@@ -700,18 +700,11 @@
 			isa = PBXTargetDependency;
 			target = 94D432AB05583C1100A80003;
 		};
-		94D432AE05583EC300A80003 = {
-			fileRef = 94D432AC05583C1100A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		94D432AF05583EF500A80003 = {
 			buildActionMask = 12;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				94D432AE05583EC300A80003,
 			);
 			isa = PBXCopyFilesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1339,7 +1332,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				F5812B890315F33D01A80001,
 			);
 			isa = PBXCopyFilesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2236,7 +2228,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.AppleCurio;
-				MODULE_VERSION = 1.1;
+				MODULE_VERSION = 1.1.1;
 				OTHER_CFLAGS = "-fpermissive";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -2278,7 +2270,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.1</string>
+	<string>1.1.1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>AppleCurio</key>
@@ -2581,7 +2573,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.AppleMaceEthernet;
-				MODULE_VERSION = 1.1;
+				MODULE_VERSION = 1.1.1;
 				OTHER_CFLAGS = "-fpermissive";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -2623,7 +2615,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.1</string>
+	<string>1.1.1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>AppleMaceEthernet</key>
@@ -6212,12 +6204,6 @@
 			settings = {
 			};
 		};
-		F5812B890315F33D01A80001 = {
-			fileRef = F5812B820315F14401A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F588751B030D66DB01A80001 = {
 			children = (
 				F588751D030D66DB01A80001,
@@ -7309,7 +7295,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.OWCCacheConfig;
-				MODULE_VERSION = 1.0.0b1;
+				MODULE_VERSION = 1.0.0b2;
 				OTHER_CFLAGS = "-D_BIG_ENDIAN=1";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -7350,7 +7336,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.0b1</string>
+	<string>1.0.0b2</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>OWCCacheConfig</key>
