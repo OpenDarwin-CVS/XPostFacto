@@ -536,17 +536,21 @@ XPFPrefs::DoUpdate (ChangeID_AC theChange,
 				SetChangeCount (GetChangeCount () + 1);
 			}
 			
-			// Need to update our internal list. This is an inefficient method, but easy to write ...
+			// Need to update our internal list. First, we find the current entry and delete it.
 			for (TemplateAutoList_AC <XPFHelperItem>::Iterator iter (&fHelperList); iter.Current (); iter.Next ()) {
 				if (volume == MountedVolume::WithInfo (&iter->target)) {
-					MountedVolume *helper = volume->getHelperDisk ();
-					if (helper) {
-						iter->helper = helper->getVolumeInfo ();
-					} else {
-						fHelperList.Delete (iter.Current ());
-					}				
+					fHelperList.Delete (iter.Current ());
 					break;
 				}
+			}
+
+			// Then, if there is a helper, we record it.
+			MountedVolume *helper = volume->getHelperDisk ();
+			if (helper) {
+				XPFHelperItem *item = new XPFHelperItem;
+				item->target = volume->getVolumeInfo ();
+				item->helper = helper->getVolumeInfo ();
+				fHelperList.InsertLast (item);
 			}
 			
 			break;
