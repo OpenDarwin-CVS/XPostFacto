@@ -1,3 +1,5 @@
-#include "CWMacAppRez_ppc_n.r"
+#if !defined(wantDebugging)
+#	define wantDebugging 0
+#endif
 
 #include "RezPrefixCommon.h"

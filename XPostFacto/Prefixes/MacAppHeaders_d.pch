@@ -1,0 +1,12 @@
+#ifndef __MACAPPHEADERS_D_PCH__
+#define __MACAPPHEADERS_D_PCH__
+
+#if !defined(wantDebugging)
+#	define wantDebugging 1
+#endif
+
+#define qTidyHeap 0
+
+#include "CWMacApp.pch.h"
+
+#endif

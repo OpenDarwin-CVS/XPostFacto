@@ -1,0 +1,10 @@
+#ifndef __MACAPPHEADERS_N_PCH__
+#define __MACAPPHEADERS_N_PCH__
+
+#if !defined(wantDebugging)
+#	define wantDebugging 0
+#endif
+
+#include "CWMacApp.pch.h"
+
+#endif

@@ -25,13 +25,15 @@
 
 <h2>XPostFacto Developer Notes</h2>
 
-March 11, 2004<br> 
+March 10, 2005<br> 
 Ryan Rempel<br> 
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a>
 
 <p>Here are some things you will need to know in order to build XPostFacto successfully. And I will probably forget some details, so feel free to ask if you run into trouble.
 
-<h4>Overview</h4>
+<p>I've recently made some significant changes to the way the CodeWarrior project is set up, so pay attention to that below.
+
+<h4>Setting up the XCode environment</h4>
 
 <p>Building XPostFacto involves both a XCode project and a CodeWarrior project. The XCode project has targets for building the following items:
 
@@ -47,19 +49,40 @@ Ryan Rempel<br>
 <p><li>A "Package" target, which (through dependencies) builds everything else, and has a shell script which packages up everything for the CodeWarrior project.
 </ol>
 
+<p>To set up the XCode environment properly, you need to make sure that <b>gcc 2.95 and the 10.1 and 10.2 SDKs are installed</b> when you install XCode. The reason is that some of the kernel extensions use the 10.1 or 10.2 SDKs, so that they will work in 10.1 and 10.2.
+
+<p>Other than that, I don't think there is anything special you need to do to set up the XCode environment.
+
+<h4>Setting up CodeWarrior</h4>
+
 <p>The XPostFacto folder contains the CodeWarrior project, which builds the application called XPostFacto. The "Derived" folder in the CodeWarrior project is special. It is where the ProjectBuilder project copies the bootx.xcoff and the kernel extensions (as archived by hfsplusarchive).
 
 <p>The CodeWarrior project is checked into the repository as an XML export. So you will need to import the XML file into CodeWarrior in order to get a working project. What I do is save the resulting project file as XPostFacto.mcp, in the same folder as the XML file.
 
 <p>As of XPF 3, XPostFacto runs in both Mac OS 9 and Mac OS X. The Mac OS 9 version builds as a non-Carbon application (because that makes certain parts of the code easier--some things I need aren't in Carbon). The Mac OS X version builds as mach-o, for the same reason (I need to link to some frameworks that are mach-o frameworks). I'm using CodeWarrior 8.3.
 
-<p>The main dependency that is not included in the XPostFacto sources is MacApp. The XPostFacto application is based on MacApp. So you will need to download MacApp, and build its libraries, both in Mac OS 9 and in Mac OS X. Also, you'll need to define a "source tree" in CodeWarrior to point to the MacApp sources. The easiest way to do this is to do it in the general CodeWarrior preferences, rather than in a specific project. So you would define a source tree with the name "MacApp", and, in my case, it points to:
+<p>The main dependency that is not included in the XPostFacto sources is MacApp. The XPostFacto application is based on MacApp. Previously, I had instructed you to download MacApp yourself and set it up somewhere. The difficulty is that I was actually using a patched version of MacApp (to permit building the OS X version of XPostFacto). What I've done know is include the patches in the CVS repository, and include a Makefile to set up the MacApp environment.
 
-<p>/Users/ryan/Projects/ClubMacApp/sources/macapp.15.1.1
+<p>So, here is what you need to do to set up the CodeWarrior environment.
 
-<p>I am using the latest MacApp. In fact, I am using the MacApp sources from ClubMacApp, which is a subscription-based service with continuing source modifications. The background is that Apple has dropped further development of MacApp, but a community of MacApp users keeps things updated through ClubMacApp.
+<ol>
+<li>You need to be booted into Mac OS X to follow the remaining instructions.<p>
 
-<p>The unfortunate part of that is that I cannot redistribute the latest MacApp changes myself, so to build the latest MacApp you need to subscribe. It is possible that I could distribute patch files with the most important changes, and I should look into that. I think it may be possible to build the Mac OS 9 version of XPostFacto with a "stock" MacApp, but the mach-o version probably requires some of the later changes.
+<li>Check out the code from the CVS repository.<p>
+
+<li>Navigate to the root directory of the code in the terminal, and run the following command:<p>
+
+<blockquote>
+	sh FixTypesAndCreators.sh
+</blockquote>
+
+This will add the correct file types and creators to the files from the CVS repository (since CVS doesn't preserve that sort of thing).<p>
+
+<li>Navigate to the "MacApp" directory (i.e. cd MacApp). Then type "make" to invoke the Makefile there. What this will do is download and expand the MacApp sources from Apple. Once that is finished, type "make" again to patch the MacApp sources.<p>
+
+<li>You don't need to build a separate MacApp library -- the XPostFacto project file picks up all the source from MacApp which it needs.
+
+</ol>
 
 <p>I originally picked MacApp (at a time it was still being developed by Apple), rather than PowerPlant, for reasons that seemed sensible at the time. It's a little awkward now, but rewriting for PowerPlant would be a ton of work, and I'm not really planning to do it. I suppose there is something appropriate about developing XPostFacto with a framework that Apple has abandoned :-)
 
@@ -67,13 +90,9 @@ Ryan Rempel<br>
 
 <h4>The Build Process</h4>
 
-<p>So, assuming that you have MacApp downloaded and you have built its libraries, here's the rest of the build process:
+<p>So, assuming that you have followed the steps given above for setting things up, here's the build process:
 
 <ol>
-<p><li>The FixTypesAndCreators.sh file is a shell script for setting types and creators to what CodeWarrior expects. You would run it this way. Generally, you would only have to do this when you first check files out of the cvs repository.
-
-<p>sh FixTypesAndCreators.sh
-
 <p><li>Build BootX and all the kernel extensions, so the CodeWarrior project can use them. The easiest way to do that is with this command (executed in this directory):
 
 <p>sudo xcodebuild install
@@ -82,7 +101,7 @@ Ryan Rempel<br>
 
 <p><li>Open the XPostFacto.mcp CodeWarrior project, and make the "Application" target. This builds both the Mac OS 9 and Mac OS X versions. Or you can build individual targets if you like.
 
-<p>You can build individual kernel extensions within XCode for testing purposes. But once you want to incorporate them into XPostFacto, you will need to repeat the "sudo pbxbuild install" step (and then rebuild XPostFacto). (For BootX, you need not perform the "sudo pbxbuild install"--building it within XCode is sufficient).
+<p>You can build individual kernel extensions within XCode for testing purposes. But once you want to incorporate them into XPostFacto, you will need to repeat the "sudo xcodebuild install" step (and then rebuild XPostFacto). (For BootX, you need not perform the "sudo xcodebuild install"--building it within XCode is sufficient).
 </ol>
 
 <h4>Quirks</h4>
@@ -124,8 +143,6 @@ Ryan Rempel<br>
 <p>Of particular interest are the files located in XPostFacto/Resources/Views. These are all .r files that you might want to edit in a binary form (i.e. icons, views, picts). In order to facilitate this, there is a Makefile there which helps with the conversion between .r and .rsrc files. Basically, you can "make" either the .r or .rsrc file, and the Makefile will do the right thing.
 
 <p>For instance, you can "cd" to the directory, and then type "make XPFProgressWindow.rsrc". The Makefile will then run Rez to generate XPFProgressWindow.rsrc from the .r file. You can then edit the resource file with a resource editor (like AdLib or IcePick). However, it is still the .r file that is compiled into the application. So once you've done you're editing, you would "make" the .r file (i.e. "make XPFProgressWindow.r"). This then runs DeRez to turn XPFProgressWindow.rsrc into XPFProgressWindow.r.
-
-<p>Rez and Derez need access to the MacApp ViewTypes.r file in order for this to work. But the Makefile doesn't know where you've put it. The easiest way to fix this is for you to copy the ViewTypes.r file into that directory. Alternatively, you could alter the Makefile, or you could use the RIncludes environment variable to point to the directory that ViewTypes.r is in. I suppose I could have a ViewTypes.r target in the Makefile that would look for the ViewTypes.r file and copy it.
 
 <h4>CVS Integration</h4>
 

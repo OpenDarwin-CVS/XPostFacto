@@ -46,10 +46,6 @@ advised of the possibility of such damage.
 #include "Balloons.r"
 #endif
 
-//#ifndef __MACAPPVERSION__
-//#include "MacAppVersion.h"
-//#endif
-
 #ifndef __ViewTypes__
 #include "ViewTypes.r"
 #endif
@@ -85,58 +81,18 @@ advised of the possibility of such damage.
 // Default includes
 // ---------------------------
 
-#if !defined(THINK_Rez) && !defined(MW_Rez)
-	#if qDebug | qPerform
-		include kDebugRsrcName not 'ckid';
-	#endif
-
-	include kDialogRsrcName not 'ckid';
-	include kMacAppRsrcName not 'ckid';
-
-	// Includes for Building Blocks
-
-	include kPrintingRsrcName not 'ckid';
-
-	// Include Code Resources
-
-	#if !qNoCode
-		include $$Shell("ObjApp")$$Shell("XAppName") 'CODE';
-		#if qModelCFM
-			include $$Shell("ObjApp")$$Shell("XAppName") 'cfrg';
-			include $$Shell("ObjApp")$$Shell("XAppName") 'rseg';
-		#endif
-	#endif
-
-	#define kApplicationName	TARGET_APPLICATION_NAME
-#else
-//	include kDefaultRsrcName  'CMNU' (mApple);			// Grab the default Apple menus
-//	include kDefaultRsrcName  'CMNU' (mFile);			// Grab the default File menus
-	include kDefaultRsrcName  'CMNU' (mEdit);			// Grab the default Edit menu
-#if qCarbon
-	include kDefaultRsrcName  'CMNU' (mEditAqua);		// Grab the default Edit menu for aqua
+#if qDebug | qPerform
+	#include "Debug.r"
 #endif
-//	include kDefaultRsrcName  'ALRT' (phAboutApp);		// Grab the default about box
-	include kDefaultRsrcName  'aete' (0);				// Grab the default AppleEvent terminology
-//	include kDefaultRsrcName  'STR#' (kDefaultCredits);	// Grab the default credits
-//	include kDefaultRsrcName  'vers' (2);				// Overall package
 
-//	include kDefaultRsrcName  'ICN#' (kApplicationID);	// MacApp Family large black & white	
-//	include kDefaultRsrcName  'ics#' (kApplicationID);	// MacApp Family small black & white	
-//	include kDefaultRsrcName  'ics4' (kApplicationID);	// MacApp Family small 4 bit
-//	include kDefaultRsrcName  'ics8' (kApplicationID);	// MacApp Family small 4 bit
-//	include kDefaultRsrcName  'icl4' (kApplicationID);	// MacApp Family large 4 bit
-//	include kDefaultRsrcName  'icl8' (kApplicationID);	// MacApp Family large 8 bit
+#include "Dialog.r"
+#include "BusyCursor.r"
+#include "DeskScrapView.r"
+#include "ErrorMgr.r"
+#include "Memory.r"
+#include "MacApp.r"
 
-
-	#if qDebug | qPerform
-		include kDebugRsrcName not 'ckid';
-	#endif
-
-	include kDialogRsrcName not 'ckid';
-	include kGeneralRsrcName not 'ckid';
-
-	#define kApplicationName	$$Shell("XAppName")
-#endif //!THINK_Rez
+#define kApplicationName	$$Shell("XAppName")
 
 //--------------------------------------------------------------------------------------------------
 // RESOURCES FOR MENUS 
@@ -214,6 +170,54 @@ purgeable) {
 #if !qCarbon
 	"Quit",				noIcon, "Q",	noMark, plain, cQuit;
 #endif
+	}
+};
+
+resource 'CMNU' (mEdit,
+#if qNames
+"mEdit",
+#endif
+purgeable) {
+	mEdit,
+	textMenuProc,
+	EnablingManagedByMacApp,
+	enabled,
+	"Edit",
+	{
+	"Undo",				noIcon, "Z",	noMark, plain, cUndo;
+	"Redo",				noIcon, "R",	noMark, plain, cRedo;
+	"-",				noIcon, noKey,	noMark, plain, nocommand;
+	"Cut",				noIcon, "X",	noMark, plain, cCut;
+	"Copy",				noIcon, "C",	noMark, plain, cCopy;
+	"Paste",			noIcon, "V",	noMark, plain, cPaste;
+	"Clear",			noIcon, noKey,	noMark, plain, cClear;
+	"Select All",		noIcon, "A",	noMark, plain, cSelectAll;
+	"-",				noIcon, noKey,	noMark, plain, nocommand;
+	"Show Clipboard",	noIcon, noKey,	noMark, plain, cShowClipboard;
+	}
+};
+
+resource 'CMNU' (mEditAqua,
+#if qNames
+"mEditAqua",
+#endif
+purgeable) {
+	mEdit,
+	textMenuProc,
+	EnablingManagedByMacApp,
+	enabled,
+	"Edit",
+	{
+	"Undo",				noIcon, "Z",	noMark, plain, cUndo;
+	"Redo",				noIcon, "R",	noMark, plain, cRedo;
+	"-",				noIcon, noKey,	noMark, plain, nocommand;
+	"Cut",				noIcon, "X",	noMark, plain, cCut;
+	"Copy",				noIcon, "C",	noMark, plain, cCopy;
+	"Paste",			noIcon, "V",	noMark, plain, cPaste;
+	"Clear",			noIcon, noKey,	noMark, plain, cClear;
+	"Select All",		noIcon, "A",	noMark, plain, cSelectAll;
+	"-",				noIcon, noKey,	noMark, plain, nocommand;
+	"Show Clipboard",	noIcon, noKey,	noMark, plain, cShowClipboard;
 	}
 };
 

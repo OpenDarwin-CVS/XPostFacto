@@ -1,0 +1,19 @@
+#ifndef __MACAPPHEADERS_OSX_N_PCH__
+#define __MACAPPHEADERS_OSX_N_PCH__
+
+// Turn on flags for Carbon
+#define qCarbon 1
+
+// Mach-0 has its own precompiled header file
+#define qCarbonMach0 1
+
+// This switch enables the Apple Framework Headers
+#define __CF_USE_FRAMEWORK_INCLUDES__ 1
+
+#if !defined(wantDebugging)
+#	define wantDebugging 0
+#endif
+
+#include "CWMacApp.pch.h"
+
+#endif	// __MACAPPHEADERS_OSX_N_PCH__

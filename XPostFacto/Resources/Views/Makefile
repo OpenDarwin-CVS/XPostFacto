@@ -10,7 +10,7 @@ binaries := OWCLogo.rsrc XPFIcons.rsrc XPFAboutBox.rsrc XPFFatalErrorWindow.rsrc
 
 sources := $(binaries:.rsrc=.r)
 
-includes := Types.r SysTypes.r ViewTypes.r
+includes := Types.r SysTypes.r "../../../MacApp/Apple C++ Frameworks/MacApp/Libraries/Framework/ViewTypes.r"
 
 .PHONY : usage binary source
 
