@@ -489,7 +489,7 @@ XPFPrefs::DoInitialState ()
 	suspendStartupItem ();
 
 #ifdef __MACH__
-	AddBehavior (new XPFPollVolumesBehavior);
+	gApplication->AddBehavior (new XPFPollVolumesBehavior);
 #endif
 }
 
