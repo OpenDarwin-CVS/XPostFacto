@@ -678,9 +678,7 @@ static long GetBootPaths(void)
 	// This saves me a little NVRAM space (well, in some cases, a fair bit)
 	// And if it starts with \tmp, add the \private as well (again, to save NVRAM space)
 	// And first see if it is the special "-i", which saves even more NVRAM.
-	printf ("%s\n", gBootFile);
 	if (!strcmp (gBootFile, "-i")) {
-		printf ("gBootFile was -i\n");
 		strcpy (gBootFile, ",\\private\\tmp\\mach_kernel");
 	}
 	if (!strncmp (gBootFile, tmp, strlen (tmp))) {
