@@ -367,28 +367,28 @@ static long SetUpBootArgs(void)
   // if 'cmd-s' or 'cmd-v' was pressed do a text boot.
   if (sKey || vKey) graphicsBoot = 0;
   
-  // Create the command line.
-  if (gOFVersion < kOFVersion3x) {
-    ofBootArgs[0] = ' ';
-    size = GetProp(gChosenPH, "machargs", ofBootArgs + 1, 126);
-    if (size == -1) {
-      size = GetProp(gOptionsPH, "boot-command", ofBootArgs, 127);
-      if (size == -1) ofBootArgs[0] = '\0';
-      else ofBootArgs[size] = '\0';
-      // Look for " bootr" but skip the number.
-      if (!strncmp(ofBootArgs + 1, " bootr", 6)) {
-	strcpy(ofBootArgs, ofBootArgs + 7);
-      } else ofBootArgs[0] = '\0';
-      SetProp(gChosenPH, "machargs", ofBootArgs, strlen(ofBootArgs) + 1);
-    } else ofBootArgs[size] = '\0';
-    // Force boot-command to start with 0 bootr.
-    sprintf(gTempStr, "0 bootr%s", ofBootArgs);
-    SetProp(gOptionsPH, "boot-command", gTempStr, strlen(gTempStr));
-  } else {
-    size = GetProp(gOptionsPH, "boot-args", ofBootArgs, 127);
-    if (size == -1) ofBootArgs[0] = '\0';
-    else ofBootArgs[size] = '\0';
-  }
+	// Create the command line.
+	if (gOFVersion < kOFVersion3x) {
+		ofBootArgs[0] = ' ';
+		size = GetProp(gChosenPH, "machargs", ofBootArgs + 1, 126);
+		if (size == -1) {
+			size = GetProp(gOptionsPH, "boot-command", ofBootArgs, 127);
+			if (size == -1) ofBootArgs[0] = '\0';
+				else ofBootArgs[size] = '\0';
+			// Look for " bootr" but skip the number.
+			if (!strncmp(ofBootArgs + 1, " bootr", 6)) {
+				strcpy(ofBootArgs, ofBootArgs + 7);
+			} else ofBootArgs[0] = '\0';
+			SetProp(gChosenPH, "machargs", ofBootArgs, strlen(ofBootArgs) + 1);
+		} else ofBootArgs[size] = '\0';
+		// Force boot-command to start with 0 bootr.
+		sprintf(gTempStr, "0 bootr%s", ofBootArgs);
+		SetProp(gOptionsPH, "boot-command", gTempStr, strlen(gTempStr));
+	} else {
+		size = GetProp(gOptionsPH, "boot-args", ofBootArgs, 127);
+		if (size == -1) ofBootArgs[0] = '\0';
+		else ofBootArgs[size] = '\0';
+	}
   
   if (ofBootArgs[0] != '\0') {
     // Look for special options and copy the rest.
@@ -680,6 +680,32 @@ static long GetBootPaths(void)
 	// And first see if it is the special "-i", which saves even more NVRAM.
 	if (!strcmp (gBootFile, "-i")) {
 		strcpy (gBootFile, ",\\private\\tmp\\mach_kernel");
+	}
+	// And see if it is the special -h, for the use of a helper disk
+	if (!strcmp (gBootFile, "-h")) {
+		char ofBootArgs[128];
+		char *pos, *end;
+		
+		size = GetProp (gChosenPH, "machargs", ofBootArgs, 127);
+		if (size == -1) size = GetProp (gOptionsPH, "boot-command", ofBootArgs, 127);
+		if (size == -1) {
+			ofBootArgs[0] = '\0';
+		} else {
+			ofBootArgs[size] = '\0';
+		}
+		pos = strstr (ofBootArgs, "rd=*");
+		if (pos) {
+			pos += 4;
+			while (pos == '/') pos++;
+			end = pos;
+			while ((*end != 0) && (*end != ' ')) {
+				if (*end == '/') *end = '\\';
+				if (*end == ':') *end = ';';
+				end++;
+			}
+			*end = 0;
+			sprintf (gBootFile, ",\\.XPostFacto\\%s\\mach_kernel", pos);
+		}
 	}
 	if (!strncmp (gBootFile, tmp, strlen (tmp))) {
 		int privSize = strlen (priv);
