@@ -73,8 +73,6 @@ class MountedVolume : public MDependable_AC
 							void* changeData,
 							CDependencySpace_AC* dependencySpace);
 		
-		void readHelperFromStream (CFileStream_AC *stream);
-		
 		void turnOffIgnorePermissions ();
 		
 		const CStr255_AC& getOpenFirmwareName (bool useShortName) {return useShortName ? fShortOpenFirmwareName : fOpenFirmwareName;}
@@ -117,7 +115,7 @@ class MountedVolume : public MDependable_AC
 		unsigned getHelperStatus ();
 		
 		MountedVolume *getHelperDisk () {return fHelperDisk;}
-		void setHelperDisk (MountedVolume *disk);
+		void setHelperDisk (MountedVolume *disk, bool callChanged = true);
 		
 		static const MountedVolumeList* GetVolumeList () {return &gVolumeList;}
 		

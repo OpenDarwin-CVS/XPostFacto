@@ -504,6 +504,21 @@ XPFPrefs::DoUpdate (ChangeID_AC theChange,
 		case cNewMountedVolume:
 			volume->AddDependent (this);
 			if (fInstallCD == NULL) setInstallCD (MountedVolume::GetDefaultInstallerDisk ());
+			
+			// Need to check if it has a helper. Not an efficient method, but easy to write ...
+			for (TemplateAutoList_AC <XPFHelperItem>::Iterator iter (&fHelperList); iter.Current (); iter.Next ()) {
+				if (volume == MountedVolume::WithInfo (&iter->target)) {
+					MountedVolume *helper = MountedVolume::WithInfo (&iter->helper);
+					if (helper) {
+						volume->setHelperDisk (helper);
+					} else {
+						// presumably it needs a helper, so we'll pick another
+						volume->setHelperDisk (volume->getDefaultHelperDisk ());
+					}				
+					break;
+				}
+			}
+
 			break;
 			
 		case cDeleteMountedVolume:
@@ -517,6 +532,20 @@ XPFPrefs::DoUpdate (ChangeID_AC theChange,
 			} else {
 				SetChangeCount (GetChangeCount () + 1);
 			}
+			
+			// Need to update our internal list. This is an inefficient method, but easy to write ...
+			for (TemplateAutoList_AC <XPFHelperItem>::Iterator iter (&fHelperList); iter.Current (); iter.Next ()) {
+				if (volume == MountedVolume::WithInfo (&iter->target)) {
+					MountedVolume *helper = volume->getHelperDisk ();
+					if (helper) {
+						iter->helper = helper->getVolumeInfo ();
+					} else {
+						fHelperList.Delete (iter.Current ());
+					}				
+					break;
+				}
+			}
+			
 			break;
 			
 		default:
@@ -542,7 +571,7 @@ XPFPrefs::DoRead (TFile* aFile, bool forPrinting)
 
 	UInt32 sig, prefsVersion;
 	CStr255_AC device;
-	FSVolumeInfo volInfo;
+	FSVolumeInfo volInfo, helperInfo;
 	
 	DoInitialState ();
 			
@@ -574,18 +603,33 @@ XPFPrefs::DoRead (TFile* aFile, bool forPrinting)
 		UInt32 helpers;
 		fileStream >> helpers;
 		
+		// We need to keep track of helper preferences separately from the actual
+		// MountedVolume instances, because Firewire disks can come and go.
+		// So we maintain our own list, and keep it synchronized with changes
+		// (see the DoUpdate method).
+
 		while (helpers > 0) {
 			helpers--;
 
 			fileStream.ReadBytes (&volInfo, sizeof (volInfo));
-			MountedVolume *vol = MountedVolume::WithInfo (&volInfo);
+			fileStream.ReadBytes (&helperInfo, sizeof (helperInfo));
 			
-			if (vol) {
-				vol->readHelperFromStream (&fileStream);
-			} else {
-				// skip over the helper
-				fileStream.ReadBytes (&volInfo, sizeof (volInfo));
+			MountedVolume *vol = MountedVolume::WithInfo (&volInfo);
+			MountedVolume *helper = MountedVolume::WithInfo (&helperInfo);
+			
+			if (vol && !helper) {
+				// Presumably it needs a helper, so we'll use the default
+				helper = vol->getDefaultHelperDisk ();
+				if (helper) helperInfo = helper->getVolumeInfo ();
+				fForceAskSave = true;
 			}
+			
+			XPFHelperItem *helperItem = new XPFHelperItem;
+			BlockMoveData (&volInfo, &helperItem->target, sizeof (volInfo));
+			BlockMoveData (&helperInfo, &helperItem->helper, sizeof (helperInfo));
+			fHelperList.InsertLast (helperItem);
+			
+			if (vol) vol->setHelperDisk (helper, false);
 		}
 		
 		fileStream >> fUseROMNDRV;
@@ -703,21 +747,11 @@ XPFPrefs::DoWrite (TFile* aFile, bool makingCopy)
 	
 	// Now, we need to store the choices for Helper Disk (which are per-volume). 
 	
-	UInt32 helpers = 0;
+	fileStream << fHelperList.GetSize ();
 
-	for (MountedVolumeIterator iter (MountedVolume::GetVolumeList ()); iter.Current (); iter.Next ()) {
-		if (iter->getHelperDisk ()) helpers++;
-	}
-
-	fileStream << helpers;
-
-	for (MountedVolumeIterator iter (MountedVolume::GetVolumeList ()); iter.Current (); iter.Next ()) {
-		if (iter->getHelperDisk ()) {
-			info = iter->getVolumeInfo ();
-			fileStream.WriteBytes (&info, sizeof (info));
-			info = iter->getHelperDisk ()->getVolumeInfo ();
-			fileStream.WriteBytes (&info, sizeof (info));
-		}
+	for (TemplateAutoList_AC <XPFHelperItem>::Iterator iter (&fHelperList); iter.Current (); iter.Next ()) {
+		fileStream.WriteBytes (&iter->target, sizeof (iter->target));
+		fileStream.WriteBytes (&iter->helper, sizeof (iter->helper));
 	}	
 	
 	fileStream << fUseROMNDRV;

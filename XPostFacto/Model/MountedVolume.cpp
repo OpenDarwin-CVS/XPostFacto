@@ -139,19 +139,6 @@ MountedVolume::Initialize ()
 	XPFBootableDevice::DeleteInvalidDevices ();
 }
 
-void
-MountedVolume::readHelperFromStream (CFileStream_AC *stream)
-{
-	FSVolumeInfo volInfo;
-	stream->ReadBytes (&volInfo, sizeof (volInfo));
-	MountedVolume *helper = MountedVolume::WithInfo (&volInfo);
-	if (helper) {
-		fHelperDisk = helper;
-	} else {
-		fHelperDisk = getDefaultHelperDisk ();
-	}
-}
-
 MountedVolume*
 MountedVolume::WithCreationDate (unsigned int date)
 {
@@ -998,11 +985,11 @@ MountedVolume::getInstallerStatus ()
 }
 
 void
-MountedVolume::setHelperDisk (MountedVolume *disk)
+MountedVolume::setHelperDisk (MountedVolume *disk, bool callChanged)
 {
 	if (fHelperDisk != disk) {
 		fHelperDisk = disk;
-		Changed (cSetHelperDisk, this);
+		if (callChanged) Changed (cSetHelperDisk, this);
 	}
 }
 

@@ -39,6 +39,11 @@ advised of the possibility of such damage.
 class MountedVolume;
 class XPFIODevice;
 
+struct XPFHelperItem {
+	FSVolumeInfo target;
+	FSVolumeInfo helper;
+};
+
 class XPFPrefs : public TFileBasedDocument {
 
 	public:
@@ -172,6 +177,8 @@ DECLARE_DEBUG_ACCESSORS (DebugPanicText)
 				
 		XPFIODevice *fInputDevice;
 		XPFIODevice *fOutputDevice;
+		
+		TemplateAutoList_AC <XPFHelperItem> fHelperList;
 		
 		TWindow *fOptionsWindow;
 
