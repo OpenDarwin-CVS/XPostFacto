@@ -568,6 +568,8 @@ XPFPrefs::DoUpdate (ChangeID_AC theChange,
 
 			// Need to update our internal list. First, we find the current entry and delete it.
 			XPFBootableDevice *device = volume->getBootableDevice ();
+			if (!device) break;
+			
 			for (TemplateAutoList_AC <XPFDeviceHint>::Iterator iter (&fDeviceHints); iter.Current (); iter.Next ()) {
 				if (device == XPFBootableDevice::DeviceWithDeviceIdent (iter->deviceIdent)) {
 					fDeviceHints.Delete (iter.Current ());

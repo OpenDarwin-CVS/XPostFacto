@@ -611,21 +611,25 @@ MountedVolume::setVolumeName (HFSUniStr255 *name)
 io_object_t
 MountedVolume::getRegEntry () {
 	char mountPoint[1024], deviceBSDName[32], *shortBSDName;
-	OSStatus err = FSRefMakePath (getRootDirectory (), (UInt8 *) mountPoint, 1023);
 	deviceBSDName[0] = 0;
+	
+	OSStatus err = FSRefMakePath (getRootDirectory (), (UInt8 *) mountPoint, 1023);
 	if (err != noErr) return NULL;
+	
 	int numFS = getfsstat (NULL, 0, MNT_NOWAIT);
 	struct statfs *fs = (struct statfs *) malloc (numFS * sizeof (struct statfs));
 	getfsstat (fs, numFS * sizeof (struct statfs), MNT_NOWAIT);
-	int x;
-	for (x = 0; x < numFS; x++) {
+
+	for (int x = 0; x < numFS; x++) {
 		if (!strcmp (fs[x].f_mntonname, mountPoint)) {
 			strcpy (deviceBSDName, fs[x].f_mntfromname);
-			err = 0;
 			break;
 		}
 	}
+	
 	free (fs);
+				
+	if (!deviceBSDName[0]) return NULL;
 				
 	shortBSDName = deviceBSDName;
 	if (!strncmp (shortBSDName, "/dev/", 5)) shortBSDName += 5;
@@ -640,6 +644,7 @@ MountedVolume::getRegEntry () {
 		retVal = IOIteratorNext (iter);
 		IOObjectRelease (iter);
 	}
+	
 	return retVal;
 }
 
@@ -883,6 +888,7 @@ void
 MountedVolume::checkExtensionsCaches ()
 {
 	fExtensionCachesOK = true;
+	if (!fBootableDevice) return;
 
 	FSRef ref;
 	OSErr err;
@@ -957,10 +963,8 @@ MountedVolume::checkBlessedFolder ()
 		fBlessedFolderID = finderInfo[0];
 	}
 	
-	UInt32 retVal = 0;
-	FSIterator iterator;
-	FSOpenIterator (&fRootDirectory, kFSIterateFlat, &iterator);
-	err = noErr;
+	FSIterator iterator = NULL;
+	err = FSOpenIterator (&fRootDirectory, kFSIterateFlat, &iterator);
 	
 	while ((err == noErr) && (fMacOS9SystemFolderNodeID == 0)) {
 		ItemCount actualObjects;
@@ -974,7 +978,7 @@ MountedVolume::checkBlessedFolder ()
 		}
 	}
 	
-	FSCloseIterator (iterator);
+	if (iterator) FSCloseIterator (iterator);
 
 	Changed (cSetBlessedFolderID, this);
 	
@@ -1185,12 +1189,19 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 		
 		gLogFile << "MountedVolume::MountedVolume fVolumeName: " << (CChar255_AC) fVolumeName << " Creation Date: " << fCreationDate << endl_AC;
 		
+		gLogFile << "checkDeviceAndPartition()" << endl_AC;
 		checkDeviceAndPartition ();
+		gLogFile << "checkSymlinks()" << endl_AC;
 		checkSymlinks ();
+		gLogFile << "checkBlessedFolder()" << endl_AC;
 		checkBlessedFolder ();
+		gLogFile << "checkBootXVersion()" << endl_AC;
 		checkBootXVersion ();
+		gLogFile << "checkMacOSXVersion()" << endl_AC;
 		checkMacOSXVersion ();
+		gLogFile << "checkOpenFirmwareName()" << endl_AC;
 		checkOpenFirmwareName ();
+		gLogFile << "checkExtensionsCaches()" << endl_AC;
 		checkExtensionsCaches ();
 			
 		if (getRequiresBootHelper ()) fHelperDisk = getDefaultHelperDisk ();
@@ -1217,7 +1228,7 @@ MountedVolume::checkOpenFirmwareName ()
 #ifdef __MACH__
 	OFAliases::AliasFor (getRegEntry (), fOpenFirmwareName, fShortOpenFirmwareName);
 #else
-	if (fBootableDevice) {
+	if (fBootableDevice && fPartitionNumber) {
 		sprintf (fOpenFirmwareName, "%s:%d", fBootableDevice->getOpenFirmwareName (false), fPartitionNumber);
 		sprintf (fShortOpenFirmwareName, "%s:%d", fBootableDevice->getOpenFirmwareName (true), fPartitionNumber);
 	}

@@ -402,7 +402,7 @@ void
 OFAliases::aliasFor (const REG_ENTRY_TYPE regEntry, char *outAlias, char *shortAlias) 
 {			
 #ifdef __MACH__
-	if (!IORegistryEntryInPlane (regEntry, kIODeviceTreePlane)) {
+	if (!regEntry || !IORegistryEntryInPlane (regEntry, kIODeviceTreePlane)) {
 		if (outAlias) outAlias[0] = 0;
 		if (shortAlias) shortAlias[0] = 0;
 		return;
