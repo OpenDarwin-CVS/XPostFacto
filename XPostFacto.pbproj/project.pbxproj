@@ -3398,7 +3398,7 @@
 				HEADER_SEARCH_PATHS = "BootX/bootx.tproj/include.subproj \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/usr/include/gcc/darwin/2.95.2\" \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/usr/include\"";
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				OTHER_CFLAGS = "-static";
-				OTHER_LDFLAGS = "-nostdlib -e _StartTVector -seg1addr 01C00000";
+				OTHER_LDFLAGS = "-nostdlib -e _StartTVector -seg1addr 05600000";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = bootx;
