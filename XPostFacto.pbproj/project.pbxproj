@@ -1412,7 +1412,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.ApplePowerSurgePE;
-				MODULE_VERSION = 1.2b2;
+				MODULE_VERSION = 1.2.1;
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = ApplePowerSurgePE;
@@ -1452,7 +1452,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.2b2</string>
+	<string>1.2.1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>ApplePowerSurgePE</key>
@@ -3260,7 +3260,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.ApplePowerExpressPE;
-				MODULE_VERSION = 1.2b1;
+				MODULE_VERSION = 1.2.1;
 				OTHER_CFLAGS = "-fpermissive";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -3301,7 +3301,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.2b1</string>
+	<string>1.2.1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>ApplePowerExpressPE</key>
@@ -3933,7 +3933,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.ApplePowerStarPE;
-				MODULE_VERSION = 1.1b1;
+				MODULE_VERSION = 1.1.1;
 				OTHER_CFLAGS = "-fpermissive";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -3974,7 +3974,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.1b1</string>
+	<string>1.1.1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>ApplePowerStarPE</key>
