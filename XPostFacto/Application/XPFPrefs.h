@@ -55,6 +55,11 @@ class XPFPrefs : public TFileBasedDocument {
 		void RegainControl ();
 		void UpdateWindowIcon (TWindow* /* aWindow */) {}
 		
+		void DoUpdate (ChangeID_AC theChange, 
+								MDependable_AC* changedObject,
+								void* changeData,
+								CDependencySpace_AC* dependencySpace);
+		
 		// Commands
 		
 		virtual void DoSetupMenus (); // Override		

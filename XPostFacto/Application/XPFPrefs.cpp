@@ -42,6 +42,7 @@ advised of the possibility of such damage.
 #include "XPFUpdateCommands.h"
 #include "XPFInstallCommand.h"
 #include "XPFRestartCommand.h"
+#include "XPFAuthorization.h"
 
 #ifndef __MACH__
 	#include <PCI.h>
@@ -163,8 +164,41 @@ XPFPrefs::DoInitialState ()
 	fTargetDisk = MountedVolume::GetDefaultRootDisk ();
 	fInstallCD = MountedVolume::GetDefaultInstallerDisk ();
 	
+	for (MountedVolumeIterator iter (MountedVolume::GetVolumeList ()); iter.Current (); iter.Next ()) {
+		iter->AddDependent (this);
+	}
+	
+	gApplication->AddDependent (this);
+	
 	checkStringLength ();
 }
+
+void
+XPFPrefs::DoUpdate (ChangeID_AC theChange, 
+								MDependable_AC* changedObject,
+								void* changeData,
+								CDependencySpace_AC* dependencySpace)
+{
+	MountedVolume *volume = (MountedVolume *) changeData;
+	ArrayIndex_AC index;
+	
+	switch (theChange) {
+	
+			
+		case cNewMountedVolume:
+			volume->AddDependent (this);
+			break;
+		
+		case cSetHelperDisk:
+			SetChangeCount (GetChangeCount () + 1);
+			break;
+			
+		default:
+			Inherited::DoUpdate (theChange, changedObject, changeData, dependencySpace);
+			break;
+	}
+}
+
 
 void
 XPFPrefs::RegainControl ()
@@ -210,6 +244,18 @@ XPFPrefs::DoRead (TFile* aFile, bool forPrinting)
 		// Don't use the pref if we can't find the disk
 		MountedVolume *rootDisk = MountedVolume::WithInfo (&volInfo);
 		if (rootDisk) fTargetDisk = rootDisk;
+		
+		UInt32 helpers;
+		fileStream >> helpers;
+		
+		while (helpers > 0) {
+			helpers--;
+
+			fileStream.ReadBytes (&volInfo, sizeof (volInfo));
+			MountedVolume *vol = MountedVolume::WithInfo (&volInfo);
+			
+			if (vol) vol->readHelperFromStream (&fileStream);	
+		}
 	}
 	
 	catch (...) {
@@ -222,6 +268,8 @@ void
 XPFPrefs::DoWrite (TFile* aFile, bool makingCopy)
 {
 	#pragma unused (makingCopy)
+	
+	XPFSetUID myUID (0);
 	
 	CFileStream_AC fileStream (aFile);
 
@@ -248,24 +296,33 @@ XPFPrefs::DoWrite (TFile* aFile, bool makingCopy)
 	
 	FSVolumeInfo info = fTargetDisk->getVolumeInfo ();
 	fileStream.WriteBytes (&info, sizeof (info));
+	
+	// Now, we need to store the choices for Helper Disk (which are per-volume). 
+	
+	UInt32 helpers = 0;
+
+	for (MountedVolumeIterator iter (MountedVolume::GetVolumeList ()); iter.Current (); iter.Next ()) {
+		if (iter->getHelperDisk ()) helpers++;
+	}
+
+	fileStream << helpers;
+
+	for (MountedVolumeIterator iter (MountedVolume::GetVolumeList ()); iter.Current (); iter.Next ()) {
+		if (iter->getHelperDisk ()) {
+			info = iter->getVolumeInfo ();
+			fileStream.WriteBytes (&info, sizeof (info));
+			info = iter->getHelperDisk ()->getVolumeInfo ();
+			fileStream.WriteBytes (&info, sizeof (info));
+		}
+	}	
 }
 
 void 
 XPFPrefs::DoMakeViews (bool forPrinting)
 {
-	#pragma unused (forPrinting)
-	
-	try {
-		TViewServer::fgViewServer->NewTemplateWindow (kGridWindow, this);
-		TViewServer::fgViewServer->NewTemplateWindow (kAdditionalSettingsWindow, this);
-	}
-	
-	catch (...) {
-		((XPFApplication *) gApplication)->CloseSplashWindow ();
-		throw;
-	}
-	
 	((XPFApplication *) gApplication)->CloseSplashWindow ();
+	
+	Inherited::DoMakeViews (forPrinting);
 }
 
 
