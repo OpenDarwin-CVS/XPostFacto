@@ -182,7 +182,10 @@ XPFIODevice::EvaluateDevice (REG_ENTRY_TYPE entry)
 			strcat (label, ")");
 		}
 		
-		XPFIODevice *device = new XPFIODevice (label, alias, shortAlias);
+		char buffer[16];
+		bool active = (getRegistryProperty (entry, "driver-ref", buffer) == noErr);
+		
+		XPFIODevice *device = new XPFIODevice (label, alias, shortAlias, deviceType, active);
 		
 		if (!strcmp (alias, "kbd") || !strcmp (deviceType, "keyboard")) {
 			gInputDeviceList.InsertLast (device);
@@ -190,18 +193,32 @@ XPFIODevice::EvaluateDevice (REG_ENTRY_TYPE entry)
 			// Need a separate object for the two lists, because I'm not doing any
 			// reference counting, so one object would get deleted twice otherwise.
 			gInputDeviceList.InsertLast (device);
-			gOutputDeviceList.InsertLast (new XPFIODevice (label, alias, shortAlias));
+			gOutputDeviceList.InsertLast (new XPFIODevice (label, alias, shortAlias, deviceType, active));
 		} else if (!strcmp (deviceType, "display")) {
 			gOutputDeviceList.InsertLast (device);
 		}
 	}
 }
 
-XPFIODevice::XPFIODevice (char *label, char *alias, char *shortAlias) 
+XPFIODevice::XPFIODevice (char *label, char *alias, char *shortAlias, char* deviceType, bool active) 
 {
 	fOpenFirmwareName.CopyFrom (alias);
 	fShortOpenFirmwareName.CopyFrom (shortAlias);
 	fLabel.CopyFrom (label);
+	fDeviceType.CopyFrom (deviceType);
+	fActive = active;
+}
+
+XPFIODevice*
+XPFIODevice::GetDefaultOutputDevice ()
+{
+	Initialize ();
+	for (XPFIODeviceIterator iter (GetOutputDeviceList ()); iter.Current(); iter.Next()) {
+		if (iter->fDeviceType != "display") continue;
+		if (!iter->fActive) continue;
+		return iter.Current ();
+	}	
+	return NULL;
 }
 
 void
