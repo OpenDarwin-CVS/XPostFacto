@@ -94,7 +94,10 @@ HFSPlusExtentsOverflowNode::addExtentsFor (HFSCatalogNodeID nodeID, TemplateArra
 			for (int y = 0; y < 8; y++) {
 				if (record[y].startBlock == 0) break;
 				*totalBlocksSeen += record[y].blockCount;
-				extentsArray->InsertElementInOrder (&record[y]);
+				extentsArray->InsertLast (record[y]);
+				gLogFile << "startBlock: " << record[y].startBlock 
+						<< " blockCount: " << record[y].blockCount << endl_AC;
+
 			}
 		} else {
 			// we've gone too far, so signal an error

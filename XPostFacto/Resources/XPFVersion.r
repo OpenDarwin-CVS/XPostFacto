@@ -51,10 +51,10 @@ RESOURCE 'vers' (1,
 	0x03,
 	0x00,
 	beta,
-	0x2,
+	0x3,
 	verUs,
-	"3.0b2",
-	"3.0b2, © 2001 - 2004 Other World Computing"
+	"3.0b3",
+	"3.0b3, © 2001 - 2004 Other World Computing"
 };
 
 RESOURCE 'vers' (3,

@@ -32,4 +32,4 @@ advised of the possibility of such damage.
 */
 
 
-#define kXPFVersion "3.0b2"
+#define kXPFVersion "3.0b3"

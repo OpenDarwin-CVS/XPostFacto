@@ -46,25 +46,30 @@ HFSPlusCatalog::HFSPlusCatalog (HFSPlusVolume *volume)
 	// collect the extents
 	HFSPlusForkData *catalogFile = &header->catalogFile;
 	UInt32 totalBlocksSeen = 0;
+
+	gLogFile << "Catalog total blocks: " << catalogFile->totalBlocks << endl_AC;
+	gLogFile << "Catalog extents" << endl_AC;
+
 	for (int x = 0; x < 8; x++) {
 		if (catalogFile->extents[x].startBlock == 0) break;
 		totalBlocksSeen += catalogFile->extents[x].blockCount;
-		fExtents.InsertElementInOrder (&catalogFile->extents[x]);
+		fExtents.InsertLast (catalogFile->extents[x]);
+		gLogFile << "startBlock: " << catalogFile->extents[x].startBlock 
+				<< " blockCount: " << catalogFile->extents[x].blockCount << endl_AC;
 	}
+
 	if (totalBlocksSeen < catalogFile->totalBlocks) {
 		#if qLogging
 			gLogFile << "Catalog too fragmented. Will consult extents overflow" << endl_AC;
 		#endif
-//		ThrowException_AC (kCatalogFileTooFragmented, 0);
 		HFSPlusExtentsOverflow extentsOverflow (fVolume);
 		extentsOverflow.addExtentsFor (kHFSCatalogFileID, &fExtents, &totalBlocksSeen);
 	} 
 	
 	if (totalBlocksSeen != catalogFile->totalBlocks) {
-		#if qLogging
-			gLogFile << "Catalog file inconsistent" << endl_AC;
-		#endif
-		ThrowException_AC (kCatalogFileInconsistent, 0);
+		gLogFile << "Catalog file inconsistent: expected " 
+			<< catalogFile->totalBlocks << " blocks and found "
+			<< totalBlocksSeen << endl_AC;		
 	} 
 	
 	BTHeaderRec headerNode;

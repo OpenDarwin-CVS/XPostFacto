@@ -48,7 +48,7 @@ HFSPlusExtentsOverflow::HFSPlusExtentsOverflow (HFSPlusVolume *volume)
 	for (int x = 0; x < 8; x++) {
 		if (extentsFile->extents[x].startBlock == 0) break;
 		totalBlocksSeen += extentsFile->extents[x].blockCount;
-		fExtents.InsertElementInOrder (&extentsFile->extents[x]);
+		fExtents.InsertLast (extentsFile->extents[x]);
 	}
 	if (totalBlocksSeen < extentsFile->totalBlocks) {
 		#if qLogging
