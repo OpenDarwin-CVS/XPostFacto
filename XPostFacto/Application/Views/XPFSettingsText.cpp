@@ -68,6 +68,7 @@ XPFSettingsText::DoUpdate (ChangeID_AC theChange,
 								CDependencySpace_AC* dependencySpace)
 {
 	// Basically, any change broadcast by fPrefs interests us, so we don't need to check
+	#pragma unused (theChange, changedObject, changeData, dependencySpace)
 	
 	CStr255_AC message;
 	XPFPrefs *prefs = (XPFPrefs *) GetDocument ();
@@ -76,33 +77,20 @@ XPFSettingsText::DoUpdate (ChangeID_AC theChange,
 	MountedVolume *installCD = prefs->getInstallCD ();
 	
 	if (target) {
-		if ((target->getInstallTargetStatus () == kStatusOK) && installCD) {
-			message += "boot-device: ";
-			message += prefs->getBootDeviceForInstall ();
-			message += "\nboot-file: ";
-			message += prefs->getBootFileForInstall ();
-			message += "\nboot-command: ";
-			message += prefs->getBootCommandForInstall ();
-			message += "\nauto-boot?: ";
-			message += prefs->getAutoBoot () ? "true" : "false";
-			message += "\ninput-device: ";
-			message += prefs->getInputDeviceForInstall ();
-			message += "\noutput-device: ";
-			message += prefs->getOutputDeviceForInstall ();
-		} else {
-			message += "boot-device: ";
-			message += prefs->getBootDevice ();
-			message += "\nboot-file: ";
-			message += prefs->getBootFile ();
-			message += "\nboot-command: ";
-			message += prefs->getBootCommand ();
-			message += "\nauto-boot?: ";
-			message += prefs->getAutoBoot () ? "true" : "false";
-			message += "\ninput-device: ";
-			message += prefs->getInputDevice ();
-			message += "\noutput-device: ";
-			message += prefs->getOutputDevice ();		
-		}
+		bool forInstall = (target->getInstallTargetStatus () == kStatusOK) && installCD;
+
+		message += "boot-device: ";
+		message += prefs->getBootDevice (forInstall);
+		message += "\nboot-file: ";
+		message += prefs->getBootFile (forInstall);
+		message += "\nboot-command: ";
+		message += prefs->getBootCommand (forInstall);
+		message += "\nauto-boot?: ";
+		message += prefs->getAutoBoot () ? "true" : "false";
+		message += "\ninput-device: ";
+		message += prefs->getInputDevice (forInstall);
+		message += "\noutput-device: ";
+		message += prefs->getOutputDevice (forInstall);
 	}
 	
 	SetText (message, true);

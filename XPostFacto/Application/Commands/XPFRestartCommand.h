@@ -31,34 +31,26 @@ advised of the possibility of such damage.
 
 */
 
-
 #ifndef __XPFRESTARTCOMMAND_H__
 #define __XPFRESTARTCOMMAND_H__
 
-#include "XPFThreadedCommand.h"
+class XPFPrefs;
 
-class XPFNVRAMSettings;
-
-class XPFRestartCommand : public XPFThreadedCommand {
+class XPFRestartCommand : public TCommand {
 
 	public:
 		
-		XPFRestartCommand (XPFPrefs *prefs);							
-		void DoItThreaded ();					
+		XPFRestartCommand (XPFPrefs *prefs, bool restartNow);							
+		void DoIt ();					
 		
 	protected:	
 	
 		void tellFinderToRestart ();
-		void adjustThrottle (XPFNVRAMSettings *nvram);
-										
-		CStr255_AC fBootDevice;
-		CStr255_AC fBootFile;
-		CStr255_AC fBootCommand;
-		CStr255_AC fInputDevice;
-		CStr255_AC fOutputDevice;
-		bool fUseShortStrings;
-		bool fAutoBoot;
-		unsigned fThrottle;
+		virtual bool getInstalling () {return false;}
+		
+		bool fRestartNow;
+		XPFPrefs *fPrefs;
+
 };	
 
 #endif

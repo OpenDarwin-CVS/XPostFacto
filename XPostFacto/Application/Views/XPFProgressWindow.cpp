@@ -41,16 +41,6 @@ MA_DEFINE_CLASS (XPFProgressWindow);
 XPFProgressWindow::XPFProgressWindow (WindowRef itsWMgrWindow, bool canResize, bool canClose, bool inDispose)
 	: TWindow (itsWMgrWindow, canResize, canClose, inDispose)
 {
-	fSetDescription = false;
-	fSetStatus = false;
-	fSetMin = false;
-	fSetMax = false;
-	fSetValue = false;
-	fFinished = false;
-	fHasException = false;
-	fThread = NULL;
-	
-	gLogFile << "XPFProgressWindow::XPFProgressWindow called\n" << endl_AC;
 }
 
 void 
@@ -59,115 +49,80 @@ XPFProgressWindow::DoPostCreate (TDocument* itsDocument)
 	TWindow::DoPostCreate (itsDocument);
 	
 	fStatus = (TStaticText *) FindSubView ('stut');
-	fCancel = (TButton *) FindSubView ('canc');
 	fProgress = (TProgressIndicator *) FindSubView ('prog');
-	fDialog = GetDialogBehavior ();
-	
-	SetIdleFreq (1);
+	fDescription = (TStaticText *) FindSubView ('desc');
 }
 
 void
-XPFProgressWindow::setThread (CCooperativeThread_AC *thread)
+XPFProgressWindow::animate ()
 {
-	fThread = thread;
+	fProgress->HandleIdle (idleContinue);
+	updateAllWindows (true);
 }
 
 void 
 XPFProgressWindow::setDescription (unsigned char* theText)
 {
-	fSetDescription = true;
-	fDescriptionText.CopyFrom (theText);
-	YieldToThread (kApplicationThreadID);
+	fDescription->SetText (theText, true);
+	updateAllWindows (true);
+}
+
+void
+XPFProgressWindow::updateAllWindows (bool forceRedraw)
+{
+	static UInt32 ticks = 0;
+	UInt32 newTickCount = TickCount ();
+	bool redraw = forceRedraw || (newTickCount > ticks + 6);		
+	if (redraw) {
+		gApplication->UpdateAllWindows ();	
+		ticks = newTickCount;
+	}
 }
 	
 void 
-XPFProgressWindow::setStatus (unsigned char* theStatus)
+XPFProgressWindow::setStatus (unsigned char* theStatus, bool forceRedraw)
 {
-	fSetStatus = true;
-	fStatusText.CopyFrom (theStatus);
+	static UInt32 ticks = 0;
+	UInt32 newTickCount = TickCount ();
+	bool redraw = forceRedraw || (newTickCount > ticks + 6);		
+	if (redraw) {
+		fStatus->SetText (theStatus, true);
+		updateAllWindows (forceRedraw);
+		ticks = newTickCount;
+	}
 }
 
 void 
 XPFProgressWindow::setProgressMin (ViewCoordinate min)
 {
-	fSetMin = true;
-	fMin = min;
+	fProgress->SetMinimum (min, true);
 }
 
 void 
 XPFProgressWindow::setProgressMax (ViewCoordinate max)
 {
-	fSetMax = true;
-	fMax = max;
+	fProgress->SetDeterminate (max != 0);
+	fProgress->SetMaximum (max, true);
 }
 
 void 
-XPFProgressWindow::setProgressValue (ViewCoordinate value)
+XPFProgressWindow::setProgressValue (ViewCoordinate value, bool forceRedraw)
 {
-	fSetValue = true;
-	fValue = value;
+	static UInt32 ticks = 0;
+	UInt32 newTickCount = TickCount ();
+	bool redraw = forceRedraw || (newTickCount > ticks + 6);
+	if (redraw) {
+		fProgress->SetValue (value, true);
+		updateAllWindows (forceRedraw);
+		ticks = newTickCount;
+	}
 }
 
 void
 XPFProgressWindow::setFinished ()
 {
-	fFinished = true;
-	fThread = NULL;
-}
-
-void 
-XPFProgressWindow::displayException (CException_AC& ex)
-{
-	fException = ex;
-	fHasException = true;
-}
-
-bool 
-XPFProgressWindow::DoIdle (IdlePhase phase)
-{
-	if (phase != idleContinue) return TWindow::DoIdle (phase);
-	
-	if (fFinished) {
-		fFinished = false;
-		if (fProgress->GetMaximum () == 0) fProgress->SetMaximum (100, false);
-		fProgress->SetDeterminate (true);
-		fProgress->SetValue (fProgress->GetMaximum (), true);
-		if (fDialog) fDialog->Dismiss ('cncl', false);
-	}
-	
-	if (fHasException) {
-		fHasException = false;
-		ErrorAlert (fException.GetError (), fException.GetExceptionMessage ());
-		if (fDialog) fDialog->Dismiss ('cncl', false);
-	}
-	
-	if (fSetDescription) {
-		this->SetTitle (fDescriptionText);
-		fSetDescription = false;
-	}
-	
-	if (fSetStatus) {
-		fStatus->SetText (fStatusText, true);
-		fSetStatus = false;
-	}
-	
-	if (fSetMin) {
-		fProgress->SetMinimum (fMin, true);
-		fSetMin = false;
-	}
-	
-	if (fSetMax) {
-		fProgress->SetDeterminate (fMax != 0);
-		fProgress->SetMaximum (fMax, true);
-		fSetMax = false;
-	}
-	
-	if (fSetValue) {
-		fProgress->SetValue (fValue, true);
-		fSetValue = false;
-	}
-	
-	if (fThread && fThread->IsAlive ()) fThread->YieldTo ();
-	
-	return TWindow::DoIdle (phase);
+	if (fProgress->GetMaximum () == 0) fProgress->SetMaximum (100, false);
+	fProgress->SetDeterminate (true);
+	fProgress->SetValue (fProgress->GetMaximum (), true);
+	updateAllWindows (true);
 }

@@ -40,41 +40,35 @@ advised of the possibility of such damage.
 #define Inherited XPFThreadedCommand
 
 void
-XPFInstallBootXCommand::DoItThreaded ()
+XPFInstallBootXCommand::DoItInProgressWindow ()
 {
 	setDescription (CStr255_AC (kXPFStringsResource, kInstallingBootX));
-	setCopyingFile ("\pBootX");
+	setCopyingFile ("\pBootX", true);
 	fProgressMax = 1000;
-	
-	if (fHelperDisk) {
-		fHelperDisk->installBootXIfNecessary (true);
-	} else {
-		fTargetDisk->installBootXIfNecessary (true);
-	}
-	
+	fBootDisk->installBootXIfNecessary (true);	
 	fProgressWindow->setFinished ();
 }
 
 void
-XPFInstallExtensionsCommand::DoItThreaded ()
+XPFInstallExtensionsCommand::DoItInProgressWindow ()
 {
 	fProgressMax = 1000;
 	setDescription (CStr255_AC (kXPFStringsResource, kInstallingExtensions));
-	installExtensionsWithRootDirectory (fTargetDisk->getRootDirectory ());
+	installExtensionsWithRootDirectory (fRootDisk->getRootDirectory ());
 	fProgressWindow->setFinished ();
 }
 
 void
-XPFInstallStartupCommand::DoItThreaded ()
+XPFInstallStartupCommand::DoItInProgressWindow ()
 {
 	fProgressMax = 1000;
 	setDescription (CStr255_AC (kXPFStringsResource, kInstallingStartupItem));
-	installStartupItemWithRootDirectory (fTargetDisk->getRootDirectory ());
+	installStartupItemWithRootDirectory (fRootDisk->getRootDirectory ());
 	fProgressWindow->setFinished ();
 }
 
 void
-XPFRecopyHelperFilesCommand::DoItThreaded ()
+XPFRecopyHelperFilesCommand::DoItInProgressWindow ()
 {
 	fProgressMax = 1000;
 	setDescription (CStr255_AC (kXPFStringsResource, kRecopyingHelperFiles));

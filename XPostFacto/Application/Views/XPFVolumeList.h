@@ -36,23 +36,20 @@ advised of the possibility of such damage.
 #define __XPFVOLUMELIST_H__
 
 #include "UScroller.h"
+#include "XPostFacto.h"
 
 class XPFApplication;
 class XPFPrefs;
+class MountedVolume;
 
 class XPFVolumeList : public TScroller
 {
-	MA_DECLARE_CLONE;
 
 public:
 
 	virtual	~XPFVolumeList();		
 	virtual void DoPostCreate(TDocument* itsDocument);
 	
-	virtual void DoEvent	(EventNumber eventNumber,
-							TEventHandler* source,
-							TEvent* event);
-						
 	void DoUpdate	(ChangeID_AC theChange, 
 					MDependable_AC* changedObject,
 					void* changeData,
@@ -60,14 +57,14 @@ public:
 					
 	void DoMouseCommand (CViewPoint&		theMouse,
 						TToolboxEvent*	event,
-						CPoint_AC		hysteresis);	
-						
-	void TrackFeedback 	(TrackPhase			aTrackPhase,
-					const CViewPoint&	anchorPoint,
-					const CViewPoint&	previousPoint,
-					const CViewPoint&	nextPoint,
-					bool				mouseDidMove,
-					bool				turnItOn);
+						CPoint_AC		hysteresis);
+
+	void TrackFeedback	(TrackPhase			aTrackPhase,
+						 const CViewPoint&	anchorPoint,
+						 const CViewPoint&	previousPoint,
+						 const CViewPoint&	nextPoint,
+						 bool				mouseDidMove,
+						 bool				turnItOn);
 
 	void TrackMouse		(TrackPhase	aTrackPhase,
 					CViewPoint&	anchorPoint,
@@ -78,11 +75,54 @@ public:
 	void ScrollBy (const CViewPoint& delta, bool redraw);
 
 					
-private:
+protected:
+
+	virtual void handleUserSelectedVolume (MountedVolume *vol) = 0;
+	virtual bool useVolumeInList (MountedVolume *vol) = 0;
+	virtual CommandNumber getSetSelectionCommandNumber () = 0;
 	
 	XPFApplication *fApp;
 	XPFPrefs *fPrefs;
 	TView *fTrackSelection;
+
+};
+
+class XPFTargetVolumeList : public XPFVolumeList 
+{
+	MA_DECLARE_CLONE;
+
+protected:
+
+	void handleUserSelectedVolume (MountedVolume *vol);
+	bool useVolumeInList (MountedVolume *vol);
+	CommandNumber getSetSelectionCommandNumber () {return cSetTargetDisk;}
+
+};
+
+class XPFInstallCDList : public XPFVolumeList 
+{
+	MA_DECLARE_CLONE;
+
+public:
+
+	virtual void DoPostCreate(TDocument* itsDocument);
+	
+	void AddedASubView (TView* theSubView);
+	void RemovedASubView (TView* theSubView);
+
+protected:
+
+	void handleUserSelectedVolume (MountedVolume *vol);
+	bool useVolumeInList (MountedVolume *vol);
+	CommandNumber getSetSelectionCommandNumber () {return cSetInstallCD;}
+	
+private:
+
+	void hideMiddleView ();
+	void showMiddleView ();
+
+	TView *fMiddleView;
+	TView *fBottomView;
 
 };
 

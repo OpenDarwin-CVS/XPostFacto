@@ -42,7 +42,11 @@ advised of the possibility of such damage.
 #include "XPFUpdateCommands.h"
 #include "XPFInstallCommand.h"
 #include "XPFRestartCommand.h"
+#include "XPFSynchronizeCommand.h"
 #include "XPFAuthorization.h"
+#include "XPFErrors.h"
+
+#include <string.h>
 
 #ifndef __MACH__
 	#include <PCI.h>
@@ -79,9 +83,10 @@ XPFPrefs::XPFPrefs (TFile* itsFile)
 		fInputDevice (NULL),
 		fOutputDevice (NULL),
 		fOptionsWindow (NULL),
-		fDebug (0)
+		fDebug (0),
+		fRebootInMacOS9 (false)
 {
-	fAskOnClose = false;
+	SetAskOnClose (true);
 }
 
 XPFPrefs::~XPFPrefs ()
@@ -89,18 +94,117 @@ XPFPrefs::~XPFPrefs ()
 	if (fOptionsWindow) delete fOptionsWindow;
 }
 
-#ifdef __MACH__
+void
+XPFPrefs::Close ()
+{
+	// First, do the superclass Close, so that we save if we need to save etc.
+	Inherited::Close ();
+	
+	try {	
+		// Now, we check NVRAM and do whatever copying is necessary
+		XPFNVRAMSettings *nvram = XPFNVRAMSettings::GetSettings ();
+		nvram->readFromNVRAM ();
+		
+		char *bootCommand = nvram->getStringValue ("boot-command");
+		char *bootDevice = nvram->getStringValue ("boot-device");
+		
+		// If we're rebooting into Mac OS 9, then no copying necessary
+		if (!strstr (bootDevice, "/AAPL,ROM")) {	
+			MountedVolume *bootDisk = MountedVolume::WithOpenFirmwarePath (bootDevice);
+			MountedVolume *rootDisk = bootDisk;
+			
+			char *rdString = strstr (bootCommand, "rd=*");
+			if (rdString) {
+				char rootPath[256];
+				strcpy (rootPath, rdString + strlen ("rd=*"));
+				char *pos = strchr (rootPath, ' ');
+				if (pos) *pos = 0;
+				
+				rootDisk = MountedVolume::WithOpenFirmwarePath (rootPath);
+				if (!rootDisk) rootDisk = bootDisk;
+			}	
+			
+			// Now, create and run the command immediately.
+			if (rootDisk) PerformCommand (TH_new XPFSynchronizeCommand (rootDisk, bootDisk));
+		}
+	}
+	
+	catch (CException_AC &ex) {
+		ErrorAlert (ex.GetError (), ex.GetExceptionMessage ());
+	}
+		
+	restartStartupItem ();
+	
+	if (!gApplication->GetDone ()) gApplication->DoMenuCommand (cQuit);
+}
+
+short
+XPFPrefs::PoseConfirmDialog (bool forInstall, bool quitting)
+{
+	short retVal = kStdCancelItemIndex;
+	
+	MountedVolume *bootDisk = forInstall ? fInstallCD : fTargetDisk;
+	
+	CStr255_AC version (fRebootInMacOS9 ? "Mac OS 9" : "Mac OS X ");
+	if (!fRebootInMacOS9) version += bootDisk->getMacOSXVersion ();
+	
+	MAParamText ("$OS$", version);
+	MAParamText ("$VOLUME$", fRebootInMacOS9 ? "a Mac OS 9 volume" : bootDisk->getVolumeName ());
+	if (forInstall) MAParamText ("$TARGET$", fTargetDisk->getVolumeName ());
+	
+	IDType dialogID;
+	if (forInstall) {
+		dialogID = quitting ? kInstallDialog : kInstallNowDialog;
+	} else {
+		dialogID = quitting ? kRestartDialog : kRestartNowDialog;
+	}
+	
+	TWindow *dialog = TViewServer::fgViewServer->NewTemplateWindow (dialogID, NULL);
+	IDType result = dialog->PoseModally ();
+	switch (result) {
+		case 'chan':
+			retVal = kStdOkItemIndex;
+			break;
+			
+		case 'canc':
+			retVal = kStdCancelItemIndex;
+			break;
+			
+		case 'dont':
+			retVal = kNoButton;
+			break;
+	}
+	
+	dialog->Close ();
+
+	return retVal;
+}
+
+short 
+XPFPrefs::PoseSaveDialog ()
+{
+	short retVal = kStdCancelItemIndex;
+	
+	// We only use the install dialog if we can't start up from the target disk already
+	bool useInstallDialog = (fInstallCD != NULL) && (fTargetDisk->getBootStatus () != kStatusOK);
+	
+	retVal = PoseConfirmDialog (useInstallDialog, true);
+		
+	if (retVal == kStdOkItemIndex) {
+		if (useInstallDialog) {
+			PerformCommand (TH_new XPFInstallCommand (this));
+		} else {
+			PerformCommand (TH_new XPFRestartCommand (this, false));
+		}		
+	}
+	
+	return retVal;
+}
 
 void
 XPFPrefs::getPrefsFromNVRAM ()
-{
-	static bool done = false;
-	if (done) return;
-	done = true;
-		
+{		
 	XPFNVRAMSettings *nvram = XPFNVRAMSettings::GetSettings ();
-	
-	setAutoBoot (nvram->getBooleanValue ("auto-boot?"));
 	
 	char *bootCommand = nvram->getStringValue ("boot-command");
 	char *bootDevice = nvram->getStringValue ("boot-device");
@@ -108,32 +212,63 @@ XPFPrefs::getPrefsFromNVRAM ()
 	char *inputDevice = nvram->getStringValue ("input-device");
 	char *outputDevice = nvram->getStringValue ("output-device");
 	char *nvramrc = nvram->getStringValue ("nvramrc");
+
+	// Check to see whether NVRAM is set to boot back into Mac OS 9
+	if (strstr (bootDevice, "/AAPL,ROM")) {
+#ifdef __MACH__
+		// If we're in Mac OS X now, we set the prefs to reboot in 9. We don't need to update the change
+		// count because we don't need to rewrite NVRAM if the user just quits.
+		setRebootInMacOS9 (true, false);
+#else
+		// If we're in Mac OS 9, we leave the pref to reboot in X, since that is probably what the user
+		// wants. But we bump the change count, since we'll have to rewrite NVRAM to achieve that.
+		SetChangeCount (GetChangeCount () + 1);
+#endif
+		// In either case, we bail out here, since the rest of the NVRAM settings won't be interesting
+		// if we're booting in 9.
+		return;	
+	}
 	
+	// For the rest of the settings, we bump the change count if we make changes to what was in the
+	// prefs file. That way, we ensure that the prefs file and the contents of NVRAM stay in sync.
+
+	setAutoBoot (nvram->getBooleanValue ("auto-boot?"));	
 	setBootInSingleUserMode ((strstr (bootCommand, " -s")) != 0);
 	setBootInVerboseMode ((strstr (bootCommand, " -v")) != 0);
+	setEnableCacheEarly ((strstr (bootCommand, " -c")) != 0);
 	
 	char *debugString = strstr (bootCommand, "debug=");
+	UInt32 debug = 0;
 	if (debugString) {
 		debugString += strlen ("debug=");
-		fDebug = strtoul (debugString, NULL, 0);
+		debug = strtoul (debugString, NULL, 0);
 	}
+	if (fDebug != debug) SetChangeCount (GetChangeCount () + 1);
+	fDebug = debug;
 	
 	MountedVolume *bootDisk = MountedVolume::WithOpenFirmwarePath (bootDevice);
 	MountedVolume *rootDisk = bootDisk;
 	
 	char *rdString = strstr (bootCommand, "rd=*");
 	if (rdString) {
-		char str[256];
-		strcpy (str, rdString + strlen ("rd=*"));
-		char *pos = strchr (str, ' ');
+		char rootPath[256];
+		strcpy (rootPath, rdString + strlen ("rd=*"));
+		char *pos = strchr (rootPath, ' ');
 		if (pos) *pos = 0;
 		
-		MountedVolume *rootDisk = MountedVolume::WithOpenFirmwarePath (rdString);
+		rootDisk = MountedVolume::WithOpenFirmwarePath (rootPath);
 		if (!rootDisk) rootDisk = bootDisk;
 	}	
 	
 	if (rootDisk && (rootDisk->getBootStatus () == kStatusOK)) {
 		setTargetDisk (rootDisk);
+		if (bootDisk && (bootDisk != rootDisk) && (bootDisk->getHelperStatus() == kStatusOK)) {
+			fTargetDisk->setHelperDisk (bootDisk);
+		}
+	} else {
+		// If we can't set the target disk to the current root, then we'd better
+		// bump the change count. (Since our pref won't match what's in NVRAM).
+		SetChangeCount (GetChangeCount () + 1);
 	}
 	
 	// input device
@@ -143,18 +278,18 @@ XPFPrefs::getPrefsFromNVRAM ()
 	setOutputDevice (outputDevice);
 	
 	// throttle
+	UInt32 throttleVal = 0;
 	char *throttle = strstr (nvramrc, "$I");
 	if (throttle) {
 		throttle = strstr (throttle + 2, "$I");
 		if (throttle) {
 			do {throttle--;} while (*throttle == ' ');
 			do {throttle--;} while (*throttle != ' ');
-			setThrottle (strtoul (throttle, NULL, 0));
+			throttleVal = strtoul (throttle, NULL, 16);
 		}
 	}
+	setThrottle (throttleVal >> 1);  // accounts for the on/off bit at the end
 }
-
-#endif 		// __MACH__
 
 void
 XPFPrefs::DoInitialState ()
@@ -169,50 +304,13 @@ XPFPrefs::DoInitialState ()
 	
 	gApplication->AddDependent (this);
 	
-	checkStringLength ();
-	
-#ifdef __MACH__
-	// Figure out what the current root disk is, according to the NVRAM
-	// Then, update things if necessary
-	
-	XPFNVRAMSettings *nvram = XPFNVRAMSettings::GetSettings ();
-	
-	char *bootCommand = nvram->getStringValue ("boot-command");
-	char *bootDevice = nvram->getStringValue ("boot-device");
-		
-	MountedVolume *bootDisk = MountedVolume::WithOpenFirmwarePath (bootDevice);
-	MountedVolume *rootDisk = NULL;
-	
-	char *rdString = strstr (bootCommand, "rd=*");
-	if (rdString) {
-		char str[256];
-		strcpy (str, rdString + strlen ("rd=*"));
-		char *pos = strchr (str, ' ');
-		if (pos) *pos = 0;
-		
-		rootDisk = MountedVolume::WithOpenFirmwarePath (rdString);
-	}
-	
-	if (rootDisk == NULL) rootDisk = bootDisk;
-
-	if (bootDisk) bootDisk->installBootXIfNecessary ();
-	
-	if (rootDisk) {
-		fTargetDisk = rootDisk; // this is a workaround to make the commands work--we reset it below 
-
-		if (!rootDisk->hasCurrentExtensions ()) {
-			PostCommand (TH_new XPFInstallExtensionsCommand (this));
-		}
-	
-		if (!rootDisk->hasCurrentStartupItems ()) {
-			PostCommand (TH_new XPFInstallStartupCommand (this));
-		}	
-	}
-#endif
-
-	// Now, really set the defaults
 	fTargetDisk = MountedVolume::GetDefaultRootDisk ();
 	fInstallCD = MountedVolume::GetDefaultInstallerDisk ();
+	if (fInstallCD && !fTargetDisk) fTargetDisk = MountedVolume::GetDefaultInstallTarget ();
+
+	checkStringLength ();	
+	
+	suspendStartupItem ();
 }
 
 void
@@ -247,7 +345,6 @@ XPFPrefs::DoUpdate (ChangeID_AC theChange,
 			break;
 	}
 }
-
 
 void
 XPFPrefs::RegainControl ()
@@ -293,8 +390,8 @@ XPFPrefs::DoRead (TFile* aFile, bool forPrinting)
 		fileStream.ReadBytes (&volInfo, sizeof (volInfo));
 		// Don't use the pref if we can't find the disk
 		MountedVolume *rootDisk = MountedVolume::WithInfo (&volInfo);
-		if (rootDisk) fTargetDisk = rootDisk;
-		
+		if (rootDisk && (rootDisk->getBootStatus () == kStatusOK)) setTargetDisk (rootDisk, false);
+			
 		UInt32 helpers;
 		fileStream >> helpers;
 		
@@ -311,7 +408,62 @@ XPFPrefs::DoRead (TFile* aFile, bool forPrinting)
 	catch (...) {
 	}
 	
+	// Now, get prefs from NVRAM to see what's changed (if anything)
+	getPrefsFromNVRAM ();
+	
 	checkStringLength ();
+}
+
+void
+XPFPrefs::writePrefsToNVRAM (bool forInstall)
+{
+	if (((XPFApplication *) gApplication)->getDebugOptions () & kDisableNVRAMWriting) return;
+
+	XPFNVRAMSettings *nvram = XPFNVRAMSettings::GetSettings ();
+	
+	CChar255_AC bootDevice (getBootDevice (forInstall));
+	CChar255_AC bootFile (getBootFile (forInstall));
+	CChar255_AC bootCommand (getBootCommand (forInstall));
+	CChar255_AC inputDevice (getInputDevice (forInstall));
+	CChar255_AC outputDevice (getOutputDevice (forInstall));
+	
+	nvram->setStringValue ("boot-device", bootDevice);
+	nvram->setStringValue ("boot-file", bootFile);
+	nvram->setStringValue ("boot-command", bootCommand);
+	nvram->setBooleanValue ("auto-boot?", fAutoBoot);	
+	nvram->setStringValue ("input-device", inputDevice);
+	nvram->setStringValue ("output-device", outputDevice);
+	
+	XPFPlatform *platform = ((XPFApplication *) gApplication)->getPlatform ();
+	if (platform->getCanPatchNVRAM ()) {
+		platform->patchNVRAM ();
+	} else {
+		ThrowException_AC (kErrorWritingNVRAM, 0);
+	}
+		
+	// adjust throttle
+	char nvramrc [2048];
+	strcpy (nvramrc, nvram->getStringValue ("nvramrc"));
+	char *ictc = strstr (nvramrc, "11 $I");
+	if (ictc) {
+		char throttleValue [12];
+		sprintf (throttleValue, "%X", fThrottle ? (fThrottle << 1) | 1 : 0);
+		ictc [0] = ' ';
+		ictc [1] = ' ';
+		BlockMoveData (throttleValue, ictc, strlen (throttleValue));
+	} 
+	nvram->setStringValue ("nvramrc", nvramrc);
+	
+	#if qLogging
+		gLogFile << "Restarting ..." << endl_AC;
+		gLogFile << "Boot-device: " << bootDevice << endl_AC;
+		gLogFile << "Boot-command: " << bootCommand << endl_AC;
+		gLogFile << "input-device: " << inputDevice << endl_AC;
+		gLogFile << "output-device: " << outputDevice << endl_AC;
+	#endif
+	
+	OSErr err = nvram->writeToNVRAM ();
+	if (err != noErr) ThrowException_AC (kErrorWritingNVRAM, 0);
 }
 
 void
@@ -336,10 +488,10 @@ XPFPrefs::DoWrite (TFile* aFile, bool makingCopy)
 	fUseShortStrings = false;
 	CStr255_AC device;
 	
-	device = getInputDevice ();
+	device = getInputDevice (false);
 	fileStream.WriteString (device);
 		
-	device = getOutputDevice ();
+	device = getOutputDevice (false);
 	fileStream.WriteString (device);
 	
 	fUseShortStrings = save;
@@ -375,7 +527,6 @@ XPFPrefs::DoMakeViews (bool forPrinting)
 	Inherited::DoMakeViews (forPrinting);
 }
 
-
 void 
 XPFPrefs::DoSetupMenus ()
 {
@@ -395,21 +546,21 @@ void
 XPFPrefs::DoMenuCommand (CommandNumber aCommandNumber)
 {
 	switch (aCommandNumber) 
-	{				
+	{			
 		case cInstallBootX:
-			PostCommand (TH_new XPFInstallBootXCommand (this));
+			PostCommand (TH_new XPFInstallBootXCommand (fTargetDisk, fTargetDisk->getHelperDisk ()));
 			break;
 			
 		case cInstallExtensions:
-			PostCommand (TH_new XPFInstallExtensionsCommand (this));
+			PostCommand (TH_new XPFInstallExtensionsCommand (fTargetDisk, fTargetDisk->getHelperDisk ()));
 			break;
 		
 		case cInstallStartupItem:
-			PostCommand (TH_new XPFInstallStartupCommand (this));
+			PostCommand (TH_new XPFInstallStartupCommand (fTargetDisk, fTargetDisk->getHelperDisk ()));
 			break;
 			
 		case cRecopyHelperFiles:
-			PostCommand (TH_new XPFRecopyHelperFilesCommand (this));
+			PostCommand (TH_new XPFRecopyHelperFilesCommand (fTargetDisk, fTargetDisk->getHelperDisk ()));
 			break;
 			
 		default:
@@ -486,99 +637,59 @@ XPFPrefs::Changed(ChangeID_AC theChange, void* changeData)
 	Inherited::Changed (theChange, changeData);
 }
 
-// Functions for getting the values we need to write to NVRAM.
+void
+XPFPrefs::suspendStartupItem ()
+{
+#ifdef __MACH__
+	XPFSetUID myUID (0);
+	system ("/Library/StartupItems/XPFStartupItem/XPFStartupItem suspend");
+#endif
+}
+
+void
+XPFPrefs::restartStartupItem ()
+{
+#ifdef __MACH__
+	XPFSetUID myUID (0);
+	system ("/Library/StartupItems/XPFStartupItem/XPFStartupItem restart");
+#endif
+}
+
+#pragma mark ----> Accessors for NVRAM values
 
 CStr255_AC 
-XPFPrefs::getInputDevice ()
+XPFPrefs::getInputDevice (bool forInstall)
 {
 	CStr255_AC result;
-	if (fInputDevice) {
-		if (fUseShortStrings) {
-			result.CopyFrom (fInputDevice->getShortOpenFirmwareName ());
-		} else {
-			result.CopyFrom (fInputDevice->getOpenFirmwareName ());
-		}
-	}
+	if (fInputDevice) result.CopyFrom (fInputDevice->getOpenFirmwareName (getUseShortStrings (forInstall)));
 	return result;
 }
 
 CStr255_AC
-XPFPrefs::getOutputDevice ()
+XPFPrefs::getOutputDevice (bool forInstall)
 {
 	CStr255_AC result;
-	if (fOutputDevice) {
-		if (fUseShortStrings) {
-			result.CopyFrom (fOutputDevice->getShortOpenFirmwareName ());
-		} else {
-			result.CopyFrom (fOutputDevice->getOpenFirmwareName ());
-		}
-	}
+	if (fOutputDevice) result.CopyFrom (fOutputDevice->getOpenFirmwareName (getUseShortStrings (forInstall)));
 	return result;
 }
 
 CStr255_AC
-XPFPrefs::getInputDeviceForInstall ()
+XPFPrefs::getBootDevice (bool forInstall)
 {
-	CStr255_AC result;
-	if (fInputDevice) {
-		if (fUseShortStringsForInstall) {
-			result.CopyFrom (fInputDevice->getShortOpenFirmwareName ());
-		} else {
-			result.CopyFrom (fInputDevice->getOpenFirmwareName ());
-		}
-	}
-	return result;
-}
+	if (fRebootInMacOS9) return CStr255_AC ("/AAPL,ROM");
 
-CStr255_AC
-XPFPrefs::getOutputDeviceForInstall ()
-{
-	CStr255_AC result;
-	if (fOutputDevice) {
-		if (fUseShortStringsForInstall) {
-			result.CopyFrom (fOutputDevice->getShortOpenFirmwareName ());
-		} else {
-			result.CopyFrom (fOutputDevice->getOpenFirmwareName ());
-		}
-	}
-	return result;
-}
-
-
-CStr255_AC
-XPFPrefs::getBootDevice ()
-{
 	MountedVolume *bootDevice = getTargetDisk ();
-	if (!bootDevice) return "";
+	if (!bootDevice) return CStr255_AC ("");
 	
 	if (bootDevice->getHelperDisk ()) bootDevice = bootDevice->getHelperDisk ();		
 	
-	if (fUseShortStrings) {
-		return bootDevice->getShortOpenFirmwareName();
-	} else {
-		return bootDevice->getOpenFirmwareName();
-	}
-}
-
-CStr255_AC
-XPFPrefs::getBootDeviceForInstall ()
-{
-	MountedVolume *bootDevice = getTargetDisk ();
-	if (!bootDevice) return "";
-	
-	if (bootDevice->getHelperDisk ()) bootDevice = bootDevice->getHelperDisk ();		
-	
-	if (fUseShortStringsForInstall) {
-		return bootDevice->getShortOpenFirmwareName ();
-	} else {
-		return bootDevice->getOpenFirmwareName ();
-	}
+	return bootDevice->getOpenFirmwareName (getUseShortStrings (forInstall));
 }
 
 CStr255_AC 
 XPFPrefs::getBootCommandBase ()
 {
-	if (!getTargetDisk ()) return "";
+	if (!getTargetDisk ()) return CStr255_AC ("");
 	
 	CStr255_AC bootCommand ("0 bootr");
 	
@@ -596,189 +707,38 @@ XPFPrefs::getBootCommandBase ()
 }
 
 CStr255_AC 
-XPFPrefs::getBootCommand ()
+XPFPrefs::getBootCommand (bool forInstall)
 {
-	if (!getTargetDisk ()) return "";	
+	if (fRebootInMacOS9) return CStr255_AC ("boot");
+
+	if (!getTargetDisk ()) return CStr255_AC ("");	
+	if (forInstall && !getInstallCD ()) return CStr255_AC ("");
+
+	MountedVolume *rootDisk = forInstall ? fInstallCD : fTargetDisk;
+
 	CStr255_AC bootCommand = getBootCommandBase ();
 	
-	if (!fBootInVerboseMode && !getTargetDisk ()->getHasFinder ()) bootCommand += " -v";
+	if (!fBootInVerboseMode && !rootDisk->getHasFinder ()) bootCommand += " -v";
 	
-	if (getTargetDisk ()->getHelperDisk ()) {
+	if (forInstall || getTargetDisk ()->getHelperDisk ()) {
 		bootCommand += " rd=*";
-		if (fUseShortStrings) {
-			bootCommand += getTargetDisk ()->getShortOpenFirmwareName ();
-		} else {
-			bootCommand += getTargetDisk ()->getOpenFirmwareName ();
-		}
+		bootCommand += rootDisk->getOpenFirmwareName (getUseShortStrings (forInstall));
 	}
 		
 	return bootCommand;
 }
 
 CStr255_AC
-XPFPrefs::getBootCommandForInstall ()
+XPFPrefs::getBootFile (bool forInstall)
 {
-	if (!getInstallCD ()) return "";
-	CStr255_AC bootCommand = getBootCommandBase ();
-	
-	if (!fBootInVerboseMode && !getInstallCD ()->getHasFinder ()) bootCommand += " -v";
-	
-	bootCommand += " rd=*";
-	if (fUseShortStringsForInstall) {
-		bootCommand += fInstallCD->getShortOpenFirmwareName ();
-	} else {
-		bootCommand += fInstallCD->getOpenFirmwareName();	
-	}
-
-	return bootCommand;
+	if (fRebootInMacOS9) return CStr255_AC ("");
+	if (forInstall) return CStr255_AC ("-h");
+	if (!getTargetDisk ()) return CStr255_AC ("");
+	if (getTargetDisk ()->getHelperDisk ()) return CStr255_AC ("-h");
+	return CStr255_AC ("");
 }
 
-CStr255_AC
-XPFPrefs::getBootFileForInstall ()
-{
-	// This is always going to be the helper-style boot
-	return CStr255_AC ("-h");
-}
-
-CStr255_AC
-XPFPrefs::getBootFile ()
-{
-	if (!getTargetDisk ()) return "";
-	if (getTargetDisk ()->getHelperDisk ()) {
-		return CStr255_AC ("-h");
-	} else {
-		return CStr255_AC ("");
-	}
-}
-
-// Accessors
-
-void
-XPFPrefs::setInputDevice (XPFIODevice *val)
-{
-	if (fInputDevice != val) {
-		fInputDevice = val;
-		Changed (cSetInputDevice, val);
-	}
-}
-
-void
-XPFPrefs::setOutputDevice (XPFIODevice *val)
-{
-	if (fOutputDevice != val) {
-		fOutputDevice = val;
-		Changed (cSetOutputDevice, val);
-	}
-}
-
-void 
-XPFPrefs::setUseShortStrings (bool newVal)
-{
-	if (fUseShortStrings != newVal) {
-		fUseShortStrings = newVal;
-		Changed (cSetUseShortStrings, &fUseShortStrings);
-	}
-}
-
-void 
-XPFPrefs::setUseShortStringsForInstall (bool newVal)
-{
-	if (fUseShortStringsForInstall != newVal) {
-		fUseShortStringsForInstall = newVal;
-		Changed (cSetUseShortStringsForInstall, &fUseShortStringsForInstall);
-	}
-}
-
-void 
-XPFPrefs::setTargetDisk (MountedVolume *theDisk)
-{
-	if (fTargetDisk != theDisk) {
-		fTargetDisk = theDisk;
-		Changed (cSetTargetDisk, fTargetDisk);
-	}
-}
-
-void 
-XPFPrefs::setInstallCD (MountedVolume *theDisk)
-{
-	if (fInstallCD != theDisk) {
-		fInstallCD = theDisk;
-		Changed (cSetInstallCD, fInstallCD);
-	}
-}
-
-void 
-XPFPrefs::setBootInVerboseMode (bool val)
-{
-	if (fBootInVerboseMode != val) {
-		fBootInVerboseMode = val;
-		Changed (cSetVerboseMode, &fBootInVerboseMode);
-	}
-}
-
-void 
-XPFPrefs::setBootInSingleUserMode (bool val)
-{
-	if (fBootInSingleUserMode != val) {
-		fBootInSingleUserMode = val;
-		Changed (cSetSingleUserMode, &fBootInSingleUserMode);
-	}
-}
-
-void
-XPFPrefs::setAutoBoot (bool val)
-{
-	if (fAutoBoot != val) {
-		fAutoBoot = val;
-		Changed (cSetAutoBoot, &fAutoBoot);
-	}
-}
-
-void
-XPFPrefs::setEnableCacheEarly (bool val)
-{
-	if (fEnableCacheEarly != val) {
-		fEnableCacheEarly = val;
-		Changed (cSetEnableCacheEarly, &fEnableCacheEarly);
-	}
-}
-
-void 
-XPFPrefs::setThrottle (unsigned throttle)
-{
-	if (fThrottle != throttle) {
-		fThrottle = throttle;
-		Changed (cSetThrottle, &fThrottle);
-	}
-}
-
-// Debug accessors. Better than repeating it all 8 times!
-
-#define DEBUG_ACCESSORS(methodName)												\
-	void																		\
-	XPFPrefs::set##methodName (bool val) 										\
-	{																			\
-		if ((fDebug & k##methodName) != (val ? k##methodName : 0)) {			\
-			if (val) fDebug |= k##methodName; else fDebug &= ~k##methodName;	\
-			Changed (cSet##methodName, &val);									\
-		}																		\
-	}																			\
-																				\
-	bool																		\
-	XPFPrefs::get##methodName ()												\
-	{																			\
-		return (fDebug & k##methodName) ? true : false;							\
-	}
-		
-DEBUG_ACCESSORS (DebugBreakpoint);
-DEBUG_ACCESSORS (DebugPrintf);
-DEBUG_ACCESSORS (DebugNMI);
-DEBUG_ACCESSORS (DebugKprintf);
-DEBUG_ACCESSORS (DebugDDB);
-DEBUG_ACCESSORS (DebugSyslog);
-DEBUG_ACCESSORS (DebugARP);
-DEBUG_ACCESSORS (DebugOldGDB);
-DEBUG_ACCESSORS (DebugPanicText);
+#pragma mark ----> Convenience Functions
 
 // Convenience functions for setting input and output devices based on their labels.
 // I.e. what would be displayed in a popup menu, for instance.
@@ -824,3 +784,78 @@ XPFPrefs::getOutputDeviceIndex ()
 	if (!fOutputDevice) return 0;
 	return XPFIODevice::GetOutputDeviceList ()->GetIdentityItemNo (fOutputDevice);
 }
+
+#pragma mark ----> Accessors
+
+void 
+XPFPrefs::setInstallCD (MountedVolume *theDisk, bool callChanged)
+{
+	if (fInstallCD != theDisk) {
+		fInstallCD = theDisk;
+		if (callChanged) Changed (cSetInstallCD, fInstallCD);
+		if (fInstallCD == NULL) {
+			// Switch the target back to something bootable if it wasn't
+			if (fTargetDisk && (fTargetDisk->getBootStatus () != kStatusOK)) {
+				setTargetDisk (MountedVolume::GetDefaultRootDisk (), callChanged);
+			}
+		} else {
+			// If we had no target, now set it to something that can be installed to
+			if (!fTargetDisk) setTargetDisk (MountedVolume::GetDefaultInstallTarget (), callChanged);
+		}
+	}
+}
+
+#define ACCESSOR(method,type)										\
+	void XPFPrefs::set##method (type val, bool callChanged) {		\
+		if (f##method != val) {										\
+			f##method = val;										\
+			if (callChanged) Changed (cSet##method, &val);			\
+		}															\
+	}									
+	
+#define POINTER_ACCESSOR(method,type)								\
+	void XPFPrefs::set##method (type *val, bool callChanged) {		\
+		if (f##method != val) {										\
+			f##method = val;										\
+			if (callChanged) Changed (cSet##method, val);			\
+		}															\
+	}		
+	
+#define DEBUG_ACCESSORS(methodName)												\
+	void																		\
+	XPFPrefs::set##methodName (bool val, bool callChanged)						\
+	{																			\
+		if ((fDebug & k##methodName) != (val ? k##methodName : 0)) {			\
+			if (val) fDebug |= k##methodName; else fDebug &= ~k##methodName;	\
+			if (callChanged) Changed (cSet##methodName, &val);					\
+		}																		\
+	}																			\
+																				\
+	bool																		\
+	XPFPrefs::get##methodName ()												\
+	{																			\
+		return (fDebug & k##methodName) ? true : false;							\
+	}
+							
+POINTER_ACCESSOR (InputDevice, XPFIODevice)
+POINTER_ACCESSOR (OutputDevice, XPFIODevice)
+POINTER_ACCESSOR (TargetDisk, MountedVolume)
+	
+ACCESSOR (UseShortStrings, bool)
+ACCESSOR (UseShortStringsForInstall, bool)
+ACCESSOR (BootInVerboseMode, bool)
+ACCESSOR (BootInSingleUserMode, bool)
+ACCESSOR (AutoBoot, bool)
+ACCESSOR (RebootInMacOS9, bool)
+ACCESSOR (EnableCacheEarly, bool)
+ACCESSOR (Throttle, unsigned)
+
+DEBUG_ACCESSORS (DebugBreakpoint)
+DEBUG_ACCESSORS (DebugPrintf)
+DEBUG_ACCESSORS (DebugNMI)
+DEBUG_ACCESSORS (DebugKprintf)
+DEBUG_ACCESSORS (DebugDDB)
+DEBUG_ACCESSORS (DebugSyslog)
+DEBUG_ACCESSORS (DebugARP)
+DEBUG_ACCESSORS (DebugOldGDB)
+DEBUG_ACCESSORS (DebugPanicText)

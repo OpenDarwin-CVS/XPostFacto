@@ -81,6 +81,9 @@ resource 'hlps' (kHelpStringsResource, purgeable) {
 		'exof', 20;
 		'selu', 21;
 		'updb', 22;
+		'rsst', 23;
+		'mosx', 23;
+		'mos9', 23;
 	}
 };
 
@@ -114,7 +117,7 @@ resource 'STR#' (kHelpStringsResource, purgeable) {
 /* 10 */ "Opens a web page that explains the debug settings.";
 
 		 "Select the volume you want to use for Mac OS X. "
-		 "Use the menus to the right to restart from this volume, or install Mac OS X to this volume.";
+		 "You can then restart from this volume, or install Mac OS X to this volume.";
 		 
 		 "Shows additional information about the selected volume. Not implemented yet.";
 		 
@@ -129,12 +132,9 @@ resource 'STR#' (kHelpStringsResource, purgeable) {
 		 "target volume will not boot without one. This is mainly meant for booting from Firewire drives "
 		 "or booting from CDs, but in can be useful in some other cases as well.";
 		 
-		 "Restart Mac OS X from the selected target volume, using the helper disk if you have selected one. "
-		 "To restart from an Install CD, select the destination as the target volume, and then use the "
-		 "'Install' button below.";
+		 "Restart Mac OS X from the selected target volume, using the helper disk if you have selected one.";
 		 
-		 "Install Mac OS X to the selected target volume, using the Install CD selected in the 'Use CD' menu."
-		 " Not working yet in the Mac OS X version of XPostFacto.";
+		 "Install Mac OS X to the selected target volume, using the Install CD you have selected";
 		 
 		 "Select an Install CD to use for installing Mac OS X.";
 		 
@@ -144,5 +144,8 @@ resource 'STR#' (kHelpStringsResource, purgeable) {
 		 "Not implemented yet.";
 		 
 		 "Update the items you have selected. Not implemented yet.";
+		 
+		 "Choose whether to reboot in Mac OS 9 or Mac OS X. Note that you cannot choose a specific "
+		 "Mac OS 9 volume -- this feature is not yet implemented.";
 	}
 };

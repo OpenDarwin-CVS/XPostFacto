@@ -34,26 +34,7 @@ advised of the possibility of such damage.
 #ifndef __XPFTHREADEDCOMMAND_H__
 #define __XPFTHREADEDCOMMAND_H__
 
-#include "CThreadRunner_AC.h"
-#include "CThreadYielder_AC.h"
 #include "UnicodeConverter.h"
-#include "CCooperativeThread_AC.h"
-
-class XPFThreadedCommand;
-
-class XPFCommandThread : public CCooperativeThread_AC {
-
-	public:
-		
-		XPFCommandThread (XPFThreadedCommand *theCommand);
-		
-		virtual void Run ();
-		
-	protected:
-										
-		XPFThreadedCommand *fCommand;
-		
-};	
 
 class XPFPrefs;
 class MountedVolume;
@@ -63,10 +44,10 @@ class XPFThreadedCommand : public TCommand {
 
 	public:
 		
-		XPFThreadedCommand (XPFPrefs *prefs);
+		XPFThreadedCommand (MountedVolume *rootDisk, MountedVolume *bootDisk = NULL);
 		
 		void DoIt ();											
-		virtual void DoItThreaded () = 0;
+		virtual void DoItInProgressWindow () = 0;
 
 		XPFProgressWindow* getProgressWindow () {return fProgressWindow;}
 			
@@ -78,26 +59,23 @@ class XPFThreadedCommand : public TCommand {
 		Boolean copyFilter (const FSRef *src, Boolean preflight);
 		Boolean archiveFilter (const FSRef *src, Boolean preflight);
 		
-		void turnOffIgnorePermissionsForVolume (MountedVolume *volume);
-		
 		void updateExtensionsCacheForRootDirectory (FSRef *rootDirectory);
 		void installExtensionsWithRootDirectory (FSRef *rootDirectory);
 		void installSecondaryExtensionsWithRootDirectory (FSRef *rootDirectory);
 		void installStartupItemWithRootDirectory (FSRef *rootDirectory);
 		void synchronizeWithHelper (bool deleteFirst = false);
-
+		
 		void copyHFSArchivesTo (ResType type, FSRef *directory);
 				
-		void setStatusMessage (unsigned char* message);
-		void setCopyingFile (unsigned char* fileName);
+		void setStatusMessage (unsigned char* message, bool forceRedraw);
+		void setCopyingFile (unsigned char* fileName, bool forceRedraw);
 		void setDescription (unsigned char* description);
 		
-		MountedVolume *fTargetDisk;
-		MountedVolume *fHelperDisk;
+		XPFPrefs *fPrefs;
+		MountedVolume *fRootDisk;
+		MountedVolume *fBootDisk;
 		
 		XPFProgressWindow *fProgressWindow;
-		CThreadYielder_AC fYielder;
-		CThreadRunner_AC fRunner;
 		
 		CStr63_AC fCopyWord;
 		

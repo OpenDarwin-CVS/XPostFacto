@@ -31,7 +31,7 @@ advised of the possibility of such damage.
 
 */
 
-#include "XPFRestartCommand.h"
+#include "XPFSynchronizeCommand.h"
 
 #include "MountedVolume.h"
 #include "XPFPrefs.h"
@@ -46,43 +46,55 @@ advised of the possibility of such damage.
 #include "XPFAuthorization.h"
 #include "XPFFSRef.h"
 
-#define Inherited TCommand
+#define Inherited XPFThreadedCommand
 
-XPFRestartCommand::XPFRestartCommand (XPFPrefs *prefs, bool restartNow)
-	: fPrefs (prefs), fRestartNow (restartNow)
+XPFSynchronizeCommand::XPFSynchronizeCommand (MountedVolume *rootDisk, MountedVolume *bootDisk)
+	: XPFThreadedCommand (rootDisk, bootDisk)
 {
-}
 
-void
-XPFRestartCommand::tellFinderToRestart ()
-{
-	if (((XPFApplication *) gApplication)->getDebugOptions () & kDisableRestart) return;
-
-	AEDesc finderAddr;
-	AppleEvent myRestart, nilReply;
-	AEEventClass eventClass;
-
-#ifdef __MACH__
-	eventClass = kCoreEventClass;
-	ProcessSerialNumber psn = {0, kSystemProcess};
-	ThrowIfOSErr_AC (AECreateDesc (typeProcessSerialNumber, &psn, sizeof (psn), &finderAddr));
-#else
-	eventClass = kAEFinderEvents;
-	OSType fndrSig = 'MACS';
-    ThrowIfOSErr_AC (AECreateDesc (typeApplSignature, &fndrSig, sizeof(fndrSig), &finderAddr));
-#endif
-
-   	ThrowIfOSErr_AC (AECreateAppleEvent (eventClass, kAERestart, &finderAddr, kAutoGenerateReturnID,
-                              kAnyTransactionID, &myRestart));
-    ThrowIfOSErr_AC (AESend (&myRestart, &nilReply, kAENoReply + kAECanSwitchLayer + kAEAlwaysInteract,
-                  kAENormalPriority, kAEDefaultTimeout, NULL, NULL));
-	AEDisposeDesc (&myRestart);
-	AEDisposeDesc (&finderAddr);
 }
 
 void 
-XPFRestartCommand::DoIt ()
+XPFSynchronizeCommand::DoItInProgressWindow ()
 {
-	fPrefs->writePrefsToNVRAM (getInstalling ());
-	if (fRestartNow) tellFinderToRestart ();
+	if (fProgressMin == 0) {
+		setDescription (CStr255_AC (kXPFStringsResource, kUpdating));
+		fProgressMax = 1000;	
+	}
+	
+	float scale = (float) (fProgressMax - fProgressMin) / (float) fProgressMax;
+	unsigned progbase = fProgressMin;
+
+	fProgressMax = progbase + scale * 50;
+	
+	if (fRootDisk->getIsWriteable ()) {
+		if (!fRootDisk->hasCurrentExtensions ()) {
+			installExtensionsWithRootDirectory (fRootDisk->getRootDirectory ());
+		}
+				
+		fProgressMin = fProgressMax;
+		fProgressMax = progbase + scale * 100;
+
+		if (!fRootDisk->hasCurrentStartupItems ()) {
+			installStartupItemWithRootDirectory (fRootDisk->getRootDirectory ());
+		}
+	}
+	
+	fProgressWindow->setProgressValue (progbase + scale * 100, true);
+	
+	if (fBootDisk->getIsWriteable ()) {
+		setCopyingFile ("\pBootX", true);
+		fBootDisk->installBootXIfNecessary ();
+	}
+	
+	fProgressWindow->setProgressValue (progbase + scale * 150, true);
+
+	fProgressMin = progbase + scale * 150;
+	fProgressMax = progbase + scale * 950;
+	
+	synchronizeWithHelper ();
+	
+	fProgressWindow->setProgressValue (progbase + scale * 950, true);	
+	
+	fProgressWindow->setFinished ();
 }

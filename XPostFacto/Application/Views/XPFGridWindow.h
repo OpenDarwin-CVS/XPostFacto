@@ -36,10 +36,6 @@ advised of the possibility of such damage.
 #define __XPFGRIDWINDOW_H__
 
 #include "UWindow.h"
-#include "MountedVolume.h"
-
-class XPFApplication;
-class XPFPrefs;
 
 class XPFGridWindow : public TWindow
 {
@@ -47,31 +43,8 @@ class XPFGridWindow : public TWindow
 
 public:
 
-	virtual~ XPFGridWindow();		
 	virtual void DoPostCreate(TDocument* itsDocument);
-	virtual void Close();
-	virtual void DoEvent(EventNumber eventNumber,
-						TEventHandler* source,
-						TEvent* event);
-	void DoUpdate(ChangeID_AC theChange, 
-								MDependable_AC* changedObject,
-								void* changeData,
-								CDependencySpace_AC* dependencySpace);
-	
-private:
-	
-	XPFApplication *fApp;
-	XPFPrefs *fPrefs;
-	
-	TButton *fRestartButton;
-	TButton *fInstallButton;
-	
-	TPopup	*fHelperMenu;
-	TPopup 	*fInstallCDMenu;
-	
-	MountedVolumeList	fHelperVolumes;
-	MountedVolumeList	fInstallCDs;
-
+		
 };
 
 #endif

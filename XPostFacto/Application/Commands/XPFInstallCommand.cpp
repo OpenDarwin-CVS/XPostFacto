@@ -41,46 +41,37 @@ advised of the possibility of such damage.
 #include "XPFStrings.h"
 #include "XPFApplication.h"
 #include "XPFFSRef.h"
+#include "XPFPrefs.h"
+#include "XPFUpdateCommands.h"
 
 #undef Inherited
 #define Inherited XPFRestartCommand
 
 XPFInstallCommand::XPFInstallCommand (XPFPrefs *prefs)
-	: XPFRestartCommand (prefs)
+	: XPFRestartCommand (prefs, true)
 {
-	fInstallCD = prefs->getInstallCD ();
-	
-	// Substitute the "install" versions of the settings
-	
-	fBootDevice = prefs->getBootDeviceForInstall ();
-	fBootCommand = prefs->getBootCommandForInstall ();
-	fBootFile = prefs->getBootFileForInstall ();
-	fInputDevice = prefs->getInputDeviceForInstall ();
-	fOutputDevice = prefs->getOutputDeviceForInstall ();
-	fUseShortStrings = prefs->getUseShortStringsForInstall ();
 }
 
 void
-XPFInstallCommand::DoItThreaded ()
-{	
-	// For the most part, we treat this as a special-case of a "helper" restart.
-	// It's as if the Install CD were the target, and the target the helper.
-	// But we do a little bit of "pre-install" first.
-						
+XPFInstallCommand::DoIt ()
+{						
 	// We copy BootX from the CD, to make the Installer think that Mac OS X is already
 	// installed, so that it won't move the extensions we pre-install
-		
-	setDescription (CStr255_AC (kXPFStringsResource, kInstalling));
-			
-	if (!(fDebugOptions & kDisableCoreServices)) {
+	
+	MountedVolume *targetDisk = fPrefs->getTargetDisk ();
+	MountedVolume *installCD = fPrefs->getInstallCD ();
+	
+	targetDisk->turnOffIgnorePermissions ();
+	installCD->turnOffIgnorePermissions ();
+						
+	if (!(((XPFApplication *) gApplication)->getDebugOptions () & kDisableCoreServices)) {
 		FSRef coreServicesFolder, cdBootX;
 			
-		ThrowIfOSErr_AC (XPFFSRef::getOrCreateCoreServicesDirectory (fTargetDisk->getRootDirectory (), &coreServicesFolder));
+		ThrowIfOSErr_AC (XPFFSRef::getOrCreateCoreServicesDirectory (targetDisk->getRootDirectory (), &coreServicesFolder));
 			
-		OSErr err = XPFFSRef::getBootXFSRef (fInstallCD->getRootDirectory (), &cdBootX);
+		OSErr err = XPFFSRef::getBootXFSRef (installCD->getRootDirectory (), &cdBootX);
 		if (err != fnfErr) {
 			ThrowIfOSErr_AC (err);
-			setCopyingFile ("\pBootX");
 			XPFSetUID myUID (0);
 			err = FSRefFileCopy (&cdBootX, &coreServicesFolder, NULL, NULL, 0, false);
 			if (err != dupFNErr) ThrowIfOSErr_AC (err);
@@ -89,25 +80,10 @@ XPFInstallCommand::DoItThreaded ()
 	
 	// And we install the extensions and startup item to the installTarget
 	
-	fProgressMin = 100;
-	fProgressMax = 150;
-	installExtensionsWithRootDirectory (fTargetDisk->getRootDirectory ());
-
-	fProgressMin = fProgressMax;
-	fProgressMax = 200;
-	installStartupItemWithRootDirectory (fTargetDisk->getRootDirectory ());
+	PerformCommand (TH_new XPFInstallExtensionsCommand (targetDisk));
+	PerformCommand (TH_new XPFInstallStartupCommand (targetDisk));
+		
+	// And then do the restart
 	
-	// Now, set up all the Restart stuff
-	// The idea is that we'll actually restart from the Install CD, and use
-	// the target disk (or it's helper, if it needs one) as the helper
-	// That way, I don't need separate logic for installs and helpers.
-	// So we switch the settings to make XPFRestartCommand do the right thing
-	
-	fHelperDisk = fTargetDisk->getHelperDisk ();
-	if (fHelperDisk == NULL) fHelperDisk = fTargetDisk;
-	fTargetDisk = fInstallCD;
-	
-	fProgressMin = fProgressMax;
-	fProgressMax = 1000;	
-	XPFRestartCommand::DoItThreaded ();
+	XPFRestartCommand::DoIt ();
 }

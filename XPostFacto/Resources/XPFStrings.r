@@ -80,5 +80,6 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 /* 35 */	"Disable Helper Copy";
 			"Keep Helper Visible";
 			"Recopying Helper Files";
+			"Updating";
 	}
 };

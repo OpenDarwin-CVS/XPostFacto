@@ -35,7 +35,6 @@ advised of the possibility of such damage.
 #define __XPFPROGRESSWINDOW_H__
 
 #include "UWindow.h"
-#include "CCooperativeThread_AC.h"
 
 class TProgressIndicator;
 
@@ -50,38 +49,23 @@ public:
 					  bool canClose = true,
 					  bool inDispose = false);
 	virtual void DoPostCreate (TDocument* itsDocument);
-	bool DoIdle (IdlePhase phase);
-	
-	void setThread (CCooperativeThread_AC *thread);
-						
-	// The following are all meant to be called from a thread.
-						
+
+	void animate ();
 	void setDescription (unsigned char* theText);
-	void setStatus (unsigned char* theStatus);
+	void setStatus (unsigned char* theStatus, bool forceRedraw);
 	void setProgressMin (ViewCoordinate min);
 	void setProgressMax (ViewCoordinate max);
-	void setProgressValue (ViewCoordinate value);
-
-	void displayException (CException_AC& ex);	
+	void setProgressValue (ViewCoordinate value, bool forceRedraw);
 	void setFinished ();
 	
 private:
 
+	void updateAllWindows (bool force);
+
 	TStaticText *fStatus;
-	TButton *fCancel;
+	TStaticText *fDescription;
 	TProgressIndicator *fProgress;
-	TDialogBehavior *fDialog;
-	
-	CStr255_AC fDescriptionText;
-	CStr255_AC fStatusText;
-	ViewCoordinate fMin, fMax, fValue;
-	CException_AC fException;
-	
-	bool fSetDescription, fSetStatus, fSetMin, fSetMax, fSetValue;
-	bool fFinished;
-	bool fHasException;
-	
-	CCooperativeThread_AC *fThread;
+		
 };
 
 #endif

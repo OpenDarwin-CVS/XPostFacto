@@ -74,7 +74,8 @@ enum {
 	kMenuDisableCoreServices,
 	kMenuDisableHelperCopy,		// 35
 	kMenuVisibleHelper,
-	kRecopyingHelperFiles
+	kRecopyingHelperFiles,
+	kUpdating
 };
 
 

@@ -6,28 +6,16 @@ resource 'View' (1020, "Progress Window", purgeable) {
 	MAThreeOhView {
 
 	},
-	{	/* array ViewArray: 4 elements */
+	{	/* array ViewArray: 5 elements */
 		/* [1] */
 		ViewSignatureAndClassname {
 			'wind',
-			493,
+			574,
 			"XPFProgressWindow",
 			'WIND',
 			enabled,
 			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					'dlgb',
-					"",
-					DialogBehavior {
-						enabled,
-						noIdle,
-						modal,
-						noID,
-						'canc'
-					}
-				}
+			{	/* array BehaviorArray: 0 elements */
 			},
 			MAThreeOhView {
 
@@ -40,9 +28,9 @@ resource 'View' (1020, "Progress Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				98,
+				118,
 				/* [2] */
-				413
+				416
 			},
 			sizeVariable,
 			sizeVariable,
@@ -102,76 +90,11 @@ resource 'View' (1020, "Progress Window", purgeable) {
 				generateActivates,
 				filler,
 				1020,
-				2
-			},
-			3
-		},
-		/* [2] */
-		ViewSignatureAndClassname {
-			'butn',
-			96,
-			"",
-			'canc',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 0 elements */
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				20,
-				/* [2] */
-				324
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				20,
-				/* [2] */
-				69
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			doesntHandleCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			Button {
-				mDismiss,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				1020,
 				1
 			},
-			NoSubviews
+			4
 		},
-		/* [3] */
+		/* [2] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -186,9 +109,9 @@ resource 'View' (1020, "Progress Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				50,
+				70,
 				/* [2] */
-				20
+				116
 			},
 			{	/* array: 2 elements */
 				/* [1] */
@@ -239,7 +162,7 @@ resource 'View' (1020, "Progress Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [4] */
+		/* [3] */
 		ViewSignatureAndClassname {
 			'prog',
 			105,
@@ -254,9 +177,9 @@ resource 'View' (1020, "Progress Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				24,
+				46,
 				/* [2] */
-				20
+				116
 			},
 			{	/* array: 2 elements */
 				/* [1] */
@@ -305,16 +228,147 @@ resource 'View' (1020, "Progress Window", purgeable) {
 				notDeterminate
 			},
 			NoSubviews
+		},
+		/* [4] */
+		ViewSignatureAndClassname {
+			'icon',
+			100,
+			"TIcon",
+			'icon',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				20,
+				/* [2] */
+				20
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				64,
+				/* [2] */
+				64
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Icon {
+				mIconHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				preferColor,
+				128
+			},
+			NoSubviews
+		},
+		/* [5] */
+		ViewSignatureAndClassname {
+			'stat',
+			100,
+			"",
+			'desc',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				20,
+				/* [2] */
+				116
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				16,
+				/* [2] */
+				280
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			StaticText {
+				mStaticTextHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				128,
+				dontPreferOutline,
+				autoWrap,
+				dontEraseFirst,
+				justSystem,
+				-1,
+				1
+			},
+			NoSubviews
 		}
 	}
 };
 
 resource 'STR#' (1020, "Progress Window", purgeable) {
-	{	/* array StringArray: 2 elements */
+	{	/* array StringArray: 1 elements */
 		/* [1] */
-		"Stop",
-		/* [2] */
-		"Progress Window"
+		"Progress"
 	}
 };
 

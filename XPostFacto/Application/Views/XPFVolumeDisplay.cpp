@@ -42,6 +42,7 @@ advised of the possibility of such damage.
 #include "XPostFacto.h"
 #include "XPFLog.h"
 #include "XPFIODevice.h"
+#include "XPFVolumeList.h"
 
 #include "UStaticText.h"
 
@@ -124,9 +125,8 @@ XPFVolumeDisplay::setVolume (MountedVolume* newVolume)
 	fIcon->SetIconSuite (iconSuite, true);
 	
 	CStr255_AC status;
-	unsigned statusCode = fVolume->getBootStatus ();
-	if (statusCode != kStatusOK) statusCode = fVolume->getInstallTargetStatus ();
-	if (statusCode != kStatusOK) statusCode = fVolume->getInstallerStatus ();
+	unsigned statusCode = fVolume->getInstallerStatus ();
+	if (statusCode != kStatusOK) statusCode = fVolume->getBootStatus ();
 	
 	if (statusCode == kStatusOK) {
 		if (fVolume->getHasMachKernel ()) {
@@ -135,30 +135,13 @@ XPFVolumeDisplay::setVolume (MountedVolume* newVolume)
 			if (fVolume->getHasInstaller ()) status += " Install CD";
 		}
 	} else {
-		this->SetActiveState (false, true);	
 		status.CopyFrom (kXPFStringsResource, statusCode, 255);
 	}
 	fStatus->SetText (status, true);
 	
 	DoUpdate (cSetTargetDisk, fPrefs, fPrefs->getTargetDisk (), NULL);
+	DoUpdate (cSetInstallCD, fPrefs, fPrefs->getInstallCD (), NULL);
 }
-
-void 
-XPFVolumeDisplay::DoEvent(EventNumber eventNumber,
-						TEventHandler* source,
-						TEvent* event)
-{
-	switch (eventNumber) {
-		case mListItemHit:
-			fPrefs->setTargetDisk (fVolume);
-			break;
-
-		default:
-			Inherited::DoEvent (eventNumber, source, event);
-			break;
-	}
-}
-
 
 void
 XPFVolumeDisplay::DoUpdate	(ChangeID_AC theChange, 
@@ -167,20 +150,9 @@ XPFVolumeDisplay::DoUpdate	(ChangeID_AC theChange,
 							CDependencySpace_AC* dependencySpace)
 {
 	MountedVolume *vol = (MountedVolume *) changeData;
-
-	switch (theChange) {
 	
-		case cSetTargetDisk:
-			if (fVolume == vol) {
-				fSelected = true;
-				AddAdorner (&TAdorner::fgSelectionAdorner, kAdornLast, true);
-				ScrollSelectionIntoView (kRedraw);
-			} else {
-				fSelected = false;
-				DeleteAdorner (&TAdorner::fgSelectionAdorner, true);
-			}
-			break;
-			
+	switch (theChange) {
+				
 		case cSetVolumeName:
 			fVolumeName->SetText (fVolume->getVolumeName (), true);
 			break;
@@ -188,12 +160,34 @@ XPFVolumeDisplay::DoUpdate	(ChangeID_AC theChange,
 		case cDeleteMountedVolume:
 			if (fVolume == vol) {
 				TView *nextView = this;
-				while (nextView = nextView->GetNextView ()) {
+				while ((nextView = nextView->GetNextView ())) {
 					CViewPoint newLoc (nextView->GetLocation ());
 					newLoc.v -= GetSize().v;
 					nextView->Locate (newLoc, true);
 				}
 				delete this;
+			}
+			break;
+			
+		case cSetSelectedVolume:
+			if (fVolume == vol) {
+				fSelected = true;
+				AddAdorner (&TAdorner::fgSelectionAdorner, kAdornLast, true);
+				ScrollSelectionIntoView (kRedraw);
+			} else {
+				fSelected = false;
+				DeleteAdorner (&TAdorner::fgSelectionAdorner, true);
+			}	
+			break;
+			
+		case cSetInstallCD:
+			unsigned bootStatus = fVolume->getBootStatus ();
+			unsigned targetStatus = fVolume->getInstallTargetStatus ();
+			unsigned installerStatus = fVolume->getInstallerStatus ();
+			if (vol) {
+				SetActiveState ((installerStatus == kStatusOK) || (bootStatus == kStatusOK) || (targetStatus == kStatusOK), false);
+			} else {
+				SetActiveState ((installerStatus == kStatusOK) || (bootStatus == kStatusOK), false);			
 			}
 			break;
 			

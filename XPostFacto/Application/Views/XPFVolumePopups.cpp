@@ -74,6 +74,8 @@ XPFVolumePopup::DoPostCreate(TDocument* itsDocument)
 		DoUpdate (cNewMountedVolume, iter.Current (), iter.Current (), NULL);
 	}
 	
+	DoUpdate (cSetRebootInMacOS9, fPrefs, NULL, NULL);
+	
 	fApp->AddDependent (this);
 	fPrefs->AddDependent (this);
 }
@@ -131,6 +133,10 @@ XPFVolumePopup::DoUpdate (ChangeID_AC theChange,
 				if (fUseNoneItem) index += 2;
 				SetMenuItemText (index, volume->getVolumeName ());
 			}
+			break;
+			
+		case cSetRebootInMacOS9:
+			SetActiveState (!fPrefs->getRebootInMacOS9 (), false);
 			break;
 			
 		default:

@@ -75,8 +75,9 @@ class MountedVolume : public MDependable_AC
 		
 		void readHelperFromStream (CFileStream_AC *stream);
 		
-		const CStr255_AC& getOpenFirmwareName () {return fOpenFirmwareName;}
-		const CStr255_AC& getShortOpenFirmwareName () {return fShortOpenFirmwareName;}
+		void turnOffIgnorePermissions ();
+		
+		const CStr255_AC& getOpenFirmwareName (bool useShortName) {return useShortName ? fShortOpenFirmwareName : fOpenFirmwareName;}
 		const CStr255_AC& getVolumeName () {return fVolumeName;}
 		const CStr255_AC& getMacOSXVersion () {return fMacOSXVersion;}
 		unsigned int getCreationDate () {return fCreationDate;}
@@ -117,13 +118,14 @@ class MountedVolume : public MDependable_AC
 		static MountedVolume* WithCreationDate (unsigned int date);
 		static MountedVolume* WithInfo (FSVolumeInfo *info);
 		
-		static MountedVolume* GetDefaultHelperDisk ();
+		MountedVolume* getDefaultHelperDisk ();
 		static MountedVolume* GetDefaultInstallerDisk ();
 		static MountedVolume* GetDefaultInstallTarget ();
 		static MountedVolume* GetDefaultRootDisk ();
 		
-#ifdef __MACH__
 		static MountedVolume* WithOpenFirmwarePath (char *path);
+
+#ifdef __MACH__
 		static MountedVolume* WithRegistryEntry (io_object_t entry);
 #endif
 

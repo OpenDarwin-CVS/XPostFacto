@@ -48,8 +48,6 @@ advised of the possibility of such damage.
 // CLASS XPFVolumeList
 //========================================================================================
 
-MA_DEFINE_CLASS(XPFVolumeList);
-
 #define Inherited TScroller
 
 XPFVolumeList::~XPFVolumeList()
@@ -74,18 +72,11 @@ XPFVolumeList::DoPostCreate(TDocument* itsDocument)
 	}
 	
 	fApp->AddDependent (this);
-	
-	for (CSubViewIterator iter (this); iter; ++iter) {
-		iter->DoUpdate (cSetTargetDisk, fPrefs, fPrefs->getTargetDisk (), NULL);
-	}
-}
-
-void 
-XPFVolumeList::DoEvent(EventNumber eventNumber,
-						TEventHandler* source,
-						TEvent* event)
-{
-	TScroller::DoEvent (eventNumber, source, event);	
+	fPrefs->AddDependent (this);
+		
+	DoUpdate (cSetTargetDisk, fPrefs, fPrefs->getTargetDisk (), NULL);
+	DoUpdate (cSetInstallCD, fPrefs, fPrefs->getInstallCD (), NULL);
+	DoUpdate (cSetRebootInMacOS9, fPrefs, NULL, NULL);
 }
 
 void 
@@ -93,6 +84,8 @@ XPFVolumeList::DoMouseCommand(CViewPoint&		theMouse,
 						   TToolboxEvent*	event,
 						   CPoint_AC		hysteresis)
 {
+	#pragma unused (event, hysteresis)
+
 	fTrackSelection = NULL;
 	for (CSubViewIterator iter (this); iter; ++iter) {
 		if (iter->AdornerWithID (kSelectionAdorner)) {
@@ -117,6 +110,8 @@ XPFVolumeList::TrackFeedback(TrackPhase			aTrackPhase,
 							 bool				turnItOn)
 {
 	#pragma unused (aTrackPhase, anchorPoint, previousPoint, nextPoint, mouseDidMove, turnItOn)
+	
+	// This is here so that the superclass doesn't track feedback.
 }
 
 void 
@@ -154,7 +149,7 @@ XPFVolumeList::TrackMouse(TrackPhase	aTrackPhase,
 					break;
 				}
 			}
-			if (fTrackSelection) fTrackSelection->HandleEvent (mListItemHit, this, NULL);
+			if (fTrackSelection) handleUserSelectedVolume (((XPFVolumeDisplay *) fTrackSelection)->getVolume ());
 			fTrackSelection = NULL;
 			break;
 	}
@@ -167,18 +162,28 @@ XPFVolumeList::DoUpdate (ChangeID_AC theChange,
 								CDependencySpace_AC* dependencySpace)
 {
 	MountedVolume *volume = (MountedVolume *) changeData;
-	ArrayIndex_AC index;
-	XPFVolumeDisplay *subview, *subviewToRemove;
+	
+	if (theChange == getSetSelectionCommandNumber ()) {
+		for (CSubViewIterator iter (this); iter; ++iter) {
+			iter->DoUpdate (cSetSelectedVolume, changedObject, changeData, dependencySpace);		
+		}
+	}
 	
 	switch (theChange) {
 				
 		case cNewMountedVolume:
-			CViewPoint offset (0, fScrollLimit.v);
-			XPFVolumeDisplay *display = (XPFVolumeDisplay *) TViewServer::fgViewServer->DoCreateViews (GetDocument (), this, 1200, offset);
-			display->setVolume (volume);
-			this->SetScrollParameters (display->GetSize (), false, true);
-			display->ScrollSelectionIntoView (false);
-			this->ForceRedraw ();
+			if (useVolumeInList (volume)) {
+				CViewPoint offset (0, fScrollLimit.v);
+				XPFVolumeDisplay *display = (XPFVolumeDisplay *) TViewServer::fgViewServer->DoCreateViews (GetDocument (), this, 1200, offset);
+				display->setVolume (volume);
+				this->SetScrollParameters (display->GetSize (), false, true);
+				display->ScrollSelectionIntoView (false);
+				this->ForceRedraw ();
+			}
+			break;
+			
+		case cSetRebootInMacOS9:
+			SetActiveState (!fPrefs->getRebootInMacOS9 (), false);
 			break;
 		
 		default:
@@ -194,3 +199,107 @@ XPFVolumeList::ScrollBy (const CViewPoint& delta, bool redraw)
 	if (redraw && fTrackSelection) fTrackSelection->DoHighlightSelection (hlOff, hlOn);
 }
 
+// -------------------
+// XPFTargetVolumeList
+// -------------------
+
+MA_DEFINE_CLASS(XPFTargetVolumeList);
+
+#undef Inherited
+#define Inherited XPFVolumeList
+
+bool
+XPFTargetVolumeList::useVolumeInList (MountedVolume *volume)
+{
+	return !volume->getHasInstaller ();
+}
+
+void 
+XPFTargetVolumeList::handleUserSelectedVolume (MountedVolume *vol)
+{
+	fPrefs->setTargetDisk (vol);
+}
+
+// -------------------
+// XPFInstallCDList
+// -------------------
+
+MA_DEFINE_CLASS(XPFInstallCDList);
+
+#undef Inherited
+#define Inherited XPFVolumeList
+
+bool
+XPFInstallCDList::useVolumeInList (MountedVolume *volume)
+{
+	return volume->getHasInstaller ();
+}
+
+void 
+XPFInstallCDList::handleUserSelectedVolume (MountedVolume *vol)
+{
+	fPrefs->setInstallCD (vol);
+}
+
+void
+XPFInstallCDList::hideMiddleView ()
+{
+	if (fMiddleView->GetShown ()) {
+		fMiddleView->Show (false, false);
+	
+		TWindow *myWindow = GetWindow ();
+		CViewPoint middleSize = fMiddleView->GetSize ();
+		
+		CViewPoint bottomLocation = fBottomView->GetLocation ();
+		bottomLocation.v -= middleSize.v;
+		fBottomView->Locate (bottomLocation, true);
+
+		CViewPoint windowSize = myWindow->GetSize ();
+		windowSize.v -= middleSize.v;
+		myWindow->Resize (windowSize, true);		
+	}
+}
+
+void
+XPFInstallCDList::showMiddleView ()
+{
+	if (!fMiddleView->GetShown ()) {
+		TWindow *myWindow = GetWindow ();
+		CViewPoint middleSize = fMiddleView->GetSize ();
+		
+		CViewPoint windowSize = myWindow->GetSize ();
+		windowSize.v += middleSize.v;
+		myWindow->Resize (windowSize, true);
+		
+		CViewPoint bottomLocation = fBottomView->GetLocation ();
+		bottomLocation.v += middleSize.v;
+		fBottomView->Locate (bottomLocation, true);
+		
+		fMiddleView->Show (true, true);
+	}
+}
+
+void 
+XPFInstallCDList::DoPostCreate (TDocument* itsDocument)
+{
+	fMiddleView = GetWindow ()->FindSubView ('invw');
+	fBottomView = GetWindow ()->FindSubView ('bovw');
+	
+	Inherited::DoPostCreate (itsDocument);
+
+	if (!HasSubViews ()) hideMiddleView ();
+}
+
+void 
+XPFInstallCDList::AddedASubView (TView* theSubView)
+{
+	Inherited::AddedASubView (theSubView);
+	showMiddleView ();
+}
+
+void 
+XPFInstallCDList::RemovedASubView (TView* theSubView)
+{
+	Inherited::RemovedASubView (theSubView);
+	if (!HasSubViews ()) hideMiddleView ();
+}

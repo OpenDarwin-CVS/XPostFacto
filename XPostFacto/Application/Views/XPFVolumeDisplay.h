@@ -58,11 +58,7 @@ public:
 	void setVolume (MountedVolume* newVolume);
 	MountedVolume *getVolume () {return fVolume;}
 	void DoHighlightSelection (HLState fromHL, HLState toHL);
-	
-	void DoEvent(EventNumber eventNumber,
-						TEventHandler* source,
-						TEvent* event);
-		
+									
 private:
 	
 	XPFApplication *fApp;

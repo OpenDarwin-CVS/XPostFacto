@@ -62,7 +62,6 @@ advised of the possibility of such damage.
 #include "XPFVolumePopups.h"
 #include "XPFButtons.h"
 #include "XPFSettingsText.h"
-#include "XPFVolumeCluster.h"
 
 #include <InternetConfig.h>
 #include <UnicodeConverter.h>
@@ -133,7 +132,8 @@ XPFApplication::XPFApplication() :
 	REGISTER_CLASS_AC (XPFFatalErrorWindow);
 	REGISTER_CLASS_AC (XPFSettingsWindow);
 	REGISTER_CLASS_AC (XPFGridWindow);
-	REGISTER_CLASS_AC (XPFVolumeList);
+	REGISTER_CLASS_AC (XPFTargetVolumeList);
+	REGISTER_CLASS_AC (XPFInstallCDList);
 	REGISTER_CLASS_AC (XPFVolumeDisplay);
 	REGISTER_CLASS_AC (XPFHelpBehavior);
 	REGISTER_CLASS_AC (XPFOpenURLBehavior);
@@ -143,7 +143,8 @@ XPFApplication::XPFApplication() :
 	REGISTER_CLASS_AC (XPFInstallButton);
 	REGISTER_CLASS_AC (XPFRestartButton);
 	REGISTER_CLASS_AC (XPFSettingsText);
-	REGISTER_CLASS_AC (XPFVolumeCluster);
+	REGISTER_CLASS_AC (XPFMacOS9Button);
+	REGISTER_CLASS_AC (XPFMacOSXButton);
 	
 	ProcessInfoRec info;
 	FSSpec appSpec, resourceSpec;
@@ -239,6 +240,7 @@ XPFApplication::DoShowHelpFile ()
 		Str255 urlString;
 		CFStringGetPascalString (urlStringRef, urlString, 255, CFStringGetSystemEncoding());
 		CFRelease (urlRef);
+		CFRelease (urlStringRef);
 
 		launchURL (urlString);	
 		

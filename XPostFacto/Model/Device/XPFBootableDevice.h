@@ -93,8 +93,7 @@ class XPFBootableDevice
 
 		bool getValidOpenFirmwareName () {return fValidOpenFirmwareName;}
 		
-		const CStr255_AC& getOpenFirmwareName () {return fOpenFirmwareName;}
-		const CStr255_AC& getShortOpenFirmwareName () {return fShortOpenFirmwareName;}
+		const CStr255_AC& getOpenFirmwareName (bool useShortName) {return useShortName ? fShortOpenFirmwareName : fOpenFirmwareName;}
 		
 		virtual bool getNeedsHelper () {return fNeedsHelper;}
 		

@@ -4,7 +4,8 @@ REZ = /Developer/Tools/Rez
 SETFILE = /Developer/Tools/SetFile
 
 binaries := OWCLogo.rsrc XPFIcons.rsrc XPFAboutBox.rsrc XPFFatalErrorWindow.rsrc XPFGridWindow.rsrc \
-            XPFLogWindow.rsrc XPFOptionsWindow.rsrc XPFProgressWindow.rsrc XPFSplashWindow.rsrc
+            XPFLogWindow.rsrc XPFOptionsWindow.rsrc XPFProgressWindow.rsrc XPFSplashWindow.rsrc \
+	    XPFConfirmDialogs.rsrc
 
 sources := $(binaries:.rsrc=.r)
 

@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001, 2002
+Copyright (c) 2001 - 2003
 Other World Computing
 All rights reserved
 
@@ -49,11 +49,6 @@ advised of the possibility of such damage.
 
 MA_DEFINE_CLASS(XPFGridWindow);
 
-XPFGridWindow::~XPFGridWindow()
-{
-	RemoveAllDependencies();
-}
-
 void 
 XPFGridWindow::DoPostCreate(TDocument* itsDocument)
 {
@@ -62,36 +57,4 @@ XPFGridWindow::DoPostCreate(TDocument* itsDocument)
 	CStr255_AC title ("XPostFacto ");
 	title += kXPFVersion;
 	this->SetTitle (title);
-		
-	fApp = (XPFApplication *) gApplication;
-}
-
-void 
-XPFGridWindow::Close()
-{
-	TWindow::Close ();
-	if (!gApplication->GetDone ()) gApplication->DoMenuCommand (cQuit);
-}
-
-void 
-XPFGridWindow::DoEvent(EventNumber eventNumber,
-						TEventHandler* source,
-						TEvent* event)
-{
-	TWindow::DoEvent (eventNumber, source, event);
-	
-	switch (eventNumber) {
-	
-		case mPictureHit:
-			fApp->launchURL ("http://eshop.macsales.com/");
-	}
-}
-
-void
-XPFGridWindow::DoUpdate(ChangeID_AC theChange, 
-								MDependable_AC* changedObject,
-								void* changeData,
-								CDependencySpace_AC* dependencySpace)
-{
-
 }

@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001, 2002
+Copyright (c) 2001 - 2003
 Other World Computing
 All rights reserved
 
@@ -134,6 +134,59 @@ AliasEntry::abbreviate (TemplateList_AC <char> *wholeName)
 	return result;
 }
 
+class RegEntryLevel {
+
+	public:
+		RegEntryLevel (char *level);	
+		bool matchWith (RegEntryLevel *other);
+	
+	private:
+
+		unsigned fUnit;
+		unsigned fFunction;
+		unsigned fArgument;
+		char fName[128];
+		bool fUnitSpecified;
+};
+
+RegEntryLevel::RegEntryLevel (char *level)
+{
+	fUnit = fFunction = fArgument = 0;
+	fUnitSpecified = false;
+
+	char *asterisk = strchr (level, '@');
+	if (asterisk) *asterisk = 0;
+	strcpy (fName, level);
+	
+	if (asterisk) {
+		fUnitSpecified = true;
+		*asterisk = '@';
+		fUnit = strtoul (++asterisk, NULL, 16);
+		
+		char *comma = strchr (asterisk, ',');
+		if (comma) fFunction = strtoul (++comma, NULL, 16);
+		
+		char *colon = strchr (asterisk, ':');
+		if (colon) fArgument = strtoul (++colon, NULL, 16);
+	}
+}
+	
+bool 
+RegEntryLevel::matchWith (RegEntryLevel *other) 
+{
+	if (fUnitSpecified && other->fUnitSpecified) {
+		// If both specified the unit, then the unit needs to match. And we don't
+		// care whether the name matches, as the name is sometimes spurious (for instance,
+		// part of the name of Firewire devices). Also, note that when only parts of the unit
+		// are specified, the rest default to 0, which is not entirely perfect, but should work.
+		return ((fUnit == other->fUnit) && (fFunction == other->fFunction) && (fArgument == other->fArgument));
+	}
+	// If one of them didn't specify a unit, then basically we need to just compare names.
+	// This isn't entirely ideal, but it's the best we can do. Assuming that both were well-formed,
+	// it should work OK.
+	return !strcmp (fName, other->fName);
+}
+
 void
 OFAliases::Initialize ()
 {
@@ -251,6 +304,70 @@ OFAliases::RegistryEntryIDCompare (const io_registry_entry_t *id1, const io_regi
 #endif
 
 void
+OFAliases::expandAlias (char *original, char *expanded)
+{
+	char first[128];
+	char *slash = strchr (original, '/');
+	if (slash) *slash = 0;
+	strcpy (first, original);
+	if (slash) *slash = '/';
+	strcpy (expanded, original);
+	
+	for (int x = 1; x <= fEntries.GetSize (); x++) {
+		if (!strcmp (fEntries.At (x)->getKey (), first)) {
+			strcpy (expanded, fEntries.At (x)->getValue ());
+			if (slash) strcat (expanded, slash);
+			break;
+		}
+	}
+}
+
+bool
+OFAliases::matchAliases (char *alias1, char *alias2)
+{
+	// First, we expand any aliases so that we don't get confused by having
+	// used different aliases to construct things.
+	char work1[512], work2[512];
+	expandAlias (alias1, work1);
+	expandAlias (alias2, work2);
+
+	// Add an extra delimiter
+	work1[strlen (work1) + 1] = 0;
+	work2[strlen (work2) + 1] = 0;
+	
+	// Now, we cycle through each level to see whether they match
+	char *start1, *start2, *end;
+	start1 = work1;
+	start2 = work2;
+	
+	while (*start1) {
+		if (!*start2) return false; // different number of levels
+		
+		end = strchr (start1, '/'); if (end) *end = 0;
+		end = strchr (start2, '/'); if (end) *end = 0;
+		
+		RegEntryLevel level1 (start1);
+		RegEntryLevel level2 (start2);
+		
+		if (!level1.matchWith (&level2)) return false;  // a level didn't match
+		
+		start1 += strlen (start1) + 1;
+		start2 += strlen (start2) + 1;
+	}	
+
+	if (*start2) return false; // different number of levels
+
+	return true;
+}
+
+bool 
+OFAliases::MatchAliases (char *alias1, char *alias2)
+{
+	Initialize ();
+	return sOFAliases->matchAliases (alias1, alias2);
+}
+
+void
 OFAliases::aliasFor (const REG_ENTRY_TYPE regEntry, char *outAlias, char *shortAlias) 
 {			
 #ifdef __MACH__
@@ -270,6 +387,7 @@ OFAliases::aliasFor (const REG_ENTRY_TYPE regEntry, char *outAlias, char *shortA
 	io_registry_entry_t parentEntry;	
 	CFTypeRef cfValue;
 #else
+	OSErr err;
 	RegEntryID deviceTreeEntry;
 	ThrowIfOSErr_AC (RegistryEntryIDInit (&deviceTreeEntry));
 	ThrowIfOSErr_AC (RegistryCStrEntryLookup (NULL, "Devices:device-tree", &deviceTreeEntry));
@@ -284,7 +402,6 @@ OFAliases::aliasFor (const REG_ENTRY_TYPE regEntry, char *outAlias, char *shortA
 	Ptr prop;
 
 	unsigned regValue;
-	OSErr err;
 	char nameComponent[256];
 	char workString[256];
 	char *temp;

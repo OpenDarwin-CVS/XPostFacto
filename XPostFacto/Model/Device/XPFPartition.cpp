@@ -88,8 +88,8 @@ XPFPartition::XPFPartition (XPFBootableDevice *device, Partition *part, int part
 
 	fExtendsPastEightGB = (part->pmPyPartStart + part->pmPartBlkCnt) > (8UL * 1024 / 512 * 1024 * 1024 );
 
-	fOpenFirmwareName.CopyFrom (device->getOpenFirmwareName ());
-	fShortOpenFirmwareName.CopyFrom (device->getShortOpenFirmwareName ());
+	fOpenFirmwareName.CopyFrom (device->getOpenFirmwareName (false));
+	fShortOpenFirmwareName.CopyFrom (device->getOpenFirmwareName (true));
 	char buffer[8];
 	snprintf (buffer, 8, ":%d", fPartitionNumber);
 	fOpenFirmwareName += buffer;

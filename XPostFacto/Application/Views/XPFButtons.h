@@ -82,4 +82,44 @@ private:
 	bool determineActiveState ();
 };
 
+class XPFMacOS9Button : public TRadio {
+
+	MA_DECLARE_CLONE;
+
+public:
+
+	virtual	~XPFMacOS9Button ();		
+	virtual void DoPostCreate(TDocument* itsDocument);
+	
+	virtual void DoEvent	(EventNumber eventNumber,
+							TEventHandler* source,
+							TEvent* event);
+						
+	virtual void DoUpdate	(ChangeID_AC theChange, 
+					MDependable_AC* changedObject,
+					void* changeData,
+					CDependencySpace_AC* dependencySpace);
+
+};
+
+class XPFMacOSXButton : public TRadio {
+
+	MA_DECLARE_CLONE;
+
+public:
+
+	virtual	~XPFMacOSXButton ();		
+	virtual void DoPostCreate(TDocument* itsDocument);
+	
+	virtual void DoEvent	(EventNumber eventNumber,
+							TEventHandler* source,
+							TEvent* event);
+						
+	virtual void DoUpdate	(ChangeID_AC theChange, 
+					MDependable_AC* changedObject,
+					void* changeData,
+					CDependencySpace_AC* dependencySpace);
+
+};
+
 #endif

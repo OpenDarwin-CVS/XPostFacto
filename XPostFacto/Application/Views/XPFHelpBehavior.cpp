@@ -52,6 +52,7 @@ XPFHelpBehavior::XPFHelpBehavior (IDType itsIdentifier)
 bool 
 XPFHelpBehavior::DoSetCursor (const CViewPoint& localPoint, RgnHandle cursorRegion)
 {
+	#pragma unused (localPoint, cursorRegion)
 	if (fHelpText) fHelpText->SetText (fHelpString, true);
 	return true;
 }
@@ -59,7 +60,7 @@ XPFHelpBehavior::DoSetCursor (const CViewPoint& localPoint, RgnHandle cursorRegi
 bool 
 XPFHelpBehavior::DoUnsetCursor ()
 {
-	if (fHelpText) fHelpText->SetText ("", false);
+	if (fHelpText) fHelpText->SetText ("", true);
 	return true;
 }
 
@@ -69,6 +70,9 @@ XPFHelpBehavior::DoPostCreate (TDocument* itsDocument)
 	Inherited::DoPostCreate (itsDocument);
 	
 	fHelpText = (TStaticText *) fOwner->GetWindow ()->FindSubView ('hlpt');
+	
+	fOwner->SetEnable (true);
+	((TView *) fOwner)->SetHandlesCursor (true);
 	
 	Handle helpStrings = GetResource ('hlps', kHelpStringsResource);
 	if (helpStrings) {

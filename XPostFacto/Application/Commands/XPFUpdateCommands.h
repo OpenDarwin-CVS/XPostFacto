@@ -40,9 +40,9 @@ class XPFInstallBootXCommand : public XPFThreadedCommand {
 
 	public:
 	
-		XPFInstallBootXCommand (XPFPrefs *prefs) : XPFThreadedCommand (prefs) {}
+		XPFInstallBootXCommand (MountedVolume *rootDisk, MountedVolume *bootDisk) : XPFThreadedCommand (rootDisk, bootDisk) {}
 				
-		void DoItThreaded ();
+		void DoItInProgressWindow ();
 		
 };	
 
@@ -50,9 +50,9 @@ class XPFInstallExtensionsCommand : public XPFThreadedCommand {
 
 	public:
 	
-		XPFInstallExtensionsCommand (XPFPrefs *prefs) : XPFThreadedCommand (prefs) {}
+		XPFInstallExtensionsCommand (MountedVolume *rootDisk, MountedVolume *bootDisk = NULL) : XPFThreadedCommand (rootDisk, bootDisk) {}
 				
-		void DoItThreaded ();
+		void DoItInProgressWindow ();
 							
 };	
 
@@ -60,9 +60,9 @@ class XPFInstallStartupCommand : public XPFThreadedCommand {
 
 	public:
 
-		XPFInstallStartupCommand (XPFPrefs *prefs) : XPFThreadedCommand (prefs) {}
+		XPFInstallStartupCommand (MountedVolume *rootDisk, MountedVolume *bootDisk = NULL) : XPFThreadedCommand (rootDisk, bootDisk) {}
 									
-		void DoItThreaded ();
+		void DoItInProgressWindow ();
 
 };	
 
@@ -70,9 +70,9 @@ class XPFRecopyHelperFilesCommand : public XPFThreadedCommand {
 
 	public:
 
-		XPFRecopyHelperFilesCommand (XPFPrefs *prefs) : XPFThreadedCommand (prefs) {}
+		XPFRecopyHelperFilesCommand (MountedVolume *rootDisk, MountedVolume *bootDisk) : XPFThreadedCommand (rootDisk, bootDisk) {}
 									
-		void DoItThreaded ();
+		void DoItInProgressWindow ();
 
 };	
 

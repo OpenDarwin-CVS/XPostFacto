@@ -1,7 +1,7 @@
 /*
 
-Copyright (c) 2000, 2001
-Ryan Rempel
+Copyright (c) 2000 - 2003
+Other World Computing
 All rights reserved
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -38,6 +38,9 @@ advised of the possibility of such damage.
 #ifdef __MACH__
 	#include <sys/mount.h>
 	#include <IOKit/IOKitLib.h>
+	#include <sys/types.h>
+	#include <sys/wait.h>
+	#include <sys/stat.h>
 #else
 	#include <Devices.h>
 	#include <Files.h>
@@ -52,6 +55,7 @@ advised of the possibility of such damage.
 #include "XPFErrors.h"
 #include "XPFBootableDevice.h"
 #include "XPFApplication.h"
+#include "XPFAuthorization.h"
 
 #include <iostream.h>
 #include "XPostFacto.h"
@@ -143,7 +147,7 @@ MountedVolume::readHelperFromStream (CFileStream_AC *stream)
 	if (helper) {
 		fHelperDisk = helper;
 	} else {
-		fHelperDisk = GetDefaultHelperDisk ();
+		fHelperDisk = getDefaultHelperDisk ();
 	}
 }
 
@@ -176,11 +180,11 @@ MountedVolume::WithInfo (FSVolumeInfo *info)
 }
 
 MountedVolume*
-MountedVolume::GetDefaultHelperDisk ()
+MountedVolume::getDefaultHelperDisk ()
 {
 	MountedVolume *retVal = NULL;
 	for (MountedVolumeIterator iter (GetVolumeList ()); iter.Current(); iter.Next()) {
-		if (iter->getIsOnBootableDevice () && !iter->getRequiresBootHelper ()) {
+		if (iter->getIsOnBootableDevice () && !iter->getRequiresBootHelper () && (iter.Current() != this)) {
 			if (retVal) {
 				if (iter->getFreeBytes () > retVal->getFreeBytes ()) retVal = iter.Current (); 
 			} else {
@@ -258,10 +262,13 @@ MountedVolume::WithRegistryEntry (io_object_t entry)
 	return retVal;
 }
 
+#endif
+
 MountedVolume*
 MountedVolume::WithOpenFirmwarePath (char *path)
 {
 	MountedVolume *retVal = NULL;
+#ifdef __MACH__
 	mach_port_t iokitPort;
 	IOMasterPort (MACH_PORT_NULL, &iokitPort);
 	io_object_t entry;
@@ -270,10 +277,17 @@ MountedVolume::WithOpenFirmwarePath (char *path)
 		retVal = MountedVolume::WithRegistryEntry (entry);
 		IOObjectRelease (entry);
 	}
+#else
+	for (MountedVolumeIterator iter (GetVolumeList ()); iter.Current(); iter.Next()) {
+		CChar255_AC volPath = (CChar255_AC) iter->getOpenFirmwareName (false);
+		if (OFAliases::MatchAliases (volPath, path)) {
+			retVal = iter.Current ();
+			break;
+		}
+	}	
+#endif
 	return retVal;
 }
-
-#endif
 
 void
 MountedVolume::installBootXIfNecessary (bool forceInstall)
@@ -462,6 +476,27 @@ MountedVolume::hasCurrentStartupItems ()
 	}
 
 	return true;
+}
+
+void
+MountedVolume::turnOffIgnorePermissions ()
+{
+#ifdef __MACH__
+	char path[256];
+	ThrowIfOSErr_AC (FSRefMakePath (getRootDirectory (), (UInt8 *) path, 255));
+	XPFSetUID myUID (0);
+	pid_t pid = fork ();
+	if (pid) {
+		if (pid != -1) {
+			int status;
+			waitpid (pid, &status, 0);
+		}
+	} else {
+		setuid (0);	// because vsdbutil checks the uid, rather than the euid
+		execl ("/usr/sbin/vsdbutil", "vsdbutil", "-a", path, NULL);
+		ThrowException_AC (kInternalError, 0);	// the execl shouldn't return
+	}
+#endif
 }
 
 MountedVolume::~MountedVolume ()
@@ -676,10 +711,10 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 			OSErr err = MoreGetPartitionInfo (info->driveNumber, &partInfo);
 			if (err == noErr) {
 				fValidOpenFirmwareName = fBootableDevice->getValidOpenFirmwareName ();
-				fOpenFirmwareName.CopyFrom (fBootableDevice->getOpenFirmwareName ());
-				fShortOpenFirmwareName.CopyFrom (fBootableDevice->getShortOpenFirmwareName ());
+				fOpenFirmwareName.CopyFrom (fBootableDevice->getOpenFirmwareName (false));
+				fShortOpenFirmwareName.CopyFrom (fBootableDevice->getOpenFirmwareName (true));
 				char buffer[16];
-				sprintf (buffer, ":%d", partInfo.partitionNumber);
+				sprintf (buffer, ":%X", partInfo.partitionNumber);
 				fOpenFirmwareName += buffer;
 				fShortOpenFirmwareName += buffer;
 			}
@@ -687,24 +722,24 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 			fPartInfo = fBootableDevice->partitionWithInfoAndName (info, name);
 			if (fPartInfo) {
 				fValidOpenFirmwareName = fPartInfo->getValidOpenFirmwareName ();
-				fOpenFirmwareName.CopyFrom (fPartInfo->getOpenFirmwareName ());
-				fShortOpenFirmwareName.CopyFrom (fPartInfo->getShortOpenFirmwareName ());
+				fOpenFirmwareName.CopyFrom (fPartInfo->getOpenFirmwareName (false));
+				fShortOpenFirmwareName.CopyFrom (fPartInfo->getOpenFirmwareName (true));
 				fPartInfo->setMountedVolume (this);
 			}
 		}
 	}
 #endif
 
-	if (getRequiresBootHelper ()) fHelperDisk = GetDefaultHelperDisk ();
+	if (getRequiresBootHelper ()) fHelperDisk = getDefaultHelperDisk ();
 	
 	#if qLogging
 		if (fValidOpenFirmwareName) {
 			gLogFile << "OpenFirmwareName: ";
-			CStr255_AC openFirmwareName = getOpenFirmwareName ();
+			CStr255_AC openFirmwareName = getOpenFirmwareName (false);
 			gLogFile.WriteCharBytes ((char *) &openFirmwareName[1], openFirmwareName[0]);
 			gLogFile << endl_AC;
 			gLogFile << "ShortOpenFirmwareName: ";
-			CStr255_AC shortOpenFirmwareName = getShortOpenFirmwareName ();
+			CStr255_AC shortOpenFirmwareName = getOpenFirmwareName (true);
 			gLogFile.WriteCharBytes ((char *) &shortOpenFirmwareName[1], shortOpenFirmwareName[0]);
 			gLogFile << endl_AC;
 		} else {
@@ -779,11 +814,13 @@ MountedVolume::setHelperDisk (MountedVolume *disk)
 void 
 MountedVolume::DoUpdate (ChangeID_AC theChange, MDependable_AC* changedObject, void* changeData, CDependencySpace_AC* dependencySpace)
 {
+	#pragma unused (changedObject, dependencySpace)
+	
 	MountedVolume *volume = (MountedVolume *) changeData;
 	
 	switch (theChange) {			
 		case cDeleteMountedVolume:
-			if (volume == fHelperDisk) setHelperDisk (MountedVolume::GetDefaultHelperDisk ());
+			if (volume == fHelperDisk) setHelperDisk (getDefaultHelperDisk ());
 			break;
 	}
 }

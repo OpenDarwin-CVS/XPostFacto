@@ -61,6 +61,7 @@ XPFInstallButton::DoPostCreate (TDocument* itsDocument)
 	itsDocument->AddDependent (this);
 	
 	DoUpdate (cSetTargetDisk, itsDocument, ((XPFPrefs *) itsDocument)->getTargetDisk (), NULL);
+	DoUpdate (cSetRebootInMacOS9, itsDocument, NULL, NULL);
 }
 
 void 
@@ -69,7 +70,12 @@ XPFInstallButton::DoEvent(EventNumber eventNumber,
 						TEvent* event)
 {
 	if (eventNumber == mButtonHit) {
-		PostCommand (TH_new XPFInstallCommand ((XPFPrefs *) GetDocument ()));
+		XPFPrefs *prefs = (XPFPrefs *) GetDocument ();
+		short retVal = prefs->PoseConfirmDialog (true, false);
+		if (retVal == kStdOkItemIndex) {
+			PostCommand (prefs->MakeSaveCommand ());		
+			PostCommand (TH_new XPFInstallCommand (prefs));
+		}
 	} else {
 		Inherited::DoEvent (eventNumber, source, event);
 	}
@@ -84,6 +90,7 @@ XPFInstallButton::determineActiveState ()
 #endif
 
 	XPFPrefs *prefs = (XPFPrefs *) GetDocument ();
+	if (prefs->getRebootInMacOS9 ()) return false;
 	MountedVolume *targetDisk = prefs->getTargetDisk ();
 	MountedVolume *installCD = prefs->getInstallCD ();
 	if (!targetDisk) return false;
@@ -103,6 +110,7 @@ XPFInstallButton::DoUpdate (ChangeID_AC theChange,
 	
 		case cSetTargetDisk:
 		case cSetInstallCD:
+		case cSetRebootInMacOS9:
 			SetActiveState (determineActiveState (), true);
 			break;
 			
@@ -134,6 +142,7 @@ XPFRestartButton::DoPostCreate (TDocument* itsDocument)
 	itsDocument->AddDependent (this);
 	
 	DoUpdate (cSetTargetDisk, itsDocument, ((XPFPrefs *) itsDocument)->getTargetDisk (), NULL);
+	DoUpdate (cSetRebootInMacOS9, itsDocument, NULL, NULL);
 }
 
 void 
@@ -142,7 +151,12 @@ XPFRestartButton::DoEvent(EventNumber eventNumber,
 						TEvent* event)
 {
 	if (eventNumber == mButtonHit) {
-		PostCommand (TH_new XPFRestartCommand ((XPFPrefs *) GetDocument ()));
+		XPFPrefs *prefs = (XPFPrefs *) GetDocument ();
+		short retVal = prefs->PoseConfirmDialog (false, false);
+		if (retVal == kStdOkItemIndex) {
+			PostCommand (prefs->MakeSaveCommand ());		
+			PostCommand (TH_new XPFRestartCommand (prefs, true));
+		}
 	} else {
 		Inherited::DoEvent (eventNumber, source, event);
 	}
@@ -152,6 +166,7 @@ bool
 XPFRestartButton::determineActiveState ()
 {
 	XPFPrefs *prefs = (XPFPrefs *) GetDocument ();
+	if (prefs->getRebootInMacOS9 ()) return true;
 	MountedVolume *targetDisk = prefs->getTargetDisk ();
 	if (!targetDisk) return false;
 	if (targetDisk->getBootStatus () != kStatusOK) return false;
@@ -167,6 +182,7 @@ XPFRestartButton::DoUpdate (ChangeID_AC theChange,
 	switch (theChange) {
 	
 		case cSetTargetDisk:
+		case cSetRebootInMacOS9:
 			SetActiveState (determineActiveState (), true);
 			break;
 			
@@ -176,3 +192,106 @@ XPFRestartButton::DoUpdate (ChangeID_AC theChange,
 	}
 }
 
+//========================================================================================
+// CLASS XPFMacOS9Button
+//========================================================================================
+
+#undef Inherited
+#define Inherited TRadio
+
+MA_DEFINE_CLASS (XPFMacOS9Button);
+
+XPFMacOS9Button::~XPFMacOS9Button ()
+{
+	RemoveAllDependencies ();
+}
+
+void 
+XPFMacOS9Button::DoPostCreate (TDocument* itsDocument)
+{
+	Inherited::DoPostCreate (itsDocument);		
+	itsDocument->AddDependent (this);
+	DoUpdate (cSetRebootInMacOS9, itsDocument, NULL, NULL);
+}
+
+void 
+XPFMacOS9Button::DoEvent(EventNumber eventNumber,
+						TEventHandler* source,
+						TEvent* event)
+{
+	if (eventNumber == mRadioHit) {
+		((XPFPrefs *) GetDocument ())->setRebootInMacOS9 (true);
+	} else {
+		Inherited::DoEvent (eventNumber, source, event);
+	}
+}
+
+void
+XPFMacOS9Button::DoUpdate (ChangeID_AC theChange, 
+								MDependable_AC* changedObject,
+								void* changeData,
+								CDependencySpace_AC* dependencySpace)
+{
+	switch (theChange) {
+	
+		case cSetRebootInMacOS9:
+			DoEvent (((XPFPrefs *) GetDocument ())->getRebootInMacOS9 () ? mTurnOn : mTurnOff, this, NULL);
+			break;
+			
+		default:
+			Inherited::DoUpdate (theChange, changedObject, changeData, dependencySpace);
+			break;
+	}
+}
+
+//========================================================================================
+// CLASS XPFMacOSXButton
+//========================================================================================
+
+#undef Inherited
+#define Inherited TRadio
+
+MA_DEFINE_CLASS (XPFMacOSXButton);
+
+XPFMacOSXButton::~XPFMacOSXButton ()
+{
+	RemoveAllDependencies ();
+}
+
+void 
+XPFMacOSXButton::DoPostCreate (TDocument* itsDocument)
+{
+	Inherited::DoPostCreate (itsDocument);		
+	itsDocument->AddDependent (this);
+	DoUpdate (cSetRebootInMacOS9, itsDocument, NULL, NULL);
+}
+
+void 
+XPFMacOSXButton::DoEvent(EventNumber eventNumber,
+						TEventHandler* source,
+						TEvent* event)
+{
+	if (eventNumber == mRadioHit) {
+		((XPFPrefs *) GetDocument ())->setRebootInMacOS9 (false);
+	} else {
+		Inherited::DoEvent (eventNumber, source, event);
+	}
+}
+
+void
+XPFMacOSXButton::DoUpdate (ChangeID_AC theChange, 
+								MDependable_AC* changedObject,
+								void* changeData,
+								CDependencySpace_AC* dependencySpace)
+{
+	switch (theChange) {
+	
+		case cSetRebootInMacOS9:
+			DoEvent (((XPFPrefs *) GetDocument ())->getRebootInMacOS9 () ? mTurnOff : mTurnOn, this, NULL);
+			break;
+			
+		default:
+			Inherited::DoUpdate (theChange, changedObject, changeData, dependencySpace);
+			break;
+	}
+}

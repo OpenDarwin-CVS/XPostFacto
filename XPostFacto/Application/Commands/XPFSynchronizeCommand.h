@@ -31,29 +31,20 @@ advised of the possibility of such damage.
 
 */
 
-#ifndef __XPFVOLUMECLUSTER_H__
-#define __XPFVOLUMECLUSTER_H__
 
-#include "UCluster.h"
+#ifndef __XPFSYNCHRONIZECOMMAND_H__
+#define __XPFSYNCHRONIZECOMMAND_H__
 
-class XPFVolumeCluster : public TPrimaryCluster {
+#include "XPFThreadedCommand.h"
 
-	MA_DECLARE_CLONE;
+class XPFSynchronizeCommand : public XPFThreadedCommand {
 
-public:
-
-	virtual	~XPFVolumeCluster ();		
-	virtual void DoPostCreate(TDocument* itsDocument);
-	
-	virtual void DoUpdate	(ChangeID_AC theChange, 
-					MDependable_AC* changedObject,
-					void* changeData,
-					CDependencySpace_AC* dependencySpace);
-					
-private:
-
-	CString_AC fInitialLabel;
-					
-};
+	public:
+		
+		XPFSynchronizeCommand (MountedVolume *rootDisk, MountedVolume *bootDisk);							
+		void DoItInProgressWindow ();					
+			
+};	
 
 #endif
+

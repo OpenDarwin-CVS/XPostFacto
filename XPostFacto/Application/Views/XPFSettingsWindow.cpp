@@ -214,8 +214,8 @@ XPFSettingsWindow::DoUpdate(ChangeID_AC theChange,
 			fThrottleText->SetText (aString, true);
 			break;
 				
-		case cSetVerboseMode:
-		case cSetSingleUserMode:
+		case cSetBootInVerboseMode:
+		case cSetBootInSingleUserMode:
 		case cSetEnableCacheEarly:
 		case cSetAutoBoot:
 		case cSetDebugBreakpoint:

@@ -78,8 +78,7 @@ class XPFPartition
 		bool getHasBootX () {return fHasBootX;}
 		unsigned int getCreationDate () {return fCreationDate;}
 		bool getExtendsPastEightGB () {return fExtendsPastEightGB;}
-		const CStr255_AC& getOpenFirmwareName () {return fOpenFirmwareName;}
-		const CStr255_AC& getShortOpenFirmwareName () {return fShortOpenFirmwareName;}
+		const CStr255_AC& getOpenFirmwareName (bool useShortName) {return useShortName ? fShortOpenFirmwareName : fOpenFirmwareName;}
 
 		void updateBootXIfInstalled (bool forceInstall = false);
 		void installBootXIfNecessary (bool forceInstall = false);

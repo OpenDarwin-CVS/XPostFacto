@@ -55,7 +55,9 @@ class XPFSetUID {
 
 #ifdef __MACH__
 
+#pragma warn_extracomma off
 #include <Security/Security.h>
+#pragma warn_extracomma reset
 
 class XPFAuthorization {
 					

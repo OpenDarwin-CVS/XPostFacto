@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2002
+Copyright (c) 2002, 2003
 Other World Computing
 All rights reserved
 
@@ -54,11 +54,20 @@ class XPFPrefs : public TFileBasedDocument {
 		void DoMakeViews (bool forPrinting);
 		void RegainControl ();
 		void UpdateWindowIcon (TWindow* /* aWindow */) {}
+		void Close ();
 		
 		void DoUpdate (ChangeID_AC theChange, 
 								MDependable_AC* changedObject,
 								void* changeData,
 								CDependencySpace_AC* dependencySpace);
+								
+		short PoseSaveDialog ();
+		short PoseConfirmDialog (bool forInstall, bool quitting);
+		
+		// Startup item
+		
+		void suspendStartupItem ();
+		void restartStartupItem ();
 		
 		// Commands
 		
@@ -67,92 +76,76 @@ class XPFPrefs : public TFileBasedDocument {
 		virtual void DoEvent	(EventNumber eventNumber,
 							TEventHandler* source,
 							TEvent* event);
+							
+		// NVRAM
+		
+		void writePrefsToNVRAM (bool forInstall);
 						
 		// Accessors
 
-		void setTargetDisk (MountedVolume *theDisk);
-		MountedVolume* getTargetDisk () {return fTargetDisk;}
-		
-		void setInstallCD (MountedVolume *theDisk);
-		MountedVolume* getInstallCD () {return fInstallCD;}
-								
-		bool getBootInVerboseMode () {return fBootInVerboseMode;}
-		bool getBootInSingleUserMode () {return fBootInSingleUserMode;}
-		
-		void setBootInVerboseMode (bool val);
-   		void setBootInSingleUserMode (bool val);
-		
-		bool getAutoBoot () {return fAutoBoot;}
-		void setAutoBoot (bool val);
-		
-		bool getUseShortStrings () {return fUseShortStrings;}
-		bool getUseShortStringsForInstall () {return fUseShortStringsForInstall;}
+		bool getUseShortStrings (bool forInstall) {return forInstall ? fUseShortStringsForInstall : fUseShortStrings;}
 
-		bool getEnableCacheEarly () {return fEnableCacheEarly;}
-		void setEnableCacheEarly (bool newVal);
-
-		CStr255_AC getBootDevice ();
-		CStr255_AC getBootFile ();
-		CStr255_AC getBootCommand ();
-		
-		CStr255_AC getBootDeviceForInstall ();
-		CStr255_AC getBootCommandForInstall ();
-		CStr255_AC getBootFileForInstall ();
-		
-		CStr255_AC getInputDevice ();
-		CStr255_AC getOutputDevice ();
-		CStr255_AC getInputDeviceForInstall ();
-		CStr255_AC getOutputDeviceForInstall ();
+		CStr255_AC getBootDevice (bool forInstall);
+		CStr255_AC getBootFile (bool forInstall);
+		CStr255_AC getBootCommand (bool forInstall);
+				
+		CStr255_AC getInputDevice (bool forInstall);
+		CStr255_AC getOutputDevice (bool forInstall);
 		
 		unsigned getInputDeviceIndex ();
 		unsigned getOutputDeviceIndex ();
-		
-		void setInputDevice (char *label, bool callChanged = true);
-		void setInputDevice (XPFIODevice *device);
-		
+
+		void setInputDevice (char *label, bool callChanged = true);		
 		void setOutputDevice (char *label, bool callChanged = true);
-		void setOutputDevice (XPFIODevice *device);
+				
+#define DECLARE_ACCESSORS(type,method) 						\
+	void set##method (type val, bool callChanged = true); 	\
+	type get##method () {return f##method;}
+	
+#define DECLARE_DEBUG_ACCESSORS(method) 					\
+	void set##method (bool val, bool callChanged = true); 	\
+	bool get##method ();
+	
+DECLARE_ACCESSORS (MountedVolume*, TargetDisk)
+DECLARE_ACCESSORS (MountedVolume*, InstallCD)
+DECLARE_ACCESSORS (XPFIODevice*, InputDevice)
+DECLARE_ACCESSORS (XPFIODevice*, OutputDevice)
+DECLARE_ACCESSORS (bool, BootInVerboseMode)
+DECLARE_ACCESSORS (bool, BootInSingleUserMode)
+DECLARE_ACCESSORS (bool, AutoBoot)		
+DECLARE_ACCESSORS (bool, RebootInMacOS9)
+DECLARE_ACCESSORS (bool, EnableCacheEarly)
+DECLARE_ACCESSORS (bool, UseShortStrings)
+DECLARE_ACCESSORS (bool, UseShortStringsForInstall)
+DECLARE_ACCESSORS (unsigned, Throttle)
+		
+DECLARE_DEBUG_ACCESSORS (DebugBreakpoint)
+DECLARE_DEBUG_ACCESSORS (DebugPrintf)
+DECLARE_DEBUG_ACCESSORS (DebugNMI)
+DECLARE_DEBUG_ACCESSORS (DebugKprintf)
+DECLARE_DEBUG_ACCESSORS (DebugDDB)
+DECLARE_DEBUG_ACCESSORS (DebugSyslog)
+DECLARE_DEBUG_ACCESSORS (DebugARP)
+DECLARE_DEBUG_ACCESSORS (DebugOldGDB)
+DECLARE_DEBUG_ACCESSORS (DebugPanicText)
 						
-		void setThrottle (unsigned throttle);
-		unsigned getThrottle () {return fThrottle;}
-		
-		void setDebugBreakpoint (bool val);
-		void setDebugPrintf (bool val);
-		void setDebugNMI (bool val);
-		void setDebugKprintf (bool val);
-		void setDebugDDB (bool val);
-		void setDebugSyslog (bool val);
-		void setDebugARP (bool val);
-		void setDebugOldGDB (bool val);
-		void setDebugPanicText (bool val);
-		
-		bool getDebugBreakpoint ();
-		bool getDebugPrintf ();
-		bool getDebugNMI ();
-		bool getDebugKprintf ();
-		bool getDebugDDB ();
-		bool getDebugSyslog ();
-		bool getDebugARP ();
-		bool getDebugOldGDB ();
-		bool getDebugPanicText ();
-		
 	private:
 			
-#ifdef __MACH__
 		void getPrefsFromNVRAM ();
-#endif
+
+		void tellFinderToRestart ();
 
 		void Changed(ChangeID_AC theChange, void* changeData);
 		void checkStringLength ();
 				
 		CStr255_AC getBootCommandBase ();
 		
-		void setUseShortStrings (bool newVal);
-		void setUseShortStringsForInstall (bool newVal);
+		// Variables
 
 		bool fUseShortStrings;
 		bool fUseShortStringsForInstall;
-
+		bool fRebootInMacOS9;
+				
 		MountedVolume *fTargetDisk;
 		MountedVolume *fInstallCD;
 				

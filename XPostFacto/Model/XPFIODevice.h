@@ -64,8 +64,7 @@ class XPFIODevice : public MDependable_AC
 		static XPFIODevice *OutputDeviceWithShortOpenFirmwareName (char *ofName);
 		static XPFIODevice *OutputDeviceWithOpenFirmwareName (char *ofName);
 		
-		const CStr255_AC& getOpenFirmwareName () {return fOpenFirmwareName;}
-		const CStr255_AC& getShortOpenFirmwareName () {return fShortOpenFirmwareName;}
+		const CStr255_AC& getOpenFirmwareName (bool useShortName) {return useShortName ? fShortOpenFirmwareName : fOpenFirmwareName;}
 		const CStr255_AC& getLabel () {return fLabel;}
 					
 	private:

@@ -54,70 +54,52 @@ advised of the possibility of such damage.
 #endif
 
 // ------------------
-// XPFCommandThread
-// ------------------
-
-XPFCommandThread::XPFCommandThread (XPFThreadedCommand *theCommand)
-	: fCommand (theCommand)
-{
-}
-
-void
-XPFCommandThread::Run ()
-{
-	try {
-		fCommand->DoItThreaded ();
-	}
-	catch (CException_AC& ex) {
-		fCommand->getProgressWindow ()->displayException (ex);
-	}
-}
-
-// ------------------
 // XPFThreadedCommand
 // ------------------
 
 #define Inherited TCommand
 
-XPFThreadedCommand::XPFThreadedCommand (XPFPrefs *prefs)
-	: fYielder (1), fItemsToCopy (0), fItemsCopied (0), fProgressMin (0), fProgressMax (0)
-{
-	fTargetDisk = prefs->getTargetDisk ();
-	fHelperDisk = fTargetDisk->getHelperDisk ();
-	
-	turnOffIgnorePermissionsForVolume (fTargetDisk);
-	turnOffIgnorePermissionsForVolume (fHelperDisk);
+XPFThreadedCommand::XPFThreadedCommand (MountedVolume *rootDisk, MountedVolume *bootDisk)
+	: fRootDisk (rootDisk), fBootDisk (bootDisk), 
+	  fItemsToCopy (0), fItemsCopied (0), fProgressMin (0), fProgressMax (0)
+{		
+	fRootDisk->turnOffIgnorePermissions ();
+	if (fBootDisk == NULL) fBootDisk = fRootDisk;
+	if (fBootDisk != fRootDisk) fBootDisk->turnOffIgnorePermissions ();
 
-	fDebugOptions = ((XPFApplication *) gApplication)->getDebugOptions ();
-		
+	fDebugOptions = ((XPFApplication *) gApplication)->getDebugOptions ();		
 	fCopyWord.CopyFrom (kXPFStringsResource, kTheWordCopy, 63);
 }	
 
-// Methods to run things threaded
+// Methods to run things in a progress window
 
 void
 XPFThreadedCommand::DoIt ()
 {
 	fProgressWindow = (XPFProgressWindow *) TViewServer::fgViewServer->NewTemplateWindow (kProgressWindow, NULL);
-	XPFCommandThread *thread = TH_new XPFCommandThread (this);
-	fRunner = thread;
-	fProgressWindow->setThread (thread);
 	fProgressWindow->setProgressMax (1000);
-	fProgressWindow->PoseModally ();
-	if (thread->IsAlive ()) thread->Join ();
+	fProgressWindow->Open ();
+	fProgressWindow->Show (true, true);
+	try {
+		DoItInProgressWindow ();
+	}
+	catch (...) {
+		fProgressWindow->Close ();
+		throw;
+	}
 	fProgressWindow->Close ();
 }
 
 void
-XPFThreadedCommand::setStatusMessage (unsigned char* message) {
-	fProgressWindow->setStatus (message);
+XPFThreadedCommand::setStatusMessage (unsigned char* message, bool forceRedraw) {
+	fProgressWindow->setStatus (message, forceRedraw);
 }
 
 void 
-XPFThreadedCommand::setCopyingFile (unsigned char *fileName)
+XPFThreadedCommand::setCopyingFile (unsigned char *fileName, bool forceRedraw)
 {
 	CStr255_AC message = fCopyWord + " " + fileName;
-	setStatusMessage (message);
+	setStatusMessage (message, forceRedraw);
 }
 
 void 
@@ -129,28 +111,27 @@ XPFThreadedCommand::setDescription (unsigned char* description)
 Boolean 
 XPFThreadedCommand::copyFilter (const FSRef *src, Boolean preflight)
 {
-	fYielder.YieldIfTime ();
 	if (preflight) {
 		fItemsToCopy++;
 	} else {
 		fItemsCopied++;
 		float scale = (float) (fProgressMax - fProgressMin) / (float) fItemsToCopy;
-		fProgressWindow->setProgressValue (fProgressMin + scale * fItemsCopied);
+		fProgressWindow->setProgressValue (fProgressMin + scale * fItemsCopied, false);
 		FSSpec spec;
 		FSGetCatalogInfo (src, kFSCatInfoNone, NULL, NULL, &spec, NULL);
-	 	setCopyingFile (spec.name);
+	 	setCopyingFile (spec.name, false);
 	}
-	return !fRunner->ShutdownRequested ();
+	return true;
 }
 
 Boolean 
 XPFThreadedCommand::archiveFilter (const FSRef *src, Boolean preflight)
 {
-	fYielder.YieldIfTime ();
+	#pragma unused (preflight)
 	FSSpec spec;
 	FSGetCatalogInfo (src, kFSCatInfoNone, NULL, NULL, &spec, NULL);
- 	setCopyingFile (spec.name);
-	return !fRunner->ShutdownRequested ();
+ 	setCopyingFile (spec.name, false);
+	return true;
 }
 
 pascal Boolean 
@@ -165,28 +146,6 @@ XPFThreadedCommand::ArchiveFilterGlue (void *refCon, const FSRef *src, Boolean p
 	return ((XPFThreadedCommand *) refCon)->archiveFilter (src, preflight);
 }
 
-void
-XPFThreadedCommand::turnOffIgnorePermissionsForVolume (MountedVolume *volume)
-{
-#ifdef __MACH__
-	if (!volume) return;
-	char path[256];
-	ThrowIfOSErr_AC (FSRefMakePath (volume->getRootDirectory (), (UInt8 *) path, 255));
-	XPFSetUID myUID (0);
-	pid_t pid = fork ();
-	if (pid) {
-		if (pid != -1) {
-			int status;
-			waitpid (pid, &status, 0);
-		}
-	} else {
-		setuid (0);	// because vsdbutil checks the uid, rather than the euid
-		execl ("/usr/sbin/vsdbutil", "vsdbutil", "-a", path, NULL);
-		ThrowException_AC (kInternalError, 0);	// the execl shouldn't return
-	}
-#endif
-}
-
 // Install methods
 
 void
@@ -196,8 +155,8 @@ XPFThreadedCommand::updateExtensionsCacheForRootDirectory (FSRef *rootDirectory)
 #ifdef __MACH__
 	fProgressWindow->setProgressMax (0);
 	fProgressWindow->setProgressMin (0);
-	fProgressWindow->setProgressValue (0);
-	setStatusMessage (CStr255_AC ((ResNumber) kXPFStringsResource, kUpdatingExtensionsCache));
+	fProgressWindow->setProgressValue (0, true);
+	setStatusMessage (CStr255_AC ((ResNumber) kXPFStringsResource, kUpdatingExtensionsCache), true);
 
 	char rootPath [256];
 	ThrowIfOSErr_AC (FSRefMakePath (rootDirectory, (UInt8 *) rootPath, 256));
@@ -207,13 +166,18 @@ XPFThreadedCommand::updateExtensionsCacheForRootDirectory (FSRef *rootDirectory)
 		if (pid) {
 			if (pid != -1) {
 				int status;
-				while (!wait4 (pid, &status, WNOHANG, 0)) fYielder.YieldNow ();
+				while (!wait4 (pid, &status, WNOHANG, 0)) {
+					usleep (1000000 / 60); // about 1 tick 
+					fProgressWindow->animate ();
+				}
 			}
 		} else {
 			execl ("/usr/sbin/kextcache", "kextcache", "-l", "-m", "System/Library/Extensions.mkext", "System/Library/Extensions", NULL);
 			ThrowException_AC (kInternalError, 0);	// the execl shouldn't return
 		}
 	}
+#else
+	#pragma unused (rootDirectory)
 #endif
 }
 
@@ -250,11 +214,8 @@ XPFThreadedCommand::installStartupItemWithRootDirectory (FSRef *rootDirectory)
 	// the old startup item (if any) out of the way first, because otherwise we'll try to delete
 	// a running binary, which doesn't work.
 	char rootPath [256];
-	bool moveAndRestart = false;
 	ThrowIfOSErr_AC (FSRefMakePath (rootDirectory, (UInt8 *) rootPath, 255));
-	if (!strcmp (rootPath, "/")) moveAndRestart = true;
-	
-	if (moveAndRestart) {
+	if (!strcmp (rootPath, "/")) {
 		struct stat sb;
 		char dstPath [256];
 		for (int x = 0; x < 100; x++) {
@@ -269,13 +230,8 @@ XPFThreadedCommand::installStartupItemWithRootDirectory (FSRef *rootDirectory)
 		
 	ThrowIfOSErr_AC (XPFFSRef::getOrCreateStartupDirectory (rootDirectory, &libraryStartupItemsFolder));	
 	copyHFSArchivesTo ('hfsS', &libraryStartupItemsFolder);
-
-#ifdef __MACH__
-	if (moveAndRestart) {
-		XPFSetUID myUID (0);
-		system ("/Library/StartupItems/XPFStartupItem/XPFStartupItem restart");
-	}
-#endif
+	
+	// We'll restart it later in Mac OS X, in XPFPrefs::Close
 }
 
 void
@@ -284,9 +240,6 @@ XPFThreadedCommand::copyHFSArchivesTo (ResType type, FSRef *directory)
 	SInt16 archiveCount = CountResources (type);
 	float scale = (float) (fProgressMax - fProgressMin) / (float) archiveCount;
 	for (SInt16 x = 1; x <= archiveCount; x++) {
-		fYielder.YieldIfTime ();
-		if (fRunner->ShutdownRequested ()) return;
-	
 		SetResLoad (false);
 		Handle hfsA = GetIndResource (type, x);
 		SetResLoad (true);
@@ -299,33 +252,25 @@ XPFThreadedCommand::copyHFSArchivesTo (ResType type, FSRef *directory)
 		XPFSetUID myUID (0);
 		ThrowIfOSErr_AC (archive.extractArchiveTo (directory));
 
-		fProgressWindow->setProgressValue (fProgressMin + scale * (float) x);
+		fProgressWindow->setProgressValue (fProgressMin + scale * (float) x, true);
 	}
 }
 
 void
 XPFThreadedCommand::synchronizeWithHelper (bool deleteFirst)
 {
-	MountedVolume *rootDisk = fTargetDisk;
-	MountedVolume *bootDisk;
-	if (fHelperDisk) {
-		bootDisk = fHelperDisk;
-	} else {
-		bootDisk = fTargetDisk;
-	}
-	
 	float scale = (float) (fProgressMax - fProgressMin) / (float) fProgressMax;
 	unsigned progbase = fProgressMin;
 
-	if ((rootDisk != bootDisk) && !(fDebugOptions & kDisableCopyToHelper)) {	
+	if ((fRootDisk != fBootDisk) && !(fDebugOptions & kDisableCopyToHelper)) {	
 			
 		// Get the .XPostFacto directory
 		FSRef helperDir;
-		ThrowIfOSErr_AC (XPFFSRef::getOrCreateXPFDirectory (bootDisk->getRootDirectory (), &helperDir));
+		ThrowIfOSErr_AC (XPFFSRef::getOrCreateXPFDirectory (fBootDisk->getRootDirectory (), &helperDir));
 
 		// Now, get the directory which corresponds to the root disk
 		char rootName[255];
-		rootDisk->getShortOpenFirmwareName ().CopyTo (rootName);
+		fRootDisk->getOpenFirmwareName (true).CopyTo (rootName);
 		rootName[strlen(rootName) + 1] = 0; // extra termination byte
 				
 		// And write out each directory
@@ -347,13 +292,13 @@ XPFThreadedCommand::synchronizeWithHelper (bool deleteFirst)
 		// Now, copy the mach_kernel file
 		// Note the FSRefFileCopy will skip the copy if the files are the same
 		FSRef kernelOnRoot;
-		ThrowIfOSErr_AC (XPFFSRef::getKernelFSRef (rootDisk->getRootDirectory (), &kernelOnRoot));
-		setCopyingFile ("\pmach_kernel");
+		ThrowIfOSErr_AC (XPFFSRef::getKernelFSRef (fRootDisk->getRootDirectory (), &kernelOnRoot));
+		setCopyingFile ("\pmach_kernel", true);
 
 		XPFSetUID myUID (0);
 		ThrowIfOSErr_AC (FSRefFileCopy (&kernelOnRoot, &helperDir, NULL, NULL, 0, false));
 
-		fProgressWindow->setProgressValue (progbase + scale * 200);		
+		fProgressWindow->setProgressValue (progbase + scale * 200, true);		
 		
 		// Copy the Extensions and Extensions.mkext
 		// Note that the FSRefCopy* routines skip copies that aren't necessary
@@ -363,7 +308,7 @@ XPFThreadedCommand::synchronizeWithHelper (bool deleteFirst)
 		ThrowIfOSErr_AC (XPFFSRef::getOrCreateSystemLibraryDirectory (&helperDir, &helperSystemLibraryRef));
 	
 		// Check for the Extensions.mkext.
-		OSErr rootErr = XPFFSRef::getExtensionsCacheFSRef (rootDisk->getRootDirectory (), &rootSystemLibraryExtensionsCacheRef);
+		OSErr rootErr = XPFFSRef::getExtensionsCacheFSRef (fRootDisk->getRootDirectory (), &rootSystemLibraryExtensionsCacheRef);
 
 		if (rootErr == fnfErr) {
 			// It doesn't exist on the root. So make sure it doesn't exist on the helper.
@@ -372,7 +317,7 @@ XPFThreadedCommand::synchronizeWithHelper (bool deleteFirst)
 			if (helperErr == noErr) ThrowIfOSErr_AC (FSDeleteObject (&helperExtensionsCacheRef));
 		} else {
 			ThrowIfOSErr_AC (rootErr);
-			setCopyingFile ("\pExtensions.mkext");
+			setCopyingFile ("\pExtensions.mkext", true);
 			ThrowIfOSErr_AC (FSRefFileCopy (&rootSystemLibraryExtensionsCacheRef, &helperSystemLibraryRef, NULL, NULL, 0, false));			
 		}	
 		
@@ -380,7 +325,7 @@ XPFThreadedCommand::synchronizeWithHelper (bool deleteFirst)
 		fProgressMax = progbase + scale * 900;		
 
 		// Check for the extensions directory. It should exist :-)
-		ThrowIfOSErr_AC (XPFFSRef::getOrCreateSystemLibraryExtensionsDirectory (rootDisk->getRootDirectory (), &rootSystemLibraryExtensionsRef));
+		ThrowIfOSErr_AC (XPFFSRef::getOrCreateSystemLibraryExtensionsDirectory (fRootDisk->getRootDirectory (), &rootSystemLibraryExtensionsRef));
 		ThrowIfOSErr_AC (FSRefFilteredDirectoryCopy (&rootSystemLibraryExtensionsRef, &helperSystemLibraryRef, NULL, NULL, 0, true, 
 								NULL, CopyFilterGlue, this));
 
@@ -389,7 +334,7 @@ XPFThreadedCommand::synchronizeWithHelper (bool deleteFirst)
 		
 		// If the root disk was not writeable, then we need to install the extensions in the secondary location
 		// on the helper, so that BootX will pick them up
-		if (!rootDisk->getIsWriteable ()) {
+		if (!fRootDisk->getIsWriteable ()) {
 			installSecondaryExtensionsWithRootDirectory (&helperDir);
 		}
 	}		

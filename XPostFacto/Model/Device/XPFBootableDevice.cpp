@@ -395,10 +395,10 @@ OSErr
 XPFBootableDevice::readBlocks (unsigned int start, unsigned int count, UInt8 **buffer)
 {
 	ThrowIfNULL_AC (buffer);
-	if (fBlockSize == 0) return;
+	if (fBlockSize == 0) return -1;
 	
 	openDeviceFile ();
-	if (fDeviceFile == NULL) return;
+	if (fDeviceFile == NULL) return -1;
     
     // the start and count will be in terms of 512 byte blocks
     // we will allocate the buffer ourselves with NewPtr
@@ -438,7 +438,7 @@ XPFBootableDevice::writeBlocks (unsigned int start, unsigned int count, UInt8 *b
 	if (fBlockSize != 512) ThrowException_AC (kWrite512ByteBlocksOnly, 0);
 
 	openDeviceFile ();
-	if (fDeviceFile == NULL) return;
+	if (fDeviceFile == NULL) return -1;
 	
 	XPFSetUID uid (0);
      

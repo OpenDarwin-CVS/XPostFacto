@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2002
+Copyright (c) 2002 - 2003
 Other World Computing
 All rights reserved
 
@@ -38,8 +38,8 @@ advised of the possibility of such damage.
 // Command Numbers
 // ---------------
 
-#define cSetVerboseMode					1402
-#define cSetSingleUserMode				1403
+#define cSetBootInVerboseMode			1402
+#define cSetBootInSingleUserMode		1403
 #define cSetAutoBoot					1404
 #define cSetInputDevice					1405
 #define cSetOutputDevice				1406
@@ -95,6 +95,8 @@ advised of the possibility of such damage.
 #define cDisableCoreServices			1447
 
 #define cRecopyHelperFiles				1448
+#define cSetRebootInMacOS9				1449
+#define cSetSelectedVolume				1450
 
 // Views and Windows
 // -----------------
@@ -105,6 +107,11 @@ advised of the possibility of such damage.
 #define kOptionsWindow				1010
 #define kProgressWindow				1020
 #define kLogWindow					1100
+
+#define kRestartDialog				1030
+#define kInstallDialog				1032
+#define kRestartNowDialog			1033
+#define kInstallNowDialog			1034
 
 // Menus
 // -----

@@ -37,17 +37,20 @@ advised of the possibility of such damage.
 
 #include "XPFRestartCommand.h"
 
+class XPFPrefs;
+
 class XPFInstallCommand : public XPFRestartCommand {
 
 	public:
 		
 		XPFInstallCommand (XPFPrefs *prefs);
 		
-		void DoItThreaded ();
+		void DoIt ();
 		
-	private:
+	protected:
 	
-		MountedVolume *fInstallCD;
+		virtual bool getInstalling () {return true;}
+		
 };	
 
 #endif

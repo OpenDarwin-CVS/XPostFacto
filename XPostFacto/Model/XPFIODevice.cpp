@@ -99,7 +99,7 @@ XPFIODevice::InputDeviceWithShortOpenFirmwareName (char *ofName)
 {
 	XPFIODevice *retVal = NULL;
 	for (XPFIODeviceIterator iter (GetInputDeviceList ()); iter.Current(); iter.Next()) {
-		if (iter->getShortOpenFirmwareName () == ofName) {
+		if (iter->getOpenFirmwareName (true) == ofName) {
 			retVal = iter.Current ();
 			break;
 		}		
@@ -112,7 +112,7 @@ XPFIODevice::OutputDeviceWithShortOpenFirmwareName (char *ofName)
 {
 	XPFIODevice *retVal = NULL;
 	for (XPFIODeviceIterator iter (GetOutputDeviceList ()); iter.Current(); iter.Next()) {
-		if (iter->getShortOpenFirmwareName () == ofName) {
+		if (iter->getOpenFirmwareName (true) == ofName) {
 			retVal = iter.Current ();
 			break;
 		}		
@@ -125,7 +125,7 @@ XPFIODevice::InputDeviceWithOpenFirmwareName (char *ofName)
 {
 	XPFIODevice *retVal = NULL;
 	for (XPFIODeviceIterator iter (GetInputDeviceList ()); iter.Current(); iter.Next()) {
-		if (iter->getOpenFirmwareName () == ofName) {
+		if (iter->getOpenFirmwareName (false) == ofName) {
 			retVal = iter.Current ();
 			break;
 		}		
@@ -138,7 +138,7 @@ XPFIODevice::OutputDeviceWithOpenFirmwareName (char *ofName)
 {
 	XPFIODevice *retVal = NULL;
 	for (XPFIODeviceIterator iter (GetOutputDeviceList ()); iter.Current(); iter.Next()) {
-		if (iter->getOpenFirmwareName () == ofName) {
+		if (iter->getOpenFirmwareName (false) == ofName) {
 			retVal = iter.Current ();
 			break;
 		}		
