@@ -1205,22 +1205,15 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 		
 		gLogFile << "MountedVolume::MountedVolume fVolumeName: " << (CChar255_AC) fVolumeName << " Creation Date: " << fCreationDate << endl_AC;
 		
-		gLogFile << "checkDeviceAndPartition()" << endl_AC;
 		checkDeviceAndPartition ();
 		
 		// We are only interested in the rest if we have a bootable device
 		if (fBootableDevice) {
-			gLogFile << "checkSymlinks()" << endl_AC;
 			checkSymlinks ();
-			gLogFile << "checkBlessedFolder()" << endl_AC;
 			checkBlessedFolder ();
-			gLogFile << "checkBootXVersion()" << endl_AC;
 			checkBootXVersion ();
-			gLogFile << "checkMacOSXVersion()" << endl_AC;
 			checkMacOSXVersion ();
-			gLogFile << "checkOpenFirmwareName()" << endl_AC;
 			checkOpenFirmwareName ();
-			gLogFile << "checkExtensionsCaches()" << endl_AC;
 			checkExtensionsCaches ();
 		}
 					
