@@ -239,8 +239,8 @@ XPFCheckPermissionsCommand::checkPermissions (FSRef *directory)
 					char temp[64];
 					snprintf (temp, 63, "0%o", catInfos[x].permissions[2] & 0777);
 					gLogFile << "--> " << (CChar63_AC) specs[x].name << " was "
-						<< catInfos[x].permissions[0] << "-" << catInfos[x].permissions[1] << "-"
-						<< temp << "-" << endl_AC;
+						<< catInfos[x].permissions[0] << "-" 
+						<< catInfos[x].permissions[1] << "-" << temp << endl_AC;
 					catInfos[x].permissions[0] = 0;
 					catInfos[x].permissions[1] = 0;
 					catInfos[x].permissions[2] &= ~0022;	// turn off group and world write
