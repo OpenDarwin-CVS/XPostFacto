@@ -1,8 +1,8 @@
-<body><h2>XPostFacto 3.0a15</h2>
+<body><h2>XPostFacto 3.0a16</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-March 25, 2004
+March 29, 2004
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -11,30 +11,28 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <p>Here's a quick link to download the latest version. 
 
 <blockquote>
-<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a15.sit">Download XPostFacto 3.0a15</a>
+<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a16.sit">Download XPostFacto 3.0a16</a>
 </blockquote>
 
-<p>Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes. The main outstanding issue in 3.0a15 is that built-in video is not working in Panther on the Beige G3. Also, Panther is not yet working on Kanga (the original Powerbook G3).
+<p>Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes. The main outstanding issue in 3.0a16 is that Panther is not yet working on Kanga (the original Powerbook G3).
 
-<h4>What's new in 3.0a15</h4>
+<h4>What's new in 3.0a16</h4>
 
-Here's a quick summary of what's new in version 3.0a15.
+Here's a quick summary of what's new in version 3.0a16.
 
 <ul>
-<p><li>I have (finally) switched to Panther for my day-to-day work, and am now building BootX and the kernel extensions with XCode in Panther. This appears not to have introduced any new problems. See the updated <a href="http://www.opendarwin.org/projects/XPostFacto/DeveloperNotes.html">developer notes</a> if you are building the extensions yourself.
+<p><li>Experimental Panther support for built-in video on the Beige G3s. Note that it is not well tested yet, so unless you are keen on testing it for me, you should wait a little while for reports to come in.
 
-<p><li>BootX has been updated to make use of additional memory in the boot process (it now assumes 96 MB of RAM). I have also modified BootX to provide more useful diagnostic messages when it fails to boot properly.
-
-<p><li>XPF 3 now mostly works with 10.0 and 10.1, as well as 10.2 and 10.3. One remaining limitation is that the XPF application will not launch in 10.0 (but it can install 10.0 if you launch XPF from Mac OS 9). There may be other limitations which apply to 10.0 and 10.1, but it mostly seems to work.
-
-<p><li>Updates the PatchedBlockStorageDriver to deal with a potential issue with Mac OS X 10.3.3.
+<p><li>Updated BootX with a few more error messages when things go wrong.
 </ul>
 
 <h4>Panther Support</h4>
 
 <p>XPF now includes support for Panther (Mac OS X 10.3) on the 7300 - 9600 (and friends), as well as the Wallstreet Powerbooks and Beige G3 (with some limitations related to video). The original Powerbook G3 (Kanga) is not yet supported in Panther, but I will be working on it.
 
-<p>Built-in video is still not working on the Beige G3 in Panther. I need to do some more work to get this fixed. The Radeon 7000 works in Panther, as does the original Radeon Mac Edition, as well as some others. One option that you may find useful in Panther is the "Use old NDRVs" option, which sets up a boot argument which tells Panther to use the ROM-based drivers on older video cards that it would otherwise ignore.
+<p>Version 3.0a16 now includes experimental Panther support for the built-in video of Beige G3s. This is not well tested yet, so unless you are keen on testing it for me, you should wait a little while for reports to come in. I would be interested in reports from the various types of Beige G3, including the G3 All-in-One.
+
+<p>Some older video cards are not working in Panther. One XPF option that can be useful is the "Use old NDRVs" option, which sets up a boot argument which tells Panther to use the ROM-based drivers on older video cards that it would otherwise ignore.
 
 <p>There are some cases in which installing Panther on the Wallstreet Powerbooks is not working -- in those cases, the Mac OS X Installer complains that the computer is not supported, despite XPostFacto's efforts. I will need to follow up on the cause for this.
 
@@ -155,7 +153,7 @@ Here's a quick summary of what's new in version 3.0a15.
 <p>These are the 7300, 7500, 7600, 8500, 8600, 9500, and 9600, as well as the clones that were based on one of these systems (the Umax S900 and J700, the PowerComputing PowerWave and PowerTower Pro,  and the Daystar Genesis and Millennium, among others).
 
 <p><li><b>The Beige G3s</b>
-<p>The Beige G3s are working. However, the built-in video is not yet working with Panther.
+<p>The Beige G3s are working.
 
 <p><li><b>The Wallstreet Powerbooks</b>
 <p>The Wallstreet Powerbooks are working, with some video-related issues in some configurations.
@@ -515,6 +513,16 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a16.sit">3.0a16 (March 29, 2004)</a>
+
+<dd>Here's a quick summary of what's new in version 3.0a16.
+
+<ul>
+<p><li>Experimental Panther support for built-in video on the Beige G3s. Note that it is not well tested yet, so unless you are keen on testing it for me, you should wait a little while for reports to come in.
+
+<p><li>Updated BootX with a few more error messages when things go wrong.
+</ul>
 
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a15.sit">3.0a15 (March 25, 2004)</a>
 
