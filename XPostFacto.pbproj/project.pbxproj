@@ -5,6 +5,206 @@
 	};
 	objectVersion = 38;
 	objects = {
+		941C8E6E0528BB2A00A80003 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = version.plist;
+			path = XPFStartupItem/version.plist;
+			refType = 4;
+		};
+		941C8E6F0528BB2A00A80003 = {
+			fileRef = 941C8E6E0528BB2A00A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9420F2140524102F00A80003 = {
+			fileRef = F52AC80E03F21A8F01A80002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		946A5D070525093200A80003 = {
+			children = (
+				946A5D12052509A900A80003,
+				94D732B2052602DE00A80003,
+				946A5D14052509A900A80003,
+				946A5D1A052509A900A80003,
+				946A5D1B052509A900A80003,
+				946A5D18052509A900A80003,
+				946A5D270525115000A80003,
+			);
+			isa = PBXGroup;
+			name = XPFSync;
+			path = "";
+			refType = 4;
+		};
+		946A5D12052509A900A80003 = {
+			children = (
+				946A5D13052509A900A80003,
+			);
+			isa = PBXVariantGroup;
+			name = InfoPlist.strings;
+			path = XPFStartupItem/XPFSync/English.lproj;
+			refType = 4;
+		};
+		946A5D13052509A900A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = English;
+			path = InfoPlist.strings;
+			refType = 4;
+		};
+		946A5D14052509A900A80003 = {
+			children = (
+				946A5D15052509A900A80003,
+			);
+			isa = PBXVariantGroup;
+			name = MainMenu.nib;
+			path = XPFStartupItem/XPFSync/English.lproj;
+			refType = 4;
+		};
+		946A5D15052509A900A80003 = {
+			isa = PBXFileReference;
+			name = English;
+			path = MainMenu.nib;
+			refType = 4;
+		};
+		946A5D18052509A900A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = main.m;
+			path = XPFStartupItem/XPFSync/main.m;
+			refType = 4;
+		};
+		946A5D1A052509A900A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = XPFSyncApp.h;
+			path = XPFStartupItem/XPFSync/XPFSyncApp.h;
+			refType = 4;
+		};
+		946A5D1B052509A900A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = XPFSyncApp.m;
+			path = XPFStartupItem/XPFSync/XPFSyncApp.m;
+			refType = 4;
+		};
+		946A5D1C052509A900A80003 = {
+			fileRef = 946A5D12052509A900A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		946A5D1D052509A900A80003 = {
+			fileRef = 946A5D14052509A900A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		946A5D1F052509A900A80003 = {
+			fileRef = 946A5D18052509A900A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		946A5D21052509A900A80003 = {
+			fileRef = 946A5D1A052509A900A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		946A5D22052509A900A80003 = {
+			fileRef = 946A5D1B052509A900A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		946A5D250525104400A80003 = {
+			isa = PBXFrameworkReference;
+			name = Cocoa.framework;
+			path = /System/Library/Frameworks/Cocoa.framework;
+			refType = 0;
+		};
+		946A5D260525104400A80003 = {
+			fileRef = 946A5D250525104400A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		946A5D270525115000A80003 = {
+			isa = PBXFileReference;
+			name = XPFIcons.icns;
+			path = XPostFacto/Resources/XPFIcons.icns;
+			refType = 4;
+		};
+		946A5D280525115000A80003 = {
+			fileRef = 946A5D270525115000A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		946A5D29052514FE00A80003 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = XPFSyncPaths.h;
+			path = XPFStartupItem/XPFSync/XPFSyncPaths.h;
+			refType = 4;
+		};
+		946A5D2A052514FE00A80003 = {
+			fileRef = 946A5D29052514FE00A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		946A5D2B052514FE00A80003 = {
+			fileRef = 946A5D29052514FE00A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		946A5D2C0525152200A80003 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = XPFSyncPaths.c;
+			path = XPFStartupItem/XPFSync/XPFSyncPaths.c;
+			refType = 4;
+		};
+		946A5D2D0525152200A80003 = {
+			fileRef = 946A5D2C0525152200A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		946A5D2E0525152200A80003 = {
+			fileRef = 946A5D2C0525152200A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		946A5D2F052518AF00A80003 = {
+			fileRef = F5BF347003F0213301A80002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		946A5D3105251A6C00A80003 = {
+			isa = PBXTargetDependency;
+			target = 94ED29270524913A00A80003;
+		};
+		946A5D3205251EDF00A80003 = {
+			fileRef = 946B436C04FC0E3500A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		946A5D3305251EDF00A80003 = {
+			fileRef = 946B436B04FC0E3500A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		946B436B04FC0E3500A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -50,6 +250,7 @@
 			files = (
 				94B81734047A816C00A80003,
 				94B81735047A816C00A80003,
+				941C8E6F0528BB2A00A80003,
 			);
 			isa = PBXCopyFilesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 1;
@@ -309,6 +510,254 @@
 			settings = {
 			};
 		};
+		94D732840525FB8F00A80003 = {
+			children = (
+				F58FB3FB02B3D0BE01A80001,
+			);
+			isa = PBXGroup;
+			name = Utility;
+			refType = 4;
+		};
+		94D732850525FBA100A80003 = {
+			children = (
+				94D732870525FBF600A80003,
+				94D732860525FBEF00A80003,
+			);
+			isa = PBXGroup;
+			name = Documentation;
+			refType = 4;
+		};
+		94D732860525FBEF00A80003 = {
+			children = (
+				94D7328A0525FC3800A80003,
+				94D7328B0525FC3800A80003,
+				94D7328C0525FC3800A80003,
+				94D7328D0525FC3800A80003,
+				94D7328E0525FC3800A80003,
+				94D7328F0525FC3800A80003,
+				94D732900525FC3800A80003,
+			);
+			isa = PBXGroup;
+			name = OWC;
+			refType = 4;
+		};
+		94D732870525FBF600A80003 = {
+			children = (
+				94D732880525FC1D00A80003,
+				94D732890525FC1D00A80003,
+			);
+			isa = PBXGroup;
+			name = OpenDarwin;
+			refType = 4;
+		};
+		94D732880525FC1D00A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = DeveloperNotes.html;
+			path = www/DeveloperNotes.html;
+			refType = 4;
+		};
+		94D732890525FC1D00A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = index.html;
+			path = www/index.html;
+			refType = 4;
+		};
+		94D7328A0525FC3800A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = Compatibility.html;
+			path = owc/Compatibility.html;
+			refType = 4;
+		};
+		94D7328B0525FC3800A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = FAQ.html;
+			path = owc/FAQ.html;
+			refType = 4;
+		};
+		94D7328C0525FC3800A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = index.html;
+			path = owc/index.html;
+			refType = 4;
+		};
+		94D7328D0525FC3800A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = L2CacheConfig.html;
+			path = owc/L2CacheConfig.html;
+			refType = 4;
+		};
+		94D7328E0525FC3800A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = Makefile;
+			path = owc/Makefile;
+			refType = 4;
+		};
+		94D7328F0525FC3800A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = XPostFacto.html;
+			path = owc/XPostFacto.html;
+			refType = 4;
+		};
+		94D732900525FC3800A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = XPostFacto3.html;
+			path = owc/XPostFacto3.html;
+			refType = 4;
+		};
+		94D732910525FCAD00A80003 = {
+			children = (
+				F5EC95B401B1F16601A80001,
+				F5EC95DD01B204D901A80001,
+				F541C86C02FEE62201A80001,
+			);
+			isa = PBXGroup;
+			name = "Shared Code";
+			refType = 4;
+		};
+		94D732B2052602DE00A80003 = {
+			children = (
+				94D732B3052602DE00A80003,
+			);
+			isa = PBXVariantGroup;
+			name = Localizable.strings;
+			path = "";
+			refType = 4;
+		};
+		94D732B3052602DE00A80003 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = English;
+			path = XPFStartupItem/XPFSync/English.lproj/Localizable.strings;
+			refType = 4;
+		};
+		94D732B4052602DE00A80003 = {
+			fileRef = 94D732B2052602DE00A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94ED29220524913A00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+				946A5D21052509A900A80003,
+				946A5D2A052514FE00A80003,
+				946A5D3205251EDF00A80003,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94ED29230524913A00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+				946A5D1C052509A900A80003,
+				946A5D1D052509A900A80003,
+				946A5D280525115000A80003,
+				94D732B4052602DE00A80003,
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94ED29240524913A00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+				946A5D1F052509A900A80003,
+				946A5D22052509A900A80003,
+				946A5D2D0525152200A80003,
+				946A5D3305251EDF00A80003,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94ED29250524913A00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+				946A5D260525104400A80003,
+				946A5D2F052518AF00A80003,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94ED29260524913A00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94ED29270524913A00A80003 = {
+			buildPhases = (
+				94ED29220524913A00A80003,
+				94ED29230524913A00A80003,
+				94ED29240524913A00A80003,
+				94ED29250524913A00A80003,
+				94ED29260524913A00A80003,
+			);
+			buildSettings = {
+				HEADER_SEARCH_PATHS = /Developer/Headers/FlatCarbon;
+				INSTALL_PATH = /Library/StartupItems/XPFStartupItem/;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = XPFSync;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+			);
+			isa = PBXApplicationTarget;
+			name = XPFSync;
+			productInstallPath = /Library/StartupItems/XPFStartupItem/;
+			productName = XPFSync;
+			productReference = 94ED29280524913A00A80003;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>XPFSync</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string>XPFIcons.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0a1</string>
+	<key>NSMainNibFile</key>
+	<string>MainMenu</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+</dict>
+</plist>
+";
+		};
+		94ED29280524913A00A80003 = {
+			isa = PBXApplicationReference;
+			path = XPFSync.app;
+			refType = 3;
+		};
 //940
 //941
 //942
@@ -365,12 +814,6 @@
 			settings = {
 			};
 		};
-		F514D82002B3C94D01A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = XPostFacto.html;
-			refType = 4;
-		};
 		F52AC80E03F21A8F01A80002 = {
 			isa = PBXFrameworkReference;
 			name = ApplicationServices.framework;
@@ -419,19 +862,18 @@
 				F5FB800A03C7A0AD01A80002,
 				F5BF317E03F01EA201A80002,
 				94CC89DB0508E1BC00A80003,
+				94ED29270524913A00A80003,
 			);
 		};
 		F53C691001B191BA01A80001 = {
 			children = (
-				F541C86C02FEE62201A80001,
-				F5EC95B401B1F16601A80001,
+				94D732910525FCAD00A80003,
 				F53C691301B1926201A80001,
 				F53C695501B1926201A80001,
-				F514D82002B3C94D01A80001,
-				F58FB3FA02B3D06B01A80001,
-				F58FB3FB02B3D0BE01A80001,
 				F5BF318103F01F0501A80002,
 				F5BF318403F020C101A80002,
+				94D732840525FB8F00A80003,
+				94D732850525FBA100A80003,
 				F53C6A1601B194DC01A80001,
 			);
 			isa = PBXGroup;
@@ -889,6 +1331,7 @@
 				F5FB800B03C7A0AD01A80002,
 				F5BF317F03F01EA201A80002,
 				94CC89DC0508E1BC00A80003,
+				94ED29280524913A00A80003,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -2949,6 +3392,7 @@
 			);
 			isa = PBXGroup;
 			name = "CPU Settings";
+			path = "";
 			refType = 4;
 		};
 		F541C86D02FEE69A01A80001 = {
@@ -5434,12 +5878,6 @@
 			isa = PBXTargetDependency;
 			target = F557F68D0226FDFA01A80001;
 		};
-		F58FB3FA02B3D06B01A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = DeveloperNotes;
-			refType = 4;
-		};
 		F58FB3FB02B3D0BE01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -5538,7 +5976,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "chown root:admin \"${DSTROOT}\"\nchmod 0775 \"${DSTROOT}\"\nchmod a+t \"${DSTROOT}\"\nchown -R root:wheel \"${DSTROOT}/System/Library/Extensions\"\nchmod -R u+w \"${DSTROOT}/System/Library/Extensions\"\nchown -R root:wheel \"${DSTROOT}/Library/StartupItems\"\n\n# Now copy the extensions and startup items\n\nmkdir -p \"${SRCROOT}/XPostFacto/Derived/Extensions\"\nmkdir -p \"${SRCROOT}/XPostFacto/Derived/StartupItems\"\n\nfor FILE in \"${SRCROOT}\"/XPostFacto/Derived/Extensions/*.hfs\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in \"${SRCROOT}\"/XPostFacto/Derived/StartupItems/*.hfs\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in \"${DSTROOT}\"/System/Library/Extensions/*.kext\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n}\n\nfor FILE in \"${DSTROOT}\"/Library/StartupItems/XPF*\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/StartupItems\"\n}\n\nif test ${SUDO_USER}; then\n\tchown -R ${SUDO_USER} \"${SYMROOT}\"\n\tchown -R ${SUDO_USER} \"${SRCROOT}/XPostFacto/Derived\"\nfi";
+			shellScript = "chown root:admin \"${DSTROOT}\"\nchmod 0775 \"${DSTROOT}\"\nchmod a+t \"${DSTROOT}\"\nchown -R root:wheel \"${DSTROOT}/System/Library/Extensions\"\nchmod -R u+w \"${DSTROOT}/System/Library/Extensions\"\nchown -R root:wheel \"${DSTROOT}/Library/StartupItems\"\nchmod u+s \"${DSTROOT}/Library/StartupItems/XPFStartupItem/XPFSync.app/Contents/MacOS/XPFSync\"\n\n# Now copy the extensions and startup items\n\nmkdir -p \"${SRCROOT}/XPostFacto/Derived/Extensions/plist\"\nmkdir -p \"${SRCROOT}/XPostFacto/Derived/StartupItems/plist\"\n\ncd \"${SRCROOT}\"\nfor FILE in XPostFacto/Derived/Extensions/*.hfs\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in XPostFacto/Derived/Extensions/plist/*.plist\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in XPostFacto/Derived/StartupItems/*.hfs\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in XPostFacto/Derived/StartupItems/plist/*.plist\n{\n\trm \"${FILE}\"\n}\n\ncd \"${DSTROOT}\"/System/Library/Extensions\nfor FILE in *.kext\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n\tcp \"${FILE}/Contents/Info.plist\" \"${SRCROOT}/XPostFacto/Derived/Extensions/plist/${FILE%.kext}.plist\"\n}\n\ncd \"${DSTROOT}\"/Library/StartupItems\nfor FILE in XPF*\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/StartupItems\"\n\tcp \"${FILE}/version.plist\" \"${SRCROOT}/XPostFacto/Derived/StartupItems/plist/${FILE}.plist\"\n}\n\nif test ${SUDO_USER}; then\n\tchown -R ${SUDO_USER} \"${SYMROOT}\"\n\tchown -R ${SUDO_USER} \"${SRCROOT}/XPostFacto/Derived\"\nfi";
 		};
 		F5B85D2103F5E91001A80002 = {
 			fileEncoding = 30;
@@ -5555,6 +5993,7 @@
 		F5BF317A03F01EA201A80002 = {
 			buildActionMask = 2147483647;
 			files = (
+				946A5D2B052514FE00A80003,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5564,6 +6003,7 @@
 			files = (
 				F5BF318303F01F8C01A80002,
 				946B436D04FC0E3500A80003,
+				946A5D2E0525152200A80003,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5574,6 +6014,7 @@
 				94BA4E81046FE32600A80003,
 				94BA4EE40470009300A80003,
 				946B436F04FC0E6100A80003,
+				9420F2140524102F00A80003,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5607,6 +6048,7 @@
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 			};
 			dependencies = (
+				946A5D3105251A6C00A80003,
 			);
 			isa = PBXToolTarget;
 			name = xpfbootsupportd;
@@ -5622,8 +6064,12 @@
 		F5BF318103F01F0501A80002 = {
 			children = (
 				F5BF318203F01F8C01A80002,
+				941C8E6E0528BB2A00A80003,
 				94B8172F047A7ABF00A80003,
 				94B81732047A7F5100A80003,
+				946A5D29052514FE00A80003,
+				946A5D2C0525152200A80003,
+				946A5D070525093200A80003,
 			);
 			isa = PBXGroup;
 			name = "XPF Startup Item";
@@ -5648,6 +6094,10 @@
 				F5BF347003F0213301A80002,
 				F52AC80E03F21A8F01A80002,
 				F52AC80F03F21A8F01A80002,
+				946A5D250525104400A80003,
+				F5EC95CC01B1F40001A80001,
+				F5EC95CD01B1F40001A80001,
+				F5EC95D801B1FEF301A80001,
 			);
 			isa = PBXGroup;
 			name = Frameworks;
@@ -5883,12 +6333,16 @@
 		};
 		F5EC95B401B1F16601A80001 = {
 			children = (
-				F5EC95CA01B1F40001A80001,
-				F5EC95DD01B204D901A80001,
-				F5EC95CB01B1F40001A80001,
+				F5EC95BC01B1F19201A80001,
+				F5EC95BD01B1F19201A80001,
+				F5EC95BE01B1F19201A80001,
+				F5EC95BF01B1F19201A80001,
+				F53F988901E7448D01A80001,
+				F53F988A01E7448D01A80001,
 			);
 			isa = PBXGroup;
 			name = HFSPlusArchive;
+			path = "";
 			refType = 4;
 		};
 		F5EC95B501B1F16601A80001 = {
@@ -6032,29 +6486,6 @@
 			settings = {
 			};
 		};
-		F5EC95CA01B1F40001A80001 = {
-			children = (
-				F5EC95BC01B1F19201A80001,
-				F5EC95BD01B1F19201A80001,
-				F5EC95BE01B1F19201A80001,
-				F5EC95BF01B1F19201A80001,
-				F53F988901E7448D01A80001,
-				F53F988A01E7448D01A80001,
-			);
-			isa = PBXGroup;
-			name = Source;
-			refType = 4;
-		};
-		F5EC95CB01B1F40001A80001 = {
-			children = (
-				F5EC95CC01B1F40001A80001,
-				F5EC95CD01B1F40001A80001,
-				F5EC95D801B1FEF301A80001,
-			);
-			isa = PBXGroup;
-			name = Frameworks;
-			refType = 4;
-		};
 		F5EC95CC01B1F40001A80001 = {
 			isa = PBXFrameworkReference;
 			name = Carbon.framework;
@@ -6070,7 +6501,7 @@
 		F5EC95D801B1FEF301A80001 = {
 			isa = PBXFileReference;
 			name = libz.dylib;
-			path = /usr/lib/libz.dylib;
+			path = /usr/lib/libz.1.1.3.dylib;
 			refType = 0;
 		};
 		F5EC95D901B1FEF301A80001 = {
@@ -6082,7 +6513,6 @@
 		F5EC95DD01B204D901A80001 = {
 			children = (
 				F5EC95DE01B204D901A80001,
-				F5EC95E801B204D901A80001,
 				F5EC95E901B204D901A80001,
 				946B436C04FC0E3500A80003,
 				946B436B04FC0E3500A80003,
@@ -6160,12 +6590,6 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Search.h;
-			refType = 4;
-		};
-		F5EC95E801B204D901A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = MoreFilesReadMe;
 			refType = 4;
 		};
 		F5EC95E901B204D901A80001 = {

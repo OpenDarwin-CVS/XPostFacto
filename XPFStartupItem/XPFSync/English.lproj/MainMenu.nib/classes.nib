@@ -1,0 +1,17 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            CLASS = XPFSyncApp; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                fCopyMessage = NSTextField; 
+                fMainWindow = NSWindow; 
+                fProgressIndicator = NSProgressIndicator; 
+                fSynchronizeButton = NSButton; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}
