@@ -1,11 +1,3 @@
-data 'TxSt' (17832, "Application 10, plain") {
-	$"00A7 000A 0000 0000 0000 0161"                                                                      /* .§.Â.......a */
-};
-
-data 'TxSt' (8715, "Application 9, bold") {
-	$"0100 0009 0000 0000 0000 0161"                                                                      /* ...Æ.......a */
-};
-
 resource 'STR#' (1040, "Update Window", purgeable) {
 	{	/* array StringArray: 7 elements */
 		/* [1] */
@@ -38,6 +30,14 @@ resource 'STR#' (1041, "Update List", purgeable) {
 	}
 };
 
+data 'TxSt' (17832, "Application 10, plain") {
+	$"00A7 000A 0000 0000 0000 0161"                                                                      /* .§.Â.......a */
+};
+
+data 'TxSt' (8715, "Application 9, bold") {
+	$"0100 0009 0000 0000 0000 0161"                                                                      /* ...Æ.......a */
+};
+
 resource 'View' (1040, "Update Window", purgeable) {
 	MAThreeOhView {
 
@@ -46,7 +46,7 @@ resource 'View' (1040, "Update Window", purgeable) {
 		/* [1] */
 		ViewSignatureAndClassname {
 			'wind',
-			1440,
+			1442,
 			"XPFUpdateWindow",
 			'WIND',
 			enabled,
@@ -314,71 +314,6 @@ resource 'View' (1040, "Update Window", purgeable) {
 		},
 		/* [4] */
 		ViewSignatureAndClassname {
-			'icon',
-			100,
-			"TIcon",
-			'icon',
-			notEnabled,
-			noIdle,
-			{	/* array BehaviorArray: 0 elements */
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				21,
-				/* [2] */
-				20
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				64,
-				/* [2] */
-				64
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			doesntHandleCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			Icon {
-				mIconHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				preferColor,
-				128
-			},
-			NoSubviews
-		},
-		/* [5] */
-		ViewSignatureAndClassname {
 			'stat',
 			100,
 			"",
@@ -445,7 +380,7 @@ resource 'View' (1040, "Update Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [6] */
+		/* [5] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -513,7 +448,7 @@ resource 'View' (1040, "Update Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [7] */
+		/* [6] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -581,7 +516,7 @@ resource 'View' (1040, "Update Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [8] */
+		/* [7] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -649,7 +584,7 @@ resource 'View' (1040, "Update Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [9] */
+		/* [8] */
 		ViewSignatureAndClassname {
 			'view',
 			417,
@@ -726,7 +661,7 @@ resource 'View' (1040, "Update Window", purgeable) {
 			},
 			2
 		},
-		/* [10] */
+		/* [9] */
 		ViewSignatureAndClassname {
 			'scrl',
 			118,
@@ -800,7 +735,7 @@ resource 'View' (1040, "Update Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [11] */
+		/* [10] */
 		ViewSignatureAndClassname {
 			'ssbr',
 			105,
@@ -864,6 +799,70 @@ resource 'View' (1040, "Update Window", purgeable) {
 				0,
 				0,
 				0
+			},
+			NoSubviews
+		},
+		/* [11] */
+		ViewSignatureAndClassname {
+			'pict',
+			102,
+			"TPicture",
+			'pict',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				21,
+				/* [2] */
+				20
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				64,
+				/* [2] */
+				64
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Picture {
+				mPictureHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				1009
 			},
 			NoSubviews
 		}

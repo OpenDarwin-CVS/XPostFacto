@@ -84,7 +84,7 @@ resource 'View' (1030, "Restart", purgeable) {
 		/* [1] */
 		ViewSignatureAndClassname {
 			'wind',
-			892,
+			894,
 			"",
 			'WIND',
 			enabled,
@@ -182,10 +182,10 @@ resource 'View' (1030, "Restart", purgeable) {
 		},
 		/* [2] */
 		ViewSignatureAndClassname {
-			'icon',
-			100,
-			"TIcon",
-			'icon',
+			'pict',
+			102,
+			"TPicture",
+			'pict',
 			notEnabled,
 			noIdle,
 			{	/* array BehaviorArray: 0 elements */
@@ -223,8 +223,8 @@ resource 'View' (1030, "Restart", purgeable) {
 
 			},
 			emptyUserArea,
-			Icon {
-				mIconHit,
+			Picture {
+				mPictureHit,
 				notHilited,
 				notDimmed,
 				sizeable,
@@ -240,8 +240,7 @@ resource 'View' (1030, "Restart", purgeable) {
 				},
 				-1,
 				dontPreferOutline,
-				preferColor,
-				128
+				1009
 			},
 			NoSubviews
 		},
@@ -627,7 +626,7 @@ resource 'View' (1032, "Install", purgeable) {
 		/* [1] */
 		ViewSignatureAndClassname {
 			'wind',
-			892,
+			894,
 			"",
 			'WIND',
 			enabled,
@@ -725,71 +724,6 @@ resource 'View' (1032, "Install", purgeable) {
 		},
 		/* [2] */
 		ViewSignatureAndClassname {
-			'icon',
-			100,
-			"TIcon",
-			'icon',
-			notEnabled,
-			noIdle,
-			{	/* array BehaviorArray: 0 elements */
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				21,
-				/* [2] */
-				20
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				64,
-				/* [2] */
-				64
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			doesntHandleCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			Icon {
-				mIconHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				preferColor,
-				128
-			},
-			NoSubviews
-		},
-		/* [3] */
-		ViewSignatureAndClassname {
 			'stat',
 			100,
 			"",
@@ -856,7 +790,7 @@ resource 'View' (1032, "Install", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [4] */
+		/* [3] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -924,7 +858,7 @@ resource 'View' (1032, "Install", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [5] */
+		/* [4] */
 		ViewSignatureAndClassname {
 			'butn',
 			207,
@@ -1029,7 +963,7 @@ resource 'View' (1032, "Install", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [6] */
+		/* [5] */
 		ViewSignatureAndClassname {
 			'butn',
 			96,
@@ -1094,7 +1028,7 @@ resource 'View' (1032, "Install", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [7] */
+		/* [6] */
 		ViewSignatureAndClassname {
 			'butn',
 			96,
@@ -1158,6 +1092,70 @@ resource 'View' (1032, "Install", purgeable) {
 				5
 			},
 			NoSubviews
+		},
+		/* [7] */
+		ViewSignatureAndClassname {
+			'pict',
+			102,
+			"TPicture",
+			'pict',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				21,
+				/* [2] */
+				20
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				64,
+				/* [2] */
+				64
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Picture {
+				mPictureHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				1009
+			},
+			NoSubviews
 		}
 	}
 };
@@ -1170,7 +1168,7 @@ resource 'View' (1033, "Restart Now", purgeable) {
 		/* [1] */
 		ViewSignatureAndClassname {
 			'wind',
-			790,
+			792,
 			"",
 			'WIND',
 			enabled,
@@ -1268,71 +1266,6 @@ resource 'View' (1033, "Restart Now", purgeable) {
 		},
 		/* [2] */
 		ViewSignatureAndClassname {
-			'icon',
-			100,
-			"TIcon",
-			'icon',
-			notEnabled,
-			noIdle,
-			{	/* array BehaviorArray: 0 elements */
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				21,
-				/* [2] */
-				20
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				64,
-				/* [2] */
-				64
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			doesntHandleCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			Icon {
-				mIconHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				preferColor,
-				128
-			},
-			NoSubviews
-		},
-		/* [3] */
-		ViewSignatureAndClassname {
 			'stat',
 			100,
 			"",
@@ -1399,7 +1332,7 @@ resource 'View' (1033, "Restart Now", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [4] */
+		/* [3] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -1467,7 +1400,7 @@ resource 'View' (1033, "Restart Now", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [5] */
+		/* [4] */
 		ViewSignatureAndClassname {
 			'butn',
 			207,
@@ -1572,7 +1505,7 @@ resource 'View' (1033, "Restart Now", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [6] */
+		/* [5] */
 		ViewSignatureAndClassname {
 			'butn',
 			96,
@@ -1634,6 +1567,70 @@ resource 'View' (1033, "Restart Now", purgeable) {
 				dontPreferOutline,
 				1030,
 				4
+			},
+			NoSubviews
+		},
+		/* [6] */
+		ViewSignatureAndClassname {
+			'pict',
+			102,
+			"TPicture",
+			'pict',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				21,
+				/* [2] */
+				20
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				64,
+				/* [2] */
+				64
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Picture {
+				mPictureHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				1009
 			},
 			NoSubviews
 		}
@@ -1648,7 +1645,7 @@ resource 'View' (1034, "Install Now", purgeable) {
 		/* [1] */
 		ViewSignatureAndClassname {
 			'wind',
-			790,
+			792,
 			"",
 			'WIND',
 			enabled,
@@ -1746,71 +1743,6 @@ resource 'View' (1034, "Install Now", purgeable) {
 		},
 		/* [2] */
 		ViewSignatureAndClassname {
-			'icon',
-			100,
-			"TIcon",
-			'icon',
-			notEnabled,
-			noIdle,
-			{	/* array BehaviorArray: 0 elements */
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				21,
-				/* [2] */
-				20
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				64,
-				/* [2] */
-				64
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			doesntHandleCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			Icon {
-				mIconHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				preferColor,
-				128
-			},
-			NoSubviews
-		},
-		/* [3] */
-		ViewSignatureAndClassname {
 			'stat',
 			100,
 			"",
@@ -1877,7 +1809,7 @@ resource 'View' (1034, "Install Now", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [4] */
+		/* [3] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -1945,7 +1877,7 @@ resource 'View' (1034, "Install Now", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [5] */
+		/* [4] */
 		ViewSignatureAndClassname {
 			'butn',
 			207,
@@ -2050,7 +1982,7 @@ resource 'View' (1034, "Install Now", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [6] */
+		/* [5] */
 		ViewSignatureAndClassname {
 			'butn',
 			96,
@@ -2114,6 +2046,70 @@ resource 'View' (1034, "Install Now", purgeable) {
 				4
 			},
 			NoSubviews
+		},
+		/* [6] */
+		ViewSignatureAndClassname {
+			'pict',
+			102,
+			"TPicture",
+			'pict',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				21,
+				/* [2] */
+				20
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				64,
+				/* [2] */
+				64
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Picture {
+				mPictureHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				1009
+			},
+			NoSubviews
 		}
 	}
 };
@@ -2126,7 +2122,7 @@ resource 'View' (1035, "Uninstall", purgeable) {
 		/* [1] */
 		ViewSignatureAndClassname {
 			'wind',
-			790,
+			792,
 			"",
 			'WIND',
 			enabled,
@@ -2224,71 +2220,6 @@ resource 'View' (1035, "Uninstall", purgeable) {
 		},
 		/* [2] */
 		ViewSignatureAndClassname {
-			'icon',
-			100,
-			"TIcon",
-			'icon',
-			notEnabled,
-			noIdle,
-			{	/* array BehaviorArray: 0 elements */
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				21,
-				/* [2] */
-				20
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				64,
-				/* [2] */
-				64
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			doesntHandleCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			Icon {
-				mIconHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				preferColor,
-				128
-			},
-			NoSubviews
-		},
-		/* [3] */
-		ViewSignatureAndClassname {
 			'stat',
 			100,
 			"",
@@ -2355,7 +2286,7 @@ resource 'View' (1035, "Uninstall", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [4] */
+		/* [3] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -2423,7 +2354,7 @@ resource 'View' (1035, "Uninstall", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [5] */
+		/* [4] */
 		ViewSignatureAndClassname {
 			'butn',
 			207,
@@ -2528,7 +2459,7 @@ resource 'View' (1035, "Uninstall", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [6] */
+		/* [5] */
 		ViewSignatureAndClassname {
 			'butn',
 			96,
@@ -2590,6 +2521,70 @@ resource 'View' (1035, "Uninstall", purgeable) {
 				dontPreferOutline,
 				1035,
 				4
+			},
+			NoSubviews
+		},
+		/* [6] */
+		ViewSignatureAndClassname {
+			'pict',
+			102,
+			"TPicture",
+			'pict',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				21,
+				/* [2] */
+				20
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				64,
+				/* [2] */
+				64
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Picture {
+				mPictureHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				1009
 			},
 			NoSubviews
 		}

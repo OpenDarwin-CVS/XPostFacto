@@ -10,7 +10,7 @@ resource 'View' (1020, "Progress Window", purgeable) {
 		/* [1] */
 		ViewSignatureAndClassname {
 			'wind',
-			574,
+			576,
 			"XPFProgressWindow",
 			'WIND',
 			enabled,
@@ -231,71 +231,6 @@ resource 'View' (1020, "Progress Window", purgeable) {
 		},
 		/* [4] */
 		ViewSignatureAndClassname {
-			'icon',
-			100,
-			"TIcon",
-			'icon',
-			notEnabled,
-			noIdle,
-			{	/* array BehaviorArray: 0 elements */
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				20,
-				/* [2] */
-				20
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				64,
-				/* [2] */
-				64
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			doesntHandleCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			Icon {
-				mIconHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				preferColor,
-				128
-			},
-			NoSubviews
-		},
-		/* [5] */
-		ViewSignatureAndClassname {
 			'stat',
 			100,
 			"",
@@ -359,6 +294,70 @@ resource 'View' (1020, "Progress Window", purgeable) {
 				justSystem,
 				-1,
 				1
+			},
+			NoSubviews
+		},
+		/* [5] */
+		ViewSignatureAndClassname {
+			'pict',
+			102,
+			"TPicture",
+			'pict',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				20,
+				/* [2] */
+				20
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				64,
+				/* [2] */
+				64
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Picture {
+				mPictureHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				1009
 			},
 			NoSubviews
 		}

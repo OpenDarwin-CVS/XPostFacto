@@ -823,7 +823,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; p&#167;&lt;&#144;)&#157;@</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -3966,7 +3966,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; p&#167;&lt;&#144;)&#157;@</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -6914,7 +6914,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; p&#167;&lt;&#144;)&#157;@</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -10288,7 +10288,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; p&#167;&lt;&#144;)&#157;@</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -13534,7 +13534,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; p&#167;&lt;&#144;)&#157;@</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -14171,6 +14171,13 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS></FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>XPFIconPict.r</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -14262,6 +14269,11 @@
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>XPFHelpStrings.r</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>XPFIconPict.r</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
         </TARGET>
@@ -14498,7 +14510,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; p&#167;&lt;&#144;)&#157;@</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -15305,7 +15317,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; p&#167;&lt;&#144;)&#157;@</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -16803,6 +16815,12 @@
                     <TARGETNAME>Mach-O Debug</TARGETNAME>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>XPFIcons.r</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Shared Resources</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>XPFIconPict.r</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>

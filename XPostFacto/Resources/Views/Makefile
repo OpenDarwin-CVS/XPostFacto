@@ -5,7 +5,8 @@ SETFILE = /Developer/Tools/SetFile
 
 binaries := OWCLogo.rsrc XPFIcons.rsrc XPFAboutBox.rsrc XPFFatalErrorWindow.rsrc XPFGridWindow.rsrc \
             XPFLogWindow.rsrc XPFOptionsWindow.rsrc XPFProgressWindow.rsrc XPFSplashWindow.rsrc \
-	    XPFConfirmDialogs.rsrc XPFUpdateWindow.rsrc XPFRegisterWindow.rsrc XPFVolumeInspectorWindow.rsrc
+	    XPFConfirmDialogs.rsrc XPFUpdateWindow.rsrc XPFRegisterWindow.rsrc XPFVolumeInspectorWindow.rsrc \
+	    XPFIconPict.rsrc
 
 sources := $(binaries:.rsrc=.r)
 
