@@ -41,9 +41,17 @@
 #define COLOR_MAP_ADDRESS 	0xF301B000
 #define COLOR_MAP_LENGTH	0x1000
 
+#define CONTROL_FRAMEBUFFER_OFFSET 0x10
+
 #define kDepth8Bit		0
 #define kDepth16Bit		1
 #define kDepth32Bit		2
+
+enum {
+    kOCFSleepState		= 0,
+    kOCFDozeState		= 1,
+    kOCFWakeState		= 2
+};
 
 #define super IOFramebuffer
 
@@ -109,9 +117,7 @@ const ControlDisplayMode gControlDisplayMode [] = {
 
 const UInt32 gNumControlDisplayModes = sizeof (gControlDisplayMode) / sizeof (ControlDisplayMode);
 
-unsigned OCFUnsignedPower (unsigned x, unsigned y);
-
-unsigned
+static unsigned
 OCFUnsignedPower (unsigned x, unsigned y)
 {
 	unsigned result = 1;
@@ -194,8 +200,78 @@ OpenControlFramebuffer::enableController (void)
 	fVRAMSize = (fVRAMBank1 ? 0x200000 : 0) + (fVRAMBank2 ? 0x200000 : 0);
 	if (!fVRAMSize) return kIOReturnError;
 
-	setDisplayMode (13, 1);	// we'll want to pick a better default that this!
+	IODisplayModeID initialDisplayMode;
+	IOIndex initialDepth;
+	getStartupDisplayMode (&initialDisplayMode, &initialDepth);
+	setDisplayMode (initialDisplayMode, initialDepth);
+	
+	fPowerState = kOCFWakeState;
+	
+	IOPMPowerState powerStates [] = {
+		{kIOPMPowerStateVersion1, kIOPMPreventSystemSleep, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+		{kIOPMPowerStateVersion1, kIOPMPreventSystemSleep, 0, IOPMPowerOn, 0, 0, 0, 0, 0, 0, 0, 0 },
+		{kIOPMPowerStateVersion1, kIOPMPreventSystemSleep | IOPMDeviceUsable, IOPMPowerOn, IOPMPowerOn, 0, 0, 0, 0, 0, 0, 0, 0 }
+    };
 
+    registerPowerDriver (this, powerStates, 3);
+
+	return kIOReturnSuccess;
+}
+
+unsigned long 
+OpenControlFramebuffer::maxCapabilityForDomainState (IOPMPowerFlags domainState)
+{
+	return (domainState & IOPMPowerOn) ? kOCFWakeState : kOCFSleepState;
+}
+
+unsigned long 
+OpenControlFramebuffer::initialPowerStateForDomainState (IOPMPowerFlags domainState)
+{
+	return (domainState & IOPMPowerOn) ? kOCFWakeState : kOCFSleepState;
+}
+
+unsigned long 
+OpenControlFramebuffer::powerStateForDomainState (IOPMPowerFlags domainState)
+{
+    return (domainState & IOPMPowerOn) ? pm_vars->myCurrentState : kOCFSleepState;
+}
+
+IOReturn 
+OpenControlFramebuffer::setStartupDisplayMode (IODisplayModeID displayMode, IOIndex depth)
+{
+	// Should be writing this to NVRAM, but that turns out to be more complicated than
+	// one might imagine. Ultimately, I'm going to have to redo some of the NVRAM classes.
+
+	return kIOReturnUnsupported;
+}
+
+IOReturn 
+OpenControlFramebuffer::getStartupDisplayMode (IODisplayModeID *displayMode, IOIndex *depth)
+{
+	// Should be reading this from NVRAM, but that turns out to be more complicated than one
+	// might imagine. Ultimately, I'm going to have to redo some of the NVRAM classes.
+
+	IODisplayModeID theDisplayMode = 0;
+	IOOptionBits flags;
+	
+	for (unsigned x = 1; x < gNumControlDisplayModes; x++) {
+		if (!gControlDisplayMode[x].clockVals[0]) continue;
+		interpretAppleSense (x, &flags, 0);
+		if (flags & kDisplayModeDefaultFlag) {
+			theDisplayMode = x;
+			break;
+		}
+	}
+
+	if (theDisplayMode == 0) theDisplayMode = 17; // a reasonably sane default, hopefully
+
+	IODisplayModeInformation info;
+	getInformationForDisplayMode (theDisplayMode, &info);
+	if (info.maxDepthIndex == kDepth32Bit) info.maxDepthIndex = kDepth16Bit;
+
+	if (displayMode) *displayMode = theDisplayMode;
+	if (depth) *depth = info.maxDepthIndex;
+	
 	return kIOReturnSuccess;
 }
 
@@ -236,8 +312,8 @@ OpenControlFramebuffer::getInformationForDisplayMode (IODisplayModeID displayMod
     bzero (info, sizeof (*info));
 
     info->maxDepthIndex	= kDepth8Bit;
-	if (getApertureSize (displayMode, kDepth16Bit) + 0x210 < fVRAMSize) info->maxDepthIndex = kDepth16Bit;
-	if (getApertureSize (displayMode, kDepth32Bit) + 0x210 < fVRAMSize) info->maxDepthIndex = kDepth32Bit;
+	if (getApertureSize (displayMode, kDepth16Bit) + CONTROL_FRAMEBUFFER_OFFSET < fVRAMSize) info->maxDepthIndex = kDepth16Bit;
+	if (getApertureSize (displayMode, kDepth32Bit) + CONTROL_FRAMEBUFFER_OFFSET < fVRAMSize) info->maxDepthIndex = kDepth32Bit;
 	
     info->nominalWidth = gControlDisplayMode[displayMode].nominalWidth;
     info->nominalHeight	= gControlDisplayMode[displayMode].nominalHeight;
@@ -338,7 +414,7 @@ OpenControlFramebuffer::getAttribute (IOSelect attribute, UInt32 *value)
 		case kIOHardwareCursorAttribute:
 			*value = 0;
 			break;
-						
+									
 		default:
 			return kIOReturnUnsupported;
 			break;
@@ -350,18 +426,44 @@ OpenControlFramebuffer::getAttribute (IOSelect attribute, UInt32 *value)
 IOReturn 
 OpenControlFramebuffer::setAttribute (IOSelect attribute, UInt32 value)
 {
-	switch (attribute) {
-		case kIOPowerAttribute:
-			// value 1 means low, value 2 means high
-			return kIOReturnUnsupported;
-			break;
-	
-		default:
-			return kIOReturnUnsupported;
-			break;
+	if (attribute == kIOPowerAttribute) {
+		UInt32 reg22;
+
+		IOLog ("OpenControlFramebuffer power state from %lu to %lu\n", fPowerState, value);
+		
+		if (fPowerState < kOCFWakeState) {
+			if (value >= kOCFWakeState) {
+				handleEvent (kIOFBNotifyWillPowerOn);
+
+#if 0
+// For some reason, actually turning the signal back on isn't working. Needs further investigation.
+				reg22 = OSSwapLittleToHostInt32 (fRegister[22].reg); eieio ();
+				reg22 &= ~0xF00;
+				fRegister[22].reg = OSSwapHostToLittleInt32 (reg22); eieio ();
+#endif
+
+				handleEvent (kIOFBNotifyDidPowerOn);			
+			}
+		} else {
+			if (value < kOCFWakeState) {
+				handleEvent (kIOFBNotifyWillPowerOff);
+
+#if 0
+// This actually works, but I can't turn the signal back on again, so ...
+				reg22 = OSSwapLittleToHostInt32 (fRegister[22].reg); eieio ();
+				reg22 |= 0xF00;
+				fRegister[22].reg = OSSwapHostToLittleInt32 (reg22); eieio ();
+#endif
+
+				handleEvent (kIOFBNotifyDidPowerOff);			
+			}
+		}
+
+		fPowerState = value;		
+		return kIOReturnSuccess;
 	}
 	
-	return kIOReturnSuccess;
+	return super::setAttribute (attribute, value);
 }
 
 IOReturn 
@@ -369,7 +471,8 @@ OpenControlFramebuffer::setAttributeForConnection (IOIndex connectIndex, IOSelec
 {
 	switch (attribute) {
 		case kConnectionPower:
-			return kIOReturnUnsupported;
+			// We just succeed here -- I don't think we have to do anything as such
+			return kIOReturnSuccess;
 			break;
 			
 		default:
@@ -424,7 +527,7 @@ OpenControlFramebuffer::getApertureRange (IOPixelAperture aper)
 	IODeviceMemory *deviceMemory = getVRAMRange ();
 	if (!deviceMemory) return NULL;
 	
-	IODeviceMemory *apertureRange = IODeviceMemory::withSubRange (deviceMemory, 0xC00210, getApertureSize (fCurrentDisplayMode, fCurrentDepth));
+	IODeviceMemory *apertureRange = IODeviceMemory::withSubRange (deviceMemory, 0xC00010, getApertureSize (fCurrentDisplayMode, fCurrentDepth));
 
 	deviceMemory->release (); // since getNVRAMRange () does a retain ()
 	return apertureRange;
@@ -439,8 +542,6 @@ OpenControlFramebuffer::isConsoleDevice (void)
 void
 OpenControlFramebuffer::implementGammaAndCLUT ()
 {
-	// Should ideally take into account whether the caller wants to synchronize with vertical blank
-
 	switch (fCurrentDepth) {
 		case kDepth8Bit:
 			if (!fCLUTValid || !fGammaValid) return;
@@ -529,8 +630,6 @@ OpenControlFramebuffer::setCLUTWithEntries (IOColorEntry *colors, UInt32 index, 
 IOReturn 
 OpenControlFramebuffer::setDisplayMode (IODisplayModeID displayMode, IOIndex depth)
 {
-	IOLog ("OpenControlFramebuffer::setDisplayMode %lu, %lu\n", displayMode, depth);
-
 	if ((displayMode == fCurrentDisplayMode) && (depth == fCurrentDepth)) return kIOReturnSuccess;
 
 	UInt32 regVal[26];	
@@ -543,7 +642,7 @@ OpenControlFramebuffer::setDisplayMode (IODisplayModeID displayMode, IOIndex dep
 	
 	if (depth == 0) regVal[18] = 59;
 
-	regVal[19] = 0x200;
+	regVal[19] = 0x0;
 	
 	IOPixelInformation info;
 	getPixelInformation (displayMode, depth, kIOFBSystemAperture, &info);

@@ -112,6 +112,13 @@ public:
 	
 	virtual bool hasDDCConnect (IOIndex connectIndex);
 	
+	virtual IOReturn setStartupDisplayMode (IODisplayModeID displayMode, IOIndex depth);
+    virtual IOReturn getStartupDisplayMode (IODisplayModeID *displayMode, IOIndex *depth);
+	
+	virtual unsigned long maxCapabilityForDomainState (IOPMPowerFlags domainState);
+	virtual unsigned long initialPowerStateForDomainState (IOPMPowerFlags domainState);
+	virtual unsigned long powerStateForDomainState (IOPMPowerFlags domainState);
+	
 private:
 
 	void implementGammaAndCLUT ();
@@ -146,6 +153,8 @@ private:
 	
 	UInt32 fAppleSensePrimary;
 	UInt32 fAppleSenseExtended;
+	
+	UInt32 fPowerState;
 
 };
 
