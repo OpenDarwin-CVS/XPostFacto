@@ -42,7 +42,8 @@ extern "C" {
  
 unsigned OWCL2CacheInit (unsigned);
 unsigned OWCL3CacheInit (unsigned);
- 
+unsigned OWCL2FXCacheInit ();
+
 #endif   // ASSEMBLER
  
 #define pfFloat		0x80000000

@@ -47,6 +47,7 @@ class OWCCacheConfig : public IOService
 	
 		void initializeCacheSettings (IOService *provider);
 		void initializeL2 (IOService *provider, unsigned clockFrequency, bool isG4);
+		void initializeL2FX (IOService *provider);
 		void initializeL3 (IOService *provider);
 
 };

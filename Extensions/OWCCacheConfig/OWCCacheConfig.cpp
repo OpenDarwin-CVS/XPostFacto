@@ -98,9 +98,8 @@ OWCCacheConfig::setProperties (OSObject *properties)
 void
 OWCCacheConfig::initializeCacheSettings (IOService *provider)
 {	
-	OSData *data = OSDynamicCast (OSData, provider->getProperty ("cpu-version"));
-	if (!data) return;
-	unsigned pvr = * ((unsigned *) data->getBytesNoCopy ());
+	OSData *data; 
+	unsigned pvr = mfpvr ();
 	
 	pvr &= 0xFFFF0000;
 	pvr >>= 16;
@@ -111,8 +110,11 @@ OWCCacheConfig::initializeCacheSettings (IOService *provider)
 	
 	switch (pvr) {
 		case PROCESSOR_VERSION_750:
-		case PROCESSOR_VERSION_750FX:
 			initializeL2 (provider, clock, false);
+			break;
+			
+		case PROCESSOR_VERSION_750FX:
+			initializeL2FX (provider);
 			break;
 			
 		case PROCESSOR_VERSION_7400:
@@ -128,6 +130,34 @@ OWCCacheConfig::initializeCacheSettings (IOService *provider)
 		default:
 			return;
 	}
+}
+
+void
+OWCCacheConfig::initializeL2FX (IOService *provider)
+{
+	unsigned result;
+	mfspr (result, l2cr);
+	
+	if (!(result & l2em)) OWCL2FXCacheInit ();
+	
+	unsigned cacheSize = 512 * 1024;
+	
+	IORegistryEntry *l2cache = provider->childFromPath ("l2-cache", gIODTPlane);
+	if (!l2cache) {
+		l2cache = new IOService;
+		l2cache->init ();
+		l2cache->attachToParent (provider, gIODTPlane);
+		l2cache->release ();
+		l2cache->setName ("l2-cache");
+		l2cache->setProperty ("name", (void *) "l2-cache", sizeof ("l2-cache"));
+	}
+	l2cache->setProperty ("cache-unified", (void *) "", 0);
+	l2cache->setProperty ("d-cache-size", &cacheSize, 4);
+	l2cache->setProperty ("i-cache-size", &cacheSize, 4);
+	l2cache->setProperty ("device_type", (void *) "cache", sizeof ("cache"));
+
+	mfspr (result, l2cr);
+	setProperty ("L2CR", &result, 4);
 }
 
 void

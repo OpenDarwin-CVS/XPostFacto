@@ -60,8 +60,6 @@ LEXT(OWCL2CacheInit)
 			
 			cmplwi	r11,PROCESSOR_VERSION_750
 			beq		doSetup
-			cmplwi	r11,PROCESSOR_VERSION_750FX
-			beq		doSetup
 			cmplwi	r11,PROCESSOR_VERSION_7400
 			beq		doSetup
 			cmplwi	r11,PROCESSOR_VERSION_7410
@@ -240,6 +238,7 @@ citestrdl2:
 			bne		citestfail						; branch around the increment
 			addi	r4,r4,1							; increment the "success" line counter
 citestfail:	
+			sync
 			dcbi	0,r10							; invalidate as we go
 			sync
 			addi	r10,r10,32						; next line
