@@ -93,6 +93,8 @@ bool MaceEnet::start(IOService * provider)
 	if (!nub || !super::start(provider))
 		return false;
 
+	nub->setProperty ("built-in", "", 0);
+
 	transmitQueue = OSDynamicCast(IOGatedOutputQueue, getOutputQueue());
 	if (!transmitQueue)
 	{
