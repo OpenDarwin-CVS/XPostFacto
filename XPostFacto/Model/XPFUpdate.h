@@ -62,6 +62,7 @@ class XPFUpdate : public MDependable_AC
 		XPFUpdateItemList *getItemList () {return &fItemList;}
 		
 		bool getRequiresAction ();
+		bool getRequiresSynchronization ();
 				
 	private:
 	

@@ -46,11 +46,14 @@ public:
 	static OSErr getOrCreateLibraryDirectory (FSRef *rootDirectory, FSRef *result, bool create = true);
 	static OSErr getOrCreateStartupDirectory (FSRef *rootDirectory, FSRef *result, bool create = true);
 	static OSErr getOrCreateLibraryExtensionsDirectory (FSRef *rootDirectory, FSRef *result, bool create = true);
+	static OSErr getOrCreateHelperDirectory (FSRef *rootDirectory, char *ofName, FSRef *result, bool create = true);
 
 	static OSErr getFSRef (FSRef *rootDirectory, char *path, FSRef *result);
 	static OSErr getKernelFSRef (FSRef *rootDirectory, FSRef *result);
 	static OSErr getExtensionsCacheFSRef (FSRef *rootDirectory, FSRef *result, bool create = true);
 	static OSErr getBootXFSRef (FSRef *rootDirectory, FSRef *result, bool create = true);
+	
+	static bool isCatalogInfoTheSame (FSRef *ref1, FSRef *ref2);
 	
 };
 

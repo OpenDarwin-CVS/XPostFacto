@@ -153,7 +153,9 @@ XPFPrefs::Close ()
 						
 			if (rootDisk && (rootDisk != bootDisk)) {
 				XPFUpdate update (rootDisk, bootDisk);
-				PerformCommand (TH_new XPFSynchronizeCommand (&update));
+				if (update.getRequiresSynchronization ()) {
+					PerformCommand (TH_new XPFSynchronizeCommand (&update));
+				}
 			}
 		}
 	}

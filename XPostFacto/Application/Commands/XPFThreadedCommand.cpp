@@ -287,33 +287,18 @@ XPFThreadedCommand::synchronizeWithHelper (bool deleteFirst)
 	unsigned progbase = fProgressMin;
 
 	if ((fRootDisk != fBootDisk) && !(fDebugOptions & kDisableCopyToHelper)) {	
-			
-		// Get the .XPostFacto directory
+		
 		FSRef helperDir;
-		ThrowIfOSErr_AC (XPFFSRef::getOrCreateXPFDirectory (fBootDisk->getRootDirectory (), &helperDir));
-
-		// Now, get the directory which corresponds to the root disk
-		char rootName[255];
-		fRootDisk->getOpenFirmwareName (true).CopyTo (rootName);
-		rootName[strlen(rootName) + 1] = 0; // extra termination byte
-				
-		// And write out each directory
-		char *end;
-		char *pos = rootName;
-		while (*pos) {
-			while (*pos == '/') pos++;
-			end = pos;		
-			while ((*end != 0) && (*end != '/')) {
-				if (*end == ':') *end = ';';
-				end++;
-			}
-			*end = 0;
-			ThrowIfOSErr_AC (XPFFSRef::getOrCreateDirectory (&helperDir, pos, 0755, &helperDir));
-			if (deleteFirst) {
-				XPFSetUID myUID (0);
-				FSRefDeleteDirectoryContents (&helperDir);
-			}
-			pos = end + 1;
+		ThrowIfOSErr_AC (XPFFSRef::getOrCreateHelperDirectory (
+			fBootDisk->getRootDirectory (), 
+			(CChar255_AC) fRootDisk->getOpenFirmwareName (true),
+			&helperDir,
+			true)
+		);
+			
+		if (deleteFirst) {
+			XPFSetUID myUID (0);
+			FSRefDeleteDirectoryContents (&helperDir);
 		}
 			
 		// Now, copy the mach_kernel file

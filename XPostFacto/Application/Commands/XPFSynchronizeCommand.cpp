@@ -60,6 +60,6 @@ XPFSynchronizeCommand::DoItInProgressWindow ()
 {
 	setDescription (CStr255_AC (kXPFStringsResource, kSynchronizing));
 	fProgressMax = 1000;		
-	synchronizeWithHelper ();
+	synchronizeWithHelper (true);   // delete first
 	fProgressWindow->setFinished ();
 }

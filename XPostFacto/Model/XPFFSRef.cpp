@@ -144,6 +144,71 @@ XPFFSRef::getOrCreateXPFDirectory (FSRef *rootDirectory, FSRef *result, bool cre
 	return err;
 }
 
+bool
+XPFFSRef::isCatalogInfoTheSame (FSRef *f1, FSRef *f2)
+{
+	OSErr err;
+	FSCatalogInfo catInfo1, catInfo2;
+	FSCatalogInfoBitmap catInfoBitmap = kFSCatInfoNodeFlags | kFSCatInfoContentMod | kFSCatInfoRsrcSizes | kFSCatInfoDataSizes;
+	
+	err = FSGetCatalogInfo (f1, catInfoBitmap, &catInfo1, NULL, NULL, NULL);
+	if (err != noErr) return false;
+	
+	err = FSGetCatalogInfo (f2, catInfoBitmap, &catInfo2, NULL, NULL, NULL);
+	if (err != noErr) return false;
+	
+	if (catInfo1.nodeFlags & kFSNodeIsDirectoryMask) {
+		if (!(catInfo2.nodeFlags & kFSNodeIsDirectoryMask)) {
+			return false;
+		} else {
+			return (!memcmp (&catInfo1.contentModDate, &catInfo2.contentModDate, sizeof (UTCDateTime)));
+		}
+	}
+	
+	if (catInfo2.nodeFlags & kFSNodeIsDirectoryMask) return false;
+		
+	return (catInfo1.dataLogicalSize == catInfo2.dataLogicalSize) &&
+			(catInfo1.rsrcLogicalSize == catInfo2.rsrcLogicalSize) &&
+			(!memcmp (&catInfo1.contentModDate, &catInfo2.contentModDate, sizeof (UTCDateTime)));			
+}
+
+OSErr
+XPFFSRef::getOrCreateHelperDirectory (FSRef *rootDirectory, char *ofName, FSRef *result, bool create)
+{
+	OSErr err;
+
+	// Get the .XPostFacto directory
+	FSRef workingDir;
+	err = XPFFSRef::getOrCreateXPFDirectory (rootDirectory, &workingDir, create);
+
+	if (err == noErr) {
+		// Now, get the directory which corresponds to the root disk
+		char *rootName = NewPtr (strlen (ofName) + 2);
+		strcpy (rootName, ofName);
+		rootName[strlen(rootName) + 1] = 0; // extra termination byte
+				
+		// And write out each directory
+		char *end;
+		char *pos = rootName;
+		while (*pos) {
+			while (*pos == '/') pos++;
+			end = pos;		
+			while ((*end != 0) && (*end != '/')) {
+				if (*end == ':') *end = ';';
+				end++;
+			}
+			*end = 0;
+			err = XPFFSRef::getOrCreateDirectory (&workingDir, pos, 0755, result, create);
+			if (err != noErr) break;
+			pos = end + 1;
+			BlockMoveData (result, &workingDir, sizeof (FSRef));
+		}
+		DisposePtr (rootName);
+	}
+	
+	return err;
+}
+
 OSErr
 XPFFSRef::getOrCreateSystemLibraryDirectory (FSRef *rootDirectory, FSRef *result, bool create)
 {

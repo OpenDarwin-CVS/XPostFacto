@@ -100,6 +100,48 @@ XPFUpdate::getRequiresAction ()
 	return false;
 }
 
+bool
+XPFUpdate::getRequiresSynchronization ()
+{
+	if (!fTarget) return false;
+	if (!fHelper) return false;
+	
+	FSRef helperDir;
+	OSErr err = XPFFSRef::getOrCreateHelperDirectory (
+		fHelper->getRootDirectory (),
+		(CChar255_AC) fTarget->getOpenFirmwareName (true),
+		&helperDir,
+		false
+	);
+	if (err != noErr) return true;
+	
+	FSRef rootFSRef, bootFSRef;
+
+	err = XPFFSRef::getKernelFSRef (fTarget->getRootDirectory (), &rootFSRef);
+	if (err == noErr) err = XPFFSRef::getKernelFSRef (&helperDir, &bootFSRef);
+	if (err != noErr) return true;
+	if (!XPFFSRef::isCatalogInfoTheSame (&rootFSRef, &bootFSRef)) return true;
+	
+	OSErr rootErr = XPFFSRef::getExtensionsCacheFSRef (fTarget->getRootDirectory (), &rootFSRef, false);
+	OSErr bootErr = XPFFSRef::getExtensionsCacheFSRef (&helperDir, &bootFSRef, false);
+	if (rootErr == fnfErr) {
+		if (bootErr != fnfErr) return true;
+	} else if (rootErr != noErr) {
+		return true;
+	} else if (bootErr != noErr) {
+		return true;
+	}
+	if (!XPFFSRef::isCatalogInfoTheSame (&rootFSRef, &bootFSRef)) return true;
+	
+	err = XPFFSRef::getOrCreateSystemLibraryExtensionsDirectory (fTarget->getRootDirectory (), &rootFSRef, false);
+	if (err != noErr) return true;
+	err = XPFFSRef::getOrCreateSystemLibraryExtensionsDirectory (&helperDir, &bootFSRef, false);
+	if (err != noErr) return true;
+	if (!XPFFSRef::isCatalogInfoTheSame (&rootFSRef, &bootFSRef)) return true;
+	
+	return false;
+}
+
 XPFUpdateItem::XPFUpdateItem (XPFUpdate *update)
 {
 	fUpdate = update;
