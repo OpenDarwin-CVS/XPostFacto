@@ -389,6 +389,13 @@ XPFPrefs::DoEvent (EventNumber eventNumber,
 void
 XPFPrefs::checkStringLength ()
 {
+	// For the moment, always use short strings. That may be the better idea anyway.
+	
+	setUseShortStrings (true);
+	setUseShortStringsForInstall (true);
+	return;
+	
+/*	
 	unsigned nvramPatchLength = strlen (XPFNVRAMSettings::GetSettings ()->getStringValue ("nvramrc"));
 	unsigned len;
 	bool save;
@@ -414,6 +421,7 @@ XPFPrefs::checkStringLength ()
 			nvramPatchLength;
 	fUseShortStringsForInstall = save;
 	setUseShortStringsForInstall (len >= 1948);
+*/
 }
 
 void 
