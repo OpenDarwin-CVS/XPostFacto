@@ -1,8 +1,8 @@
-<body><h2>XPostFacto 3.0b2</h2>
+<body><h2>XPostFacto 3.0b8</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-July 13, 2004
+August 3, 2004
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -11,37 +11,21 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <p>Here's a quick link to download the latest version. Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes.
 
 <blockquote>
-<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0b2.sit">Download XPostFacto 3.0b2</a>
+<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0b8.sit">Download XPostFacto 3.0b8</a>
 </blockquote>
-
-<p>Two significant problems have been reported with version 3.0b2. When running in Mac OS X, version 3.0b2 will sometimes crash after you enter your password. When running in Mac OS 9, version 3.0b2 will not identify the Open Firmware name for ATA drives properly. I hope to have these problems fixed soon, but in the meantime some people will want to use version 3.0b1 instead.
 
 <p>XPostFacto is an open-source application which you may download and try for free. However, I encourage you to <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">register as an XPostFacto user</a>. This helps to support the continuing development of XPostFacto, and also gives you an account on the <a href="http://forum.macsales.com/">tech support forum</a>. If you are already a registered user of XPostFacto, you can make a <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">contribution to its continuing development</a>.
 
-<h4>What's new in 3.0b2</h4>
+<h4>What's new in 3.0b8</h4>
 
-<p>Here's a quick summary of what's new in version 3.0b2.
+<p>Version 3.0b8 fixes several bugs in 3.0b2. (There were several intermediate versions with limited distribution to help diagnose the bugs).
 
 <ul>
-<li>XPF will now <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1020">provide warnings</a> about certain conditions which might cause problems -- for instance, the 8 GB limit, volumes formatted in manner that may not be bootable, and missing or corrupt symbolic links.
+<li>Fixes the problem <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2081">detecting the Open Firmware name for ATA drives</a> in Mac OS 9.
 
-<li>There is now a <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1019">volume inspector window</a>, which you can access by double-clicking on a entry in XPF's volume list (or by using the Window menu). 
+<li>Fixes a problem which <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2091">caused version 3.0b2 to crash</a> in Mac OS X.
 
-<li>Using the volume inspector window, you can now <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1349">override the ATA bus or SCSI bus</a> that XPF thinks a volume is attached to. The background is that in Mac OS 9, there is no completely deterministic way to match a volume with an ATA bus or SCSI bus -- generally, XPF gets the matching correct, but there are cases where XPF gets it wrong. The volume inspector allows you to manually override XPF's choice (which is indicated as the underlined item in the popup menu). Do let me know about situations in which it is necessary to do this, as it may be possible to fix XPF so that it will choose the correct bus on its own.
-
-<li>XPF now checks whether the <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1769">symbolic links</a> /tmp, /var and /etc have been properly created on a Mac OS X Volume, and gives a warning if problems are detected. In some cases, it is possible to fix those links with the "Fix Symbolic Links" command in the "Install" menu.
-
-<li>XPostFacto now uses <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1983">balloon help (in Mac OS 9) and help tags (in Mac OS X)</a>, rather than the "custom" help mechanism it had been using previously. You can use the checkbox in the lower right corner of the XPF windows to turn help on and off.
-
-<li>XPF handles volumes with <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=899">identical creation dates and sizes</a> better, though some anomalies may still remain.
-
-<li>Updated the code which <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1441">installs BootX</a> and checks whether BootX has been properly installed.
-
-<li>XPF does a better job of <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=936">recognizing Darwin Install CDs</a>. However, further testing with Darwin installs is required.
-
-<li>XPF does a better job of distinguishing volumes with <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=899">identical creation dates and sizes</a>. However, some anomalies may remain.
-
-<li>XPF now keeps track of the preference <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1928">whether to boot into Mac OS 9</a> or Mac OS X. If the current NVRAM setting is inconsistent, then XPF asks the user whether to save the preferred setting.
+<li>Hopefully fixes a problem whereby XPF sometimes <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2090">thinks that a G3/G4 upgrade is required</a>, even though one was already installed. If this continues to be a problem, XPF 3.0b8 writes some log messages which will help diagnose it.
 
 </ul>
 
@@ -91,6 +75,8 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <li>I have not <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=936">tested XPF with Darwin</a> lately, and problems have been reported with the installation. This is partially fixed in 3.0b2, but not fully.
 
 <li>XPostFacto gets confused by volumes with <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=899">identical creation dates and sizes</a>. This is partially fixed in version 3.0b2.
+
+<li>XPF tries to detect whether you formatted your disk with Apple's Drive Setup or Intech's Hard Disk SpeedTools, but sometimes will <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2092">generate a spurious warning</a> (i.e. warning that you should use Hard Disk SpeedTools when you already have).
 
 </ul>
 
@@ -565,6 +551,19 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0b8.sit">3.0b8 (August 3, 2004)</a>
+
+<dd>Version 3.0b8 fixes several bugs in 3.0b2. (There were several intermediate versions with limited distribution to help diagnose the bugs).
+
+<ul>
+<li>Fixes the problem <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2081">detecting the Open Firmware name for ATA drives</a> in Mac OS 9.
+
+<li>Fixes a problem which <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2091">caused version 3.0b2 to crash</a> in Mac OS X.
+
+<li>Hopefully fixes a problem whereby XPF sometimes <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2090">thinks that a G3/G4 upgrade is required</a>, even though one was already installed. If this continues to be a problem, XPF 3.0b8 writes some log messages which will help diagnose it.
+
+</ul>
 
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0b2.sit">3.0b2 (July 13, 2004)</a>
 
