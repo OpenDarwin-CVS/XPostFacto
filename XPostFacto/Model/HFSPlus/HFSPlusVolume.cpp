@@ -260,6 +260,7 @@ HFSPlusVolume::installBootX ()
 	ThrowIfOSErr_AC (FSGetCatalogInfo (&bootXRef, kFSCatInfoNone, NULL, NULL, &bootXSpec, NULL));
  	FSpSetIsInvisible (&bootXSpec);
 	
+#ifdef BUILDING_XPF	
 	// Now I add versioning info to the resource fork.
 	Handle bootXVersion = GetResource ('vers', 3);
 	ThrowIfResError_AC ();
@@ -278,6 +279,7 @@ HFSPlusVolume::installBootX ()
  	ThrowIfResError_AC ();
 	CloseResFile (resourceFork);
 	ThrowIfResError_AC ();
+#endif
  	
 	fPartition->setLgBootStart (getBootXStartBlock ());
 	if (fPartition->getLgBootStart () == 0) {

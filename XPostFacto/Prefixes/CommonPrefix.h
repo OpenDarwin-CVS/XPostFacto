@@ -4,4 +4,5 @@
 	
 */
 
-#define qWantsThreadManager 1
+#define BUILDING_XPF 1
+
