@@ -124,6 +124,8 @@ advised of the possibility of such damage.
 
 #define cSetShowHelpTags				1469
 
+#define cSaveLogToFile					1470
+
 // Views and Windows
 // -----------------
 

@@ -600,6 +600,100 @@ XPFApplication::InstallHelpMenuItems()
 	if (fShowDebugOptions) addDebugOptionsToHelpMenu ();
 }
 
+void
+XPFApplication::saveLogToFile ()
+{
+	if (!fViewStream) return;
+	Handle textHandle = fViewStream->GetTEView()->ExtractText ();
+	ThrowIfNULL_AC (textHandle);
+	
+#if qCarbon
+	NavDialogCreationOptions options;
+	BlockZero_AC (options);
+	NavDialogRef dialog = NULL;
+	NavReplyRecord reply;
+	
+	options.version = kNavDialogCreationOptionsVersion;
+	options.optionFlags = kNavNoTypePopup | kNavDontAutoTranslate | kNavDontAddTranslateItems;
+	options.location.v = options.location.h = -1;
+	options.clientName = CFSTR ("XPostFacto");
+	options.windowTitle = CFSTR ("Save Current Log");
+	options.saveFileName = CFSTR ("XPostFacto Log");		 
+	
+	ThrowIfOSErr_AC (NavCreatePutFileDialog (&options, 'TEXT', 'ttxt', NULL, NULL, &dialog));
+	ThrowIfOSErr_AC (NavDialogRun (dialog));
+	ThrowIfOSErr_AC (NavDialogGetReply (dialog, &reply));
+	
+	if (reply.validRecord) {
+		CAEDesc fileList = reply.selection;
+		CTempDesc_AC fileItem = fileList.GetNthItem (1, typeFSS);
+		CFSSpec_AC dirSpec = fileItem.GetFSSpec ();
+		FSRef directory;
+		FSpMakeFSRef (&dirSpec, &directory);
+		HFSUniStr255 fileName;
+		fileName.length = CFStringGetBytes (reply.saveFileName, CFRangeMake (0, CFStringGetLength (reply.saveFileName)), 
+				kCFStringEncodingUnicode, 0, false, (UInt8 *)(fileName.unicode), 255, NULL);
+				
+		if (reply.replacing) {
+			FSRef currentFile;
+			ThrowIfOSErr_AC (FSMakeFSRefUnicode ((FSRef *) &directory, fileName.length, fileName.unicode, kCFStringEncodingUnicode, &currentFile));
+			FSDeleteObject (&currentFile);
+		}
+
+		FSCatalogInfo catInfo;
+		BlockZero_AC (catInfo);
+		FileInfo *fileInfo = (FileInfo *) &catInfo.finderInfo;
+		fileInfo->fileType = 'TEXT';
+		fileInfo->fileCreator = 'ttxt';						
+		FSSpec newFileSpec;
+		ThrowIfOSErr_AC (FSCreateFileUnicode ((FSRef *) &directory, fileName.length, fileName.unicode, kFSCatInfoFinderInfo, &catInfo, NULL, &newFileSpec));
+		
+		CFile_AC theFile ('TEXT', 'ttxt', true);
+		theFile.Specify (newFileSpec);
+		theFile.SetPermissions (fsRdWrPerm, fsRdWrPerm);
+		theFile.OpenFile ();			
+		long handleSize = GetHandleSize (textHandle);
+		theFile.WriteData (*textHandle, handleSize);
+	}
+	
+	NavDisposeReply (&reply);
+	NavDialogDispose (dialog); 
+#else
+	NavDialogOptions options;
+	BlockZero_AC (options);
+	NavReplyRecord reply;
+	
+	options.version = kNavDialogOptionsVersion;
+	options.dialogOptionFlags = kNavNoTypePopup | kNavDontAutoTranslate | kNavDontAddTranslateItems;
+	options.location.v = options.location.h = -1;
+		
+	GetIndString (options.clientName, kXPFStringsResource, kXPostFactoName);
+	GetIndString (options.windowTitle, kXPFStringsResource, kSaveCurrentLog);
+	GetIndString (options.message, kXPFStringsResource, kSaveCurrentLog);
+	GetIndString (options.savedFileName, kXPFStringsResource, kXPostFactoLog);
+	
+	OSErr err = NavPutFile (NULL, &reply, &options, NULL, 'TEXT', 'ttxt', NULL);
+	
+	if ((err == noErr) && reply.validRecord) {
+		CAEDesc fileList = reply.selection;
+		CTempDesc_AC fileItem = fileList.GetNthItem (1, typeFSS);
+		CFSSpec_AC newFileSpec = fileItem.GetFSSpec ();
+		CFile_AC theFile ('TEXT', 'ttxt', true);
+		theFile.Specify (newFileSpec);				
+		if (reply.replacing) {
+			theFile.DeleteCFile ();
+		}
+		theFile.CreateCFile ();
+		theFile.SetPermissions (fsRdWrPerm, fsRdWrPerm);
+		theFile.OpenFile ();			
+		long handleSize = GetHandleSize (textHandle);
+		theFile.WriteData (*textHandle, handleSize);
+	}
+	
+	NavDisposeReply (&reply);
+#endif
+}
+
 void 
 XPFApplication::DoMenuCommand(CommandNumber aCommandNumber) // Override 
 {
@@ -639,6 +733,10 @@ XPFApplication::DoMenuCommand(CommandNumber aCommandNumber) // Override
 			fShowDebugOptions = true;
 			break;
 			
+		case cSaveLogToFile:
+			saveLogToFile ();
+			break;
+			
 		case cDisableRestart: 			toggleDebugOption (kDisableRestart); break;
 		case cVisibleHelperFiles: 		toggleDebugOption (kVisibleHelperFiles); break;
 		case cDisableNVRAMWriting: 		toggleDebugOption (kDisableNVRAMWriting); break;
@@ -661,6 +759,8 @@ XPFApplication::DoSetupMenus()
 	TApplication::DoSetupMenus();
 	
 	bool enable = !InModalState ();
+	
+	Enable (cSaveLogToFile, enable);
 	
 	Enable (cShowHelpFile, enable);
 	Enable (cShowOnlineHelpFile, enable);

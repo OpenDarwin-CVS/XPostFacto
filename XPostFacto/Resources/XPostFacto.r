@@ -170,6 +170,7 @@ purgeable)
 {
 	{
 		mApple;
+		mFile;
 		mEditAqua;
 		mInstall;
 		mCache;
@@ -198,7 +199,6 @@ purgeable) {
 	}
 };
 
-#ifndef qCarbonMach0
 resource 'CMNU' (mFile,
 #if qNames
 "mFile",
@@ -210,10 +210,12 @@ purgeable) {
 	enabled,
 	"File",
 	{
+	"Save Current Log…",		noIcon, noKey, noMark, plain, cSaveLogToFile;	
+#if !qCarbon
 	"Quit",				noIcon, "Q",	noMark, plain, cQuit;
+#endif
 	}
 };
-#endif
 
 resource 'CMNU' (mInstall,
 #if qNames

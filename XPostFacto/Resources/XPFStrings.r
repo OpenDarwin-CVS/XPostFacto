@@ -125,6 +125,10 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			"Could not determine partition number";
 			
 			"You have specified a non-default bus for this volume. This is only necessary in cases where "
-			"XPostFacto would otherwise assign the volume to the wrong bus."; 
+			"XPostFacto would otherwise assign the volume to the wrong bus.";
+			
+			"XPostFacto";
+			"Save Current Log";
+			"XPostFacto Log";
 	}
 };

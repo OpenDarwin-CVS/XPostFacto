@@ -126,6 +126,8 @@ class XPFApplication : public TApplication {
 
 		void installMenuHelpTags (ResNumber menuResID);
 
+		void saveLogToFile ();
+
 	private:
 				
 		XPFAboutBox *fAboutBox;

@@ -98,6 +98,9 @@ enum {
 	kRequiresInstallation,
 	kNoPartitionNumber,
 	kUsingNonDefaultBus,
+	kXPostFactoName,
+	kSaveCurrentLog,
+	kXPostFactoLog,
 };
 
 
