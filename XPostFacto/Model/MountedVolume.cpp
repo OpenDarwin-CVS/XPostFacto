@@ -267,8 +267,13 @@ MountedVolume::WithOpenFirmwarePath (char *path)
 #ifdef __MACH__
 	mach_port_t iokitPort;
 	IOMasterPort (MACH_PORT_NULL, &iokitPort);
-	io_object_t entry;
-	entry = IOServiceGetMatchingService (iokitPort, IOOpenFirmwarePathMatching (iokitPort, NULL, path));
+	io_object_t entry = NULL;
+	io_iterator_t iter = NULL;
+	IOServiceGetMatchingServices (iokitPort, IOOpenFirmwarePathMatching (iokitPort, NULL, path), &iter);
+	if (iter) {
+		entry = IOIteratorNext (iter);
+		IOObjectRelease (iter);
+	}
 	if (entry) {
 		retVal = MountedVolume::WithRegistryEntry (entry);
 		IOObjectRelease (entry);
@@ -546,8 +551,16 @@ MountedVolume::getRegEntry () {
 	if (!strncmp (shortBSDName, "/dev/", 5)) shortBSDName += 5;
 		
 	mach_port_t iokitPort;
+	io_object_t retVal = NULL;
+	io_iterator_t iter = NULL;
+	
 	IOMasterPort (MACH_PORT_NULL, &iokitPort);
-	return IOServiceGetMatchingService (iokitPort, IOBSDNameMatching (iokitPort, NULL, shortBSDName));
+	IOServiceGetMatchingServices (iokitPort, IOBSDNameMatching (iokitPort, NULL, shortBSDName), &iter);
+	if (iter) {
+		retVal = IOIteratorNext (iter);
+		IOObjectRelease (iter);
+	}
+	return retVal;
 }
 
 io_object_t
