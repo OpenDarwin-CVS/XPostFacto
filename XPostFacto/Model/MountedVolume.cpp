@@ -72,10 +72,6 @@ MountedVolumeList MountedVolume::gVolumeList;
 void
 MountedVolume::Initialize ()
 {
-	#if qLogging
-		gLogFile << "Initializing Mounted Volumes" << endl_AC;
-	#endif
-	
 	// Initialize the devices
 	XPFBootableDevice::Initialize ();
 

@@ -58,6 +58,20 @@ advised of the possibility of such damage.
 
 #include <stdio.h>
 
+class XPFPollVolumesBehavior : public TBehavior {
+
+	public:
+	
+		XPFPollVolumesBehavior () {
+			SetIdleFreq (10 * 60);
+		}
+
+		virtual bool DoIdle (IdlePhase phase) {
+			if (phase == idleContinue) MountedVolume::Initialize ();
+			return false;
+		}
+};
+
 #define Inherited TFileBasedDocument
 
 UInt32 kPrefsSignature = 'usuX';
@@ -350,6 +364,10 @@ XPFPrefs::DoInitialState ()
 	checkStringLength ();	
 	
 	suspendStartupItem ();
+
+#ifdef __MACH__
+	AddBehavior (new XPFPollVolumesBehavior);
+#endif
 }
 
 void
@@ -364,6 +382,7 @@ XPFPrefs::DoUpdate (ChangeID_AC theChange,
 				
 		case cNewMountedVolume:
 			volume->AddDependent (this);
+			if (fInstallCD == NULL) setInstallCD (MountedVolume::GetDefaultInstallerDisk ());
 			break;
 			
 		case cDeleteMountedVolume:
