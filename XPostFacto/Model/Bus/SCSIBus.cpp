@@ -258,20 +258,6 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 				ThrowIfOSErr_AC (RegistryPropertyGet (&foundEntry, "ATA-Channel", &channel, &propSize));
 				OFAliases::AliasFor (&foundEntry, alias, shortAlias);
 
-				unsigned reg;
-				err = RegistryPropertyGetSize (&foundEntry, "reg", &propSize);
-				if ((err == noErr) && (propSize == 4)) {
-					ThrowIfOSErr_AC (RegistryPropertyGet (&foundEntry, "reg", &reg, &propSize));
-					char buffer[24];
-					sprintf (buffer, "@%X", reg);
-					strcat (alias, buffer);
-					char *pos = shortAlias + strlen (shortAlias);
-					while ((*pos != '/') && (pos > shortAlias)) pos--;
-					pos++;
-					*pos = 0;
-					strcat (shortAlias, buffer);
-				}
-
 				if (channel == 0) {
 					fATAOpenFirmwareName0.CopyFrom (alias);
 					fATAShortOpenFirmwareName0.CopyFrom (shortAlias);
