@@ -34,7 +34,7 @@
 #define _BOOTX_SL_H_
 
 #define kBootXVersion "59.1.1"
-#define kBootXVersionXPF "3.0"
+#define kBootXVersionXPF "3.1"
 
 #define kFailToBoot (1)
 
