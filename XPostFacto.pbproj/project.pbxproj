@@ -5,6 +5,109 @@
 	};
 	objectVersion = 38;
 	objects = {
+		94B8172F047A7ABF00A80003 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = XPFStartupItem;
+			path = XPFStartupItem/XPFStartupItem;
+			refType = 4;
+		};
+		94B81732047A7F5100A80003 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = StartupParameters.plist;
+			path = XPFStartupItem/StartupParameters.plist;
+			refType = 4;
+		};
+		94B81733047A812200A80003 = {
+			buildActionMask = 8;
+			dstPath = Library/StartupItems/XPFStartupItem;
+			dstSubfolderSpec = 0;
+			files = (
+				94B81734047A816C00A80003,
+				94B81735047A816C00A80003,
+			);
+			isa = PBXCopyFilesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		94B81734047A816C00A80003 = {
+			fileRef = 94B8172F047A7ABF00A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94B81735047A816C00A80003 = {
+			fileRef = 94B81732047A7F5100A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94B81736047A834200A80003 = {
+			buildActionMask = 8;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "chmod a+x ${DSTROOT}/Library/StartupItems/XPFStartupItem/XPFStartupItem";
+		};
+		94B81737047A848E00A80003 = {
+			isa = PBXTargetDependency;
+			target = F5BF317E03F01EA201A80002;
+		};
+		94BA4E81046FE32600A80003 = {
+			fileRef = F5BF347003F0213301A80002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94BA4EE40470009300A80003 = {
+			fileRef = F5BF318503F020F601A80002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94BCDEAB046D6BAD00A80003 = {
+			children = (
+				94BCDEAC046D6BE300A80003,
+				94BCDEAD046D6BE300A80003,
+			);
+			isa = PBXGroup;
+			name = XPFBootSupport;
+			refType = 4;
+		};
+		94BCDEAC046D6BE300A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = XPFBootSupport.cpp;
+			path = XPFBootSupport/XPFBootSupport.cpp;
+			refType = 4;
+		};
+		94BCDEAD046D6BE300A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = XPFBootSupport.h;
+			path = XPFBootSupport/XPFBootSupport.h;
+			refType = 4;
+		};
+		94CB5C4404FBB49500A80003 = {
+			isa = PBXTargetDependency;
+			target = F53C6AF401B1ACE201A80001;
+		};
+//940
+//941
+//942
+//943
+//944
+//F50
+//F51
+//F52
+//F53
+//F54
 		F50F59610315EABD01A80001 = {
 			buildActionMask = 2147483647;
 			dstPath = "";
@@ -16,16 +119,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F513163C0322F90801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = appleboot.h;
 			refType = 4;
 		};
 		F513163D0322F90801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = failedboot.h;
 			refType = 4;
 		};
 		F513163E0322F90801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = netboot.h;
 			refType = 4;
@@ -49,15 +155,29 @@
 			};
 		};
 		F514D82002B3C94D01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = XPostFacto.html;
 			refType = 4;
+		};
+		F52AC80E03F21A8F01A80002 = {
+			isa = PBXFrameworkReference;
+			name = ApplicationServices.framework;
+			path = /System/Library/Frameworks/ApplicationServices.framework;
+			refType = 0;
+		};
+		F52AC80F03F21A8F01A80002 = {
+			isa = PBXFrameworkReference;
+			name = CoreServices.framework;
+			path = /System/Library/Frameworks/CoreServices.framework;
+			refType = 0;
 		};
 		F53C690F01B191BA01A80001 = {
 			buildStyles = (
 				F53C691101B191BA01A80001,
 				F53C691201B191BA01A80001,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = F53C691001B191BA01A80001;
 			productRefGroup = F53C6A1601B194DC01A80001;
@@ -86,6 +206,7 @@
 				F53C6A2401B194DC01A80001,
 				F53C6A1A01B194DC01A80001,
 				F5FB800A03C7A0AD01A80002,
+				F5BF317E03F01EA201A80002,
 			);
 		};
 		F53C691001B191BA01A80001 = {
@@ -97,6 +218,8 @@
 				F514D82002B3C94D01A80001,
 				F58FB3FA02B3D06B01A80001,
 				F58FB3FB02B3D0BE01A80001,
+				F5BF318103F01F0501A80002,
+				F5BF318403F020C101A80002,
 				F53C6A1601B194DC01A80001,
 			);
 			isa = PBXGroup;
@@ -133,12 +256,14 @@
 			refType = 4;
 		};
 		F53C691401B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = APPLE_LICENSE;
 			refType = 4;
 		};
 		F53C695501B1926201A80001 = {
 			children = (
+				94BCDEAB046D6BAD00A80003,
 				F5FB800D03C7A0DD01A80002,
 				F547F715028EFEEC01A80001,
 				F557F69E0226FF1001A80001,
@@ -171,11 +296,13 @@
 			refType = 4;
 		};
 		F53C695701B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AppleCurio.cpp;
 			refType = 4;
 		};
 		F53C695801B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AppleCurio.h;
 			refType = 4;
@@ -190,6 +317,7 @@
 			refType = 4;
 		};
 		F53C695D01B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
@@ -206,11 +334,13 @@
 			refType = 4;
 		};
 		F53C695F01B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AppleGrandCentral.cpp;
 			refType = 4;
 		};
 		F53C696001B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AppleGrandCentral.h;
 			refType = 4;
@@ -225,6 +355,7 @@
 			refType = 4;
 		};
 		F53C696501B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
@@ -245,31 +376,37 @@
 			refType = 4;
 		};
 		F53C696801B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AppleMaceEthernet.cpp;
 			refType = 4;
 		};
 		F53C696901B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AppleMaceEthernet.h;
 			refType = 4;
 		};
 		F53C696E01B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AppleMaceEthernetHW.cpp;
 			refType = 4;
 		};
 		F53C696F01B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AppleMaceEthernetPrivate.cpp;
 			refType = 4;
 		};
 		F53C697001B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AppleMaceEthernetPrivate.h;
 			refType = 4;
 		};
 		F53C697101B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = AppleMaceEthernetRegisters.h;
 			refType = 4;
@@ -284,6 +421,7 @@
 			refType = 4;
 		};
 		F53C697301B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
@@ -300,11 +438,13 @@
 			refType = 4;
 		};
 		F53C697601B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ApplePowerSurgePE.cpp;
 			refType = 4;
 		};
 		F53C697701B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ApplePowerSurgePE.h;
 			refType = 4;
@@ -319,6 +459,7 @@
 			refType = 4;
 		};
 		F53C697D01B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
@@ -344,17 +485,20 @@
 			refType = 4;
 		};
 		F53C698301B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
 			refType = 4;
 		};
 		F53C698401B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = PatchedAppleNVRAM.cpp;
 			refType = 4;
 		};
 		F53C698501B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = PatchedAppleNVRAM.h;
 			refType = 4;
@@ -383,37 +527,44 @@
 			refType = 4;
 		};
 		F53C698B01B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
 			refType = 4;
 		};
 		F53C698C01B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = IOBasicSCSI.h;
 			refType = 4;
 		};
 		F53C698D01B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = IOSCSICDDrive.h;
 			refType = 4;
 		};
 		F53C698E01B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = IOSCSICDDriveNub.h;
 			refType = 4;
 		};
 		F53C698F01B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = IOSCSIHDDrive.h;
 			refType = 4;
 		};
 		F53C699001B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = PatchedIOSCSICDDrive.cpp;
 			refType = 4;
 		};
 		F53C699101B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = PatchedIOSCSICDDrive.h;
 			refType = 4;
@@ -442,37 +593,44 @@
 			refType = 4;
 		};
 		F53C699801B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
 			refType = 4;
 		};
 		F53C699901B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ObsoleteSCSIDeviceType05.h;
 			refType = 4;
 		};
 		F53C699A01B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ObsoleteSCSIMultimediaCommands.cpp;
 			refType = 4;
 		};
 		F53C699B01B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ObsoleteSCSIMultimediaCommands.h;
 			refType = 4;
 		};
 		F53C699C01B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ObsoloteSCSIDeviceType05.cpp;
 			refType = 4;
 		};
 		F53C699D01B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = PatchedSCSIDeviceType05.cpp;
 			refType = 4;
 		};
 		F53C699E01B1926201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = PatchedSCSIDeviceType05.h;
 			refType = 4;
@@ -516,6 +674,7 @@
 				F5887528030D66FA01A80001,
 				F5812B820315F14401A80001,
 				F5FB800B03C7A0AD01A80002,
+				F5BF317F03F01EA201A80002,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -545,6 +704,7 @@
 				F53C6AAA01B19CA601A80001,
 			);
 			buildSettings = {
+				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = BootX/bootx.tproj/include.subproj;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				OTHER_CFLAGS = "-static";
@@ -554,8 +714,6 @@
 				PRODUCT_NAME = bootx;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
-				USE_GCC2 = YES;
-				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 			};
 			dependencies = (
@@ -566,7 +724,6 @@
 			productInstallPath = /usr/local/bin;
 			productName = BootX;
 			productReference = F53C6A1701B194DC01A80001;
-			shouldUseHeadermap = 0;
 		};
 		F53C6A1B01B194DC01A80001 = {
 			buildActionMask = 2147483647;
@@ -670,7 +827,6 @@
 			productInstallPath = /usr/local/bin;
 			productName = "macho-to-xcoff";
 			productReference = F53C6A1801B194DC01A80001;
-			shouldUseHeadermap = 0;
 		};
 		F53C6A2001B194DC01A80001 = {
 			buildActionMask = 2147483647;
@@ -725,7 +881,6 @@
 			productInstallPath = /usr/local/bin;
 			productName = "fcode-to-c";
 			productReference = F53C6A1901B194DC01A80001;
-			shouldUseHeadermap = 0;
 		};
 		F53C6A2501B194DC01A80001 = {
 			buildActionMask = 2147483647;
@@ -770,6 +925,7 @@
 			refType = 4;
 		};
 		F53C6A2B01B1968701A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = bootinfo.hdr;
 			refType = 4;
@@ -783,6 +939,7 @@
 			refType = 4;
 		};
 		F53C6A6401B1968701A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = "fcode-to-c.c";
 			refType = 4;
@@ -796,6 +953,7 @@
 			refType = 4;
 		};
 		F53C6A6601B1968701A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = "macho-to-xcoff.c";
 			refType = 4;
@@ -846,6 +1004,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
@@ -858,8 +1017,6 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = AppleCurio;
 				SECTORDER_FLAGS = "";
-				USE_GCC2 = YES;
-				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
 			};
@@ -929,7 +1086,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F53C6AB601B19FD401A80001 = {
 			buildActionMask = 2147483647;
@@ -1022,6 +1178,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
@@ -1034,8 +1191,6 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = AppleGrandCentral;
 				SECTORDER_FLAGS = "";
-				USE_GCC2 = YES;
-				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
 			};
@@ -1102,7 +1257,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F53C6AC401B1A29901A80001 = {
 			buildActionMask = 2147483647;
@@ -1195,6 +1349,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
@@ -1207,8 +1362,6 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = AppleMaceEthernet;
 				SECTORDER_FLAGS = "";
-				USE_GCC2 = YES;
-				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
 			};
@@ -1271,7 +1424,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F53C6AD501B1A6D301A80001 = {
 			buildActionMask = 2147483647;
@@ -1398,22 +1550,26 @@
 			refType = 4;
 		};
 		F53C6AE701B1AC0501A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
 			refType = 4;
 		};
 		F53C6AE801B1AC0501A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = PerProcInfo.h;
 			refType = 4;
 		};
 		F53C6AE901B1AC0501A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = PowerSurgeCPU.cpp;
 			refType = 4;
 		};
 		F53C6AEA01B1AC0501A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = PowerSurgeCPU.h;
 			refType = 4;
@@ -1439,6 +1595,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
@@ -1450,8 +1607,6 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = ApplePowerSurgePE;
 				SECTORDER_FLAGS = "";
-				USE_GCC2 = YES;
-				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
 			};
@@ -1526,7 +1681,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F53C6AEE01B1ACE201A80001 = {
 			buildActionMask = 2147483647;
@@ -1598,6 +1752,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
@@ -1610,8 +1765,6 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = PowerSurgeCPU;
 				SECTORDER_FLAGS = "";
-				USE_GCC2 = YES;
-				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
 			};
@@ -1678,7 +1831,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F53C6AF501B1ACE201A80001 = {
 			buildActionMask = 2147483647;
@@ -1796,6 +1948,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
@@ -1808,8 +1961,6 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = PatchedAppleNVRAM;
 				SECTORDER_FLAGS = "";
-				USE_GCC2 = YES;
-				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
 			};
@@ -1876,7 +2027,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F53C6B0B01B1B30F01A80001 = {
 			buildActionMask = 2147483647;
@@ -1974,6 +2124,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
@@ -1986,8 +2137,6 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = PatchedIOSCSICDDrive;
 				SECTORDER_FLAGS = "";
-				USE_GCC2 = YES;
-				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
 			};
@@ -2048,7 +2197,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F53C6B1A01B1B4A101A80001 = {
 			buildActionMask = 2147483647;
@@ -2164,6 +2312,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
@@ -2176,8 +2325,6 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = PatchedSCSIDeviceType05;
 				SECTORDER_FLAGS = "";
-				USE_GCC2 = YES;
-				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
 			};
@@ -2265,7 +2412,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F53C6B2801B1B4A101A80001 = {
 			buildActionMask = 2147483647;
@@ -2371,12 +2517,14 @@
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
 		};
 		F53F988901E7448D01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = archive.cpp;
 			path = HFSPlusArchive/archive.cpp;
 			refType = 4;
 		};
 		F53F988A01E7448D01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = extract.cpp;
 			path = HFSPlusArchive/extract.cpp;
@@ -2418,7 +2566,6 @@
 			productInstallPath = /usr/local/bin;
 			productName = hfsplusextract;
 			productReference = F53F988C01E7451A01A80001;
-			shouldUseHeadermap = 0;
 		};
 		F53F988E01E7451B01A80001 = {
 			buildActionMask = 2147483647;
@@ -2591,12 +2738,14 @@
 			refType = 4;
 		};
 		F541C86D02FEE69A01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = XPFCPUSettings.h;
 			path = CPUSettings/XPFCPUSettings.h;
 			refType = 4;
 		};
 		F541C86E02FEE74E01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = XPFCPUSettings.c;
 			path = CPUSettings/XPFCPUSettings.c;
@@ -2667,12 +2816,14 @@
 			refType = 4;
 		};
 		F547F716028EFEEC01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = PowerStarCPU.cpp;
 			path = PowerStarCPU/PowerStarCPU.cpp;
 			refType = 4;
 		};
 		F547F717028EFEEC01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = PowerStarCPU.h;
 			path = PowerStarCPU/PowerStarCPU.h;
@@ -2688,6 +2839,7 @@
 			refType = 4;
 		};
 		F547F719028EFEEC01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = English;
 			path = PowerStarCPU/English.lproj/InfoPlist.strings;
@@ -2709,6 +2861,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
@@ -2721,8 +2874,6 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = PowerStarCPU;
 				SECTORDER_FLAGS = "";
-				USE_GCC2 = YES;
-				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
 			};
@@ -2787,7 +2938,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F547F71C028EFEEC01A80001 = {
 			buildActionMask = 2147483647;
@@ -2888,6 +3038,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
@@ -2900,8 +3051,6 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = OpenPMU;
 				SECTORDER_FLAGS = "";
-				USE_GCC2 = YES;
-				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
 			};
@@ -2968,7 +3117,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F548C0DA0289790D01A80001 = {
 			buildActionMask = 2147483647;
@@ -3062,76 +3210,91 @@
 			refType = 4;
 		};
 		F548C0E102897DDC01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OpenPMU.cpp;
 			refType = 4;
 		};
 		F548C0E202897DDC01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OpenPMU.h;
 			refType = 4;
 		};
 		F548C0E302897DDC01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OpenViaInterface.cpp;
 			refType = 4;
 		};
 		F548C0E402897DDC01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OpenViaInterface.h;
 			refType = 4;
 		};
 		F548C0E702897DDC01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OpenPMUNVRAMController.cpp;
 			refType = 4;
 		};
 		F548C0E802897DDC01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OpenPMUNVRAMController.h;
 			refType = 4;
 		};
 		F548C0E902897DDC01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OpenPMUPowerSource.cpp;
 			refType = 4;
 		};
 		F548C0EA02897DDC01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OpenPMUPowerSource.h;
 			refType = 4;
 		};
 		F548C0EB02897DDC01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OpenPMUPwrController.cpp;
 			refType = 4;
 		};
 		F548C0EC02897DDC01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OpenPMUPwrController.h;
 			refType = 4;
 		};
 		F548C0ED02897DDC01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OpenPMURTCController.cpp;
 			refType = 4;
 		};
 		F548C0EE02897DDC01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OpenPMURTCController.h;
 			refType = 4;
 		};
 		F548C0EF02897DDC01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OpenPMUTables.h;
 			refType = 4;
 		};
 		F548C0F002897DDC01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OpenPMUUserClient.cpp;
 			refType = 4;
 		};
 		F548C0F102897DDC01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OpenPMUUserClient.h;
 			refType = 4;
@@ -3241,11 +3404,13 @@
 			refType = 4;
 		};
 		F54E20740267327701A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ApplePowerExpressPE.cpp;
 			refType = 4;
 		};
 		F54E20750267327701A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ApplePowerExpressPE.h;
 			refType = 4;
@@ -3260,6 +3425,7 @@
 			refType = 4;
 		};
 		F54E20770267327701A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
@@ -3285,6 +3451,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
@@ -3297,8 +3464,6 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = ApplePowerExpressPE;
 				SECTORDER_FLAGS = "";
-				USE_GCC2 = YES;
-				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
 			};
@@ -3374,7 +3539,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F54E207B0267327701A80001 = {
 			buildActionMask = 2147483647;
@@ -3489,6 +3653,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
@@ -3501,8 +3666,6 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = OHareATA;
 				SECTORDER_FLAGS = "";
-				USE_GCC2 = YES;
-				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
 			};
@@ -3563,7 +3726,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F557F6820226FD2201A80001 = {
 			buildActionMask = 2147483647;
@@ -3623,12 +3785,14 @@
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
 		};
 		F557F6880226FDFA01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = AppleOHare.cpp;
 			path = AppleOHare/AppleOHare.cpp;
 			refType = 4;
 		};
 		F557F6890226FDFA01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = AppleOHare.h;
 			path = AppleOHare/AppleOHare.h;
@@ -3644,6 +3808,7 @@
 			refType = 4;
 		};
 		F557F68B0226FDFA01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = English;
 			path = AppleOHare/English.lproj/InfoPlist.strings;
@@ -3665,6 +3830,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
@@ -3677,8 +3843,6 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = AppleOHare;
 				SECTORDER_FLAGS = "";
-				USE_GCC2 = YES;
-				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
 			};
@@ -3786,7 +3950,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F557F68E0226FDFA01A80001 = {
 			buildActionMask = 2147483647;
@@ -3858,12 +4021,14 @@
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
 		};
 		F557F6970226FE6701A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = OHareATA.cpp;
 			path = OHareATA/OHareATA.cpp;
 			refType = 4;
 		};
 		F557F6980226FE6701A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = OHareATA.h;
 			path = OHareATA/OHareATA.h;
@@ -3879,6 +4044,7 @@
 			refType = 4;
 		};
 		F557F69A0226FE6701A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = English;
 			path = OHareATA/English.lproj/InfoPlist.strings;
@@ -3914,12 +4080,14 @@
 			refType = 4;
 		};
 		F557F69F0226FF1001A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ApplePowerStarPE.cpp;
 			path = ApplePowerStarPE/ApplePowerStarPE.cpp;
 			refType = 4;
 		};
 		F557F6A00226FF1001A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ApplePowerStarPE.h;
 			path = ApplePowerStarPE/ApplePowerStarPE.h;
@@ -3935,6 +4103,7 @@
 			refType = 4;
 		};
 		F557F6A20226FF1001A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = English;
 			path = ApplePowerStarPE/English.lproj/InfoPlist.strings;
@@ -3964,6 +4133,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
@@ -3976,8 +4146,6 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = ApplePowerStarPE;
 				SECTORDER_FLAGS = "";
-				USE_GCC2 = YES;
-				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
 			};
@@ -4028,6 +4196,7 @@
 				<string>AAPL,3500</string>
 				<string>AAPL,e407</string>
 				<string>AAPL,e411</string>
+				<string>AAPL,e826</string>
 			</array>
 			<key>IOProbeScore</key>
 			<integer>500</integer>
@@ -4047,7 +4216,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F557F6A80226FF1001A80001 = {
 			buildActionMask = 2147483647;
@@ -4144,26 +4312,31 @@
 			refType = 4;
 		};
 		F572EE800254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ci.c;
 			refType = 4;
 		};
 		F572EE810254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ci_io.c;
 			refType = 4;
 		};
 		F572EE820254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Control2.c;
 			refType = 4;
 		};
 		F572EE830254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = "MAC-PARTS.c";
 			refType = 4;
 		};
 		F572EE840254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = sl_words.c;
 			refType = 4;
@@ -4191,71 +4364,85 @@
 			refType = 4;
 		};
 		F572EE860254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = cache.c;
 			refType = 4;
 		};
 		F572EE870254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = CaseTables.h;
 			refType = 4;
 		};
 		F572EE880254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ext2fs.c;
 			refType = 4;
 		};
 		F572EE890254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ext2fs.h;
 			refType = 4;
 		};
 		F572EE8A0254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ext2fs_bswap.c;
 			refType = 4;
 		};
 		F572EE8B0254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ext2fs_dinode.h;
 			refType = 4;
 		};
 		F572EE8C0254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ext2fs_dir.h;
 			refType = 4;
 		};
 		F572EE8D0254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = fs.c;
 			refType = 4;
 		};
 		F572EE8E0254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = hfs.c;
 			refType = 4;
 		};
 		F572EE8F0254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = HFSCompare.c;
 			refType = 4;
 		};
 		F572EE900254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = net.c;
 			refType = 4;
 		};
 		F572EE910254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ufs.c;
 			refType = 4;
 		};
 		F572EE920254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ufs_byteorder.c;
 			refType = 4;
 		};
 		F572EE930254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ufs_byteorder.h;
 			refType = 4;
@@ -4276,36 +4463,43 @@
 			refType = 4;
 		};
 		F572EE950254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = boot_args.h;
 			refType = 4;
 		};
 		F572EE960254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ci.h;
 			refType = 4;
 		};
 		F572EE970254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = device_tree.h;
 			refType = 4;
 		};
 		F572EE980254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = fs.h;
 			refType = 4;
 		};
 		F572EE990254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = libclite.h;
 			refType = 4;
 		};
 		F572EE9A0254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = sl.h;
 			refType = 4;
 		};
 		F572EE9B0254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = sl_words.h;
 			refType = 4;
@@ -4329,51 +4523,61 @@
 			refType = 4;
 		};
 		F572EE9D0254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = bsearch.c;
 			refType = 4;
 		};
 		F572EE9E0254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = bswap.c;
 			refType = 4;
 		};
 		F572EE9F0254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = mem.c;
 			refType = 4;
 		};
 		F572EEA00254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = prf.c;
 			refType = 4;
 		};
 		F572EEA10254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = printf.c;
 			refType = 4;
 		};
 		F572EEA20254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = sprintf.c;
 			refType = 4;
 		};
 		F572EEA30254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = string.c;
 			refType = 4;
 		};
 		F572EEA40254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = strstr.c;
 			refType = 4;
 		};
 		F572EEA50254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = strtol.c;
 			refType = 4;
 		};
 		F572EEA60254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = zalloc.c;
 			refType = 4;
@@ -4399,46 +4603,55 @@
 			refType = 4;
 		};
 		F572EEA90254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = bootargs.c;
 			refType = 4;
 		};
 		F572EEAA0254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = clut.h;
 			refType = 4;
 		};
 		F572EEAB0254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = device_tree.c;
 			refType = 4;
 		};
 		F572EEAC0254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = display.c;
 			refType = 4;
 		};
 		F572EEAD0254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = drivers.c;
 			refType = 4;
 		};
 		F572EEAE0254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = elf.c;
 			refType = 4;
 		};
 		F572EEAF0254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = elf.h;
 			refType = 4;
 		};
 		F572EEB40254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = macho.c;
 			refType = 4;
 		};
 		F572EEB50254E9E801A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = main.c;
 			refType = 4;
@@ -4692,6 +4905,7 @@
 			buildSettings = {
 				DEBUGGING_SYMBOLS = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
@@ -4703,8 +4917,6 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = AppleCurio4K78;
 				SECTORDER_FLAGS = "";
-				USE_GCC2 = YES;
-				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
 			};
@@ -4759,7 +4971,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F5812B820315F14401A80001 = {
 			isa = PBXBundleReference;
@@ -4814,17 +5025,20 @@
 			refType = 4;
 		};
 		F588751E030D66DB01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
 			refType = 4;
 		};
 		F588751F030D66DB01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = PatchedNDRVFramebuffer.cpp;
 			refType = 4;
 		};
 		F5887520030D66DB01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = PatchedNDRVFramebuffer.h;
 			refType = 4;
@@ -4897,6 +5111,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
@@ -4909,8 +5124,6 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = PatchedNDRVSupport;
 				SECTORDER_FLAGS = "";
-				USE_GCC2 = YES;
-				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
 			};
@@ -4975,7 +5188,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F5887528030D66FA01A80001 = {
 			isa = PBXBundleReference;
@@ -5009,11 +5221,13 @@
 			target = F557F68D0226FDFA01A80001;
 		};
 		F58FB3FA02B3D06B01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = DeveloperNotes;
 			refType = 4;
 		};
 		F58FB3FB02B3D0BE01A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = FixTypesAndCreators.sh;
 			refType = 4;
@@ -5038,6 +5252,7 @@
 				WRAPPER_EXTENSION = pkg;
 			};
 			dependencies = (
+				94B81737047A848E00A80003,
 				F54DBA8602B139A701A80001,
 				F59D629201B1D12901A80001,
 				F5FCE85C03C7AA0C01A80002,
@@ -5049,12 +5264,12 @@
 				F557F6A60226FF1001A80001,
 				F59D628E01B1D12901A80001,
 				F59D628F01B1D12901A80001,
-				F59D629001B1D12901A80001,
 				F59D629101B1D12901A80001,
 				F588752E030D69F001A80001,
 				F59D629301B1D12901A80001,
 				F59D629401B1D12901A80001,
 				F59D629501B1D12901A80001,
+				94CB5C4404FBB49500A80003,
 				F564382A01C2B3E601A80001,
 			);
 			isa = PBXBundleTarget;
@@ -5068,7 +5283,6 @@
 <dict/>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F59D628E01B1D12901A80001 = {
 			isa = PBXTargetDependency;
@@ -5077,10 +5291,6 @@
 		F59D628F01B1D12901A80001 = {
 			isa = PBXTargetDependency;
 			target = F53C6B1901B1B4A101A80001;
-		};
-		F59D629001B1D12901A80001 = {
-			isa = PBXTargetDependency;
-			target = F53C6AF401B1ACE201A80001;
 		};
 		F59D629101B1D12901A80001 = {
 			isa = PBXTargetDependency;
@@ -5113,7 +5323,129 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "chown root:admin \"${DSTROOT}\"\nchmod 0775 \"${DSTROOT}\"\nchmod a+t \"${DSTROOT}\"\nchown -R root:wheel \"${DSTROOT}/System/Library/Extensions\"\nchmod -R u+w \"${DSTROOT}/System/Library/Extensions\"\n\n# Now copy the extensions\n\nmkdir -p \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n\nfor FILE in \"${SRCROOT}\"/XPostFacto/Derived/Extensions/*.hfs\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in \"${DSTROOT}\"/System/Library/Extensions/*.kext\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n}\n\nif test ${SUDO_USER}; then\n\tchown -R ${SUDO_USER} \"${SYMROOT}\"\n\tchown -R ${SUDO_USER} \"${SRCROOT}/XPostFacto/Derived\"\nfi";
+			shellScript = "chown root:admin \"${DSTROOT}\"\nchmod 0775 \"${DSTROOT}\"\nchmod a+t \"${DSTROOT}\"\nchown -R root:wheel \"${DSTROOT}/System/Library/Extensions\"\nchmod -R u+w \"${DSTROOT}/System/Library/Extensions\"\nchown -R root:wheel \"${DSTROOT}/Library/StartupItems\"\n\n# Now copy the extensions and startup items\n\nmkdir -p \"${SRCROOT}/XPostFacto/Derived/Extensions\"\nmkdir -p \"${SRCROOT}/XPostFacto/Derived/StartupItems\"\n\nfor FILE in \"${SRCROOT}\"/XPostFacto/Derived/Extensions/*.hfs\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in \"${SRCROOT}\"/XPostFacto/Derived/StartupItems/*.hfs\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in \"${DSTROOT}\"/System/Library/Extensions/*.kext\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n}\n\nfor FILE in \"${DSTROOT}\"/Library/StartupItems/XPF*\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/StartupItems\"\n}\n\nif test ${SUDO_USER}; then\n\tchown -R ${SUDO_USER} \"${SYMROOT}\"\n\tchown -R ${SUDO_USER} \"${SRCROOT}/XPostFacto/Derived\"\nfi";
+		};
+		F5B85D2103F5E91001A80002 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = OWCL2FXCacheInit.s;
+			refType = 4;
+		};
+		F5B85D2203F5E91001A80002 = {
+			fileRef = F5B85D2103F5E91001A80002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5BF317A03F01EA201A80002 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5BF317B03F01EA201A80002 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5BF318303F01F8C01A80002,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5BF317C03F01EA201A80002 = {
+			buildActionMask = 2147483647;
+			files = (
+				94BA4E81046FE32600A80003,
+				94BA4EE40470009300A80003,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5BF317D03F01EA201A80002 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5BF317E03F01EA201A80002 = {
+			buildPhases = (
+				F5BF317A03F01EA201A80002,
+				F5BF317B03F01EA201A80002,
+				F5BF317C03F01EA201A80002,
+				F5BF317D03F01EA201A80002,
+				94B81733047A812200A80003,
+				94B81736047A834200A80003,
+			);
+			buildSettings = {
+				INSTALL_PATH = /Library/StartupItems/XPFStartupItem;
+				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = xpfbootsupportd;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			dependencies = (
+			);
+			isa = PBXToolTarget;
+			name = xpfbootsupportd;
+			productInstallPath = /Library/StartupItems/XPFStartupItem;
+			productName = xpostfactod;
+			productReference = F5BF317F03F01EA201A80002;
+		};
+		F5BF317F03F01EA201A80002 = {
+			isa = PBXExecutableFileReference;
+			path = xpfbootsupportd;
+			refType = 3;
+		};
+		F5BF318103F01F0501A80002 = {
+			children = (
+				F5BF318203F01F8C01A80002,
+				94B8172F047A7ABF00A80003,
+				94B81732047A7F5100A80003,
+			);
+			isa = PBXGroup;
+			name = "XPF Startup Item";
+			refType = 4;
+		};
+		F5BF318203F01F8C01A80002 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = xpfbootsupportd.c;
+			path = XPFStartupItem/xpfbootsupportd.c;
+			refType = 4;
+		};
+		F5BF318303F01F8C01A80002 = {
+			fileRef = F5BF318203F01F8C01A80002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5BF318403F020C101A80002 = {
+			children = (
+				F5BF318503F020F601A80002,
+				F5BF347003F0213301A80002,
+				F52AC80E03F21A8F01A80002,
+				F52AC80F03F21A8F01A80002,
+			);
+			isa = PBXGroup;
+			name = Frameworks;
+			refType = 4;
+		};
+		F5BF318503F020F601A80002 = {
+			isa = PBXFrameworkReference;
+			name = CoreFoundation.framework;
+			path = /System/Library/Frameworks/CoreFoundation.framework;
+			refType = 0;
+		};
+		F5BF347003F0213301A80002 = {
+			isa = PBXFrameworkReference;
+			name = IOKit.framework;
+			path = /System/Library/Frameworks/IOKit.framework;
+			refType = 0;
 		};
 		F5BFE40F0304CD5E01A80001 = {
 			fileRef = F53C6A1501B1943D01A80001;
@@ -5354,6 +5686,7 @@
 				F5EC95BA01B1F16601A80001,
 			);
 			buildSettings = {
+				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = "/Developer/Headers/FlatCarbon XPostFacto/MoreFiles/CHeaders XPostFacto/MoreFiles/Sources";
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				OPTIMIZATION_CFLAGS = "-O0";
@@ -5363,8 +5696,6 @@
 				PRODUCT_NAME = hfsplusarchive;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
-				USE_GCC2 = YES;
-				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 			};
 			dependencies = (
@@ -5374,7 +5705,6 @@
 			productInstallPath = /usr/local/bin;
 			productName = hfsplusarchive;
 			productReference = F5EC95B501B1F16601A80001;
-			shouldUseHeadermap = 0;
 		};
 		F5EC95B701B1F16601A80001 = {
 			buildActionMask = 2147483647;
@@ -5433,24 +5763,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5EC95BC01B1F19201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = HFSPlusArchive.cpp;
 			path = XPostFacto/HFSPlusArchive/HFSPlusArchive.cpp;
 			refType = 4;
 		};
 		F5EC95BD01B1F19201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = HFSPlusArchive.h;
 			path = XPostFacto/HFSPlusArchive/HFSPlusArchive.h;
 			refType = 4;
 		};
 		F5EC95BE01B1F19201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ZStream.cpp;
 			path = XPostFacto/HFSPlusArchive/ZStream.cpp;
 			refType = 4;
 		};
 		F5EC95BF01B1F19201A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = ZStream.h;
 			path = XPostFacto/HFSPlusArchive/ZStream.h;
@@ -5555,51 +5889,61 @@
 			refType = 4;
 		};
 		F5EC95DF01B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = DirectoryCopy.h;
 			refType = 4;
 		};
 		F5EC95E001B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = FileCopy.h;
 			refType = 4;
 		};
 		F5EC95E101B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = FSpCompat.h;
 			refType = 4;
 		};
 		F5EC95E201B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = FullPath.h;
 			refType = 4;
 		};
 		F5EC95E301B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = IterateDirectory.h;
 			refType = 4;
 		};
 		F5EC95E401B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MoreDesktopMgr.h;
 			refType = 4;
 		};
 		F5EC95E501B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MoreFiles.h;
 			refType = 4;
 		};
 		F5EC95E601B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MoreFilesExtras.h;
 			refType = 4;
 		};
 		F5EC95E701B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Search.h;
 			refType = 4;
 		};
 		F5EC95E801B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MoreFilesReadMe;
 			refType = 4;
@@ -5623,56 +5967,67 @@
 			refType = 4;
 		};
 		F5EC95EA01B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = DirectoryCopy.c;
 			refType = 4;
 		};
 		F5EC95EB01B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = FileCopy.c;
 			refType = 4;
 		};
 		F5EC95EC01B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = FSpCompat.c;
 			refType = 4;
 		};
 		F5EC95ED01B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = FullPath.c;
 			refType = 4;
 		};
 		F5EC95EE01B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = IterateDirectory.c;
 			refType = 4;
 		};
 		F5EC95EF01B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MoreDesktopMgr.c;
 			refType = 4;
 		};
 		F5EC95F001B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MoreFiles.c;
 			refType = 4;
 		};
 		F5EC95F101B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = MoreFilesExtras.c;
 			refType = 4;
 		};
 		F5EC95F201B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Optimization.h;
 			refType = 4;
 		};
 		F5EC95F301B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OptimizationEnd.h;
 			refType = 4;
 		};
 		F5EC95F401B204D901A80001 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Search.c;
 			refType = 4;
@@ -5717,6 +6072,7 @@
 				F5FB801303C7A10D01A80002,
 				F5FB801603C7A10D01A80002,
 				F5FB801703C7A10D01A80002,
+				F5B85D2203F5E91001A80002,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5759,6 +6115,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
@@ -5771,8 +6128,6 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = OWCCacheConfig;
 				SECTORDER_FLAGS = "";
-				USE_GCC2 = YES;
-				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
 			};
@@ -5837,7 +6192,6 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 0;
 		};
 		F5FB800B03C7A0AD01A80002 = {
 			isa = PBXBundleReference;
@@ -5850,6 +6204,7 @@
 				F5FB800F03C7A10D01A80002,
 				F5FB801003C7A10D01A80002,
 				F5FB801103C7A10D01A80002,
+				F5B85D2103F5E91001A80002,
 				F5FB801203C7A10D01A80002,
 			);
 			isa = PBXGroup;
@@ -5858,26 +6213,31 @@
 			refType = 2;
 		};
 		F5FB800E03C7A10D01A80002 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OWCCacheConfig.cpp;
 			refType = 4;
 		};
 		F5FB800F03C7A10D01A80002 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OWCCacheConfig.h;
 			refType = 4;
 		};
 		F5FB801003C7A10D01A80002 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OWCCacheInit.h;
 			refType = 4;
 		};
 		F5FB801103C7A10D01A80002 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OWCL2CacheInit.s;
 			refType = 4;
 		};
 		F5FB801203C7A10D01A80002 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = OWCL3CacheInit.s;
 			refType = 4;
