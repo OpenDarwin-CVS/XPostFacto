@@ -85,7 +85,6 @@ XPFProgressWindow::setStatus (unsigned char* theStatus)
 {
 	fSetStatus = true;
 	fStatusText.CopyFrom (theStatus);
-	YieldToThread (kApplicationThreadID);
 }
 
 void 
@@ -100,7 +99,6 @@ XPFProgressWindow::setProgressMax (ViewCoordinate max)
 {
 	fSetMax = true;
 	fMax = max;
-	YieldToThread (kApplicationThreadID);
 }
 
 void 
