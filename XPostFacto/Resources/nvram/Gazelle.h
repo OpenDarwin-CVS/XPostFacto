@@ -48,4 +48,7 @@ dev scsi\
 : $M3 -F68 $M f over $X $X ;\
 : $M4 1 ms ;\
 $E\
-unselect-dev
+unselect-dev \
+cpoke 0a7 0f3000032 \
+cpoke 093 0f3000033 \
+cpoke 03e 0f300003a
