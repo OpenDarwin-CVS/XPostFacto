@@ -50,6 +50,7 @@ advised of the possibility of such damage.
 #include "XPFUpdateWindow.h"
 #include "vers_rsrc.h"
 #include "XPFBus.h"
+#include "XPFBootableDevice.h"
 
 #include <string.h>
 
@@ -556,10 +557,32 @@ XPFPrefs::DoUpdate (ChangeID_AC theChange,
 			break;
 			
 		case cSetBus:
-			// Just bump the change count
+			// Bump the change count
 			SetChangeCount (GetChangeCount () + 1);
-			break;
+
+			// Need to update our internal list. First, we find the current entry and delete it.
+			XPFBootableDevice *device = volume->getBootableDevice ();
+			for (TemplateAutoList_AC <XPFDeviceHint>::Iterator iter (&fDeviceHints); iter.Current (); iter.Next ()) {
+				if (device == XPFBootableDevice::DeviceWithDeviceIdent (iter->deviceIdent)) {
+					fDeviceHints.Delete (iter.Current ());
+					break;
+				}
+			}
+
+			// Then, if there is a hint, we record it.
+			XPFBus *bus = device->getBus ();
+			if (bus != device->getDefaultBus ()) {
+				XPFDeviceHint *hint = new XPFDeviceHint;
+				hint->deviceIdent = device->getDeviceIdent ();
+				hint->busOFName.CopyFrom (bus->getOpenFirmwareName (false));
+				fDeviceHints.InsertLast (hint);
+			}
 			
+			// Broadcast so that the settings display picks this up
+			Changed (theChange, changeData);
+			
+			break;
+						
 		default:
 			Inherited::DoUpdate (theChange, changedObject, changeData, dependencySpace);
 			break;
@@ -650,32 +673,26 @@ XPFPrefs::DoRead (TFile* aFile, bool forPrinting)
 		fileStream >> fRebootInMacOS9;
 		
 		// Restore non-default bus selections
-		UInt32 num;
-		fileStream >> num;
+		UInt32 deviceHints;
+		fileStream >> deviceHints;
 		
-		for (UInt32 x = 0; x < num; x++) {
-			FSVolumeInfo info;
-			CStr255_AC ofName;
+		while (deviceHints > 0) {
+			deviceHints--;
 			
-			fileStream.ReadBytes (&info, sizeof (info));
-			ofName = fileStream.ReadString (255);
+			XPFDeviceHint *hint = new XPFDeviceHint;
+								
+			fileStream >> hint->deviceIdent;
+			hint->busOFName = fileStream.ReadString (255);
 			
-			MountedVolume *vol = MountedVolume::WithInfo (&info);
-			if (vol) {
-				CVoidList_AC *busList = vol->getBusList ();
-				if (busList) {
-					CChar255_AC ofNameChar (ofName);
-					for (int y = 1; y < busList->GetSize(); y++) {
-						XPFBus *bus = (XPFBus *) busList->At(y);
-						if (OFAliases::MatchAliases (bus->getOpenFirmwareName (false), ofNameChar)) {
-							vol->setBus (bus);
-							break;
-						}
-					}
-				}
-			}
-		}
+			fDeviceHints.InsertLast (hint);
+
+#ifndef __MACH__
+			XPFBootableDevice *device = XPFBootableDevice::DeviceWithDeviceIdent (hint->deviceIdent);
+			XPFBus *bus = XPFBus::WithOpenFirmwareName ((CChar255_AC) hint->busOFName);
 		
+			if (bus && device) device->setBus (bus);
+#endif
+		}		
 	}
 	
 	catch (...) {
@@ -801,23 +818,13 @@ XPFPrefs::DoWrite (TFile* aFile, bool makingCopy)
 	fileStream << fUsePatchedRagePro;
 	fileStream << fRebootInMacOS9;
 	
-	// Now, we store the non-default bus selections (if any)
-	
-	UInt32 x = 0;
-	for (MountedVolumeIterator iter (MountedVolume::GetVolumeList()); iter.Current(); iter.Next()) {
-		if (iter->getBus () && iter->getBus () != iter->getDefaultBus ()) x++;
-	}
-	
-	fileStream << x;
+	// Now, we store the non-default bus selections (if any)	
+	fileStream << fHelperList.GetSize ();
 
-	for (MountedVolumeIterator iter (MountedVolume::GetVolumeList()); iter.Current(); iter.Next()) {
-		if (iter->getBus () && iter->getBus () != iter->getDefaultBus ()) {
-			FSVolumeInfo info = iter->getVolumeInfo ();
-			fileStream.WriteBytes (&info, sizeof (info));
-			CStr255_AC ofName (iter->getBus()->getOpenFirmwareName (false));
-			fileStream.WriteString (ofName);
-		}
-	}	
+	for (TemplateAutoList_AC <XPFDeviceHint>::Iterator iter (&fDeviceHints); iter.Current (); iter.Next ()) {
+		fileStream << iter->deviceIdent;
+		fileStream.WriteString (iter->busOFName);
+	}		
 }
 
 void 

@@ -166,3 +166,17 @@ ATABus::BusWithRegEntryID (RegEntryID *otherRegEntry)
 	return retVal;
 }
 
+ATABus*
+ATABus::BusWithOpenFirmwareName (char *ofName)
+{
+	ATABus *retVal = NULL;
+	for (ATABusIterator iter (&gATABusList); iter.Current(); iter.Next()) {
+		if (OFAliases::MatchAliases (iter->fOpenFirmwareName, ofName)) {
+			retVal = iter.Current ();
+			break;
+		}
+	}
+	return retVal;
+}
+
+

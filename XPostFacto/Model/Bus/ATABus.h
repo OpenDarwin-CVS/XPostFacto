@@ -59,6 +59,7 @@ class ATABus : public XPFBus {
 		
 		static ATABus* BusWithNumber (int number);
 		static ATABus* BusWithRegEntryID (RegEntryID *regEntry);
+		static ATABus* BusWithOpenFirmwareName (char *ofName);
 		static ATABus* GetDefaultBus () {return gATABusList.Last ();}
 		
 		static int getBusCount () {return gBusCount;}

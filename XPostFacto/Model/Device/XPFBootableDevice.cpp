@@ -524,6 +524,17 @@ XPFBootableDevice::DeviceWithOpenFirmwareName (char *ofName)
 }
 
 XPFBootableDevice* 
+XPFBootableDevice::DeviceWithDeviceIdent (UInt32 deviceIdent)
+{
+	for (DeviceIterator iter (&gDeviceList); iter.Current (); iter.Next ()) {
+		if (iter->getDeviceIdent () == deviceIdent) {
+			return iter.Current ();
+		}
+	}
+	return NULL;
+}
+
+XPFBootableDevice* 
 XPFBootableDevice::DeviceWithInfoAndName (FSVolumeInfo *info, HFSUniStr255 *name)
 {
 	for (DeviceIterator iter (&gDeviceList); iter.Current (); iter.Next ()) {

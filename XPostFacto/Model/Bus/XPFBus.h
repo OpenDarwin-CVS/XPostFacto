@@ -44,6 +44,8 @@ public:
 
 	const char* getOpenFirmwareName (bool useShortName) {return useShortName ? fShortOpenFirmwareName : fOpenFirmwareName;}
 
+	static XPFBus* WithOpenFirmwareName (char *ofName);
+
 	virtual bool getIsActuallyATABus () = 0;
 
 protected:

@@ -66,6 +66,7 @@ class XPFBootableDevice : public MDependable_AC
 
 		static XPFBootableDevice* DeviceWithOpenFirmwareName (char *ofName);
 		static XPFBootableDevice* DeviceWithInfoAndName (FSVolumeInfo *info, HFSUniStr255 *name);
+		static XPFBootableDevice* DeviceWithDeviceIdent (UInt32 deviceIdent);
 						
 		static void DeleteInvalidDevices ();
 
@@ -107,6 +108,8 @@ class XPFBootableDevice : public MDependable_AC
 		virtual XPFBus* getDefaultBus () {return fDefaultBus;}
 		virtual void setBus (XPFBus *bus);
 		virtual CVoidList_AC* getBusList () {return NULL;}
+		
+		virtual UInt32 getDeviceIdent () {return 0xFFFFFFFF;}
 		
 		virtual bool isFirewireDevice ();
 		virtual bool isReallyATADevice ();

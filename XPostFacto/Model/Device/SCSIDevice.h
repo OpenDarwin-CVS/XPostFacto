@@ -63,6 +63,8 @@ class SCSIDevice : public XPFBootableDevice
 		
 		virtual CVoidList_AC* getBusList () {return SCSIBus::GetBusList ();}
 		
+		virtual UInt32 getDeviceIdent () {return *(UInt32*) &fDeviceIdent;}
+		
 	protected:
 	
 		void checkOpenFirmwareName ();

@@ -32,3 +32,13 @@ advised of the possibility of such damage.
 */
 
 #include "XPFBus.h"
+#include "ATABus.h"
+#include "SCSIBus.h"
+
+XPFBus* 
+XPFBus::WithOpenFirmwareName (char *ofName)
+{
+	XPFBus *retVal = ATABus::BusWithOpenFirmwareName (ofName);
+	if (!retVal) retVal = SCSIBus::BusWithOpenFirmwareName (ofName);
+	return retVal;
+}

@@ -59,6 +59,8 @@ class ATADevice : public XPFBootableDevice
 		bool isReallyATADevice () {return true;}
 		
 		virtual CVoidList_AC* getBusList () {return ATABus::GetBusList ();}
+		
+		virtual UInt32 getDeviceIdent () {return *(UInt32 *) &fDeviceIdent;}
 
 	protected:
 	

@@ -161,7 +161,7 @@ SCSIBus::BusWithOpenFirmwareName (char *ofName)
 {
 	SCSIBus *retVal = NULL;
 	for (SCSIBusIterator iter (&gSCSIBusList); iter.Current(); iter.Next()) {
-		if (!strcmp (iter->fOpenFirmwareName, ofName)) {
+		if (OFAliases::MatchAliases (iter->fOpenFirmwareName, ofName)) {
 			retVal = iter.Current ();
 			break;
 		}

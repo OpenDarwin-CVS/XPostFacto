@@ -44,6 +44,11 @@ struct XPFHelperItem {
 	FSVolumeInfo helper;
 };
 
+struct XPFDeviceHint {
+	UInt32 deviceIdent;
+	CStr255_AC busOFName;
+};
+
 class XPFPrefs : public TFileBasedDocument {
 
 	public:
@@ -179,7 +184,8 @@ DECLARE_DEBUG_ACCESSORS (DebugPanicText)
 		XPFIODevice *fOutputDevice;
 		
 		TemplateAutoList_AC <XPFHelperItem> fHelperList;
-		
+		TemplateAutoList_AC <XPFDeviceHint> fDeviceHints;
+
 		TWindow *fOptionsWindow;
 
 		// Values for prefs file. Don't change type, as that would
