@@ -1,0 +1,215 @@
+/*
+
+Copyright (c) 2003
+Other World Computing
+All rights reserved
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer as the first lines of
+   each file.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation and/or
+   other materials provided with the distribution.
+
+3. Redistributions in binary form must retain the link to Other World
+   Computing's web site in the application's "About Box."
+
+This software is provided by Other World Computing ``as is'' and any express or implied
+warranties, including, but not limited to, the implied warranties of
+merchantability and fitness for a particular purpose are disclaimed. In no event
+shall Ryan Rempel or Other World Computing be liable for any direct, indirect,
+incidental, special, exemplary, or consequential damages (including, but not
+limited to, procurement of substitute goods or services; loss of use, data, or
+profits; or business interruption) however caused and on any theory of
+liability, whether in contract, strict liability, or tort (including negligence
+or otherwise) arising in any way out of the use of this software, even if
+advised of the possibility of such damage.
+
+*/
+
+#include "XPFRestartCommand.h"
+
+#include "MountedVolume.h"
+#include "XPFPrefs.h"
+#include "NVRAM.h"
+#include "FSRefCopying.h"
+#include "XPFLog.h"
+#include "XPFApplication.h"
+#include "XPFErrors.h"
+#include "stdio.h"
+
+#define Inherited XPFThreadedCommand
+
+XPFRestartCommand::XPFRestartCommand (XPFPrefs *prefs)
+	: XPFThreadedCommand (prefs)
+{
+	fBootDevice = prefs->getBootDevice ();
+	fBootCommand = prefs->getBootCommand ();
+	fBootFile = prefs->getBootFile ();
+	fInputDevice = prefs->getInputDevice ();
+	fOutputDevice = prefs->getOutputDevice ();
+	fUseShortStrings = prefs->getUseShortStrings ();
+	fAutoBoot = prefs->getAutoBoot ();
+	fThrottle = prefs->getThrottle ();
+}
+
+void
+XPFRestartCommand::tellFinderToRestart ()
+{
+	AEDesc finderAddr;
+	AppleEvent myRestart, nilReply;
+	OSType fndrSig = 'MACS';
+    ThrowIfOSErr_AC (AECreateDesc (typeApplSignature, &fndrSig, sizeof(fndrSig), &finderAddr));
+   	ThrowIfOSErr_AC (AECreateAppleEvent (kAEFinderEvents, kAERestart, &finderAddr, kAutoGenerateReturnID,
+                              kAnyTransactionID, &myRestart));
+    ThrowIfOSErr_AC (AESend (&myRestart, &nilReply, kAENoReply + kAECanSwitchLayer + kAEAlwaysInteract,
+                  kAENormalPriority, kAEDefaultTimeout, NULL, NULL));
+	AEDisposeDesc (&myRestart);
+	AEDisposeDesc (&finderAddr);
+}
+
+void
+XPFRestartCommand::adjustThrottle (XPFNVRAMSettings *nvram) {
+	char nvramrc [2048];
+	strcpy (nvramrc, nvram->getStringValue ("nvramrc"));
+	char *ictc = strstr (nvramrc, "11 $I");
+	if (ictc) {
+		char throttleValue [12];
+		sprintf (throttleValue, "%X", fThrottle ? (fThrottle << 1) | 1 : 0);
+		ictc [0] = ' ';
+		ictc [1] = ' ';
+		BlockMoveData (throttleValue, ictc, strlen (throttleValue));
+	} 
+	nvram->setStringValue ("nvramrc", nvramrc);
+}
+
+void 
+XPFRestartCommand::DoItThreaded ()
+{
+	MountedVolume *rootDisk = fTargetDisk;
+	MountedVolume *bootDisk;
+	if (fHelperDisk) {
+		bootDisk = fHelperDisk;
+	} else {
+		bootDisk = fTargetDisk;
+	}
+	
+	if (rootDisk->getIsWriteable ()) {
+		if (!rootDisk->getHasOldWorldSupport ()) {
+			installExtensionsWithRootDirectory (rootDisk->getRootDirectory ());
+		}
+		if (!rootDisk->getHasStartupItemInstalled ()) {
+			installStartupItemWithRootDirectory (rootDisk->getRootDirectory ());
+		}
+	}
+
+	if (bootDisk->getIsWriteable ()) {
+		setCopyingFile ("\pBootX");
+		bootDisk->installBootXIfNecessary ();
+	}
+
+	// Now, see if we need to copy stuff from the root-disk to the boot-disk
+	if (rootDisk != bootDisk) {	
+			
+		// Get the .XPostFacto directory
+		FSRef helperDir;
+		ThrowIfOSErr_AC (getOrCreateXPFDirectory (bootDisk->getRootDirectory (), &helperDir));
+
+		// Now, get the directory which corresponds to the root disk
+		char rootName[255];
+		rootDisk->getShortOpenFirmwareName ().CopyTo (rootName);
+		rootName[strlen(rootName) + 1] = 0; // extra termination byte
+				
+		// And write out each directory
+		char *end;
+		char *pos = rootName;
+		while (*pos) {
+			while (*pos == '/') pos++;
+			end = pos;		
+			while ((*end != 0) && (*end != '/')) {
+				if (*end == ':') *end = ';';
+				end++;
+			}
+			*end = 0;
+			ThrowIfOSErr_AC (getOrCreateDirectory (&helperDir, pos, 0755, &helperDir));
+			pos = end + 1;
+		}
+			
+		// Now, copy the mach_kernel file
+		// Note the FSRefFileCopy will skip the copy if the files are the same
+		FSRef kernelOnRoot;
+		ThrowIfOSErr_AC (getKernelFSRef (rootDisk->getRootDirectory (), &kernelOnRoot));
+		setCopyingFile ("\pmach_kernel");
+		ThrowIfOSErr_AC (FSRefFileCopy (&kernelOnRoot, &helperDir, NULL, NULL, 0, false));
+		
+		// Copy the Extensions and Extensions.mkext
+		// Note that the FSRefCopy* routines skip copies that aren't necessary
+		FSRef helperSystemLibraryRef;
+		FSRef rootSystemLibraryExtensionsRef, rootSystemLibraryExtensionsCacheRef;
+
+		ThrowIfOSErr_AC (getOrCreateSystemLibraryDirectory (&helperDir, &helperSystemLibraryRef));
+	
+		// Check for the Extensions.mkext. If it doesn't exist, don't copy it.
+		OSErr rootErr = getExtensionsCacheFSRef (rootDisk->getRootDirectory (), &rootSystemLibraryExtensionsCacheRef);
+
+		if (rootErr == noErr) {
+			setCopyingFile ("\pExtensions.mkext");
+			ThrowIfOSErr_AC (FSRefFileCopy (&rootSystemLibraryExtensionsCacheRef, &helperSystemLibraryRef, NULL, NULL, 0, false));			
+		}	
+
+		// Check for the extensions directory. It should exist :-)
+		ThrowIfOSErr_AC (getOrCreateSystemLibraryExtensionsDirectory (rootDisk->getRootDirectory (), &rootSystemLibraryExtensionsRef));
+		ThrowIfOSErr_AC (FSRefFilteredDirectoryCopy (&rootSystemLibraryExtensionsRef, &helperSystemLibraryRef, NULL, NULL, 0, false, 
+								NULL, CopyFilterGlue, this));
+		
+		// If the root disk was not writeable, then we need to install the extensions in the secondary location
+		// on the helper, so that BootX will pick them up
+		if (!rootDisk->getIsWriteable ()) {
+			installSecondaryExtensionsWithRootDirectory (&helperDir);
+		}
+	}		
+
+	XPFNVRAMSettings *nvram = XPFNVRAMSettings::GetSettings ();
+	
+	CChar255_AC bootDevice (fBootDevice);
+	CChar255_AC bootFile (fBootFile);
+	CChar255_AC bootCommand (fBootCommand);
+	CChar255_AC inputDevice (fInputDevice);
+	CChar255_AC outputDevice (fOutputDevice);
+	
+	nvram->setStringValue ("boot-device", bootDevice);
+	nvram->setStringValue ("boot-file", bootFile);
+	nvram->setStringValue ("boot-command", bootCommand);
+	nvram->setBooleanValue ("auto-boot?", fAutoBoot);	
+	nvram->setStringValue ("input-device", inputDevice);
+	nvram->setStringValue ("output-device", outputDevice);
+	
+	if (bootDisk->getIsWriteable ()) adjustThrottle (nvram);
+	
+	XPFPlatform *platform = ((XPFApplication *) gApplication)->getPlatform ();
+	if (platform->getCanPatchNVRAM ()) {
+		platform->patchNVRAM ();
+	} else {
+		ThrowException_AC (kErrorWritingNVRAM, 0);
+	}
+		
+	#if qLogging
+		gLogFile << "Restarting ..." << endl_AC;
+		gLogFile << "Boot-device: " << bootDevice << endl_AC;
+		gLogFile << "Boot-command: " << bootCommand << endl_AC;
+		gLogFile << "input-device: " << inputDevice << endl_AC;
+		gLogFile << "output-device: " << outputDevice << endl_AC;
+	#endif
+
+	#if !qDebug
+		if (nvram->writeToNVRAM () == noErr) {	
+			tellFinderToRestart ();
+		} else {
+			ThrowException_AC (kErrorWritingNVRAM, 0);
+		}
+	#endif
+}
