@@ -308,12 +308,13 @@ OFAliases::aliasFor (const RegEntryID* regEntry, char *outAlias, char *shortAlia
 		while ((*start != '/') && (start >= shortAlias)) start--;
 		// We need to work around the firmware in the UltraTek cards, which will
 		// only rewrite the boot-device setting properly if they see "UltraTek"
-		if (memcmp (start, "/UltraTek", strlen ("/UltraTek"))) {
+//		if (memcmp (start, "/UltraTek", strlen ("/UltraTek"))) {
 			BlockMoveData (at, start + 1, strlen (at) + 1);
 			start += 2;
-		} else {
-			start = at + 1;
-		}
+//		} else {
+//			start = at + 1;
+//		}
+
 	}
 
 	RegistryEntryIDDispose (&deviceTreeEntry);	
