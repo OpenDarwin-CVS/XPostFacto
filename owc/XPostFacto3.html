@@ -1,8 +1,8 @@
-<body><h2>XPostFacto 3.0b8</h2>
+<body><h2>XPostFacto 3.0b9</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-August 3, 2004
+October 26, 2004
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -11,21 +11,23 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <p>Here's a quick link to download the latest version. Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes.
 
 <blockquote>
-<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0b8.sit">Download XPostFacto 3.0b8</a>
+<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0b9.sit">Download XPostFacto 3.0b9</a>
 </blockquote>
 
 <p>XPostFacto is an open-source application which you may download and try for free. However, I encourage you to <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">register as an XPostFacto user</a>. This helps to support the continuing development of XPostFacto, and also gives you an account on the <a href="http://forum.macsales.com/">tech support forum</a>. If you are already a registered user of XPostFacto, you can make a <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">contribution to its continuing development</a>.
 
-<h4>What's new in 3.0b8</h4>
+<h4>What's new in 3.0b9</h4>
 
-<p>Version 3.0b8 fixes several bugs in 3.0b2. (There were several intermediate versions with limited distribution to help diagnose the bugs).
+<p>Here is a quick summary of what's new in version 3.0b9. I am expecting this to be the last beta version before officially releasing version 3.0. So, I am particularly looking for two kinds of problem reports at the moment: (a) things that used to work in a previous version of XPF but do not work now; and (b) things which do not work and are not sufficiently documented as "known problems" below.
 
 <ul>
-<li>Fixes the problem <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2081">detecting the Open Firmware name for ATA drives</a> in Mac OS 9.
+<li>Will now set a <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2093">default input-device and output-device</a>, unless the user has specifically chosen to have none.
 
-<li>Fixes a problem which <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2091">caused version 3.0b2 to crash</a> in Mac OS X.
+<li>Added a menu command to <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2328">save the log file</a>.
 
-<li>Hopefully fixes a problem whereby XPF sometimes <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2090">thinks that a G3/G4 upgrade is required</a>, even though one was already installed. If this continues to be a problem, XPF 3.0b8 writes some log messages which will help diagnose it.
+<li>Show an error message when there is a <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2329">problem reading from a volume</a>, rather than just leaving it out of the volume list.
+
+<li>Show a warning rather than an error when XPF <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2090">fails to detect a G3/G4 CPU upgrade</a>, since there had been some cases where XPF was not detecting the CPU type properly.
 
 </ul>
 
@@ -34,7 +36,7 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <p>Here is a partial list of known problems with the current version of XPostFacto. You can also consult the <a href="http://www.opendarwin.org/bugzilla/buglist.cgi?product=XPostFacto&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&bug_status=RESOLVED&cmdtype=doit">bug list</a> directly.
 
 <ul>
-<li>OWCCacheConfig is often <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=855">causing problems</a>, especially with Panther. The workaround for the moment is to de-select the "Enable L2/L3 Cache" option in XPostFacto.
+<li>OWCCacheConfig is often <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=855">causing problems</a>, especially with Panther. The workaround for the moment is to de-select the "Enable L2/L3 Cache" option in XPostFacto (I have made this the default setting for now). There are several other options for enabling the L2/L3 cache -- the forum contains a <a href="http://forum.macsales.com/viewtopic.php?t=1766">HOWTO on this topic</a>.
 
 <li>There is an <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=868">8 GB limit</a> that applies when installing Mac OS X on an ATA drive on an "Old World" machine. The issue is that the firmware drivers for the built-in ATA bus on Old World machines will not access past the 8 GB mark. This means that Mac OS X must be installed on the first partition, and that partition must be less than 8 GB in size. The Mac OS X Installer knows about this, and will refuse to install if it detects the problem. Unfortunately, the Mac OS X Installer also refuses to install on ATA drives connected to PCI cards on Old World machines, even though that would actually work. Complicating this further is that some ATA cards "pretend" to be SCSI cards in Mac OS X, while others do not. I have a few ideas about how to <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=872">work around</a> some of these issues, but have not implemented that yet.
 
@@ -267,14 +269,14 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <dl>
 <dt><p><b><a name="macosx">Mac OS X Versions</a></b>
 
-<dd><p>XPostFacto 3 should work with Mac OS X 10.0 through 10.3, but testing with 10.0 and 10.1 has been limited. One limitation is that XPF 3 will not launch in Mac OS X 10.0 (but you can launch it from Mac OS 9 to install Mac OS X 10.0).  
+<dd><p>XPostFacto 3 should work with Mac OS X 10.0 through 10.3, but testing with 10.0 and 10.1 has been limited. One limitation is that XPF 3 will not launch in Mac OS X 10.0 (but you can launch it from Mac OS 9 to install Mac OS X 10.0).
 
 <dt><p><b><a name="cpus">CPUs</a></b>
 <dd><p>Mac OS X does not work with a 601 CPU. Therefore, if you have a 7500 with the original 601 processor, you will need to install a CPU upgrade before installing Mac OS X. 
 
 <P>Mac OS X 10.2 (and later) does not work with a 603 or 604 CPU either. I have done some work to try to fix this, but it seems unlikely that this problem will be solved. The workaround is to install a G3 or G4 upgrade card.
 
-<p>If you install a G3 or a G4 upgrade, you will need some software to enable the L2 cache in Mac OS X. You can use my <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=L2CacheConfig.html">L2CacheConfig</a> software, or the PowerLogix <a href="http://www.powerlogix.com/downloads/index.html">cache control</a> software, which is also free. Your computer will work without enabling the L2 cache--it will just be slower.
+<p>If you install a G3 or a G4 upgrade, you will need some software to enable the L2 cache in Mac OS X. The forum contains a <a href="http://forum.macsales.com/viewtopic.php?t=1766">HOWTO on L2 cache software</a>.
 
 <p>XPF 3.0 includes OWCCacheConfig, which attempts to automatically detect and configure L2 and L3 cache when you boot into Mac OS X, including when you boot from the CD to install. You can control whether OWCCacheConfig is installed using the "Enable L2/L3 Cache" option in XPostFacto. Unfortunately, OWCCacheConfig is causing problems for a fair number of users so far, so XPF is now defaulting to have it turned off, rather than on. You can turn it on if you want to test it.
 
@@ -551,6 +553,21 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0b9.sit">3.0b9 (October 26, 2004)</a>
+
+<dd>Here is a quick summary of what's new in version 3.0b9. I am expecting this to be the last beta version before officially releasing version 3.0. So, I am particularly looking for two kinds of problem reports at the moment: (a) things that used to work in a previous version of XPF but do not work now; and (b) things which do not work and are not sufficiently documented as "known problems."
+
+<ul>
+<li>Will now set a <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2093">default input-device and output-device</a>, unless the user has specifically chosen to have none.
+
+<li>Added a menu command to <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2328">save the log file</a>.
+
+<li>Show an error message when there is a <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2329">problem reading from a volume</a>, rather than just leaving it out of the volume list.
+
+<li>Show a warning rather than an error when XPF <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2090">fails to detect a G3/G4 CPU upgrade</a>, since there had been some cases where XPF was not detecting the CPU type properly.
+
+</ul>
 
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0b8.sit">3.0b8 (August 3, 2004)</a>
 
