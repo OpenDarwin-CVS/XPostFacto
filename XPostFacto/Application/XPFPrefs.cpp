@@ -582,8 +582,8 @@ XPFPrefs::getBootCommandForInstall ()
 CStr255_AC
 XPFPrefs::getBootFileForInstall ()
 {
-	CStr255_AC bootFile ("-i");
-	return bootFile;
+	// This is always going to be the helper-style boot
+	return CStr255_AC ("-h");
 }
 
 CStr255_AC
