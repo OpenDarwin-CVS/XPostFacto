@@ -61,12 +61,12 @@ class XPFThreadedCommand : public TCommand {
 		Boolean archiveFilter (const FSRef *src, Boolean preflight);
 		
 		void updateExtensionsCacheForRootDirectory (FSRef *rootDirectory);
-		void installExtensionsWithRootDirectory (FSRef *rootDirectory);
+		void installExtensionsWithRootDirectory (FSRef *rootDirectory, bool deleteUnqualified = true);
 		void installSecondaryExtensionsWithRootDirectory (FSRef *rootDirectory);
 		void installStartupItemWithRootDirectory (FSRef *rootDirectory);
 		void synchronizeWithHelper (bool deleteFirst = false);
 		
-		void copyHFSArchivesTo (ResType type, FSRef *directory);
+		void copyHFSArchivesTo (ResType type, FSRef *directory, bool deleteUnqualified = true);
 				
 		void setStatusMessage (unsigned char* message, bool forceRedraw);
 		void setCopyingFile (unsigned char* fileName, bool forceRedraw);

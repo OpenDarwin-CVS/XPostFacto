@@ -191,13 +191,13 @@ XPFThreadedCommand::updateExtensionsCacheForRootDirectory (FSRef *rootDirectory)
 }
 
 void
-XPFThreadedCommand::installExtensionsWithRootDirectory (FSRef *rootDirectory)
+XPFThreadedCommand::installExtensionsWithRootDirectory (FSRef *rootDirectory, bool deleteUnqualified)
 {
 	if (fDebugOptions & kDisableExtensions) return;
 	FSRef systemLibraryExtensionsFolder;
 	
 	ThrowIfOSErr_AC (XPFFSRef::getOrCreateSystemLibraryExtensionsDirectory (rootDirectory, &systemLibraryExtensionsFolder));
-	copyHFSArchivesTo ('hfsA', &systemLibraryExtensionsFolder);
+	copyHFSArchivesTo ('hfsA', &systemLibraryExtensionsFolder, deleteUnqualified);
 		
 	updateExtensionsCacheForRootDirectory (rootDirectory);
 }
@@ -209,7 +209,7 @@ XPFThreadedCommand::installSecondaryExtensionsWithRootDirectory (FSRef *rootDire
 	FSRef libraryExtensionsFolder;
 	
 	ThrowIfOSErr_AC (XPFFSRef::getOrCreateLibraryExtensionsDirectory (rootDirectory, &libraryExtensionsFolder));
-	copyHFSArchivesTo ('hfsA', &libraryExtensionsFolder);
+	copyHFSArchivesTo ('hfsA', &libraryExtensionsFolder, true);
 }
 
 void
@@ -244,7 +244,7 @@ XPFThreadedCommand::installStartupItemWithRootDirectory (FSRef *rootDirectory)
 }
 
 void
-XPFThreadedCommand::copyHFSArchivesTo (ResType type, FSRef *directory)
+XPFThreadedCommand::copyHFSArchivesTo (ResType type, FSRef *directory, bool deleteUnqualified)
 {
 	SInt16 archiveCount = CountResources (type);
 	float scale = (float) (fProgressMax - fProgressMin) / (float) archiveCount;
@@ -268,11 +268,13 @@ XPFThreadedCommand::copyHFSArchivesTo (ResType type, FSRef *directory)
 			XPFSetUID myUID (0);
 			ThrowIfOSErr_AC (archive.extractArchiveTo (directory));
 		} else {
-			FSRef existingDir;
-			OSErr err = XPFFSRef::getFSRef (directory, (CChar255_AC) updateItem->getResourceName (), &existingDir);
-			if (err == noErr) {
-				XPFSetUID myUID (0);
-				FSRefDeleteDirectory (&existingDir);
+			if (deleteUnqualified) {
+				FSRef existingDir;
+				OSErr err = XPFFSRef::getFSRef (directory, (CChar255_AC) updateItem->getResourceName (), &existingDir);
+				if (err == noErr) {
+					XPFSetUID myUID (0);
+					FSRefDeleteDirectory (&existingDir);
+				}
 			}
 		}
 

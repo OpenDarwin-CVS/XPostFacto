@@ -61,7 +61,7 @@ XPFInstallExtensionsCommand::DoItInProgressWindow ()
 {
 	fProgressMax = 1000;
 	setDescription (CStr255_AC (kXPFStringsResource, kInstallingExtensions));
-	installExtensionsWithRootDirectory (fRootDisk->getRootDirectory ());
+	installExtensionsWithRootDirectory (fRootDisk->getRootDirectory (), !fUpdate->getInstallCD ());
 	fProgressWindow->setFinished ();
 }
 
@@ -163,12 +163,15 @@ XPFUninstallCommand::DoItInProgressWindow ()
 void
 XPFEmptyCacheCommand::DoItInProgressWindow ()
 {
+	setDescription (CStr255_AC ((ResNumber) kXPFStringsResource, kDeletingXPFCache));
 	setStatusMessage (CStr255_AC ((ResNumber) kXPFStringsResource, kDeletingXPFCache), true);
+	fProgressWindow->setProgressMax (2);
 
 	XPFSetUID myUID (0);
 	FSRef xpfDirectory;	
 	OSErr err = XPFFSRef::getOrCreateXPFDirectory (fUpdate->getTarget()->getRootDirectory(), &xpfDirectory, false);
 	if (err == noErr) ThrowIfOSErr_AC (FSRefDeleteDirectoryContents (&xpfDirectory, true));
+	fProgressWindow->setProgressValue (1, true);
 	if (fUpdate->getHelper ()) {
 		err = XPFFSRef::getOrCreateXPFDirectory (fUpdate->getHelper()->getRootDirectory(), &xpfDirectory, false);
 		if (err == noErr) ThrowIfOSErr_AC (FSRefDeleteDirectoryContents (&xpfDirectory, true));	
@@ -180,20 +183,19 @@ XPFEmptyCacheCommand::DoItInProgressWindow ()
 void
 XPFCheckPermissionsCommand::DoItInProgressWindow ()
 {
+	setDescription (CStr255_AC ((ResNumber) kXPFStringsResource, kCheckingPermissions));
 	setStatusMessage (CStr255_AC ((ResNumber) kXPFStringsResource, kCheckingPermissions), true);
-
-	gLogFile << "Fixing permissions:" << endl_AC;
+	fProgressWindow->setProgressMax (2);
 
 	XPFSetUID myUID (0);
 	FSRef xpfDirectory;	
 	OSErr err = XPFFSRef::getOrCreateXPFDirectory (fUpdate->getTarget()->getRootDirectory(), &xpfDirectory, false);
 	if (err == noErr) checkPermissions (&xpfDirectory);
+	fProgressWindow->setProgressValue (1, true);
 	if (fUpdate->getHelper ()) {
 		err = XPFFSRef::getOrCreateXPFDirectory (fUpdate->getHelper()->getRootDirectory(), &xpfDirectory, false);
 		if (err == noErr) checkPermissions (&xpfDirectory);
 	}
-	
-	gLogFile << "Finished fixing permissions" << endl_AC;
 	
 	fProgressWindow->setFinished ();
 }
