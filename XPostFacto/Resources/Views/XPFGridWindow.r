@@ -1,11 +1,3 @@
-data 'TxSt' (5312, "Application 12, bold") {
-	$"019C 000C 0000 0000 0000 0161"                                                                      /* .œ.........a */
-};
-
-data 'TxSt' (27392, "Application 10, plain") {
-	$"009C 000A 0000 0000 0000 0161"                                                                      /* .œ.Â.......a */
-};
-
 resource 'STR#' (1001, "Grid Window", purgeable) {
 	{	/* array StringArray: 12 elements */
 		/* [1] */
@@ -42,15 +34,23 @@ resource 'STR#' (1200, "VolumeDisplay", purgeable) {
 	}
 };
 
+data 'TxSt' (5312, "Application 12, bold") {
+	$"019C 000C 0000 0000 0000 0161"                                                                      /* .œ.........a */
+};
+
+data 'TxSt' (27392, "Application 10, plain") {
+	$"009C 000A 0000 0000 0000 0161"                                                                      /* .œ.Â.......a */
+};
+
 resource 'View' (1001, "Grid Window", purgeable) {
 	MAThreeOhView {
 
 	},
-	{	/* array ViewArray: 29 elements */
+	{	/* array ViewArray: 33 elements */
 		/* [1] */
 		ViewSignatureAndClassname {
 			'wind',
-			3561,
+			4019,
 			"XPFGridWindow",
 			'WIND',
 			enabled,
@@ -137,7 +137,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 		/* [2] */
 		ViewSignatureAndClassname {
 			'view',
-			856,
+			1085,
 			"",
 			'invw',
 			enabled,
@@ -180,7 +180,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			View {
 
 			},
-			4
+			6
 		},
 		/* [3] */
 		ViewSignatureAndClassname {
@@ -601,8 +601,141 @@ resource 'View' (1001, "Grid Window", purgeable) {
 		},
 		/* [9] */
 		ViewSignatureAndClassname {
+			'icon',
+			100,
+			"TIcon",
+			'inwa',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				40,
+				/* [2] */
+				341
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				32,
+				/* [2] */
+				32
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Icon {
+				mIconHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				preferColor,
+				0
+			},
+			NoSubviews
+		},
+		/* [10] */
+		ViewSignatureAndClassname {
+			'stat',
+			117,
+			"XPFInstallWarning",
+			'sta6',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				40,
+				/* [2] */
+				382
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				32,
+				/* [2] */
+				162
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			StaticText {
+				mStaticTextHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				27392,
+				dontPreferOutline,
+				autoWrap,
+				dontEraseFirst,
+				justSystem,
+				-1,
+				1
+			},
+			NoSubviews
+		},
+		/* [11] */
+		ViewSignatureAndClassname {
 			'view',
-			1653,
+			1882,
 			"",
 			'revw',
 			enabled,
@@ -645,9 +778,9 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			View {
 
 			},
-			9
+			11
 		},
-		/* [10] */
+		/* [12] */
 		ViewSignatureAndClassname {
 			'butn',
 			147,
@@ -721,7 +854,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [11] */
+		/* [13] */
 		ViewSignatureAndClassname {
 			'view',
 			462,
@@ -798,7 +931,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			2
 		},
-		/* [12] */
+		/* [14] */
 		ViewSignatureAndClassname {
 			'scrl',
 			163,
@@ -881,7 +1014,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [13] */
+		/* [15] */
 		ViewSignatureAndClassname {
 			'ssbr',
 			105,
@@ -948,7 +1081,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [14] */
+		/* [16] */
 		ViewSignatureAndClassname {
 			'radb',
 			147,
@@ -1023,7 +1156,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [15] */
+		/* [17] */
 		ViewSignatureAndClassname {
 			'radb',
 			147,
@@ -1098,7 +1231,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [16] */
+		/* [18] */
 		ViewSignatureAndClassname {
 			'stat',
 			135,
@@ -1175,7 +1308,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [17] */
+		/* [19] */
 		ViewSignatureAndClassname {
 			'popp',
 			159,
@@ -1201,7 +1334,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 				/* [1] */
 				107,
 				/* [2] */
-				416
+				418
 			},
 			{	/* array: 2 elements */
 				/* [1] */
@@ -1256,7 +1389,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [18] */
+		/* [20] */
 		ViewSignatureAndClassname {
 			'stat',
 			135,
@@ -1333,7 +1466,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [19] */
+		/* [21] */
 		ViewSignatureAndClassname {
 			'stat',
 			135,
@@ -1410,7 +1543,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [20] */
+		/* [22] */
 		ViewSignatureAndClassname {
 			'sepr',
 			66,
@@ -1458,7 +1591,140 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [21] */
+		/* [23] */
+		ViewSignatureAndClassname {
+			'icon',
+			100,
+			"TIcon",
+			'rewa',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				142,
+				/* [2] */
+				341
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				32,
+				/* [2] */
+				32
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Icon {
+				mIconHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				preferColor,
+				0
+			},
+			NoSubviews
+		},
+		/* [24] */
+		ViewSignatureAndClassname {
+			'stat',
+			117,
+			"XPFRestartWarning",
+			'sta0',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				142,
+				/* [2] */
+				382
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				32,
+				/* [2] */
+				162
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			StaticText {
+				mStaticTextHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				27392,
+				dontPreferOutline,
+				autoWrap,
+				dontEraseFirst,
+				justSystem,
+				-1,
+				1
+			},
+			NoSubviews
+		},
+		/* [25] */
 		ViewSignatureAndClassname {
 			'view',
 			893,
@@ -1506,7 +1772,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			8
 		},
-		/* [22] */
+		/* [26] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -1574,7 +1840,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [23] */
+		/* [27] */
 		ViewSignatureAndClassname {
 			'stat',
 			150,
@@ -1651,7 +1917,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [24] */
+		/* [28] */
 		ViewSignatureAndClassname {
 			'butn',
 			131,
@@ -1725,7 +1991,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [25] */
+		/* [29] */
 		ViewSignatureAndClassname {
 			'sepr',
 			66,
@@ -1773,7 +2039,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [26] */
+		/* [30] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -1841,7 +2107,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [27] */
+		/* [31] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -1909,7 +2175,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [28] */
+		/* [32] */
 		ViewSignatureAndClassname {
 			'sepr',
 			66,
@@ -1957,7 +2223,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [29] */
+		/* [33] */
 		ViewSignatureAndClassname {
 			'sepr',
 			66,

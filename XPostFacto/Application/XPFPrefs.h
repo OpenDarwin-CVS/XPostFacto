@@ -84,6 +84,7 @@ class XPFPrefs : public TFileBasedDocument {
 		// Accessors
 
 		bool getUseShortStrings (bool forInstall) {return forInstall ? fUseShortStringsForInstall : fUseShortStrings;}
+		bool getTooBigForNVRAM (bool forInstall) {return forInstall ? fTooBigForNVRAMForInstall : fTooBigForNVRAM;}
 
 		CStr255_AC getBootDevice (bool forInstall);
 		CStr255_AC getBootFile (bool forInstall);
@@ -145,13 +146,15 @@ DECLARE_DEBUG_ACCESSORS (DebugPanicText)
 		CStr255_AC getBootCommandBase ();
 		
 		void installXPFPartitionInfo ();
-		
+
 		// Variables
 
 		bool fUseShortStrings;
 		bool fUseShortStringsForInstall;
 		bool fRebootInMacOS9;
 		bool fRestartOnClose;
+		bool fTooBigForNVRAM;
+		bool fTooBigForNVRAMForInstall;
 				
 		MountedVolume *fTargetDisk;
 		MountedVolume *fInstallCD;

@@ -92,6 +92,7 @@ XPFInstallButton::determineActiveState ()
 	if (!installCD) return false;
 	if (targetDisk->getInstallTargetStatus () != kStatusOK) return false;
 	if (installCD->getInstallerStatus () != kStatusOK) return false;
+	if (prefs->getTooBigForNVRAM (true)) return false;
 	return true;
 }
 
@@ -101,18 +102,8 @@ XPFInstallButton::DoUpdate (ChangeID_AC theChange,
 								void* changeData,
 								CDependencySpace_AC* dependencySpace)
 {
-	switch (theChange) {
-	
-		case cSetTargetDisk:
-		case cSetInstallCD:
-		case cSetRebootInMacOS9:
-			SetActiveState (determineActiveState (), true);
-			break;
-			
-		default:
-			Inherited::DoUpdate (theChange, changedObject, changeData, dependencySpace);
-			break;
-	}
+	// basically, any update from fPrefs might change our state
+	SetActiveState (determineActiveState (), true);
 }
 
 //========================================================================================
@@ -165,6 +156,7 @@ XPFRestartButton::determineActiveState ()
 	MountedVolume *targetDisk = prefs->getTargetDisk ();
 	if (!targetDisk) return false;
 	if (targetDisk->getBootStatus () != kStatusOK) return false;
+	if (prefs->getTooBigForNVRAM (false)) return false;
 	return true;
 }
 
@@ -174,17 +166,8 @@ XPFRestartButton::DoUpdate (ChangeID_AC theChange,
 								void* changeData,
 								CDependencySpace_AC* dependencySpace)
 {
-	switch (theChange) {
-	
-		case cSetTargetDisk:
-		case cSetRebootInMacOS9:
-			SetActiveState (determineActiveState (), true);
-			break;
-			
-		default:
-			Inherited::DoUpdate (theChange, changedObject, changeData, dependencySpace);
-			break;
-	}
+	// Basically, any update from fPrefs could change our active state
+	SetActiveState (determineActiveState (), true);
 }
 
 //========================================================================================

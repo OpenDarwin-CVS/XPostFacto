@@ -104,6 +104,10 @@ XPFPrefs::XPFPrefs (TFile* itsFile)
 		fDebug (0),
 		fRebootInMacOS9 (false),
 		fUseROMNDRV (false),
+		fUseShortStrings (true),
+		fUseShortStringsForInstall (true),
+		fTooBigForNVRAM (false),
+		fTooBigForNVRAMForInstall (false),
 		fRestartOnClose (false)
 {
 	SetAskOnClose (true);
@@ -184,6 +188,12 @@ XPFPrefs::PoseConfirmDialog (bool forInstall, bool quitting)
 	}
 	
 	TWindow *dialog = TViewServer::fgViewServer->NewTemplateWindow (dialogID, NULL);
+	
+	if (getTooBigForNVRAM (forInstall)) {
+		TView *change = dialog->FindSubView ('chan');
+		if (change) change->SetActiveState (false, true);
+	}
+	
 	IDType result = dialog->PoseModally ();
 	switch (result) {
 		case 'chan':
@@ -207,12 +217,10 @@ XPFPrefs::PoseConfirmDialog (bool forInstall, bool quitting)
 short 
 XPFPrefs::PoseSaveDialog ()
 {
-	short retVal = kStdCancelItemIndex;
-	
 	// We only use the install dialog if we can't start up from the target disk already
 	bool useInstallDialog = (fInstallCD != NULL) && (fTargetDisk->getBootStatus () != kStatusOK);
 	
-	retVal = PoseConfirmDialog (useInstallDialog, true);
+	short retVal = PoseConfirmDialog (useInstallDialog, true);
 		
 	if (retVal == kStdOkItemIndex) {
 		if (useInstallDialog) {
@@ -229,6 +237,9 @@ void
 XPFPrefs::getPrefsFromNVRAM ()
 {		
 	XPFNVRAMSettings *nvram = XPFNVRAMSettings::GetSettings ();
+
+	XPFPlatform *platform = ((XPFApplication *) gApplication)->getPlatform ();
+	if (platform->getCanPatchNVRAM ()) platform->patchNVRAM ();
 	
 	char *bootCommand = nvram->getStringValue ("boot-command");
 	char *bootDevice = nvram->getStringValue ("boot-device");
@@ -515,11 +526,7 @@ XPFPrefs::writePrefsToNVRAM (bool forInstall)
 	nvram->setStringValue ("output-device", outputDevice);
 	
 	XPFPlatform *platform = ((XPFApplication *) gApplication)->getPlatform ();
-	if (platform->getCanPatchNVRAM ()) {
-		platform->patchNVRAM ();
-	} else {
-		ThrowException_AC (kErrorWritingNVRAM, 0);
-	}
+	if (!platform->getCanPatchNVRAM ()) ThrowException_AC (kErrorWritingNVRAM, 0);
 		
 	// adjust throttle
 	char nvramrc [2048];
@@ -675,39 +682,27 @@ XPFPrefs::DoEvent (EventNumber eventNumber,
 void
 XPFPrefs::checkStringLength ()
 {
-	// For the moment, always use short strings. That may be the better idea anyway.
-	
-	setUseShortStrings (true);
-	setUseShortStringsForInstall (true);
-	return;
-	
-/*	
-	unsigned nvramPatchLength = strlen (XPFNVRAMSettings::GetSettings ()->getStringValue ("nvramrc"));
-	unsigned len;
-	bool save;
-	
-	save = fUseShortStrings;
-	fUseShortStrings = false;
-	len = 	getBootCommand ().Length () + 
-			getBootFile ().Length () +
-			getBootDevice ().Length () +
-			getInputDevice ().Length () +
-			getOutputDevice ().Length () +
-			nvramPatchLength;
-	fUseShortStrings = save;
-	setUseShortStrings (len >= 1948);
+	// Figure out the lengths
 
-	save = fUseShortStringsForInstall;
-	fUseShortStringsForInstall = false;				
-	len =  	getBootCommandForInstall ().Length () + 
-			getBootFileForInstall ().Length () +
-			getBootDeviceForInstall ().Length () +
-			getInputDevice ().Length () +
-			getOutputDevice ().Length () +
-			nvramPatchLength;
-	fUseShortStringsForInstall = save;
-	setUseShortStringsForInstall (len >= 1948);
-*/
+	unsigned nvramPatchLength = strlen (XPFNVRAMSettings::GetSettings ()->getStringValue ("nvramrc"));
+
+	unsigned len = getBootCommand (false).Length () + 
+				   getBootFile (false).Length () +
+				   getBootDevice (false).Length () +
+				   getInputDevice (false).Length () +
+				   getOutputDevice (false).Length () +
+				   nvramPatchLength;
+
+	fTooBigForNVRAM = (len >= kOFStringCapacity);
+
+	len = getBootCommand (true).Length () + 
+		  getBootFile (true).Length () +
+		  getBootDevice (true).Length () +
+		  getInputDevice (true).Length () +
+		  getOutputDevice (true).Length () +
+		  nvramPatchLength;
+						  
+	fTooBigForNVRAMForInstall = (len >= kOFStringCapacity);
 }
 
 void 

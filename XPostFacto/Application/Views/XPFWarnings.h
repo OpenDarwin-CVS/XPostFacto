@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001 - 2003
+Copyright (c) 2003
 Other World Computing
 All rights reserved
 
@@ -31,54 +31,50 @@ advised of the possibility of such damage.
 
 */
 
-#ifndef __XPFSTRINGS_H__
+#ifndef __XPFWARNINGS_H__
+#define __XPFWARNINGS_H__
 
-#define kXPFStringsResource 2000
+#include "UStaticText.h"
 
-#define kStatusOK	0
+class XPFInstallWarning : public TStaticText {
 
-enum {
-	kNotBootable = 1,
-	kNotHFSPlus,
-	kNoMachKernel,
-	kNoOFName,
-	kNoOldWorldSupport,			// 5
-	kNoBootX,
-	kPast8GB,
-	kNotWriteable,
-	kNotInstaller,
-	kRequiresOS9,				// 10
-	kNoNVRAMPatches,
-	kNoMacOSXYet,
-	kXPostFactoHelpMenu,
-	kXPostFactoOnlineHelpMenu,
-	kXPostFactoSourceCodeMenu,	// 15
-	kInstallOnly,
-	kNeedsHelper,
-	kShowLogWindowMenu,
-	kTheWordCopy,
-	kRestarting,				// 20
-	kInstalling,
-	kInstallingBootX,
-	kInstallingExtensions,
-	kInstallingStartupItem,
-	kUpdatingExtensionsCache,	// 25
-	kShowDebugOptions,
-	kHideDebugOptions,
-	kMenuDisableRestart,
-	kMenuDisableNVRAM,
-	kMenuDisableBootX,			// 30
-	kMenuDisableStartupItem,
-	kMenuDisableExtensions,
-	kMenuDisableExtensionsCache,
-	kMenuDisableCoreServices,
-	kMenuDisableHelperCopy,		// 35
-	kMenuVisibleHelper,
-	kRecopyingHelperFiles,
-	kUpdating,
-	kTooBigForNVRAM,
-	kTooBigForNVRAMForInstall	// 40
+	MA_DECLARE_CLONE;
+
+public:
+
+	virtual	~XPFInstallWarning ();		
+	virtual void DoPostCreate (TDocument* itsDocument);
+	virtual void DoUpdate	(ChangeID_AC theChange, 
+					MDependable_AC* changedObject,
+					void* changeData,
+					CDependencySpace_AC* dependencySpace);
+					
+	
+private:
+
+	TIcon *fIcon;
+	IconRef fIconRef;
+	
 };
 
+class XPFRestartWarning : public TStaticText {
+
+	MA_DECLARE_CLONE;
+
+public:
+
+	virtual	~XPFRestartWarning ();		
+	virtual void DoPostCreate (TDocument* itsDocument);
+	virtual void DoUpdate	(ChangeID_AC theChange, 
+					MDependable_AC* changedObject,
+					void* changeData,
+					CDependencySpace_AC* dependencySpace);
+					
+private:
+
+	TIcon *fIcon;
+	IconRef fIconRef;
+
+};
 
 #endif

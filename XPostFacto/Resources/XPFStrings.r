@@ -81,5 +81,8 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			"Keep Helper Visible";
 			"Recopying Helper Files";
 			"Updating";
+			
+			"There is not enough NVRAM to store these settings.";
+			"There is not enough NVRAM to store these installation settings.";
 	}
 };
