@@ -90,6 +90,7 @@ class MountedVolume : public MDependable_AC
 		bool getIsWriteable () {return fIsWriteable;}
 		bool getValidOpenFirmwareName () {return fValidOpenFirmwareName;}
 		bool getHasOldWorldSupport () {return fHasOldWorldSupport;}
+		bool getHasFinder () {return fHasFinder;}
 		FSRef* getRootDirectory () {return &fRootDirectory;}
 		
 		bool getHasBeenPrepared () {return fHasBeenPrepared;}
@@ -130,6 +131,7 @@ class MountedVolume : public MDependable_AC
 		bool fValidOpenFirmwareName;
 		bool fStillThere;
 		bool fHasBeenPrepared;
+		bool fHasFinder;
 		
 		XPFBootableDevice *fBootableDevice;
 		XPFPartition *fPartInfo;

@@ -334,7 +334,14 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 		OSErr err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Library:Extensions:PatchedAppleNVRAM.kext", &supportSpec);
 		fHasOldWorldSupport = (err == noErr);
 	}
-		
+	
+	// See if it has a Finder (i.e. whether it might be a Darwin disk)
+	{
+		CFSSpec_AC finderSpec;
+		OSErr err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Library:CoreServices:Finder.app:", &finderSpec);
+		fHasFinder = (err == noErr);
+	}
+	
 	// Do some logging
 	#if qLogging
 	{

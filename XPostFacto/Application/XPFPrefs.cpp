@@ -581,7 +581,7 @@ CStr255_AC
 XPFPrefs::getBootCommand ()
 {
 	CStr255_AC bootCommand ("0 bootr");
-	if (fBootInVerboseMode) bootCommand += (" -v");
+	if (fBootInVerboseMode || !getBootDisk ()->getHasFinder ()) bootCommand += (" -v");
 	if (fBootInSingleUserMode) bootCommand += (" -s");
 	
 	unsigned debug = 0;
