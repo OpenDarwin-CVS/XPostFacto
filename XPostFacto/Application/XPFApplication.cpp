@@ -895,7 +895,7 @@ XPFApplication::restart ()
 	CChar255_AC outputDevice (fPrefs->getOutputDevice ());
 	nvram->setOutputDevice (outputDevice);
 	
-	if (fBootDisk->getIsWriteable () (adjustThrottle (nvram));
+	if (bootDisk->getIsWriteable ()) (adjustThrottle (nvram));
 		
 	#if qLogging
 		gLogFile << "Restarting ..." << endl_AC;
