@@ -125,13 +125,12 @@ XPFVolumeDisplay::setVolume (MountedVolume* newVolume)
 	
 	if ((fVolume->getBootStatus () != kStatusOK) && (fVolume->getInstallTargetStatus () != kStatusOK)) {
 		this->SetActiveState (false, true);	
-	} else {
-		if (fVolume->getHasMachKernel ()) {
-			CStr255_AC status ("Mac OS X ");
-			status += fVolume->getMacOSXVersion ();
-			if (fVolume->getHasInstaller ()) status += " Install CD";
-			fStatus->SetText (status, true);
-		}
+	}  
+	if (fVolume->getHasMachKernel ()) {
+		CStr255_AC status ("Mac OS X ");
+		status += fVolume->getMacOSXVersion ();
+		if (fVolume->getHasInstaller ()) status += " Install CD";
+		fStatus->SetText (status, true);
 	}
 	
 	DoUpdate (cSetTargetDisk, fPrefs, fPrefs->getTargetDisk (), NULL);
