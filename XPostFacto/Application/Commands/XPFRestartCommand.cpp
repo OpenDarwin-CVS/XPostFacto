@@ -41,6 +41,7 @@ advised of the possibility of such damage.
 #include "XPFApplication.h"
 #include "XPFErrors.h"
 #include "stdio.h"
+#include "XPFProgressWindow.h"
 
 #define Inherited XPFThreadedCommand
 
@@ -153,10 +154,16 @@ XPFRestartCommand::DoItThreaded ()
 
 		ThrowIfOSErr_AC (getOrCreateSystemLibraryDirectory (&helperDir, &helperSystemLibraryRef));
 	
-		// Check for the Extensions.mkext. If it doesn't exist, don't copy it.
+		// Check for the Extensions.mkext.
 		OSErr rootErr = getExtensionsCacheFSRef (rootDisk->getRootDirectory (), &rootSystemLibraryExtensionsCacheRef);
 
-		if (rootErr == noErr) {
+		if (rootErr == fnfErr) {
+			// It doesn't exist on the root. So make sure it doesn't exist on the helper.
+			FSRef helperExtensionsCacheRef;
+			OSErr helperErr = getExtensionsCacheFSRef (&helperDir, &helperExtensionsCacheRef);
+			if (helperErr == noErr) ThrowIfOSErr_AC (FSDeleteObject (&helperDir));
+		} else {
+			ThrowIfOSErr_AC (rootErr);
 			setCopyingFile ("\pExtensions.mkext");
 			ThrowIfOSErr_AC (FSRefFileCopy (&rootSystemLibraryExtensionsCacheRef, &helperSystemLibraryRef, NULL, NULL, 0, false));			
 		}	
@@ -212,4 +219,6 @@ XPFRestartCommand::DoItThreaded ()
 			ThrowException_AC (kErrorWritingNVRAM, 0);
 		}
 	#endif
+	
+	fProgressWindow->setFinished ();
 }
