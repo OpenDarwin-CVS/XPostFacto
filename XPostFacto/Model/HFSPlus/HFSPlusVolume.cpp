@@ -66,12 +66,18 @@ HFSPlusVolume::~HFSPlusVolume ()
 bool 
 HFSPlusVolume::matchInfo (FSVolumeInfo *info)
 {
-	LocalDateTime localTime;
-	ThrowIfOSErr_AC (ConvertUTCToLocalDateTime (&info->createDate, &localTime));
-	
-	return ((localTime.lowSeconds == fHeader->createDate) &&
-		  	(info->blockSize == fHeader->blockSize) &&
-		  	(info->totalBlocks == fHeader->totalBlocks));
+	// Because of time zone weirdness, we need to compare creation dates not for equality as such,
+	// but for possible equality based on time zone differences. There is probably a deterministic
+	// way to do this, but this approach ought to be good enough.
+	unsigned difference;
+	if (info->createDate.lowSeconds > fHeader->createDate) {
+		difference = info->createDate.lowSeconds - fHeader->createDate;
+	} else {
+		difference = fHeader->createDate - info->createDate.lowSeconds;
+	}
+	if (difference > (24 * 60 * 60)) return false; // more than 24 hour difference
+	if (difference % (30 * 60) != 0) return false; // not an even 30 minute difference 
+	return ((info->blockSize == fHeader->blockSize) && (info->totalBlocks == fHeader->totalBlocks));
 }
 
 bool 
