@@ -1,6 +1,10 @@
 // Final prefix
 
-#include "MacAppHeaders_n.pch"
+#ifdef __MACH__
+	#include "MacAppHeaders_osx_n.pch"
+#else
+	#include "MacAppHeaders_n.pch"
+#endif
 
 #include "CommonPrefix.h"
 
