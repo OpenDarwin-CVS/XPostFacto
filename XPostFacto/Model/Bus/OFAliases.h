@@ -34,12 +34,16 @@ advised of the possibility of such damage.
 #ifndef __OFALIASES_H__
 #define __OFALIASES_H__
 
-#include <NameRegistry.h>
+#ifdef __MACH__
+	#define REG_ENTRY_TYPE io_object_t
+#else
+	#define REG_ENTRY_TYPE RegEntryID*
+#endif
 
 class AliasEntry {
 
 	public:
-		AliasEntry (char *key, char *value);
+		AliasEntry (const char *key, const char *value);
 		~AliasEntry ();
 		
 		char *abbreviate (TemplateList_AC <char> *wholeName);
@@ -48,14 +52,14 @@ class AliasEntry {
 		char *fKey;
 		char *fValue;
 		TemplateList_AC <char> fComponents;
-
+		
 };
 
 class OFAliases {
 
 	public:
 	
-		static void AliasFor (const RegEntryID* regEntry, char *outAlias, char *shortAlias);
+		static void AliasFor (const REG_ENTRY_TYPE regEntry, char *outAlias, char *shortAlias);
 
 		~OFAliases ();
 		
@@ -66,13 +70,15 @@ class OFAliases {
 
 		static void Initialize ();
 
-		void aliasFor (const RegEntryID* regEntry, char *outAlias, char *shortAlias);
-
-		RegEntryID fAliasEntry;
+		void aliasFor (const REG_ENTRY_TYPE regEntry, char *outAlias, char *shortAlias);
 		
 		TemplateList_AC <AliasEntry> fEntries;
 
 		OFAliases ();
+
+#ifdef __MACH__		
+		static void processDictionary (const void *key, const void *value, void *context);
+#endif
 		
 };
 

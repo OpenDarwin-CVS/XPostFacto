@@ -32,17 +32,18 @@ advised of the possibility of such damage.
 */
 
 #include "OFAliases.h"
-#include "XPFNameRegistry.h"
-#include <iostream.h>
-#include <string.h>
-#include <stdio.h>
-#include <PCI.h>
 #include "XPFLog.h"
+
+#include <stdio.h>
+
+#ifndef __MACH__
+	#include <PCI.h>
+#endif
 
 CAutoPtr_AC <OFAliases> OFAliases::sOFAliases = NULL;
 bool OFAliases::sHasBeenInitialized = false;
 
-AliasEntry::AliasEntry (char *key, char *value)
+AliasEntry::AliasEntry (const char *key, const char *value)
 {
 	fKey = NewPtr (strlen (key) + 1);
 	strcpy (fKey, key);
@@ -119,10 +120,52 @@ OFAliases::Initialize ()
 	sOFAliases = new OFAliases;
 }
 
+#ifdef __MACH__
+
+void 
+OFAliases::processDictionary (const void *key, const void *value, void *context)
+{
+	OFAliases *self = (OFAliases *) context;
+	
+	const char *name = CFStringGetCStringPtr ((CFStringRef) key, kCFStringEncodingMacRoman);
+	if (!strcmp (name, "AAPL,phandle")) return;
+	if (!strcmp (name, "name")) return;
+	
+	CFTypeID type = CFGetTypeID (value);
+		
+	if (type == CFDataGetTypeID ()) {
+		char str[256];
+		strcpy (str, (char *) CFDataGetBytePtr ((CFDataRef) value));
+		str [CFDataGetLength ((CFDataRef) value)] = 0;
+		
+		self->fEntries.InsertLast (new AliasEntry (name, str));
+	}
+}
+
+#endif
+
 OFAliases::OFAliases ()
 {
-	ThrowIfOSErr_AC (RegistryEntryIDInit (&fAliasEntry));	
-	ThrowIfOSErr_AC (RegistryCStrEntryLookup (NULL, "Devices:device-tree:aliases", &fAliasEntry));
+#ifdef __MACH__
+
+	mach_port_t iokitPort;
+	IOMasterPort (MACH_PORT_NULL, &iokitPort);
+	io_registry_entry_t aliasEntry = IORegistryEntryFromPath (iokitPort, "IODeviceTree:/aliases");
+	if (aliasEntry) {
+		CFMutableDictionaryRef properties;
+		IORegistryEntryCreateCFProperties (aliasEntry, &properties, NULL, 0);
+ 		if (properties) {
+ 			CFDictionaryApplyFunction (properties, &OFAliases::processDictionary, this);
+ 			CFRelease (properties);
+ 		}
+ 		IOObjectRelease (aliasEntry);	
+ 	}
+	
+#else
+
+	RegEntryID aliasEntry;
+	ThrowIfOSErr_AC (RegistryEntryIDInit (&aliasEntry));	
+	ThrowIfOSErr_AC (RegistryCStrEntryLookup (NULL, "Devices:device-tree:aliases", &aliasEntry));
 	
 	// OK, the idea is that we need to construct an array of the aliases, in a manner that will be useful
 	// for later.
@@ -130,16 +173,16 @@ OFAliases::OFAliases ()
 	RegPropertyIter cookie;
 	Boolean done = false;
 	
-	ThrowIfOSErr_AC (RegistryPropertyIterateCreate (&fAliasEntry, &cookie));
+	ThrowIfOSErr_AC (RegistryPropertyIterateCreate (&aliasEntry, &cookie));
 	while (!done) {
 		RegPropertyNameBuf property;
 		ThrowIfOSErr_AC (RegistryPropertyIterate (&cookie, property, &done));
 		if (!done && strcmp (property, "name")) {
 			char *value;
 			RegPropertyValueSize size;
-			ThrowIfOSErr_AC (RegistryPropertyGetSize (&fAliasEntry, property, &size));
+			ThrowIfOSErr_AC (RegistryPropertyGetSize (&aliasEntry, property, &size));
 			value = NewPtr (size + 1);
-			ThrowIfOSErr_AC (RegistryPropertyGet (&fAliasEntry, property, value, &size));
+			ThrowIfOSErr_AC (RegistryPropertyGet (&aliasEntry, property, value, &size));
 			value[size] = '\0';
 			
 			fEntries.InsertLast (new AliasEntry (property, value));
@@ -148,27 +191,56 @@ OFAliases::OFAliases ()
 		}
 	}
 	RegistryPropertyIterateDispose(&cookie);	
+	RegistryEntryIDDispose (&aliasEntry);
+#endif
 }
 
 OFAliases::~OFAliases ()
 {
-	RegistryEntryIDDispose (&fAliasEntry);
-	
 	for (int x = 1; x <= fEntries.GetSize (); x++) {
 		delete (fEntries.At (x));
 	} 
 }
 
 void
-OFAliases::AliasFor (const RegEntryID* regEntry, char *outAlias, char *shortAlias) {
-	if ((Ptr) RegistryEntryIDInit == (Ptr) kUnresolvedCFragSymbolAddress) return;
+OFAliases::AliasFor (const REG_ENTRY_TYPE regEntry, char *outAlias, char *shortAlias) 
+{
 	Initialize ();
 	return sOFAliases->aliasFor (regEntry, outAlias, shortAlias);
 }
 
 void
-OFAliases::aliasFor (const RegEntryID* regEntry, char *outAlias, char *shortAlias) 
+OFAliases::aliasFor (const REG_ENTRY_TYPE regEntry, char *outAlias, char *shortAlias) 
 {			
+#ifdef __MACH__
+
+	char ofPath[256];
+	kern_return_t retVal = IORegistryEntryGetPath (regEntry, kIODeviceTreePlane, ofPath);
+	if (retVal != 0) {
+		outAlias[0] = 0;
+		shortAlias[0] = 0;
+		return;
+	}
+	
+	char *ofName = ofPath;
+	if (!strncmp (ofName, "IODeviceTree:", strlen ("IODeviceTree:"))) {
+		ofName += strlen ("IODeviceTree:");
+	}
+	
+	strcpy (outAlias, ofName);					
+	strcpy (shortAlias, ofName);
+	
+	char *at;
+	char *start = shortAlias;
+	while ((at = strstr (start, "@"))) {
+		start = at;
+		while ((*start != '/') && (start >= shortAlias)) start--;
+		BlockMoveData (at, start + 1, strlen (at) + 1);
+		start += 2;
+	}
+
+#else
+
 	RegEntryID deviceTreeEntry;
 	ThrowIfOSErr_AC (RegistryEntryIDInit (&deviceTreeEntry));
 	ThrowIfOSErr_AC (RegistryCStrEntryLookup (NULL, "Devices:device-tree", &deviceTreeEntry));
@@ -301,16 +373,11 @@ OFAliases::aliasFor (const RegEntryID* regEntry, char *outAlias, char *shortAlia
 	while ((at = strstr (start, "@"))) {
 		start = at;
 		while ((*start != '/') && (start >= shortAlias)) start--;
-		// We need to work around the firmware in the UltraTek cards, which will
-		// only rewrite the boot-device setting properly if they see "UltraTek"
-//		if (memcmp (start, "/UltraTek", strlen ("/UltraTek"))) {
-			BlockMoveData (at, start + 1, strlen (at) + 1);
-			start += 2;
-//		} else {
-//			start = at + 1;
-//		}
-
+		BlockMoveData (at, start + 1, strlen (at) + 1);
+		start += 2;
 	}
-
-	RegistryEntryIDDispose (&deviceTreeEntry);	
+	
+	RegistryEntryIDDispose (&deviceTreeEntry);
+	
+#endif
 }
