@@ -1,6 +1,6 @@
 TIME := .UploadTimeStamps
 
-SOURCE := Compatibility.html FAQ.html L2CacheConfig.html XPostFacto3.html index.html
+SOURCE := Compatibility.html FAQ.html L2CacheConfig.html XPostFacto3.html index.html Log.html
 
 TARGET := $(SOURCE:%=$(TIME)/%.stamp)
 

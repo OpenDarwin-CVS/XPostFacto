@@ -1,0 +1,931 @@
+<h3>Unsupported Mac OS X Log</h3>
+
+Ryan Rempel<br>
+<a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a>
+
+<p>If you would like to know what I'm up to at the moment, this is where to look.
+
+<dl>
+
+<dt><p>March 9, 2005
+<dd><p>
+I've been neglecting the log for quite a while -- has it really been a year? Of course, I've got a lot to say on the forums, but I should keep posting some thoughts here now and then, too. 
+
+<p>Now that XPF 3.0 is officially out, I've been working on a variety of things. Ben Ralston has contributed some code for getting the audio on the 7300 - 9600 working better, and I've spent some time integrating that into XPF. I've also been working on some more model support. In particular, I'd like to get the Sonnet CPU upgrades working on the Twentieth Anniversary Mac (and others, like the 6500 etc.). And I'm working on issues with the Starmax machines as well. Peter Caday figured out why Mac OS X 10.2 wouldn't work on the 603 or 604, so that's fixed now, but there are still various issues with these machines, and it would be more fun if the CPU update worked.
+
+<p>Of course, Tiger is coming too. Apple doesn't release the relevant source code in advance any more -- I only get it after the official release date. For that reason, I'm not likely to have Tiger working on the very first day. With Panther, it took about 3 or 4 weeks post-release to solve the basic issues, and I expect that it will probably take about the same time with Tiger. Then we'll see what additional issues Tiger brings. So far, each new release of Mac OS X has been better and faster than the last, even on the old machines, so I'm looking forward to getting Tiger to work.
+
+<p>If you haven't registered for XPostFacto yet, <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">here's the link</a>. The income from registration really helps me continue to work on XPostFacto, and I really appreciate everyone who has registered. If you have registered, you can also make an <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">additional contribution</a> to the development of XPostFacto.
+
+<p>BTW, I'm giving a paper on XPostFacto at the AdHoc Conference (aka MacHack) in July. I've never been there before, so I'm pretty excited about seeing what it is like, and writing up some of the interesting technical aspectes of how XPostFacto works.
+
+<dt><p>February 3, 2004
+<dd><p>
+I've mostly been working on the video driver for built-in video on the 7300 etc. lately (the /chaos/control video). I'm now at the point where I've got a video driver that sort of works -- I can get something more or less recognizable on the screen, but it doesn't look right, so there is still some debugging to do. Once I've got the obvious bugs fixed, I'll check the code in so that others can take a look at it as well.
+
+<dt><p>January 15, 2004
+<dd><p>
+MacWorld was great fun (as usual) and really tiring (as usual) -- I pretty much need a week to recover!
+
+<p>The XPostFacto demos went really well on Tuesday and Wednesday -- even the FireWire booting worked! Thursday's was OK, but my energy level was starting to wane a bit. Friday's was a bit of a disaster -- once I moved the demo machine (a 7300) to the demo area, I couldn't get it to reboot! So, I talked about XPF for a while and answered some questions -- people were really very nice about the whole thing and it wasn't as painful an experience as I would have expected it to be. And, of course, once I moved the 7300 back to my corner of the OWC booth, it booted just fine. Must sacrifice more chickens to the demo gods next year!
+
+<p>I didn't get to see very much at the show this year, because I was busy helping out with the various demos that OWC organized at the booth. Seeing Jonas Salling demo the <a href="http://www.salling.com">Salling Clicker</a> was a real highlight -- I don't have a Bluetooth-enabled phone, but now I want one! And the <a href="http://www.unsanity.com">Unsanity</a> demos are always a great time.
+
+<p>It was great to meet some people from the forum, too!
+
+<p>My wife Joanne came with me this year, and it was nice for her to be able to meet the OWC gang. We stayed over the Saturday after the show and did a guided tour of the <a href="http://www.nps.gov/muwo/">Muir Woods</a> with naturalist <a href="http://www.adayinnature.com/">Colin Sloan</a> -- it was very restful after a week in the basement of Moscone!
+
+<dt><p>December 31, 2003
+<dd><p>
+Happy New Year!
+
+<p>I've been working away at a variety of things. Got the 3.0a10 version of XPF out with a bunch of fixes that had been long overdue. I've been working at a video driver for the 7300 - 9600 built-in video -- making steady progress, but there is a fair bit of a learning curve involved, as I have not worked on video drivers before. Once that is finished, I will have learned a fair bit which will help me with writing a video driver for the Beige G3 video.
+
+<p>I'm also working on a handful of things I want to fix before I declare XPF 3 to be a beta version. I'm hoping that might happen fairly quickly now.
+
+<p>I will be in San Francisco for MacWorld Expo next week, so stop in at OWC's booth for a chat if you're in the area!
+
+<dt><p>December 8, 2003
+<dd><p>
+Well, I've spent some more time on the video issues, and it looks like it is often the case that substituting Jaguar NDRVs for Panther NDRVs doesn't help. The background is that Apple didn't write individual framebuffer drivers for each video type in Mac OS X. Instead, they wrote a single framebuffer driver that made use of the Mac OS 9 style NDRV drivers. Clearly, something has changed between Jaguar and Panther with respect to NDRV support, and some of the older NDRVs just won't work anymore.
+
+<p>The question is what to do about it. I could try to debug the NDRV support -- that is, figure out exactly why the older NDRVs aren't working, and see if anything can be done about it. The problem is that this is likely to be hard work, especially since there is no source code available for the NDRVs themselves. The chief advantage of fixing the NDRV support was that it might have been easier -- at first, I thought the problem was merely that Apple had left the NDRVs out of Panther. But if fixing the NDRV support is going to require a bunch of debugging etc., then it is probably better to spend the time writing actual framebuffer drivers. That will be hard work too, but the finished product will be more useful -- at that point, we won't need to rely on the NDRVs at all.
+
+<p>So I'll spend some time seeing exactly how hard it is to write framebuffer drivers :-) 
+
+<dt><p>December 2, 2003
+<dd><p>
+I've been doing some work on the Panther video issues, and unfortunately it's turning out to be a little more complicated than I had hoped. I had hoped that the principal problem was that Apple had left some video drivers off of the Panther Install CD. So I wrote some code that would install the appropriate driver (in my case, the control.ndrv for the 7300 built-in video). My code is working properly (for instance, I can test it successfully in Jaguar). But in Panther I don't get the desired effect -- I get a kernel panic or system freeze once Panther tries to use the video driver. So it seems that something has changed with respect to the underlying video support.
+
+<p>With respect to the various ATI drivers, it looks like most or all of them are actually included in Panther -- some with the same versions as in Jaguar, and some with newer versions. So it's not entirely clear why they aren't working on the older systems.
+
+<p>So, the next step is to get a version of XPF out with some tools in it that will allow people to experiment a bit with various drivers and versions of drivers.
+
+<dt><p>November 23, 2003
+<dd><p>
+It's been a busy couple of weeks! I'm now up to XPostFacto 3.0a9, which has support for Panther on the 7300 - 9600 series, the Beige G3, and Wallstreet Powerbooks. The main limitation is built-in video on the 7300 - 9600 and Beige, which I will be working on next.
+
+<p>Once that is done, it will be a matter of chasing down bugs for a while. So far, the most commonly reported bugs are:
+
+<ul>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=855">OWCCacheConfig crashing when testing cache</a> (so that you need to turn off the "Enable L2/L3 Cache" option in XPostFacto).
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1153">Mac OS X version of XPF crashing on launch</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1160">Panther install not working if initiated from Mac OS X</a> (but working if initiated from Mac OS 9)
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1161">SCSI drives not always showing up in Panther</a>
+</ul>
+
+<p>The tech support forum continues to be working really well -- we're running at about the rate of 500 messages a week, which seems like a lot to me! I'm doing some travelling for my other job next week (Wednesday through Friday), so there will be a couple of days when I'm not around.
+
+<dt><p>November 3, 2003
+<dd><p>
+The new forum software at <a href="http://anybox.owc.net/forum/">http://anybox.owc.net/forum/</a> seems to be working great -- at least, I am finding it a pleasure to use, and people appear to be able to access it. One user reports that his username was a little different in the new forum than the old -- in the old forum, it was his full e-mail address, whereas in the new forum it was just the part before the "@". So give that a try if you have any trouble logging in.
+
+<dt><p>November 1, 2003
+<dd><p>
+The <a href="http://anybox.owc.net/forum/">new forum software</a> is now available, and I think you'll find it to be a welcome improvement. Your user accounts and passwords should be the same there as for the current forum. We're leaving the current forum active for the moment, but we'll switch it to "read-only" status once it's clear that the new forum is working well.
+
+<p>One issue we haven't solved yet is how to move the material from the old forum to the new forum -- we're still working on that. But we figured that we may as well get started with the new forum in the meantime.
+
+<p>I'm working on getting a new version of XPF this week, with whatever level of Panther support I can quickly finish.
+
+<p>I've had a couple of interviews lately. One is at the <a href="http://www.xlr8yourmac.com/OSX/rempel_interview.html">xlr8yourmac web site</a>. The other one was an "Internet radio" interview, which you can hear at <a href="http://www.macradio.com/friday/">The Mac Night Owl</a> -- my bit is about two-thirds of the way through or so.
+
+<dt><p>October 29, 2003
+<dd><p>
+I've been able to solve most of the issues related to Panther support on the 7300 - 9600 series. The only thing left that isn't working yet is the built-in video. But I have a few ideas about how to fix that, and I expect that it will be possible.
+
+<p>Then I'll get to work on the Beige G3 video, which is probably much the same problem. And my Wallstreet Powerbook is in the mail, so we'll see how that goes when it arrives.
+
+<dt><p>October 25, 2003
+<dd><p>
+Apple released the source code for Panther this morning, and looking at the source has allowed me to solve the problem that had me stymied for a month or two. There are still a few issues left to deal with, but basically things are looking good now.
+
+<p>I'm also making progress on XPF 3. I'm testing the new approach to synchronizing with the helper disk, and hope to have that ironed out reasonably soon. 
+
+<dt><p>October 6, 2003
+<dd><p>
+The new approach is working well, thank goodness! The only problem is that it requires some changes in the XPostFacto user interface to make things really make sense. They are changes I had been meaning to make anyway, so it's not a huge deal. But it does mean that it will be a little more time before I get the next alpha version out. We'll see how far I get tonight.
+
+<img align="right" src="XPF3.0a6.jpg">
+
+<p>Here's a screen shot of what I have in mind (it will need a little tweaking yet).
+
+<p>The other behaviour that I'm tweaking is what XPostFacto does when you quit. At the moment, XPostFacto saves your settings when you quit, but doesn't apply them unless you use the "Install" or "Restart" command. What I'm going to do is mimic the behaviour of the Startup Disk control panel. That is, when you quit without using the "restart" or "install" commands, you'll be asked whether to apply your settings.
+
+<dt><p>October 4, 2003
+<dd><p>
+It certainly did need a little testing! Unfortunately, it seems that it is sometimes the case that you can't launch new applications while doing an install. Actually, I suppose that makes sense--seeing as the install will be writing some of the libraries and frameworks that the application uses, there will be moments at which launching a new application just won't work. Anyway, launching the XPFSync application did not work while doing the 10.2 -> 10.2.6 update.
+
+<p>So I need to try yet another approach to this problem. What I'm thinking now is that it makes most sense for the startup item to do two things when it sees that synchronization is required:
+
+<p><ol>
+<li>Set NVRAM to boot back into Mac OS 9.
+<li>Put up a dialog box telling the user about that, and telling the user to use XPostFacto to reboot after the install is complete (to avoid the round-trip to Mac OS 9 and back).
+</ol>
+
+<p>I think that should be reliable, and should solve the problem fairly neatly. The nice thing is that even if step 2 should fail for some reason, step 1 will prevent a reboot with mismatched system components on the helper.
+
+<dt><p>September 30, 2003
+<dd><p>
+I've been working on the new approach to synchronization--launching an application with a user interface to do synchronization, rather than trying to use a background application. I had hoped to get a new version out today, but didn't quite make it--it needs a little more testing before I inflict it on the rest of you :-)
+
+<p>So hopefully by the end of the week or so. I've also fixed at least one of the bugs that was preventing XPF from launching properly in Mac OS X in some situations.
+
+<p>Once that is out, I'll take stock again of what I need to fix before declaring this ready for beta testing.
+
+<dt><p>September 23, 2003
+<dd><p>
+Well, I did get a new alpha of XPF 3 out yesterday. There was a small problem with the first version I uploaded, so if you happened to have downloaded 3.0a4 yesterday evening, you should try again today. You can see the list of bug fixes in the release notes. It fixes a variety of technical issues with 3.0a3.
+
+<p>One new bug with 3.0a4 is that it won't launch in Mac OS X if you have a disk image mounted. I'll need to fix that--and hopefully fix the general case of XPF getting confused when launching!
+
+<p>Version 3.0a4 fixes some problems in the XPF application that related to the process of copying files from a FireWire drive to the "helper" drive. However, the background application that synchronizes changes with the helper is still problematic in several respects. I did a 10.2.8 update on a FireWire drive, and the automatic synchronization process appears to have caused problems for the update itself. There are some more details in a forum thread, and several bugs open on this.
+
+<p>What I think I will have to do is rethink the way the synchronization process works. At the moment, there is a background application (a "daemon") that gets launched at startup time, and is responsible for two things: (a) noticing when files need to be synchronized between the root volume and the helper drive; and (b) actually copying the files. Ideally, step (b) would be performed just once, at shutdown time. The problem is that a background application doesn't get notified of shutdown in a way that guarantees that there will be time to finish the copying (and it can't cancel shutdown, or delay it very long). So that is why the current daemon copies the files right away. Actually, it does try to stay out of the way of the Installer, but appears not to do a sufficiently good job of it.
+
+<p>Even if I fixed the technical problem with the current approach, it still wouldn't be the best user experience, since it is disconcerting to have important things happening in the background with no control over them. (Unless they are completely invisible, I suppose, but this process can't be completely invisible because I need to make sure that the user doesn't shut down in the middle of it).
+
+<p>So I am considering an alternative approach. The background application would still be responsible for step (a)--that is, noticing when files need to be copied. But instead of doing the copy itself, it would launch a regular application, with a user interface, that would have a single window which would explain that synchronization needs to take place when installation is finished, and a button to start the synchronization. It would also do the synchronization automatically when it quits--and since UI applications can delay logout indefinitely, that should work.
+
+<p>I suppose there are two technical flaws in this approach. One is what to do if the UI application cannot be launched--for instance, there is no user logged in, or we're running in Darwin. In that case, I suppose I may need to fall back on having the daemon do the copying, in which case I just need to be smarter about not getting in the Installer's way. The other flaw is what to do about a cancelled logout, in cases where the UI application delays logout so long that the Finder cancels the logout. I suppose that the application could automatically generate a restart at that stage, or prompt the user to do so. The question would be what is the most convenient thing to do that won't violate user expectations.
+
+<dt><p>September 20, 2003
+<dd><p>
+I've been hard at work on XPF 3 lately. You can see the progress on specific points over at the <a href="http://www.opendarwin.org/bugzilla/">Bugzilla</a>. The Bugzilla has turned out to be a great thing--it makes it easy for me to keep track of work in progress.
+
+<p>Panther support isn't going so well. The biggest problem at this point is that Apple is not releasing source code for Panther until after it ships. This makes my debugging quite a bit harder at this stage. In fact, there is some chance that I won't be able to get Panther to work until I see the source, which would mean some delay after Panther ships. We'll see how it goes--I'd love to have it working on day 1, but I don't want to waste too much time trying to figure out issues that will be obvious once I see the source.
+
+<p>I'm going to try to get a new alpha version of XPF out for Monday.
+
+<dt><p>September 8, 2003
+<dd><p>
+I've added a "doc" component to the Bugzilla, for reporting bugs in the documentation surrounding XPostFacto. These could be things that should be documented better, or things that should go in a FAQ of some kind.
+
+<p>I've spent another day on Panther support. The good news is that I have now seen the Panther install screen on my 7300 in all its glory. I let out a rather loud whoop when that happened! There are still several things to fix, but it's basically looking good at this point.
+
+<dt><p>September 7, 2003
+<dd><p>
+I've been working on Panther support for the last few days. Making a certain amount of progress, but not quite there yet. Unfortunately, I can't say very much due to NDA restrictions. One frustration is that Apple isn't making much of the Panther source public until it ships, which means that I have to guess a little at what some of the changes are.
+
+<p>I've also set up an "XPostFacto" product at the OpenDarwin Bugzilla. As you may know, the XPostFacto source code has been hosted at the OpenDarwin CVS server for some time, and now I'm using the Bugzilla for bug tracking as well.
+
+<p>Here's the URL for the OpenDarwin Bugzilla:
+
+<blockquote><a href="http://www.opendarwin.org/bugzilla/">http://www.opendarwin.org/bugzilla/</a></blockquote>
+
+<p>When you are doing a search there, or creating a new bug, make sure to specify  XPostFacto as the "product", as the same Bugzilla database is also used for other products whose source is hosted at OpenDarwin.
+
+<p>Here's a few of the things you can do with the Bugzilla:
+
+<ul>
+<p><li>You can search (yes, I said search!) the XPostFacto bug list to see whether there is a bug open for your problem.
+<p><li>You can add yourself to a bug as a "cc" , so that you will get e-mail when the bug changes status, or has new information added.
+<p><li>You can create a new bug. <em>But make sure to check whether an existing bug covers your situation first.</em>
+<p><li>You can add a comment to a bug. For instance, if you have some insight, or a solution to recommend, etc.
+<p><li>You can vote for a bug. I think this might be kind of neat. The idea is that you get 10 votes which you can "spend" on bugs (i.e. you can give 5 votes to one bug, and 1 vote each to 5 others, etc.). Then, the total number of votes per bug is something that gives me an idea which bugs people think are the "most important." I won't take that too terribly seriously, but it might be fun.
+<p><li>You can fix a bug and post a "diff" file with the source for the fix.
+<p><li>You can test or verify that a fix actually works.
+</ul>
+
+<p>I have entered a few bugs that I know about, but it is by no means a complete list. So, where will additional bugs come from?
+
+<ul>
+<p><li>I will continue to enter bugs myself. Basically, if I'm working on something, my plan is to first write up a bug that helps to "organize" the work. It's actually interesting how writing out a problem in words (without having to think about code right away) helps to clarify things.
+
+<p><li>It would be great if some of the people who are active in the tech forum here would take some of the particularly useful tech forum threads and write them up in the form of a bug report. The advantage is that they are then searchable, and also easy to refer to. For instance, if the question comes up again on the tech forum, you can reply there with a reference to the bug. You don't have to limit yourself to things that are, strictly speaking, bugs in XPostFacto. For instance, if there is a thread that has a great workaround for some issue, then it would be worth creating a bug report that summarizes the problem and the workaround.
+
+<p><li>You can enter new bugs into the Bugzilla. Some of the bugs might be specific problems you are having where you don't know the cause (i.e. it's a question of diagnosis). In other cases, it may be that the cause of the problem is clear--it's just a question of fixing it. <em>Do look to see whether a bug already exists for your problem before you create a new one.</em> If a bug already exists, you can add a comment if you have additional information, or merely add yourself as a "cc" so you get e-mail when something happens to the bug.
+</ul>
+
+<p>I should probably say something about the relationship which I imagine between the Bugzilla and this tech forum. My intention is that the Bugzilla will be a fairly "formal" environment, and the tech forum more "informal". That is, there are topics that would be quite appropriate for the tech forum (like "when will XPF 3 be finished") that are not appropriate for the Bugzilla. Basically, the Bugzilla is there for formal problem reports and solutions, rather than discussion per se. Of course, it is fair game to comment on a bug in Bugzilla if you have something useful to add.
+
+<p>So the Bugzilla would be for formal problem-solving, where as the tech forum here would be more for news, discussion, etc. I think in that way we can leverage the strengths of the forum here, and minimize it's weaknesses.
+
+<p>One pattern that would be quite sensible would be if newcomers, or more inexperienced users, were to post questions and problems in the tech forum, and more experienced users could either point them to the relevant bug, or create a new bug for them (and then point them to it). But I don't want to prejudge how this will work best--we've got a nice new tool to use, and we'll have to see how it works out.
+
+<dt><p>September 3, 2003
+<dd><p>
+OK, folks, here you go:
+
+<p>
+<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto3.html">
+http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto3.html
+</a>
+
+<p>It's not finished yet, but it sure feels good to have it compiling again and basically functioning. Read the docs for details about what's working now and what isn't working yet.
+
+<p>This is an "alpha" version of XPF 3, which means that the features aren't yet complete, and it still has bugs. But it is ready for people who want to test it to start testing.
+
+<p>Speaking of testing, I am going to be starting to use the Bugzilla at www.opendarwin.org as my bug-tracking mechanism for XPostFacto. I think that is going to be a great help in organizing my work. I'll post some more details on that once I've got it more set up.
+
+<p>I guess I need to apologize again for falling behind on the tech support. I've been quite desperate to get some version of XPF 3 out the door, and have been spending long hours getting it there, and just haven't kept up with e-mail and the tech forum as well as I should. Hopefully seeing the results will make you feel a little better about that.
+
+<p>My biggest priority for the next week or two is going to be making progress on Panther support. I have not spent very much time on that yet, because I really wanted to get XPF 3 in some sort of decent shape first. But Apple seems to be making quick progress on Panther, so I had better get the problems figured out soon :-)
+
+<dt><p>July 18, 2003
+<dd><p>
+I've been working on a proper "progress window" for XPF lately. It's harder than it looks to get that right! As part of that process, I've been working on getting the install and restart commands to work properly in Mac OS X. The main issue is that you need write to directories that require root privileges, and there are a few options as to how to set that up.
+
+<p>I'm off to Pennsylvania tomorrow to visit my parents for a couple of weeks. So I'll be a little out of touch for a while. 
+
+<dt><p>July 10, 2003
+<dd><p>
+Today I'm working on the "help" mechanism for XPF 3. What I want to do is implement something a little bit like balloon help. I can't (easily) use balloon help itself, because it's not available in Mac OS X. (Mac OS X does have "Tool Tips", but I don't think MacApp implements them anyway). So what I'm working on is having a little box in the window that displays help text, depending on what the cursor is currently pointing at. It is surprisingly easy to set up in MacApp, with its "behaviors" mechanism. 
+
+<dt><p>July 8, 2003
+<dd><p>
+One of the issues I'm thinking about for XPostFacto 3 is where to store the preferences file. There are two reasons it's a little complicated now. The first is that XPostFacto 3 will run in Mac OS X as well as Mac OS 9, and I'd like to use the same preferences file. The other is that there is a little bit of "per-drive" preference in XPF 3, and drives can come and go (i.e. Firewire drives).
+
+<p>What I had been doing in XPF 2 was putting the preferences file in the usual Mac OS 9 place, i.e. in the preferences folder in the System Folder. The problem is that this is not a trivial location to find from Mac OS X, because I don't know where your Mac OS 9 System Folder was. In theory, I could just look at each disk for a System Folder, but the problem there is that the name of the System Folder (and Preferences folder) may have been localized, and I can't figure that out from Mac OS X. (If I do the usual FindFolder stuff from Mac OS X, it tells me where the equivalent Mac OS X folders are, not the Mac OS 9 folders).
+
+<p>So what I have been considering is creating an invisible folder in the root directory of the Mac OS 9 system disk. I would then use that invisible folder to store the preferences file, as well as for a few other things I need in some circumstances. It would be relatively easy to find this folder either from Mac OS 9 or Mac OS X. To store the per-drive preferences, I would put that invisible folder on each drive, with that drive's preferences.
+
+<p>The main flaw in this plan is that the preferences file would be harder to throw away if corrupted (being in an invisible folder). I suppose I could make it a visible folder, but that would clutter up the root directory. Or, I could set things up so that launching XPostFacto with the shift-key held down (or some such thing) would cause XPostFacto to create a new preferences file.
+
+<p>The other thing I could do in Mac OS X is get the preferences from NVRAM, rather than a preferences file. That is, instead of reading preferences from the file, I could just look at the current settings for the boot-device, boot-command etc. and figure out what the current state of the system is. That way, if the user has changed startup disk (for instance) with the Mac OS X preference pane, XPostFacto would pick up that preference change.
+
+<p>It's a viable option, and I'm not sure if it's better than using a preference file or not. Basically, I need to figure out which user expectation to honour--the expectation that XPostFacto preferences will not change except by using XPostFacto, or the expectation that if the relevant settings get changed by anyone, XPostFacto will pick up the changes.
+
+<dt><p>July 7, 2003
+<dd><p>
+Today I'm mostly working on updating XPostFacto to make better use of the MacApp framework. When I started the application, I chose to use MacApp instead of PowerPlant for a couple of reasons that seemed to make sense at the time. One was that I didn't have the current version of CodeWarrior then, so I didn't have the current version of PowerPlant either--but I could download the current MacApp. Also, I had some ideas of using MPW as the compiler, which could have allowed for a completely "free as in beer" toolkit--but I quickly abandoned that idea, as CodeWarrior was just too convenient.
+
+<p>Then, of course, Apple dropped support for MacApp! I suppose I it is appropriate somehow to use an unsupported framework to write an application for unsupported systems. And MacApp isn't entirely unsupported--Mike Rosetti, one of the MacApp developers, has established a "ClubMacApp" subscription-based service for sharing MacApp updates. While this is great, it does mean that anyone else who wants to build XPostFacto would need to join ClubMacApp for the newest MacApp sources, which isn't ideal.
+
+<p>So I may switch to PowerPlant someday, but I won't do it for version 3--it would take too long to learn PowerPlant again (I have done some PowerPlant programming, but it was several years ago, and I imagine that there have been a fair number of changes since then).
+
+<p>In the meantime, I am making some changes to make better use of MacApp. Originally, I used MacApp as a kind of a "wrapper" for the tasks I needed to perform, without really thinking hard about how to do things the "MacApp way." The problem is that I ended up implementing a variety of things that MacApp would have done for me had I just structured my classes a little more like MacApp expected. So I am doing a bit of restructuring now--it will make the application more easily maintainable in the future, and solve a couple of problems I was needing to figure out now. Also, it will make it far easier to add AppleEvent support, which would be useful for some people. And little things like "Undo", though I don't suppose that Undo is so very critical for XPostFacto.
+
+<dt><p>July 6, 2003
+<dd><p>
+I am taking July and August off of my "day job", which means that I can concentrate on XPostFacto for a while (when I'm not taking the kids to the wading pool down the block). I have been making pretty good progress lately. I'm working on the new user interface now--here's a screen shot.
+
+<img align="right" src="XPFScreenShot.gif">
+
+<p>It's a work in progress--there are a few more details to add. Writing a Macintosh application is actually fairly hard work--there are a lot of little details to get right. It's not like kernel hacking where (at least at one level) things either work or they don't.
+
+<p>You'll notice that this is a screen shot of XPF running in Mac OS X. Version 3 will run both in Mac OS 9 and in Mac OS X. So far, I've been able to implement all the functionality in Mac OS X except for installing new versions of BootX. And I may be able to solve that one yet.
+
+<p>I was at WWDC in June, which was great fun. It was my first WWDC, and it is certainly something to take in! I have never seen so many PowerBooks and iBooks in one room before. It was great to meet quite a few people who I had corresponded with by e-mail. I got a chance to chat with my "competition" at Sonnet, as well as some of the people at Apple who originally wrote the kernel extensions of which I am now the self-appointed curator.
+
+<p>So I have the Panther developer's release, and will be working to get it running with XPostFacto. The kernel extensions that come with XPostFacto will need some rewriting due to changes in the way the kernel manages memory. But that should not be too difficult to do. At the moment, I'm concentrating on getting XPF 3 to beta quality before I work on the kernel extensions again. But that will be my next priority.
+
+<p>The other news about Panther relates to rumors that Apple is dropping support for Old World machines entirely in Panther (i.e. dropping support for the Beige G3's). I can't comment on that too directly, because of NDA issues. If the rumor is true, it would give me a few more puzzles to solve in getting Panther to work with XPostFacto. But I would be highly motivated!
+
+<dt><p>April 29, 2003
+<dd><p>
+Well, I was out of commission a little longer than I thought I would be. It was about 6 weeks worth of "total immersion" in my other job--I was working about 10 hours a day, 7 days week for quite a bit of that. It was actually enjoyable in an odd sort of way. Usually, I'm juggling a lot of different responsibilities, so it was interesting to see what it would be like to be completely devoted to one thing for a while. But it's really not sustainable, and parts of it were very tiresome indeed. And, of course, I managed to come down with a nasty cold that has dragged on for a couple of weeks.
+
+<p>But now my other job has settled back down (and they owe me quite a bit of time off, which I will be taking as circumstances permit). And I've got some more energy, so back to the routine!
+
+<p>It will take me a little while to get up to speed again. I've been going through the tech forum to try to answer some of the questions that built up while I was gone. I'm impressed at how much people have been able to help each other without me--that is just great. I'll start keeping up with new posts again, and will dig back to the older stuff I missed as time permits.
+
+<p>Speaking of the tech forum, we really, really need to work on a search feature. I can't say very much more than that right now, but I sure do understand the need for it.
+
+<p>I've also got an enormous pile of e-mail to respond to. I'll start chipping away at it, but it will take a while to get current again.
+
+<p>Thanks for your patience--it feels good to be back.
+
+<dt><p>February 19, 2003
+<dd><p>
+Some of you may have noticed that XPostFacto 3 isn't out yet :-) And I haven't been very active in the tech forum for a while. So I thought I would explain.
+
+<p>I am actually only a part-time OS X Guru. I usually try to hide that fact through amazing feats of efficiency, but occasionally things just catch up with me. In my "day job" I am a lawyer for the Government of Canada (specifically, the Department of Agriculture and Agri-food), and I usually have a pretty accommodating schedule (I work 3 days a week). But it is the kind of job that occasionally gets a little demanding, and I am in the middle of a ton of work that is going to last another couple of weeks. So my OS X Guru output is going to be diminished for a little while.
+
+<p>So, my apologies--I will be back up to speed eventually. In the meantime, I have made some more progress in my few minutes of spare time on the Twentieth Anniversary Mac. In fact, it seems to work pretty well now, with the exception of the backlight. OK, that's a pretty big exception, but I think it is solvable. 
+
+<dt><p>January 26, 2003
+<dd>
+<p>I did some more work on the problems with 604e CPUs and Mac OS X 10.2 recently. I was able to make a certain amount of progress. Here are the details--probably more details than you want, but ...
+
+<p>The symptom when you try to run Mac OS X 10.2 on a 604e CPU is that you get as far as a white square in the upper-left corner of the display, and then everything stops. It occurred to me to check whether kprintf had been initialized. So I set things up to get kprintf output on a second machine, and lo and behold, you do get some output from kprintf before everything stops. So I compiled a custom kernel with some more kprintf statements thrown in, and some debugging messages turned on, and here is what I get:
+
+<pre>kprintf initialized
+version_variant =
+version         = Darwin Kernel Version 6.0:
+Mon Jan 20 12:27:08 CST 2003; ryan:BUILD/obj/RELEASE_PPC
+
+
+About to call ppc_vm_init
+Entering ppc_vm_init
+sectTEXT: 11000, size: 292000
+sectDATA: 2a3000, size: 8d000
+sectLINK: 366000, size: 7aaf8
+sectKLD:  330000, size: 36000
+end: 3e1000
+mem_size: 128 M
+About to call pmap_bootstrap
+Returning from pmap_bootstrap
+Mapping memory:
+   exception vector: 00002000, 00002000 - 00011000
+          sectTEXTB: 00011000, 00011000 - 002A3000
+          sectDATAB: 002A3000, 002A3000 - 00330000
+          sectLINKB: 00366000, 00366000 - 003E1000
+           sectKLDB: 00330000, 00330000 - 00366000
+                end: 003E1000, 003E1000 - 0105B000
+About to call pmap_map 3 times
+Returned from pmap_map once
+Returned from pmap_map twice
+Returned from pmap_map three times
+About to make pmap entires for sectKLDB
+Finished make pmap entires for sectKLDB
+About to make pmap entires for sectLINKB
+Finished make pmap entires for sectLINKB
+About to make pmap entires for the remainder
+Finished make pmap entires for the remainder
+Free region start 0x0105b000 end 0x02000000
+Free region start 0x0228a000 end 0x08000000
+About to call LoadIBATs
+</pre>
+
+<p>Most of this is from xnu/osfmk/ppc/ppc_vm_init.c (and, of course, I have added some kprintf's).
+
+<p>So it rather looks as though the call to LoadIBATs is not returning. Now, LoadIBATs is defined in xnu/osfmk/ppc/Firmware.s, and it works in a curious manner. The LoadIBATs routine itself issues an sc command (i.e. system call), which generates an interrupt that will eventually transfer control to xLoadIBATsLL, which is also defined in xnu/osfmk/ppc/Firmware.s. I can't say that I understand why the indirection is necessary--it probably has to do with translations and the like--I'm afraid that I don't understand this stuff nearly as well as I'd like to.
+
+<p>So, let's construct a theory about why this isn't working on the 604. Let's start with the xLoadIBATsLL itself. All that it does is as follows:
+
+<pre>ENTRY(xLoadIBATsLL, TAG_NO_FRAME_USED)
+
+	lwz	r4,0(r3)	/* Get IBAT 0 high */
+	lwz	r5,4(r3)	/* Get IBAT 0 low */
+	lwz	r6,8(r3)	/* Get IBAT 1 high */
+	lwz	r7,12(r3)	/* Get IBAT 1 low */
+	lwz	r8,16(r3)	/* Get IBAT 2 high */
+	lwz	r9,20(r3)	/* Get IBAT 2 low */
+	lwz	r10,24(r3)	/* Get IBAT 3 high */
+	lwz	r11,28(r3)	/* Get IBAT 3 low */
+	
+	sync	/* Common decency and the state law require that you wash your hands */
+	mtibatu	0,r4	/* Load IBAT 0 high */
+	mtibatl	0,r5	/* Load IBAT 0 low */
+	mtibatu	1,r6	/* Load IBAT 1 high */
+	mtibatl	1,r7	/* Load IBAT 1 low */
+	mtibatu	2,r8	/* Load IBAT 2 high */
+	mtibatl	2,r9	/* Load IBAT 2 low */
+	mtibatu	3,r10	/* Load IBAT 3 high */
+	mtibatl	3,r11	/* Load IBAT 3 low */
+	sync	/* Make sure it's done */
+	isync	/* Toss out anything new */
+	
+	blr	/* Leave... */
+</pre>
+
+<p>Now, this code didn't change between 10.1.5 and 10.2, so it can't be the problem directly. So, what about the values being loaded? They are filled in earlier in xnu/osfmk/ppc/ppc_init.c, and each given the value of BAT_INVALID. This value did not change from 10.1.5 to 10.2, so presumably it isn't the problem either.
+
+<p>The possibility which remains is the problem is not in the xLoadIBATsLL function itself, but instead in the mechanism used to get there. Moving backwards in the sequence, what calls xLoadIBATsLL is the FirmwareCall function defined in xnu/osfmk/ppc/Firmware.s. However, FirmwareCall did not change between 10.1.5 and 10.2, so it probably is not the problem.
+
+<p>So, what calls FirmwareCall? That would be the exception_entry function in xnu/osfmk/ppc/lowmem_vectors.s, which in turn is called by L_handlerC00 (that is, the system call handler), also in xnu/osfmk/ppc/lowmem_vectors.s.
+
+<p>If you look at exception_entry, you will notice that the way in which FirmwareCall is called changed from 10.1.5 to 10.2. Here's the diff, with 10.1.5 being the "-" part and 10.2 being the "+".
+
+<pre>-	lis	r1,hi16(EXT(FirmwareCall))	/* Top half of firmware call handler */
+-	ori	r1,r1,lo16(EXT(FirmwareCall))	/* Bottom half of it */
+-	lwz	r3,saver3(r13)	/* Restore the first parameter, the rest are ok already */
+-	mtlr	r1	/* Get it in the link register */
+-	blrl	/* Call the handler */
++	lwz	r3,saver3(r13)	; Restore the first parameter
++	bl	EXT(FirmwareCall)	; Go handle the firmware call....
+</pre>
+
+<p>So far as I can tell, the two versions are functionally identical. Just in case, I tried compiling a kernel with the 10.1.5 version, and it did not make a difference.
+
+<p>So then, we need to scan forwards and backwards, since it isn't clear whether it fails before this point or after this point (but before the rfi). I suppose I have this narrowed down far enough now that I could just use the two-machine debugging to step through. Except that translations and interrupts are off while you handle interrupts, so I wonder whether debugging works? I suppose there is only one way to find out ...
+
+<p>In any event, there are a lot of changes between 10.1.5 and 10.2 in the sc (System Call) handling code (and interrupt handling in lowmem_vectors.s generally). Presumably something in there is causing the problem, but my brain is beginning to hurt, so I shall leave it for the moment and come back to it later.
+
+<p>One thing that I did try is to call xLoadIBATsLL directly, rather than going through the System Call process. Interestingly enough, that produced the same result. So either the problem is not in the System Call process after all, or (more likely) you really do need to go through the system call process for it to work (i.e. it failed for a different reason).
+
+
+<dt><p>January 26, 2003
+<dd>
+<p>Well, MacWorld was a very good time, as usual. It was nice to meet some of you folks. And the demos at the OWC booth went really well.
+
+<p>So here's a quick list of things that are left for me to do for XPostFacto 3.0:
+
+<p><ul>
+<li>Implement some details around the Firewire booting capability.
+<li>Figure out USB booting (largely the same procedure, but some differences).
+<li>Figure out why Firewire booting only works with some Firewire cards and not others.
+<li>Finish the port to Mac OS X.
+<li>Fix a bug in the OWC Cache Config program (this is a frustrating one, because I though I had that finished :-(
+<li>Finish improvements to the UI.
+</ul>
+
+<p>So the release date won't be next week or anything, but I will post something preliminary once the Firewire booting procedure is fully implemented.
+
+<p>The other news is that I have been making some progress on the Starmax models recently--things are looking pretty optimistic for those. Of course, the 160 MB RAM limit is unfortunate, but otherwise things are looking pretty good.
+
+<dt><p>January 2, 2003
+<dd>
+<p>I've been working away at XPostFacto 3.0, and now have the "booting from a Firewire device" feature working, as well as "booting from a BootCD disk." And the L3 cache support is working as well.
+
+<p>So I'll have a couple of interesting things to demonstrate at MacWorld next week. I hope to see some of you there. OWC has a great booth setup--we'll be hosting hourly demos by various freeware and shareware authors. Here's the schedule:
+
+<p><a href="http://eshop.macsales.com/macworld/">
+http://eshop.macsales.com/macworld/
+</a>
+
+<p>I'm hoping to release OWC Cache Config this weekend, if all goes well. I *may* also release the version of XPostFacto that I will demo at MacWorld. It depends how well it behaves this weekend--there are still quite a few details to take care of.
+
+<p>I should also have version 2.2.5 of XPostFacto out this weekend. It helps with certain SCSI cards (particularly the ATTO cards) that have two SCSI busses. It also will help in situations where people had been running out of NVRAM space for the settings that XPostFacto needs to make.
+
+<dt><p>December 10, 2002
+<dd>
+<p>I have just about got L3 cache support working now--there are just a couple of details left to figure out. And I guess I'll need to change the name of L2CacheConfig once it works with the L3 cache. At the moment, we're leaning towards "OWC Cache Config" -- if you have any better ideas, let me know.
+
+<p>I should also have a new version of XPostFacto out soon (version 2.2.5). It will help with certain SCSI PCI cards that have dual channels.
+
+<dt><p>November 26, 2002
+<dd>
+<p>I have been mostly working on XPostFacto 3.0 for the last month or so. I'm planning to have something to release (or at least demo) for MacWorld in January. We'll see how that goes!
+
+<p>I will also have improvements to L2CacheConfig. I have figured out how to automatically detect the proper cache settings, which will eliminate the need to save a configuration file from Mac OS 9. It will also make it possible to turn on the cache when doing a Mac OS X install, which will speed things up some. I'm also planning to have L3 cache support--I suppose I may need to change the name then :-)
+
+<p>I have been falling behind on tech support lately, for which I apologize--I'll work on catching up soon.
+
+<dt><p>October 20, 2002
+<dd>
+<p>I have posted version 2.2.4b1 of XPostFacto. It should fix a problem with the version of BootX included in version 2.2.3. 
+Here's the URL:
+
+<p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Download/XPostFacto2.2.4b1.sit">
+http://eshop.macsales.com/OSXCenter/XPostFacto/Download/XPostFacto2.2.4b1.sit
+</a>
+
+<p>The symptom of the problem is an early kernel panic, especially when trying to install Mac OS X 10.2 from a CD. The cause is that I had reduced the memory available to BootX for loading files. I thought that this was safe, because the biggest files which BootX needs to load are the kernel and the Extensions.mkext, which are both under 4 MB. What I forgot is that the Extensions.mkext is much larger on an install CD.
+
+<p>In any event, version 2.2.4b1 ought to fix it. If you have been having trouble with 2.2.3, please let me know whether 2.2.4b1 helps. (Assuming it does, I will "officially" release it).
+
+<p>Version 2.2.4b1 also incorporates some progress I have made with the 6500 recently. I have separated the NVRAM patches for the 6400 and the 6500. Several of the patches for the 6400 had been causing trouble on the 6500, and it turns out that just removing them actually gets you further. 
+
+<p>Unfortunately, the SCSI bus just doesn't seem to work for me. It is possible that it is a termination issue. At least, that's what I often tell people, so I may as well try my own advice. It may be a termination power issue, in fact, so I will check into that.
+
+<p>Since the SCSI bus is not working, a normal install doesn't work either (because the CD-ROM is a SCSI device). What I did is use Apple Software Restore to copy a previously installed Mac OS X 10.1 volume to the internal ATA drive. XPostFacto version 2.2.4b1 was able to boot into Mac OS X from that.
+
+<p>The video works, which is nice.
+
+<p>The ethernet connection does not work. It is the same error message as for the ethernet-only connection on the original Powerbook G3. So that is convenient, actually, since I will be able to try to fix that now.
+
+<p>Sound isn't working.
+
+<p>It is unbearably slow, unfortunately (even with a 275 MHz 603). The machine I'm working with has only 96 MB of RAM, which I suspect is part of the problem. I read that the 6500 takes a max of 128 MB, which should be a noticeable improvement. It will still be slow, of course.
+
+<p>(Getting a G3 upgrade card to work in Mac OS X will be a bit tricky, as it requires special software to engage the CPU at all--it is not just a question of enabling the L2 cache. I don't have an upgrade card at the moment, but I will try one once more of the other problems have been worked out).
+
+<p>So I can't recommend that anyone try this yet--it is awkward, unbearably slow, and a lot of things don't work. But it was nice to see Mac OS X actually running on another machine. And it is at the point where it should be possible to try to fix a few more things.
+
+<dt><p>October 7, 2002
+<dd>
+<p>Version 2.2.3 of XPostFacto is out. It fixes a couple of specific problems--if you are not affected by these problems, there is no particular reason to upgrade from 2.2.2.
+
+<p>XPostFacto should now work with the Darwin 6 Install CD. It will recognize that it is an Install CD (Apple changed the layout again). It will also turn on verbose mode automatically (so you can see something :-). Also, I had to change BootX to allow a little more space for the drivers--otherwise, the boot process wasn't finishing properly.
+
+<p>In testing this, I noticed that when doing an install, the initial part of the boot process takes much longer than it used to. I'm not sure why that is--it appears the BootX is loading files much more slowly than it used to. Once it can use the Extensions.mkext, things speed up quite a bit, but when it has to load individual drivers, it can be very slow. I'll look into this and see if I can figure it out.
+
+<p>XPostFacto also now works a little better with the Soinnet ATA/100 card with the version 2.3.5 firmware applied. XPostFacto had been failing to find the Open Firmware name for the card. Now that works fine, but the boot process still fails later on. I'm not sure whether that is XPostFacto's fault or not--I will investigate.
+
+<p>I have also fixed (I think) the Alchemy NVRAM patch, which may make things go a bit better on the 6400 and 6500. I haven't been able to test that, though, because my 6500 is in the shop at the moment, and I haven't had a chance to set up my new 6360 (which is like a 6400).
+
+<dt><p>September 29, 2002
+<dd><p>
+I have been working away at version 3.0 of XPostFacto for a while. The major focus of version 3.0 is a substantial rewrite of the XPostFacto application itself (as opposed to the kernel extensions). Here's a quick list of the main features I'm working on.
+
+<p>
+<ul>
+<li>A much improved user interface.
+<li>Full functionality for the application in Mac OS X as well as Mac OS 9.
+<li>A method to boot from Firewire and USB drives.
+<li>A method to boot from CD's created with BootCD.
+<li>AppleEvent support.
+<li>An "uninstall" feature.
+<li>(Possibly) integrated L2 (and L3?) cache support
+</ul>
+
+<p>It will be a while before this is finished. In the meantime, I am currently working on a couple of problems with the Darwin 6 Install CD. It isn't working with XPostFacto at the moment, but I think I can fix things.
+
+<p>I'll also be working on more platform support. At the moment, I'm concentrating on the 6400, 6500 and the Starmax 4000. If I get any of those working before XPostFacto 3.0 is ready, I'll just release another update of XPostFacto 2.x.
+
+<p>I'm several weeks behind on answering e-mail at the moment--my apologies to those who are waiting. (At least the tech forum is up to date, which is my priority). I hope to catch up on e-mail reasonably soon.
+
+<p>One other thing that I'd like to do is set up some kind of bug tracking system. It would be useful for keeping track of all the issues that I haven't got to yet.
+
+<dt><p>September 12, 2002
+<dd><p>
+Version 2.2.2 of XPostFacto is out, and it fixes the Jaguar Classic problem (which had affected those with G4 upgrade cards). 
+
+<p>For the technically-minded among you, here's how I found the problem. (Well, I'll leave out all the false starts and red herrings :-) 
+
+<p>I did a "strings TruBlueEnvironment | grep cpu" command in the terminal to see if anything interesting might show up. Out popped the following strings:
+
+<p>cpu-version
+<br>IODeviceTree:/cpus
+
+<p>Well, it seemed possible that Classic might be looking at the "cpus" node in the device-tree to get the cpu-version. The problem is that on the older machines, there is no "cpus" node. So I modified the ApplePowerSurgePE kernel extension to make one, and put the "PowerPC,60?" node underneath it. 
+
+<p>Reboot Mac OS X, launch Classic, and behold the happy Mac. It's always nice to see a smiling face :-)
+
+<p>It also occurs to me that I neglected to mention version 2.2.1 of XPostFacto in this log. It was out last week, and the main new feature was that it incorporated the new boot graphic from Jaguar. It also fixed the problem with SCSI on Powerbooks, which I mentioned in my last entry.
+
+<dt><p>August 23, 2002
+<dd><p>
+Version 2.2 of XPostFacto is out. Given that Jaguar is being released now, and version 2.2 just about deals with all the Jaguar issues, it seemed appropriate to declare the beta period over.
+
+<p>One last minute issue that I spend some time on today was trying to figure out why the SCSI bus on the powerbooks isn't working. It appears to have stopped working somewhere between Mac OS X 10.1 and 10.1.5. The driver for the SCSI bus (AppleMesh) comes with Mac OS X, so I will need to investigate and see what changed that might have caused the problem.
+
+<p>Here's a quick list of what I plan to be working on now:
+
+<ul>
+<li> better Powerbook support (sleep, ethernet, etc.).
+<li> big improvements in the user interface (better integrated help, among other things)
+<li> full functionality in Mac OS X as well as Mac OS 9
+<li> support for more machines (6500, Starmax, etc.)
+<li> fix some nagging limitations (sound in, volume adjustment, etc.)
+<li> restore 603 and 604 CPU support in Jaguar
+</ul>
+
+<p>But perhaps not all at once :-)
+
+<dt><p>August 18, 2002
+<dd><p>
+Version 2.2b17 of XPostFacto is out. I am going to wait a day or two before updating the main page and the VersionTracker entry--that will give a few of you folks a chance to try it and see if it introduces any new problems. My plan is to fix whatever problems I can easily fix, and then declare version 2.2 done before the 24th. 
+
+<p>One problem with 2.2b17 is that the XPostFacto application seems to have lost its icon! I'm not sure why that happened--I will try to figure it out. But it works fine. 
+
+<p>Here's the URL for download: 
+
+<p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2b17.img.sit">http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2b17.img.sit</a>
+
+<p>And here's the list of changes: 
+
+<ul>
+<li>Fixes the "file not found" error when trying to install Mac OS X 10.0 (the error was introduced in version 2.2b15).<p>
+
+<li>Fixes the "squished cursor" problem when using Jaguar with onboard video. At the moment, I'm just turning off hardware cursor support for onboard video. Ideally, it would be better to actually fix hardware cursor support, but this works for the moment.<p>
+
+<li>The extensions are now built with the Jaguar development tools and headers. I don't expect this to cause any problems (I have tested with Mac OS X 10.0 and 10.1), but let me know if it does.<p>
+
+<li>Minor updates to BootX to synchronize with Apple's changes. One of the things that Apple has changed in BootX for 10.2 is the startup screen. However, the new startup screen has not been pushed out to the open-source version of BootX yet, so my custom version of BootX still has the traditional "Happy Mac." (I suppose there is something appropriate in that). <p>
+
+<li>I've tweaked the way the install process is set up to use about 9 bytes less NVRAM. Hey, every byte counts :-) <p>
+
+<li>XPostFacto is now able to install the current version of the extensions while running in Mac OS X. This takes the place of the "package" file which was formerly included. Eventually, I'm hoping to have XPostFacto fully functional in Mac OS X, but for now the new "Install Extensions" command is the only thing that works.<p>
+
+</ul>
+
+So now I will try to catch up on the tech forum and the e-mail--I have fallen a little behind lately. 
+
+<dt><p>August 14, 2002
+<dd><p>
+It turns out that version 2.2b16 has some problems with the Mac OS X 10.0 Install CD (i.e. the original Mac OS X). I added a feature which prevents the Mac OS X Installer from moving the files which XPostFacto pre-installs. The method is to copy an additional file from the CD, which is what the Installer looks for when deciding whether to move previously installed extensions or not.
+
+<p>However, on the original Mac OS X 10.0 Install CD, that file is in a different place. So XPostFacto complains that a file was not found, and stops with the "Copying webdav_fs" message on the screen. (It actually has nothing to do with webdav, but that is the last thing that XPostFacto successfully did).
+
+<p>For the moment, you can go back to version 2.2b14 to install the original Mac OS X 10.0. The problem will be fixed in version 2.2b17 of XPostFacto, which should be out in a day or two.
+
+<p>The other thing that will be new in version 2.2b17 is that XPostFacto will be built using the developer tools from 10.2. This required a little tinkering to make work. OK, a couple of days of tinkering. But, I didn't want to get left behind either! I don't expect the changes to cause any problems, but I will ask for some volunteer testers before widely announcing it. (In a day or two).
+
+<p>The next issue I will be tackling is the funny-looking pointer cursor in 10.2. The problem appears to only occur when using onboard video. I have a theory about what might be causing it, and how it might be fixed. So I'll see what I can do. (10.2 is more or less useable even with the funny-looking cursor, but certain precise mouse operations could be a little tough until this is fixed).
+
+<dt><p>August 10, 2002
+<dd><p>
+I am getting a fair number of reports of problems with version 2.2b15 of XPostFacto. The symptom is a kernel panic early in the boot process, with the message that a platform expert for your model (AAPL,8500 etc.) could not be found. If this happens to you, then the solution is to go back to version 2.2b14, and reinstall kernel extensions. That seems to fix it.
+
+<p>I am not entirely sure why some users are having this problem, but I do have a theory which I will test.
+
+<p>I am continuing to test Jaguar. At the moment, there appear to be three issues with unsupported systems:
+
+<ul>
+<li>Jaguar does not work with the 603 or 604 processor. It may be possible to fix this, but it will not happen before the 24th.
+<li>There is a problem with the appearance of the "pointer cursor" when using onboard video. The IOGraphicsFamily.kext has had some changes recently related to the cursor, so I am hoping that this problem can be fixed.
+<li>I have had some trouble starting Classic, but I have not tracked down the cause yet.
+</ul>
+
+<dt><p>August 8, 2002
+<dd><p>Version 3.3 of L2CacheConfig is out, with changes so that it will work with Mac OS X 10.2
+
+<p>Version 2.2b15 of XPostFacto is also out. The update to XPostFacto fixes one problem in 10.2 (the built-in ethernet port is seen as built-in again). It also fixes the "panic on first reboot when doing a clean install" problem. I finally figured out how to set things up so that the Mac OS X Installer would not move the kernel extensions which XPostFacto pre-installs.
+
+<p>Version 2.2b15 deals with all of the Mac OS X 10.2 issues I have been able to reproduce. There have been a couple of reports of problems with the cursor in 10.2--it will be interesting to see whether that correlates to particular video cards or not.
+
+<p>I have also extensively rewritten the documentation for XPostFacto. Let me know if you think it is an improvement.
+
+<dt><p>July 27, 2002
+<dd><p>
+Well, I'm back from vacation, and it is going to take me a little while to catch up on everything. We went to Pennsylvania to visit my parents, and I stopped in at MacWorld as well. It was terrific to meet some of you there.<p>
+
+We had a 7300 at the OWC booth demonstrating XPostFacto--it was fun to see people do a double-take as they walked by. The 7300 was heavily upgraded, with an ATA card, 1 GB of RAM, a USB/Firewire card with a USB keyboard and mouse, a Radeon 7000 card with a DVI-ADC adapter, connected to a 17 inch LCD display.<p>
+
+One thing I learned is that it is important to keep an ADB mouse and keyboard around even if you are using USB devices, because ADB support is built into the 7300's ROM, and there are situations where that is useful.<p>
+
+So I'll be working to catch up on the tech forum and my e-mail. As I doing that, I will be updating the documentation for XPostFacto and declaring version 2.2 finished. It is not as though all the problems are solved, but that is what version 2.3 will be for :-)<p>
+
+<dt><p>July 6, 2002
+<dd><p>
+I have been working on some problems getting the correct Open Firmware name for SCSI devices on the Beige G3 and some of the PowerCenter clones. The result is version 2.2b12, which can be downloaded from the following URL:<p>
+
+<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Download/XPostFacto2.2b12.sit">http://eshop.macsales.com/OSXCenter/XPostFacto/Download/XPostFacto2.2b12.sit</a><p>
+
+It is possible that this version will work with additional PowerCenter clones, so long as you have a video card installed--the "platinum" onboard video is not working at this time.<p>
+
+I'll update the main XPostFacto page once I get some feedback on whether this actually helps or not.
+
+<dt><p>June 29, 2002
+<dd><p>
+Version 2.2b9 is now available. Here is a quick list of the changes:<p>
+<ul>
+<li>Permits unsupported Powerbooks to use Mac OS X 10.1.1 and later. However, sleep now crashes the system (in previous versions, sleep did not work, but at least it failed gracefully). So you will need to avoid sleep for the time being.
+<li>May now work with the Beige G3. Ordinarily, Mac OS X should just work with the Beige G3, but there are some cases in which the Beige G3 has problems that XPostFacto may be able to help with. XPostFacto is untested on Beige G3s, so if you try it, let me know how it works.
+<li>Has some limited support for the 6400 and 6500. My 6500 still has problems with the SCSI bus, so booting from a CD does not work. So the 6400 and 6500 support is mostly for people who want to work on the problems, rather than the ordinary user.
+<li>A great deal of restructuring in the source code of the XPostFacto application. Some things may have been broken in the process--let me know.
+<li>A "debug" menu, for accessing certain debugging features in the Mac OS X kernel. If you do not know what the options mean, just leave them unselected.
+<li>Better error messages if you launch XPostFacto in Mac OS X or in Mac OS 8.x.
+<li>The "prepare a custom CD" feature is gone for the moment. It did not work with recent versions of the install CD. I should be able to fix this, but have not gotten around to it yet.
+<li>Source code now in the cvs repository at <a href="http://www.opendarwin.org/cgi-bin/cvsweb.cgi/proj/">http://www.opendarwin.org/</a>
+</ul>
+
+<p>I had hoped to get sleep working on the unsupported powerbooks, which is partly why this version has been delayed so long. But in the end, I thought that the other changes were worth getting out. I will continue to work on sleep support (among other things).
+
+<dt><p>June 24, 2002
+<dd><p>
+It has been far too long since I have written something in the log. The tech support forum has been active, though, and I have been very pleased with how that is turning out. I have been very busy lately at my other job--in addition to being a part-time OS X guru, I am also a part-time lawyer for the Canadian government (the Department of Agriculture and Agri-Food), and a part-time graduate student, for that matter (and we have a one-year old and a five-year old). But enough excuses!
+
+<p>I have moved the XPostFacto source code to the CVS server at <a href="http://www.opendarwin.org/">http://www.opendarwin.org/</a>. This will make it much easier for me to keep track of changes to the source code, and much easier for others to participate in the process as well.
+
+<p>I am also just about ready to release version 2.2b9 of XPostFacto. There are a couple of nice new features. The 6400 and 6500 are closer to working now than they were before, though there still are problems with the video on the 6400, and with SCSI on the 6500. I think that version 2.2b9 will work with the Beige G3s, though it is untested. The unsupported Powerbooks will work with 10.1.5 without having to replace the ApplePMU.kext. (Unfortunately, sleep support on the Powerbooks is even more broken than it was--that is something which needs more work. I had hoped to get sleep working for this release, which is part of the reason for the delay.). I expect that version 2.2b9 will be out on the weekend.
+
+<p>Other World Computing is going to be at MacWorld, and I will be there too. It was fun to meet some of you at MacWorld San Fransisco, and I'm looking forward to meeting more of you in New York. 
+
+<dt><p>April 21, 2002
+<dd><p>
+Version 2.2b7 is out. It really, truly makes sure that processor throttling does not persist when you reboot in Mac OS 9. I thought version 2.2b4 had done that, but it turned out to need some more work. And I have already had some reports of certain problems with 2.2b7, so it will need some more work too.<p>
+
+I will be travelling this week, so I will fall behind on e-mail until I get back on the 27th.<p>
+
+We are planning to unveil a new support strategy for XPostFacto. Answering e-mail is taking more and more of my time, and I tend to fall behind when I am concentrating on programming. So we are planning to set up a support forum, much like the forum that is now operating for the UltraTek firmware here. That way, everyone can see the questions and answers, and everyone can contribute.<p>
+
+Well, at least all registered users will be able to contribute. Accessing the support forum, as well as some of the other pages about XPostFacto, will require a $10 registration fee. XPostFacto itself will continue to be absolutely free. Since it is an open source product, it does not really make sense to charge for XPostFacto itself. And it is important that XPostFacto remain open source, because the knowledge needed to make OS X work on older machines needs to be shared. But support takes my time and effort, as well as other resources at OWC, so it makes sense to charge a fee for that.<p>
+
+So the forum and the user registration system should be up in a week or so. If you are one of the people who made a contribution to me before I joined with OWC, you can send me a note and I will set up a free registration for you.<p> 
+
+<dt><p>April 16, 2002
+<dd><p>
+Version 2.2b4 is out. It fixes a problem with the "throttle" feature of version 2.2b3. On some machines, it was possible for the processor throttling to persist when you reboot into Mac OS 9 (which is undesirable). Version 2.2b4 ensures that the throttle is applied only when booting Mac OS X, not Mac OS 9.
+
+<dt><p>April 14, 2002
+<dd><p>
+Version 2.2b3 is out. It does not add anything related to the powerbook support yet. Instead, it adds the ability to throttle (i.e. slow down) the CPU in the early stages of the boot process. This helps some users who had trouble previously booting with G3 or G4 upgrade cards. If you try it and it works, let me know what throttle setting you needed. Eventually, I will probably standardize on a suitable setting and get rid of the menu.
+
+<dt><p>April 13, 2002
+<dd><p>
+I have had one report of a user who successfully used XPostFacto 2.2b1 to install Mac OS X on a PowerCenter Pro. This is interesting, as I had not expected it to work. It suggests that version 2.2b1 might work on other PowerComputing models as well, at least the ones with a 604 processor.
+
+<dt><p>April 12, 2002
+<dd><p>
+It seems that there were (at least) two versions with the original Powerbook G3--one with a combo ethernet-modem connection, and the other with just ethernet. At the moment, the combo connection appears to be working, while the "just ethernet" connection is not.
+
+<p>On the desktop machines, one user has come up with a fix for a problem booting from certain SCSI cards when you have a G3 or G4 processor upgrade installed. I would be interested in hearing from people who were able to boot Mac OS X with the original 604 processor, but could not do so with a G3 or G4 upgrade. It is possible that this fix would work for you as well. (This would include people who could only boot from the slower, external SCSI bus with a G3 or G4 upgrade card installed).
+
+<dt><p>April 8, 2002
+<dd><p>
+It looks like version 2.2b1 does indeed work with the 2400, both with the original processor and with the G3 upgrade. Peformance with the original processor is said to be pretty slow, though, which is consistent with what I've seen with the 3400.
+
+<dt><p>April 7, 2002
+<dd><p>
+Version 2.2b1 is out, with beta-level support for the original Powerbook G3, the 3400, and (possibly) the 2400. The other pages talk about some of the limitations and problems involved, so I won't repeat myself here. It is nice to get some more machines working, even with a few problems.
+
+<p>One of the changes in 2.2b1 is that XPostFacto is now a Carbon application. In the long term, I would like it to work in Mac OS X as well as Mac OS 9. For now, it crashes in Mac OS X for a variety of reasons, and it will take a bit of effort to fix that.
+
+<p>Version 2.2b1 really ought to work with the 6500 as well, but it just doesn't. I'll have some debugging to do on that.
+
+<dt><p>March 12, 2002
+<dd><p>I got Mac OS 10.1.3 to work by copying the version of ApplePMU.kext from the 10.1 install CD. I'll have to figure out some more elegant way of dealing with the problem, ultimately. I now have a semi-reliable boot method for Kanga as well. So the most urgent next step is to implement writing to NVRAM on Kanga, so that XPostFacto can set up the correct settings for installation.
+
+<p>I figured out a technique to more reliably re-bless a Mac OS 9 system folder. I used to simply drag the Finder to the desktop and then back into the system folder, but this hadn't been working for me lately. So I tried creating a new folder, dragging the entire contents of unblessed system folder to the new folder, and that worked--the new folder was blessed. Then I could trash the old folder and rename the new one.
+
+<p>I have also, finally, come up with a workaround for the "kernel panic when nothing is attached to onboard video" problem. I should really try to get an updated XPostFacto with this change out soon, but it will probably be next week before I can do it, at the earliest.
+
+<dt><p>March 4, 2002
+<dd><p>I got Mac OS X 10.1 to install on Kanga today, and it seemed to work all right.  In fact, sound worked (it hadn't in 10.0). And it looked like the serial port and infrared port were supported, which was also not the case in 10.0.
+
+<p>However, when I upgraded to 10.1.3, I got a persistent kernel panic on reboot, in the ApplePMU driver. So it looks like there will be a little more work to do! I'll probably reinstall 10.1 and see whether I can get the media bay CD working, as that would simplify the install process considerably.
+
+<p>Here's the panic information in 10.1.3:
+
+<pre>panic(cpu 0): 0x300 - Data access
+
+PC=0x0C5221FC; MSR=0x00009030; DAR=0x00000000; DSISR=0x40000000; 
+LR=0x0C5221F0; R1=0x0621BB20; XCP=0x0000000C
+
+The symbol for the PC is:
+
+updatePMUversion__17ApplePMUInterface + 384
+
+And the backtrace decodes to:
+
+updatePMUversion__17ApplePMUInterface + 372
+start__17ApplePMUInterfaceP9IOService + 888
+start__8ApplePMUP9IOService + 40
+startCandidate__9IOServicePB0 + 136
+probeCandidates__9IOServiceP12OSOrderedSet + 2372
+doServiceMatch__9IOServiceUl + 508
+main__15_IOConfigThreadPB0 + 336
+ioThreadStart + 60
+thread_continue + 148</pre>
+
+<p>Unfortunately, the current source for ApplePMU is not in Darwin, so there may not be much I can do about it. There is old source in the CVS repository that may still work with some changes.
+
+<p>I also had some trouble rebooting into Mac OS 9 after this. I'm doing a one partition install (i.e. Mac OS 9 and Mac OS X on the same partition), which I don't really recommend, precisely because of this problem. The thing is that the Mac OS X installer de-blesses the Mac OS 9 System Folder. This makes it difficult to reboot into Mac OS 9.1--you need to rebless the System Folder somehow first. If you successfully reboot into Mac OS X after the install, then the 'Startup Disk' preference panel generally takes care of it (at least on other machines--I didn't try it on Kanga, because I wanted to simulate the harder case). The harder case is if you can't reboot successfully into Mac OS X. In that case, you need to boot from a CD (with the "c" key down), which worked for me (in my case, the Mac OS 9.1 install CD). I then used the 'Startup Disk' control panel from the CD to select the hard drive to boot from. I was then able to boot Mac OS 9.1 from the hard drive (though I had to hold down the option key to do so). However, the odd thing is that the System Folder wasn't actually blessed. It didn't have the "blessed icon". Furthermore, while the machine had booted from the hard drive, and the Finder was running, no extensions had loaded, and no fonts were available. So while the machine had booted from the hard drive, the System Folder was not really blessed. The trick that I usually try for re-blessing the System Folder is to move the System file or the Finder to the desktop and then back to the System Folder, but that also had no effect (well, there was a short pause as if the computer was thinking about blessing the System Folder, but it did not follow through).
+
+<dt><p>March 3, 2002
+<dd><p>I am really far behind in answering my e-mail. My apologies to anyone who has written in the last week or two--I will get to it eventually. The reason for the delay is that I have become obsessed with getting Mac OS X to boot on Kanga, which makes it difficult for me to focus on each e-mail properly.
+
+<p>The good news is that I have made significant progress on Kanga (aka the 3500, or the original Powerbook G3). In fact, I am installing Mac OS X 10.0 on mine as I write this. There is still significant work to be done, however. Booting Mac OS X on Kanga is, so far, a hit and miss affair. There is a memory-related problem which occurs early in the boot process. I have managed to avoid that error on a number of occasions, but I am not entirely sure how to avoid it reliably. I do have a theory, which I will test once Mac OS X finishes installing, but it remains to be seen whether Kanga will boot Mac OS X reliably or not.
+
+<p>On the occasions that I have been able to boot Kanga, I have noticed that the media bay CD is not working. I am guessing that this will be reasonably easy to fix, but this remains to be seen. We'll also have to see whether power management is supported (i.e. sleep). Other than that, things seemed to be working on the few occasions I have successfully booted.
+
+<p>XPostFacto will need to be modifed in order to write to NVRAM on Kanga. I have some idea how to do this now, but it remains to be seen how long this will take to implement. (In the meantime, I have been using System Disk to write NVRAM).
+
+<p>It is likely that if Kanga can be made to work, then the 3400 and 2400 will work as well. However, there may be difficulties specific to those models too!
+
+<dt><p>February 21, 2002
+<dd><p>I've finished making the changes needed to get XPostFacto working with ATA drives. I have also found the code in mkLinux for reading and writing NVRAM on the original Powerbook G3. So I should be able to port that back to Mac OS 9 for XPostFacto. I suppose I'll also have to write a kernel extension so that reading and writing NVRAM works in Mac OS X as well. I will also have to dust off several kernel extensions for the original Powerbook G3 whose source is in the Darwin CVS repository (OHare and OHareATA).
+
+<p>So I'm pretty happy with progress so far--we'll see what problems crop up yet.
+
+<dt><p>February 11, 2002
+<dd><p>I've been spending some time working on the original Powerbook G3 again. This will require some significant changes (under the hood) to XPostFacto, so that it will work with ATA drives as well as SCSI drives. I have figured out what I need to do to make that work, but it will take a little while to get it working right.
+
+<p>The other thing I need to do is figure out how to read and write NVRAM on the original Powerbook G3. I have been looking around for any documentation on that, so far without success. If you should happen to know something about reading and writing NVRAM on the original Powerbook G3 (or the 3400 or 2400, which are likely quite similar), I would be grateful for any help you might be able to offer. Presumably someone knows how to do it!
+
+<dt><p>January 21, 2002
+<dd><p>Version 2.11 of XPostFacto is out. It fixes the problem reading the catalog on highly fragmented drives. It also partially fixes the incompatibility with NoFinderZoom9. There are still some problems closing the &quot;About Box&quot; if NoFinderZoom9 is active, but at least it doesn't crash anymore. I have also added some feedback when preparing custom install CDs, and booting those CDs with XPostFacto now actually works.
+
+<dt><p>January 19, 2002
+<dd><p>There are a couple of problems with version 2.1 that I'm working on. One is that it is incompatible with an extension called NoFinderZoom9. It that extension is active, version 2.1 of XPostFacto will crash when trying to restart the computer. I have a copy of NoFinderZoom9 myself now, and will try to figure out what the nature of the issue is.
+<p>It also turns out that I had not entirely fixed the problem XPostFacto was having with highly fragmented hard drives. But I found the error, and the fix will be in version 2.11.
+<p>Some users have reported that certain disk utilities indicate problems with the version 2.1 disc image. I'm not sure what would be causing that, but I will rebuild the image for version 2.11 and hopefully that will fix whatever the problem was.
+
+<p>I'm also making plans for version 2.2. I'm planning to do another chunk of work on the original Powerbook G3, but it's hard to say whether that will make it in for version 2.2. One feature I would definitely like to include is a method to boot from non-bootable drives, such as drives connected to some of the Adaptec cards. The basic technique would be quite similar to the way in which XPostFacto boots from the Mac OS X Install CD, but there are a few additional wrinkles to work out. I also have a few ideas for improving the user interface a little. It needs some work as I add new features or it will become cluttered. I also want to rewrite the documentation, which has lost a little clarity as new material is added over time.
+<dt><p>January 13, 2002
+<dd><p>Version 2.1 is out, and the new name is XPostFacto. Many thanks to Joshua Thorpe for suggesting the new name--we all thought that it was quite clever.
+<p>It was fun to talk with some of you at MacWorld Expo. I had never been to MacWorld before (nor to San Fransisco), and it was just an amazing experience. Now I can't wait for MacWorld New York in July.
+
+<p>There are two main new features in version 2.1 of XPostFacto. The first is that I have incorporated El-Gato Software's SCSI CD-RW helper. This will permit some additional SCSI CD, CD-R and CD-RW devices to work with Mac OS X. The second is that XPF will help you create custom Mac OS X Install CD's--see the documentation for the procedure. I have also fixed several bugs. The most notable bug fix is that XPostFacto should now work better on highly fragmented hard drives.
+<dt><p>January 2, 2002
+<dd><p>
+Still working on version 2.1. I hope to get it out beffore MacWorld. Speaking of MacWorld, I will be there on January 8 and 9. Look for me at the OWC booth!
+
+<dt><p>December 18, 2001
+<dd><p>
+Thanks for all the name suggestions--we've got one we like, and it will debut with version 2.1. I'm still hoping to get version 2.1 out in December, but have run into a few last-minute bugs that are harder to squash then I had hoped. I'll keep working on it.
+
+<dt><p>November 30, 2001
+<dd><p>
+I've been working away at version 2.1 of UUX, but the results aren't visible yet. I expect it to be out sometime in December.<p>
+
+Version 2.1 will support some additional CD-ROM devices, courtesy of a bug fix from <a href="http://www.elgato.com/">El Gato Software</a>. They figured out how to get some SCSI CD, CD-R and CD-RW devices to work in Mac OS X. Unfortunately, their fix was not compatible with my PatchedIOSCSICDDrive.kext (they each fix different problems, but only one could be active at a time). I've just about figured out how to make them work together.<p>
+
+The other major goal for 2.1 is to help create custom bootable CD's (for instance, so that you can include ATI's driver update on an install CD).<p>
+
+And there will be a couple of bug fixes as well, and possibly a few other goodies if I can get them to work.<p>
+
+We're also thinking of changing the name of this utility from "Unsupported UtilityX" to something else. If you've got any good ideas, let me know!
+
+<dt><p>October 29, 2001
+<dd><p>
+Version 2.0 of Unsupported UtilityX is out. This means that I've fixed all the bugs related to  Mac OS X 10.1 that I know how to fix right now. There are still some configurations that cause problems that I don't know how to fix, but I don't expect that to ever go away entirely. Version 2.0 is basically the same as version 2.0b4, with some improvements in error logging.
+
+<p>So now I'll turn to some other issues: additional model support, easier L2 cache support, some adjustments to the way NVRAM is written, creating bootable CDs, better video support, et. al.
+
+<dt><p>October 13, 2001
+<dd><p>
+Version 2.0b4 of Unsupported UtilityX is out. It fixes the bug which was causing problems with SCSI cards and IDE cards in the lower three slots of 6-slot machines. It also should fix the problem with running out of space in NVRAM in some configurations.<p>
+
+I am going to be away from home until October 19th, so I will be getting behind on my e-mail for a little while.<p>
+
+<dt><p>October 8, 2001
+<dd><p>
+This might seem odd, but it was only yesterday that I finally installed Mac OS X 10.1 on my "main" system. (I had installed it too many times to count on my "test" system). It certainly is quite an improvement. I was pleasantly surprised by a couple of small improvements in the Mail application. There is a "Redirect" command now, which I had missed before. You can now "flag" messages for further attention, which is also new (unless I just missed it before). And it just feels snappier, like the rest of 10.1.<p>
+
+I'm working on fixing several bugs in UUX. There is a problem booting from SCSI or ATA cards in the lower three slots of 6-slot machines, because UUX is getting their Open Firmware names wrong. I should be able to fix this (it worked in v. 1.x). UUX is having trouble interpreting the volume structure on disks formatted with FWB's Hard Disk ToolKit. I may be able to fix this, or at least set it up so that it ignores the FWB-formatted volumes and lets you use select another. On some configurations, there isn't enough space in NVRAM for all the settings that UUX needs to write out. I think I know how to work around this as well.<p>
+
+So I hope to have v. 2.0b4 out later this week.<p>
+
+<dt><p>October 2, 2001
+<dd><p>Version 2.0b3 of Unsupported UtilityX is out. I changed the installation strategy again, in order to restore support for certain CD-ROM drives that do not work early in the boot process. UUX 2.0b3 now copies the kernel and kernel extensions from the CD to the target volume. However, instead of putting them at the root of the target volume, it puts them in the /private/tmp directory. This ensures that a failed attempt to boot from the CD does not interfere with a previous installation. Version 2.0b3 still installs a modified BootX, since we still need to load extensions from two different locations.
+
+<dt><p>October 1, 2001
+<dd><p>
+ATI has an update out that reportedly fixes some of the problems with their cards on unsupported systems. The URL is: <a href="http://support.ati.com/drivers/mac/ati_mac_rom_901.html">http://support.ati.com/drivers/mac/ati_mac_rom_901.html</a>.<p>
+
+I have received several reports from users for whom UUX 1.x had worked, but UUX 2.x does not. The reason seems to be that the new installation strategy required for Mac OS X 10.1 does not work with certain CD-ROM drives. I am working on a revised installation strategy that should be able to fix this problem.<p>
+
+<dt><p>September 30, 2001
+<dd><p>
+Version 2.0b2 of Unsupported UtilityX is out. It fixes a bug in the code which installs BootX. This had been causing problems booting on some configurations. It also adds some advanced troubleshooting options via the Open Firmware shell.
+
+<dt><p>September 25, 2001
+<dd><p>
+Now that Mac OS X 10.1 is officially out, I can say a little more about the changes I have made to Unsupported UtilityX in order to support 10.1. The long and the short of it is that I believe version 2.0b1 should be able to install Mac OS X 10.1, but there are a few potential difficulties.<p>
+
+Minor changes were required to the kernel extensions installed by UUX. Mac OS X 10.1 requires kernel extensions to declare their dependencies on parts of the kernel (and other kernel extensions) in order to be loaded. This did not, for the most part, require any substantial change to the code. It was simply a housekeeping matter. (Getting PatchedIOSCSICDDrive.kext to load under both Mac OS X 10.0 and 10.1 required a little additional work).<p>
+
+The more difficult problem was that Apple made an optimization to the boot process when booting from the Mac OS X 10.1 Install CD, and that optimization interfered with the installation method used by UUX 1.1 (and earlier). Apple optimized the boot process by including all the kernel extensions on the CD in the Extensions.mkext cache. This cache is loaded by BootX early in the boot process. Usually the cache only contains the extensions required to access the root device, leaving the other extensions to be loaded later by kextd. But since the extensions on the CD are a well-known set, it optimizes the boot process to load them all at once. Furthermore, since all the extensions have already been loaded, the startup script on the CD (/etc/rc.cdrom) invokes the kernel extensions process (kextd) in such a way that it does not attempt to load any additional extensions.<p>
+
+This optimization is sensible enough, but it did interfere with my installation method. The installation method had been as follows:<p>
+
+<ol>
+<li>Copy the kernel and kernel extensions from the CD to the target volume
+<li>Copy the extra kernel extensions for unsupported systems to the target volume
+<li>Install BootX (if necessary)
+<li>Set up NVRAM so that Mac OS X will boot from the target volume, but use the CD as the root device
+</ol><p>
+
+The problem is this: this installation technique just doesn't work unless the CD-ROM is the root device. So there wasn't anything I could do to alter the behaviour of the /etc/rc.cdrom script. This means that no kernel extensions could be loaded except those loaded by BootX. But that left me in a no-win situation. I could copy the Extensions.mkext from the CD. In that case, BootX would load the extensions from the cache and ignore the contents of /System/Library/Extensions. So the kernel extensions required for older systems would not be loaded, and a kernel panic would result. Yet if I did not copy the Extensions.mkext from the CD, a different problem arises. In that case, BootX would load extensions from /System/Library/Extensions, but only the ones required to access the root device. So the mouse driver, among others, would not get loaded. And you need a mouse driver to install Mac OS X! 
+
+<p>I debated a couple of solutions to the problem. One solution I briefly tried was to port the code for constructing an Extensions.mkext cache from Mac OS X back to Mac OS 9. This would have allowed me to construct an Extensions.mkext which included both the extensions from the CD and the extensions required for older systems. However, it seemed a little too difficult to port the code. There was also a workaround that involved booting into single-user mode and manually invoking kextd. But I figure it's my job to spare you from that sort of thing!
+
+<p>Finally, I figured that if I didn't like the way that BootX was loading kernel extensions, I could just modify BootX to load the extensions I wanted. I considered a couple of strategies for modifying BootX, until I hit on a strategy that was rather neat. All along, the problem has been that we need to boot from the CD, but with a few extra kernel extensions. So why not simply tell BootX to load extensions from the CD and from the target volume? All that was needed in the end was 3 extra lines of code in BootX.
+
+<p>So the new installation strategy is this:
+
+<p>
+<ol>
+<li>Copy the modified BootX to the target volume.
+<li>Copy the extra kernel extensions to /Library/Extensions and /System/Library/Extensions on the target volume.
+<li>Set up NVRAM so that the target volume is the boot-device, but the CD is the boot-file.
+<li>Reboot!
+</ol>
+
+<p>What happens then is that BootX loads the extensions from the CD in the ordinary way. Then, my 3 extra lines of code load the extensions from the /Library/Extensions directory of the target volume. I chose /Library/Extensions rather than /System/Library/Extensions because it made it easier to isolate the required extensions from the other extensions that might be present on an existing installation. The net effect is that we have booted from the CD, but we have also loaded the extra extensions we needed.
+
+<p>The bonus is that UUX no longer needs to copy anything from the CD to the target volume. This is a huge advantage when the target volume has an existing Mac OS X installation on it, since a failed install in that situation could lead to mismatched system components otherwise.
+
+<p>The new installation strategy does have a few disadvantages. The main disadvantage is that the new strategy requires that BootX access the CD through the Open Firmware drivers, which appears to be problematic on some CD models. The old installation strategy did not access the CD until the kernel was loaded, which seemed to work on a broader range of CD devices.
+
+<p>The other disadvantage is that my method for installing BootX does not appear to be perfectly reliable. I have had some reports of users who need to reformat their target volume for it to work. This is often inconvenient (to say the least), and I will try to fix the installation technique.
+
+<p>There is one additional problem when installing Mac OS X 10.1 from scratch. In that situation, the Mac OS X installer renames the /System directory on the target volume to /System (Mac OS 9). The logic, I suppose, is that since there is no existing Mac OS X installation, the user might have some files in the /System directory that should not get subsumed into the Mac OS X /System directory. The problem this creates is that when the Installer reboots after installation is finished, the extra extensions that we pre-installed have been moved. So you get a kernel panic. This is easily fixed if you can get back to Mac OS 9. All you have to do is run UUX and select the target volume to boot from. It will notice that the extra kernel extensions aren't there, and reinstall them automatically. But there are circumstances in which getting back to Mac OS 9 isn't so easy. This happens when you install Mac OS X on top of your Mac OS 9 installation. This seems, at least on some occasions, to "de-bless" the Mac OS 9 System Folder. In that case, the best way out seems to be to boot from the Mac OS 9 Install CD (with the "c" key down). It should then be possible to "re-bless" the System Folder on the target volume (by moving the Finder out and then back in again).
+
+<p>In addition to changes for 10.1, I've been working on a couple of additional things. I have come up with a strategy that might permit me to enable the L2 cache when booting from the CD, which should speed up installation significantly. It doesn't work yet, but I'll keep trying. Also, some users have had success with certain ATI video cards by changing their "model" property in Open Firmware. I want to look into this and see whether I can incorporate it into my BootX modifications (or elsewhere).
+
+<dt><p>September 23, 2001
+<dd><p>I have been a little quiet for a few weeks while I worked on compatibility with future versions of Mac OS X. I think that version 2.0b1 of Unsupported UtilityX should help a great deal with this, but I can't say very much about that until Mac OS X 10.1 is released. The biggest change in v. 2.0b1 is that UUX no longer copies files from the install CD to the target volume. Instead, it installs a modified version of BootX that will load kernel extensions both from the CD and from the target volume. This simplifies certain things considerably, and I'm pretty pleased with the results. It's a beta for the moment because the change in installation strategy may cause problems on certain configurations--we'll have to see.<p>
+
+A few more notes about the MacAlly Optinet USB Mouse. If you use a USB mouse with Mac OS X on older systems, you will probably want to keep your ADB mouse around as well. The reason is that when you boot into Mac OS 9, the USB mouse does not become active until quite late in the boot process. In fact, if you boot with extensions off, the USB mouse does not become active at all. For the same reason, you would want to keep an ADB keyboard around even if you are using a USB keyboard. This is even more important, as the key combinations which affect the boot process only work on an ADB keyboard (on older machines).<p>
+
+Once any remaining 10.1 issues are dealt with, I'll be back to work on Kanga, amongst other things. I'm working on new features for UUX which will assist in debugging boot problems, by allowing for interaction with the Open Firmware shell. By the way, version 2.0b1 of UUX should now work when you boot with extensions off, or when you boot from a CD.
+
+<dt><p>September 1, 2001
+<dd><p>It has been a busy couple of weeks. I have been working on some changes for Unsupported UtilityX and L2CacheConfig to make them more compatible with future versions of Mac OS X. There isn't much I can say about that until later, but the news is basically good so far. There are some minor problems remaining that I would like to work around if I can figure out how.
+
+<p>I have been getting some questions about Mac OS 9.2.1, which has been officially released now. Mac OS 9.2.1 won't install on older Macs, and if you figure out how to install it, it won't boot. However, it will work in Classic mode. This situation is not ideal by any means, but it may not be too bad in the end. As far as I know, the improvements in going from 9.1 to 9.2.1 mostly relate to Classic anyway. So installing 9.2.1 exclusively for Classic may make some sense (so long as you have another partition for a 9.1 installation as well). I have been working on a little utility to make installing 9.2.1 on older systems easier, and hope to get that out soon. 
+
+<p>Unfortunately, the GrabL2CacheSetting program (part of L2CacheConfig) does not run successfully on Mac OS 9.2.1. I won't be able to fix this very easily, as I don't have a system that will work with MacOS 9.2.1. If anyone wants to debug this for me, I'd be grateful.
+
+<p>Some users have been having trouble installing Mac OS X because their monitors boot up into 640x480 mode and they cannot finish the Setup Assistant (because the "Continue" button is off-screen). I have figured out a way of bypassing the Setup Assistant (create an empty file at /private/var/db/.AppleSetupDone). Then the trick is to figure out how to create an initial user account. I'll have to test this and see how it can be done.
+
+<p>I have continued to try to get Kanga (the original Powerbook G3) to boot Mac OS X. I've been having some trouble at the earliest stages of the boot process, so I have had to figure out how to modify and install the BootX code that controls that part of the process. So I should be able to do some more informed debugging soon.
+
+<p>I have also been working on 604 MP support from time to time. I have a "shell" in place that sets up the various structures that will be required--now I just have the write the code that does the actual work! I have some source code to work from, but even then MP isn't the easiest thing in the world to understand.
+
+<p>I'm also working on a variety of technical improvements to Unsupported UtilityX, many of which are meant to help me debug problems. I have been working on the video issues, but am not making a whole lot of progress just yet.
+
+<p>I am using a MacAlly OptiNet Mouse now with a scroll wheel, and do I ever like it! Scroll wheels are such a great idea--it sure beats hunting for those little scroll arrows. Quite a few Mac OS X apps support the scroll wheel (but not the Finder, at least not yet). The OptiNet is an optical mouse, and thus has no little ball to clean. What's more, I find that moving the mouse is just easier--there is noticeably less friction. The OptiNet has a nice red glow, and it gets brighter when you move it. Sure, it's a little cheesy, but I like it. MacAlly's designers seem to have a playful bent--they include several snap-on shells with different colours, and even the packaging is rather inventive. Installation on Mac OS X is a snap, because their's nothing to install--just plug it into your USB card. The mouse cord was a little short for my needs (about 3 feet or so), so I had to get a USB extension cable. A hub would probably have worked too. By the way, I've been trying several USB/Firewire combo cards, and will write up my experiences with them soon.
+
+<dt><p>August 12, 2001
+<dd><p>I installed a <a href="http://www.sonnettech.com/product/tempo.html">Sonnet Tempo IDE</a> card in my 9600, and was very impressed. The drivers for this card are included with Mac OS X, so there is no software to install. Sonnet includes the little screws needed to mount your hard drives, which I thought was a very considerate touch (and I needed them!). You need to initialize your drives after attaching them to the Tempo (even if they have been initialized before, apparently). One thing I found is that initializing them in Mac OS X did not seem to work very well--I got various odd errors when trying to copy files to the drives. But initializing the drives in Mac OS 9 worked fine.
+
+<p>Speaking of initialization, when I tried initializing the drives with FWB's <a href="http://www.fwb.com/cs/pe/main.html">Hard Disk ToolKit</a>, I found that I was unable to install Mac OS X. However, I did succeed after initializing the drives with Intech's <a href="http://www.IntechUSA.com/">Hard Disk SpeedTools</a>. So for those of you with drives that Drive Setup won't format, Hard Disk SpeedTools may be a good option. In fact, Intech <a href="http://www.IntechUSA.com/XNews.html">advertises</a> that its drivers work with Mac OS X. I don't believe that FWB makes a similar claim yet, though I have had some reports of success with FWB (but more reports of failure).
+
+<p>Another thing I found is that the 8 GB limit doesn't seem to apply to drives attached to the Tempo card. I successfully installed Mac OS X on partitions wholly beyond 8 GB. Later I want to test whether the 8 GB limit actually applies to drives on the regular SCSI bus.
+
+<p>I've been getting quite a few questions about Mac OS X 10.1, as well as Mac OS 9.2. I should have some answers in week or two.
+
+<p>One user has requested that Unsupported UtilityX be enhanced to allow you to pick Mac OS 9 disks to boot from as well. I believe that this could be done, if it would be useful to people. Another possibility would be to carbonize Unsupported UtilityX so that it could run in Mac OS X as well. This isn't really necessary, because the Mac OS X "Startup Disk" panel in "System Preferences" basically works. If you have any other suggestions for Unsupported UtilityX, I'd certainly be interested in hearing them.
+
+<dt><p>August 4, 2001
+<dd><p>I've gotten several reports today of problems installing onto the clones (PowerTower Pro and the Umax clones) with version 1.0. I'm not sure whether this relates to specific configurations or whether I've changed something in version 1.0 that has broken clone support. So if you have successfully installed Mac OS X on a clone with version 1.0, I'd be interested to <a href="mailto:osxguru@macsales.com">hear about it</a>.
+
+<dt><p>August 3, 2001
+<dd><p>Version 1.0 is out! This is a satisfying milestone for me, and I'd like to thank everyone for their encouragement. There are still configurations that don't work, but that's what version 1.1 is for :-)
+
+<p>My copy of Mac OS X Server arrived, and I successfully installed it on my 9600. I installed onto an IDE drive connected to Sonnet's Tempo card, which worked like a charm. I'll have more to say about that, and some other peripherals, soon. 
+
+<dt><p>July 30, 2001
+<dd><p>It has been quite a few months! Joanne, Alan (our four year-old) and I moved into our new house in June. Then in July, Joanne gave birth to a baby boy, Paul. We're not getting quite as much sleep as we'd like, but things are going well.
+
+<p>On the programming front, I've got several things going right now.
+
+<p>Version 1.0b10 of Unsupported UtilityX is out, and it appears to be working reasonably well. I've had several reports of problems with the PowerTower Pro, so I'd be interested in hearing from people who have successfully used UUX with the PTP. The Open Firmware on the clones seems to have a few quirks here and there, so I may just have to check it out for myself.
+
+<p>My copy of Mac OS X Server is in the mail. Once it arrives and I've confirmed that 1.b10 will install it, I'll declare the beta period over (barring any more bug reports). 1.0b9 had an embarrassing bug when trying to boot Darwin--I had left out one essential line of code for some reason (lack of sleep?).
+
+<p>Larry at Other World Computing has sent me several boxes of peripherals to test with Mac OS X on unsupported systems, so I'll be busy plugging in PCI cards and hooking up drives. Fortunately, my 9600 MP has arrived, so I have some extra drive bays and PCI slots to play with now. And I'm anxious to get MP working on the 9600 MP--we'll see how fast I make progress there.
+
+<p>Larry also sent me an original Powerbook G3 (Kanga) to work on. So far I've got it to the point of a kernel panic with an actual error message, so that's progress!
+
+<p>I've also started actively working on trying to understand the video card issues better. I have started a page with some information, and would like to collect more while I work on the problem.
+
+
+</dl>

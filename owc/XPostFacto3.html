@@ -2,7 +2,7 @@
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-March 1, 2005
+March 9, 2005
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -523,6 +523,8 @@ Ken Lui did some nice work updating the AppleMaceEthernet driver.<p>
 
 Ben Ralston figured out how to get the AppleScreamerAudio code from Darwin to work on Old World machines.<p>
 
+Peter Caday figured out why Mac OS X 10.2 wouldn't boot on the 603 or 604 CPUs.<p>
+
 I would also like to thank Other World Computing (Larry O'Connor in particular) for their generous support.
 
 <p><hr>
@@ -576,7 +578,7 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <p><ul>
 <li>Includes a new audio driver for the 7300 - 9600 series that enables volume control, and partly enables audio input (microphones are mostly working, but there appear to problems with line-level inputs). The new driver is also more efficient in some respects than the previous driver. This is courtesy of Ben Ralston's efforts in this area.
 
-<li>Includes modifications to BootX that permit Mac OS X 10.2 to work with 603 and 604 CPUs. (Mac OS X 10.3 still doesn't work unless you have a G3 or G4 upgrade).
+<li>Includes modifications to BootX that permit Mac OS X 10.2 to work with 603 and 604 CPUs. (Mac OS X 10.3 still doesn't work unless you have a G3 or G4 upgrade). Peter Caday figured out what the problem in 10.2 was. 
 
 <li>Minor modifications to XPFStartupItem.
 </ul>
