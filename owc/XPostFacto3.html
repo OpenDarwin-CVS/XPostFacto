@@ -1,8 +1,8 @@
-<body><h2>XPostFacto 3.0a16</h2>
+<body><h2>XPostFacto 3.0a17</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-March 29, 2004
+April 13, 2004
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -11,30 +11,36 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <p>Here's a quick link to download the latest version. 
 
 <blockquote>
-<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a16.sit">Download XPostFacto 3.0a16</a>
+<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a17.sit">Download XPostFacto 3.0a17</a>
 </blockquote>
 
-<p>Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes. The main outstanding issue in 3.0a16 is that Panther is not yet working on Kanga (the original Powerbook G3).
+<p>Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes.
 
-<h4>What's new in 3.0a16</h4>
+<h4>What's new in 3.0a17</h4>
 
-Here's a quick summary of what's new in version 3.0a16.
+<p>Here's a quick summary of what's new in version 3.0a17.
 
 <ul>
-<p><li>Experimental Panther support for built-in video on the Beige G3s. Note that it is not well tested yet, so unless you are keen on testing it for me, you should wait a little while for reports to come in.
+<p><li>Includes OpenChips65550Framebuffer.kext, which is a Panther video driver for Kanga (the original Powerbook G3). So far, only 256 colour mode works properly -- I will work on 16-bit colour support. Panther appears to be mostly working on Kanga now, though there may be issues with PC Cards.
 
-<p><li>Updated BootX with a few more error messages when things go wrong.
+<p><li>PatchedBlockStorageDriver disables itself if Mac OS X 10.3.3 is installed. It seems that PatchedBlockStorageDriver is no longer necessary with 10.3.3, and it appears to cause problems in some circumstances.
+
+<p><li>Hopefully the "permissions" error which sometimes affected installation has been solved. If you have been stuck with that error in a previous installation attempt, use the "Check Permissions" command under the new "Cache" menu to fix it.
 </ul>
+
+<p>I am expecting that this will be the last alpha version of XPF 3. This means that I will stop adding new features for the moment, and concentrate on fixing bugs in the beta cycle. So, this would be a good time to look at the <a href="http://www.opendarwin.org/bugzilla/buglist.cgi?product=XPostFacto&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&bug_status=RESOLVED&cmdtype=doit">bug list</a> and see if you have anything to add.
 
 <h4>Panther Support</h4>
 
-<p>XPF now includes support for Panther (Mac OS X 10.3) on the 7300 - 9600 (and friends), as well as the Wallstreet Powerbooks and Beige G3 (with some limitations related to video). The original Powerbook G3 (Kanga) is not yet supported in Panther, but I will be working on it.
+<p>XPF now includes support for Panther (Mac OS X 10.3) on the 7300 - 9600 (and friends), as well as the Wallstreet Powerbooks and Beige G3 (with some limitations related to video).
 
-<p>Version 3.0a16 now includes experimental Panther support for the built-in video of Beige G3s. This is not well tested yet, so unless you are keen on testing it for me, you should wait a little while for reports to come in. I would be interested in reports from the various types of Beige G3, including the G3 All-in-One.
+<p>Version 3.0a16 (and later) includes Panther support for the built-in video of Beige G3s. This appears to be mostly working, subject to a "<a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1708">video panic</a>" which is reported by a substantial number of users (this also affected Mac OS X 10.2.8 on the Beige G3, so it is not exclusively Panther-related).
 
 <p>Some older video cards are not working in Panther. One XPF option that can be useful is the "Use old NDRVs" option, which sets up a boot argument which tells Panther to use the ROM-based drivers on older video cards that it would otherwise ignore.
 
-<p>There are some cases in which installing Panther on the Wallstreet Powerbooks is not working -- in those cases, the Mac OS X Installer complains that the computer is not supported, despite XPostFacto's efforts. I will need to follow up on the cause for this.
+<p>There are some cases in which installing Panther on the Wallstreet Powerbooks is not working -- in those cases, the Mac OS X Installer complains that the computer is not supported, despite XPostFacto's efforts. I am hoping that version 3.0a17 might help with this, if you use the "Check Permissions" or "Empty Cache" commands from the "Cache" menu in XPF.
+
+<p>Version 3.0a17 includes a Panther video driver for Kanga (the original Powerbook G3). It is limited to 256-colour mode at the moment, but I will be working on 16-bit support.
 
 <h4>Pre-Jaguar Support</h4>
 
@@ -58,9 +64,15 @@ Here's a quick summary of what's new in version 3.0a16.
 
 <p>The helper mechanism appears to be working well when you don't really need it (for instance, when I test it with two SCSI drives). It is still problematic, though, when booting from Firewire drives. It appears that there is often (but not always) a problem reading from Firewire drives when they are used as the root disk. This is an area that needs more testing.
 
+<h4>The Cache Menu</h4>
+
+<p>The "Cache" menu in XPostFacto allows you to control the files which XPF copies, either as part of the install procedure, or when using a "helper" disk. You can empty the cache with the "Empty Cache" command. This will save some disk space after an install. Of course, if you are using a "helper" drive, XPF will have to recopy some of those files (it will know to do that when you quit).
+
+<p>If you have had a "permissions" error when trying to perform an installation, then using the "Check Permissions" command should solve it.
+
 <h4>Running XPF in Mac OS X</h4>
 
-<p>The XPF version of Mac OS X should be working now, and should be able to do everything that it can do in Mac OS 9. Some people report that the install process does not work if initiated from Mac OS X, but does work if initiated from Mac OS 9. Note also that the XPF application will not launch in Mac OS X 10.0.
+<p>The XPF version of Mac OS X should be working now, and should be able to do everything that it can do in Mac OS 9. Some people report that the install process does not work if initiated from Mac OS X, but does work if initiated from Mac OS 9. I am hoping that version 3.0a17 may help with this problem. Note also that the XPF application will not launch in Mac OS X 10.0.
 
 <h4>Behaviour when Quitting</h4>
 
@@ -163,7 +175,7 @@ Here's a quick summary of what's new in version 3.0a16.
 
 <p>I should warn potential users that Mac OS X is pretty slow on the 2400 and 3400. Also, the original 603e CPU is only supported in Mac OS X 10.0 and 10.1.  
 
-<p>The original Powerbook G3 is not working with Panther yet -- the main remaining problem is that a new video driver needs to be written for it.
+<p>The original Powerbook G3 (Kanga) is working with Panther now -- the main limitation is that the video support is limited to 256-colour mode at the moment (I will be working on 16-bit support). Also, there may be a problem with PC Cards in Panther.
 </ul> 
 
 <p>Support for other models may be possible in the future. Some users have recently had success with some of the "Catalyst" machines (in particular, the PowerCenter and PowerCenter Pro). At least on some of these machines, the onboard video is not working, so a video card is required. Also, some progress has been made with the Alchemy and Gazelle (the 6400 and 6500), but they are not working reliably yet.  
@@ -285,7 +297,7 @@ Here's a quick summary of what's new in version 3.0a16.
 <dt><p><b><a name="Sleep">Sleep</a></b>
 <dd><p>Display sleep works, and is safe. Disk sleep works and seems safe in Mac OS X 10.1 and later. In Mac OS X 10.0, there were some reports of data corruption upon waking for sleep.
 
-<p>System sleep is not working yet. On the desktop models, it fails gracefully (or at least reasonably gracefully--I seem to lose my Internet connection sometimes). <b>On the Powerbooks, however, sleep crashes the system.</b> So it is important to turn sleep off in the Energy Saver preference panel in the System Preferences application.
+<p>System sleep works on the models which Apple supported in Mac OS 10.0 through 10.2 (i.e. the Beige G3's and the Wallstreet Powerbooks). On the machines that Apple did not support, sleep is not working yet.
 
 <dt><p><b><a name="PCCards">PCMCIA Cards and Cardbus Cards</a></b>
 <dd><p>PCMCIA cards appear not to work in the Powerbooks. However, some CardBus cards do seem to work.
@@ -333,9 +345,9 @@ To install XPostFacto, just copy it to a convenient location on your hard drive.
 
 <p>When you reach the Mac OS X Installer, select the target volume again (make sure to select the same one). Do not reformat the target volume at this point, as we need to keep the files that we have already copied there. Follow the rest of the Installer's instructions as usual. 
 
-<p>Once you have finished installing Mac OS X, the installer will reboot your system. Once you have successfully rebooted, remember to go to the "Energy Savers" panel in "System Preferences" and set your computer and hard drive to <b>never</b> sleep. System sleep does not work well on unsupported systems. However, display sleep is OK, and drive sleep is OK in Mac OS X 10.1 and later.
+<p>Once you have finished installing Mac OS X, the installer will reboot your system. One thing to note is that if you are using a "helper" disk (for instance, where your target is a Firewire drive), you will probably reboot into Mac OS 9 after the install is completed, rather than Mac OS X. At this point, you simply need to run XPostFacto again, select your target volume, and click on "Restart". That will set up the special boot process correctly again.
 
-<p>One thing to note is that if you are using a "helper" disk (for instance, where your target is a Firewire drive), you will probably reboot into Mac OS 9 after the install is completed, rather than Mac OS X. At this point, you simply need to run XPostFacto again, select your target volume, and click on "Restart". That will set up the special boot process correctly again. 
+<p>Also, if you have chosen to "Erase and Install" or an "Archive Install", then the kernel extensions pre-installed by XPostFacto will have been moved or erased. In that situation, you can reboot into Mac OS 9, and then use XPostFacto to boot from your new Mac OS X installation (it will re-install the missing extensions).
 
 <h3><a name="switching">Switching between Mac OS 9 and Mac OS X</a></h3>
 
@@ -513,6 +525,18 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a17.sit">3.0a17 (April 13, 2004)</a>
+
+<dd>Here's a quick summary of what's new in version 3.0a17.
+
+<ul>
+<li>Includes OpenChips65550Framebuffer.kext, which is a Panther video driver for Kanga (the original Powerbook G3). So far, only 256 colour mode works properly -- I will work on 16-bit colour support. Panther appears to be mostly working on Kanga now, though there may be issues with PC Cards.
+
+<li>PatchedBlockStorageDriver disables itself if Mac OS X 10.3.3 is installed. It seems that PatchedBlockStorageDriver is no longer necessary with 10.3.3, and it appears to cause problems in some circumstances.
+
+<li>Hopefully the "permissions" error which sometimes affected installation has been solved. If you have been stuck with that error in a previous installation attempt, use the "Check Permissions" command under the new "Cache" menu to fix it.
+</ul>
 
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a16.sit">3.0a16 (March 29, 2004)</a>
 
