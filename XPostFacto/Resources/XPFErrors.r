@@ -85,6 +85,17 @@ resource 'errs' (kReasonResourceID, purgeable) {
 		kMustSpecifyIODevices, kMustSpecifyIODevices, 25;
 		kInternalError, kInternalError, 26;
 		kSynchronizationFailed, kSynchronizationFailed, 27;
+		kProblemLocatingHelperDirectory, kProblemLocatingHelperDirectory, 28;
+		kProblemDeletingHelperDirectory, kProblemDeletingHelperDirectory, 29;
+		kProblemFindingKernel, kProblemFindingKernel, 30;
+		kProblemCopyingKernel, kProblemCopyingKernel, 31;
+		kProblemLocatingHelperExtensions, kProblemLocatingHelperExtensions, 32;
+		kProblemDeletingHelperMKext, kProblemDeletingHelperMKext, 33;
+		kProblemLocatingExtensionsCache, kProblemLocatingExtensionsCache, 34;
+		kProblemCopyingExtensionsCache, kProblemCopyingExtensionsCache, 35;
+		kProblemFindingExtensions, kProblemFindingExtensions, 36;
+		kProblemCopyingExtensions, kProblemCopyingExtensions, 37;
+		kProblemInstallingExtensions, kProblemInstallingExtensions, 38;
 	}
 };
 
@@ -118,7 +129,18 @@ resource 'STR#' (kReasonResourceID, purgeable) {
 					"the Mac OS X version of XPostFacto is unable to install BootX (yet). Try rebooting in Mac OS 9";
 		/* 25 */	"when auto-boot? is turned off, you must specify an input-device and output-device";
 					"an internal error";
-					"synchronization failed. XPostFacto will set your computer to startup in Mac OS 9. Launch XPostFacto again to make changes" 
+					"synchronization failed. XPostFacto will set your computer to startup in Mac OS 9. Launch XPostFacto again to make changes";
+					"there was a problem locating the helper directory";
+					"there was a problem deleting the helper directory";
+		/* 30 */	"there was a problem locating the mach_kernel file";
+					"there was a problem copying the mach_kernel file";
+					"there was a problem locating the extensions directory on the helper";
+					"there was a problem deleting the extensions cache on the helper";
+					"there was a problem locating the extensions cache";
+		/* 35 */	"there was a problem copying the extensions cache";
+					"there was a problem locating the extensions directory";
+					"there was a problem copying the extensions directory";
+					"there was a problem installing extensions";
 	}
 };
 

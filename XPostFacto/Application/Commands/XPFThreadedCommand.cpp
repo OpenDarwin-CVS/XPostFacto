@@ -303,32 +303,37 @@ XPFThreadedCommand::copyHFSArchivesTo (ResType type, FSRef *directory, bool dele
 void
 XPFThreadedCommand::synchronizeWithHelper (bool deleteFirst)
 {
+	OSErr err;
+
 	float scale = (float) (fProgressMax - fProgressMin) / (float) fProgressMax;
 	unsigned progbase = fProgressMin;
 
 	if ((fRootDisk != fBootDisk) && !(fDebugOptions & kDisableCopyToHelper)) {	
 		
 		FSRef helperDir;
-		ThrowIfOSErr_AC (XPFFSRef::getOrCreateHelperDirectory (
+		err = XPFFSRef::getOrCreateHelperDirectory (
 			fBootDisk->getRootDirectory (), 
 			fRootDisk->getOpenFirmwareName (true),
 			&helperDir,
-			true)
-		);
+			true);
+		if (err != noErr) ThrowException_AC (kProblemLocatingHelperDirectory, 0);
 			
 		if (deleteFirst) {
 			XPFSetUID myUID (0);
-			FSRefDeleteDirectoryContents (&helperDir);
+			err = FSRefDeleteDirectoryContents (&helperDir);
+			if (err != noErr) ThrowException_AC (kProblemDeletingHelperDirectory, 0);
 		}
 			
 		// Now, copy the mach_kernel file
 		// Note the FSRefFileCopy will skip the copy if the files are the same
 		FSRef kernelOnRoot;
-		ThrowIfOSErr_AC (XPFFSRef::getKernelFSRef (fRootDisk->getRootDirectory (), &kernelOnRoot));
+		err = XPFFSRef::getKernelFSRef (fRootDisk->getRootDirectory (), &kernelOnRoot);
+		if (err != noErr) ThrowException_AC (kProblemFindingKernel, 0);
 		setCopyingFile ("\pmach_kernel", true);
 
 		XPFSetUID myUID (0);
-		ThrowIfOSErr_AC (FSRefFileCopy (&kernelOnRoot, &helperDir, NULL, NULL, 0, false));
+		err = FSRefFileCopy (&kernelOnRoot, &helperDir, NULL, NULL, 0, false);
+		if (err != noErr) ThrowException_AC (kProblemCopyingKernel, 0);
 
 		fProgressWindow->setProgressValue (progbase + scale * 200, true);		
 		
@@ -337,7 +342,8 @@ XPFThreadedCommand::synchronizeWithHelper (bool deleteFirst)
 		FSRef helperSystemLibraryRef;
 		FSRef rootSystemLibraryExtensionsRef, rootSystemLibraryExtensionsCacheRef;
 
-		ThrowIfOSErr_AC (XPFFSRef::getOrCreateSystemLibraryDirectory (&helperDir, &helperSystemLibraryRef));
+		err = XPFFSRef::getOrCreateSystemLibraryDirectory (&helperDir, &helperSystemLibraryRef);
+		if (err != noErr) ThrowException_AC (kProblemLocatingHelperExtensions, 0);
 	
 		// Check for the Extensions.mkext.
 		OSErr rootErr = XPFFSRef::getExtensionsCacheFSRef (fRootDisk->getRootDirectory (), &rootSystemLibraryExtensionsCacheRef);
@@ -346,20 +352,27 @@ XPFThreadedCommand::synchronizeWithHelper (bool deleteFirst)
 			// It doesn't exist on the root. So make sure it doesn't exist on the helper.
 			FSRef helperExtensionsCacheRef;
 			OSErr helperErr = XPFFSRef::getExtensionsCacheFSRef (&helperDir, &helperExtensionsCacheRef);
-			if (helperErr == noErr) ThrowIfOSErr_AC (FSDeleteObject (&helperExtensionsCacheRef));
+			if (helperErr == noErr) {
+				err = FSDeleteObject (&helperExtensionsCacheRef);
+				if (err != noErr) ThrowException_AC (kProblemDeletingHelperMKext, 0);
+			}
 		} else {
-			ThrowIfOSErr_AC (rootErr);
+			if (rootErr) ThrowException_AC (kProblemLocatingExtensionsCache, 0);
 			setCopyingFile ("\pExtensions.mkext", true);
-			ThrowIfOSErr_AC (FSRefFileCopy (&rootSystemLibraryExtensionsCacheRef, &helperSystemLibraryRef, NULL, NULL, 0, false));			
+			err = FSRefFileCopy (&rootSystemLibraryExtensionsCacheRef, &helperSystemLibraryRef, NULL, NULL, 0, false);
+			if (err != noErr) ThrowException_AC (kProblemCopyingExtensionsCache, 0);	
 		}	
 		
 		fProgressMin = progbase + scale * 250;
 		fProgressMax = progbase + scale * 900;		
 
 		// Check for the extensions directory. It should exist :-)
-		ThrowIfOSErr_AC (XPFFSRef::getOrCreateSystemLibraryExtensionsDirectory (fRootDisk->getRootDirectory (), &rootSystemLibraryExtensionsRef));
-		ThrowIfOSErr_AC (FSRefFilteredDirectoryCopy (&rootSystemLibraryExtensionsRef, &helperSystemLibraryRef, NULL, NULL, 0, true, 
-								NULL, CopyFilterGlue, this));
+		err = XPFFSRef::getOrCreateSystemLibraryExtensionsDirectory (fRootDisk->getRootDirectory (), &rootSystemLibraryExtensionsRef);
+		if (err != noErr) ThrowException_AC (kProblemFindingExtensions, 0);
+		
+		err = FSRefFilteredDirectoryCopy (&rootSystemLibraryExtensionsRef, &helperSystemLibraryRef, NULL, NULL, 0, true, 
+								NULL, CopyFilterGlue, this);
+		if (err != noErr) ThrowException_AC (kProblemCopyingExtensions, 0);
 
 		fProgressMin = fProgressMax;
 		fProgressMax = progbase + scale * 950;
@@ -367,7 +380,12 @@ XPFThreadedCommand::synchronizeWithHelper (bool deleteFirst)
 		// If the root disk was not writeable, then we need to install the extensions in the secondary location
 		// on the helper, so that BootX will pick them up
 		if (!fRootDisk->getIsWriteable ()) {
-			installSecondaryExtensionsWithRootDirectory (&helperDir);
+			try {
+				installSecondaryExtensionsWithRootDirectory (&helperDir);
+			}
+			catch (...) {
+				ThrowException_AC (kProblemInstallingExtensions, 0);
+			}
 		}
 	}		
 }

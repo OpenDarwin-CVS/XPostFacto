@@ -62,6 +62,17 @@ enum {
 	kMustSpecifyIODevices,
 	kInternalError,
 	kSynchronizationFailed,
+	kProblemLocatingHelperDirectory,
+	kProblemDeletingHelperDirectory,
+	kProblemFindingKernel,
+	kProblemCopyingKernel,
+	kProblemLocatingHelperExtensions,
+	kProblemDeletingHelperMKext,
+	kProblemLocatingExtensionsCache,
+	kProblemCopyingExtensionsCache,
+	kProblemFindingExtensions,
+	kProblemCopyingExtensions,
+	kProblemInstallingExtensions,
 };
 
 
