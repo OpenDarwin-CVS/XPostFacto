@@ -137,7 +137,7 @@ DECLARE_DEBUG_ACCESSORS (DebugPanicText)
 	private:
 			
 		void getPrefsFromNVRAM ();
-		void checkForUpdates (MountedVolume *rootDisk, MountedVolume *bootDisk);
+		void checkForUpdates (bool forInstall);
 
 		void tellFinderToRestart ();
 

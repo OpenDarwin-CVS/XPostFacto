@@ -73,6 +73,30 @@ XPFUpdate::XPFUpdate (MountedVolume *target, MountedVolume *helper, MountedVolum
 	}
 }
 
+OSErr
+XPFUpdate::getOrCreateExtensionsDirectory (FSRef *directory, bool create)
+{
+	OSErr err = fnfErr;
+	MountedVolume *bootDisk, *rootDisk;
+	
+	rootDisk = fInstallCD ? fInstallCD : fTarget;
+	bootDisk = fHelper ? fHelper : fTarget;
+	
+	if (rootDisk->getIsWriteable ()) {
+		err = XPFFSRef::getOrCreateSystemLibraryExtensionsDirectory (rootDisk->getRootDirectory (), directory, create);
+	} else if (bootDisk) {
+		FSRef helperDir;
+		err = XPFFSRef::getOrCreateHelperDirectory (
+			bootDisk->getRootDirectory (), 
+			(CChar255_AC) rootDisk->getOpenFirmwareName (true),
+			&helperDir,
+			create
+		);			
+		if (err == noErr) err = XPFFSRef::getOrCreateLibraryExtensionsDirectory (&helperDir, directory, create);
+	}
+	return err;
+}
+
 XPFUpdateItem *
 XPFUpdate::getItemWithResourceID (ResNumber resourceID)
 {
@@ -240,7 +264,6 @@ XPFUpdateItem::getIsQualified ()
 XPFUpdateAction
 XPFUpdateItem::getAction ()
 {
-	if (fResourceID && !fUpdate->getTarget()->getIsWriteable ()) return kActionNone;
 	if (!getIsQualified ()) return fInstalledVersion ? kActionDelete : kActionNone;
 	if (VERS_compare (fAvailableVersion, fInstalledVersion) == 1) return kActionInstall;	
 	return kActionNone;
@@ -295,7 +318,7 @@ XPFExtensionsUpdate::XPFExtensionsUpdate (XPFUpdate *update, SInt16 resIndex)
 	fResourceName += ".kext";
 
 	FSRef extensionsDir;
-	OSErr err = XPFFSRef::getOrCreateSystemLibraryExtensionsDirectory (update->getTarget()->getRootDirectory (), &extensionsDir, false);
+	OSErr err = update->getOrCreateExtensionsDirectory (&extensionsDir, false);
 	
 	if (err == noErr) {	
 		FSRef extension, contents, infoplist;
@@ -309,15 +332,15 @@ XPFExtensionsUpdate::XPFExtensionsUpdate (XPFUpdate *update, SInt16 resIndex)
 void
 XPFExtensionsUpdate::doUpdate ()
 {
-	FSRef systemLibraryExtensionsFolder;	
-	ThrowIfOSErr_AC (XPFFSRef::getOrCreateSystemLibraryExtensionsDirectory (fUpdate->getTarget()->getRootDirectory(), &systemLibraryExtensionsFolder));
+	FSRef extensionsDir;	
+	ThrowIfOSErr_AC (fUpdate->getOrCreateExtensionsDirectory (&extensionsDir, true));
 	
 	XPFUpdateAction action = getAction ();
 	if (action == kActionInstall) {
 		CResourceStream_AC stream ('hfsA', fResourceID);
 		HFSPlusArchive archive (&stream, NULL, NULL);
 		XPFSetUID myUID (0);
-		ThrowIfOSErr_AC (archive.extractArchiveTo (&systemLibraryExtensionsFolder));
+		ThrowIfOSErr_AC (archive.extractArchiveTo (&extensionsDir));
 	} else if (action == kActionDelete) {
 		uninstall ();
 	}
@@ -326,9 +349,9 @@ XPFExtensionsUpdate::doUpdate ()
 void
 XPFExtensionsUpdate::uninstall ()
 {
-	FSRef systemLibraryExtensionsFolder, existingDir;	
-	ThrowIfOSErr_AC (XPFFSRef::getOrCreateSystemLibraryExtensionsDirectory (fUpdate->getTarget()->getRootDirectory(), &systemLibraryExtensionsFolder));
-	OSErr err = XPFFSRef::getFSRef (&systemLibraryExtensionsFolder, (CChar255_AC) getResourceName (), &existingDir);
+	FSRef extensionsDir, existingDir;	
+	ThrowIfOSErr_AC (fUpdate->getOrCreateExtensionsDirectory (&extensionsDir, true));
+	OSErr err = XPFFSRef::getFSRef (&extensionsDir, (CChar255_AC) getResourceName (), &existingDir);
 	if (err == noErr) {
 		XPFSetUID myUID (0);
 		FSRefDeleteDirectory (&existingDir);
@@ -351,6 +374,13 @@ XPFStartupItemUpdate::XPFStartupItemUpdate (XPFUpdate *update, SInt16 resIndex)
 		if (err == noErr) err = XPFFSRef::getFSRef (&contents, "Info.plist", &infoplist);
 		if (err == noErr) getFileInfo (&infoplist);
 	}	
+}
+
+XPFUpdateAction 
+XPFStartupItemUpdate::getAction ()
+{
+	if (!fUpdate->getTarget()->getIsWriteable()) return kActionNone;
+	return XPFUpdateItem::getAction ();
 }
 
 void

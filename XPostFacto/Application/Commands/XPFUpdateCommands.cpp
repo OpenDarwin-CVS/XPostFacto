@@ -37,6 +37,7 @@ advised of the possibility of such damage.
 #include "XPFProgressWindow.h"
 #include "XPFStrings.h"
 #include "XPFUpdate.h"
+#include "XPFFSRef.h"
 
 #define Inherited XPFThreadedCommand
 

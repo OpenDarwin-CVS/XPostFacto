@@ -177,20 +177,24 @@ XPFPrefs::Close ()
 // when we write prefs to NVRAM (i.e. at quitting time).
 
 void
-XPFPrefs::checkForUpdates (MountedVolume *rootDisk, MountedVolume *bootDisk)
+XPFPrefs::checkForUpdates (bool forInstall)
 {
-	XPFUpdate update (rootDisk, bootDisk);
+	XPFUpdate update (fTargetDisk, fTargetDisk->getHelperDisk (), forInstall ? fInstallCD : NULL);
 		
 	if (update.getRequiresAction ()) {
-		MAParamText ("$VOLUME$", rootDisk->getVolumeName ());
-		
-		XPFUpdateWindow *dialog = (XPFUpdateWindow *) TViewServer::fgViewServer->NewTemplateWindow (kUpdateWindow, NULL);
-		dialog->setUpdateItemList (update.getItemList ());
-		
-		IDType result = dialog->PoseModally ();
-		dialog->Close ();
-		
-		if (result == 'upda') PerformCommand (TH_new XPFUpdateCommand (&update));			
+		if (!forInstall && fTargetDisk->getIsWriteable ()) {
+			MAParamText ("$VOLUME$", fTargetDisk->getVolumeName ());
+			
+			XPFUpdateWindow *dialog = (XPFUpdateWindow *) TViewServer::fgViewServer->NewTemplateWindow (kUpdateWindow, NULL);
+			dialog->setUpdateItemList (update.getItemList ());
+			
+			IDType result = dialog->PoseModally ();
+			dialog->Close ();
+			
+			if (result == 'upda') PerformCommand (TH_new XPFUpdateCommand (&update));
+		} else {
+			PerformCommand (TH_new XPFUpdateCommand (&update));
+		}	
 	}
 }
 
@@ -350,7 +354,7 @@ XPFPrefs::getPrefsFromNVRAM ()
 		}
 		// We check at launch for available updates to the current configuration
 		// We do it here because we get here where we have a MountedVolume for the current root
-		checkForUpdates (fTargetDisk, fTargetDisk->getHelperDisk ());
+		checkForUpdates (false);
 	} else {
 		// If we can't set the target disk to the current root, then we'd ask
 		// user about saving (since our pref won't match what's in NVRAM).
@@ -564,7 +568,7 @@ XPFPrefs::writePrefsToNVRAM (bool forInstall)
 {
 	if (((XPFApplication *) gApplication)->getDebugOptions () & kDisableNVRAMWriting) return;
 
-	if (!forInstall && !fRebootInMacOS9) checkForUpdates (fTargetDisk, fTargetDisk->getHelperDisk ());
+	if (!fRebootInMacOS9) checkForUpdates (forInstall);
 
 	XPFNVRAMSettings *nvram = XPFNVRAMSettings::GetSettings ();
 	

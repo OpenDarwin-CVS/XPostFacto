@@ -63,6 +63,8 @@ class XPFUpdate : public MDependable_AC
 		
 		bool getRequiresAction ();
 		bool getRequiresSynchronization ();
+		
+		OSErr getOrCreateExtensionsDirectory (FSRef *directory, bool create);
 				
 	private:
 	
@@ -85,7 +87,7 @@ class XPFUpdateItem : public MDependable_AC
 		UInt32 getInstalledVersion () {return fInstalledVersion;}
 		UInt32 getAvailableVersion () {return fAvailableVersion;}
 		
-		XPFUpdateAction getAction ();
+		virtual XPFUpdateAction getAction ();
 		bool getIsQualified ();
 		
 		CStr255_AC getResourceName () {return fResourceName;}
@@ -123,9 +125,8 @@ class XPFExtensionsUpdate : public XPFUpdateItem
 		XPFExtensionsUpdate (XPFUpdate *update, SInt16 resIndex);
 		virtual void doUpdate ();
 		virtual void uninstall ();
-		
+				
 };
-
 
 class XPFBootXUpdate : public XPFUpdateItem
 {
@@ -146,6 +147,7 @@ class XPFStartupItemUpdate : public XPFUpdateItem
 		XPFStartupItemUpdate (XPFUpdate *update, SInt16 resIndex);
 		virtual void doUpdate ();
 		virtual void uninstall ();
+		virtual XPFUpdateAction getAction ();
 		
 	private:
 	
