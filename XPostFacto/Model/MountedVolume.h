@@ -121,6 +121,8 @@ class MountedVolume : public MDependable_AC
 		
 		void fixSymlinkAtPath (char *path);
 		void checkSymlinks ();
+
+		void checkExtensionsCaches ();
 		
 		MountedVolume *getHelperDisk () {return fHelperDisk;}
 		void setHelperDisk (MountedVolume *disk, bool callChanged = true);
@@ -164,6 +166,8 @@ class MountedVolume : public MDependable_AC
 		void checkOpenFirmwareName ();
 		void checkMacOSXVersion ();
 		void checkDeviceAndPartition ();
+
+		bool isCacheFileOK (FSRef *ref);
 		
 	private:	
 		
@@ -192,6 +196,8 @@ class MountedVolume : public MDependable_AC
 		bool fIsAttachedToPCICard;
 		bool fIsDarwin;
 		bool fFullyInitialized;
+
+		bool fExtensionCachesOK;
 
 		unsigned fSymlinkStatus;
 		

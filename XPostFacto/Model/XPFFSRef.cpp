@@ -48,6 +48,7 @@ char systemName[] =  "System";
 char libraryName[] = "Library";
 char extensionsName[] = "Extensions"; 
 char extensionsCacheName[] = "Extensions.mkext";
+char kextCacheName[] = "Extensions.kextcache";
 char privateName[] = "private";
 char tmpName[] = "tmp";
 char kernelName[] = "mach_kernel";
@@ -56,6 +57,8 @@ char bootXName[] = "BootX";
 char installName[] = "XPFInstall";
 char XPFName[] = ".XPostFacto";
 char startupItemsName[] = "StartupItems";
+char cachesName[] = "Caches";
+char kernelCachesName[] = "com.apple.kernelcaches";
 
 // Constructor for getting the right permissions and ownership
 
@@ -290,6 +293,21 @@ XPFFSRef::getOrCreateStartupDirectory (FSRef *rootDirectory, FSRef *result, bool
 }
 
 OSErr
+XPFFSRef::getOrCreateKernelCacheDirectory (FSRef *rootDirectory, FSRef *result, bool create)
+{
+	OSErr err;
+	FSRef libraryRef;
+	FSRef cacheRef;
+	
+	err = getOrCreateSystemLibraryDirectory (rootDirectory, &libraryRef, create);
+	if (err != noErr) return err;
+	err = getOrCreateDirectory (&libraryRef, cachesName, 0755, &cacheRef, create);
+	if (err != noErr) return err;
+	
+	return getOrCreateDirectory (&cacheRef, kernelCachesName, 0755, result, create); 
+}
+
+OSErr
 XPFFSRef::getOrCreateLibraryExtensionsDirectory (FSRef *rootDirectory, FSRef *result, bool create)
 {
 	OSErr err;
@@ -317,6 +335,18 @@ XPFFSRef::getExtensionsCacheFSRef (FSRef *rootDirectory, FSRef *result, bool cre
 	if (err != noErr) return err;
 	
 	return getFSRef (&libraryRef, extensionsCacheName, result);
+}
+
+OSErr
+XPFFSRef::getKextCacheFSRef (FSRef *rootDirectory, FSRef *result, bool create)
+{
+	FSRef libraryRef;
+	OSErr err;
+	
+	err = getOrCreateSystemLibraryDirectory (rootDirectory, &libraryRef, create);
+	if (err != noErr) return err;
+	
+	return getFSRef (&libraryRef, kextCacheName, result);
 }
 
 OSErr

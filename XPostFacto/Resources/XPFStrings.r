@@ -132,5 +132,8 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			"XPostFacto Log";
 			
 			"Check log for error";
+			
+			"One of the extension cache files appears to be invalid (see log for details). You may be "
+			"able to fix this problem with the 'Install Extensions' command.";
 	}
 };

@@ -126,6 +126,8 @@ advised of the possibility of such damage.
 
 #define cSaveLogToFile					1470
 
+#define cSetExtensionsCacheStatus		1471
+
 // Views and Windows
 // -----------------
 

@@ -160,6 +160,7 @@ XPFVolumeDisplay::setVolume (MountedVolume* newVolume)
 	DoUpdate (cSetTargetDisk, fPrefs, fPrefs->getTargetDisk (), NULL);
 	DoUpdate (cSetInstallCD, fPrefs, fPrefs->getInstallCD (), NULL);
 	DoUpdate (cSetSymlinkStatus, fVolume, fVolume, NULL);
+	DoUpdate (cSetExtensionsCacheStatus, fVolume, fVolume, NULL);
 }
 
 void

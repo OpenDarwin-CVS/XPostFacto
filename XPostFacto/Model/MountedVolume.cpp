@@ -60,6 +60,7 @@ advised of the possibility of such damage.
 #include "XPFPartition.h"
 #include "XPFAuthorization.h"
 #include "XCOFFDecoder.h"
+#include "FastUnicodeCompare.h"
 
 #include <iostream.h>
 #include "XPostFacto.h"
@@ -839,6 +840,91 @@ MountedVolume::getSymlinkStatusForPath (char *path)
 	return (mode & S_IFMT) == S_IFLNK ? kSymlinkStatusOK : kSymlinkStatusInvalid;
 }
 
+const UInt64 kMaxCacheFileSize = 16 * 1024 * 1024;
+
+bool
+MountedVolume::isCacheFileOK (FSRef *ref)
+{
+	FSCatalogInfo catInfo;
+	OSErr err = FSGetCatalogInfo (ref, kFSCatInfoPermissions | kFSCatInfoDataSizes | kFSCatInfoContentMod, &catInfo, NULL, NULL, NULL);
+	if (err == noErr) {
+		if (catInfo.dataPhysicalSize > kMaxCacheFileSize) {
+			gLogFile << "Cache file too large" << endl_AC;
+			return false;
+		}
+		
+		if (catInfo.dataPhysicalSize == 0) {
+			gLogFile << "Cache file has zero size" << endl_AC;
+			return false;
+		}
+
+		UTCDateTime dateTime;
+		err = GetUTCDateTime (&dateTime, kUTCDefaultOptions);
+		if ((err == noErr) && (*(UInt64*) &catInfo.contentModDate > *(UInt64*) &dateTime)) {
+			gLogFile << "Cache file modification date is in future" << endl_AC;
+			return false;
+		}
+		
+		if (catInfo.permissions[0] || catInfo.permissions[1]) {
+			gLogFile << "Cache file owner or group is incorrect" << endl_AC;
+			return false;
+		}
+		
+		if (catInfo.permissions[2] & ~S_IFMT != 0755) {
+			gLogFile << "Cache file permissions are not 0755" << endl_AC;
+			return false;
+		}
+	}
+	
+	return true;
+}
+
+void
+MountedVolume::checkExtensionsCaches ()
+{
+	fExtensionCachesOK = true;
+
+	FSRef ref;
+	OSErr err;
+	
+	err = XPFFSRef::getExtensionsCacheFSRef (&fRootDirectory, &ref, false);
+	if ((err == noErr) && !isCacheFileOK (&ref)) {
+		fExtensionCachesOK = false;
+		gLogFile << "--> Extensions.mkext" << endl_AC;
+		return;
+	}
+	
+	err = XPFFSRef::getKextCacheFSRef (&fRootDirectory, &ref, false);
+	if ((err == noErr) && !isCacheFileOK (&ref)) {
+		fExtensionCachesOK = false;
+		gLogFile << "--> Extensions.kextcache" << endl_AC;
+		return;
+	}
+	
+	err = XPFFSRef::getOrCreateKernelCacheDirectory (&fRootDirectory, &ref, false);
+	if (err == noErr) {
+		FSIterator iterator = NULL;
+		err = FSOpenIterator (&ref, kFSIterateFlat, &iterator);
+		while (err == noErr) {
+			ItemCount actualObjects;
+			FSRef item;
+			FSCatalogInfo catInfo;
+			HFSUniStr255 filename;
+			err = FSGetCatalogInfoBulk (iterator, 1, &actualObjects, NULL, kFSCatInfoNodeFlags, &catInfo, &item, NULL, &filename);
+			if ((err == noErr) && (actualObjects == 1) && !(catInfo.nodeFlags & kFSNodeIsDirectoryMask)) {
+				UniChar kernelCache[] = {'k', 'e', 'r', 'n', 'e', 'l', 'c', 'a', 'c', 'h', 'e'};
+				if (!FastUnicodeCompare (filename.unicode, 11, kernelCache, 11) && !isCacheFileOK (&item)) {
+					fExtensionCachesOK = false;
+					gLogFile << "--> com.apple.kernelcache" << endl_AC;
+				}
+			}
+		}
+		if (iterator) FSCloseIterator (iterator);
+	}
+	
+	Changed (cSetExtensionsCacheStatus, this);
+}
+
 void
 MountedVolume::checkSymlinks ()
 {
@@ -1046,6 +1132,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	fShortOpenFirmwareName[0] = 0;
 	fIsDarwin = false;
 	fFullyInitialized = false;
+	fExtensionCachesOK = true;
 	
 	// Wrap entire method in try block, to catch exceptions
 	// The idea is to show all devices, even if there is an error initializing them
@@ -1104,6 +1191,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 		checkBootXVersion ();
 		checkMacOSXVersion ();
 		checkOpenFirmwareName ();
+		checkExtensionsCaches ();
 			
 		if (getRequiresBootHelper ()) fHelperDisk = getDefaultHelperDisk ();
 		
@@ -1211,6 +1299,8 @@ MountedVolume::getBootWarning (bool forInstall)
 {
 	// We only worry about warnings if there is no fatal problem
 	if (getInstallTargetStatus () && getInstallerStatus ()) return kStatusOK;
+	
+	if (!fExtensionCachesOK) return kExtensionsCacheInvalid;
 
 	if (fSymlinkStatus == kSymlinkStatusCannotFix) return kInvalidSymlinksCannotFix;
 	if (fSymlinkStatus != kSymlinkStatusOK) return kInvalidSymlinks;

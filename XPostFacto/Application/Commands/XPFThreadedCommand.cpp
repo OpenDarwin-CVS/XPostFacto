@@ -158,6 +158,8 @@ XPFThreadedCommand::ArchiveFilterGlue (void *refCon, const FSRef *src, Boolean p
 void
 XPFThreadedCommand::updateExtensionsCacheForRootDirectory (FSRef *rootDirectory)
 {
+	OSErr err;
+	
 	if (fDebugOptions & kDisableExtensionsCache) return;
 #ifdef __MACH__
 	fProgressWindow->setProgressMax (0);
@@ -179,15 +181,28 @@ XPFThreadedCommand::updateExtensionsCacheForRootDirectory (FSRef *rootDirectory)
 				}
 			}
 		} else {
-			execl ("/usr/sbin/kextcache", "kextcache", "-l", "-m", "System/Library/Extensions.mkext", "System/Library/Extensions", NULL);
+			execl ("/usr/sbin/kextcache", "kextcache", "-l", "-k", "-m", "System/Library/Extensions.mkext", "System/Library/Extensions", NULL);
 			ThrowException_AC (kInternalError, 0);	// the execl shouldn't return
 		}
 	}
 #else
 	FSRef extensionsCache;
-	OSErr err = XPFFSRef::getExtensionsCacheFSRef (rootDirectory, &extensionsCache, false);
+	err = XPFFSRef::getExtensionsCacheFSRef (rootDirectory, &extensionsCache, false);
+	if (err == noErr) FSDeleteObject (&extensionsCache);
+	err = XPFFSRef::getKextCacheFSRef (rootDirectory, &extensionsCache, false);
 	if (err == noErr) FSDeleteObject (&extensionsCache);
 #endif
+
+// In either case, we delete the kernelcaches if they exist
+// We could recreate them with the kextcache command, but that only works in 10.3, and
+// we would need to construct the correct filename
+
+	FSRef kernelCacheDir;
+	err = XPFFSRef::getOrCreateKernelCacheDirectory (rootDirectory, &kernelCacheDir, false);
+	if (err == noErr) FSRefDeleteDirectoryContents (&kernelCacheDir);
+	
+	MountedVolume *volume = MountedVolume::WithRootDirectory (rootDirectory);
+	if (volume) volume->checkExtensionsCaches ();
 }
 
 void

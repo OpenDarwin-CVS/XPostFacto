@@ -102,6 +102,7 @@ enum {
 	kSaveCurrentLog,
 	kXPostFactoLog,
 	kNotInitialized,
+	kExtensionsCacheInvalid,
 };
 
 
