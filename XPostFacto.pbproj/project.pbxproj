@@ -544,7 +544,6 @@
 			buildSettings = {
 				HEADER_SEARCH_PATHS = BootX/bootx.tproj/include.subproj;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "-static";
 				OTHER_LDFLAGS = "-nostdlib -e _StartTVector -seg1addr 01C00000";
 				OTHER_REZFLAGS = "";
@@ -552,6 +551,7 @@
 				PRODUCT_NAME = bootx;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
+				USE_GCC2 = YES;
 				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 			};
