@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2002
+Copyright (c) 2002, 2003
 Other World Computing
 All rights reserved
 
@@ -50,11 +50,11 @@ RESOURCE 'vers' (1,
 	purgeable) {
 	0x02,
 	0x25,
-	beta,
-	0x7,
+	final,
+	0x0,
 	verUs,
-	"2.2.5b7",
-	"2.2.5b7, © 2001, 2002 Other World Computing"
+	"2.2.5",
+	"2.2.5, © 2001 - 2003 Other World Computing"
 };
 
 RESOURCE 'vers' (3,
