@@ -103,7 +103,7 @@ MountedVolume::Initialize ()
 				volume->fStillThere = true;
 				// catch name changes for the UI
 				volume->setHFSName (&volName);
-			} else {
+			} else if (info.totalBlocks) {
 				try {
 					volume = new MountedVolume (&info, &volName, &rootDirectory);
 					gVolumeList.InsertLast (volume);
