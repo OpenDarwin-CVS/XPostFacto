@@ -93,7 +93,6 @@ class XPFApplication : public TApplication {
 		virtual void DoAEClose(TAppleEvent* message, TAppleEvent* reply);
 		
 	private:						
-		TWindow *fMainWindow;
 		XPFAboutBox *fAboutBox;
 		TWindow *fSplash;
 		TWindow *fLogWindow;
