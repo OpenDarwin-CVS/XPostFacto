@@ -59,8 +59,15 @@ AppleOHare::passiveMatch (OSDictionary *matching, bool changesOK)
 	// override passiveMatch so that this will match OHare. This works, because AppleMediaBay uses
 	// callPlatformFunction to interface with OHare.
 
+	// I'm also matching with "Heathrow" now, which works around a problem in the AppleMesh driver.
+	// The AppleMesh driver is calling waitForService (serviceMatching ("Heathrow")), and for some
+	// reason this call is not returning on the unsupported powerbooks. Matching here makes the
+	// call return. I suppose it is also sort of the appropriate thing to do--I could then
+	// intercept the callPlatformFunction calls and "do the right thing."
+
 	OSString *str = OSDynamicCast (OSString, matching->getObject (gIOProviderClassKey));
 	if (str && str->isEqualTo ("OHare")) return true;
+	if (str && str->isEqualTo ("Heathrow")) return true;
 	return super::passiveMatch (matching, changesOK);
 }
 

@@ -3656,7 +3656,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.AppleOHare;
-				MODULE_VERSION = 1.1.0f1;
+				MODULE_VERSION = 1.1.1;
 				OTHER_CFLAGS = "-fpermissive -D_BIG_ENDIAN=__BIG_ENDIAN__";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -3698,7 +3698,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.1.0f1</string>
+	<string>1.1.1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>AppleOHare</key>
