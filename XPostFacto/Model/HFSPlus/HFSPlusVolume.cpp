@@ -43,9 +43,6 @@ advised of the possibility of such damage.
 #include "HFSPlusExtentsOverflow.h"
 #include "FastUnicodeCompare.h"
 
-#include <Files.h>
-#include <iostream.h>
-
 HFSPlusVolume::HFSPlusVolume (XPFPartition *thePartition, unsigned long offsetToData)
 {
 	fBootXInstallationComplete = false;

@@ -34,10 +34,9 @@ advised of the possibility of such damage.
 #ifndef __HFSPLUSVOLUME_H__
 #define __HFSPLUSVOLUME_H__
 
-#include <HFSVolumes.h>
-#include <SCSI.h>
-
 #include "XPFPartition.h"
+
+#include <HFSVolumes.h>
 
 class MountedVolume;
 

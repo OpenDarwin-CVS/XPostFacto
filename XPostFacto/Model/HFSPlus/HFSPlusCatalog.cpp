@@ -38,9 +38,6 @@ advised of the possibility of such damage.
 #include "XPFErrors.h"
 #include "XPFLog.h"
 
-#include <HFSVolumes.h>
-#include <iostream.h>
-
 HFSPlusCatalog::HFSPlusCatalog (HFSPlusVolume *volume)
 {
 	fVolume = volume;

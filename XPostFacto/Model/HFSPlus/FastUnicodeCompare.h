@@ -11,7 +11,17 @@
 
 #ifndef __FASTUNICODECOMPARE_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "TextCommon.h"
+
 SInt32 FastUnicodeCompare ( register ConstUniCharArrayPtr str1, register ItemCount length1,
                             register ConstUniCharArrayPtr str2, register ItemCount length2);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

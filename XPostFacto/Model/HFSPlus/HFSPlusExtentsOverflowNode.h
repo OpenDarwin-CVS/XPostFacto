@@ -34,8 +34,7 @@ advised of the possibility of such damage.
 #ifndef __HFSPLUSEXTENTSOVERFLOWNODE_H__
 #define __HFSPLUSEXTENTSOVERFLOWNODE_H__
 
-#include "HFSVolumes.h"
-#include "Files.h"
+#include <HFSVolumes.h>
 
 class HFSPlusExtentsOverflow;
 
