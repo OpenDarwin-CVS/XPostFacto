@@ -34,8 +34,11 @@ advised of the possibility of such damage.
 #include "XPFFSRef.h"
 #include "XPFAuthorization.h"
 #include "FSRefCopying.h"
-#include "XPFApplication.h"
 #include "MoreFilesExtras.h"
+
+#ifdef BUILDING_XPF
+	#include "XPFApplication.h"
+#endif
 
 #include <UnicodeConverter.h>
 
@@ -129,11 +132,13 @@ XPFFSRef::getOrCreateXPFDirectory (FSRef *rootDirectory, FSRef *result, bool cre
 		if (err == noErr) {
 			FolderInfo *info = (FolderInfo *) catInfo.finderInfo;
 			XPFSetUID myUID (0);
+#ifdef BUILDING_XPF
 			if (((XPFApplication *) gApplication)->getDebugOptions () & kVisibleHelperFiles) {			
 				if ((info->finderFlags & kIsInvisible)) FSpClearIsInvisible (&spec);				
 			} else {
 				if (!(info->finderFlags & kIsInvisible)) FSpSetIsInvisible (&spec);
 			}
+#endif
 		}
 	}
 	return err;

@@ -35,7 +35,6 @@ advised of the possibility of such damage.
 
 #include "XPFLog.h"
 #include "OFAliases.h"
-#include "XPFApplication.h"
 
 SCSIBusList SCSIBus::gSCSIBusList;
 bool SCSIBus::gHasBeenInitialized = false;

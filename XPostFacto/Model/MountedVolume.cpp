@@ -50,11 +50,13 @@ advised of the possibility of such damage.
 	#include <Sound.h>
 #endif
 
+#ifdef BUILDING_XPF
+	#include "XPFApplication.h"
+#endif
+
 #include "XPFLog.h"
-#include "HFSPlusArchive.h"
 #include "XPFErrors.h"
 #include "XPFBootableDevice.h"
-#include "XPFApplication.h"
 #include "XPFAuthorization.h"
 
 #include <iostream.h>
@@ -293,7 +295,9 @@ MountedVolume::WithOpenFirmwarePath (char *path)
 void
 MountedVolume::installBootXIfNecessary (bool forceInstall)
 {
+#ifdef BUILDING_XPF
 	if (((XPFApplication *) gApplication)->getDebugOptions () & kDisableBootX) return;
+#endif
 	
 	if (!getIsWriteable()) {
 		if (getHasBootX ()) {
@@ -598,8 +602,10 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	fHelperDisk = NULL;
 	fCreationDate = 0;
 	
+#ifdef BUILDING_XPF
 	gApplication->AddDependent (this); // for listening for volume deletions
-			
+#endif
+
 	// Copy the info
 	{				
 #ifdef __MACH__

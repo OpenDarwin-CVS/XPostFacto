@@ -35,7 +35,6 @@ advised of the possibility of such damage.
 #include "XPFPartition.h"
 #include "HFSPlusCatalog.h"
 #include "MountedVolume.h"
-#include "HFSPlusArchive.h"
 #include "XPFErrors.h"
 #include "XPFLog.h"
 #include "XCOFFDecoder.h"
@@ -43,7 +42,10 @@ advised of the possibility of such damage.
 #include "HFSPlusExtentsOverflow.h"
 #include "FastUnicodeCompare.h"
 #include "XPFAuthorization.h"
-#include "XPFApplication.h"
+
+#ifdef BUILDING_XPF
+	#include "XPFApplication.h"
+#endif
 
 #ifdef __MACH__
 	#include <unistd.h>
@@ -172,8 +174,10 @@ HFSPlusVolume::getBootXStartBlock ()
 void
 HFSPlusVolume::installBootX ()
 {
+#ifdef BUILDING_XPF
 	if (((XPFApplication *) gApplication)->getDebugOptions () & kDisableBootX) return;
-	
+#endif
+
 	MountedVolume* volume = getMountedVolume ();
 	if (!volume) {
 		#if qLogging

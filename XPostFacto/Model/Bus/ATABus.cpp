@@ -35,7 +35,6 @@ advised of the possibility of such damage.
 
 #include "XPFLog.h"
 #include "OFAliases.h"
-#include "XPFApplication.h"
 
 ATABusList ATABus::gATABusList;
 bool ATABus::gHasBeenInitialized = false;
