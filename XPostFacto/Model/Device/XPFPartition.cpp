@@ -53,6 +53,41 @@ union VolumeHeader {
 	HFSPlusVolumeHeader hfsplus;
 };
 
+void
+static XPFDumpMasterDirectoryBlock (HFSMasterDirectoryBlock *block) 
+{
+	gLogFile << "HFSMasterDirectoryBlock Info" << endl_AC;
+	gLogFile << "drSigWord: " << block->drSigWord << endl_AC;
+	gLogFile << "drCrDate: " << block->drCrDate << endl_AC;
+	gLogFile << "drLsMod: " << block->drLsMod << endl_AC;
+	gLogFile << "drAtrb: " << block->drAtrb << endl_AC;
+	gLogFile << "drNmFls: " << block->drNmFls << endl_AC;
+	gLogFile << "drVBMSt: " << block->drVBMSt << endl_AC;
+	gLogFile << "drAllocPtr: " << block->drAllocPtr << endl_AC;
+	gLogFile << "drNmAlBlks: " << block->drNmAlBlks << endl_AC;
+	gLogFile << "drAlBlkSiz: " << block->drAlBlkSiz << endl_AC;
+	gLogFile << "drClpSiz: " << block->drClpSiz << endl_AC;
+	gLogFile << "drAlBlSt: " << block->drAlBlSt << endl_AC;
+	gLogFile << "drNxtCNID: " << block->drNxtCNID << endl_AC;
+	gLogFile << "drFreeBks: " << block->drFreeBks << endl_AC;
+	gLogFile << "drVN: " << (CChar255_AC) block->drVN << endl_AC;
+	gLogFile << "drVolBkUp: " << block->drVolBkUp << endl_AC;
+	gLogFile << "drVSeqNum: " << block->drVSeqNum << endl_AC;
+	gLogFile << "drWrCnt: " << block->drWrCnt << endl_AC;
+	gLogFile << "drXTClpSiz: " << block->drXTClpSiz << endl_AC;
+	gLogFile << "drCTClpSiz: " << block->drCTClpSiz << endl_AC;
+	gLogFile << "drNmRtDirs: " << block->drNmRtDirs << endl_AC;
+	gLogFile << "drFilCnt: " << block->drFilCnt << endl_AC;
+	gLogFile << "drDirCnt: " << block->drDirCnt << endl_AC;
+	gLogFile << "drEmbedSigWord: " << block->drEmbedSigWord << endl_AC;
+	gLogFile << "drEmbedExtent.startBlock: " << block->drEmbedExtent.startBlock << endl_AC;
+	gLogFile << "drXTFlSize: " << block->drXTFlSize << endl_AC;
+	gLogFile << "drCTFlSize: " << block->drCTFlSize << endl_AC;
+	
+	unsigned long offset = block->drAlBlSt + block->drEmbedExtent.startBlock * (block->drAlBlkSiz / 512);
+	gLogFile << "Calculated offset: " << offset << endl_AC;
+}
+
 XPFPartition::XPFPartition (XPFBootableDevice *device, Partition *part, int partNumber)
 {
 	fBootableDevice = device;
@@ -69,7 +104,10 @@ XPFPartition::XPFPartition (XPFBootableDevice *device, Partition *part, int part
 		VolumeHeader *header = NULL;
 		ThrowIfOSErr_AC (readBlocks (2, 1, (void **) &header));
 		ThrowIfNULL_AC (header);
+		
 		if (header->hfs.drSigWord == kHFSSigWord) {
+			XPFDumpMasterDirectoryBlock ((HFSMasterDirectoryBlock *) header);
+		
 			fCreationDate = header->hfs.drCrDate;
 			if (header->hfs.drEmbedSigWord == kHFSPlusSigWord) {
 				fOffsetToHFSPlusVolume = header->hfs.drAlBlSt 
