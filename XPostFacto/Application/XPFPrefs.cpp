@@ -181,12 +181,16 @@ XPFPrefs::DoUpdate (ChangeID_AC theChange,
 								CDependencySpace_AC* dependencySpace)
 {
 	MountedVolume *volume = (MountedVolume *) changeData;
-	ArrayIndex_AC index;
 	
 	switch (theChange) {
 				
 		case cNewMountedVolume:
 			volume->AddDependent (this);
+			break;
+			
+		case cDeleteMountedVolume:
+			if (volume == fTargetDisk) setTargetDisk (MountedVolume::GetDefaultRootDisk ());
+			if (volume == fInstallCD) setInstallCD (MountedVolume::GetDefaultInstallerDisk ());
 			break;
 		
 		case cSetHelperDisk:

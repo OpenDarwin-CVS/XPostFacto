@@ -119,8 +119,8 @@ MountedVolume::Initialize ()
 		MountedVolume *current = iter.Current ();
 		if (!current->fStillThere) {
 			if (current->fBootableDevice) current->fBootableDevice->invalidate ();
-			gApplication->Changed (cDeleteMountedVolume, current);
 			gVolumeList.Delete (current);	
+			gApplication->Changed (cDeleteMountedVolume, current);
 			delete current;
 		}
 	}
@@ -244,10 +244,14 @@ MountedVolume::WithRegistryEntry (io_object_t entry)
 {
 	MountedVolume *retVal = NULL;
 	for (MountedVolumeIterator iter (GetVolumeList ()); iter.Current(); iter.Next()) {
-		if (IOObjectIsEqualTo (iter->fRegEntry, entry)) {
+		io_object_t regEntry = iter->getRegEntry ();
+		if (!regEntry) continue;
+		if (IOObjectIsEqualTo (regEntry, entry)) {
 			retVal = iter.Current ();
+			IOObjectRelease (regEntry);
 			break;
 		}		
+		IOObjectRelease (regEntry);
 	}	
 	return retVal;
 }
@@ -295,9 +299,6 @@ MountedVolume::installBootXIfNecessary (bool forceInstall)
 MountedVolume::~MountedVolume ()
 {
 	RemoveAllDependencies ();
-#ifdef __MACH__
-	if (fRegEntry) IOObjectRelease (fRegEntry);
-#endif
 }
 
 void
@@ -321,6 +322,37 @@ MountedVolume::setVolumeName (HFSUniStr255 *name)
 	DisposeUnicodeToTextInfo (&converter);
 }
 
+#ifdef __MACH__
+
+io_object_t
+MountedVolume::getRegEntry () {
+	char mountPoint[256], deviceBSDName[32], *shortBSDName;
+	OSStatus err = FSRefMakePath (getRootDirectory (), (UInt8 *) mountPoint, 255);
+	deviceBSDName[0] = 0;
+	if (err != noErr) return NULL;
+	int numFS = getfsstat (NULL, 0, MNT_NOWAIT);
+	struct statfs *fs = (struct statfs *) malloc (numFS * sizeof (struct statfs));
+	getfsstat (fs, numFS * sizeof (struct statfs), MNT_NOWAIT);
+	int x;
+	for (x = 0; x < numFS; x++) {
+		if (!strcmp (fs[x].f_mntonname, mountPoint)) {
+			strcpy (deviceBSDName, fs[x].f_mntfromname);
+			err = 0;
+			break;
+		}
+	}
+	free (fs);
+				
+	shortBSDName = deviceBSDName;
+	if (!strncmp (shortBSDName, "/dev/", 5)) shortBSDName += 5;
+		
+	mach_port_t iokitPort;
+	IOMasterPort (MACH_PORT_NULL, &iokitPort);
+	return IOServiceGetMatchingService (iokitPort, IOBSDNameMatching (iokitPort, NULL, shortBSDName));
+}
+
+#endif
+
 MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *rootDirectory)
 {
 	fValidOpenFirmwareName = false;
@@ -329,6 +361,8 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	fBootableDevice = NULL;
 	fHelperDisk = NULL;
 	fCreationDate = 0;
+	
+	gApplication->AddDependent (this); // for listening for volume deletions
 			
 	// Copy the info
 	{				
@@ -399,6 +433,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 				}
 				DisposePtr (versionData);	
 			}
+			versionFile.CloseDataFork ();
 		}
 	}
 		
@@ -445,46 +480,24 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	fValidOpenFirmwareName = false;
 	
 #ifdef __MACH__
-	char mountPoint[256], deviceBSDName[32], *shortBSDName;
-	OSStatus err = FSRefMakePath (&fRootDirectory, (UInt8 *) mountPoint, 255);
-	deviceBSDName[0] = 0;
-	if (err == noErr) {
-		int numFS = getfsstat (NULL, 0, MNT_NOWAIT);
-		struct statfs *fs = (struct statfs *) malloc (numFS * sizeof (struct statfs));
-		getfsstat (fs, numFS * sizeof (struct statfs), MNT_NOWAIT);
-		int x;
-		for (x = 0; x < numFS; x++) {
-			if (!strcmp (fs[x].f_mntonname, mountPoint)) {
-				strcpy (deviceBSDName, fs[x].f_mntfromname);
-				err = 0;
-				break;
-			}
-		}
-		free (fs);
+	io_object_t regEntry = getRegEntry ();
+	if (regEntry) {
+		fBootableDevice = XPFBootableDevice::DeviceForRegEntry (regEntry);
+		if (fBootableDevice) {
+			fIsOnBootableDevice = true;
+			fPartInfo = fBootableDevice->partitionWithInfoAndName (info, name);
+			if (fPartInfo) {
+				fPartInfo->setMountedVolume (this);
 				
-		shortBSDName = deviceBSDName;
-		if (!strncmp (shortBSDName, "/dev/", 5)) shortBSDName += 5;
-		
-		mach_port_t iokitPort;
-		IOMasterPort (MACH_PORT_NULL, &iokitPort);
-		fRegEntry = IOServiceGetMatchingService (iokitPort, IOBSDNameMatching (iokitPort, NULL, shortBSDName));
-		if (fRegEntry) {
-			fBootableDevice = XPFBootableDevice::DeviceForRegEntry (fRegEntry);
-			if (fBootableDevice) {
-				fIsOnBootableDevice = true;
-				fPartInfo = fBootableDevice->partitionWithInfoAndName (info, name);
-				if (fPartInfo) {
-					fPartInfo->setMountedVolume (this);
-					
-					char alias[256], shortAlias[256];
-					OFAliases::AliasFor (fRegEntry, alias, shortAlias);
-					fOpenFirmwareName.CopyFrom (alias);
-					fShortOpenFirmwareName.CopyFrom (shortAlias);
-					
-					fValidOpenFirmwareName = (alias[0] != 0);
-				}
+				char alias[256], shortAlias[256];
+				OFAliases::AliasFor (regEntry, alias, shortAlias);
+				fOpenFirmwareName.CopyFrom (alias);
+				fShortOpenFirmwareName.CopyFrom (shortAlias);
+				
+				fValidOpenFirmwareName = (alias[0] != 0);
 			}
 		}
+		IOObjectRelease (regEntry);
 	}
 #else
 	fBootableDevice = XPFBootableDevice::DeviceWithInfo (info);
@@ -592,5 +605,17 @@ MountedVolume::setHelperDisk (MountedVolume *disk)
 	if (fHelperDisk != disk) {
 		fHelperDisk = disk;
 		Changed (cSetHelperDisk, this);
+	}
+}
+
+void 
+MountedVolume::DoUpdate (ChangeID_AC theChange, MDependable_AC* changedObject, void* changeData, CDependencySpace_AC* dependencySpace)
+{
+	MountedVolume *volume = (MountedVolume *) changeData;
+	
+	switch (theChange) {			
+		case cDeleteMountedVolume:
+			if (volume == fHelperDisk) setHelperDisk (MountedVolume::GetDefaultHelperDisk ());
+			break;
 	}
 }

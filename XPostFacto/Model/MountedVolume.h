@@ -68,6 +68,11 @@ class MountedVolume : public MDependable_AC
 	
 		static void Initialize ();
 		
+		void DoUpdate (ChangeID_AC theChange, 
+							MDependable_AC* changedObject,
+							void* changeData,
+							CDependencySpace_AC* dependencySpace);
+		
 		void readHelperFromStream (CFileStream_AC *stream);
 		
 		const CStr255_AC& getOpenFirmwareName () {return fOpenFirmwareName;}
@@ -127,6 +132,10 @@ class MountedVolume : public MDependable_AC
 		
 		void setHFSName (HFSUniStr255 *name);
 		void setVolumeName (HFSUniStr255 *name);
+		
+#ifdef __MACH__
+		io_object_t getRegEntry ();
+#endif
 
 		FSRef fRootDirectory;
 		CStr255_AC fVolumeName;
@@ -154,10 +163,6 @@ class MountedVolume : public MDependable_AC
 		
 		MountedVolume *fHelperDisk;
 		
-#ifdef __MACH__
-		io_object_t fRegEntry;
-#endif
-
 		unsigned int fCreationDate;
 				
 		static MountedVolumeList gVolumeList;

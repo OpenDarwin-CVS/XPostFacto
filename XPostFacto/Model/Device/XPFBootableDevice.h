@@ -83,6 +83,8 @@ class XPFBootableDevice
 		OSErr readBlocks (unsigned int start, unsigned int count, UInt8 **buffer);
 		OSErr writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer);
 		void readCapacity ();
+		void openDeviceFile ();
+		void closeDeviceFile ();
 #else
 		virtual OSErr readBlocks (unsigned int start, unsigned int count, UInt8 **buffer) = 0;
 		virtual OSErr writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer) = 0;
@@ -126,7 +128,6 @@ class XPFBootableDevice
 		bool fNeedsHelper;
 		
 #ifdef __MACH__
-		io_registry_entry_t fRegEntry;
 		char fBSDName[32];
 		FILE *fDeviceFile;
 #else

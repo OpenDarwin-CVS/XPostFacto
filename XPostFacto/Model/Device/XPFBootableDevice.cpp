@@ -152,6 +152,10 @@ XPFBootableDevice::extractPartitionInfo ()
 
 	readCapacity ();
 	
+#ifdef __MACH__
+	openDeviceFile ();
+#endif
+	
 	Partition *pm = NULL;
 	OSErr err = readBlocks (1, 1, (UInt8 **) &pm);
 	if (err != noErr) {
@@ -194,6 +198,10 @@ XPFBootableDevice::extractPartitionInfo ()
 		}
 	}	
 	if (pm) DisposePtr ((Ptr) pm);
+	
+#ifdef __MACH__
+	closeDeviceFile ();
+#endif
 }
 
 union VolumeHeader {
@@ -221,8 +229,6 @@ XPFBootableDevice::XPFBootableDevice
 	fNeedsHelper = false;
 	
 #ifdef __MACH__
-	fRegEntry = entry;
-	if (entry) IOObjectRetain (entry);
 	fBSDName[0] = 0;
 	fDeviceFile = NULL;
 #else
@@ -250,6 +256,30 @@ XPFBootableDevice::XPFBootableDevice
 		IOObjectRelease (parent);
 	}
 	IOObjectRelease (iterator);
+	
+	// Fill in some things we need to know
+	
+	CFNumberRef blockSize = (CFNumberRef) IORegistryEntryCreateCFProperty (entry, CFSTR ("Preferred Block Size"), NULL, 0);
+	if (blockSize) {
+		CFNumberGetValue (blockSize, kCFNumberLongType, &fBlockSize);
+		CFRelease (blockSize);
+	}
+
+	SInt64 tempByteSize;
+	CFNumberRef byteSize = (CFNumberRef) IORegistryEntryCreateCFProperty (entry, CFSTR ("Size"), NULL, 0);
+	if (byteSize) {
+		CFNumberGetValue (byteSize, kCFNumberSInt64Type, &tempByteSize);
+		fBlockCount = tempByteSize / fBlockSize;	
+		CFRelease (byteSize);	
+	}
+	
+	CFStringRef bsdName = (CFStringRef) IORegistryEntryCreateCFProperty (entry, CFSTR ("BSD Name"), NULL, 0);
+	if (bsdName) {
+		strcpy (fBSDName, "/dev/");
+		CFStringGetCString (bsdName, fBSDName + 5, 27, kCFStringEncodingASCII); 
+		CFRelease (bsdName);
+	}
+
 #endif
 }
 
@@ -257,8 +287,7 @@ XPFBootableDevice::~XPFBootableDevice ()
 {
 	if (fPartitionList) delete fPartitionList;
 #ifdef __MACH__
-	if (fRegEntry) IOObjectRelease (fRegEntry);
-	if (fDeviceFile) fclose (fDeviceFile);
+	closeDeviceFile ();
 #endif
 }
 
@@ -300,8 +329,18 @@ XPFBootableDevice::DeviceForRegEntry (io_registry_entry_t startpoint)
 
 	if (!found) return NULL;
 	
+	char bsdName[32];
+	bsdName[0] = 0;
+	CFStringRef bsdNameRef = (CFStringRef) IORegistryEntryCreateCFProperty (entry, CFSTR ("BSD Name"), NULL, 0);
+	
+	if (bsdNameRef) {
+		strcpy (bsdName, "/dev/");
+		CFStringGetCString (bsdNameRef, bsdName + 5, 27, kCFStringEncodingASCII); 
+		CFRelease (bsdNameRef);
+	}
+
 	for (DeviceIterator iter (&gDeviceList); iter.Current (); iter.Next ()) {
-		if (IOObjectIsEqualTo (iter->fRegEntry, entry)) {
+		if (!strcmp (iter->fBSDName, bsdName)) {
 			IOObjectRelease (entry);
 			return iter.Current ();
 		}
@@ -335,11 +374,30 @@ XPFBootableDevice::DeviceWithDriverRefNum (SInt16 driverRefNum)
 
 #ifdef __MACH__
 
+void
+XPFBootableDevice::openDeviceFile ()
+{
+	if (fDeviceFile) return; // already open
+	XPFSetUID uid (0);
+	fDeviceFile = fopen (fBSDName, "rb");
+}
+
+void
+XPFBootableDevice::closeDeviceFile ()
+{
+	if (!fDeviceFile) return; // already closed
+	XPFSetUID (0);
+	fclose (fDeviceFile);
+	fDeviceFile = NULL;
+}
+
 OSErr 
 XPFBootableDevice::readBlocks (unsigned int start, unsigned int count, UInt8 **buffer)
 {
 	ThrowIfNULL_AC (buffer);
 	if (fBlockSize == 0) return;
+	
+	openDeviceFile ();
 	if (fDeviceFile == NULL) return;
     
     // the start and count will be in terms of 512 byte blocks
@@ -378,7 +436,9 @@ XPFBootableDevice::writeBlocks (unsigned int start, unsigned int count, UInt8 *b
 {
 	ThrowIfNULL_AC (buffer);
 	if (fBlockSize != 512) ThrowException_AC (kWrite512ByteBlocksOnly, 0);
-	if (fBSDName[0] == 0) return;
+
+	openDeviceFile ();
+	if (fDeviceFile == NULL) return;
 	
 	XPFSetUID uid (0);
      
@@ -391,30 +451,7 @@ XPFBootableDevice::writeBlocks (unsigned int start, unsigned int count, UInt8 *b
 void 
 XPFBootableDevice::readCapacity ()
 {
-	// Get the block size and block count
-	CFNumberRef blockSize = (CFNumberRef) IORegistryEntryCreateCFProperty (fRegEntry, CFSTR ("Preferred Block Size"), NULL, 0);
-	if (blockSize) {
-		CFNumberGetValue (blockSize, kCFNumberLongType, &fBlockSize);
-		CFRelease (blockSize);
-	}
-
-	SInt64 tempByteSize;
-	CFNumberRef byteSize = (CFNumberRef) IORegistryEntryCreateCFProperty (fRegEntry, CFSTR ("Size"), NULL, 0);
-	if (byteSize) {
-		CFNumberGetValue (byteSize, kCFNumberSInt64Type, &tempByteSize);
-		fBlockCount = tempByteSize / fBlockSize;	
-		CFRelease (byteSize);	
-	}
-	
-	CFStringRef bsdName = (CFStringRef) IORegistryEntryCreateCFProperty (fRegEntry, CFSTR ("BSD Name"), NULL, 0);
-	if (bsdName) {
-		strcpy (fBSDName, "/dev/");
-		CFStringGetCString (bsdName, fBSDName + 5, 27, kCFStringEncodingASCII); 
-		CFRelease (bsdName);
-		
-		XPFSetUID uid (0);
-		fDeviceFile = fopen (fBSDName, "rb");
-	}
+	// This is all done in the constructor now
 }
 
 #endif  // __MACH__
