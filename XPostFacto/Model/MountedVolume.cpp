@@ -120,7 +120,6 @@ MountedVolume::Initialize ()
 		}	
 	} while (err == noErr);
 
-
 	// Now we see whether anything has gone away. If so, we need to delete it from the
 	// list, and invalidate its device
 	for (MountedVolumeIterator iter (&gVolumeList); iter.Current (); iter.Next ()) {
@@ -136,6 +135,15 @@ MountedVolume::Initialize ()
 	}
 	
 	XPFBootableDevice::DeleteInvalidDevices ();
+	
+	// Now, we check all the volumes to see if any need a helper and haven't got one
+	// already.
+	for (MountedVolumeIterator iter (&gVolumeList); iter.Current (); iter.Next ()) {
+		MountedVolume *current = iter.Current ();
+		if (current->getRequiresBootHelper () && !current->getHelperDisk ()) {
+			current->setHelperDisk (current->getDefaultHelperDisk ());
+		}
+	}
 }
 
 MountedVolume*
@@ -1216,8 +1224,6 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 			checkExtensionsCaches ();
 		}
 					
-		if (getRequiresBootHelper ()) fHelperDisk = getDefaultHelperDisk ();
-		
 		gLogFile << "MountedVolume::MountedVolume OpenFirmwareName: " << fShortOpenFirmwareName << endl_AC;
 
 		fFullyInitialized = true;
