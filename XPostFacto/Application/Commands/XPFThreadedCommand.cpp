@@ -44,6 +44,11 @@ advised of the possibility of such damage.
 #include "UThreads.h"
 #include "MoreFilesExtras.h"
 
+#ifdef __MACH__
+	#include <sys/types.h>
+	#include <sys/stat.h>
+#endif
+
 // String constants
 
 char systemName[] =  "System";
@@ -336,9 +341,38 @@ void
 XPFThreadedCommand::installStartupItemWithRootDirectory (FSRef *rootDirectory)
 {
 	FSRef libraryStartupItemsFolder;
+	
+#ifdef __MACH__
+	// On Mac OS X, if we're installing in the current root directory, then we need to move
+	// the old startup item (if any) out of the way first, because otherwise we'll try to delete
+	// a running binary, which doesn't work.
+	char rootPath [256];
+	bool moveAndRestart = false;
+	ThrowIfOSErr_AC (FSRefMakePath (rootDirectory, (UInt8 *) rootPath, 255));
+	if (!strcmp (rootPath, "/")) moveAndRestart = true;
+	
+	if (moveAndRestart) {
+		struct stat sb;
+		char dstPath [256];
+		for (int x = 0; x < 100; x++) {
+			sprintf (dstPath, "/tmp/XPFStartupItem.%d", x);
+			if (stat (dstPath, &sb)) break; // we break on an error--i.e. no file!
+		}
+		XPFSetUID myUID (0);
+		rename ("/Library/StartupItems/XPFStartupItem", dstPath);
+		// we don't care about rename errors--for instance, if the src doesn't exist, that's fine
+	}
+#endif 
 		
 	ThrowIfOSErr_AC (getOrCreateStartupDirectory (rootDirectory, &libraryStartupItemsFolder));	
 	copyHFSArchivesTo ('hfsS', &libraryStartupItemsFolder);
+
+#ifdef __MACH__
+	if (moveAndRestart) {
+		XPFSetUID myUID (0);
+		system ("/Library/StartupItems/XPFStartupItem/XPFStartupItem restart");
+	}
+#endif
 }
 
 

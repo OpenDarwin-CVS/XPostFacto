@@ -94,7 +94,12 @@ do a synchronized copy (that is, they only copy things that have changed).
 
 #include "FSRefCopying.h"
 
-#define XPF_SECONDS_TO_SLEEP 5
+#define XPF_SECONDS_TO_SLEEP 6
+#define XPF_SECONDS_TO_WAIT_FOR_CHANGES 12
+
+// ================
+// Global variables
+// ================
 
 struct stat 	sb;
 struct timespec kernelMod;
@@ -118,6 +123,10 @@ int noSyncRequired = 0;
 
 mach_port_t iokitPort;
 
+// ===================
+// Function prototypes
+// ===================
+
 void warn_the_user ();
 void cancel_warning ();
 
@@ -134,8 +143,40 @@ void most_recent_change_in_directory (char *path, struct timespec *changeTime);
 
 void writePID ();
 void handle_SIGHUP (int sig);
+void pollForChanges ();
 
 int getMountPointForOFPath (char *mountPoint, const char *ofPath);
+
+void dirError (char *path, int code);
+void statError (char *path, int code);
+void exitIfOSErr (OSStatus err, int code);
+
+// ==============
+// Error handling
+// ==============
+
+void
+dirError (char *path, int code)
+{
+	syslog (LOG_ERR, "Error in chdir \"%s\" from code %d: %m", path, code);
+	exit (1);
+}
+
+void 
+statError (char *path, int code)
+{
+	syslog (LOG_ERR, "Error in stat \"%s\" from code %d: %m", path, code);
+	exit (1);
+}
+
+void 
+exitIfOSErr (OSStatus err, int code)
+{
+	if (err) {
+		syslog (LOG_ERR, "OSErr %d at code %d", err, code);
+		exit (1);
+	}
+}
 
 // -----------------
 //
@@ -205,6 +246,9 @@ getMountPointForOFPath (char *mountPoint, const char *ofPath)
 		}
 	}		
 	free (fs);
+	
+	if (err) syslog (LOG_ERR, "Could not find mountpoint for %s", ofPath);
+	
 	return err;
 }
 
@@ -258,6 +302,10 @@ initialize_paths ()
 	
 	CFRelease (properties);
 	IOObjectRelease (options);
+	
+	syslog (LOG_INFO, "rootDevicePath = %s", rootDevicePath);
+	syslog (LOG_INFO, "bootDevicePath = %s", bootDevicePath);
+	
 	return 0;
 }
 
@@ -280,13 +328,14 @@ initialize_everything_else ()
 	int err;
 	
 	err = initialize_paths ();
-	if (err) exit (err);
+	if (err) {
+		syslog (LOG_ERR, "Error %d in initialize_paths", err);
+		exit (err);
+	}
 	
-	err = chdir (bootDevicePath);
-	if (err) exit (1);
+	if (chdir (bootDevicePath)) dirError (bootDevicePath, 2);
 	
-	err = stat ("System/Library", &sb);
-	if (err) exit (1);
+	if (stat ("System/Library", &sb)) statError ("bootDevicePath/System/Library", 2);
 			
 	if (!noSyncRequired) {					
 		err = stat ("System/Library/Extensions.mkext", &sb);
@@ -322,18 +371,20 @@ void
 handle_mkext_change (int hasChanged)
 {
 	if (mkextChanging && !hasChanged) {
-		if (chdir (bootDevicePath)) exit (7);
+		if (chdir (bootDevicePath)) dirError (bootDevicePath, 7);
 		if (sb.st_mtimespec.tv_sec == 0) {
+			syslog (LOG_INFO, "unlink %s/System/Library/Extensions.mkext", bootDevicePath);
 			unlink ("System/Library/Extensions.mkext");
 		} else {
 			FSRef src, dst;
 			OSStatus status = FSPathMakeRef ("System/Library", &dst, NULL);
-			if (status) exit (status);
-			if (chdir (rootDevicePath)) exit (12);
+			exitIfOSErr (status, 12);
+			if (chdir (rootDevicePath)) dirError (rootDevicePath, 12);
 			status = FSPathMakeRef ("System/Library/Extensions.mkext", &src, NULL);
-			if (status) exit (status);
+			exitIfOSErr (status, 13);
+			syslog (LOG_INFO, "Copy %s/System/Library/Extensions.mkext to %s/System/Library", rootDevicePath, bootDevicePath);
 			status = FSRefFileCopy (&src, &dst, NULL, NULL, 0, false);
-			if (status) exit (status);
+			exitIfOSErr (status, 14);
 		}
 		mkextChanging = 0;
 		cancel_warning ();
@@ -349,18 +400,20 @@ void
 handle_kernel_change (int hasChanged)
 {
 	if (kernelChanging && !hasChanged) {
-		if (chdir (bootDevicePath)) exit (8);
+		if (chdir (bootDevicePath)) dirError (bootDevicePath, 8);
 		if (sb.st_mtimespec.tv_sec == 0) {
+			syslog (LOG_INFO, "unlink %s/mach_kernel", bootDevicePath);
 			unlink ("mach_kernel");
 		} else {
 			FSRef src, dst;
-			OSStatus status = FSPathMakeRef ("bootDevicePath", &dst, NULL);
-			if (status) exit (status);
-			if (chdir (rootDevicePath)) exit (12);
+			OSStatus status = FSPathMakeRef (bootDevicePath, &dst, NULL);
+			exitIfOSErr (status, 8);
+			if (chdir (rootDevicePath)) dirError (rootDevicePath, 12);
 			status = FSPathMakeRef ("mach_kernel", &src, NULL);
-			if (status) exit (status);
+			exitIfOSErr (status, 12);
+			syslog (LOG_INFO, "Copy %s/mach_kernel to %s", rootDevicePath, bootDevicePath);
 			status = FSRefFileCopy (&src, &dst, NULL, NULL, 0, false);
-			if (status) exit (status);
+			exitIfOSErr (status, 13);
 		}
 		kernelChanging = 0;
 		cancel_warning ();
@@ -462,18 +515,19 @@ void
 handle_extensions_folder_change (int hasChanged)
 {
 	if (extfolderChanging) {
-		if (chdir (rootDevicePath)) exit (9);
+		if (chdir (rootDevicePath)) dirError (rootDevicePath, 9);
 		if (!anything_changed_in_directory_since_time ("System/Library/Extensions", &extfolderMod)) {
-			if (chdir (bootDevicePath)) exit (10);
+			if (chdir (bootDevicePath)) dirError (bootDevicePath, 10);
 
 			FSRef src, dst;
 			OSStatus status = FSPathMakeRef ("System/Library", &dst, NULL);
-			if (status) exit (status);
-			if (chdir (rootDevicePath)) exit (12);
+			exitIfOSErr (status, 12);
+			if (chdir (rootDevicePath)) dirError (rootDevicePath, 12);
 			status = FSPathMakeRef ("System/Library/Extensions", &src, NULL);
-			if (status) exit (status);
+			exitIfOSErr (status, 12);
+			syslog (LOG_INFO, "Copy %s/System/Library/Extensions to %s/System/Library", rootDevicePath, bootDevicePath);
 			status = FSRefDirectoryCopy (&src, &dst, NULL, NULL, 0, false, NULL);
-			if (status) exit (status);
+			exitIfOSErr (status, 12);
 
 			extfolderMod.tv_sec = sb.st_mtimespec.tv_sec; 
 			extfolderMod.tv_nsec = sb.st_mtimespec.tv_nsec;
@@ -484,7 +538,7 @@ handle_extensions_folder_change (int hasChanged)
 		warn_the_user ();
 		extfolderChanging = 1;
 		bzero (&extfolderMod, sizeof (extfolderMod));
-		if (chdir (rootDevicePath)) exit (11);
+		if (chdir (rootDevicePath)) dirError (rootDevicePath, 11);
 		most_recent_change_in_directory ("System/Library/Extensions", &extfolderMod);
 	}
 }
@@ -513,6 +567,46 @@ handle_SIGHUP (int sig)
 	reinitializeNow = 1;
 }
 
+void
+restartProcess ()
+{
+	execl ("/Library/StartupItems/XPFStartupItem/xpfbootsupportd", "xpfbootsupportd");
+	// this shouldn't return, so error if it does
+	syslog (LOG_ERR, "Error from execl: %m");
+	exit (errno);
+}
+
+void
+pollForChanges ()
+{
+	while (1) {			
+		int err;		
+		
+		if (kernelChanging || mkextChanging || extfolderChanging) {
+			sleep (XPF_SECONDS_TO_WAIT_FOR_CHANGES);
+		} else {
+			sleep (XPF_SECONDS_TO_SLEEP);
+		}	
+		
+		if (reinitializeNow) restartProcess ();
+
+		if (chdir (rootDevicePath)) dirError (rootDevicePath, 1);
+		err = stat ("System/Library/Extensions.mkext", &sb);
+		if (err) sb.st_mtimespec.tv_sec = sb.st_mtimespec.tv_nsec = 0;
+		handle_mkext_change ((mkextMod.tv_sec != sb.st_mtimespec.tv_sec) || (mkextMod.tv_nsec != sb.st_mtimespec.tv_nsec));
+	
+		if (chdir (rootDevicePath)) dirError (rootDevicePath, 1);
+		err = stat ("mach_kernel", &sb);
+		if (err) sb.st_mtimespec.tv_sec = sb.st_mtimespec.tv_nsec = 0;
+		handle_kernel_change ((kernelMod.tv_sec != sb.st_mtimespec.tv_sec) || (kernelMod.tv_nsec != sb.st_mtimespec.tv_nsec));
+	
+		if (chdir (rootDevicePath)) dirError (rootDevicePath, 1);
+		err = stat ("System/Library/Extensions", &sb);
+		if (err) sb.st_mtimespec.tv_sec = sb.st_mtimespec.tv_nsec = 0;
+		handle_extensions_folder_change ((extfolderMod.tv_sec != sb.st_mtimespec.tv_sec) || (extfolderMod.tv_nsec != sb.st_mtimespec.tv_nsec));
+	}
+}
+
 int
 main (int argc, char **argv)
 {	
@@ -523,6 +617,8 @@ main (int argc, char **argv)
 	
 	IOMasterPort (MACH_PORT_NULL, &iokitPort);
 	
+	openlog ("xpfbootsupportd", 0, LOG_USER);
+	
 	initialize_warning_strings ();
 	initialize_everything_else ();
 	
@@ -530,31 +626,25 @@ main (int argc, char **argv)
 	
 	sigset_t allsigs;
 	sigemptyset (&allsigs);
-	
-	while (1) {			
-		sleep (XPF_SECONDS_TO_SLEEP);
 		
-		while (noSyncRequired) {
-			sigsuspend (&allsigs);
-			if (reinitializeNow) initialize_everything_else ();
-		}
+	// If no sync is required, we suspend execution until someone sends us a signal.
+	// If the signal was SIGHUP, then we will have handled it above by setting
+	// reinitializeNow to true. The idea is that anyone who sets NVRAM so that a 
+	// helper is to be used should send us SIGHUP to tell us to check. The alternative
+	// would be to read NVRAM every time through the loop to check. Or, possibly, to
+	// register for notifications from the /options node in the IORegistry (if that
+	// is possible).
+			
+	// To actually perform the reinitialization, we execl ourselves. The reason is
+	// to facilitate reinstalls. We can't delete the object file while it is running,
+	// but we can move it and then ask the running process to execl the original location,
+	// to get the new file.
 
-		int err;
-		
-		if (chdir (rootDevicePath)) exit (1);
-		err = stat ("System/Library/Extensions.mkext", &sb);
-		if (err) sb.st_mtimespec.tv_sec = sb.st_mtimespec.tv_nsec = 0;
-		handle_mkext_change ((mkextMod.tv_sec != sb.st_mtimespec.tv_sec) || (mkextMod.tv_nsec != sb.st_mtimespec.tv_nsec));
-	
-		if (chdir (rootDevicePath)) exit (1);
-		err = stat ("mach_kernel", &sb);
-		if (err) sb.st_mtimespec.tv_sec = sb.st_mtimespec.tv_nsec = 0;
-		handle_kernel_change ((kernelMod.tv_sec != sb.st_mtimespec.tv_sec) || (kernelMod.tv_nsec != sb.st_mtimespec.tv_nsec));
-	
-		if (chdir (rootDevicePath)) exit (1);
-		err = stat ("System/Library/Extensions", &sb);
-		if (err) sb.st_mtimespec.tv_sec = sb.st_mtimespec.tv_nsec = 0;
-		handle_extensions_folder_change ((extfolderMod.tv_sec != sb.st_mtimespec.tv_sec) || (extfolderMod.tv_nsec != sb.st_mtimespec.tv_nsec));
+	if (noSyncRequired) {
+		while (!reinitializeNow) sigsuspend (&allsigs);
+		restartProcess ();
+	} else {
+		pollForChanges ();
 	}
 	
     return 0;
