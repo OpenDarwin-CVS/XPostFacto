@@ -515,7 +515,7 @@
 				F53C6AAA01B19CA601A80001,
 			);
 			buildSettings = {
-				HEADER_SEARCH_PATHS = BootX/bootx/include.subproj;
+				HEADER_SEARCH_PATHS = BootX/bootx.tproj/include.subproj;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "-static";
@@ -736,7 +736,7 @@
 				F572EEA70254E9E801A80001,
 			);
 			isa = PBXGroup;
-			path = bootx;
+			path = bootx.tproj;
 			refType = 4;
 		};
 		F53C6A2B01B1968701A80001 = {
@@ -749,7 +749,7 @@
 				F53C6A6401B1968701A80001,
 			);
 			isa = PBXGroup;
-			path = "fcode-to-c";
+			path = "fcode-to-c.tproj";
 			refType = 4;
 		};
 		F53C6A6401B1968701A80001 = {
@@ -762,7 +762,7 @@
 				F53C6A6601B1968701A80001,
 			);
 			isa = PBXGroup;
-			path = "macho-to-xcoff";
+			path = "macho-to-xcoff.tproj";
 			refType = 4;
 		};
 		F53C6A6601B1968701A80001 = {
