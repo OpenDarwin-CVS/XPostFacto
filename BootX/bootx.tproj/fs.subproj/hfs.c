@@ -92,7 +92,7 @@ long HFSInitPartition(CICell ih)
   
   if (ih == gCurrentIH) return 0;
   
-  printf("HFSInitPartition: %x\n", ih);
+  printf("HFSInitPartition: %lx\n", ih);
   
   gAllocationOffset = 0;
   gIsHFSPlus = 0;
@@ -164,7 +164,7 @@ long HFSLoadFile(CICell ih, char *filePath)
   
   if (HFSInitPartition(ih) == -1) return -1;
   
-  printf("Loading HFS%s file: [%s] from %x.\n",
+  printf("Loading HFS%s file: [%s] from %lx.\n",
 	 (gIsHFSPlus ? "+" : ""), filePath, ih);
   
   dirID = kHFSRootFolderID;
@@ -259,8 +259,8 @@ static long ReadFile(void *file, long *length)
 
 static long GetCatalogEntryInfo(void *entry, long *flags, long *time)
 {
-  long tmpTime;
-  
+  long tmpTime = 0;
+
   // Get information about the file.
   switch (*(short *)entry) {
   case kHFSFolderRecord           :

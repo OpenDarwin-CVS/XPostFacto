@@ -130,7 +130,9 @@ static TagPtr NewTag(void);
 static void FreeTag(TagPtr tag);
 static char *NewSymbol(char *string);
 static void FreeSymbol(char *string);
+#if 0
 static void DumpTag(TagPtr tag, long depth);
+#endif
 
 static ModulePtr gModuleHead, gModuleTail;
 static TagPtr    gPersonalityHead, gPersonalityTail;
@@ -287,7 +289,7 @@ static long LoadDriverMKext(char *fileSpec)
   memcpy((void *)driversAddr, (void *)kLoadAddr, driversLength);
   
   // Add the MKext to the memory map.
-  sprintf(segName, "DriversPackage-%x", driversAddr);
+  sprintf(segName, "DriversPackage-%lx", driversAddr);
   AllocateMemoryRange(segName, driversAddr, driversLength);
   
   return 0;
@@ -415,7 +417,7 @@ static long LoadMatchedModules(void)
 	}
 	
 	// Add an entry to the memory map.
-	sprintf(segName, "Driver-%x", driver);
+	sprintf(segName, "Driver-%lx", (long)driver);
 	AllocateMemoryRange(segName, driverAddr, driverLength);
       }
     }

@@ -76,7 +76,7 @@ long UFSInitPartition(CICell ih)
   
   if (ih == gCurrentIH) return 0;
   
-  printf("UFSInitPartition: %x\n", ih);
+  printf("UFSInitPartition: %lx\n", ih);
   
   gCurrentIH = 0;
   
@@ -143,7 +143,7 @@ long UFSLoadFile(CICell ih, char *filePath)
   
   if (UFSInitPartition(ih) == -1) return -1;
   
-  printf("Loading UFS file: [%s] from %x.\n", filePath, ih);
+  printf("Loading UFS file: [%s] from %lx.\n", filePath, ih);
   
   // Skip one or two leading '\'.
   if (*filePath == '\\') filePath++;

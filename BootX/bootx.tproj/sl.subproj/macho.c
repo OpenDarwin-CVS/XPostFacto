@@ -99,7 +99,7 @@ long DecodeMachO(void)
       break;
       
     default:
-      printf("Ignoring cmd type %d.\n", cmd);
+      printf("Ignoring cmd type %ld.\n", cmd);
       break;
     }
     

@@ -127,7 +127,7 @@ long DumpDir(char *dirSpec)
     ret = GetDirEntry(dirSpec, &index, &name, &flags, &time);
     if (ret == -1) break;
     
-    printf("%x %x [%s]\n", flags, time, name);
+    printf("%lx %lx [%s]\n", flags, time, name);
   }
   
   return 0;

@@ -71,7 +71,7 @@ long Ext2InitPartition(CICell ih)
   
   if (ih == gCurrentIH) return 0;
   
-  printf("Ext2InitPartition: %x\n", ih);
+  printf("Ext2InitPartition: %lx\n", ih);
   
   gCurrentIH = 0;
   
@@ -130,7 +130,7 @@ long Ext2LoadFile(CICell ih, char *filePath)
   
   if (Ext2InitPartition(ih) == -1) return -1;
   
-  printf("Loading Ext2 file: [%s] from %x.\n", filePath, ih);
+  printf("Loading Ext2 file: [%s] from %lx.\n", filePath, ih);
   
   // Skip one or two leading '\'.
   if (*filePath == '\\') filePath++;
