@@ -45,7 +45,7 @@ Read 'OFpt' (134, "Gossamer") ":nvram:Gossamer.h";
 Read 'OFpt' (135, "Mainstreet") ":nvram:Mainstreet.h";
 Read 'OFpt' (136, "Wallstreet") ":nvram:Wallstreet.h";
 Read 'OFpt' (137, "Gazelle") ":nvram:Gazelle.h";
-
+Read 'OFpt' (138, "Tanzania") ":nvram:Tanzania.h";
 
 type 'OFtc' {
 	array {
@@ -65,6 +65,7 @@ Resource 'OFtc' (128) {
 		"AAPL,3400/2400", 130,
 		"AAPL,e407", 131,
 		"AAPL,e411", 137,
+		"AAPL,e826", 138,
 		"AAPL,9700", 132,
 		"AAPL,Gossamer", 134,
 		"AAPL,PowerMac G3", 133,
