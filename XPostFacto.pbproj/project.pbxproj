@@ -5155,7 +5155,7 @@
 			);
 			isa = PBXBundleTarget;
 			name = PatchedNDRVSupport;
-			productInstallPath = "$(USER_LIBRARY_DIR)/Bundles";
+			productInstallPath = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 			productName = PatchedNDRVSupport;
 			productReference = F5887528030D66FA01A80001;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
