@@ -1,4 +1,4 @@
-<body><h2>XPostFacto 3.0a7</h2>
+<body><h2>XPostFacto 3.0a8</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
@@ -11,16 +11,22 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <p>Here's a quick link to download the latest version. 
 
 <blockquote>
-<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a7.sit">Download XPostFacto 3.0a7</a>
+<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a8.sit">Download XPostFacto 3.0a8</a>
 </blockquote>
 
 <p>Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes.  Note that the latest version is an alpha version of XPostFacto 3. "Alpha" means it's not finished yet, and there are likely to be some bugs.
 
-<h3>Significant Changes in 3.0a7</h3>
+<h3>Significant Changes in 3.0a8</h3>
 
-<p>There are quite a few changes between XPF 3.0a4 and 3.0a7, and I'll describe them here. Eventually, I'll incorporate this into the rest of the document.  <b>Read this! <i>Yes, you! I'll tell you when you can stop!</i></b>
+<p>There are quite a few changes between XPF 3.0a4 and 3.0a8, and I'll describe them here. Eventually, I'll incorporate this into the rest of the document.  <b>Read this! <i>Yes, you! I'll tell you when you can stop!</i></b>
 
-<p><b>The most important thing to note is that users testing XPF 3.0a6 were mostly reporting problems. So you should expect that you may encounter some difficulties testing 3.0a7 as well.</b>
+<p><b><i>The most important thing to note is that users testing XPF 3.0a6 and 3.0a7 were mostly reporting problems. So you should expect that you may encounter some difficulties testing 3.0a8 as well.</i></b>
+
+<h4>Changes since 3.0a7</h4>
+
+<p>I've added a new method of disabling OWCCacheConfig. XPF will now actually install or delete OWCCacheConfig.kext based on the setting you choose for "Enable L2/L3 Cache". I still haven't figured out why my previous method of disabling it isn't working (it works for me), but deleting it should be pretty certain to work :-)
+
+<p>I've also fixed a problem which occured if you launched XPF in Mac OS 9 and there was no Install CD around, and no existing Mac OS X volume. XPF should now do the expected thing when you quit in these circumstances (i.e., nothing).
 
 <h4>Changes since 3.0a6</h4>
 
@@ -517,6 +523,12 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a8.sit">3.0a8 (November 17, 2003)</a>
+<dd>I've added a new method of disabling OWCCacheConfig. XPF will now actually install or delete OWCCacheConfig.kext based on the setting you choose for "Enable L2/L3 Cache". I still haven't figured out why my previous method of disabling it isn't working (it works for me), but deleting it should be pretty certain to work :-)
+
+<p>I've also fixed a problem which occured if you launched XPF in Mac OS 9 and there was no Install CD around, and no existing Mac OS X volume. XPF should now do the expected thing when you quit in these circumstances (i.e., nothing).
+
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a7.sit">3.0a7 (November 17, 2003)</a>
 <dd>I've made some minor changes to OWCCacheConfig since 3.0a6. Some users are reporting problems with OWCCacheConfig -- and, worse, reporting that they are unable to disable it using the techniques below. Unfortunately, I can't reproduce the problem yet.
 
