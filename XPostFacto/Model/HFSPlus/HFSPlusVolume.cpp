@@ -173,6 +173,66 @@ HFSPlusVolume::getBootXStartBlock ()
 #endif
 }
 
+OSErr
+HFSPlusVolume::writeBootBlocksIfNecessary (bool forceInstall)
+{
+	Ptr bootBlocks = NULL;
+
+	if (!forceInstall) {
+		OSErr err = fPartition->readBootBlocks ((void **) &bootBlocks);
+		if (err != noErr) return err;
+		if ((bootBlocks[0] == 0x4C) && (bootBlocks[1] == 0x4B)) {
+			DisposePtr (bootBlocks);
+			return noErr;
+		}
+		DisposePtr (bootBlocks);
+	}
+		
+	gLogFile << "Writing boot blocks ..." << endl_AC;
+	bootBlocks = NewPtr (1024);
+		
+#ifdef __MACH__
+	FILE *bootBlockData = fopen ("/usr/share/misc/bootblockdata", "r");
+	if (bootBlockData == NULL) {
+		gLogFile << "Could not open /usr/share/misc/bootblockdata" << endl_AC;
+		DisposePtr (bootBlocks);
+		return fnfErr;
+	}
+	size_t bytesRead = fread (bootBlocks, 1, 1024, bootBlockData);
+	if (bytesRead != 1024) {
+		gLogFile << "Could not read /usr/share/misc/bootBlockData" << endl_AC;
+		DisposePtr (bootBlocks);
+		return fnfErr;
+	}
+	fclose (bootBlockData);
+#else
+	Handle bootBlockResource = GetResource ('boot', 1);
+	if (bootBlockResource == NULL) {
+		gLogFile << "Could not find boot block resource" << endl_AC;
+		DisposePtr (bootBlocks);
+		return fnfErr;
+	}
+	if (GetHandleSize (bootBlockResource) != 1024) {
+		gLogFile << "Boot block resource wrong size" << endl_AC;
+		DisposePtr (bootBlocks);
+		return fnfErr;
+	}
+	BlockMoveData (*bootBlockResource, bootBlocks, 1024);
+	ReleaseResource (bootBlockResource);
+#endif
+
+	if ((bootBlocks[0] != 0x4C) || (bootBlocks[1] != 0x4B)) {
+		gLogFile << "Wrong signature in boot block data" << endl_AC;
+		DisposePtr (bootBlocks);
+		return fnfErr;
+	}
+	
+	OSErr err = fPartition->writeBootBlocks (bootBlocks);
+
+	DisposePtr (bootBlocks);
+	return err;
+}
+
 void
 HFSPlusVolume::installBootX ()
 {
@@ -285,6 +345,8 @@ HFSPlusVolume::installBootX ()
 
 	XPFBootableDevice::DisableCDDriver (); 	
  	try {
+		writeBootBlocksIfNecessary ();
+ 	
 		fPartition->setLgBootStart (getBootXStartBlock ());
 		if (fPartition->getLgBootStart () == 0) {
 			#if qLogging

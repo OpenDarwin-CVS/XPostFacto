@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001, 2002
+Copyright (c) 2001 - 2003
 Other World Computing
 All rights reserved
 
@@ -34,6 +34,7 @@ advised of the possibility of such damage.
 #include "XCOFFDecoder.h"
 #include <iostream.h>
 
+
 XCOFFDecoder::XCOFFDecoder (CRandomAccessStream_AC *stream)
 {
 	ThrowIfNULL_AC (stream);
@@ -42,6 +43,10 @@ XCOFFDecoder::XCOFFDecoder (CRandomAccessStream_AC *stream)
 	fStream->ReadBytes (&fHead, sizeof (fHead));
 	
 	fSize = fHead.text.size + fHead.data.size + fHead.BSS.size;
+
+	const UInt32 kPageSize = 4096;
+	fSize += kPageSize - 1;
+	fSize &= -kPageSize;
 
 	unsigned entryPointOffset = fHead.opt.entryPoint - fHead.text.pAddr;
 	if (entryPointOffset > fHead.text.size) {

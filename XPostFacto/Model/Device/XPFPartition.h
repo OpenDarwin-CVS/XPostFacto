@@ -95,7 +95,10 @@ class XPFPartition
 		void setLgBootStart (unsigned long start) {fPartition.pmLgBootStart = start;}
 
 		OSErr readBlocks (unsigned int start, unsigned int count, void **buffer);
+		OSErr writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer);
 		void writePartition ();
+		OSErr writeBootBlocks (void *buffer);
+		OSErr readBootBlocks (void **buffer);
 		
 		void dump ();
 };

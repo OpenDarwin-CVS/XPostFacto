@@ -548,11 +548,11 @@ XPFBootableDevice::writeBlocks (unsigned int start, unsigned int count, UInt8 *b
 	ThrowIfNULL_AC (buffer);
 	if (fBlockSize != 512) ThrowException_AC (kWrite512ByteBlocksOnly, 0);
 
+	XPFSetUID uid (0);
+     
 	openDeviceFile ();
 	if (fDeviceFile == NULL) return -1;
 	
-	XPFSetUID uid (0);
-     
 	fseeko (fDeviceFile, (off_t) start * (off_t) fBlockSize, SEEK_SET);
 	fwrite (buffer, fBlockSize, count, fDeviceFile);
 	

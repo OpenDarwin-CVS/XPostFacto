@@ -37,6 +37,8 @@ advised of the possibility of such damage.
 #include "XPFErrors.h"
 
 #include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 #include "HFSPlusCatalog.h"
 #include "HFSPlusVolume.h"
@@ -58,6 +60,7 @@ XPFPartition::XPFPartition (XPFBootableDevice *device, Partition *part, int part
 	fCreationDate = 0;
 	fIsHFSPlusVolume = false;
 	fHFSPlusVolume = NULL;
+	gLogFile << "pmStatus: " << part->pmPartStatus << endl_AC;
 	BlockMoveData (part, &fPartition, sizeof (fPartition));
 	if (!strcmp ((char *) fPartition.pmParType, "Apple_HFS")) {
 		VolumeHeader *header = NULL;
@@ -115,6 +118,13 @@ XPFPartition::readBlocks (unsigned int start, unsigned int count, void **buffer)
 			fPartition.pmLgDataStart, count, (UInt8 **) buffer);
 }
 
+OSErr 
+XPFPartition::writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer)
+{
+	return fSCSIDevice->writeBlocks (start + fPartition.pmPyPartStart +
+			fPartition.pmLgDataStart, count, buffer);
+}
+
 bool
 XPFPartition::matchInfo (FSVolumeInfo *info)
 {
@@ -134,6 +144,14 @@ XPFPartition::setBootXValues (unsigned loadAddress, unsigned entryPoint, unsigne
 {
 	// The idea here is that we have done a fresh BootX installation.
 		
+	fPartition.pmPartStatus |=  kPartitionAUXIsValid |
+								kPartitionAUXIsAllocated |
+								kPartitionAUXIsInUse |
+								kPartitionAUXIsBootValid |
+								kPartitionAUXIsReadable |
+								kPartitionAUXIsWriteable |
+								kPartitionAUXIsBootCodePositionIndependent;
+								
 	fPartition.pmBootSize 	= size;
 	fPartition.pmBootAddr 	= loadAddress;
 	fPartition.pmBootEntry 	= entryPoint + 12; // we're skipping the prologue, which causes problems on the 6500
@@ -200,6 +218,41 @@ XPFPartition::writePartition ()
 		ThrowIfOSErr_AC (fSCSIDevice->writeBlocks (fPartitionNumber, 1, (UInt8 *) &fPartition));
 
 	#endif
+}
+
+OSErr
+XPFPartition::writeBootBlocks (void *buffer)
+{
+#ifdef __MACH__
+	char path[256];
+	OSErr err = FSRefMakePath (fMountedVolume->getRootDirectory (), (UInt8 *) path, 255);
+	if (err) {
+		gLogFile << "Could not get path for mountpoint" << endl_AC;
+	} else { 
+		int fd = open (path, O_RDONLY);
+	    if (fd == -1) {
+			gLogFile << "Could not open mountpoint to write boot blocks" << endl_AC;
+	    } else {
+			fbootstraptransfer_t btrans;
+			btrans.fbt_offset = 0;
+			btrans.fbt_length = 1024;
+			btrans.fbt_buffer = buffer;
+	    
+		    err = fcntl (fd, F_WRITEBOOTSTRAP, &btrans);
+		    if (err) gLogFile << "Error " << err << " writing boot blocks" << endl_AC;
+		    close (fd);
+	    }
+	}
+	return err;
+#else
+	return writeBlocks (0, 2, (UInt8 *) buffer);
+#endif
+}
+
+OSErr
+XPFPartition::readBootBlocks (void **buffer)
+{
+	return readBlocks (0, 2, buffer);
 }
 
 void

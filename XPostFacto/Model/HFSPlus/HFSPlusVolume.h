@@ -53,6 +53,7 @@ class HFSPlusVolume {
 
 		unsigned long getBootXStartBlock ();
 		MountedVolume *getMountedVolume () {if (fPartition) return fPartition->getMountedVolume (); else return NULL;}
+		OSErr writeBootBlocksIfNecessary (bool forceInstall = false);
 
 	public:
 		HFSPlusVolume (XPFPartition *thePartition, unsigned long offsetToVolume);
