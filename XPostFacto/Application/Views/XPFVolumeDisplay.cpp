@@ -170,7 +170,9 @@ XPFVolumeDisplay::DoUpdate	(ChangeID_AC theChange,
 							CDependencySpace_AC* dependencySpace)
 {
 	MountedVolume *vol = (MountedVolume *) changeData;
-	
+
+	if (fVolume == vol) fWarningIcon->Show (fVolume->getBootWarning (), true);
+
 	switch (theChange) {
 				
 		case cSetVolumeName:
@@ -210,11 +212,7 @@ XPFVolumeDisplay::DoUpdate	(ChangeID_AC theChange,
 				SetActiveState ((installerStatus == kStatusOK) || (bootStatus == kStatusOK), false);			
 			}
 			break;
-			
-		case cSetSymlinkStatus:
-			if (fVolume == vol) fWarningIcon->Show (fVolume->getBootWarning (), true);
-			break;
-	
+				
 		default:
 			Inherited::DoUpdate (theChange, changedObject, changeData, dependencySpace);
 			break;
