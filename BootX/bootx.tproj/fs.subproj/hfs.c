@@ -461,8 +461,8 @@ static long ReadBTreeEntry(long btree, void *key, char *entry, long *dirIndex)
   short            extentFile;
   char             *nodeBuf;
   BTNodeDescriptor *node;
-  long             nodeSize, result, entrySize;
-  long             curNode, index, lowerBound, upperBound;
+  long             nodeSize, result = 0, entrySize = 0;
+  long             curNode, index = 0, lowerBound, upperBound;
   char             *testKey, *recordData;
   
   // Figure out which tree is being looked at.

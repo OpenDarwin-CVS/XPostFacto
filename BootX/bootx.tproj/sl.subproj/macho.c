@@ -47,7 +47,7 @@ long DecodeMachO(void)
   struct fat_arch    *fA;
   struct mach_header *mH;
   long   ncmds, cmdBase, cmd, cmdsize, headerBase, headerAddr, headerSize;
-  long   cnt, ret;
+  long   cnt, ret = 0;
   
   // Test for a fat header.
   fH = (struct fat_header *)kLoadAddr;
