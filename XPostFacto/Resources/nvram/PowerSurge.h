@@ -93,7 +93,7 @@ $E\
 : ck 0 do swap dup 3 >> km + c@ 1 rot 7 and << and or loop ;\
 : bootr 0d word count encode-string " machargs" $a\
 0 0 1 ck if 0 and else dup 1 = if 3d 0 1 else f 3d 0 2 then ck if 40 or then then\
-40 and if bye else 11 $I 1e 0 do ['] boot catch drop 1f4 ms loop then 0 $I bye ;\
+40 and if bye else 11 $I 1e 0 do ['] boot catch drop 3c8 ms loop then 0 $I bye ;\
 : &SI\
 " scsi-int" open-dev\
 " open" 2 pick 4+ @ find-method drop\
