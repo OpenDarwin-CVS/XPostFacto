@@ -51,6 +51,10 @@ dev /packages/mac-parts\
 104 + ' 0 $L\
 ' load 15C + ' 0 $L\
 $E\
+dev /packages/obp-tftp\
+: $M dup 24 - HIS-ENET-HA 6 move 14 + ;\
+' open 66C - ' $M $L\
+$E\
 dev mac-io\
 : decode-unit parse-1hex ;\
 $E\
