@@ -118,9 +118,196 @@
 			path = XPFBootSupport/XPFBootSupport.h;
 			refType = 4;
 		};
+		94C18CC10509155800A80003 = {
+			isa = PBXTargetDependency;
+			target = 94CC89DB0508E1BC00A80003;
+		};
 		94CB5C4404FBB49500A80003 = {
 			isa = PBXTargetDependency;
 			target = F53C6AF401B1ACE201A80001;
+		};
+		94CC89D20508E13B00A80003 = {
+			children = (
+				94CC89D30508E19600A80003,
+				94CC89D40508E19600A80003,
+			);
+			isa = PBXGroup;
+			name = OWCDumpIORegistry;
+			refType = 4;
+		};
+		94CC89D30508E19600A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = OWCDumpIORegistry.cpp;
+			path = OWCDumpIORegistry/OWCDumpIORegistry.cpp;
+			refType = 4;
+		};
+		94CC89D40508E19600A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = OWCDumpIORegistry.h;
+			path = OWCDumpIORegistry/OWCDumpIORegistry.h;
+			refType = 4;
+		};
+		94CC89D50508E1BC00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		94CC89D60508E1BC00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+				94CC89DE0508E5A500A80003,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94CC89D70508E1BC00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+				94CC89DD0508E5A400A80003,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94CC89D80508E1BC00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94CC89D90508E1BC00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94CC89DA0508E1BC00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		94CC89DB0508E1BC00A80003 = {
+			buildPhases = (
+				94CC89D50508E1BC00A80003,
+				94CC89D60508E1BC00A80003,
+				94CC89D70508E1BC00A80003,
+				94CC89D80508E1BC00A80003,
+				94CC89D90508E1BC00A80003,
+				94CC89DA0508E1BC00A80003,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
+				HEADER_SEARCH_PATHS = "";
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+				KERNEL_MODULE = YES;
+				LIBRARY_SEARCH_PATHS = "";
+				MODULE_IOKIT = YES;
+				MODULE_NAME = com.macsales.iokit.OWCDumpIORegistry;
+				MODULE_VERSION = 1.0.0d1;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = OWCDumpIORegistry;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = kext;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = OWCDumpIORegistry;
+			productInstallPath = "$(USER_LIBRARY_DIR)/Bundles";
+			productName = OWCDumpIORegistry;
+			productReference = 94CC89DC0508E1BC00A80003;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>OWCDumpIORegistry</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.macsales.iokit.OWCDumpIORegistry</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.0d1</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>OWCDumpIORegistry</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.macsales.iokit.OWCDumpIORegistry</string>
+			<key>IOClass</key>
+			<string>OWCDumpIORegistry</string>
+			<key>IOMatchCategory</key>
+			<string>OWCDumpIORegistry</string>
+			<key>IOProviderClass</key>
+			<string>IOResources</string>
+			<key>IOResourceMatch</key>
+			<string>IOKit</string>
+		</dict>
+	</dict>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.kernel.iokit</key>
+		<string>1.0b1</string>
+	</dict>
+	<key>OSBundleRequired</key>
+	<string>Root</string>
+</dict>
+</plist>
+";
+		};
+		94CC89DC0508E1BC00A80003 = {
+			isa = PBXBundleReference;
+			path = OWCDumpIORegistry.kext;
+			refType = 3;
+		};
+		94CC89DD0508E5A400A80003 = {
+			fileRef = 94CC89D30508E19600A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94CC89DE0508E5A500A80003 = {
+			fileRef = 94CC89D40508E19600A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 //940
 //941
@@ -231,6 +418,7 @@
 				F53C6A1A01B194DC01A80001,
 				F5FB800A03C7A0AD01A80002,
 				F5BF317E03F01EA201A80002,
+				94CC89DB0508E1BC00A80003,
 			);
 		};
 		F53C691001B191BA01A80001 = {
@@ -287,6 +475,7 @@
 		};
 		F53C695501B1926201A80001 = {
 			children = (
+				94CC89D20508E13B00A80003,
 				94BCDEAB046D6BAD00A80003,
 				F5FB800D03C7A0DD01A80002,
 				F547F715028EFEEC01A80001,
@@ -699,6 +888,7 @@
 				F5812B820315F14401A80001,
 				F5FB800B03C7A0AD01A80002,
 				F5BF317F03F01EA201A80002,
+				94CC89DC0508E1BC00A80003,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -5285,6 +5475,7 @@
 				F54E20790267327701A80001,
 				F58C73360238599301A80001,
 				F557F6A40226FF1001A80001,
+				94C18CC10509155800A80003,
 				F557F6A60226FF1001A80001,
 				F59D628E01B1D12901A80001,
 				F59D628F01B1D12901A80001,
@@ -6201,8 +6392,6 @@
 			<string>com.macsales.iokit.OWCCacheConfig</string>
 			<key>IOClass</key>
 			<string>OWCCacheConfig</string>
-			<key>IOKitDebug</key>
-			<integer>1</integer>
 			<key>IOMatchCategory</key>
 			<string>OWCCacheConfig</string>
 			<key>IONameMatch</key>
