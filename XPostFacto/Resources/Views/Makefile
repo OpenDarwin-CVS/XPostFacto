@@ -1,6 +1,7 @@
 SHELL = /bin/sh
 DEREZ = /Developer/Tools/Derez
 REZ = /Developer/Tools/Rez
+SETFILE = /Developer/Tools/SetFile
 
 binaries := OWCLogo.rsrc XPFIcons.rsrc XPFAboutBox.rsrc XPFFatalErrorWindow.rsrc XPFGridWindow.rsrc \
             XPFLogWindow.rsrc XPFOptionsWindow.rsrc XPFProgressWindow.rsrc XPFSplashWindow.rsrc
@@ -27,7 +28,7 @@ ifdef making_binary
 
 %.rsrc : %.r
 	$(REZ) $(includes) $< -i /Developer/Headers/FlatCarbon -o $@
-
+	$(SETFILE) -c RSED -t RSRC $@
 else
 
 ifdef making_source
