@@ -178,6 +178,9 @@ XPFVolumeList::DoUpdate (ChangeID_AC theChange,
 				display->setVolume (volume);
 				this->SetScrollParameters (display->GetSize (), false, true);
 				display->ScrollSelectionIntoView (false);
+				// Make sure that we highlight the disk if it is the default
+				if (volume == fPrefs->getTargetDisk ()) DoUpdate (cSetTargetDisk, changedObject, changeData, dependencySpace);
+				if (volume == fPrefs->getInstallCD ()) DoUpdate (cSetInstallCD, changedObject, changeData, dependencySpace);
 				this->ForceRedraw ();
 			}
 			break;
