@@ -91,6 +91,7 @@ class MountedVolume : public MDependable_AC
 		bool getRequiresBootHelper ();
 		bool getHasMachKernel () {return fHasMachKernel;}
 		bool getHasInstaller () {return fHasInstaller;}
+		bool getIsDarwin () {return fIsDarwin;}
 		bool getIsWriteable () {return fIsWriteable;}
 		bool getHasFinder () {return fHasFinder;}
 		FSRef* getRootDirectory () {return &fRootDirectory;}
@@ -187,6 +188,7 @@ class MountedVolume : public MDependable_AC
 		bool fHasFinder;
 		bool fTurnedOffIgnorePermissions;
 		bool fIsAttachedToPCICard;
+		bool fIsDarwin;
 
 		unsigned fSymlinkStatus;
 		

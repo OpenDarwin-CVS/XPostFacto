@@ -148,7 +148,7 @@ XPFVolumeDisplay::setVolume (MountedVolume* newVolume)
 	
 	if (statusCode == kStatusOK) {
 		if (fVolume->getHasMachKernel ()) {
-			status = "Mac OS X ";
+			status = fVolume->getIsDarwin () ? "Darwin " : "Mac OS X ";
 			status += fVolume->getMacOSXVersion ();
 			if (fVolume->getHasInstaller ()) status += " Install CD";
 		}

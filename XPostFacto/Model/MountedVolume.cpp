@@ -916,6 +916,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	fPartitionNumber = 0;
 	fOpenFirmwareName[0] = 0;
 	fShortOpenFirmwareName[0] = 0;
+	fIsDarwin = false;
 	
 #ifdef BUILDING_XPF
 	gApplication->AddDependent (this); // for listening for volume deletions
@@ -964,6 +965,8 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	{
 		CFSSpec_AC versionSpec;
 		OSErr err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Library:CoreServices:SystemVersion.plist", &versionSpec);
+		if (err == fnfErr) err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Library:Extensions:System.kext:Info.plist", &versionSpec);
+		if (err == fnfErr) err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Library:Extensions:System.kext:Contents:Info.plist", &versionSpec);
 		if (err == noErr) {
 			CFile_AC versionFile;
 			versionFile.Specify (versionSpec);
@@ -977,6 +980,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 					versionData[dataSize] = 0;
 					char *key = strstr (versionData, "<key>ProductUserVisibleVersion</key>");
 					if (!key) key = strstr (versionData, "<key>ProductVersion</key>");
+					if (!key) key = strstr (versionData, "<key>CFBundleVersion</key>");
 					if (key) {
 						char *start = strstr (key, "<string>");
 						if (start) {
@@ -991,6 +995,10 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 						}
 					}
 					key = strstr (versionData, "<key>ProductBuildVersion</key>");
+					if (!key) {
+						key = strstr (versionData, "<key>CFBundleVersion</key>");
+						if (key) fIsDarwin = true;
+					}
 					if (key) {
 						char *start = strstr (key, "<string>");
 						if (start) {
@@ -1008,7 +1016,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 			versionFile.CloseDataFork ();
 		}
 	}
-		
+			
 	// See if it's writeable
 	{
 		fIsWriteable = !(info->flags & (kFSVolFlagHardwareLockedMask | kFSVolFlagSoftwareLockedMask));
