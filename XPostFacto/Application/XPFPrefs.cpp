@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2002
+Copyright (c) 2002, 2003
 Other World Computing
 All rights reserved
 
@@ -31,461 +31,326 @@ advised of the possibility of such damage.
 
 */
 
-// The idea is that this class is the "model-controller". It keeps track of the 
-// data model and the user's settings.
-
 #include "MountedVolume.h"
 #include "XPFPrefs.h"
 #include "XPFLog.h"
-#include "XPFNameRegistry.h"
-#include "OFAliases.h"
 #include "XPostFacto.h"
-#include "PCI.h"
 #include "NVRAM.h"
+#include "XPFIODevice.h"
+#include "XPFStrings.h"
+#include "XPFApplication.h"
+#include "XPFUpdateCommands.h"
+#include "XPFInstallCommand.h"
+#include "XPFRestartCommand.h"
+
+#ifndef __MACH__
+	#include <PCI.h>
+#endif
 
 #include <stdio.h>
 
+#define Inherited TFileBasedDocument
+
+UInt32 kPrefsSignature = 'usuX';
+UInt32 kPrefsVersion = 1;
+
+const UInt32 kDebugBreakpoint	= 1 << 0;
+const UInt32 kDebugPrintf		= 1 << 1;
+const UInt32 kDebugNMI			= 1 << 2;
+const UInt32 kDebugKprintf		= 1 << 3;
+const UInt32 kDebugDDB			= 1 << 4;
+const UInt32 kDebugSyslog		= 1 << 5;
+const UInt32 kDebugARP			= 1 << 6;
+const UInt32 kDebugOldGDB		= 1 << 7;
+const UInt32 kDebugPanicText	= 1 << 8;
+
 #define kDeviceTypeProperty "device_type"
 
-XPFPrefs::XPFPrefs () 
+XPFPrefs::XPFPrefs (TFile* itsFile)
+	: TFileBasedDocument (itsFile),
+		fEnableCacheEarly (false),
+		fAutoBoot (true),
+		fBootInSingleUserMode (false),
+		fBootInVerboseMode (false),
+		fThrottle (0),
+		fTargetDisk (NULL),
+		fInstallCD (NULL),
+		fInputDevice (NULL),
+		fOutputDevice (NULL),
+		fDebug (0)
 {
-	fSetupL2Cache = false;
-	fL2CRValue = 0;
-	fAutoBoot = true;
-	fBootInSingleUserMode = false;
-	fBootInVerboseMode = false;
-	fReinstallBootX = false;
-	fReinstallExtensions = false;
-	fInputDeviceIndex = 0;
-	fOutputDeviceIndex = 0;
-	fThrottle = 8;
-	fForceShortStrings = false;
-	
-	fNextInputDevice = cFirstInputDevice;
-	fNextOutputDevice = cFirstOutputDevice;
-	fNextHelperVolume = cFirstHelperDisk;
-
-	fBootDisk = NULL;
-	fInstallDisk = NULL;
-	fCachedCreationDate = 0;
-	fHelperCreationDate = 0;
-	
-	fDirty = false;
-	
-	fDebug.breakpoint = false;
-	fDebug.printf = false;
-	fDebug.nmi = false;
-	fDebug.kprintf = false;
-	fDebug.ddb = false;
-	fDebug.syslog = false;
-	fDebug.arp = false;
-	fDebug.oldgdb = false;
-	fDebug.panicText = false;
-}
-
-void
-XPFPrefs::getPrefsFromFile ()
-{
-	static bool doneOnce = false;
-	if (doneOnce) return;
-	doneOnce = true;
-	
-	fPrefs = new CFile_AC ('pref', '????', true);
-	SInt16 prefsVRefNum;
-	SInt32 prefsDirID;
-	try {
-		ThrowIfOSErr_AC (FindFolder (kOnSystemDisk, kPreferencesFolderType, true, &prefsVRefNum, &prefsDirID));
-		ThrowIfOSErr_AC (fPrefs->SpecifyWithTrio (prefsVRefNum, prefsDirID, "\p:Unsupported UtilityX Prefs"));
-			
-		if (fPrefs->GetFileSpec().Exists()) fPrefs->RenameFile ("XPostFacto Prefs");
-			
-		ThrowIfOSErr_AC (fPrefs->SpecifyWithTrio (prefsVRefNum, prefsDirID, "\p:XPostFacto Prefs"));
-			
-		if (!fPrefs->GetFileSpec().Exists()) ThrowIfOSErr_AC (fPrefs->CreateCFile ());
-			
-		fPrefs->SetPermissions(fsRdWrPerm, fsRdWrPerm);
-		ThrowIfOSErr_AC (fPrefs->OpenFile ());
-		
-		long size = sizeof (fCachedCreationDate);
-		OSErr err = fPrefs->ReadData (&fCachedCreationDate, size);
-		if (err != noErr) fCachedCreationDate = 0;
-					
-		size = sizeof (fBootInSingleUserMode);
-		err = fPrefs->ReadData (&fBootInSingleUserMode, size);
-		if (err != noErr) fBootInSingleUserMode = false;
-		err = fPrefs->ReadData (&fBootInVerboseMode, size);
-		if (err != noErr) fBootInVerboseMode = false;
-		err = fPrefs->ReadData (&fAutoBoot, size);
-		if (err != noErr) fAutoBoot = true;
-		
-		bool setupCache;
-		err = fPrefs->ReadData (&setupCache, size);
-/*		if (err == noErr) {
-			setSetupL2Cache (setupCache);
-		} else {
-			setSetupL2Cache (false);
-		}
-*/			
-		CStr255_AC device;
-		size = 1;
-		err = fPrefs->ReadData (&device[0], size);
-		if ((err == noErr) && device.Length ()) {
-			size = device.Length ();
-			fPrefs->ReadData (&device[1], size);
-			for (unsigned x = 1; x <= fInputDevices.GetSize (); x++) {
-				if (device == fInputDevices.At (x)) {
-					fInputDeviceIndex = x;
-					break;
-				}
-			} 
-		}
-		size = 1;
-		err = fPrefs->ReadData (&device[0], size);
-		if ((err == noErr) && device.Length ()) {
-			size = device.Length ();
-			fPrefs->ReadData (&device[1], size);
-			for (unsigned x = 1; x <= fOutputDevices.GetSize (); x++) {
-				if (device == fOutputDevices.At (x)) {
-					fOutputDeviceIndex = x;
-					break;
-				}
-			} 
-		}
-		
-		size = sizeof (fThrottle);
-		err = fPrefs->ReadData (&fThrottle, size);
-		if (err != noErr) fThrottle = 8;
-		
-		size = sizeof (fDebug);
-		err = fPrefs->ReadData (&fDebug, size);
-		if (err != noErr) {
-			fDebug.breakpoint = false;
-			fDebug.printf = false;
-			fDebug.nmi = false;
-			fDebug.kprintf = false;
-			fDebug.ddb = false;
-			fDebug.syslog = false;
-			fDebug.arp = false;
-			fDebug.oldgdb = false;
-		}
-		
-		size = sizeof (fHelperCreationDate);
-		err = fPrefs->ReadData (&fHelperCreationDate, size);
-		if (err != noErr) fHelperCreationDate = 0;
-
-	}
-	catch (...) {
-	}
-
-	fBootDisk = MountedVolume::WithCreationDate (fCachedCreationDate);
-	if (fBootDisk == NULL) fBootDisk = MountedVolume::GetVolumeList()->First ();
-	
-	fHelperDisk = MountedVolume::WithCreationDate (fHelperCreationDate);
-	if (fHelperDisk == NULL) {
-		for (MountedVolumeIterator iter (MountedVolume::GetVolumeList ()); iter.Current(); iter.Next()) {
-			if (iter->getIsOnBootableDevice () && !iter->getRequiresBootHelper ()) {
-				if (fHelperDisk) {
-					if (iter->getFreeBytes () > fHelperDisk->getFreeBytes ()) {
-						fHelperDisk = iter.Current ();
-					} 
-				} else {
-					fHelperDisk = iter.Current ();
-				}
-			}
-		}
-	}
-
-	fInstallDisk = MountedVolume::GetVolumeList()->First ();
-}
-
-void
-XPFPrefs::writePrefsToFile ()
-{
-	fPrefs->SetPosition (0);
-	unsigned int creationDate = fBootDisk->getCreationDate ();
-	long size = sizeof (creationDate);
-	fPrefs->WriteData (&creationDate, size);
-	size = sizeof (fBootInSingleUserMode);
-	fPrefs->WriteData (&fBootInSingleUserMode, size);
-	fPrefs->WriteData (&fBootInVerboseMode, size);
-	fPrefs->WriteData (&fAutoBoot, size);
-	fPrefs->WriteData (&fSetupL2Cache, size);
-			
-	bool save = fUseShortStrings;
-	fUseShortStrings = false;
-	CStr255_AC device;
-	device = getInputDevice ();
-	size = device.Length () + 1;
-	fPrefs->WriteData (device, size);
-	device = getOutputDevice ();
-	size = device.Length () + 1;
-	fPrefs->WriteData (device, size);
-	fUseShortStrings = save;
-	
-	size = sizeof (fThrottle);
-	fPrefs->WriteData (&fThrottle, size);
-	
-	size = sizeof (fDebug);
-	fPrefs->WriteData (&fDebug, size);
-	
-	size = sizeof (creationDate);
-	creationDate = fHelperDisk->getCreationDate ();
-	fPrefs->WriteData (&creationDate, size);
+	fAskOnClose = false;
 }
 
 XPFPrefs::~XPFPrefs ()
 {
-	if (fPrefs) {
-		if (fDirty) writePrefsToFile ();
-		fPrefs->CloseFile ();
-		fPrefs->FlushVolume ();
 
-		delete fPrefs;
+}
+
+#ifdef __MACH__
+
+void
+XPFPrefs::getPrefsFromNVRAM ()
+{
+	static bool done = false;
+	if (done) return;
+	done = true;
+		
+	XPFNVRAMSettings *nvram = XPFNVRAMSettings::GetSettings ();
+	
+	setAutoBoot (nvram->getBooleanValue ("auto-boot?"));
+	
+	char *bootCommand = nvram->getStringValue ("boot-command");
+	char *bootDevice = nvram->getStringValue ("boot-device");
+	char *bootFile = nvram->getStringValue ("boot-file");
+	char *inputDevice = nvram->getStringValue ("input-device");
+	char *outputDevice = nvram->getStringValue ("output-device");
+	char *nvramrc = nvram->getStringValue ("nvramrc");
+	
+	setBootInSingleUserMode ((strstr (bootCommand, " -s")) != 0);
+	setBootInVerboseMode ((strstr (bootCommand, " -v")) != 0);
+	
+	char *debugString = strstr (bootCommand, "debug=");
+	if (debugString) {
+		debugString += strlen ("debug=");
+		fDebug = strtoul (debugString, NULL, 0);
 	}
 	
-	for (int x = 1; x <= fInputDevices.GetSize (); x++) {
-		DisposePtr (fInputDevices.At (x));
-	} 
-
-	for (int x = 1; x <= fOutputDevices.GetSize (); x++) {
-		DisposePtr (fOutputDevices.At (x));
+	MountedVolume *bootDisk = MountedVolume::WithOpenFirmwarePath (bootDevice);
+	MountedVolume *rootDisk = bootDisk;
+	
+	char *rdString = strstr (bootCommand, "rd=*");
+	if (rdString) {
+		char str[256];
+		strcpy (str, rdString + strlen ("rd=*"));
+		char *pos = strchr (str, ' ');
+		if (pos) *pos = 0;
+		
+		MountedVolume *rootDisk = MountedVolume::WithOpenFirmwarePath (rdString);
+		if (!rootDisk) rootDisk = bootDisk;
+	}	
+	
+	if (rootDisk && (rootDisk->getBootStatus () == kStatusOK)) {
+		setTargetDisk (rootDisk);
 	}
+	
+	// input device
+	setInputDevice (inputDevice);
+	
+	// output device
+	setOutputDevice (outputDevice);
+	
+	// throttle
+	char *throttle = strstr (nvramrc, "$I");
+	if (throttle) {
+		throttle = strstr (throttle + 2, "$I");
+		if (throttle) {
+			do {throttle--;} while (*throttle == ' ');
+			do {throttle--;} while (*throttle != ' ');
+			setThrottle (strtoul (throttle, NULL, 0));
+		}
+	}
+}
 
-	for (int x = 1; x <= fShortInputDevices.GetSize (); x++) {
-		DisposePtr (fShortInputDevices.At (x));
-	} 
+#endif 		// __MACH__
 
-	for (int x = 1; x <= fShortOutputDevices.GetSize (); x++) {
-		DisposePtr (fShortOutputDevices.At (x));
+void
+XPFPrefs::DoInitialState ()
+{
+	Inherited::DoInitialState ();
+
+	MountedVolume::Initialize ();
+	fTargetDisk = MountedVolume::GetDefaultRootDisk ();
+	fInstallCD = MountedVolume::GetDefaultInstallerDisk ();
+	
+	checkStringLength ();
+}
+
+void
+XPFPrefs::RegainControl ()
+{
+	Inherited::RegainControl ();
+	MountedVolume::Initialize ();
+}
+
+void
+XPFPrefs::DoRead (TFile* aFile, bool forPrinting)
+{
+	#pragma unused (forPrinting)
+	
+	CFileStream_AC fileStream (aFile);
+
+	UInt32 sig, prefsVersion;
+	CStr255_AC device;
+	FSVolumeInfo volInfo;
+	
+	DoInitialState ();
+			
+	try {	
+		fileStream 	>> sig;
+		if (sig != kPrefsSignature) return;
+		
+		fileStream >> prefsVersion;
+		if (prefsVersion != 1) return;
+		
+		fileStream 	>> fBootInSingleUserMode
+					>> fBootInVerboseMode
+					>> fAutoBoot
+					>> fThrottle
+					>> fDebug
+					>> fEnableCacheEarly;
+		
+		device = fileStream.ReadString (255);
+		setInputDevice (CChar255_AC (device), false);
+		
+		device = fileStream.ReadString (255);
+		setOutputDevice (CChar255_AC (device), false);
+		
+		fileStream.ReadBytes (&volInfo, sizeof (volInfo));
+		// Don't use the pref if we can't find the disk
+		MountedVolume *rootDisk = MountedVolume::WithInfo (&volInfo);
+		if (rootDisk) fTargetDisk = rootDisk;
+	}
+	
+	catch (...) {
+	}
+	
+	checkStringLength ();
+}
+
+void
+XPFPrefs::DoWrite (TFile* aFile, bool makingCopy)
+{
+	#pragma unused (makingCopy)
+	
+	CFileStream_AC fileStream (aFile);
+
+	fileStream	<< kPrefsSignature
+				<< kPrefsVersion
+				<< fBootInSingleUserMode
+				<< fBootInVerboseMode
+				<< fAutoBoot
+				<< fThrottle
+				<< fDebug
+				<< fEnableCacheEarly;
+			
+	bool save = fUseShortStrings;
+	fUseShortStrings = false;
+	CStr255_AC device;
+	
+	device = getInputDevice ();
+	fileStream.WriteString (device);
+		
+	device = getOutputDevice ();
+	fileStream.WriteString (device);
+	
+	fUseShortStrings = save;
+	
+	FSVolumeInfo info = fTargetDisk->getVolumeInfo ();
+	fileStream.WriteBytes (&info, sizeof (info));
+}
+
+void 
+XPFPrefs::DoMakeViews (bool forPrinting)
+{
+	#pragma unused (forPrinting)
+	
+	try {
+		TViewServer::fgViewServer->NewTemplateWindow (kGridWindow, this);
+		TViewServer::fgViewServer->NewTemplateWindow (kAdditionalSettingsWindow, this);
+	}
+	
+	catch (...) {
+		((XPFApplication *) gApplication)->CloseSplashWindow ();
+		throw;
+	}
+	
+	((XPFApplication *) gApplication)->CloseSplashWindow ();
+}
+
+
+void 
+XPFPrefs::DoSetupMenus ()
+{
+	Inherited::DoSetupMenus ();
+	
+	Enable (cInstallBootX, true);
+	Enable (cInstallExtensions, true);
+	Enable (cInstallStartupItem, true);
+}
+
+void 
+XPFPrefs::DoMenuCommand (CommandNumber aCommandNumber)
+{
+	switch (aCommandNumber) 
+	{				
+		case cInstallBootX:
+			PostCommand (TH_new XPFInstallBootXCommand (this));
+			break;
+			
+		case cInstallExtensions:
+			PostCommand (TH_new XPFInstallExtensionsCommand (this));
+			break;
+		
+		case cInstallStartupItem:
+			PostCommand (TH_new XPFInstallStartupCommand (this));
+			break;
+				
+		default:
+			Inherited::DoMenuCommand (aCommandNumber);
+			break;
 	}
 }
 
 void
 XPFPrefs::checkStringLength ()
 {
-	if (fForceShortStrings) {
-		fUseShortStrings = true;
-		fUseShortStringsForInstall = true;
-	} else {
-		fUseShortStrings = false;
-		unsigned nvramPatchLength = strlen (NVRAMVariables::GetVariables ()->getNVRAMRC ());
-		unsigned len = 	getBootCommand ().Length () + 
-						getBootFile ().Length () +
-						getBootDevice ().Length () +
-						getInputDevice ().Length () +
-						getOutputDevice ().Length () +
-						nvramPatchLength;
-		fUseShortStrings = (len >= 1948);
-				
-		len =  	getBootCommandForInstall ().Length () + 
-				getBootFileForInstall ().Length () +
-				getBootDeviceForInstall ().Length () +
-				getInputDevice ().Length () +
-				getOutputDevice ().Length () +
-				nvramPatchLength;
-		fUseShortStringsForInstall = (len >= 1948);
-	}
+	unsigned nvramPatchLength = strlen (XPFNVRAMSettings::GetSettings ()->getStringValue ("nvramrc"));
+	unsigned len;
+	bool save;
+	
+	save = fUseShortStrings;
+	fUseShortStrings = false;
+	len = 	getBootCommand ().Length () + 
+			getBootFile ().Length () +
+			getBootDevice ().Length () +
+			getInputDevice ().Length () +
+			getOutputDevice ().Length () +
+			nvramPatchLength;
+	fUseShortStrings = save;
+	setUseShortStrings (len >= 1948);
+
+	save = fUseShortStringsForInstall;
+	fUseShortStringsForInstall = false;				
+	len =  	getBootCommandForInstall ().Length () + 
+			getBootFileForInstall ().Length () +
+			getBootDeviceForInstall ().Length () +
+			getInputDevice ().Length () +
+			getOutputDevice ().Length () +
+			nvramPatchLength;
+	fUseShortStringsForInstall = save;
+	setUseShortStringsForInstall (len >= 1948);
 }
 
 void 
 XPFPrefs::Changed(ChangeID_AC theChange, void* changeData)
 {
-	fDirty = true;
-	
 	checkStringLength ();
 	
-	MDependable_AC::Changed (theChange, changeData);
+	Inherited::Changed (theChange, changeData);
 }
 
-void
-XPFPrefs::Initialize ()
-{
-	#if qLogging
-		gLogFile << "Reinitializing ..." << endl_AC;
-	#endif
-	
-	initializeInputAndOutputDevices ();
-	
-	MountedVolume::Initialize ();
-	
-	initializeHelperMenu ();
-	
-	getPrefsFromFile ();
-
-	unsigned int bootCreationDate = fBootDisk->getCreationDate ();
-	unsigned int installCreationDate = fInstallDisk->getCreationDate ();
-	
-	setBootDisk (MountedVolume::WithCreationDate (bootCreationDate));
-	setInstallDisk (MountedVolume::WithCreationDate (installCreationDate));
-	if (fBootDisk == NULL) setBootDisk (MountedVolume::GetVolumeList()->First ());
-	if (fInstallDisk == NULL) setInstallDisk (MountedVolume::GetVolumeList()->First ());
-	
-	UInt32 version = 0;	
-	Gestalt (gestaltSystemVersion, (SInt32 *) &version);
-
-	if (version < 0x01000) Changed (cSetBootDisk, NULL);
-}
-
-void 
-XPFPrefs::addInputOutputDevice (RegEntryID *entry, TemplateList_AC <char> *list)
-{
-	char alias[256];
-	char shortAlias[256];
-	char label[128];
-	char displayType[128];
-
-	OFAliases::AliasFor (entry, alias, shortAlias);
-	if (list == &fOutputDevices) {
-		if (!strcmp (alias, "kbd")) return;
-		if (!strcmp (alias, "/offscreen-display")) return;
-	}
-			
-#if qLogging
-	gLogFile << "IO Device: " << alias << endl_AC;
-	gLogFile << "IO Short Device: " << shortAlias << endl_AC;
-#endif
-	
-	RegPropertyValueSize propSize;
-	OSErr err = RegistryPropertyGetSize (entry, "AAPL,connector", &propSize);
-	if (err == noErr) {
-		RegistryPropertyGet (entry, "AAPL,connector", label, &propSize);
-		label[propSize] = '\0';
-	} else {
-		err = RegistryPropertyGetSize (entry, "name", &propSize);
-		if (err == noErr) {
-			RegistryPropertyGet (entry, "name", label, &propSize);
-			label[propSize] = '\0';
-		} else {
-			strcpy (label, alias);
-		}
-	}
-	
-	if (!strcmp (label, "infrared")) {
-		return;
-	}
-	
-	err = RegistryPropertyGetSize (entry, "display-type", &propSize);
-	if (err == noErr) {
-		RegistryPropertyGet (entry, "display-type", displayType, &propSize);
-		displayType[propSize] = '\0';
-		if (!strcmp (displayType, "NONE")) return;
-		strcat (label, " (");
-		strcat (label, displayType);
-		strcat (label, ")");
-	}
-
-	char *temp = NewPtr (strlen (alias) + 1);
-	strcpy (temp, alias);
-	list->InsertLast (temp);
-	
-	temp = NewPtr (strlen (shortAlias) + 1);
-	strcpy (temp, shortAlias);
-	
-	if (list == &fInputDevices) {
-		fShortInputDevices.InsertLast (temp);
-		TMenuBarManager::fgMenuBarManager->AddMenuItem (label, mInputDevice, 999, fNextInputDevice++);
-	} else {
-		fShortOutputDevices.InsertLast (temp);
-		TMenuBarManager::fgMenuBarManager->AddMenuItem (label, mOutputDevice, 999, fNextOutputDevice++);
-	}
-}
-
-void
-XPFPrefs::initializeHelperMenu ()
-{
-	static bool doneOnce = false;
-	if (doneOnce) return;
-	doneOnce = true;
-
-	for (MountedVolumeIterator iter (MountedVolume::GetVolumeList ()); iter.Current(); iter.Next()) {
-		if (iter->getIsOnBootableDevice () && !iter->getRequiresBootHelper ()) {
-			TMenuBarManager::fgMenuBarManager->AddMenuItem (iter->getVolumeName (), mHelper, 999, fNextHelperVolume++);
-		}		
-	}
-}
-
-unsigned int 
-XPFPrefs::getHelperVolumeIndex ()
-{
-	unsigned index = 0;
-	for (MountedVolumeIterator iter (MountedVolume::GetVolumeList ()); iter.Current(); iter.Next()) {
-		if (iter->getIsOnBootableDevice () && !iter->getRequiresBootHelper ()) {
-			index++;
-			if (iter.Current () == fHelperDisk) return index;
-		}		
-	}
-	return 0;
-}
-
-void
-XPFPrefs::setHelperVolumeIndex (unsigned index)
-{
-	for (MountedVolumeIterator iter (MountedVolume::GetVolumeList ()); iter.Current(); iter.Next()) {
-		if (iter->getIsOnBootableDevice () && !iter->getRequiresBootHelper ()) {
-			index--;
-			if (index == 0) setHelperDisk (iter.Current ());
-		}		
-	}
-}
-
-void
-XPFPrefs::initializeInputAndOutputDevices ()
-{
-	static bool doneOnce = false;
-	if (doneOnce) return;
-	doneOnce = true;
-
-	if ((Ptr) RegistryEntryIterate == (Ptr) kUnresolvedCFragSymbolAddress) return;
-
-	RegEntryIter cookie;
-    RegEntryID entry;
-    Boolean done = false;
-    RegEntryIterationOp iterOp = kRegIterDescendants;
-    OSStatus err = RegistryEntryIterateCreate (&cookie);
-
-	try {
-	    while (true) {
-	        err = RegistryEntryIterate (&cookie, iterOp, &entry, &done);
-	        if (!done && (err == noErr)) {
-	  			RegPropertyValueSize propSize;
-	  			err = RegistryPropertyGetSize (&entry, kDeviceTypeProperty, &propSize);
-	  			if (err == noErr) {
-					char *deviceType = NewPtr (propSize + 1);
-					ThrowIfNULL_AC (deviceType);
-					ThrowIfOSErr_AC (RegistryPropertyGet (&entry, kDeviceTypeProperty, deviceType, &propSize));
-					deviceType[propSize] = '\0';
-					if (!strcmp (deviceType, "serial")) {
-						addInputOutputDevice (&entry, &fInputDevices);
-						addInputOutputDevice (&entry, &fOutputDevices);
-					} else if (!strcmp (deviceType, "display")) {
-						addInputOutputDevice (&entry, &fOutputDevices);
-					} else if (!strcmp (deviceType, "keyboard")) {
-						addInputOutputDevice (&entry, &fInputDevices);
-					}
-					DisposePtr (deviceType);				
-				}
-		        RegistryEntryIDDispose (&entry);
-	        } else {
-	        	break;
-	        }
-	        iterOp = kRegIterContinue;
-	    }
-	} 
-	catch (...) {
-	}
-	RegistryEntryIterateDispose (&cookie);
-}
-
+// Functions for getting the values we need to write to NVRAM.
 
 CStr255_AC 
 XPFPrefs::getInputDevice ()
 {
 	CStr255_AC result;
-	if (fInputDeviceIndex) {
+	if (fInputDevice) {
 		if (fUseShortStrings) {
-			result.CopyFrom (fShortInputDevices.At (fInputDeviceIndex));
+			result.CopyFrom (fInputDevice->getShortOpenFirmwareName ());
 		} else {
-			result.CopyFrom (fInputDevices.At (fInputDeviceIndex));
+			result.CopyFrom (fInputDevice->getOpenFirmwareName ());
 		}
 	}
 	return result;
@@ -495,11 +360,11 @@ CStr255_AC
 XPFPrefs::getOutputDevice ()
 {
 	CStr255_AC result;
-	if (fOutputDeviceIndex) {
+	if (fOutputDevice) {
 		if (fUseShortStrings) {
-			result.CopyFrom (fShortOutputDevices.At (fOutputDeviceIndex));
+			result.CopyFrom (fOutputDevice->getShortOpenFirmwareName ());
 		} else {
-			result.CopyFrom (fOutputDevices.At (fOutputDeviceIndex));		
+			result.CopyFrom (fOutputDevice->getOpenFirmwareName ());
 		}
 	}
 	return result;
@@ -509,11 +374,11 @@ CStr255_AC
 XPFPrefs::getInputDeviceForInstall ()
 {
 	CStr255_AC result;
-	if (fInputDeviceIndex) {
+	if (fInputDevice) {
 		if (fUseShortStringsForInstall) {
-			result.CopyFrom (fShortInputDevices.At (fInputDeviceIndex));
+			result.CopyFrom (fInputDevice->getShortOpenFirmwareName ());
 		} else {
-			result.CopyFrom (fInputDevices.At (fInputDeviceIndex));
+			result.CopyFrom (fInputDevice->getOpenFirmwareName ());
 		}
 	}
 	return result;
@@ -523,135 +388,24 @@ CStr255_AC
 XPFPrefs::getOutputDeviceForInstall ()
 {
 	CStr255_AC result;
-	if (fOutputDeviceIndex) {
+	if (fOutputDevice) {
 		if (fUseShortStringsForInstall) {
-			result.CopyFrom (fShortOutputDevices.At (fOutputDeviceIndex));
+			result.CopyFrom (fOutputDevice->getShortOpenFirmwareName ());
 		} else {
-			result.CopyFrom (fOutputDevices.At (fOutputDeviceIndex));		
+			result.CopyFrom (fOutputDevice->getOpenFirmwareName ());
 		}
 	}
 	return result;
 }
 
-void 
-XPFPrefs::setBootDisk (MountedVolume *theDisk)
-{
-	if (fBootDisk != theDisk) {
-		fBootDisk = theDisk;
-		fCachedCreationDate = theDisk->getCreationDate ();
-		Changed (cSetBootDisk, NULL);
-	}
-}
-
-void 
-XPFPrefs::setInstallDisk (MountedVolume *theDisk)
-{
-	if (fInstallDisk != theDisk) {
-		fInstallDisk = theDisk;
-		Changed (cSetInstallDisk, NULL);
-	}
-}
-
-void
-XPFPrefs::setHelperDisk (MountedVolume *theDisk)
-{
-	if (fHelperDisk != theDisk) {
-		fHelperDisk = theDisk;
-		Changed (cSetHelperDisk, NULL);
-	}
-}
-
-void 
-XPFPrefs::setBootInVerboseMode (bool val)
-{
-	if (fBootInVerboseMode != val) {
-		fBootInVerboseMode = val;
-		Changed (cToggleVerboseMode, NULL);
-	}
-}
-
-
-void
-XPFPrefs::setReinstallBootX (bool val)
-{
-	if (fReinstallBootX != val) {
-		fReinstallBootX = val;
-		Changed (cReinstallBootX, NULL);
-	}
-}
-
-void
-XPFPrefs::setReinstallExtensions (bool val)
-{
-	if (fReinstallExtensions != val) {
-		fReinstallExtensions = val;
-		Changed (cReinstallExtensions, NULL);
-	}
-}
-
-void 
-XPFPrefs::setBootInSingleUserMode (bool val)
-{
-	if (fBootInSingleUserMode != val) {
-		fBootInSingleUserMode = val;
-		Changed (cToggleSingleUserMode, NULL);
-	}
-}
-
-void
-XPFPrefs::setSetupL2Cache (bool val)
-{
-#pragma unused (val)
-/*	if (!fHasL2Cache) return;
-	fPrefs->setSetupL2Cache (val);
-	if (fSetupL2Cache && !fPrefs->getL2CRValue) fPrefs->setL2CRValue (getCurrentL2CRValue ());
-	if (fMainWindow) fMainWindow->UpdateUI ();
-*/
-}
-
-void
-XPFPrefs::setAutoBoot (bool val)
-{
-	if (fAutoBoot != val) {
-		fAutoBoot = val;
-		Changed (cToggleAutoBoot, NULL);
-	}
-}
-
-void 
-XPFPrefs::setOutputDeviceIndex (unsigned index)
-{
-	if (fOutputDeviceIndex != index) {
-		fOutputDeviceIndex = index;
-		Changed (cFirstOutputDevice, NULL);
-	}
-}
-
-void 
-XPFPrefs::setInputDeviceIndex (unsigned index)
-{
-	if (fInputDeviceIndex != index) {
-		fInputDeviceIndex = index;
-		Changed (cFirstInputDevice, NULL);
-	}
-}
-
-void 
-XPFPrefs::setThrottle (unsigned throttle)
-{
-	if (fThrottle != throttle) {
-		fThrottle = throttle;
-		Changed (cThrottleBase, NULL);
-	}
-}
 
 CStr255_AC
 XPFPrefs::getBootDevice ()
 {
-	MountedVolume *bootDevice = getBootDisk ();
-	if (bootDevice->getRequiresBootHelper ()) {
-		bootDevice = getHelperDisk ();		
-	}
+	MountedVolume *bootDevice = getTargetDisk ();
+	if (!bootDevice) return "";
+	
+	if (bootDevice->getHelperDisk ()) bootDevice = bootDevice->getHelperDisk ();		
 	
 	if (fUseShortStrings) {
 		return bootDevice->getShortOpenFirmwareName();
@@ -663,10 +417,10 @@ XPFPrefs::getBootDevice ()
 CStr255_AC
 XPFPrefs::getBootDeviceForInstall ()
 {
-	MountedVolume *bootDevice = getInstallDisk ();
-	if (bootDevice->getRequiresBootHelper ()) {
-		bootDevice = getHelperDisk ();		
-	}
+	MountedVolume *bootDevice = getTargetDisk ();
+	if (!bootDevice) return "";
+	
+	if (bootDevice->getHelperDisk ()) bootDevice = bootDevice->getHelperDisk ();		
 	
 	if (fUseShortStringsForInstall) {
 		return bootDevice->getShortOpenFirmwareName ();
@@ -678,49 +432,36 @@ XPFPrefs::getBootDeviceForInstall ()
 CStr255_AC 
 XPFPrefs::getBootCommandBase ()
 {
+	if (!getTargetDisk ()) return "";
+	
 	CStr255_AC bootCommand ("0 bootr");
-	if (fBootInVerboseMode || !getBootDisk ()->getHasFinder ()) bootCommand += (" -v");
-	if (fBootInSingleUserMode) bootCommand += (" -s");
 	
-	unsigned debug = 0;
-	if (fDebug.breakpoint)	debug |= 1 << 0;
-	if (fDebug.printf) 		debug |= 1 << 1;
-	if (fDebug.nmi)			debug |= 1 << 2;
-	if (fDebug.kprintf)		debug |= 1 << 3;
-	if (fDebug.ddb)			debug |= 1 << 4;
-	if (fDebug.syslog) 		debug |= 1 << 5;
-	if (fDebug.arp)			debug |= 1 << 6;
-	if (fDebug.oldgdb)		debug |= 1 << 7;
-	if (fDebug.panicText)	debug |= 1 << 8;
-	
-	if (debug) {
+	if (fDebug) {
 		char debugValue [32];
-		sprintf (debugValue, " debug=0x%X", debug);
+		sprintf (debugValue, " debug=0x%X", fDebug);
 		bootCommand += debugValue;
 	}
 			
-#if 0
-	if (fSetupL2Cache) {
-		char str [128];
-		sprintf (str, " L2CR=0x%X", fL2CRValue);
-		bootCommand += str;
-	}
-#endif
+	if (fBootInVerboseMode) bootCommand += (" -v");
+	if (fBootInSingleUserMode) bootCommand += (" -s");
+	
 	return bootCommand;
-
 }
 
 CStr255_AC 
 XPFPrefs::getBootCommand ()
 {
+	if (!getTargetDisk ()) return "";	
 	CStr255_AC bootCommand = getBootCommandBase ();
 	
-	if (getBootDisk ()->getRequiresBootHelper ()) {
+	if (!fBootInVerboseMode && !getTargetDisk ()->getHasFinder ()) bootCommand += " -v";
+	
+	if (getTargetDisk ()->getHelperDisk ()) {
 		bootCommand += " rd=*";
 		if (fUseShortStrings) {
-			bootCommand += fBootDisk->getShortOpenFirmwareName ();
+			bootCommand += getTargetDisk ()->getShortOpenFirmwareName ();
 		} else {
-			bootCommand += fBootDisk->getOpenFirmwareName ();
+			bootCommand += getTargetDisk ()->getOpenFirmwareName ();
 		}
 	}
 		
@@ -730,13 +471,16 @@ XPFPrefs::getBootCommand ()
 CStr255_AC
 XPFPrefs::getBootCommandForInstall ()
 {
+	if (!getInstallCD ()) return "";
 	CStr255_AC bootCommand = getBootCommandBase ();
+	
+	if (!fBootInVerboseMode && !getInstallCD ()->getHasFinder ()) bootCommand += " -v";
 	
 	bootCommand += " rd=*";
 	if (fUseShortStringsForInstall) {
-		bootCommand += fBootDisk->getShortOpenFirmwareName ();
+		bootCommand += fInstallCD->getShortOpenFirmwareName ();
 	} else {
-		bootCommand += fBootDisk->getOpenFirmwareName();	
+		bootCommand += fInstallCD->getOpenFirmwareName();	
 	}
 
 	return bootCommand;
@@ -752,92 +496,184 @@ XPFPrefs::getBootFileForInstall ()
 CStr255_AC
 XPFPrefs::getBootFile ()
 {
-	if (getBootDisk ()->getRequiresBootHelper ()) {
+	if (!getTargetDisk ()) return "";
+	if (getTargetDisk ()->getHelperDisk ()) {
 		return CStr255_AC ("-h");
 	} else {
 		return CStr255_AC ("");
 	}
 }
 
+// Accessors
+
 void
-XPFPrefs::setDebugBreakpoint (bool val)
+XPFPrefs::setInputDevice (XPFIODevice *val)
 {
-	if (fDebug.breakpoint != val) {
-		fDebug.breakpoint = val;
-		Changed (cToggleDebugBreakpoint, NULL);
+	if (fInputDevice != val) {
+		fInputDevice = val;
+		Changed (cSetInputDevice, val);
 	}
 }
 
 void
-XPFPrefs::setDebugPrintf (bool val)
+XPFPrefs::setOutputDevice (XPFIODevice *val)
 {
-	if (fDebug.printf != val) {
-		fDebug.printf = val;
-		Changed (cToggleDebugPrint, NULL);
+	if (fOutputDevice != val) {
+		fOutputDevice = val;
+		Changed (cSetOutputDevice, val);
+	}
+}
+
+void 
+XPFPrefs::setUseShortStrings (bool newVal)
+{
+	if (fUseShortStrings != newVal) {
+		fUseShortStrings = newVal;
+		Changed (cSetUseShortStrings, &fUseShortStrings);
+	}
+}
+
+void 
+XPFPrefs::setUseShortStringsForInstall (bool newVal)
+{
+	if (fUseShortStringsForInstall != newVal) {
+		fUseShortStringsForInstall = newVal;
+		Changed (cSetUseShortStringsForInstall, &fUseShortStringsForInstall);
+	}
+}
+
+void 
+XPFPrefs::setTargetDisk (MountedVolume *theDisk)
+{
+	if (fTargetDisk != theDisk) {
+		fTargetDisk = theDisk;
+		Changed (cSetTargetDisk, fTargetDisk);
+	}
+}
+
+void 
+XPFPrefs::setInstallCD (MountedVolume *theDisk)
+{
+	if (fInstallCD != theDisk) {
+		fInstallCD = theDisk;
+		Changed (cSetInstallCD, fInstallCD);
+	}
+}
+
+void 
+XPFPrefs::setBootInVerboseMode (bool val)
+{
+	if (fBootInVerboseMode != val) {
+		fBootInVerboseMode = val;
+		Changed (cSetVerboseMode, &fBootInVerboseMode);
+	}
+}
+
+void 
+XPFPrefs::setBootInSingleUserMode (bool val)
+{
+	if (fBootInSingleUserMode != val) {
+		fBootInSingleUserMode = val;
+		Changed (cSetSingleUserMode, &fBootInSingleUserMode);
 	}
 }
 
 void
-XPFPrefs::setDebugNMI (bool val)
+XPFPrefs::setAutoBoot (bool val)
 {
-	if (fDebug.nmi != val) {
-		fDebug.nmi = val;
-		Changed (cToggleDebugNMI, NULL);
+	if (fAutoBoot != val) {
+		fAutoBoot = val;
+		Changed (cSetAutoBoot, &fAutoBoot);
 	}
 }
 
 void
-XPFPrefs::setDebugKprintf (bool val)
+XPFPrefs::setEnableCacheEarly (bool val)
 {
-	if (fDebug.kprintf != val) {
-		fDebug.kprintf = val;
-		Changed (cToggleDebugkprintf, NULL);
+	if (fEnableCacheEarly != val) {
+		fEnableCacheEarly = val;
+		Changed (cSetEnableCacheEarly, &fEnableCacheEarly);
+	}
+}
+
+void 
+XPFPrefs::setThrottle (unsigned throttle)
+{
+	if (fThrottle != throttle) {
+		fThrottle = throttle;
+		Changed (cSetThrottle, &fThrottle);
+	}
+}
+
+// Debug accessors. Better than repeating it all 8 times!
+
+#define DEBUG_ACCESSORS(methodName)												\
+	void																		\
+	XPFPrefs::set##methodName (bool val) 										\
+	{																			\
+		if ((fDebug & k##methodName) != (val ? k##methodName : 0)) {			\
+			if (val) fDebug |= k##methodName; else fDebug &= ~k##methodName;	\
+			Changed (cSet##methodName, &val);									\
+		}																		\
+	}																			\
+																				\
+	bool																		\
+	XPFPrefs::get##methodName ()												\
+	{																			\
+		return (fDebug & k##methodName) ? true : false;							\
+	}
+		
+DEBUG_ACCESSORS (DebugBreakpoint);
+DEBUG_ACCESSORS (DebugPrintf);
+DEBUG_ACCESSORS (DebugNMI);
+DEBUG_ACCESSORS (DebugKprintf);
+DEBUG_ACCESSORS (DebugDDB);
+DEBUG_ACCESSORS (DebugSyslog);
+DEBUG_ACCESSORS (DebugARP);
+DEBUG_ACCESSORS (DebugOldGDB);
+DEBUG_ACCESSORS (DebugPanicText);
+
+// Convenience functions for setting input and output devices based on their labels.
+// I.e. what would be displayed in a popup menu, for instance.
+
+void
+XPFPrefs::setInputDevice (char *label, bool callChanged)
+{
+	XPFIODevice *newVal = XPFIODevice::InputDeviceWithLabel (label);
+	if (newVal == NULL) newVal = XPFIODevice::InputDeviceWithOpenFirmwareName (label);
+	if (newVal == NULL) newVal = XPFIODevice::InputDeviceWithShortOpenFirmwareName (label);
+	if (callChanged) {
+		setInputDevice (newVal);
+	} else {
+		fInputDevice = newVal;
 	}
 }
 
 void
-XPFPrefs::setDebugDDB (bool val)
+XPFPrefs::setOutputDevice (char *label, bool callChanged)
 {
-	if (fDebug.ddb != val) {
-		fDebug.ddb = val;
-		Changed (cToggleDebugUseDDB, NULL);
+	XPFIODevice *newVal = XPFIODevice::OutputDeviceWithLabel (label);
+	if (newVal == NULL) newVal = XPFIODevice::OutputDeviceWithOpenFirmwareName (label);
+	if (newVal == NULL) newVal = XPFIODevice::OutputDeviceWithShortOpenFirmwareName (label);
+	if (callChanged) {
+		setOutputDevice (newVal);
+	} else {
+		fOutputDevice = newVal;
 	}
 }
 
-void
-XPFPrefs::setDebugSyslog (bool val)
+// Convenience functions to get the index of an input or output device in its list.
+
+unsigned
+XPFPrefs::getInputDeviceIndex ()
 {
-	if (fDebug.syslog != val) {
-		fDebug.syslog = val;
-		Changed (cToggleDebugSystemLog, NULL);
-	}
+	if (!fInputDevice) return 0;
+	return XPFIODevice::GetInputDeviceList ()->GetIdentityItemNo (fInputDevice);
 }
 
-void
-XPFPrefs::setDebugARP (bool val)
+unsigned
+XPFPrefs::getOutputDeviceIndex ()
 {
-	if (fDebug.arp != val) {
-		fDebug.arp = val;
-		Changed (cToggleDebugARP, NULL);
-	}
+	if (!fOutputDevice) return 0;
+	return XPFIODevice::GetOutputDeviceList ()->GetIdentityItemNo (fOutputDevice);
 }
-
-void
-XPFPrefs::setDebugOldGDB (bool val)
-{
-	if (fDebug.oldgdb != val) {
-		fDebug.oldgdb = val;
-		Changed (cToggleDebugOldGDB, NULL);
-	}
-}
-
-void
-XPFPrefs::setDebugPanicText (bool val)
-{
-	if (fDebug.panicText != val) {
-		fDebug.panicText = val;
-		Changed (cToggleDebugPanicText, NULL);
-	}
-}
-
-

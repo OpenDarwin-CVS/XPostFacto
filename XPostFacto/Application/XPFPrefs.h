@@ -34,57 +34,54 @@ advised of the possibility of such damage.
 #ifndef __XPFPREFS_H__
 #define __XPFPREFS_H__
 
-#include "MDependable_AC.h"
+#include "OFAliases.h"
 
 class MountedVolume;
+class XPFIODevice;
 
-struct XPFDebug {
-	bool	breakpoint;
-	bool	printf;
-	bool	nmi;
-	bool	kprintf;
-	bool	ddb;
-	bool	syslog;
-	bool	arp;
-	bool	oldgdb;
-	bool	panicText;
-};
-
-class XPFPrefs : public MDependable_AC {
+class XPFPrefs : public TFileBasedDocument {
 
 	public:
 	
-		XPFPrefs ();
+		XPFPrefs (TFile* itsFile = NULL);
 		~XPFPrefs ();
 
-		void Initialize ();
+		// TFileBasedDocument methods
 
-		void setBootDisk (MountedVolume *theDisk);
-		MountedVolume* getBootDisk () {return fBootDisk;}
+		void DoInitialState ();
+		void DoRead (TFile* aFile, bool forPrinting);
+		void DoWrite (TFile* aFile, bool makingCopy);
+		void DoMakeViews (bool forPrinting);
+		void RegainControl ();
+		void UpdateWindowIcon (TWindow* /* aWindow */) {}
 		
-		void setInstallDisk (MountedVolume *theDisk);
-		MountedVolume* getInstallDisk () {return fInstallDisk;}
+		// Commands
 		
-		void setHelperDisk (MountedVolume *theDisk);
-		MountedVolume* getHelperDisk () {return fHelperDisk;}
+		virtual void DoSetupMenus (); // Override		
+		virtual void DoMenuCommand (CommandNumber aCommandNumber); // Override
+
+		// Accessors
+
+		void setTargetDisk (MountedVolume *theDisk);
+		MountedVolume* getTargetDisk () {return fTargetDisk;}
 		
+		void setInstallCD (MountedVolume *theDisk);
+		MountedVolume* getInstallCD () {return fInstallCD;}
+								
 		bool getBootInVerboseMode () {return fBootInVerboseMode;}
 		bool getBootInSingleUserMode () {return fBootInSingleUserMode;}
 		
 		void setBootInVerboseMode (bool val);
-		void setBootInDebugMode (bool val);
-		void setBootInSingleUserMode (bool val);
+   		void setBootInSingleUserMode (bool val);
 		
-		bool getReinstallBootX () {return fReinstallBootX;}
-		void setReinstallBootX (bool val);
-		bool getReinstallExtensions () {return fReinstallExtensions;}
-		void setReinstallExtensions (bool val);
 		bool getAutoBoot () {return fAutoBoot;}
 		void setAutoBoot (bool val);
-		bool getSetupL2Cache () {return fSetupL2Cache;}
-		void setSetupL2Cache (bool val);
-		unsigned int getL2CRValue () {return fL2CRValue;}
+		
 		bool getUseShortStrings () {return fUseShortStrings;}
+		bool getUseShortStringsForInstall () {return fUseShortStringsForInstall;}
+
+		bool getEnableCacheEarly () {return fEnableCacheEarly;}
+		void setEnableCacheEarly (bool newVal);
 
 		CStr255_AC getBootDevice ();
 		CStr255_AC getBootFile ();
@@ -98,25 +95,18 @@ class XPFPrefs : public MDependable_AC {
 		CStr255_AC getOutputDevice ();
 		CStr255_AC getInputDeviceForInstall ();
 		CStr255_AC getOutputDeviceForInstall ();
-				
-		unsigned int getNextInputDevice () {return fNextInputDevice;}
-		unsigned int getNextOutputDevice () {return fNextOutputDevice;}
 		
-		unsigned int getInputDeviceIndex () {return fInputDeviceIndex;}
-		unsigned int getOutputDeviceIndex () {return fOutputDeviceIndex;}
+		unsigned getInputDeviceIndex ();
+		unsigned getOutputDeviceIndex ();
 		
-		unsigned int getNextHelperVolume () {return fNextHelperVolume;}
-		unsigned int getHelperVolumeIndex ();
-
-		void setHelperVolumeIndex (unsigned index);
-		void setOutputDeviceIndex (unsigned index);
-		void setInputDeviceIndex (unsigned index);
+		void setInputDevice (char *label, bool callChanged = true);
+		void setInputDevice (XPFIODevice *device);
 		
+		void setOutputDevice (char *label, bool callChanged = true);
+		void setOutputDevice (XPFIODevice *device);
+						
 		void setThrottle (unsigned throttle);
 		unsigned getThrottle () {return fThrottle;}
-		
-		void Changed(ChangeID_AC theChange, void* changeData);
-		void checkStringLength ();
 		
 		void setDebugBreakpoint (bool val);
 		void setDebugPrintf (bool val);
@@ -128,62 +118,48 @@ class XPFPrefs : public MDependable_AC {
 		void setDebugOldGDB (bool val);
 		void setDebugPanicText (bool val);
 		
-		bool getDebugBreakpoint () {return fDebug.breakpoint;}
-		bool getDebugPrintf () {return fDebug.printf;}
-		bool getDebugNMI () {return fDebug.nmi;}
-		bool getDebugKprintf () {return fDebug.kprintf;}
-		bool getDebugDDB () {return fDebug.ddb;}
-		bool getDebugSyslog () {return fDebug.syslog;}
-		bool getDebugARP () {return fDebug.arp;}
-		bool getDebugOldGDB () {return fDebug.oldgdb;}
-		bool getDebugPanicText () {return fDebug.panicText;}
+		bool getDebugBreakpoint ();
+		bool getDebugPrintf ();
+		bool getDebugNMI ();
+		bool getDebugKprintf ();
+		bool getDebugDDB ();
+		bool getDebugSyslog ();
+		bool getDebugARP ();
+		bool getDebugOldGDB ();
+		bool getDebugPanicText ();
 		
 	private:
-	
-		void getPrefsFromFile ();
-		void writePrefsToFile ();
-		
-		void initializeInputAndOutputDevices ();
-		void initializeHelperMenu ();
-		void addInputOutputDevice (RegEntryID *entry, TemplateList_AC <char> *list);
-		
+			
+#ifdef __MACH__
+		void getPrefsFromNVRAM ();
+#endif
+
+		void Changed(ChangeID_AC theChange, void* changeData);
+		void checkStringLength ();
+				
 		CStr255_AC getBootCommandBase ();
+		
+		void setUseShortStrings (bool newVal);
+		void setUseShortStringsForInstall (bool newVal);
 
-		CFile_AC *fPrefs;
-
-		unsigned int fCachedCreationDate;
-		unsigned int fHelperCreationDate;
-		unsigned int fL2CRValue;
-		unsigned int fThrottle;
-		bool fBootInVerboseMode;
-		bool fBootInSingleUserMode;
-		bool fReinstallBootX;
-		bool fReinstallExtensions;
-		bool fAutoBoot;
-		bool fSetupL2Cache;
-
-		bool fDirty;
 		bool fUseShortStrings;
 		bool fUseShortStringsForInstall;
-		bool fForceShortStrings;
 
-		MountedVolume *fBootDisk;
-		MountedVolume *fInstallDisk;
-		MountedVolume *fHelperDisk;
+		MountedVolume *fTargetDisk;
+		MountedVolume *fInstallCD;
+				
+		XPFIODevice *fInputDevice;
+		XPFIODevice *fOutputDevice;
 
-		TemplateList_AC <char> fInputDevices;
-		TemplateList_AC <char> fOutputDevices;
-		TemplateList_AC <char> fShortInputDevices;
-		TemplateList_AC <char> fShortOutputDevices;
-		unsigned int fInputDeviceIndex;
-		unsigned int fOutputDeviceIndex;
-		
-		unsigned int fNextInputDevice;
-		unsigned int fNextOutputDevice;		
-		unsigned int fNextHelperVolume;
-		
-		XPFDebug fDebug;
+		// Values for prefs file. Don't change type, as that would
+		// break the prefs file format.
 
+		UInt32	fThrottle;
+		UInt8	fBootInVerboseMode;
+		UInt8	fBootInSingleUserMode;
+		UInt8	fAutoBoot;
+		UInt8	fEnableCacheEarly;
+		UInt32	fDebug;
 };
 
 #endif
