@@ -38,6 +38,11 @@ advised of the possibility of such damage.
 #include "XPFStrings.h"
 #include "XPFUpdate.h"
 #include "XPFFSRef.h"
+#include "XPFAuthorization.h"
+#include "FSRefCopying.h"
+#include "XPFLog.h"
+
+#include <stdio.h>
 
 #define Inherited XPFThreadedCommand
 
@@ -141,5 +146,118 @@ XPFUninstallCommand::DoItInProgressWindow ()
 	
 	updateExtensionsCacheForRootDirectory (fUpdate->getTarget()->getRootDirectory ());
 	
+	setStatusMessage (CStr255_AC ((ResNumber) kXPFStringsResource, kDeletingXPFCache), true);
+
+	XPFSetUID myUID (0);
+	FSRef xpfDirectory;	
+	OSErr err = XPFFSRef::getOrCreateXPFDirectory (fUpdate->getTarget()->getRootDirectory(), &xpfDirectory, false);
+	if (err == noErr) FSRefDeleteDirectoryContents (&xpfDirectory, true);
+	if (fUpdate->getHelper ()) {
+		err = XPFFSRef::getOrCreateXPFDirectory (fUpdate->getHelper()->getRootDirectory(), &xpfDirectory, false);
+		if (err == noErr) FSRefDeleteDirectoryContents (&xpfDirectory, true);	
+	}
+	
 	fProgressWindow->setFinished ();
+}
+
+void
+XPFEmptyCacheCommand::DoItInProgressWindow ()
+{
+	setStatusMessage (CStr255_AC ((ResNumber) kXPFStringsResource, kDeletingXPFCache), true);
+
+	XPFSetUID myUID (0);
+	FSRef xpfDirectory;	
+	OSErr err = XPFFSRef::getOrCreateXPFDirectory (fUpdate->getTarget()->getRootDirectory(), &xpfDirectory, false);
+	if (err == noErr) ThrowIfOSErr_AC (FSRefDeleteDirectoryContents (&xpfDirectory, true));
+	if (fUpdate->getHelper ()) {
+		err = XPFFSRef::getOrCreateXPFDirectory (fUpdate->getHelper()->getRootDirectory(), &xpfDirectory, false);
+		if (err == noErr) ThrowIfOSErr_AC (FSRefDeleteDirectoryContents (&xpfDirectory, true));	
+	}
+	
+	fProgressWindow->setFinished ();
+}
+
+void
+XPFCheckPermissionsCommand::DoItInProgressWindow ()
+{
+	setStatusMessage (CStr255_AC ((ResNumber) kXPFStringsResource, kCheckingPermissions), true);
+
+	gLogFile << "Fixing permissions:" << endl_AC;
+
+	XPFSetUID myUID (0);
+	FSRef xpfDirectory;	
+	OSErr err = XPFFSRef::getOrCreateXPFDirectory (fUpdate->getTarget()->getRootDirectory(), &xpfDirectory, false);
+	if (err == noErr) checkPermissions (&xpfDirectory);
+	if (fUpdate->getHelper ()) {
+		err = XPFFSRef::getOrCreateXPFDirectory (fUpdate->getHelper()->getRootDirectory(), &xpfDirectory, false);
+		if (err == noErr) checkPermissions (&xpfDirectory);
+	}
+	
+	gLogFile << "Finished fixing permissions" << endl_AC;
+	
+	fProgressWindow->setFinished ();
+}
+
+#define ITERATE_OVER	16
+
+OSErr
+XPFCheckPermissionsCommand::checkPermissions (FSRef *directory)
+{
+	OSErr error;
+	FSCatalogInfo catInfo;
+	error = FSGetCatalogInfo (directory, kFSCatInfoNodeFlags, &catInfo, NULL, NULL, NULL);
+	if (error != noErr) return error;
+	if (!(catInfo.nodeFlags & kFSNodeIsDirectoryMask)) return errFSNotAFolder;
+
+	bool done = false;
+	FSIterator iterator;
+	error = FSOpenIterator (directory, kFSIterateFlat, &iterator);
+	if (error != noErr) return error;
+
+	while (!done) {
+		ItemCount actualObjects;
+		FSRef items [ITERATE_OVER];
+		FSSpec specs [ITERATE_OVER];
+		FSCatalogInfo catInfos [ITERATE_OVER];
+
+		error = FSGetCatalogInfoBulk (iterator, ITERATE_OVER, &actualObjects, NULL, 
+					kFSCatInfoNodeFlags | kFSCatInfoPermissions, catInfos, items, specs, NULL);
+											
+		if (error == errFSNoMoreItems) {
+			error = noErr;
+			done = true;
+		} else if (error != noErr) {
+			break;
+		}
+		
+		for (int x = 0; x < actualObjects; x++) {
+			if (catInfos[x].nodeFlags & kFSNodeIsDirectoryMask) {
+				error = checkPermissions (&items[x]);
+			} else {
+				if ((catInfos[x].permissions[0] != 0) || (catInfos[x].permissions[1] != 0) ||
+							(catInfos[x].permissions[2] & 0022)) {
+					char temp[64];
+					snprintf (temp, 63, "0%o", catInfos[x].permissions[2] & 0777);
+					gLogFile << "--> " << (CChar63_AC) specs[x].name << " was "
+						<< catInfos[x].permissions[0] << "-" << catInfos[x].permissions[1] << "-"
+						<< temp << "-" << endl_AC;
+					catInfos[x].permissions[0] = 0;
+					catInfos[x].permissions[1] = 0;
+					catInfos[x].permissions[2] &= ~0022;	// turn off group and world write
+					XPFSetUID myUID (0);
+					FSSetCatalogInfo (&items[x], kFSCatInfoPermissions, &catInfos[x]);
+					#ifdef __MACH__
+						char path[1024];
+						error = FSRefMakePath (&items[x], (UInt8 *) path, 1023);
+						if (error == noErr) chown (path, 0, 0);
+					#endif
+				}
+			}
+		}
+		
+		if (error != noErr) return error;
+	}
+
+	FSCloseIterator (iterator);	
+	return error;
 }

@@ -506,8 +506,10 @@ void
 MountedVolume::turnOffIgnorePermissions ()
 {
 #ifdef __MACH__
-	char path[256];
-	ThrowIfOSErr_AC (FSRefMakePath (getRootDirectory (), (UInt8 *) path, 255));
+	if (fTurnedOffIgnorePermissions) return;
+
+	char path[1024];
+	ThrowIfOSErr_AC (FSRefMakePath (getRootDirectory (), (UInt8 *) path, 1023));
 	XPFSetUID myUID (0);
 	pid_t pid = fork ();
 	if (pid) {
@@ -520,6 +522,8 @@ MountedVolume::turnOffIgnorePermissions ()
 		execl ("/usr/sbin/vsdbutil", "vsdbutil", "-a", path, NULL);
 		ThrowException_AC (kInternalError, 0);	// the execl shouldn't return
 	}
+	
+	fTurnedOffIgnorePermissions = true;
 #endif
 }
 
@@ -553,8 +557,8 @@ MountedVolume::setVolumeName (HFSUniStr255 *name)
 
 io_object_t
 MountedVolume::getRegEntry () {
-	char mountPoint[256], deviceBSDName[32], *shortBSDName;
-	OSStatus err = FSRefMakePath (getRootDirectory (), (UInt8 *) mountPoint, 255);
+	char mountPoint[1024], deviceBSDName[32], *shortBSDName;
+	OSStatus err = FSRefMakePath (getRootDirectory (), (UInt8 *) mountPoint, 1023);
 	deviceBSDName[0] = 0;
 	if (err != noErr) return NULL;
 	int numFS = getfsstat (NULL, 0, MNT_NOWAIT);
@@ -666,6 +670,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	fCreationDate = 0;
 	fMacOSXVersion = "";
 	fMacOSXMajorVersion = 0;
+	fTurnedOffIgnorePermissions = false;
 	
 #ifdef BUILDING_XPF
 	gApplication->AddDependent (this); // for listening for volume deletions

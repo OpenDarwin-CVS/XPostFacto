@@ -106,4 +106,28 @@ class XPFUninstallCommand : public XPFThreadedCommand {
 
 };
 
+class XPFEmptyCacheCommand : public XPFThreadedCommand {
+
+	public:
+	
+		XPFEmptyCacheCommand (XPFUpdate *update) : XPFThreadedCommand (update) {}
+									
+		void DoItInProgressWindow ();
+
+};
+
+class XPFCheckPermissionsCommand : public XPFThreadedCommand {
+
+	public:
+	
+		XPFCheckPermissionsCommand (XPFUpdate *update) : XPFThreadedCommand (update) {}
+									
+		void DoItInProgressWindow ();
+		
+	private:
+	
+		OSErr checkPermissions (FSRef *rootDirectory);
+
+};
+
 #endif

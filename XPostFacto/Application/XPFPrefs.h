@@ -64,6 +64,10 @@ class XPFPrefs : public TFileBasedDocument {
 		short PoseSaveDialog ();
 		short PoseConfirmDialog (bool forInstall, bool quitting);
 		
+		void SaveFile (	CommandNumber		itsCommandNumber,
+						TFile*				theSaveFile,
+						CSaveOptions*		itsOptions);
+	
 		// Startup item
 		
 		void suspendStartupItem ();

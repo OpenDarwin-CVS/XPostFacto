@@ -335,8 +335,8 @@ FSGetOrCreateDirectoryUnicode (
 
 	#ifdef __MACH__
 		if (whichInfo & kFSCatInfoPermissions) {
-			char path[256];
-			error = FSRefMakePath (&tempRef, (UInt8 *) path, 255);
+			char path[1024];
+			error = FSRefMakePath (&tempRef, (UInt8 *) path, 1023);
 			if (error != noErr) return error;
 			chown (path, catalogInfo->permissions[0], catalogInfo->permissions[1]);
 		}
@@ -448,8 +448,8 @@ FSRefCopyFileMgrAttributes(	const FSRef *srcRef,
 		// In Mac OS X, we need to set the UID and GID separately
 		#ifdef __MACH__
 			if (error == noErr) {
-				char path[256];
-				error = FSRefMakePath (dstRef, (UInt8 *) path, 255);
+				char path[1024];
+				error = FSRefMakePath (dstRef, (UInt8 *) path, 1023);
 				if (error != noErr) return error;
 				chown (path, info.permissions[0], info.permissions[1]);
 			}
@@ -1241,46 +1241,48 @@ FSRefDirectoryCopy(
 										copyErrHandler, NULL, NULL);
 }
 
-
+#define ITERATE_OVER	32
 
 OSErr	
-FSRefDeleteDirectoryContents (FSRef *directory)
+FSRefDeleteDirectoryContents (FSRef *directory, bool leaveFiles)
 {
 	OSErr error;
 	FSCatalogInfo catInfo;
 	error = FSGetCatalogInfo (directory, kFSCatInfoNodeFlags, &catInfo, NULL, NULL, NULL);
 	if (error != noErr) return error;
-	if (catInfo.nodeFlags & kFSNodeIsDirectoryMask) {
-		// iterate through the directory, deleting as we go. We can't iterate in the usual way,
-		// so we keep creating & releasing the iterator.
-		while (true) {
-//			::YieldToAnyThread ();
-			ItemCount actualObjects;
-			FSRef item;
-			FSIterator iterator;
+	if (!(catInfo.nodeFlags & kFSNodeIsDirectoryMask)) return errFSNotAFolder;
 
-			error = FSOpenIterator (directory, kFSIterateFlat, &iterator);
-			if (error != noErr) return error;
-			error = FSGetCatalogInfoBulk (iterator, 1, &actualObjects, NULL, 
-												kFSCatInfoNodeFlags, &catInfo, &item, NULL, NULL);
-			FSCloseIterator (iterator);
+	// iterate through the directory, deleting as we go. We can't iterate in the usual way,
+	// so we keep creating & releasing the iterator.
+	bool done = false;
+	while (!done) {
+		ItemCount actualObjects;
+		FSRef items [ITERATE_OVER];
+		FSCatalogInfo catInfos [ITERATE_OVER];
+		FSIterator iterator;
 
-			if (error == errFSNoMoreItems) {
-				error = noErr;
-				break;
-			} else if (error != noErr) {
-				return error;
-			} else if (actualObjects == 1) {
-				if (catInfo.nodeFlags & kFSNodeIsDirectoryMask) {
-					error = FSRefDeleteDirectory (&item);
-				} else {
-					error = FSDeleteObject (&item);
-				}
-				if (error != noErr) return error;
-			} 
+		error = FSOpenIterator (directory, kFSIterateFlat, &iterator);
+		if (error != noErr) return error;
+		error = FSGetCatalogInfoBulk (iterator, ITERATE_OVER, &actualObjects, NULL, 
+											kFSCatInfoNodeFlags, catInfos, items, NULL, NULL);
+		FSCloseIterator (iterator);
+
+		if (error == errFSNoMoreItems) {
+			error = noErr;
+			done = true;
+		} else if (error != noErr) {
+			return error;
 		}
-	} else {
-		return errFSNotAFolder;
+		
+		for (int x = 0; x < actualObjects; x++) {
+			if (catInfos[x].nodeFlags & kFSNodeIsDirectoryMask) {
+				error = FSRefDeleteDirectory (&items[x]);
+			} else {
+				if (!leaveFiles) error = FSDeleteObject (&items[x]);
+			}
+		}
+		
+		if (error != noErr) return error;
 	}
 	
 	return error;

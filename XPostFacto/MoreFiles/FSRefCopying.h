@@ -485,8 +485,7 @@ FSRefDirectoryCopy(
 /*****************************************************************************/
 
 OSErr FSRefDeleteDirectory (FSRef *directory);
-OSErr FSRefDeleteDirectoryContents (FSRef *directory);
-
+OSErr FSRefDeleteDirectoryContents (FSRef *directory, bool leaveFiles = false);
 
 #ifdef __cplusplus
 }

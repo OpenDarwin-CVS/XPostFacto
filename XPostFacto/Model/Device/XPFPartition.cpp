@@ -224,8 +224,8 @@ OSErr
 XPFPartition::writeBootBlocks (void *buffer)
 {
 #ifdef __MACH__
-	char path[256];
-	OSErr err = FSRefMakePath (fMountedVolume->getRootDirectory (), (UInt8 *) path, 255);
+	char path[1024];
+	OSErr err = FSRefMakePath (fMountedVolume->getRootDirectory (), (UInt8 *) path, 1023);
 	if (err) {
 		gLogFile << "Could not get path for mountpoint" << endl_AC;
 	} else { 

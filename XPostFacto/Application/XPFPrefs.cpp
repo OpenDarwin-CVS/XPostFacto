@@ -397,8 +397,8 @@ XPFPrefs::installXPFPartitionInfo ()
 		XPFSetUID myUID (0);
 		ThrowIfOSErr_AC (archive.extractArchiveTo (&tmpDirectory));
 		
-		char path[256];
-		err = FSRefMakePath (&tmpDirectory, (UInt8 *) path, 256);
+		char path[1024];
+		err = FSRefMakePath (&tmpDirectory, (UInt8 *) path, 1023);
 		if (err == noErr) {
 			strcat (path, "/XPFPartitionInfo.kext");
 			pid_t pid = fork ();
@@ -481,7 +481,7 @@ XPFPrefs::DoUpdate (ChangeID_AC theChange,
 void
 XPFPrefs::RegainControl ()
 {
-	Inherited::RegainControl ();
+	TDocument::RegainControl ();	// we skip TFileBasedDocument
 	MountedVolume::Initialize ();
 	if (!fInstallCD) setInstallCD (MountedVolume::GetDefaultInstallerDisk ());
 }
@@ -613,6 +613,13 @@ XPFPrefs::writePrefsToNVRAM (bool forInstall)
 	if (err != noErr) ThrowException_AC (kErrorWritingNVRAM, 0);
 }
 
+void 
+XPFPrefs::SaveFile (CommandNumber itsCommandNumber, TFile* theSaveFile, CSaveOptions *itsOptions)
+{
+	XPFSetUID myUID (0);
+	Inherited::SaveFile (itsCommandNumber, theSaveFile, itsOptions);
+}
+
 void
 XPFPrefs::DoWrite (TFile* aFile, bool makingCopy)
 {
@@ -687,13 +694,16 @@ XPFPrefs::DoSetupMenus ()
 {
 	Inherited::DoSetupMenus ();
 	
-	Enable (cInstallBootX, true);
-	Enable (cInstallExtensions, true);
-	Enable (cInstallStartupItem, true);
+	Enable (cInstallBootX, fTargetDisk != NULL);
+	Enable (cInstallExtensions, fTargetDisk != NULL);
+	Enable (cInstallStartupItem, fTargetDisk != NULL);
+	Enable (cInstallEverything, fTargetDisk != NULL);
 	Enable (cShowOptionsWindow, true);
 	Enable (cRecopyHelperFiles, fTargetDisk && fTargetDisk->getHelperDisk () != NULL);
 	Enable (cUninstall, fTargetDisk && fTargetDisk->getIsWriteable ());
-	Enable (cBlessMacOS9SystemFolder, fTargetDisk && fTargetDisk->getMacOS9SystemFolderNodeID ()); 
+	Enable (cBlessMacOS9SystemFolder, fTargetDisk && fTargetDisk->getMacOS9SystemFolderNodeID ());
+	Enable (cEmptyCache, fTargetDisk != NULL);
+	Enable (cCheckPermissions, fTargetDisk != NULL);
 }
 
 void 
@@ -718,6 +728,13 @@ XPFPrefs::DoMenuCommand (CommandNumber aCommandNumber)
 			PerformCommand (TH_new XPFInstallStartupCommand (update));
 			break;
 			
+		case cInstallEverything:
+			update = new XPFUpdate (fTargetDisk, fTargetDisk->getHelperDisk ());
+			PerformCommand (TH_new XPFInstallBootXCommand (update));
+			PerformCommand (TH_new XPFInstallExtensionsCommand (update));
+			PerformCommand (TH_new XPFInstallStartupCommand (update));
+			break;
+						
 		case cRecopyHelperFiles:
 			update = new XPFUpdate (fTargetDisk, fTargetDisk->getHelperDisk ());
 			PerformCommand (TH_new XPFRecopyHelperFilesCommand (update));
@@ -739,6 +756,16 @@ XPFPrefs::DoMenuCommand (CommandNumber aCommandNumber)
 				update = new XPFUpdate (fTargetDisk, fTargetDisk->getHelperDisk ());
 				PerformCommand (TH_new XPFUninstallCommand (update));			
 			}
+			break;
+			
+		case cEmptyCache:
+			update = new XPFUpdate (fTargetDisk, fTargetDisk->getHelperDisk ());
+			PerformCommand (TH_new XPFEmptyCacheCommand (update));
+			break;
+			
+		case cCheckPermissions:
+			update = new XPFUpdate (fTargetDisk, fTargetDisk->getHelperDisk ());
+			PerformCommand (TH_new XPFCheckPermissionsCommand (update));
 			break;
 			
 		case cShowOptionsWindow:

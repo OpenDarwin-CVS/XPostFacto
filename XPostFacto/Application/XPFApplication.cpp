@@ -376,6 +376,7 @@ XPFApplication::FindOrCreatePrefsFile (CommandNumber itsCommandNumber)
 
 	// If we still don't have one, then we'll have to create it
 	
+	XPFSetUID myUID (0);
 	ThrowIfOSErr_AC (FindFolder (kOnSystemDisk, kVolumeRootFolderType, true, &vRefNum, &dirID));
 	err = FSMakeFSSpec (vRefNum, fsRtDirID, "\p:.XPostFacto", &fileSpec);
 	if (err != noErr) {
@@ -403,8 +404,8 @@ XPFApplication::OpenNew (CommandNumber itsCommandNumber)
 			if (myURL) {
 				FSRef myFSRef;
 				if (CFURLGetFSRef (myURL, &myFSRef)) {
-					char myPath[256];
-					OSStatus err = FSRefMakePath (&myFSRef, (UInt8 *) myPath, 255);
+					char myPath[1024];
+					OSStatus err = FSRefMakePath (&myFSRef, (UInt8 *) myPath, 1023);
 					if (err == noErr) {
 						XPFAuthorization::ExecuteWithPrivileges (myPath, NULL, NULL);				
 					}

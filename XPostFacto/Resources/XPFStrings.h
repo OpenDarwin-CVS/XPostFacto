@@ -82,7 +82,9 @@ enum {
 	kDeleteWord,
 	kSynchronizing,
 	kUninstalling,
-	kBlessingSystemFolder		// 45
+	kBlessingSystemFolder,		// 45
+	kDeletingXPFCache,
+	kCheckingPermissions
 };
 
 

@@ -64,6 +64,7 @@ XPFInstallCommand::DoIt ()
 	
 	targetDisk->turnOffIgnorePermissions ();
 	installCD->turnOffIgnorePermissions ();
+	if (targetDisk->getHelperDisk ()) targetDisk->getHelperDisk()->turnOffIgnorePermissions ();
 						
 	if (!(((XPFApplication *) gApplication)->getDebugOptions () & kDisableCoreServices)) {
 		FSRef coreServicesFolder, cdBootX;

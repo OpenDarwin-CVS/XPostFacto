@@ -102,6 +102,9 @@ advised of the possibility of such damage.
 
 #define cUninstall						1453
 #define cBlessMacOS9SystemFolder		1454
+#define cEmptyCache						1455
+#define cCheckPermissions				1456
+#define cInstallEverything				1457
 
 // Views and Windows
 // -----------------
@@ -129,6 +132,7 @@ advised of the possibility of such damage.
 
 #define mInstall 	70
 #define mWindow 	71
+#define mCache		72
 	
 // Finder Information
 // ------------------

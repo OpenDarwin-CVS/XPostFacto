@@ -58,6 +58,10 @@ XPFUpdate::XPFUpdate (MountedVolume *target, MountedVolume *helper, MountedVolum
 	fHelper = helper;
 	fInstallCD = installCD;
 	
+	if (fTarget) fTarget->turnOffIgnorePermissions ();
+	if (fHelper) fHelper->turnOffIgnorePermissions ();
+	if (fInstallCD) fInstallCD->turnOffIgnorePermissions ();
+	
 	// Construct the list
 	
 	fItemList.InsertLast (new XPFBootXUpdate (this));
@@ -390,8 +394,8 @@ XPFStartupItemUpdate::moveToTmp ()
 	// On Mac OS X, if we're installing in the current root directory, then we need to move
 	// the old startup item (if any) out of the way first, because otherwise we'll try to delete
 	// a running binary, which doesn't work.
-	char rootPath [256];
-	ThrowIfOSErr_AC (FSRefMakePath (fUpdate->getTarget()->getRootDirectory(), (UInt8 *) rootPath, 255));
+	char rootPath [1024];
+	ThrowIfOSErr_AC (FSRefMakePath (fUpdate->getTarget()->getRootDirectory(), (UInt8 *) rootPath, 1023));
 	if (!strcmp (rootPath, "/")) {
 		struct stat sb;
 		char dstPath [256];

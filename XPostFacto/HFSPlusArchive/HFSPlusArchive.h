@@ -87,7 +87,7 @@ private:
 	OSErr fErr;
 	ItemCount fActualObjects;
 	bool fContiguousAlloc;
-	char fItemPath[256];
+	char fItemPath[1024];
 };
 
 #endif

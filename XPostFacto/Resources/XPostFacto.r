@@ -156,6 +156,7 @@ resource 'MBAR' (kMBarDisplayed,
 		mFile;
 		mEdit;
 		mInstall;
+		mCache;
 		mWindow;
 	}
 };
@@ -171,6 +172,7 @@ purgeable)
 		mApple;
 		mEditAqua;
 		mInstall;
+		mCache;
 		mWindow;
 	}
 };
@@ -222,17 +224,34 @@ purgeable) {
 	textMenuProc,
 	EnablingManagedByMacApp,
 	enabled,
-	"Reinstall",
+	"Install",
 	{
 	"BootX",		noIcon, noKey, noMark, plain, cInstallBootX;
 	"Extensions",	noIcon, noKey, noMark, plain, cInstallExtensions;
 	"Startup Item", noIcon, noKey, noMark, plain, cInstallStartupItem;
 	"-",			noIcon, noKey, noMark, plain, nocommand;
-	"Recopy Helper Files", noIcon, noKey, noMark, plain, cRecopyHelperFiles;
+	"Everything",	noIcon, noKey, noMark, plain, cInstallEverything;
 	"-",			noIcon, noKey, noMark, plain, nocommand;
 	"Bless Mac OS 9 System", noIcon, noKey, noMark, plain, cBlessMacOS9SystemFolder;
 	"-",			noIcon, noKey, noMark, plain, nocommand;
 	"Uninstall…",	noIcon, noKey, noMark, plain, cUninstall;
+	}
+};
+
+resource 'CMNU' (mCache,
+#if qNames
+"mCache",
+#endif
+purgeable) {
+	mCache,
+	textMenuProc,
+	EnablingManagedByMacApp,
+	enabled,
+	"Cache",
+	{
+	"Recopy Helper Files", noIcon, noKey, noMark, plain, cRecopyHelperFiles;
+	"Check Permissions", noIcon, noKey, noMark, plain, cCheckPermissions;
+	"Empty Cache",	noIcon, noKey, noMark, plain, cEmptyCache;
 	}
 };
 

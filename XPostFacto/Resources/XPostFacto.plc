@@ -36,7 +36,7 @@ advised of the possibility of such damage.
 #define kBundleIdentifier "com.macsales.app.XPostFacto"
 #define kBundleShortVersion kXPFVersion
 
-#define kBundleGetInfo kBundleShortVersion ", Copyright © 2001 - 2003 by Other World Computing.  All rights reserved."
+#define kBundleGetInfo kBundleShortVersion ", Copyright © 2001 - 2004 by Other World Computing.  All rights reserved."
 
 plist
 {

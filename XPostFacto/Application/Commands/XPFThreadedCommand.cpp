@@ -165,8 +165,8 @@ XPFThreadedCommand::updateExtensionsCacheForRootDirectory (FSRef *rootDirectory)
 	fProgressWindow->setProgressValue (0, true);
 	setStatusMessage (CStr255_AC ((ResNumber) kXPFStringsResource, kUpdatingExtensionsCache), true);
 
-	char rootPath [256];
-	ThrowIfOSErr_AC (FSRefMakePath (rootDirectory, (UInt8 *) rootPath, 256));
+	char rootPath [1024];
+	ThrowIfOSErr_AC (FSRefMakePath (rootDirectory, (UInt8 *) rootPath, 1023));
 	XPFSetUID myUID (0);
 	if (!chdir (rootPath)) {
 		pid_t pid = fork ();
@@ -222,8 +222,8 @@ XPFThreadedCommand::installStartupItemWithRootDirectory (FSRef *rootDirectory)
 	// On Mac OS X, if we're installing in the current root directory, then we need to move
 	// the old startup item (if any) out of the way first, because otherwise we'll try to delete
 	// a running binary, which doesn't work.
-	char rootPath [256];
-	ThrowIfOSErr_AC (FSRefMakePath (rootDirectory, (UInt8 *) rootPath, 255));
+	char rootPath [1024];
+	ThrowIfOSErr_AC (FSRefMakePath (rootDirectory, (UInt8 *) rootPath, 1023));
 	if (!strcmp (rootPath, "/")) {
 		struct stat sb;
 		char dstPath [256];

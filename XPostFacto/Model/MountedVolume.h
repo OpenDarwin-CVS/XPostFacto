@@ -170,6 +170,7 @@ class MountedVolume : public MDependable_AC
 		bool fValidOpenFirmwareName;
 		bool fStillThere;
 		bool fHasFinder;
+		bool fTurnedOffIgnorePermissions;
 		
 		XPFBootableDevice *fBootableDevice;
 		XPFPartition *fPartInfo;

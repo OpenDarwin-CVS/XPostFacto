@@ -119,10 +119,10 @@ HFSPlusVolume::getBootXStartBlock ()
 	
 	attrlist params;
 	
-	char path[256];
+	char path[1024];
 	MountedVolume *vol = getMountedVolume ();
 	if (!vol) return 0;
-	FSRefMakePath (vol->getRootDirectory (), (UInt8 *) path, 255);
+	FSRefMakePath (vol->getRootDirectory (), (UInt8 *) path, 1023);
 	if (path[strlen (path) - 1] != '/') strcat (path, "/");
 	strcat (path, "BootX.image");
 
