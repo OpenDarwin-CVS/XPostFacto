@@ -34,6 +34,7 @@
 #include <IOKit/IOUserClient.h>
 #include <IOKit/IOLib.h>
 #include <IOKit/IODeviceTreeSupport.h>
+#include <pexpert/pexpert.h>
 
 #undef super
 #define super IOService
@@ -265,8 +266,10 @@ OWCCacheConfig::initializeL2 (IOService *provider, unsigned clock, bool isG4)
 		IOSleep (OWCCACHESLEEP);
 		if (originalCacheSetting & l2em) {
 			setProperty ("Original L2CR", (void *) &originalCacheSetting, sizeof (originalCacheSetting));
+			IOLog ("Setting L2CR to 0x%x\n", originalCacheSetting);
 			OWCL2CacheInit (originalCacheSetting);
 		} else {
+			IOLog ("Setting L2CR to 0x%x\n", setValue);
 			OWCL2CacheInit (setValue);
 		}
 		
