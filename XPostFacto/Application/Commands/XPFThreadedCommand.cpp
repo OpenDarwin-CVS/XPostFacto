@@ -185,6 +185,9 @@ XPFThreadedCommand::updateExtensionsCacheForRootDirectory (FSRef *rootDirectory)
 			ThrowException_AC (kInternalError, 0);	// the execl shouldn't return
 		}
 	}
+	// Make sure the permissions got set correctly
+	chown ("System/Library/Extensions.mkext", 0, 0);
+	chmod ("System/Library/Extensions.mkext", 0644);
 #else
 	FSRef extensionsCache;
 	err = XPFFSRef::getExtensionsCacheFSRef (rootDirectory, &extensionsCache, false);
