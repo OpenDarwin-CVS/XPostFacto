@@ -126,16 +126,18 @@ class XPFBootableDevice : public MDependable_AC
 #endif
 
 		virtual void checkOpenFirmwareName () {}	// meant to be overridden
-	
-		static TemplateAutoList_AC <XPFBootableDevice> gDeviceList;
-		static bool fInitialized;	
-			
+		
 		virtual void extractPartitionInfo ();
 		
 #if qDebug
 		static void PrintPartitionMapEntry (Partition *part);
 #endif
 
+	protected:
+	
+		static TemplateAutoList_AC <XPFBootableDevice> gDeviceList;
+		static bool fInitialized;	
+			
 		XPFBus *fBus;
 		XPFBus *fDefaultBus;
 

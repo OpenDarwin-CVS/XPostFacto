@@ -359,6 +359,9 @@ XPFBootableDevice::XPFBootableDevice
 	fDriverRefNum = driverRefNum;
 #endif
 
+	fOpenFirmwareName[0] = 0;
+	fShortOpenFirmwareName[0] = 0;
+
 	fPartitionList = NULL;
 	fBlockSize = 0;
 	fBlockCount = 0;
