@@ -78,6 +78,9 @@ resource 'errs' (kReasonResourceID, purgeable) {
 		kExtentsFileTooFragmented, kExtentsFileTooFragmented, 18;
 		kExtentsFileInconsistent, kExtentsFileInconsistent, 19;
 		kCouldNotObtainAuthorization, kCouldNotObtainAuthorization, 20;
+		kWrongNVRAMType, kWrongNVRAMType, 21;
+		kNoSuchNVRAMKey, kNoSuchNVRAMKey, 22;
+		kNVRAMPatchParseError, kNVRAMPatchParseError, 23;
 	}
 };
 
@@ -104,10 +107,13 @@ resource 'STR#' (kReasonResourceID, purgeable) {
 					"the extents file was too fragmented";
 					"the extents file was inconsistent";
 		/* 20 */	"could not obtain authorization";
+					"wrong NVRAM type (internal error)";
+					"no such NVRAM key (internal error)";
+					"error parsing NVRAM patch (internal error)";
 	}
 };
 
-// recoverty table & strings
+// recovery table & strings
 
 resource 'errs' (kRecoveryResourceID, purgeable) {
 	{

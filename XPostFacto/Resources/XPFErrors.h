@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001, 2002
+Copyright (c) 2001 - 2003
 Other World Computing
 All rights reserved
 
@@ -32,6 +32,7 @@ advised of the possibility of such damage.
 */
 
 #ifndef __XPFERRORS_H__
+#define __XPFERRORS_H__
 
 enum {
 	kErrorWritingNVRAM = -29999,
@@ -53,7 +54,10 @@ enum {
 	kUserCancelledInstall,
 	kExtentsFileTooFragmented,
 	kExtentsFileInconsistent,
-	kCouldNotObtainAuthorization
+	kCouldNotObtainAuthorization,
+	kWrongNVRAMType,
+	kNoSuchNVRAMKey,
+	kNVRAMPatchParseError
 };
 
 

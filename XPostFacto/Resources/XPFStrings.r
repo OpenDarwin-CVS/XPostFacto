@@ -58,5 +58,8 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			"Online Help";
 /* 15 */	"Online Source Code";
 			"can only be used as an installer.";
+			"requires a helper disk.";
+			"Show Log Window";
+			"Copy";
 	}
 };

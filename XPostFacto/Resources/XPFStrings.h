@@ -53,7 +53,10 @@ enum {
 	kXPostFactoHelpMenu,
 	kXPostFactoOnlineHelpMenu,
 	kXPostFactoSourceCodeMenu,
-	kInstallOnly
+	kInstallOnly,
+	kNeedsHelper,
+	kShowLogWindowMenu,
+	kTheWordCopy
 };
 
 
