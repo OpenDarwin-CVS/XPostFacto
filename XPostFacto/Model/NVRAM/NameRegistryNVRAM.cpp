@@ -36,6 +36,8 @@ advised of the possibility of such damage.
 // NVRAM
 // ===================
 
+#if 0
+
 #include "NVRAM.h"
 #include <Sound.h>
 #include <strings.h>
@@ -466,3 +468,5 @@ NVRAMVariables::setString (char **string, const char *val)
 		BlockMoveData (val, *string, size);
 	}
 }
+
+#endif
