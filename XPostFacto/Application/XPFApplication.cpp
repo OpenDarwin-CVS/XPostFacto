@@ -60,6 +60,7 @@ advised of the possibility of such damage.
 #include "XPFHelpBehavior.h"
 #include "XPFOpenURLBehavior.h"
 #include "XPFProgressWindow.h"
+#include "XPFVolumePopups.h"
 
 #include <InternetConfig.h>
 #include <UnicodeConverter.h>
@@ -133,6 +134,8 @@ XPFApplication::XPFApplication() :
 	REGISTER_CLASS_AC (XPFHelpBehavior);
 	REGISTER_CLASS_AC (XPFOpenURLBehavior);
 	REGISTER_CLASS_AC (XPFProgressWindow);
+	REGISTER_CLASS_AC (XPFHelperPopup);
+	REGISTER_CLASS_AC (XPFInstallCDPopup);
 	
 	ProcessInfoRec info;
 	FSSpec appSpec, resourceSpec;
