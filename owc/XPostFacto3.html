@@ -2,7 +2,7 @@
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-May 25, 2004
+June 7, 2004
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -14,7 +14,7 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0b1.sit">Download XPostFacto 3.0b1</a>
 </blockquote>
 
-<p>XPostFacto is an open-source application which you may download and try for free. However, I encourage you to <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">register as an XPostFacto user</a>. This helps to support the continuing development of XPostFacto, and also gives you an account on the <a href="http://anybox.owc.net">tech support forum</a>.
+<p>XPostFacto is an open-source application which you may download and try for free. However, I encourage you to <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">register as an XPostFacto user</a>. This helps to support the continuing development of XPostFacto, and also gives you an account on the <a href="http://anybox.owc.net">tech support forum</a>. If you are already a registered user of XPostFacto, you can make a <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">contribution to its continuing development</a>.
 
 <h4>What's new in 3.0b1</h4>
 
@@ -49,9 +49,11 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 
 <li>Warns user in cases where a <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=854">CPU upgrade is required</a>.
 
+<li>Upgraded the custom BootX version with <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1911">code from Apple's latest BootX</a> (BootX 59.1.1). This will now use some additional caching techniques, which may speed up the boot process somewhat.
+
 </ul>
 
-<h4><a name="known">Known Problems</a></h4>
+<h4><a name="problems">Known Problems</a></h4>
 
 <p>Here is a partial list of known problems with the current version of XPostFacto. You can also consult the <a href="http://www.opendarwin.org/bugzilla/buglist.cgi?product=XPostFacto&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&bug_status=RESOLVED&cmdtype=doit">bug list</a> directly.
 
@@ -62,8 +64,6 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 
 <li>Booting from a Firewire drive is sometimes problematic -- it seems to depend on <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=879">which PCI card</a> is used, or sometimes <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=880">which Firewire devices are attached.</a> One workaround for error messages which appear in verbose mode is to tap the keyboard -- it is not clear why that should help, but in some cases it does.
 
-<li>XPostFacto sometimes does not permit <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=896">installing from a Firewire CD-ROM device</a>, if you are running in Mac OS 9. (It should work from Mac OS X).
-
 <li>Sometimes files are copied from the CD to the target volume with <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1160">the wrong permissions</a>, which causes errors when booting. I am hoping that recent versions of XPF have mostly fixed the problem. I have also added the "Check Permissions" command (in the "Cache" menu) which can be used to fix the problem.
 
 <li>There are some problems with <a href="http://bugzilla.opendarwin.org/show_bug.cgi?id=1171">video in Panther on the Wallstreet Powerbooks</a>, at least in some configurations. One problem is a kernel panic (or perhaps a WindowServer failure) which seems to correspond with high levels of disk activity. Another problem is colour problems, which can be solved by removing some drivers. Enabling the "Use PatchedRagePro" option in XPF may also help.
@@ -73,6 +73,28 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <li>The <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1374">Panther video driver for Kanga</a> (Original Powerbook G3) only supports 256 colours for the moment.
 
 <li>The Wallstreet Powerbooks sometimes boot from the Install CD in a way that doesn't <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1389">pick up the special settings</a> needed to get the Panther installer to work.
+
+<li>There are a couple of audio-related problems on the 7300 - 9600 series. The <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1762">global sound volume preference</a> is not adjustable, and <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1256">audio in</a> is generally not working.
+
+<li>The video in/out on the <a href="http://bugzilla.opendarwin.org/show_bug.cgi?id=1914">Beige G3 A/V personality cards</a> is not working.
+
+<li>The RCA video on the 7600 / 8600 etc. is not working -- both <a href="http://bugzilla.opendarwin.org/show_bug.cgi?id=1913">video in (planb)</a> and <a href="http://bugzilla.opendarwin.org/show_bug.cgi?id=1912">video out (sixty6)</a>.
+
+<li>Some <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1123">SCSI scanners are not working</a> when attached to the 7300 - 9600 series.
+
+<li>System sleep is not working properly on the <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1915">7300 - 9600 series</a>, or on the <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1916">original Powerbook G3 (Kanga)</a>. However, it is working on the Beige G3s and Wallstreet Powerbooks.
+
+<li>In some configurations, <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1917">audio output stutters or fails</a> when an ATA/100 or ATA/133 card is in use. However, this does not affect everyone consistently.
+
+<li>The <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1918">floppy drive</a> does not work.
+
+<li>The ethernet port on <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1596">ethernet-only Kangas</a> (original Powerbook G3) is not working. (However, the combo modem-ethernet port is working). 
+
+<li>Mac OS X 10.2 (and later) <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=854">require a G3 or G4 CPU upgrade</a> on models that did not originally come with a G3 or G4.
+
+<li>Mac OS X does not support LocalTalk networking (through the serial port).
+
+<li>Volumes <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1919">partitioned in Mac OS X</a> are not bootable on older machines -- the utilities that work are Apple's Drive Setup (in Mac OS 9.x) and Intech's Hard Disk SpeedTools.
 
 </ul>
 
@@ -548,7 +570,7 @@ This software is provided by Other World Computing ``as is'' and any express or 
 
 <dl>
 
-<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0b1.sit">3.0b1 (May 25, 2004)</a>
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0b1.sit">3.0b1 (June 7, 2004)</a>
 
 <dd>Here's a quick summary of what's new in version 3.0b1.
 
@@ -580,6 +602,8 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <li>Shows error message if you run XPF on a system that XPF doesn't work with.
 
 <li>Warns user in cases where a <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=854">CPU upgrade is required</a>.
+
+<li>Upgraded the custom BootX version with <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1911">code from Apple's latest BootX</a> (BootX 59.1.1). This will now use some additional caching techniques, which may speed up the boot process somewhat.
 
 </ul>
 
