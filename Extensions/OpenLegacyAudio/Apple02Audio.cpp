@@ -348,7 +348,7 @@ IOReturn Apple02Audio::protectedInitHardware (IOService * provider) {
     setDeviceName ("DeviceName");
     setDeviceShortName ("DeviceShortName");
     setManufacturerName ("ManufacturerName");
-    setProperty (kIOAudioDeviceLocalizedBundleKey, "Apple02Audio.kext");
+    setProperty (kIOAudioDeviceLocalizedBundleKey, "OpenScreamerAudio.kext");
 #else
     setDeviceName ("Built-in Audio");
     setDeviceShortName ("Built-in");

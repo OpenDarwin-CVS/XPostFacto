@@ -1,0 +1,32 @@
+HeaderOfDallasPartialInsert = "Speaker Connection";
+StringOfDallasPartialInsert = "The device plugged into the Apple speaker mini-jack cannot be recognized. Remove the plug from the jack. Then plug it back in and make sure it is fully inserted.";
+ButtonOfDallasPartialInsert = "OK";
+
+DeviceName2 = "Built-in Audio 2";
+DeviceShortName2 = "Built-in 2";
+
+DeviceName = "Built-in Audio";
+DeviceShortName = "Built-in";
+ManufacturerName = "Apple";
+
+Headphones = "Headphones";
+IntSpeakers = "Internal speakers";
+ExtSpeakers = "External speakers";
+LineOut = "Line Out";
+DigitalOut = "Digital Out";
+
+InternalMic = "Internal microphone";
+ExternalMic = "External microphone/Line In";
+LineIn = "Line In";
+SoundIn = "Sound Input";
+Modem = "Modem";
+CD = "CD";
+DVD = "DVD";
+RCAInput = "RCA input";
+PCCard = "PC Card";
+ZoomedVideo = "Zoomed video";
+DigitalIn = "Digital In";
+
+BootBeepVolume = "Boot beep volume";
+InternalClock = "Internal Clock";
+ExternalClock = "External Clock";

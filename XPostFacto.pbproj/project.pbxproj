@@ -5,6 +5,30 @@
 	};
 	objectVersion = 39;
 	objects = {
+		9404AD7D07C928B4003CE43E = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
+			name = English;
+			path = OpenLegacyAudio/Resources/English.lproj/Localizable.strings;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		9404AE1407C92949003CE43E = {
+			children = (
+				9404AD7D07C928B4003CE43E,
+			);
+			isa = PBXVariantGroup;
+			name = Localizable.strings;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		9404AE1507C92949003CE43E = {
+			fileRef = 9404AE1407C92949003CE43E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		9406C1EA058E057B00A80003 = {
 			isa = PBXTargetDependency;
 			target = 94D432AB05583C1100A80003;
@@ -1681,6 +1705,7 @@
 		94B59CA407B970C6005060B1 = {
 			buildActionMask = 2147483647;
 			files = (
+				9404AE1507C92949003CE43E,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1865,6 +1890,7 @@
 		94C19B6707C139B7004B83EE = {
 			children = (
 				94C19CBA07C14735004B83EE,
+				9404AE1407C92949003CE43E,
 				94C19B6A07C139EA004B83EE,
 				94C19B6B07C139EA004B83EE,
 				94C19B6C07C139EA004B83EE,
