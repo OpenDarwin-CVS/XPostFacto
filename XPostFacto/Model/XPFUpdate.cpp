@@ -143,15 +143,16 @@ XPFUpdateItem::getResourceInfo (ResType resType, SInt16 resIndex)
 	SetResLoad (true);
 	GetResInfo (hfsA, &fResourceID, NULL, fResourceName);
 	ReleaseResource (hfsA);
-
+		
 	Handle plist = GetResource ('plst', fResourceID);
+	(*plist)[GetHandleSize(plist) - 1] = 0;
 	char minBuild[32], maxBuild[32], availableVersion[32];
 	parsePListString (*plist, "CFBundleVersion", availableVersion);
 	parsePListString (*plist, "OWCInstallMinBuild", minBuild);
 	parsePListString (*plist, "OWCInstallMaxBuild", maxBuild);
 	if (minBuild [0]) fMinBuild = strtoul (minBuild, NULL, 0);
 	if (maxBuild [0]) fMaxBuild = strtoul (maxBuild, NULL, 0);
-	VERS_parse_string (availableVersion, &fAvailableVersion);
+	VERS_parse_string (availableVersion, &fAvailableVersion);		
 	ReleaseResource (plist);
 }
 
