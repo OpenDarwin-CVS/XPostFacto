@@ -27,6 +27,29 @@
 			settings = {
 			};
 		};
+		941847670555EFD100A80003 = {
+			buildActionMask = 8;
+			dstPath = Library/StartupItems/XPFStartupItem/Contents/Resources;
+			dstSubfolderSpec = 0;
+			files = (
+				941847690555F01E00A80003,
+				941847680555F01900A80003,
+			);
+			isa = PBXCopyFilesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		941847680555F01900A80003 = {
+			fileRef = 9407317505312EC600A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		941847690555F01E00A80003 = {
+			fileRef = 946A5D270525115000A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		941C8E6E0528BB2A00A80003 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -80,12 +103,6 @@
 			isa = PBXFileReference;
 			path = FSRefCopying.h;
 			refType = 4;
-		};
-		946B436D04FC0E3500A80003 = {
-			fileRef = 946B436B04FC0E3500A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		94B8172F047A7ABF00A80003 = {
 			fileEncoding = 4;
@@ -142,36 +159,308 @@
 			isa = PBXTargetDependency;
 			target = F5BF317E03F01EA201A80002;
 		};
-		94BCDEAB046D6BAD00A80003 = {
-			children = (
-				94BCDEAC046D6BE300A80003,
-				94BCDEAD046D6BE300A80003,
-			);
-			isa = PBXGroup;
-			name = XPFBootSupport;
-			refType = 4;
-		};
-		94BCDEAC046D6BE300A80003 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = XPFBootSupport.cpp;
-			path = XPFBootSupport/XPFBootSupport.cpp;
-			refType = 4;
-		};
-		94BCDEAD046D6BE300A80003 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = XPFBootSupport.h;
-			path = XPFBootSupport/XPFBootSupport.h;
-			refType = 4;
-		};
 		94C18CC10509155800A80003 = {
 			isa = PBXTargetDependency;
 			target = 94CC89DB0508E1BC00A80003;
 		};
+		94C63B6D054EDDA500A80003 = {
+			isa = PBXTargetDependency;
+			target = 94CC88EF054C817100A80003;
+		};
 		94CB5C4404FBB49500A80003 = {
 			isa = PBXTargetDependency;
 			target = F53C6AF401B1ACE201A80001;
+		};
+		94CC8146054C189400A80003 = {
+			children = (
+				94E25C6C054DF93500A80003,
+				94CC8147054C18C800A80003,
+				94E25C67054DF40600A80003,
+				94CC8148054C18C800A80003,
+				94CC8149054C18C800A80003,
+				94CC814A054C18C800A80003,
+				94CC814B054C18C800A80003,
+				94CC814C054C18C800A80003,
+				94CC814D054C18C800A80003,
+				94CC814E054C18C800A80003,
+				94CC814F054C18C800A80003,
+			);
+			isa = PBXGroup;
+			name = OpenOWScreamerAudio;
+			refType = 4;
+		};
+		94CC8147054C18C800A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = OpenDBDMAAudioDMAEngine.h;
+			path = OpenOWScreamerAudio/OpenDBDMAAudioDMAEngine.h;
+			refType = 4;
+		};
+		94CC8148054C18C800A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = AppleiSubEngine.h;
+			path = OpenOWScreamerAudio/AppleiSubEngine.h;
+			refType = 4;
+		};
+		94CC8149054C18C800A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = AudioHardwareCommon.h;
+			path = OpenOWScreamerAudio/AudioHardwareCommon.h;
+			refType = 4;
+		};
+		94CC814A054C18C800A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = AudioHardwareConstants.h;
+			path = OpenOWScreamerAudio/AudioHardwareConstants.h;
+			refType = 4;
+		};
+		94CC814B054C18C800A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = AudioHardwareUtilities.h;
+			path = OpenOWScreamerAudio/AudioHardwareUtilities.h;
+			refType = 4;
+		};
+		94CC814C054C18C800A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = awacs_OWhw.h;
+			path = OpenOWScreamerAudio/awacs_OWhw.h;
+			refType = 4;
+		};
+		94CC814D054C18C800A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = iSubTypes.h;
+			path = OpenOWScreamerAudio/iSubTypes.h;
+			refType = 4;
+		};
+		94CC814E054C18C800A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = OpenOWScreamerAudio.cpp;
+			path = OpenOWScreamerAudio/OpenOWScreamerAudio.cpp;
+			refType = 4;
+		};
+		94CC814F054C18C800A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = OpenOWScreamerAudio.h;
+			path = OpenOWScreamerAudio/OpenOWScreamerAudio.h;
+			refType = 4;
+		};
+		94CC88E9054C817100A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		94CC88EA054C817100A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+				94CC88F1054C82CC00A80003,
+				94CC88F2054C82CC00A80003,
+				94CC88F3054C82CD00A80003,
+				94CC88F4054C82CD00A80003,
+				94CC88F5054C82CE00A80003,
+				94CC88F6054C82CE00A80003,
+				94CC88F7054C82CF00A80003,
+				94CC88F9054C82D000A80003,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94CC88EB054C817100A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+				94CC88F8054C82CF00A80003,
+				94E25C68054DF40600A80003,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94CC88EC054C817100A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94CC88ED054C817100A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+				94E26634054E04B700A80003,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94CC88EE054C817100A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		94CC88EF054C817100A80003 = {
+			buildPhases = (
+				94CC88E9054C817100A80003,
+				94CC88EA054C817100A80003,
+				94CC88EB054C817100A80003,
+				94CC88EC054C817100A80003,
+				94CC88ED054C817100A80003,
+				94CC88EE054C817100A80003,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "";
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+				KERNEL_MODULE = YES;
+				LIBRARY_SEARCH_PATHS = "";
+				MODULE_IOKIT = YES;
+				MODULE_NAME = com.macsales.iokit.OpenOWScreamerAudio;
+				MODULE_VERSION = 1.9d1;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = OpenOWScreamerAudio;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = kext;
+			};
+			dependencies = (
+				94E26633054E049700A80003,
+			);
+			isa = PBXBundleTarget;
+			name = OpenOWScreamerAudio;
+			productInstallPath = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+			productName = OpenOWScreamerAudio;
+			productReference = 94CC88F0054C817100A80003;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>OpenOWScreamerAudio</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.macsales.iokit.OpenOWScreamerAudio</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.9d1</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>OpenOWScreamerAudio</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.macsales.iokit.OpenOWScreamerAudio</string>
+			<key>IOClass</key>
+			<string>OpenOWScreamerAudio</string>
+			<key>IONameMatch</key>
+			<array>
+				<string>davbus</string>
+				<string>awacs</string>
+			</array>
+			<key>IOProviderClass</key>
+			<string>AppleMacIODevice</string>
+		</dict>
+	</dict>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.iokit.IOAudioFamily</key>
+		<string>1.2.1b1</string>
+	</dict>
+</dict>
+</plist>
+";
+		};
+		94CC88F0054C817100A80003 = {
+			isa = PBXBundleReference;
+			path = OpenOWScreamerAudio.kext;
+			refType = 3;
+		};
+		94CC88F1054C82CC00A80003 = {
+			fileRef = 94CC8147054C18C800A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94CC88F2054C82CC00A80003 = {
+			fileRef = 94CC8148054C18C800A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94CC88F3054C82CD00A80003 = {
+			fileRef = 94CC8149054C18C800A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94CC88F4054C82CD00A80003 = {
+			fileRef = 94CC814A054C18C800A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94CC88F5054C82CE00A80003 = {
+			fileRef = 94CC814B054C18C800A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94CC88F6054C82CE00A80003 = {
+			fileRef = 94CC814C054C18C800A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94CC88F7054C82CF00A80003 = {
+			fileRef = 94CC814D054C18C800A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94CC88F8054C82CF00A80003 = {
+			fileRef = 94CC814E054C18C800A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94CC88F9054C82D000A80003 = {
+			fileRef = 94CC814F054C18C800A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		94CC89D20508E13B00A80003 = {
 			children = (
@@ -374,6 +663,172 @@
 			settings = {
 			};
 		};
+		94D432A505583C1100A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		94D432A605583C1100A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94D432A705583C1100A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94D432A805583C1100A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94D432A905583C1100A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94D432AA05583C1100A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		94D432AB05583C1100A80003 = {
+			buildPhases = (
+				94D432A505583C1100A80003,
+				94D432A605583C1100A80003,
+				94D432A705583C1100A80003,
+				94D432A805583C1100A80003,
+				94D432A905583C1100A80003,
+				94D432AA05583C1100A80003,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
+				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				KERNEL_MODULE = YES;
+				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				MODULE_IOKIT = YES;
+				MODULE_NAME = com.macsales.iokit.AppleMaceEthernetPreJaguar;
+				MODULE_VERSION = 1.1;
+				OTHER_CFLAGS = "-fpermissive";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = AppleMaceEthernetPreJaguar;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = kext;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = AppleMaceEthernetPreJaguar;
+			productName = AppleMaceEthernetPreJaguar;
+			productReference = 94D432AC05583C1100A80003;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>AppleMaceEthernetPreJaguar</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.macsales.iokit.AppleMaceEthernetPreJaguar</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.1</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>AppleMaceEthernetPreJaguar</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.macsales.iokit.AppleMaceEthernetPreJaguar</string>
+			<key>IOClass</key>
+			<string>MaceEnet</string>
+			<key>IONameMatch</key>
+			<array>
+				<string>mace</string>
+			</array>
+			<key>IOProviderClass</key>
+			<string>AppleMacIODevice</string>
+		</dict>
+	</dict>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.iokit.IONetworkingFamily</key>
+		<string>1.0.0b1</string>
+		<key>com.apple.kernel</key>
+		<string>1.0.0b1</string>
+	</dict>
+	<key>OSBundleRequired</key>
+	<string>Network-Root</string>
+</dict>
+</plist>
+";
+		};
+		94D432AC05583C1100A80003 = {
+			isa = PBXBundleReference;
+			path = AppleMaceEthernetPreJaguar.kext;
+			refType = 3;
+		};
+		94D432AD05583E4B00A80003 = {
+			isa = PBXTargetDependency;
+			target = 94D432AB05583C1100A80003;
+		};
+		94D432AE05583EC300A80003 = {
+			fileRef = 94D432AC05583C1100A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94D432AF05583EF500A80003 = {
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				94D432AE05583EC300A80003,
+			);
+			isa = PBXCopyFilesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		94D732840525FB8F00A80003 = {
 			children = (
 				F58FB3FB02B3D0BE01A80001,
@@ -486,6 +941,113 @@
 			isa = PBXGroup;
 			name = "Shared Code";
 			refType = 4;
+		};
+		94E25C67054DF40600A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = OpenDBDMAAudioDMAEngine.cpp;
+			path = OpenOWScreamerAudio/OpenDBDMAAudioDMAEngine.cpp;
+			refType = 4;
+		};
+		94E25C68054DF40600A80003 = {
+			fileRef = 94E25C67054DF40600A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94E25C6A054DF8FC00A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = OpenDBDMAAudioClip.c;
+			path = OpenOWScreamerAudio/OpenDBDMAAudioClip.c;
+			refType = 4;
+		};
+		94E25C6C054DF93500A80003 = {
+			children = (
+				94E25C6A054DF8FC00A80003,
+			);
+			isa = PBXGroup;
+			name = OpenDBDMAAudioFloatLib;
+			refType = 4;
+		};
+		94E2662C054E02A400A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94E2662D054E02A400A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+				94E26632054E03A700A80003,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94E2662E054E02A400A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94E2662F054E02A400A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94E26630054E02A400A80003 = {
+			buildPhases = (
+				94E2662C054E02A400A80003,
+				94E2662D054E02A400A80003,
+				94E2662E054E02A400A80003,
+				94E2662F054E02A400A80003,
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Kernel.framework/Headers\"";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "-nostdinc -finline -fno-keep-inline-functions -force_cpusubtype_ALL -mlong-branch -fno-rtti -fno-exceptions -fcheck-new -static -DKERNEL -DKERNEL_PRIVATE -DDRIVER_PRIVATE -DAPPLE -DNeXT";
+				OTHER_LDFLAGS = "-static";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = libAppleDBDMAAudioFloatLib.a;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			dependencies = (
+			);
+			isa = PBXLibraryTarget;
+			name = OpenDBDMAAudioFloatLib;
+			productInstallPath = /usr/local/lib;
+			productName = OpenDBDMAAudioFloatLib;
+			productReference = 94E26631054E02A400A80003;
+		};
+		94E26631054E02A400A80003 = {
+			isa = PBXLibraryReference;
+			path = libAppleDBDMAAudioFloatLib.a;
+			refType = 3;
+		};
+		94E26632054E03A700A80003 = {
+			fileRef = 94E25C6A054DF8FC00A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94E26633054E049700A80003 = {
+			isa = PBXTargetDependency;
+			target = 94E26630054E02A400A80003;
+		};
+		94E26634054E04B700A80003 = {
+			fileRef = 94E26631054E02A400A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		94F4275F0543145400A80003 = {
 			buildActionMask = 2147483647;
@@ -783,6 +1345,7 @@
 				F557F68D0226FDFA01A80001,
 				F557F6810226FD2201A80001,
 				F53C6AD401B1A6D301A80001,
+				94D432AB05583C1100A80003,
 				F53C6AED01B1ACE201A80001,
 				F557F6A70226FF1001A80001,
 				F54E207A0267327701A80001,
@@ -801,6 +1364,8 @@
 				F5BF317E03F01EA201A80002,
 				94CC89DB0508E1BC00A80003,
 				94F427650543145400A80003,
+				94CC88EF054C817100A80003,
+				94E26630054E02A400A80003,
 			);
 		};
 		F53C691001B191BA01A80001 = {
@@ -848,8 +1413,8 @@
 		};
 		F53C695501B1926201A80001 = {
 			children = (
+				94CC8146054C189400A80003,
 				94CC89D20508E13B00A80003,
-				94BCDEAB046D6BAD00A80003,
 				F5FB800D03C7A0DD01A80002,
 				F547F715028EFEEC01A80001,
 				F557F69E0226FF1001A80001,
@@ -1264,6 +1829,9 @@
 				F5BF317F03F01EA201A80002,
 				94CC89DC0508E1BC00A80003,
 				94F427660543145400A80003,
+				94CC88F0054C817100A80003,
+				94E26631054E02A400A80003,
+				94D432AC05583C1100A80003,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -1600,7 +2168,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.AppleCurio;
-				MODULE_VERSION = 1.0.0f1;
+				MODULE_VERSION = 1.1;
 				OTHER_CFLAGS = "-fpermissive";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -1642,7 +2210,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.0f1</string>
+	<string>1.1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>AppleCurio</key>
@@ -1774,7 +2342,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.AppleGrandCentral;
-				MODULE_VERSION = 1.0.1;
+				MODULE_VERSION = 1.1;
 				OTHER_CFLAGS = "-fpermissive -D_BIG_ENDIAN=__BIG_ENDIAN__";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -1815,7 +2383,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.1</string>
+	<string>1.1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>AppleGrandCentral</key>
@@ -1933,19 +2501,19 @@
 				F53C6AD601B1A6D301A80001,
 				F53C6ADA01B1A6D301A80001,
 				F53C6ADE01B1A6D301A80001,
+				94D432AF05583EF500A80003,
 				F53C6AE001B1A6D301A80001,
 				F53C6AE101B1A6D301A80001,
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				HEADER_SEARCH_PATHS = "";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.AppleMaceEthernet;
-				MODULE_VERSION = 1.0.2;
+				MODULE_VERSION = 1.1;
 				OTHER_CFLAGS = "-fpermissive";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -1955,6 +2523,7 @@
 				WRAPPER_EXTENSION = kext;
 			};
 			dependencies = (
+				94D432AD05583E4B00A80003,
 			);
 			isa = PBXBundleTarget;
 			name = AppleMaceEthernet;
@@ -1986,7 +2555,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.2</string>
+	<string>1.1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>AppleMaceEthernet</key>
@@ -2006,10 +2575,10 @@
 	<key>OSBundleLibraries</key>
 	<dict>
 		<key>com.apple.iokit.IONetworkingFamily</key>
-		<string>1.0.0b1</string>
+		<string>1.2</string>
 	</dict>
 	<key>OSBundleRequired</key>
-	<string>Root</string>
+	<string>Network-Root</string>
 </dict>
 </plist>
 ";
@@ -2120,7 +2689,6 @@
 		F53C6AE501B1AC0501A80001 = {
 			children = (
 				F53C6AE601B1AC0501A80001,
-				F53C6AE801B1AC0501A80001,
 				F53C6AE901B1AC0501A80001,
 				F53C6AEA01B1AC0501A80001,
 			);
@@ -2143,12 +2711,6 @@
 			isa = PBXFileReference;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
-			refType = 4;
-		};
-		F53C6AE801B1AC0501A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = PerProcInfo.h;
 			refType = 4;
 		};
 		F53C6AE901B1AC0501A80001 = {
@@ -2191,7 +2753,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.ApplePowerSurgePE;
-				MODULE_VERSION = 1.2.2;
+				MODULE_VERSION = 1.3;
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = ApplePowerSurgePE;
@@ -2231,7 +2793,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.2.2</string>
+	<string>1.3</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>ApplePowerSurgePE</key>
@@ -2348,7 +2910,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = oldworld.support.PowerSurgeCPU;
-				MODULE_VERSION = 1.1b1;
+				MODULE_VERSION = 1.2;
 				OTHER_CFLAGS = "-fpermissive -D_BIG_ENDIAN=1";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -2389,7 +2951,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.1b1</string>
+	<string>1.2</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>PowerSurgeCPU</key>
@@ -2437,7 +2999,6 @@
 		F53C6AF601B1ACE201A80001 = {
 			buildActionMask = 2147483647;
 			files = (
-				F53C6AFE01B1AD1C01A80001,
 				F53C6AFF01B1AD1C01A80001,
 			);
 			isa = PBXHeadersBuildPhase;
@@ -2493,12 +3054,6 @@
 		};
 		F53C6AFD01B1AD1C01A80001 = {
 			fileRef = F53C697C01B1926201A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F53C6AFE01B1AD1C01A80001 = {
-			fileRef = F53C6AE801B1AC0501A80001;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -4048,7 +4603,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.ApplePowerExpressPE;
-				MODULE_VERSION = 1.2.1;
+				MODULE_VERSION = 1.3;
 				OTHER_CFLAGS = "-fpermissive";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -4089,7 +4644,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.2.1</string>
+	<string>1.3</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>ApplePowerExpressPE</key>
@@ -4730,7 +5285,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.ApplePowerStarPE;
-				MODULE_VERSION = 1.1.1;
+				MODULE_VERSION = 1.2;
 				OTHER_CFLAGS = "-fpermissive";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -4771,7 +5326,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.1.1</string>
+	<string>1.2</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>ApplePowerStarPE</key>
@@ -5501,7 +6056,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.AppleCurio4K78;
-				MODULE_VERSION = 1.0.0d1;
+				MODULE_VERSION = 1.1;
 				OTHER_CFLAGS = "-fpermissive";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -5541,7 +6096,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.0d1</string>
+	<string>1.1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>AppleCurio4K78</key>
@@ -5856,6 +6411,7 @@
 				F59D629501B1D12901A80001,
 				94CB5C4404FBB49500A80003,
 				94F427670543146000A80003,
+				94C63B6D054EDDA500A80003,
 				F564382A01C2B3E601A80001,
 			);
 			isa = PBXBundleTarget;
@@ -5934,7 +6490,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F5BF318303F01F8C01A80002,
-				946B436D04FC0E3500A80003,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5963,6 +6518,7 @@
 				F5BF317C03F01EA201A80002,
 				F5BF317D03F01EA201A80002,
 				94B81733047A812200A80003,
+				941847670555EFD100A80003,
 				94279A75052FCE2500A80003,
 				94B81736047A834200A80003,
 			);
