@@ -304,7 +304,8 @@ XPFPrefs::addInputOutputDevice (RegEntryID *entry, TemplateList_AC <char> *list)
 {
 	char alias[256];
 	char shortAlias[256];
-	char label[256];
+	char label[128];
+	char displayType[128];
 
 	OFAliases::AliasFor (entry, alias, shortAlias);
 	if (list == &fOutputDevices) {
@@ -331,14 +332,21 @@ XPFPrefs::addInputOutputDevice (RegEntryID *entry, TemplateList_AC <char> *list)
 			strcpy (label, alias);
 		}
 	}
+	
 	if (!strcmp (label, "infrared")) {
 		return;
-	} else if (!strcmp (label, "ATY,RV100ad_A")) {
-		strcat (label, " (VGA)");
-	} else if (!strcmp (label, "ATY,RV100ad_B")) {
-		strcat (label, " (DVI)");
 	}
 	
+	err = RegistryPropertyGetSize (entry, "display-type", &propSize);
+	if (err == noErr) {
+		RegistryPropertyGet (entry, "display-type", displayType, &propSize);
+		displayType[propSize] = '\0';
+		if (!strcmp (displayType, "NONE")) return;
+		strcat (label, " (");
+		strcat (label, displayType);
+		strcat (label, ")");
+	}
+
 	char *temp = NewPtr (strlen (alias) + 1);
 	strcpy (temp, alias);
 	list->InsertLast (temp);
