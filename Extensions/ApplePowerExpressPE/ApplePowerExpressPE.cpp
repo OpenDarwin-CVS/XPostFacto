@@ -32,6 +32,8 @@
 
 #include "ApplePowerExpressPE.h"
 
+#include "XPFCPUSettings.h"
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #define super ApplePlatformExpert
@@ -45,6 +47,11 @@ ApplePowerExpressPE::start(IOService *provider)
 {
 	OSData *tmpData;
 
+	// We fix the processor settings made by the NVRAM patch, just in case our
+	// custom version of BootX is not installed
+
+	XPFfixProcessorSettings ();
+	
 	if (!super::start (provider)) return false;
 	
 	setChipSetType(kChipSetTypePowerExpress);

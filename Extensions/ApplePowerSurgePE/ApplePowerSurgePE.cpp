@@ -30,6 +30,8 @@
 #include <IOKit/IODeviceTreeSupport.h>
 #include <IOKit/pwr_mgt/RootDomain.h>
 
+#include "XPFCPUSettings.h"
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #define super ApplePlatformExpert
@@ -41,6 +43,11 @@ OSDefineMetaClassAndStructors(ApplePowerSurgePE, ApplePlatformExpert);
 bool 
 ApplePowerSurgePE::start(IOService *provider)
 {
+	// We fix the processor settings made by the NVRAM patch, just in case our
+	// custom version of BootX is not installed
+
+	XPFfixProcessorSettings ();
+	
 	if (!super::start (provider)) return false;
 
 	setChipSetType(kChipSetTypePowerSurge);

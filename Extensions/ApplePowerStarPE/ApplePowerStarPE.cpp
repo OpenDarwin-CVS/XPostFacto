@@ -28,6 +28,8 @@
 
 #include "ApplePowerStarPE.h"
 
+#include "XPFCPUSettings.h"
+
 #include <IOKit/IODeviceTreeSupport.h>
 #include <IOKit/pwr_mgt/RootDomain.h>
 
@@ -43,6 +45,11 @@ bool ApplePowerStarPE::start(IOService *provider)
 {
     long machineType;
 
+	// We fix the processor settings made by the NVRAM patch, just in case our
+	// custom version of BootX is not installed
+
+	XPFfixProcessorSettings ();
+	
 	if (!super::start(provider)) return false;
 	
     setChipSetType(kChipSetTypePowerStar);
