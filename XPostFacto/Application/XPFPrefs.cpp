@@ -140,6 +140,8 @@ XPFPrefs::Close ()
 	// Do the superclass Close, so that we save if we need to save etc.
 	Inherited::Close ();
 	
+	bool synchronizationFailed = false;
+	
 	try {	
 		// Now, we check NVRAM and do whatever copying is necessary
 		XPFNVRAMSettings *nvram = XPFNVRAMSettings::GetSettings ();
@@ -174,6 +176,7 @@ XPFPrefs::Close ()
 	}
 	
 	catch (CException_AC &ex) {
+		synchronizationFailed = true;
 		ErrorAlert (ex.GetError (), ex.GetExceptionMessage ());
 	}
 		
@@ -181,8 +184,19 @@ XPFPrefs::Close ()
 	restartStartupItem ();
 #endif
 
-	if (fRestartOnClose) tellFinderToRestart ();
-
+	if (synchronizationFailed) {
+		fRebootInMacOS9 = true;
+		ErrorAlert (kSynchronizationFailed, 0);
+		try {
+			writePrefsToNVRAM (false);
+		}
+		catch (CException_AC &ex) {
+			ErrorAlert (ex.GetError (), ex.GetExceptionMessage ());
+		}
+	} else {
+		if (fRestartOnClose) tellFinderToRestart ();
+	}
+	
 	if (!gApplication->GetDone ()) gApplication->DoMenuCommand (cQuit);
 }
 
@@ -779,7 +793,7 @@ XPFPrefs::writePrefsToNVRAM (bool forInstall)
 	nvram->setStringValue ("nvramrc", nvramrc);
 	
 	#if qLogging
-		gLogFile << "Restarting ..." << endl_AC;
+		gLogFile << "Writing NVRAM ..." << endl_AC;
 		gLogFile << "boot-device: " << bootDevice << endl_AC;
 		gLogFile << "boot-command: " << bootCommand << endl_AC;
 		gLogFile << "input-device: " << inputDevice << endl_AC;

@@ -84,6 +84,7 @@ resource 'errs' (kReasonResourceID, purgeable) {
 		kWritePartitionOSX, kWritePartitionOSX, 24;
 		kMustSpecifyIODevices, kMustSpecifyIODevices, 25;
 		kInternalError, kInternalError, 26;
+		kSynchronizationFailed, kSynchronizationFailed, 27;
 	}
 };
 
@@ -117,6 +118,7 @@ resource 'STR#' (kReasonResourceID, purgeable) {
 					"the Mac OS X version of XPostFacto is unable to install BootX (yet). Try rebooting in Mac OS 9";
 		/* 25 */	"when auto-boot? is turned off, you must specify an input-device and output-device";
 					"an internal error";
+					"synchronization failed. XPostFacto will set your computer to startup in Mac OS 9. Launch XPostFacto again to make changes" 
 	}
 };
 

@@ -60,7 +60,8 @@ enum {
 	kNVRAMPatchParseError,
 	kWritePartitionOSX,
 	kMustSpecifyIODevices,
-	kInternalError
+	kInternalError,
+	kSynchronizationFailed,
 };
 
 
