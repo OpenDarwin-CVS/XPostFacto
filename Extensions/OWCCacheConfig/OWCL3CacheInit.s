@@ -160,6 +160,8 @@ ciinvdl3:	rlwinm	r8,r3,0,l3e+1,31				; Use desired L3CR value and clear the enab
 
 			cmplwi	r3, 0							; Should the L3 be all the way off?
 			beq	cinoexit							; Yes, done with L3
+			rlwinm. r2,r3,0,l3dmem,l3dmem			; Are we in test mode?
+			bne 	citestL3						; Skip the invalidate
 
 			ori		r8,r8,lo16(l3im)				; Get the invalidate flag set
 
@@ -169,13 +171,13 @@ ciinvdl3b:	mfspr	r8,l3cr							; Get the L3CR
 			rlwinm.	r8,r8,0,l3i,l3i					; Is the invalidate still going?
 			bne+	ciinvdl3b						; Assume so...
 			sync
-			
+
+			b		cil3pdet						; Not in test mode, or we would have branched above
 ;
 ;	Setup for test mode
 ;
-			
-			rlwinm.	r2,r3,0,l3dmem,l3dmem			; Are we in test mode?
-			beq		cil3pdet						; If not, skip
+
+citestL3:
 			lis		r10,0xFFE0					; Dead recon ROM for now
 			rlwinm	r8,r10,28,4,15				; compensate for extended addressing off
 			sync
@@ -246,7 +248,6 @@ citestwrl2:
 			stw		r10,24(r10)
 			stw		r10,28(r10)
 			dcbf	0,r10							; flush the write to the L3 cache
-			sync
 			addi	r10,r10,32						; Next line
 			bdnz	citestwrl2						; Do the lot...
 			
@@ -286,11 +287,10 @@ citestrdl2:
 			
 			addi	r4,r4,1							; increment the "success" line counter
 citestfail:	
-			dcbi	0,r10							; invalidate as we go
-			sync
 			addi	r10,r10,32						; next line
 			bdnz	citestrdl2						; do the lot
 
+			sync
 			slwi	r3,r4,5							; return how much SRAM tested OK (multiply by 32)
 		
 ;

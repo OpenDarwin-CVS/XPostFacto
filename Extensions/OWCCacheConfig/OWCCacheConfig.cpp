@@ -35,6 +35,7 @@
 #include <IOKit/IOLib.h>
 #include <IOKit/IODeviceTreeSupport.h>
 #include <pexpert/pexpert.h>
+#include <ppc/machine_routines.h>
 
 #undef super
 #define super IOService
@@ -56,6 +57,16 @@ OWCCacheConfig::start (IOService *provider)
 	char buffer[16];
 	if (PE_parse_boot_arg ("-c", buffer)) return false;
 	if (PE_parse_boot_arg ("-s", buffer)) return false;
+	
+	// Wait a little for AppleVIA to show up, because that's what gets us an accurate CPU speed
+	mach_timespec_t timeout;
+	timeout.tv_sec = 60;
+	timeout.tv_nsec = 0;
+	IOService *viaDevice = waitForService (serviceMatching ("AppleVIADevice"), &timeout);
+	if (!viaDevice) {
+		IOLog ("OWCCAcheConfig timed out waiting for AppleVIA\n");
+		return false;
+	}
 	
 	initializeCacheSettings (provider);
 	
@@ -108,19 +119,14 @@ OWCCacheConfig::setProperties (OSObject *properties)
 void
 OWCCacheConfig::initializeCacheSettings (IOService *provider)
 {	
-	OSData *data; 
 	unsigned pvr = mfpvr ();
 	
 	pvr &= 0xFFFF0000;
 	pvr >>= 16;
-	
-	data = OSDynamicCast (OSData, provider->getProperty ("clock-frequency"));
-	if (!data) return;
-	unsigned clock = * ((unsigned *) data->getBytesNoCopy ());
-	
+		
 	switch (pvr) {
 		case PROCESSOR_VERSION_750:
-			initializeL2 (provider, clock, false);
+			initializeL2 (provider, false);
 			break;
 			
 		case PROCESSOR_VERSION_750FX:
@@ -129,7 +135,7 @@ OWCCacheConfig::initializeCacheSettings (IOService *provider)
 			
 		case PROCESSOR_VERSION_7400:
 		case PROCESSOR_VERSION_7410:
-			initializeL2 (provider, clock, true);
+			initializeL2 (provider, true);
 			break;
 			
 		case PROCESSOR_VERSION_7450:
@@ -171,18 +177,21 @@ OWCCacheConfig::initializeL2FX (IOService *provider)
 }
 
 void
-OWCCacheConfig::initializeL2 (IOService *provider, unsigned clock, bool isG4)
+OWCCacheConfig::initializeL2 (IOService *provider, bool isG4)
 {	
 	unsigned clockSettings [] = {L2CLK_1, L2CLK_15, L2CLK_2, L2CLK_25, L2CLK_3, L2CLK_35, L2CLK_4};
 	unsigned ramSettings [] = {L2RAM_PB, L2RAM_FT, L2RAM_LW};
 	unsigned result;
+	boolean_t interrupts;
 	
 	unsigned originalCacheSetting;
 	mfspr (originalCacheSetting, l2cr);
 	
 	IOLog ("Setting cache to 0\n");
 	IOSleep (OWCCACHESLEEP);
+	interrupts = ml_set_interrupts_enabled (false);
 	result = OWCL2CacheInit (0);			// turn off the cache
+	ml_set_interrupts_enabled (interrupts);
 	IOLog ("OWCCacheConfig: result 0x%X\n", result);
 		
 // 	For some reason, the first test always fails. So we run a test out here.
@@ -201,7 +210,7 @@ OWCCacheConfig::initializeL2 (IOService *provider, unsigned clock, bool isG4)
 			unsigned testValue = l2em | l2tsm | clockSettings[clockOffset] | ramSettings[ramOffset];
 			testValue |= isG4 ? L2SIZ_2048 : L2SIZ_1024;
 			if (ramSettings[ramOffset] == L2RAM_LW) testValue |= l2dfm | (isG4 ? L2OH_2 : L2OH_1);
-			if (clock / (clockOffset + 2) * 2  <= 100000) testValue |= l2slm;
+			if (gPEClockFrequencyInfo.cpu_clock_rate_hz / (clockOffset + 2) * 2  <= 100000) testValue |= l2slm;
 			
 			// It looks like we need the IOSleep call if we are going to run multiple tests
 			// in quick succession (otherwise, we freeze). My theory is we spend too much
@@ -209,7 +218,9 @@ OWCCacheConfig::initializeL2 (IOService *provider, unsigned clock, bool isG4)
 			
 			IOLog ("OWCCacheConfig: testing 0x%X\n", testValue);
 			IOSleep (OWCCACHESLEEP);	
+			interrupts = ml_set_interrupts_enabled (false);
 			result = OWCL2CacheInit (testValue);
+			ml_set_interrupts_enabled (interrupts);
 			IOLog ("OWCCacheConfig: result 0x%X\n", result);
 			
 			switch (result) {
@@ -261,16 +272,20 @@ OWCCacheConfig::initializeL2 (IOService *provider, unsigned clock, bool isG4)
 		// Now, move up one clock setting (for safety)
 		setValue = baseValue & ~l2clkm;
 		setValue |= clockSettings[clockTestedGood + 1];
-		if ((clock / (clockTestedGood + 3) * 2) <= 100000) setValue |= l2slm;
+		if ((gPEClockFrequencyInfo.cpu_clock_rate_hz / (clockTestedGood + 3) * 2) <= 100000) setValue |= l2slm;
 		
 		IOSleep (OWCCACHESLEEP);
 		if (originalCacheSetting & l2em) {
 			setProperty ("Original L2CR", (void *) &originalCacheSetting, sizeof (originalCacheSetting));
 			IOLog ("Setting L2CR to 0x%x\n", originalCacheSetting);
+			interrupts = ml_set_interrupts_enabled (false);
 			OWCL2CacheInit (originalCacheSetting);
+			ml_set_interrupts_enabled (interrupts);
 		} else {
 			IOLog ("Setting L2CR to 0x%x\n", setValue);
+			interrupts = ml_set_interrupts_enabled (false);
 			OWCL2CacheInit (setValue);
+			ml_set_interrupts_enabled (interrupts);
 		}
 		
 		IORegistryEntry *l2cache = provider->childFromPath ("l2-cache", gIODTPlane);
@@ -306,6 +321,7 @@ OWCCacheConfig::initializeL3 (IOService *provider)
 	unsigned ckspSettings [] = {0x0, 0x0, L3CKSP_2, L3CKSP_3, L3CKSP_4, L3CKSP_5};
 	unsigned pspSettings [] = {L3PSP_0, L3PSP_1, L3PSP_2, L3PSP_3, L3PSP_4, L3PSP_5};
 	int maxPSP [] = {1, 1, 2, 2, 3, 4, 5};
+	unsigned doubleClockOffset [] = {0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 5, 6, 6};
 	
 	unsigned originalCacheSetting;
 	mfspr (originalCacheSetting, 1018);
@@ -321,13 +337,17 @@ OWCCacheConfig::initializeL3 (IOService *provider)
 	OSData *data = 0;
 	
 	for (ramOffset = 0; ramOffset < 3; ramOffset++) {
-		// First, we see what settings, if any, will work for the slowest clock speed
-		clockOffset = 6;
+		// We assume that the RAM speed is 200 MHz. The problem is that any clock speed seems
+		// to test good (for a while) if we push the cksp and psp up high enough. So we need
+		// to make an assumption about the clock speed and work from there.
+		unsigned doubleClockRatio = gPEClockFrequencyInfo.cpu_clock_rate_hz / (200 * 1000 * 1000 / 2);
+		if (doubleClockRatio > 12) doubleClockRatio = 12;
+		clockOffset = doubleClockOffset[doubleClockRatio];
 		cksp = 0;
 		psp = 0;
 		goodL3Value = 0;
 		
-		for (int cycle = 35; cycle >= 12; cycle--) {
+		for (int cycle = (clockOffset * 5) + maxPSP[clockOffset]; cycle >= clockOffset * 2; cycle--) {
 			testcksp = cycle / clockOffset;
 			testpsp = cycle % clockOffset;
 			
@@ -372,7 +392,7 @@ OWCCacheConfig::initializeL3 (IOService *provider)
 			data->release ();
 
 			// see what other clockspeeds will work
-			for (clockOffset = 5; clockOffset >= 0; clockOffset--) {
+			for (clockOffset--; clockOffset >= 0; clockOffset--) {
 				testValue = l3clkenm | l3dxm | l3dmemm | clockSettings[clockOffset] | ramSettings[ramOffset];
 				if (try2MB) testValue |= l3dmsizm;
 				
@@ -444,11 +464,11 @@ OWCCacheConfig::initializeL3 (IOService *provider)
 		
 		// Now, figure out which value to actually use
 		
-		if (l3crBase->getCount () > 1) {
-			data = (OSData *) l3crBase->getObject (l3crBase->getCount () - 2);
-		} else {
+//		if (l3crBase->getCount () > 1) {
+//			data = (OSData *) l3crBase->getObject (l3crBase->getCount () - 2);
+//		} else {
 			data = (OSData *) l3crBase->getObject (0); 
-		}
+//		}
 		
 		setValue = * (unsigned *) data->getBytesNoCopy ();
 		
