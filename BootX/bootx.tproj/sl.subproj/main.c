@@ -45,6 +45,7 @@ static long InitMemoryMap(void);
 static long GetOFVersion(void);
 static long TestForKey(long key);
 static long GetBootPaths(void);
+static void PatchKernelFor60xCPU(void);
 
 const unsigned long StartTVector[2] = {(unsigned long)Start, 0};
 
@@ -430,9 +431,35 @@ static long DecodeKernel(void)
   ret = DecodeMachO(binary);
   if (ret == -1) ret = DecodeElf(binary);
   
+  PatchKernelFor60xCPU ();
+  
   return ret;
 }
 
+// This patches the problem in the 10.2.x kernel that causes trouble for the 603 and 604 CPU
+// Peter Caday diagnosed the issue
+// See http://www.opendarwin.org/bugzilla/show_bug.cgi?id=854
+// ryan.rempel@utoronto.ca
+
+static void PatchKernelFor60xCPU(void)
+{
+	unsigned long *p = (unsigned long *) gVectorSaveAddr;
+	unsigned long count = kVectorSize / sizeof (*p);
+	while (count--) {
+		if (
+			(p[0] == 0x7f660120) &&		// mtcrf 0x60,r27 in osfmk/ppc/lowmen_vectors.s
+			(p[1] == 0x56a00421) &&		// rlwinm. r0,r21,0,MSR_EE_BIT,MSR_EE_BIT
+			(p[2] == 0x4fe74102) &&		// crandc 31,pfThermalb,pfThermIntb
+			(p[3] == 0x3abf0080) &&		// la r21,saver0(r31)
+			(p[4] == 0x4fe2f902)		// crandc 31,cr0_eq,31
+		) {
+			p[4] = 0x4fff1102;			// crandc 31,31,cr0_eq
+			printf ("==> Patched kernel for 60x CPU\n");
+			break;
+		}
+		p++;
+	}
+}
 
 static long SetUpBootArgs(void)
 {
