@@ -180,6 +180,7 @@ OFAliases::aliasFor (const RegEntryID* regEntry, char *outAlias, char *shortAlia
 			
 	RegPropertyValueSize propSize;
 	Ptr prop;
+	unsigned regValue;
 	OSErr err;
 	char nameComponent[256];
 	char workString[256];
@@ -192,83 +193,77 @@ OFAliases::aliasFor (const RegEntryID* regEntry, char *outAlias, char *shortAlia
  		ThrowIfOSErr_AC (RegistryCStrEntryToName (&iterEntry, &parentEntry, nameComponent, &finished));
 		if (finished) break;
 		workString[0] = 0;
+		regValue = 0;
 		
-		if (RegistryEntryIDCompare (&parentEntry, &deviceTreeEntry)) {
-			// If the parent is the device-tree, then this is the last go round
-			finished = true;
+		if (RegistryEntryIDCompare (&parentEntry, &deviceTreeEntry)) finished = true;
 			
-			// Also, if the parent is the device tree, we want to capture the "reg" property
-			err = RegistryPropertyGetSize (&iterEntry, "reg", &propSize);
+		// See if there is a reg property, which we can use for an address		
+		err = RegistryPropertyGetSize (&iterEntry, "reg", &propSize);
+		if (err == noErr) {
+			propSize = sizeof (regValue);
+			ThrowIfOSErr_AC (RegistryPropertyGet (&iterEntry, "reg", &regValue, &propSize));
+		}
+		
+		// We want to special-case where the parent is a pci bus or vci bus
+		// So that we can include the device number and function number	
+		err = RegistryPropertyGetSize (&parentEntry, "device_type", &propSize);
+		if (err == noErr) {
+			prop = NewPtr (propSize + 1);
+			ThrowIfOSErr_AC (RegistryPropertyGet (&parentEntry, "device_type", prop, &propSize));
+			prop[propSize] = '\0';
+			if (!strcmp (prop, "pci") || !strcmp (prop, "vci")) {
+				// since the parent is a pci or vci bus, we get device and function number
+				if (regValue) {
+					int deviceNumber = GetPCIDeviceNumber ((PCIAssignedAddress *) &regValue);
+					int functionNumber = GetPCIFunctionNumber ((PCIAssignedAddress *) &regValue);
+					if (functionNumber) {
+						snprintf (workString, 255, "%s@%X,%X", nameComponent, deviceNumber, functionNumber);
+					} else {
+						snprintf (workString, 255, "%s@%X", nameComponent, deviceNumber);
+					}
+				} else {
+					strcpy (workString, nameComponent);
+				}
+			}
+		}
+			
+		// Special case FW devices
+		if (workString[0] == 0) {
+			err = RegistryPropertyGetSize (&iterEntry, "fw-mao", &propSize);
 			if (err == noErr) {
-				prop = NewPtr (propSize + 1);
-				ThrowIfOSErr_AC (RegistryPropertyGet (&iterEntry, "reg", prop, &propSize));
-				prop[propSize] = '\0';
-				snprintf (workString, 255, "%s@%X", nameComponent, * (unsigned *) prop);
-				DisposePtr (prop);	
-			} else {			
+				unsigned fwmao, fwlun;
+				ThrowIfOSErr_AC (RegistryPropertyGet (&iterEntry, "fw-mao", &fwmao, &propSize));
+				err = RegistryPropertyGetSize (&iterEntry, "fw-lun", &propSize);
+				if (err == noErr) {
+					ThrowIfOSErr_AC (RegistryPropertyGet (&iterEntry, "fw-lun", &fwlun, &propSize));
+					sprintf (workString, "@%X/@%X", fwmao, fwlun);	
+				}
+			}			
+		}
+			
+		// Special case for FW bus
+		if (workString[0] == 0) {
+			err = RegistryPropertyGetSize (&iterEntry, "fw-guid", &propSize);
+			if (err == noErr) {
+				unsigned fwguid[2];
+				ThrowIfOSErr_AC (RegistryPropertyGet (&iterEntry, "fw-guid", fwguid, &propSize));
+				sprintf (workString, "@%X%.8X", fwguid[0], fwguid[1]);
+			}			
+		}
+					
+		// Last chance!
+		if (workString[0] == 0) {
+			if (regValue) {
+				sprintf (workString, "%s@%X", nameComponent, regValue);	
+			} else {
 				strcpy (workString, nameComponent);
 			}
-			RegistryEntryIDDispose (&iterEntry);
-			RegistryEntryIDDispose (&parentEntry);
-			
-		} else {
-		
-			// We want to special-case where the parent is a pci bus or vci bus
-			// So that we can include the device number and function number	
-			err = RegistryPropertyGetSize (&parentEntry, "device_type", &propSize);
-			if (err == noErr) {
-				prop = NewPtr (propSize + 1);
-				ThrowIfOSErr_AC (RegistryPropertyGet (&parentEntry, "device_type", prop, &propSize));
-				prop[propSize] = '\0';
-				if (!strcmp (prop, "pci") || !strcmp (prop, "vci")) {
-					// since the parent is a pci or vci bus, we get device and function number
-					err = RegistryPropertyGetSize (&iterEntry, "reg", &propSize);
-					if (err == noErr) {
-						Ptr reg = NewPtr (propSize);
-						ThrowIfOSErr_AC (RegistryPropertyGet (&iterEntry, "reg", reg, &propSize));
-						int deviceNumber = GetPCIDeviceNumber ((PCIAssignedAddress *) reg);
-						int functionNumber = GetPCIFunctionNumber ((PCIAssignedAddress *) reg);
-						if (functionNumber) {
-							snprintf (workString, 255, "%s@%X,%X", nameComponent, deviceNumber, functionNumber);
-						} else {
-							snprintf (workString, 255, "%s@%X", nameComponent, deviceNumber);
-						}
-						DisposePtr (reg);	
-					} else {
-						strcpy (workString, nameComponent);
-					}
-				}
-				DisposePtr (prop);
-			}
-			
-			if (workString[0] == 0) {
-				err = RegistryPropertyGetSize (&iterEntry, "fw-mao", &propSize);
-				if (err == noErr) {
-					unsigned fwmao, fwlun;
-					ThrowIfOSErr_AC (RegistryPropertyGet (&iterEntry, "fw-mao", &fwmao, &propSize));
-					err = RegistryPropertyGetSize (&iterEntry, "fw-lun", &propSize);
-					if (err == noErr) {
-						ThrowIfOSErr_AC (RegistryPropertyGet (&iterEntry, "fw-lun", &fwlun, &propSize));
-						sprintf (workString, "@%X/@%X", fwmao, fwlun);	
-					}
-				}			
-			}
-			
-			if (workString[0] == 0) {
-				err = RegistryPropertyGetSize (&iterEntry, "fw-guid", &propSize);
-				if (err == noErr) {
-					unsigned fwguid[2];
-					ThrowIfOSErr_AC (RegistryPropertyGet (&iterEntry, "fw-guid", fwguid, &propSize));
-					sprintf (workString, "@%X%.8X", fwguid[0], fwguid[1]);
-				}			
-			}
-						
-			if (workString[0] == 0) strcpy (workString, nameComponent);
-			
-			RegistryEntryIDDispose (&iterEntry);
-			ThrowIfOSErr_AC (RegistryEntryIDCopy (&parentEntry, &iterEntry));
-			RegistryEntryIDDispose (&parentEntry);
 		}
+		
+		RegistryEntryIDDispose (&iterEntry);
+		ThrowIfOSErr_AC (RegistryEntryIDCopy (&parentEntry, &iterEntry));
+		RegistryEntryIDDispose (&parentEntry);
+	
 		temp = NewPtr (strlen (workString) + 1);
 		strcpy (temp, workString);
 		wholeName.InsertFirst (temp);
