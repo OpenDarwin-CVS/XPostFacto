@@ -99,6 +99,8 @@ XPFSettingsWindow::DoPostCreate(TDocument* itsDocument)
 	
 	fAutoBoot = dynamic_cast_or_throw_AC (TCheckBox*, this->FindSubView ('auto'));
 	fEnableCacheEarly = dynamic_cast_or_throw_AC (TCheckBox*, this->FindSubView ('cach'));
+
+	fUseROMNDRV = dynamic_cast_or_throw_AC (TCheckBox*, this->FindSubView ('romn'));
 	
 	fThrottle = dynamic_cast_or_throw_AC (TSlider*, this->FindSubView ('thro'));
 
@@ -168,6 +170,8 @@ XPFSettingsWindow::DoEvent(EventNumber eventNumber,
 				fPrefs->setEnableCacheEarly (newValue);
 			} else if (source == fAutoBoot) {
 				fPrefs->setAutoBoot (newValue);
+			} else if (source == fUseROMNDRV) {
+				fPrefs->setUseROMNDRV (newValue);
 			}
 			break;
 	}
@@ -240,6 +244,7 @@ XPFSettingsWindow::DoUpdate(ChangeID_AC theChange,
 			fSingleUserMode->SetValue (fPrefs->getBootInSingleUserMode (), true);
 			fEnableCacheEarly->SetValue (fPrefs->getEnableCacheEarly (), true);
 			fAutoBoot->SetValue (fPrefs->getAutoBoot (), true);
+			fUseROMNDRV->SetValue (fPrefs->getUseROMNDRV (), true);
 			break;
 
 	}

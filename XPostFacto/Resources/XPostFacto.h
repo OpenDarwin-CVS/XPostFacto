@@ -97,6 +97,7 @@ advised of the possibility of such damage.
 #define cRecopyHelperFiles				1448
 #define cSetRebootInMacOS9				1449
 #define cSetSelectedVolume				1450
+#define cSetUseROMNDRV					1451
 
 // Views and Windows
 // -----------------

@@ -85,6 +85,8 @@ private:
 	TCheckBox *fSingleUserMode;
 	TCheckBox *fVerboseMode;
 	
+	TCheckBox *fUseROMNDRV;
+	
 	TCheckBox *fAutoBoot;
 	TCheckBox *fEnableCacheEarly;
 

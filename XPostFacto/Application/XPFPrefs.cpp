@@ -103,6 +103,7 @@ XPFPrefs::XPFPrefs (TFile* itsFile)
 		fOptionsWindow (NULL),
 		fDebug (0),
 		fRebootInMacOS9 (false),
+		fUseROMNDRV (false),
 		fRestartOnClose (false)
 {
 	SetAskOnClose (true);
@@ -271,6 +272,14 @@ XPFPrefs::getPrefsFromNVRAM ()
 	}
 	if (fDebug != debug) SetChangeCount (GetChangeCount () + 1);
 	fDebug = debug;
+	
+	char *romndrvstring = strstr (bootCommand, "romndrv=");
+	UInt32 romndrv = 0;
+	if (romndrvstring) {
+		romndrvstring += strlen ("romndrv=");
+		romndrv = strtoul (romndrvstring, NULL, 0);
+	}
+	setUseROMNDRV (romndrv);
 	
 	MountedVolume *bootDisk = MountedVolume::WithOpenFirmwarePath (bootDevice);
 	MountedVolume *rootDisk = bootDisk;
@@ -465,8 +474,15 @@ XPFPrefs::DoRead (TFile* aFile, bool forPrinting)
 			fileStream.ReadBytes (&volInfo, sizeof (volInfo));
 			MountedVolume *vol = MountedVolume::WithInfo (&volInfo);
 			
-			if (vol) vol->readHelperFromStream (&fileStream);	
+			if (vol) {
+				vol->readHelperFromStream (&fileStream);
+			} else {
+				// skip over the helper
+				fileStream.ReadBytes (&volInfo, sizeof (volInfo));
+			}
 		}
+		
+		fileStream >> fUseROMNDRV;
 	}
 	
 	catch (...) {
@@ -581,6 +597,10 @@ XPFPrefs::DoWrite (TFile* aFile, bool makingCopy)
 			fileStream.WriteBytes (&info, sizeof (info));
 		}
 	}	
+	
+	// And the ROMNDRV
+	
+	fileStream << fUseROMNDRV;
 }
 
 void 
@@ -790,6 +810,7 @@ XPFPrefs::getBootCommandBase ()
 	if (fBootInVerboseMode) bootCommand += (" -v");
 	if (fBootInSingleUserMode) bootCommand += (" -s");
 	if (fEnableCacheEarly) bootCommand += (" -c");
+	if (fUseROMNDRV) bootCommand += (" romndrv=1");
 	
 	return bootCommand;
 }
@@ -937,6 +958,7 @@ ACCESSOR (AutoBoot, bool)
 ACCESSOR (RebootInMacOS9, bool)
 ACCESSOR (EnableCacheEarly, bool)
 ACCESSOR (Throttle, unsigned)
+ACCESSOR (UseROMNDRV, bool)
 
 DEBUG_ACCESSORS (DebugBreakpoint)
 DEBUG_ACCESSORS (DebugPrintf)

@@ -10,11 +10,11 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 	MAThreeOhView {
 
 	},
-	{	/* array ViewArray: 35 elements */
+	{	/* array ViewArray: 41 elements */
 		/* [1] */
 		ViewSignatureAndClassname {
 			'wind',
-			4471,
+			5086,
 			"XPFSettingsWindow",
 			'WIND',
 			enabled,
@@ -32,7 +32,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				410,
+				512,
 				/* [2] */
 				658
 			},
@@ -94,9 +94,9 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 				generateActivates,
 				filler,
 				1010,
-				25
+				28
 			},
-			34
+			40
 		},
 		/* [2] */
 		ViewSignatureAndClassname {
@@ -271,7 +271,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 				/* [1] */
 				16,
 				/* [2] */
-				50
+				42
 			},
 			sizeVariable,
 			sizeVariable,
@@ -340,7 +340,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				140,
+				206,
 				/* [2] */
 				56
 			},
@@ -415,7 +415,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				166,
+				232,
 				/* [2] */
 				56
 			},
@@ -490,7 +490,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				192,
+				258,
 				/* [2] */
 				56
 			},
@@ -565,7 +565,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				218,
+				284,
 				/* [2] */
 				56
 			},
@@ -640,7 +640,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				244,
+				310,
 				/* [2] */
 				56
 			},
@@ -715,7 +715,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				270,
+				336,
 				/* [2] */
 				56
 			},
@@ -790,7 +790,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				296,
+				362,
 				/* [2] */
 				56
 			},
@@ -865,7 +865,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				322,
+				388,
 				/* [2] */
 				56
 			},
@@ -940,7 +940,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				348,
+				414,
 				/* [2] */
 				56
 			},
@@ -1024,7 +1024,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				376,
+				442,
 				/* [2] */
 				75
 			},
@@ -1092,7 +1092,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				112,
+				178,
 				/* [2] */
 				20
 			},
@@ -1100,7 +1100,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 				/* [1] */
 				16,
 				/* [2] */
-				50
+				48
 			},
 			sizeVariable,
 			sizeVariable,
@@ -1714,7 +1714,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				234,
+				236,
 				/* [2] */
 				436
 			},
@@ -1792,7 +1792,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				234,
+				236,
 				/* [2] */
 				360
 			},
@@ -1869,7 +1869,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				204,
+				206,
 				/* [2] */
 				436
 			},
@@ -1944,7 +1944,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				234,
+				236,
 				/* [2] */
 				576
 			},
@@ -2032,7 +2032,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				176,
+				178,
 				/* [2] */
 				292
 			},
@@ -2040,7 +2040,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 				/* [1] */
 				16,
 				/* [2] */
-				36
+				31
 			},
 			sizeVariable,
 			sizeVariable,
@@ -2100,13 +2100,13 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				300,
+				430,
 				/* [2] */
 				328
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				90,
+				66,
 				/* [2] */
 				274
 			},
@@ -2168,7 +2168,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				272,
+				402,
 				/* [2] */
 				292
 			},
@@ -2238,13 +2238,13 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 				/* [1] */
 				23,
 				/* [2] */
-				72
+				64
 			},
 			{	/* array: 2 elements */
 				/* [1] */
 				18,
 				/* [2] */
-				180
+				188
 			},
 			sizeVariable,
 			sizeVariable,
@@ -2284,15 +2284,15 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				115,
+				181,
 				/* [2] */
-				72
+				70
 			},
 			{	/* array: 2 elements */
 				/* [1] */
 				18,
 				/* [2] */
-				180
+				182
 			},
 			sizeVariable,
 			sizeVariable,
@@ -2380,15 +2380,15 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				184,
+				186,
 				/* [2] */
-				330
+				325
 			},
 			{	/* array: 2 elements */
 				/* [1] */
 				9,
 				/* [2] */
-				308
+				313
 			},
 			sizeVariable,
 			sizeVariable,
@@ -2428,7 +2428,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				278,
+				408,
 				/* [2] */
 				330
 			},
@@ -2482,7 +2482,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				358,
+				424,
 				/* [2] */
 				12
 			},
@@ -2508,12 +2508,387 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 
 			},
 			NoSubviews
+		},
+		/* [36] */
+		ViewSignatureAndClassname {
+			'stat',
+			100,
+			"",
+			'sta4',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				112,
+				/* [2] */
+				20
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				16,
+				/* [2] */
+				42
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			StaticText {
+				mStaticTextHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				autoWrap,
+				dontEraseFirst,
+				justRight,
+				1010,
+				25
+			},
+			NoSubviews
+		},
+		/* [37] */
+		ViewSignatureAndClassname {
+			'sepr',
+			66,
+			"",
+			'sep5',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				117,
+				/* [2] */
+				64
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				14,
+				/* [2] */
+				188
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Separator {
+
+			},
+			NoSubviews
+		},
+		/* [38] */
+		ViewSignatureAndClassname {
+			'chkb',
+			132,
+			"",
+			'romn',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 1 elements */
+				/* [1] */
+				BehaviorSignatureAndClassname {
+					noID,
+					"XPFHelpBehavior",
+					Behavior {
+						enabled,
+						noIdle
+					}
+				}
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				140,
+				/* [2] */
+				56
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				160
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			handlesCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			CheckBox {
+				mCheckBoxHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				off,
+				1010,
+				26
+			},
+			NoSubviews
+		},
+		/* [39] */
+		ViewSignatureAndClassname {
+			'stat',
+			100,
+			"",
+			'sta5',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				274,
+				/* [2] */
+				292
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				16,
+				/* [2] */
+				65
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			StaticText {
+				mStaticTextHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				autoWrap,
+				dontEraseFirst,
+				justRight,
+				1010,
+				27
+			},
+			NoSubviews
+		},
+		/* [40] */
+		ViewSignatureAndClassname {
+			'sepr',
+			66,
+			"",
+			'sep6',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				281,
+				/* [2] */
+				359
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				11,
+				/* [2] */
+				279
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Separator {
+
+			},
+			NoSubviews
+		},
+		/* [41] */
+		ViewSignatureAndClassname {
+			'stat',
+			115,
+			"XPFSettingsText",
+			'sta6',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				302,
+				/* [2] */
+				328
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				80,
+				/* [2] */
+				274
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			StaticText {
+				mStaticTextHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				27392,
+				dontPreferOutline,
+				autoWrap,
+				dontEraseFirst,
+				justSystem,
+				-1,
+				1
+			},
+			NoSubviews
 		}
 	}
 };
 
 resource 'STR#' (1010, "Additional Settings", purgeable) {
-	{	/* array StringArray: 25 elements */
+	{	/* array StringArray: 28 elements */
 		/* [1] */
 		"Verbose",
 		/* [2] */
@@ -2563,6 +2938,12 @@ resource 'STR#' (1010, "Additional Settings", purgeable) {
 		/* [24] */
 		"Help",
 		/* [25] */
+		"Video",
+		/* [26] */
+		"Use old NDRVs",
+		/* [27] */
+		"Summary",
+		/* [28] */
 		"Additional Settings"
 	}
 };

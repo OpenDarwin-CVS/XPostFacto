@@ -84,6 +84,7 @@ resource 'hlps' (kHelpStringsResource, purgeable) {
 		'rsst', 23;
 		'mosx', 23;
 		'mos9', 23;
+		'romn', 24;
 	}
 };
 
@@ -147,5 +148,8 @@ resource 'STR#' (kHelpStringsResource, purgeable) {
 		 
 		 "Choose whether to reboot in Mac OS 9 or Mac OS X. Note that you cannot choose a specific "
 		 "Mac OS 9 volume -- this feature is not yet implemented.";
+		 
+		 "Force Mac OS X 10.3 (Panther) to use video drivers it would otherwise reject as too old. "
+		 "This setting has no effect prior to Mac OS X 10.3";
 	}
 };

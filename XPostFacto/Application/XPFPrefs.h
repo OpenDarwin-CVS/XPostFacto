@@ -121,6 +121,7 @@ DECLARE_ACCESSORS (bool, EnableCacheEarly)
 DECLARE_ACCESSORS (bool, UseShortStrings)
 DECLARE_ACCESSORS (bool, UseShortStringsForInstall)
 DECLARE_ACCESSORS (unsigned, Throttle)
+DECLARE_ACCESSORS (bool, UseROMNDRV)
 		
 DECLARE_DEBUG_ACCESSORS (DebugBreakpoint)
 DECLARE_DEBUG_ACCESSORS (DebugPrintf)
@@ -169,6 +170,7 @@ DECLARE_DEBUG_ACCESSORS (DebugPanicText)
 		UInt8	fAutoBoot;
 		UInt8	fEnableCacheEarly;
 		UInt32	fDebug;
+		UInt8	fUseROMNDRV;
 };
 
 #endif
