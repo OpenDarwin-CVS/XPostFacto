@@ -41,6 +41,8 @@ advised of the possibility of such damage.
 #include "vers_rsrc.h"
 #include "XPFUpdate.h"
 #include "XPFUpdateCommands.h"
+#include "XPFApplication.h"
+#include "XPFPrefs.h"
 
 #include <stdio.h>
 
@@ -96,6 +98,9 @@ XPFVolumeInspectorWindow::DoPostCreate(TDocument* itsDocument)
 	fWarningIcon = dynamic_cast_or_throw_AC (TIcon*, this->FindSubView ('warn'));
 	fWarningText = dynamic_cast_or_throw_AC (TStaticText*, this->FindSubView ('wart'));
 	
+	fPrefs = ((XPFApplication *) gApplication)->getPrefs ();
+	fPrefs->AddDependent (this);
+	
 	TWindow::DoPostCreate (itsDocument);
 }
 
@@ -148,7 +153,7 @@ XPFVolumeInspectorWindow::updateFields ()
 	sprintf (buffer, "%lu", fVolume->getBlessedFolderID ());
 	fBlessedFolderID->SetText (buffer, true);
 	
-	UInt32 warning = fVolume->getBootWarning ();
+	UInt32 warning = fVolume->getBootWarning (fPrefs->getInstallCD ());
 	if (warning) {
 		fWarningIcon->Show (true, true);
 		fWarningText->SetTextWithStrListID (kXPFStringsResource, warning, true);
@@ -161,7 +166,7 @@ XPFVolumeInspectorWindow::updateFields ()
 void 
 XPFVolumeInspectorWindow::DoUpdate (ChangeID_AC theChange, MDependable_AC* changedObject, void* changeData, CDependencySpace_AC* dependencySpace)
 {
-	if (changedObject == fVolume) updateFields ();
+	if ((changedObject == fVolume) || (changedObject == fPrefs)) updateFields ();
 	Inherited::DoUpdate (theChange, changedObject, changeData, dependencySpace);
 }
 

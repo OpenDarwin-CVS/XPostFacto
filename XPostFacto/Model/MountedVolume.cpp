@@ -955,7 +955,7 @@ MountedVolume::getBootStatus ()
 }
 
 unsigned
-MountedVolume::getBootWarning ()
+MountedVolume::getBootWarning (bool forInstall)
 {
 	// We only worry about warnings if there is no fatal problem
 	if (getInstallTargetStatus () && getInstallerStatus ()) return kStatusOK;
@@ -963,14 +963,21 @@ MountedVolume::getBootWarning ()
 	if (fSymlinkStatus == kSymlinkStatusCannotFix) return kInvalidSymlinksCannotFix;
 	if (fSymlinkStatus != kSymlinkStatusOK) return kInvalidSymlinks;
 
-	if (fBootableDevice && !getHelperDisk ()) {
-		XPFPartition* firstPart = fBootableDevice->getFirstHFSPartition ();
-		if (firstPart && firstPart->getPartitionNumber () < kExpectedFirstHFSPartition) return kFewerPartitionsThanExpected;
+	if (fBootableDevice) {
+		if (!getHelperDisk ()) {
+			XPFPartition* firstPart = fBootableDevice->getFirstHFSPartition ();
+			if (firstPart && firstPart->getPartitionNumber () < kExpectedFirstHFSPartition) return kFewerPartitionsThanExpected;
 
-		if (fPartInfo && !fPartInfo->getHasHFSWrapper ()) return kNoHFSWrapper;
+			if (fPartInfo && !fPartInfo->getHasHFSWrapper ()) return kNoHFSWrapper;
+		}
 
 		if (fBootableDevice->isReallyATADevice () && getExtendsPastEightGB ()) {
-			return fIsAttachedToPCICard ? kBogus8GBWarning : k8GBWarning;
+			if (fIsAttachedToPCICard) {
+				if (forInstall) return kBogus8GBWarning; 
+			} else {
+				if (forInstall && getHelperDisk ()) return kBogus8GBWarning;
+				if (!getHelperDisk ()) return k8GBWarning;
+			}
 		}
 	}
 	

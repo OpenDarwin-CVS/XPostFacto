@@ -171,7 +171,7 @@ XPFVolumeDisplay::DoUpdate	(ChangeID_AC theChange,
 {
 	MountedVolume *vol = (MountedVolume *) changeData;
 
-	if (fVolume == vol) fWarningIcon->Show (fVolume->getBootWarning (), true);
+	if (fVolume == vol) fWarningIcon->Show (fVolume->getBootWarning (fPrefs->getInstallCD ()), true);
 
 	switch (theChange) {
 				
@@ -211,6 +211,7 @@ XPFVolumeDisplay::DoUpdate	(ChangeID_AC theChange,
 			} else {
 				SetActiveState ((installerStatus == kStatusOK) || (bootStatus == kStatusOK), false);			
 			}
+			fWarningIcon->Show (fVolume->getBootWarning (vol), true);
 			break;
 				
 		default:

@@ -38,6 +38,7 @@ advised of the possibility of such damage.
 #include "UWindow.h"
 
 class MountedVolume;
+class XPFPrefs;
 
 class XPFVolumeInspectorWindow : public TWindow
 {
@@ -68,6 +69,7 @@ private:
 	static XPFVolumeInspectorWindow *gInstance;
 	
 	MountedVolume *fVolume;
+	XPFPrefs *fPrefs;
 	
 	TStaticText *fVolumeName;
 	TStaticText *fOpenFirmwareName;

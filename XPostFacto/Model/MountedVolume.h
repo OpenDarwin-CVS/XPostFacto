@@ -116,7 +116,7 @@ class MountedVolume : public MDependable_AC
 		unsigned getInstallerStatus ();
 		unsigned getInstallTargetStatus ();
 		unsigned getHelperStatus ();
-		unsigned getBootWarning ();
+		unsigned getBootWarning (bool forInstall = false);
 		unsigned getSymlinkStatus () {return fSymlinkStatus;}
 		
 		void fixSymlinkAtPath (char *path);
