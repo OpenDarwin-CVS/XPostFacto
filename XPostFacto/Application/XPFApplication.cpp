@@ -488,7 +488,11 @@ XPFApplication::InstallHelpMenuItems()
 	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (theMenuName, cShowOnlineHelpFile);
 	GetIndString (theMenuName, kXPFStringsResource, kXPostFactoSourceCodeMenu);
 	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (theMenuName, cShowSourceCode);
+	GetIndString (theMenuName, kXPFStringsResource, kXPostFactoRegisterMenu);
+	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (theMenuName, cRegisterXPostFacto);
+
 	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem ("-", cNoCommand);
+
 	GetIndString (theMenuName, kXPFStringsResource, kShowDebugOptions);
 	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (theMenuName, cShowDebugOptions);
 	
@@ -514,6 +518,10 @@ XPFApplication::DoMenuCommand(CommandNumber aCommandNumber) // Override
 			
 		case cShowSourceCode:
 			launchURL ("\phttp://www.opendarwin.org/cgi-bin/cvsweb.cgi/proj/XPostFacto/");
+			break;
+			
+		case cRegisterXPostFacto:
+			launchURL ("\phttps://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm");
 			break;
 			
 		case cShowLogWindow:
@@ -554,6 +562,7 @@ XPFApplication::DoSetupMenus()
 	Enable (cShowSourceCode, enable);
 	Enable (cShowLogWindow, enable);
 	Enable (cShowDebugOptions, enable);
+	Enable (cRegisterXPostFacto, enable);
 	
 	EnableCheck (cDisableRestart, enable, fDebugOptions & kDisableRestart);
 	EnableCheck (cVisibleHelperFiles, enable, fDebugOptions & kVisibleHelperFiles);

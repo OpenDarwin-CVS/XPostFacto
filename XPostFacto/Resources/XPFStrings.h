@@ -84,7 +84,8 @@ enum {
 	kUninstalling,
 	kBlessingSystemFolder,		// 45
 	kDeletingXPFCache,
-	kCheckingPermissions
+	kCheckingPermissions,
+	kXPostFactoRegisterMenu,
 };
 
 

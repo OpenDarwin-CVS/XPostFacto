@@ -93,5 +93,7 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 /* 45 */	"Blessing Mac OS 9 System Folder";
 			"Deleting XPostFacto Cache Files";
 			"Checking Permissions";
+			
+			"Register XPostFacto";
 	}
 };
