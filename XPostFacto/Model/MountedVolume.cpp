@@ -239,7 +239,7 @@ MountedVolume::GetDefaultRootDisk ()
 {
 	MountedVolume *retVal = NULL;
 	for (MountedVolumeIterator iter (GetVolumeList ()); iter.Current(); iter.Next()) {
-		if (iter->getBootStatus () == kStatusOK) {
+		if ((iter->getBootStatus () == kStatusOK) && !iter->getHasInstaller ()) {
 			if (retVal) {
 				if (iter->getFreeBytes () > retVal->getFreeBytes ()) retVal = iter.Current (); 
 			} else {

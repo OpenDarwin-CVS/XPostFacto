@@ -376,8 +376,10 @@ XPFPrefs::getPrefsFromNVRAM ()
 			rootDisk = MountedVolume::WithOpenFirmwarePath (rootPath);
 			if (!rootDisk) rootDisk = bootDisk;
 		}	
-		
-		if (rootDisk && (rootDisk->getBootStatus () == kStatusOK)) {
+				
+		// Only honour the rootDisk if it is not an installer -- if it is an installer, then force
+		// the user to confirm changes no matter what
+		if (rootDisk && (rootDisk->getBootStatus () == kStatusOK) && (rootDisk->getInstallerStatus () != kStatusOK)) {
 			if (rootDisk != fTargetDisk) fForceAskSave = true;
 			setTargetDisk (rootDisk);
 			if (bootDisk && (bootDisk != rootDisk)) {
