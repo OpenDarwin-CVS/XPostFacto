@@ -33,14 +33,6 @@ advised of the possibility of such damage.
 
 #include "SCSIBus.h"
 
-#include <Devices.h>
-#include <Files.h>
-#include "XPFNameRegistry.h"
-#include <HFSVolumes.h>
-#include <DriverGestalt.h>
-#include <stdio.h>
-#include <PCI.h>
-
 #include "XPFLog.h"
 #include "OFAliases.h"
 #include "XPFApplication.h"
@@ -62,8 +54,6 @@ SCSIBus::Initialize ()
 	if (gHasBeenInitialized) return;
 	
 	gHasBeenInitialized = true;
-	
-	if ((Ptr) RegistryEntryIDInit == (Ptr) kUnresolvedCFragSymbolAddress) return;
 	
 	RegEntryIter cookie;
     RegEntryID entry;
@@ -140,7 +130,7 @@ SCSIBus::BusWithNumber (int number)
 			break;
 		}
 	}
-
+	
 	return retVal;
 }
 
@@ -299,5 +289,5 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 
 		}
 	#endif
-	
+
 }

@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2002
+Copyright (c) 2002 - 2003
 Other World Computing
 All rights reserved
 
@@ -33,17 +33,9 @@ advised of the possibility of such damage.
 
 #include "ATABus.h"
 
-#include <Devices.h>
-#include <Files.h>
-#include "XPFNameRegistry.h"
-#include <HFSVolumes.h>
-#include <DriverGestalt.h>
-#include <stdio.h>
-
 #include "XPFLog.h"
 #include "OFAliases.h"
 #include "XPFApplication.h"
-#include "PCI.h"
 
 ATABusList ATABus::gATABusList;
 bool ATABus::gHasBeenInitialized = false;
@@ -59,9 +51,7 @@ ATABus::Initialize ()
 	if (gHasBeenInitialized) return;
 	
 	gHasBeenInitialized = true;
-	
-	if ((Ptr) RegistryEntryIDInit == (Ptr) kUnresolvedCFragSymbolAddress) return;
-	
+		
 	RegEntryIter cookie;
     RegEntryID entry;
     Boolean done = false;
@@ -121,7 +111,7 @@ ATABus::ATABus (RegEntryID *regEntry)
 	#if qLogging
 		gLogFile << "Creating new ATA Bus" << endl_AC;
 	#endif
-
+	
 	char alias [256];
 	char shortAlias [256];
 	OFAliases::AliasFor (regEntry, alias, shortAlias);
@@ -135,7 +125,7 @@ ATABus::ATABus (RegEntryID *regEntry)
 	} else {
 		fBusNumber = 0;
 	}
-					
+			
 	#if qLogging
 		gLogFile << "OpenFirmwareName: ";
 		gLogFile.WriteCharBytes ((char *) &fOpenFirmwareName[1], fOpenFirmwareName[0]);

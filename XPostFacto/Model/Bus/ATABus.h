@@ -44,9 +44,6 @@ entries that might be ATA buses.
 #ifndef __ATABUS_H__
 #define __ATABUS_H__
 
-#include <SCSI.h>
-#include <NameRegistry.h>
-
 class ATABus;
 
 typedef TemplateAutoList_AC <ATABus> ATABusList;

@@ -45,9 +45,6 @@ turns out to be a lot harder than you might think.
 #ifndef __SCSIBUS_H__
 #define __SCSIBUS_H__
 
-#include <SCSI.h>
-#include <NameRegistry.h>
-
 class SCSIBus;
 
 typedef TemplateAutoList_AC <SCSIBus> SCSIBusList;
