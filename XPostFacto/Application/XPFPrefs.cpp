@@ -291,19 +291,16 @@ XPFPrefs::getPrefsFromNVRAM ()
 		return;	
 	}
 	
-	// For the rest of the settings, we bump the change count if we make changes to what was in the
-	// prefs file. That way, we ensure that the prefs file and the contents of NVRAM stay in sync.
-
-	// Note that we don't apply the "-v" setting because we may have set that automatically to deal
-	// with Darwin boots. So the preferences file will control that setting exclusively.
-
-	setAutoBoot (nvram->getBooleanValue ("auto-boot?"));	
-	setBootInSingleUserMode ((strstr (bootCommand, " -s")) != 0);
-//	setBootInVerboseMode ((strstr (bootCommand, " -v")) != 0);
-
+	// For most settings, we use what is in our preferences rather than what is in NVRAM.
+	// But, we ask about saving those preferences if NVRAM is different 
+	
+	if (fAutoBoot != nvram->getBooleanValue ("auto-boot?")) fForceAskSave = true;;	
+	if (fBootInSingleUserMode != (strstr (bootCommand, " -s") != 0)) fForceAskSave = true;
+	if (fBootInVerboseMode != (strstr (bootCommand, " -v") != 0)) fForceAskSave = true;
+	
 	// we set -c if the user does *not* want to enable the cache early
 	// If no -c, we don't assume anything
-	if (strstr (bootCommand, " -c")) setEnableCacheEarly (false);
+	if (fEnableCacheEarly != (strstr (bootCommand, " -c") == 0)) fForceAskSave = true;
 	
 	char *debugString = strstr (bootCommand, "debug=");
 	UInt32 debug = 0;
@@ -311,7 +308,7 @@ XPFPrefs::getPrefsFromNVRAM ()
 		debugString += strlen ("debug=");
 		debug = strtoul (debugString, NULL, 0);
 	}
-	fDebug = debug;
+	if (fDebug != debug) fForceAskSave = true;
 	
 	char *romndrvstring = strstr (bootCommand, "romndrv=");
 	UInt32 romndrv = 0;
@@ -319,7 +316,10 @@ XPFPrefs::getPrefsFromNVRAM ()
 		romndrvstring += strlen ("romndrv=");
 		romndrv = strtoul (romndrvstring, NULL, 0);
 	}
-	setUseROMNDRV (romndrv);
+	if (fUseROMNDRV != romndrv) fForceAskSave = true;
+	
+	// For the target disk and helper disk, we use what is in NVRAM rather than preferences file
+	// But, once again, we ask to save preferences if they are different
 	
 	MountedVolume *bootDisk = MountedVolume::WithOpenFirmwarePath (bootDevice);
 	MountedVolume *rootDisk = bootDisk;
@@ -336,15 +336,18 @@ XPFPrefs::getPrefsFromNVRAM ()
 	}	
 	
 	if (rootDisk && (rootDisk->getBootStatus () == kStatusOK)) {
+		if (rootDisk != fTargetDisk) fForceAskSave = true;
 		setTargetDisk (rootDisk);
 		if (bootDisk && (bootDisk != rootDisk)) {
 			if (bootDisk->getHelperStatus() == kStatusOK) {
+				if (bootDisk != fTargetDisk->getHelperDisk ()) fForceAskSave = true;
 				fTargetDisk->setHelperDisk (bootDisk);
 			} else {
 				fForceAskSave = true;
 			}
 		}
 		// We check at launch for available updates to the current configuration
+		// We do it here because we get here where we have a MountedVolume for the current root
 		checkForUpdates (fTargetDisk, fTargetDisk->getHelperDisk ());
 	} else {
 		// If we can't set the target disk to the current root, then we'd ask
@@ -352,11 +355,9 @@ XPFPrefs::getPrefsFromNVRAM ()
 		fForceAskSave = true;
 	}
 	
-	// input device
-	setInputDevice (inputDevice);
-	
-	// output device
-	setOutputDevice (outputDevice);
+	// input device and output device
+	if (getInputDevice (false) != inputDevice) fForceAskSave = true;
+	if (getOutputDevice (false) != outputDevice) fForceAskSave = true;
 	
 	// throttle
 	UInt32 throttleVal = 0;
@@ -369,7 +370,13 @@ XPFPrefs::getPrefsFromNVRAM ()
 			throttleVal = strtoul (throttle, NULL, 16);
 		}
 	}
-	setThrottle (throttleVal >> 1);  // accounts for the on/off bit at the end
+	if (throttleVal & 0x1) {
+		throttleVal >>= 1; // accounts for the on/off bit at the end
+	} else {
+		throttleVal = 0;
+	}
+	gLogFile << fThrottle << " " << throttleVal << endl_AC;
+	if (fThrottle != throttleVal) fForceAskSave = true;
 }
 
 void 
