@@ -1,12 +1,3 @@
-resource 'STR#' (1009, "Splash Window", purgeable) {
-	{	/* array StringArray: 2 elements */
-		/* [1] */
-		"XPostFacto",
-		/* [2] */
-		"(c) 2001 - 2003, Other World Computing"
-	}
-};
-
 resource 'View' (1009, "Splash Window", purgeable) {
 	MAThreeOhView {
 
@@ -33,9 +24,9 @@ resource 'View' (1009, "Splash Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				210,
+				232,
 				/* [2] */
-				322
+				299
 			},
 			sizeVariable,
 			sizeVariable,
@@ -114,9 +105,9 @@ resource 'View' (1009, "Splash Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				155,
+				170,
 				/* [2] */
-				28
+				20
 			},
 			{	/* array: 2 elements */
 				/* [1] */
@@ -182,15 +173,15 @@ resource 'View' (1009, "Splash Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				183,
+				192,
 				/* [2] */
-				28
+				20
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				16,
+				20,
 				/* [2] */
-				280
+				259
 			},
 			sizeVariable,
 			sizeVariable,
@@ -250,9 +241,9 @@ resource 'View' (1009, "Splash Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				11,
+				20,
 				/* [2] */
-				28
+				20
 			},
 			{	/* array: 2 elements */
 				/* [1] */
@@ -299,6 +290,15 @@ resource 'View' (1009, "Splash Window", purgeable) {
 			},
 			NoSubviews
 		}
+	}
+};
+
+resource 'STR#' (1009, "Splash Window", purgeable) {
+	{	/* array StringArray: 2 elements */
+		/* [1] */
+		"XPostFacto",
+		/* [2] */
+		"(c) 2001 - 2003, Other World Computing"
 	}
 };
 

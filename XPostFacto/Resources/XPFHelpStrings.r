@@ -48,6 +48,14 @@ resource 'hlps' (kHelpStringsResource, purgeable) {
 		'sinm', 2;
 		'verm', 3;
 		'debg', 4;
+		'debr', 4;
+		'depr', 4;
+		'denm', 4;
+		'dekp', 4;
+		'dudd', 4;
+		'dedi', 4;
+		'deda', 4;
+		'deso', 4;
 		'auto', 5;
 		'inpd', 6;
 		'intx', 6;

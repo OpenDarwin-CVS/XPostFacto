@@ -1,40 +1,30 @@
-data 'TxSt' (5312, "Application 12, bold") {
-	$"019C 000C 0000 0000 0000 0161"                                                                      /* .œ.........a */
-};
-
-data 'TxSt' (27392, "Application 10, plain") {
-	$"009C 000A 0000 0000 0000 0161"                                                                      /* .œ.Â.......a */
-};
-
 resource 'STR#' (1001, "Grid Window", purgeable) {
-	{	/* array StringArray: 14 elements */
+	{	/* array StringArray: 13 elements */
 		/* [1] */
-		"Install from CD to Target Volume:",
+		"Install from CD to",
 		/* [2] */
 		"Install",
 		/* [3] */
 		"Use CD:",
 		/* [4] */
-		"Update Target Volume:",
-		/* [5] */
 		"Update",
-		/* [6] */
+		/* [5] */
 		"Select Target Volume:",
-		/* [7] */
+		/* [6] */
 		"Get InfoÉ",
+		/* [7] */
+		"Help:",
 		/* [8] */
-		"Help",
-		/* [9] */
 		"NVRAM Settings:",
-		/* [10] */
+		/* [9] */
 		"OptionsÉ",
+		/* [10] */
+		"Restart from",
 		/* [11] */
-		"Restart from Target Volume:",
-		/* [12] */
 		"Helper:",
-		/* [13] */
+		/* [12] */
 		"Restart",
-		/* [14] */
+		/* [13] */
 		"XPostFacto"
 	}
 };
@@ -46,15 +36,23 @@ resource 'STR#' (1200, "VolumeDisplay", purgeable) {
 	}
 };
 
+data 'TxSt' (5312, "Application 12, bold") {
+	$"019C 000C 0000 0000 0000 0161"                                                                      /* .œ.........a */
+};
+
+data 'TxSt' (27392, "Application 10, plain") {
+	$"009C 000A 0000 0000 0000 0161"                                                                      /* .œ.Â.......a */
+};
+
 resource 'View' (1001, "Grid Window", purgeable) {
 	MAThreeOhView {
 
 	},
-	{	/* array ViewArray: 25 elements */
+	{	/* array ViewArray: 24 elements */
 		/* [1] */
 		ViewSignatureAndClassname {
 			'wind',
-			3554,
+			3459,
 			"XPFGridWindow",
 			'WIND',
 			enabled,
@@ -72,9 +70,9 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				560,
+				544,
 				/* [2] */
-				760
+				768
 			},
 			sizeVariable,
 			sizeVariable,
@@ -134,15 +132,15 @@ resource 'View' (1001, "Grid Window", purgeable) {
 				generateActivates,
 				filler,
 				1001,
-				14
+				13
 			},
-			7
+			6
 		},
 		/* [2] */
 		ViewSignatureAndClassname {
 			'clsp',
-			582,
-			"",
+			598,
+			"XPFVolumeCluster",
 			'incl',
 			enabled,
 			noIdle,
@@ -162,15 +160,15 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				88,
+				392,
 				/* [2] */
-				382
+				20
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				57,
+				92,
 				/* [2] */
-				345
+				356
 			},
 			sizeVariable,
 			sizeVariable,
@@ -237,15 +235,15 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				22,
+				60,
 				/* [2] */
-				241
+				254
 			},
 			{	/* array: 2 elements */
 				/* [1] */
 				20,
 				/* [2] */
-				93
+				90
 			},
 			sizeVariable,
 			sizeVariable,
@@ -311,15 +309,15 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				23,
+				28,
 				/* [2] */
-				88
+				74
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				21,
+				20,
 				/* [2] */
-				138
+				202
 			},
 			sizeVariable,
 			sizeVariable,
@@ -392,15 +390,15 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				24,
+				29,
 				/* [2] */
-				9
+				12
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				19,
+				16,
 				/* [2] */
-				67
+				54
 			},
 			sizeVariable,
 			sizeVariable,
@@ -448,8 +446,8 @@ resource 'View' (1001, "Grid Window", purgeable) {
 		/* [6] */
 		ViewSignatureAndClassname {
 			'clsp',
-			715,
-			"",
+			731,
+			"XPFVolumeCluster",
 			'upsl',
 			notEnabled,
 			noIdle,
@@ -469,13 +467,13 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				163,
+				20,
 				/* [2] */
-				383
+				400
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				235,
+				228,
 				/* [2] */
 				348
 			},
@@ -544,15 +542,15 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				203,
+				196,
 				/* [2] */
-				259
+				246
 			},
 			{	/* array: 2 elements */
 				/* [1] */
 				20,
 				/* [2] */
-				73
+				90
 			},
 			sizeVariable,
 			sizeVariable,
@@ -590,7 +588,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 				-1,
 				dontPreferOutline,
 				1001,
-				5
+				4
 			},
 			NoSubviews
 		},
@@ -609,15 +607,15 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				20,
+				24,
 				/* [2] */
-				8
+				12
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				169,
+				160,
 				/* [2] */
-				327
+				324
 			},
 			sizeVariable,
 			sizeVariable,
@@ -695,15 +693,15 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				5,
+				2,
 				/* [2] */
-				5
+				2
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				160,
+				156,
 				/* [2] */
-				308
+				304
 			},
 			sizeVariable,
 			sizeVariable,
@@ -769,13 +767,13 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				4,
+				1,
 				/* [2] */
-				313
+				306
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				162,
+				158,
 				/* [2] */
 				16
 			},
@@ -845,13 +843,13 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				10,
+				20,
 				/* [2] */
-				11
+				20
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				242,
+				256,
 				/* [2] */
 				356
 			},
@@ -891,7 +889,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 				-1,
 				dontPreferOutline,
 				1001,
-				6,
+				5,
 				noID
 			},
 			2
@@ -911,15 +909,15 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				21,
+				24,
 				/* [2] */
-				6
+				12
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				187,
+				188,
 				/* [2] */
-				342
+				332
 			},
 			sizeVariable,
 			sizeVariable,
@@ -997,15 +995,15 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				3,
+				2,
 				/* [2] */
-				3
+				2
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				181,
+				184,
 				/* [2] */
-				322
+				312
 			},
 			sizeRelSuperView,
 			sizeRelSuperView,
@@ -1071,13 +1069,13 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				2,
+				1,
 				/* [2] */
-				325
+				314
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				183,
+				186,
 				/* [2] */
 				16
 			},
@@ -1147,15 +1145,15 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				212,
+				224,
 				/* [2] */
-				251
+				254
 			},
 			{	/* array: 2 elements */
 				/* [1] */
 				20,
 				/* [2] */
-				84
+				90
 			},
 			sizeVariable,
 			sizeVariable,
@@ -1193,7 +1191,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 				-1,
 				dontPreferOutline,
 				1001,
-				7
+				6
 			},
 			NoSubviews
 		},
@@ -1221,15 +1219,15 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				403,
+				420,
 				/* [2] */
-				387
+				400
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				145,
+				104,
 				/* [2] */
-				335
+				348
 			},
 			sizeVariable,
 			sizeVariable,
@@ -1267,7 +1265,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 				-1,
 				dontPreferOutline,
 				1001,
-				8,
+				7,
 				noID
 			},
 			1
@@ -1289,13 +1287,13 @@ resource 'View' (1001, "Grid Window", purgeable) {
 				/* [1] */
 				24,
 				/* [2] */
-				21
+				12
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				108,
+				68,
 				/* [2] */
-				302
+				324
 			},
 			sizeVariable,
 			sizeVariable,
@@ -1364,15 +1362,15 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				259,
+				260,
 				/* [2] */
-				13
+				400
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				146,
+				148,
 				/* [2] */
-				350
+				348
 			},
 			sizeVariable,
 			sizeVariable,
@@ -1410,7 +1408,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 				-1,
 				dontPreferOutline,
 				1001,
-				9,
+				8,
 				noID
 			},
 			2
@@ -1447,7 +1445,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 				/* [1] */
 				20,
 				/* [2] */
-				88
+				90
 			},
 			sizeVariable,
 			sizeVariable,
@@ -1485,7 +1483,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 				-1,
 				dontPreferOutline,
 				1001,
-				10
+				9
 			},
 			NoSubviews
 		},
@@ -1513,13 +1511,13 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				23,
+				24,
 				/* [2] */
-				10
+				12
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				89,
+				80,
 				/* [2] */
 				324
 			},
@@ -1568,82 +1566,9 @@ resource 'View' (1001, "Grid Window", purgeable) {
 		},
 		/* [21] */
 		ViewSignatureAndClassname {
-			'pict',
-			137,
-			"TPicture",
-			'owcp',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				413,
-				/* [2] */
-				47
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				134,
-				/* [2] */
-				259
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			Picture {
-				mPictureHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				1008
-			},
-			NoSubviews
-		},
-		/* [22] */
-		ViewSignatureAndClassname {
 			'clsp',
-			579,
-			"",
+			595,
+			"XPFVolumeCluster",
 			'recl',
 			enabled,
 			noIdle,
@@ -1663,15 +1588,15 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				10,
+				288,
 				/* [2] */
-				381
+				20
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				61,
+				92,
 				/* [2] */
-				348
+				356
 			},
 			sizeVariable,
 			sizeVariable,
@@ -1709,12 +1634,12 @@ resource 'View' (1001, "Grid Window", purgeable) {
 				-1,
 				dontPreferOutline,
 				1001,
-				11,
+				10,
 				noID
 			},
 			3
 		},
-		/* [23] */
+		/* [22] */
 		ViewSignatureAndClassname {
 			'popp',
 			159,
@@ -1738,15 +1663,15 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				26,
+				28,
 				/* [2] */
-				77
+				74
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				21,
+				20,
 				/* [2] */
-				131
+				202
 			},
 			sizeVariable,
 			sizeVariable,
@@ -1795,7 +1720,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [24] */
+		/* [23] */
 		ViewSignatureAndClassname {
 			'stat',
 			135,
@@ -1819,15 +1744,15 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				27,
+				29,
 				/* [2] */
-				9
+				12
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				18,
+				16,
 				/* [2] */
-				60
+				54
 			},
 			sizeVariable,
 			sizeVariable,
@@ -1868,11 +1793,11 @@ resource 'View' (1001, "Grid Window", purgeable) {
 				dontEraseFirst,
 				justRight,
 				1001,
-				12
+				11
 			},
 			NoSubviews
 		},
-		/* [25] */
+		/* [24] */
 		ViewSignatureAndClassname {
 			'butn',
 			147,
@@ -1896,15 +1821,15 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				26,
+				60,
 				/* [2] */
-				238
+				254
 			},
 			{	/* array: 2 elements */
 				/* [1] */
 				20,
 				/* [2] */
-				97
+				90
 			},
 			sizeVariable,
 			sizeVariable,
@@ -1942,7 +1867,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 				-1,
 				dontPreferOutline,
 				1001,
-				13
+				12
 			},
 			NoSubviews
 		}
@@ -1977,7 +1902,7 @@ resource 'View' (1200, "VolumeDisplay", purgeable) {
 				/* [1] */
 				40,
 				/* [2] */
-				320
+				312
 			},
 			sizeFixed,
 			sizeFixed,
@@ -2025,7 +1950,7 @@ resource 'View' (1200, "VolumeDisplay", purgeable) {
 				/* [1] */
 				18,
 				/* [2] */
-				273
+				262
 			},
 			sizeVariable,
 			sizeVariable,
@@ -2158,7 +2083,7 @@ resource 'View' (1200, "VolumeDisplay", purgeable) {
 				/* [1] */
 				14,
 				/* [2] */
-				272
+				262
 			},
 			sizeVariable,
 			sizeVariable,

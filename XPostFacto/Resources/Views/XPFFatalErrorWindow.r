@@ -1,12 +1,3 @@
-resource 'STR#' (1006, "Fatal Error", purgeable) {
-	{	/* array StringArray: 2 elements */
-		/* [1] */
-		"Quit",
-		/* [2] */
-		"XPostFacto"
-	}
-};
-
 resource 'View' (1006, "Fatal Error", purgeable) {
 	MAThreeOhView {
 
@@ -33,9 +24,9 @@ resource 'View' (1006, "Fatal Error", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				379,
+				396,
 				/* [2] */
-				599
+				600
 			},
 			sizeVariable,
 			sizeVariable,
@@ -114,15 +105,15 @@ resource 'View' (1006, "Fatal Error", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				14,
+				20,
 				/* [2] */
-				17
+				20
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				318,
+				320,
 				/* [2] */
-				556
+				560
 			},
 			sizeVariable,
 			sizeVariable,
@@ -182,15 +173,15 @@ resource 'View' (1006, "Fatal Error", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				344,
+				356,
 				/* [2] */
-				465
+				511
 			},
 			{	/* array: 2 elements */
 				/* [1] */
 				20,
 				/* [2] */
-				94
+				69
 			},
 			sizeVariable,
 			sizeVariable,
@@ -232,6 +223,15 @@ resource 'View' (1006, "Fatal Error", purgeable) {
 			},
 			NoSubviews
 		}
+	}
+};
+
+resource 'STR#' (1006, "Fatal Error", purgeable) {
+	{	/* array StringArray: 2 elements */
+		/* [1] */
+		"Quit",
+		/* [2] */
+		"XPostFacto"
 	}
 };
 

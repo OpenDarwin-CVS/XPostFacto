@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001, 2002
+Copyright (c) 2003
 Other World Computing
 All rights reserved
 
@@ -31,49 +31,29 @@ advised of the possibility of such damage.
 
 */
 
+#ifndef __XPFVOLUMECLUSTER_H__
+#define __XPFVOLUMECLUSTER_H__
 
-#include "XPFAboutBox.h"
-#include "XPFApplication.h"
-#include <iostream.h>
+#include "UCluster.h"
 
-#include <InternetConfig.h>
+class XPFVolumeCluster : public TPrimaryCluster {
 
-#include "XPostFacto.h"
+	MA_DECLARE_CLONE;
 
-MA_DEFINE_CLASS (XPFAboutBox);
+public:
 
-XPFAboutBox::~XPFAboutBox()
-{
-	DisposeIfHandle_AC (fCopyrightText);
-}
-
-void 
-XPFAboutBox::DoPostCreate (TDocument* itsDocument)
-{
-	TWindow::DoPostCreate (itsDocument);
-	fURL = (TStaticText *) this->FindSubView ('urlT');
-	fCopyrightNotice = (TTEView *) this->FindSubView ('Copy');
+	virtual	~XPFVolumeCluster ();		
+	virtual void DoPostCreate(TDocument* itsDocument);
 	
-	fCopyrightText = GetResource ('TEXT', kCopyrightID);
-	if (fCopyrightText) {
-		DetachResource (fCopyrightText);
-		for (int x = GetHandleSize (fCopyrightText) - 1; x >= 0; x--) {
-			if ((*fCopyrightText)[x] == 10) (*fCopyrightText)[x] = 13;
-		}
-		fCopyrightNotice->StuffText (fCopyrightText);
-	}
-}
+	virtual void DoUpdate	(ChangeID_AC theChange, 
+					MDependable_AC* changedObject,
+					void* changeData,
+					CDependencySpace_AC* dependencySpace);
+					
+private:
 
-void 
-XPFAboutBox::DoEvent(EventNumber eventNumber,
-						TEventHandler* source,
-						TEvent* event)
-{
-	TWindow::DoEvent (eventNumber, source, event);
-	if ((eventNumber == mStaticTextHit) && (source == fURL)) {
-		CStr255_AC theURL = fURL->GetText ();
-		((XPFApplication *) gApplication)->launchURL (theURL);
-	} else if (eventNumber == mPictureHit) {
-		((XPFApplication *) gApplication)->launchURL ("http://eshop.macsales.com/");
-	}
-}
+	CString_AC fInitialLabel;
+					
+};
+
+#endif

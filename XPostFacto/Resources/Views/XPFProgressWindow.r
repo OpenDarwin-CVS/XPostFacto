@@ -2,13 +2,6 @@ data 'TxSt' (27392, "Application 10, plain") {
 	$"009C 000A 0000 0000 0000 0161"                                                                      /* .œ.Â.......a */
 };
 
-resource 'STR#' (1020, "Progress Window", purgeable) {
-	{	/* array StringArray: 1 elements */
-		/* [1] */
-		"Stop"
-	}
-};
-
 resource 'View' (1020, "Progress Window", purgeable) {
 	MAThreeOhView {
 
@@ -47,9 +40,9 @@ resource 'View' (1020, "Progress Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				99,
+				98,
 				/* [2] */
-				412
+				413
 			},
 			sizeVariable,
 			sizeVariable,
@@ -108,8 +101,8 @@ resource 'View' (1020, "Progress Window", purgeable) {
 				doesntHideOnSuspend,
 				generateActivates,
 				filler,
-				-1,
-				1
+				1020,
+				2
 			},
 			3
 		},
@@ -128,15 +121,15 @@ resource 'View' (1020, "Progress Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				15,
+				20,
 				/* [2] */
-				326
+				324
 			},
 			{	/* array: 2 elements */
 				/* [1] */
 				20,
 				/* [2] */
-				71
+				69
 			},
 			sizeVariable,
 			sizeVariable,
@@ -195,13 +188,13 @@ resource 'View' (1020, "Progress Window", purgeable) {
 				/* [1] */
 				50,
 				/* [2] */
-				18
+				20
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				31,
+				28,
 				/* [2] */
-				277
+				280
 			},
 			sizeVariable,
 			sizeVariable,
@@ -261,15 +254,15 @@ resource 'View' (1020, "Progress Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				18,
+				24,
 				/* [2] */
-				18
+				20
 			},
 			{	/* array: 2 elements */
 				/* [1] */
 				14,
 				/* [2] */
-				279
+				280
 			},
 			sizeVariable,
 			sizeVariable,
@@ -313,6 +306,15 @@ resource 'View' (1020, "Progress Window", purgeable) {
 			},
 			NoSubviews
 		}
+	}
+};
+
+resource 'STR#' (1020, "Progress Window", purgeable) {
+	{	/* array StringArray: 2 elements */
+		/* [1] */
+		"Stop",
+		/* [2] */
+		"Progress Window"
 	}
 };
 

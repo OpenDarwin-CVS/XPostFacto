@@ -62,6 +62,7 @@ advised of the possibility of such damage.
 #include "XPFVolumePopups.h"
 #include "XPFButtons.h"
 #include "XPFSettingsText.h"
+#include "XPFVolumeCluster.h"
 
 #include <InternetConfig.h>
 #include <UnicodeConverter.h>
@@ -140,6 +141,7 @@ XPFApplication::XPFApplication() :
 	REGISTER_CLASS_AC (XPFInstallButton);
 	REGISTER_CLASS_AC (XPFRestartButton);
 	REGISTER_CLASS_AC (XPFSettingsText);
+	REGISTER_CLASS_AC (XPFVolumeCluster);
 	
 	ProcessInfoRec info;
 	FSSpec appSpec, resourceSpec;

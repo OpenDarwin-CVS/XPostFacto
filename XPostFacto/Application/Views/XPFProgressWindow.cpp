@@ -128,6 +128,9 @@ XPFProgressWindow::DoIdle (IdlePhase phase)
 	
 	if (fFinished) {
 		fFinished = false;
+		if (fProgress->GetMaximum () == 0) fProgress->SetMaximum (100, false);
+		fProgress->SetDeterminate (true);
+		fProgress->SetValue (fProgress->GetMaximum (), true);
 		if (fDialog) fDialog->Dismiss ('cncl', false);
 	}
 	

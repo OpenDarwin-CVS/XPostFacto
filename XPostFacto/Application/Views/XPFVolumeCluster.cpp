@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001, 2002
+Copyright (c) 2003
 Other World Computing
 All rights reserved
 
@@ -31,49 +31,59 @@ advised of the possibility of such damage.
 
 */
 
-
-#include "XPFAboutBox.h"
-#include "XPFApplication.h"
-#include <iostream.h>
-
-#include <InternetConfig.h>
-
+#include "XPFVolumeCluster.h"
+#include "MountedVolume.h"
+#include "XPFPrefs.h"
 #include "XPostFacto.h"
 
-MA_DEFINE_CLASS (XPFAboutBox);
+//========================================================================================
+// CLASS XPFVolumeCluster
+//========================================================================================
 
-XPFAboutBox::~XPFAboutBox()
+#undef Inherited
+#define Inherited TPrimaryCluster
+
+MA_DEFINE_CLASS (XPFVolumeCluster);
+
+XPFVolumeCluster::~XPFVolumeCluster ()
 {
-	DisposeIfHandle_AC (fCopyrightText);
+	RemoveAllDependencies ();
 }
 
 void 
-XPFAboutBox::DoPostCreate (TDocument* itsDocument)
+XPFVolumeCluster::DoPostCreate (TDocument* itsDocument)
 {
-	TWindow::DoPostCreate (itsDocument);
-	fURL = (TStaticText *) this->FindSubView ('urlT');
-	fCopyrightNotice = (TTEView *) this->FindSubView ('Copy');
+	Inherited::DoPostCreate (itsDocument);
 	
-	fCopyrightText = GetResource ('TEXT', kCopyrightID);
-	if (fCopyrightText) {
-		DetachResource (fCopyrightText);
-		for (int x = GetHandleSize (fCopyrightText) - 1; x >= 0; x--) {
-			if ((*fCopyrightText)[x] == 10) (*fCopyrightText)[x] = 13;
-		}
-		fCopyrightNotice->StuffText (fCopyrightText);
-	}
+	fInitialLabel = GetLabel ();
+		
+	itsDocument->AddDependent (this);
+	
+	DoUpdate (cSetTargetDisk, itsDocument, ((XPFPrefs *) itsDocument)->getTargetDisk (), NULL);
 }
 
-void 
-XPFAboutBox::DoEvent(EventNumber eventNumber,
-						TEventHandler* source,
-						TEvent* event)
+void
+XPFVolumeCluster::DoUpdate (ChangeID_AC theChange, 
+								MDependable_AC* changedObject,
+								void* changeData,
+								CDependencySpace_AC* dependencySpace)
 {
-	TWindow::DoEvent (eventNumber, source, event);
-	if ((eventNumber == mStaticTextHit) && (source == fURL)) {
-		CStr255_AC theURL = fURL->GetText ();
-		((XPFApplication *) gApplication)->launchURL (theURL);
-	} else if (eventNumber == mPictureHit) {
-		((XPFApplication *) gApplication)->launchURL ("http://eshop.macsales.com/");
+	CStr255_AC newLabel (fInitialLabel);
+	MountedVolume *volume = (MountedVolume *) changeData;
+	
+	switch (theChange) {
+	
+		case cSetTargetDisk:
+			if (volume) {
+				 newLabel += " \"";
+				 newLabel += volume->getVolumeName ();
+				 newLabel += "\"";
+			}
+			SetLabel (newLabel, true);
+			break;
+			
+		default:
+			Inherited::DoUpdate (theChange, changedObject, changeData, dependencySpace);
+			break;
 	}
 }

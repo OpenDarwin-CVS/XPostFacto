@@ -6,27 +6,15 @@ data 'TxSt' (27392, "Application 10, plain") {
 	$"009C 000A 0000 0000 0000 0161"                                                                      /* .œ.Â.......a */
 };
 
-resource 'STR#' (1005, "About Box", purgeable) {
-	{	/* array StringArray: 3 elements */
-		/* [1] */
-		"http://eshop.macsales.com/OSXCenter/XPostFacto/",
-		/* [2] */
-		"For updates and information about this utility, visit Other World Computing's we"
-		"b site at:",
-		/* [3] */
-		"About XPostFacto"
-	}
-};
-
 resource 'View' (1005, "About Box", purgeable) {
 	MAThreeOhView {
 
 	},
-	{	/* array ViewArray: 4 elements */
+	{	/* array ViewArray: 8 elements */
 		/* [1] */
 		ViewSignatureAndClassname {
 			'wind',
-			461,
+			985,
 			"XPFAboutBox",
 			'WIND',
 			enabled,
@@ -44,9 +32,9 @@ resource 'View' (1005, "About Box", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				406,
+				462,
 				/* [2] */
-				623
+				634
 			},
 			sizeVariable,
 			sizeVariable,
@@ -108,75 +96,9 @@ resource 'View' (1005, "About Box", purgeable) {
 				1005,
 				3
 			},
-			3
+			4
 		},
 		/* [2] */
-		ViewSignatureAndClassname {
-			'tevw',
-			104,
-			"TTEView",
-			'Copy',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 0 elements */
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				54,
-				/* [2] */
-				16
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				338,
-				/* [2] */
-				594
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			wantsToBeTarget,
-			doesntHandleCursor,
-			letsSubViewsHandleCursor,
-			1,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			TEView {
-				withoutStyle,
-				autoWrap,
-				acceptChanges,
-				dontFreeText,
-				cTyping,
-				unlimited,
-				{	/* array: 4 elements */
-					/* [1] */
-					3,
-					/* [2] */
-					3,
-					/* [3] */
-					3,
-					/* [4] */
-					3
-				},
-				justSystem,
-				27392,
-				dontPreferOutline
-			},
-			NoSubviews
-		},
-		/* [3] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -191,15 +113,15 @@ resource 'View' (1005, "About Box", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				30,
+				95,
 				/* [2] */
-				17
+				20
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				18,
+				16,
 				/* [2] */
-				564
+				320
 			},
 			sizeVariable,
 			sizeVariable,
@@ -244,7 +166,7 @@ resource 'View' (1005, "About Box", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [4] */
+		/* [3] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -259,15 +181,15 @@ resource 'View' (1005, "About Box", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				9,
+				59,
 				/* [2] */
-				16
+				20
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				19,
+				34,
 				/* [2] */
-				577
+				313
 			},
 			sizeVariable,
 			sizeVariable,
@@ -311,7 +233,367 @@ resource 'View' (1005, "About Box", purgeable) {
 				2
 			},
 			NoSubviews
+		},
+		/* [4] */
+		ViewSignatureAndClassname {
+			'pict',
+			131,
+			"TPicture",
+			'owcp',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 1 elements */
+				/* [1] */
+				BehaviorSignatureAndClassname {
+					noID,
+					"TBehavior",
+					Behavior {
+						enabled,
+						noIdle
+					}
+				}
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				20,
+				/* [2] */
+				355
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				134,
+				/* [2] */
+				259
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			handlesCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Picture {
+				mPictureHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				1008
+			},
+			NoSubviews
+		},
+		/* [5] */
+		ViewSignatureAndClassname {
+			'view',
+			491,
+			"",
+			'view',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				166,
+				/* [2] */
+				20
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				276,
+				/* [2] */
+				594
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			AdornerListSignatureAndClassname {
+				NoIdentifier,
+				"TAdornerList",
+				8,
+				AdornerElementSizeShift,
+				8,
+				{	/* array AdornerElementArray: 2 elements */
+					/* [1] */
+					AdornFirst,
+					AdornerSignatureAndClassname {
+						'wgad',
+						"TWhiteBackgroundAdorner",
+						'wgad',
+						freeOnDeletion,
+						$""
+					},
+					/* [2] */
+					DrawView,
+					AdornerLocalObject {
+						DrawAdorner
+					}
+				}
+			},
+			emptyUserArea,
+			View {
+
+			},
+			2
+		},
+		/* [6] */
+		ViewSignatureAndClassname {
+			'scrl',
+			228,
+			"TScroller",
+			'scrl',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				2,
+				/* [2] */
+				2
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				272,
+				/* [2] */
+				576
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Scroller {
+				'vcrl',
+				noID,
+				{	/* array: 2 elements */
+					/* [1] */
+					270,
+					/* [2] */
+					576
+				},
+				{	/* array: 2 elements */
+					/* [1] */
+					13,
+					/* [2] */
+					16
+				},
+				VertConstrain,
+				noHorzConstrain,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				respondsToFKeys
+			},
+			1
+		},
+		/* [7] */
+		ViewSignatureAndClassname {
+			'tevw',
+			104,
+			"TTEView",
+			'Copy',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				2,
+				/* [2] */
+				2
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				268,
+				/* [2] */
+				572
+			},
+			sizeVariable,
+			sizeRelSuperView,
+			shown,
+			wantsToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			1,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			TEView {
+				withoutStyle,
+				autoWrap,
+				acceptChanges,
+				dontFreeText,
+				cTyping,
+				unlimited,
+				{	/* array: 4 elements */
+					/* [1] */
+					3,
+					/* [2] */
+					3,
+					/* [3] */
+					3,
+					/* [4] */
+					3
+				},
+				justSystem,
+				27392,
+				dontPreferOutline
+			},
+			NoSubviews
+		},
+		/* [8] */
+		ViewSignatureAndClassname {
+			'ssbr',
+			105,
+			"",
+			'vcrl',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				1,
+				/* [2] */
+				578
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				274,
+				/* [2] */
+				16
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			handlesCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			handlesHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			ScrollerScrollBar {
+				mVScrollBarHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				v,
+				0,
+				0,
+				0
+			},
+			NoSubviews
 		}
+	}
+};
+
+resource 'STR#' (1005, "About Box", purgeable) {
+	{	/* array StringArray: 3 elements */
+		/* [1] */
+		"http://eshop.macsales.com/OSXCenter/XPostFacto/",
+		/* [2] */
+		"For updates and information about this utility, visit Other World Computing's we"
+		"b site at:",
+		/* [3] */
+		"About XPostFacto"
 	}
 };
 
