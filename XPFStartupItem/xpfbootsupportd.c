@@ -45,8 +45,6 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <IOKit/IOKitLib.h>
-#include <IOKit/IOMessage.h>
-#include <ApplicationServices/ApplicationServices.h>
 
 #define XPF_SECONDS_TO_SLEEP 12
 
@@ -170,28 +168,24 @@ getPaths (char *rootDevicePath, char *bootDevicePath)
 	
 	err = getMountPointForOFPath (rootDevicePath, rootDeviceOFPath); 
 	if (err == noErr) err = getMountPointForOFPath (bootDevicePath, bootDeviceOFPath); 
-	if (err) return err;
-	
-	// See if any synchronization is required. If so, construct the path to the helper files
-	// on the boot device
-	
-	if (strcmp (rootDevicePath, bootDevicePath)) {
-		pos = rootDeviceOFPath;
-		while (*pos != 0) {
-			if (*pos == ':') *pos = ';';
-			pos++;
+
+	if (err == noErr) {
+		if (strcmp (rootDevicePath, bootDevicePath)) {
+			pos = rootDeviceOFPath;
+			while (*pos != 0) {
+				if (*pos == ':') *pos = ';';
+				pos++;
+			}
+			strcat (bootDevicePath, "/.XPostFacto/");
+			strcat (bootDevicePath, rootDeviceOFPath);
 		}
-		strcat (bootDevicePath, "/.XPostFacto/");
-		strcat (bootDevicePath, rootDeviceOFPath);
 	}
 	
 	if (properties) CFRelease (properties);
-	if (rootCommand) CFRelease (rootCommand);
-	if (bootDevice) CFRelease (bootDevice);
 	
 	if (options) IOObjectRelease (options);
 	
-	return 0;
+	return err;
 }
 
 void
@@ -202,17 +196,19 @@ setupRestartInMacOS9 ()
 	mach_port_t iokitPort;
 	IOMasterPort (MACH_PORT_NULL, &iokitPort);
 	io_registry_entry_t options = IORegistryEntryFromPath (iokitPort, "IODeviceTree:/options");
+
 	if (options) {
 		CFTypeRef keys[3] = {
-			CFStringCreateWithCString (kCFAllocatorDefault, "boot-device", kCFStringEncodingASCII), 
-			CFStringCreateWithCString (kCFAllocatorDefault, "boot-command", kCFStringEncodingASCII), 
-			CFStringCreateWithCString (kCFAllocatorDefault, "boot-file", kCFStringEncodingASCII)
+			CFSTR ("boot-device"), 
+			CFSTR ("boot-command"), 
+			CFSTR ("boot-file")
 		};
 		CFTypeRef values[3] = {
-			CFStringCreateWithCString (kCFAllocatorDefault, "/AAPL,ROM", kCFStringEncodingASCII), 
-			CFStringCreateWithCString (kCFAllocatorDefault, "boot", kCFStringEncodingASCII), 
-			CFStringCreateWithCString (kCFAllocatorDefault, "", kCFStringEncodingASCII)
+			CFSTR ("/AAPL,ROM"), 
+			CFSTR ("boot"), 
+			CFSTR ("")
 		};
+		
 		CFDictionaryRef dict = CFDictionaryCreate (kCFAllocatorDefault, keys, values, 3, 
 				&kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 		if (dict) {
@@ -220,23 +216,18 @@ setupRestartInMacOS9 ()
 			CFRelease (dict);
 			noSyncRequired = true;
 		}
-		int x;
-		for (x = 0; x < 3; x++) {
-			CFRelease (keys[x]);
-			CFRelease (values[x]);
-		}
 		IOObjectRelease (options);
 	}
 	
 	CFURLRef bundle = CFURLCreateWithFileSystemPath (kCFAllocatorDefault, CFSTR ("/Library/StartupItems/XPFStartupItem"), kCFURLPOSIXPathStyle, true);
 
-	CFURLRef icon = CFURLCreateWithFileSystemPath (kCFAllocatorDefault, CFSTR ("/Library/StartupItems/XPFStartupItem/Resources/XPFIcons.icns"), kCFURLPOSIXPathStyle, false);
+	CFURLRef icon = CFURLCreateWithFileSystemPath (kCFAllocatorDefault, CFSTR ("/Library/StartupItems/XPFStartupItem/Contents/Resources/XPFIcons.icns"), kCFURLPOSIXPathStyle, false);
 	
 	CFUserNotificationDisplayNotice (0, kCFUserNotificationCautionAlertLevel, 
-		icon, NULL, bundle, 
-		CFSTR ("XPF Synchronization Required"),
-		CFSTR ("XPFSyncMessage"),
-		NULL);
+			icon, NULL, bundle, 
+			CFSTR ("XPF Synchronization Required"),
+			CFSTR ("XPostFacto has noticed changes in progress to your system files. Once these changes have completed, you can launch XPostFacto synchronize the changes with your helper disk. Otherwise, your computer will restart in Mac OS 9 to avoid a mismatch between the system files on your root disk and helper disk."),
+			NULL);
 		
 	if (bundle) CFRelease (bundle);
 	if (icon) CFRelease (icon);
@@ -418,19 +409,19 @@ pollForChanges ()
 int
 main (int argc, char **argv)
 {	
-	turnOffSleepIfUnsupported ();
-
 	daemon (0, 0);
 	writePID ();
 	atexit (deletePID);
 		
 	openlog ("xpfbootsupportd", 0, LOG_USER);
 	
+	turnOffSleepIfUnsupported ();
+
 	initialize_everything ();
 	
 	signal (SIGHUP, &handle_SIGHUP);
 	signal (SIGUSR1, &handle_SIGUSR1);
-	
+
 	pollForChanges ();
 	
 	restartWhenSignalled ();
