@@ -41,12 +41,25 @@ advised of the possibility of such damage.
 #endif
 
 #include "UThreads.h"
-
+#include "UTabbedView.h"
+#include "UBackgroundAdorner.h"
+#include "USeparator.h"
+#include "UUpDownControl.h"
+#include "UNumberText.h"
+#include "UIcon.h"
+#include "USlider.h"
+#include "UNumberText.h"
+#include "UProgressIndicator.h"
 
 //----------------------------------------------------------------------------------------
 // main: 
 //----------------------------------------------------------------------------------------
-void main()
+#ifdef __MACH__
+int
+#else
+void
+#endif
+main()
 {
 	try
 	{
@@ -56,6 +69,16 @@ void main()
 		InitUTEView ();
 		InitUDialog ();
 		InitUThreads();
+		InitUTabbedView ();
+		InitUCheckbox ();
+		InitUBackgroundAdorner();
+		InitUSeparator ();
+		InitUUpDownControl ();
+		InitUNumberText ();
+		InitUIcon (true);
+		InitUSlider ();
+		InitUNumberText ();
+		InitUProgressIndicator ();
 
 		XPFApplication xpfApp;			// Allocate application object
 		xpfApp.Run();							// Well lets run it then!
