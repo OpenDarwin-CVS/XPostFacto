@@ -45,6 +45,9 @@
 	Change History (most recent first):
 
 $Log$
+Revision 1.3  2003/10/21 16:51:56  ryan
+Get rid of a few warnings in Mac OS X.
+
 Revision 1.2  2003/01/05 22:32:18  ryan
 Fixed the line endings :-)
 
@@ -211,7 +214,9 @@ Tidy up headers, add CVS logs, update copyright.
 // Mac OS Interfaces
 
 #if ! MORE_FRAMEWORK_INCLUDES
-	#include <Traps.h>
+	#ifndef __MACH__
+		#include <Traps.h>
+	#endif
 	#include <Patches.h>
 	#include <Memory.h>
 	#include <MacErrors.h>
