@@ -3,19 +3,22 @@
  *
  * @APPLE_LICENSE_HEADER_START@
  * 
- * The contents of this file constitute Original Code as defined in and
- * are subject to the Apple Public Source License Version 1.1 (the
- * "License").  You may not use this file except in compliance with the
- * License.  Please obtain a copy of the License at
- * http://www.apple.com/publicsource and read it before using this file.
+ * Copyright (c) 1999-2003 Apple Computer, Inc.  All Rights Reserved.
  * 
- * This Original Code and all software distributed under the License are
- * distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+ * This file contains Original Code and/or Modifications of Original Code
+ * as defined in and that are subject to the Apple Public Source License
+ * Version 2.0 (the 'License'). You may not use this file except in
+ * compliance with the License. Please obtain a copy of the License at
+ * http://www.opensource.apple.com/apsl/ and read it before using this
+ * file.
+ * 
+ * The Original Code and all software distributed under the License are
+ * distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
  * EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
  * INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT.  Please see the
- * License for the specific language governing rights and limitations
- * under the License.
+ * FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+ * Please see the License for the specific language governing rights and
+ * limitations under the License.
  * 
  * @APPLE_LICENSE_HEADER_END@
  */
@@ -49,12 +52,8 @@ static char *ReadFileBlock(InodePtr fileInode, long fragNum, long blockOffset,
 static long ReadFile(InodePtr fileInode, long *length);
 
 
-#define kDevBlockSize (0x200)    // Size of each disk block.
-#define kDiskLableBlock (15)     // Block the DL is in.
-
 static CICell    gCurrentIH;
 static long long gPartitionBase;
-static char      gDLBuf[8192];
 static char      gFSBuf[SBSIZE];
 static struct fs *gFS;
 static long      gBlockSize;
@@ -71,9 +70,6 @@ static Inode     gFileInode;
 
 long UFSInitPartition(CICell ih)
 {
-  disk_label_t *dl;
-  partition_t  *part;
-  
   if (ih == gCurrentIH) return 0;
   
   printf("UFSInitPartition: %lx\n", ih);
@@ -89,30 +85,7 @@ long UFSInitPartition(CICell ih)
   
   gFS = (struct fs *)gFSBuf;
   if (gFS->fs_magic != FS_MAGIC) {
-    // Did not find it... Look for the Disk Label.
-    // Look for the Disk Label
-    Seek(ih, 1ULL * kDevBlockSize * kDiskLableBlock);
-    Read(ih, (long)gDLBuf, 8192);
-    
-    dl = (disk_label_t *)gDLBuf;
-    byte_swap_disklabel_in(dl);
-    
-    if (dl->dl_version != DL_VERSION) {
-      return -1;
-    }
-    
-    part = &dl->dl_part[0];
-    gPartitionBase = (1ULL * (dl->dl_front + part->p_base) * dl->dl_secsize) -
-      (1ULL * (dl->dl_label_blkno - kDiskLableBlock) * kDevBlockSize);
-    
-    // Re-read the Super Block.
-    Seek(ih, gPartitionBase + SBOFF);
-    Read(ih, (long)gFSBuf, SBSIZE);
-    
-    gFS = (struct fs *)gFSBuf;
-    if (gFS->fs_magic != FS_MAGIC) {
-      return -1;
-    }
+    return -1;
   }
   
   // Calculate the block size and set up the block cache.

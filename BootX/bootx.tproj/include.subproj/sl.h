@@ -3,26 +3,29 @@
  *
  * @APPLE_LICENSE_HEADER_START@
  * 
- * The contents of this file constitute Original Code as defined in and
- * are subject to the Apple Public Source License Version 1.1 (the
- * "License").  You may not use this file except in compliance with the
- * License.  Please obtain a copy of the License at
- * http://www.apple.com/publicsource and read it before using this file.
+ * Copyright (c) 1999-2003 Apple Computer, Inc.  All Rights Reserved.
  * 
- * This Original Code and all software distributed under the License are
- * distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+ * This file contains Original Code and/or Modifications of Original Code
+ * as defined in and that are subject to the Apple Public Source License
+ * Version 2.0 (the 'License'). You may not use this file except in
+ * compliance with the License. Please obtain a copy of the License at
+ * http://www.opensource.apple.com/apsl/ and read it before using this
+ * file.
+ * 
+ * The Original Code and all software distributed under the License are
+ * distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
  * EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
  * INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT.  Please see the
- * License for the specific language governing rights and limitations
- * under the License.
+ * FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+ * Please see the License for the specific language governing rights and
+ * limitations under the License.
  * 
  * @APPLE_LICENSE_HEADER_END@
  */
 /*
  *  sl.h - Headers for configuring the Secondary Loader
  *
- *  Copyright (c) 1998-2002 Apple Computer, Inc.
+ *  Copyright (c) 1998-2003 Apple Computer, Inc.
  *
  *  DRI: Josh de Cesare
  */
@@ -34,50 +37,25 @@
 
 /*
 
-Memory Map...  Assumes 32 MB
+Memory Map:  assumes 96 MB
 
 Physical Address
 
-Open Firmware Version     1x, 2x                        3x
-00000000 - 00003FFF  :             Exception Vectors
-00004000 - 002FFFFF  :                Free Memory
-00300000 - 004FFFFF  :   OF Image         /            Free Memory
-00500000 - 01DFFFFF  :                Free Memory
-01E00000 - 01FFFFFF  :   Free Memory      /            OF Image
+Open Firmware Version    3x, 4x, ...
+00000000 - 00003FFF  :   Exception Vectors
+00004000 - 057FFFFF  :   Free Memory
+05800000 - 05FFFFFF  :   OF Image
 
 
 Logical Address
 
 00000000 - 00003FFF  : Exception Vectors
-00004000 - 013FFFFF  : Kernel Image, Boot Struct and Drivers
-01400000 - 01BFFFFF  : File Load Area
-01C00000 - 01CFFFFF  : Secondary Loader Image
-01D00000 - 01DFFFFF  : Malloc Area
-01E00000 - 01FFFFFF  : Unused
-
-To provide a consistant Logical Memory Usage between OF 1,2 and OF 3
-the Logical Addresses 0x00300000 - 0x004FFFFF will be mapped to
-Physical Address 0x01E00000 - 0x01FFFFFF and will be copied back
-just before the kernel is loaded.
-
-
-*/
-
-/*
-
-I've changed the memory map to move the file load area above 32 MB.
-This gives it more space, and also leaves more space for the drivers area.
-That appears to be required when booting the Darwin 6 Install CD.
-This does mean that BootX now assumes 48 MB memory, rather than 32.
-
- 00000000 - 00003FFF  : Exception Vectors
- 00004000 - 01BFFFFF  : Kernel Image, Boot Struct and Drivers
- 01C00000 - 01CFFFFF  : Secondary Loader Image
- 01D00000 - 01DFFFFF  : Malloc Area
- 01E00000 - 01FFFFFF  : Unused
- 02000000 - 02FFFFFF  : File Load Area
- 
-ryan.rempel@utoronto.ca
+00004000 - 03FFFFFF  : Kernel Image, Boot Struct and Drivers
+04000000 - 04FFFFFF  : File Load Area
+05000000 - 053FFFFF  : FS Cache
+05400000 - 055FFFFF  : Malloc Zone
+05600000 - 057FFFFF  : BootX Image
+05800000 - 05FFFFFF  : Unused
 
 */
 
@@ -86,22 +64,25 @@ ryan.rempel@utoronto.ca
 
 // OF 3.x
 #define kImageAddr      (0x00004000)
-#define kImageSize      (0x01BFC000)
+#define kImageSize      (0x03FFC000)
 
 // OF 1.x 2.x
 #define kImageAddr0     (0x00004000)
 #define kImageSize0     (0x002FC000)
 #define kImageAddr1     (0x00300000)
 #define kImageSize1     (0x00200000)
-#define kImageAddr1Phys (0x01E00000)
+#define kImageAddr1Phys (0x05800000)
 #define kImageAddr2     (0x00500000)
-#define kImageSize2     (0x01700000)
+#define kImageSize2     (0x03B00000)
 
-#define kLoadAddr       (0x02000000)
+#define kLoadAddr       (0x04000000)
 #define kLoadSize       (0x01000000)
 
-#define kMallocAddr     (0x01D00000)
-#define kMallocSize     (0x00100000)
+#define kFSCacheAddr    (0x05000000)
+#define kFSCacheSize    (0x00400000)
+
+#define kMallocAddr     (0x05400000)
+#define kMallocSize     (0x00200000)
 
 // Default Output Level
 #define kOutputLevelOff  (0)
@@ -111,6 +92,7 @@ ryan.rempel@utoronto.ca
 #define kOFVersion1x    (0x01000000)
 #define kOFVersion2x    (0x02000000)
 #define kOFVersion3x    (0x03000000)
+#define kOFVersion4x    (0x04000000)
 
 // Device Types
 enum {
@@ -189,6 +171,9 @@ extern long gOFVersion;
 
 extern char *gKeyMap;
 
+extern long gRootAddrCells;
+extern long gRootSizeCells;
+
 extern CICell gChosenPH;
 extern CICell gOptionsPH;
 extern CICell gScreenPH;
@@ -200,6 +185,7 @@ extern CICell gMemoryIH;
 extern CICell gStdOutIH;
 extern CICell gKeyboardIH;
 
+extern long ThinFatBinary(void **binary, unsigned long *length);
 extern long GetDeviceType(char *devSpec);
 extern long ConvertFileSpec(char *fileSpec, char *devSpec, char **filePath);
 extern long MatchThis(CICell phandle, char *string);
@@ -209,10 +195,12 @@ extern long AllocateMemoryRange(char *rangeName, long start, long length);
 extern unsigned long Alder32(unsigned char *buffer, long length);
 
 // Externs for macho.c
-extern long DecodeMachO(void);
+extern long ThinFatBinaryMachO(void **binary, unsigned long *length);
+extern long DecodeMachO(void *binary);
 
 // Externs for elf.c
-extern long DecodeElf(void);
+extern long ThinFatBinaryElf(void **binary, unsigned long *length);
+extern long DecodeElf(void *binary);
 
 // Externs for device_tree.c
 extern long FlattenDeviceTree(void);

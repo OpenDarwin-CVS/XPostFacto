@@ -3,19 +3,22 @@
  *
  * @APPLE_LICENSE_HEADER_START@
  * 
- * The contents of this file constitute Original Code as defined in and
- * are subject to the Apple Public Source License Version 1.1 (the
- * "License").  You may not use this file except in compliance with the
- * License.  Please obtain a copy of the License at
- * http://www.apple.com/publicsource and read it before using this file.
+ * Copyright (c) 1999-2003 Apple Computer, Inc.  All Rights Reserved.
  * 
- * This Original Code and all software distributed under the License are
- * distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+ * This file contains Original Code and/or Modifications of Original Code
+ * as defined in and that are subject to the Apple Public Source License
+ * Version 2.0 (the 'License'). You may not use this file except in
+ * compliance with the License. Please obtain a copy of the License at
+ * http://www.opensource.apple.com/apsl/ and read it before using this
+ * file.
+ * 
+ * The Original Code and all software distributed under the License are
+ * distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
  * EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
  * INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT.  Please see the
- * License for the specific language governing rights and limitations
- * under the License.
+ * FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+ * Please see the License for the specific language governing rights and
+ * limitations under the License.
  * 
  * @APPLE_LICENSE_HEADER_END@
  */
@@ -33,19 +36,24 @@
 
 // Public Functions
 
-long DecodeElf(void)
+long ThinFatBinaryElf(void **binary, unsigned long *length)
+{
+  return -1;
+}
+
+long DecodeElf(void *binary)
 {
   ElfHeaderPtr     ehPtr;
   ProgramHeaderPtr phPtr;
   long             cnt, paddr, offset, memsz, filesz, entry, *tmp;
   
-  ehPtr = (ElfHeaderPtr)kLoadAddr;
+  ehPtr = (ElfHeaderPtr)binary;
   if (ehPtr->signature != kElfSignature) return 0;
   
   entry = ehPtr->entry & kElfAddressMask;
   
   for (cnt = 0; cnt < ehPtr->phnum; cnt++) { 
-    phPtr = (ProgramHeaderPtr)(kLoadAddr+ehPtr->phoff+cnt*ehPtr->phentsize);
+    phPtr = (ProgramHeaderPtr)((unsigned long)binary + ehPtr->phoff + cnt * ehPtr->phentsize);
     
     if (phPtr->type == kElfProgramTypeLoad) {
       paddr = phPtr->paddr & kElfAddressMask;
@@ -55,7 +63,7 @@ long DecodeElf(void)
       
       // Get the actual entry if it is in this program.
       if ((entry >= paddr) && (entry < (paddr + filesz))) {
-	tmp = (long *)(kLoadAddr + offset + entry);
+	tmp = (long *)((unsigned long)binary + offset + entry);
 	if (tmp[2] == 0) entry +=  tmp[0];
 	
       }
@@ -69,7 +77,7 @@ long DecodeElf(void)
       
       if (paddr < kImageAddr) {
 	// Copy the Vectors out of the way.
-	bcopy((char *)(kLoadAddr + offset), gVectorSaveAddr,
+	bcopy((char *)((unsigned long)binary + offset), gVectorSaveAddr,
 	      kVectorSize - paddr);
 	
 	offset += kImageAddr - paddr;
@@ -78,7 +86,7 @@ long DecodeElf(void)
       }
       
       // Move the program.
-      bcopy((char *)(kLoadAddr + offset), (char *)paddr, filesz);
+      bcopy((char *)((unsigned long)binary + offset), (char *)paddr, filesz);
     }
   }
   

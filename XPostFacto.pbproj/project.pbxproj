@@ -653,7 +653,6 @@
 		};
 		F53C691301B1926201A80001 = {
 			children = (
-				F53C691401B1926201A80001,
 				F53C6A2A01B1968701A80001,
 				F53C6A6301B1968701A80001,
 				F53C6A6501B1968701A80001,
@@ -661,12 +660,6 @@
 			);
 			isa = PBXGroup;
 			path = BootX;
-			refType = 4;
-		};
-		F53C691401B1926201A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			path = APPLE_LICENSE;
 			refType = 4;
 		};
 		F53C695501B1926201A80001 = {
