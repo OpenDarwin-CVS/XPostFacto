@@ -71,11 +71,13 @@ class XPFThreadedCommand : public TCommand {
 
 		XPFProgressWindow* getProgressWindow () {return fProgressWindow;}
 			
-		static pascal Boolean CopyFilterGlue (void *refCon, const FSRef *src);
+		static pascal Boolean CopyFilterGlue (void *refCon, const FSRef *src, Boolean preflight);
+		static pascal Boolean ArchiveFilterGlue (void *refCon, const FSRef *src, Boolean preflight);
 	
 	protected:
 	
-		Boolean copyFilter (const FSRef *src);
+		Boolean copyFilter (const FSRef *src, Boolean preflight);
+		Boolean archiveFilter (const FSRef *src, Boolean preflight);
 
 		OSErr getOrCreateDirectory (FSRef *rootDirectory, char *path, UInt32 mode, FSRef *result);
 		OSErr getOrCreateXPFDirectory (FSRef *rootDirectory, FSRef *result);
@@ -116,6 +118,12 @@ class XPFThreadedCommand : public TCommand {
 		CStr63_AC fCopyWord;
 		
 		UInt32 fDebugOptions;
+		
+		unsigned fItemsToCopy;
+		unsigned fItemsCopied;
+		
+		unsigned fProgressMin;
+		unsigned fProgressMax;
 };
 
 #endif

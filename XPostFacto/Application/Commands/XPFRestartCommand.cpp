@@ -105,7 +105,13 @@ XPFRestartCommand::adjustThrottle (XPFNVRAMSettings *nvram) {
 void 
 XPFRestartCommand::DoItThreaded ()
 {
-	setDescription (CStr255_AC (kXPFStringsResource, kRestarting));
+	if (fProgressMin == 0) {
+		setDescription (CStr255_AC (kXPFStringsResource, kRestarting));
+		fProgressMax = 1000;	
+	}
+	
+	float scale = (float) (fProgressMax - fProgressMin) / (float) fProgressMax;
+	unsigned progbase = fProgressMin;
 
 	if (!fAutoBoot) {
 		// Make sure that input-device and output-device are specified if not auto-booting
@@ -122,19 +128,29 @@ XPFRestartCommand::DoItThreaded ()
 		bootDisk = fTargetDisk;
 	}
 	
+	fProgressMax = progbase + scale * 50;
+	
 	if (rootDisk->getIsWriteable ()) {
 		if (!rootDisk->getHasOldWorldSupport ()) {
 			installExtensionsWithRootDirectory (rootDisk->getRootDirectory ());
 		}
+				
+		fProgressMin = fProgressMax;
+		fProgressMax = progbase + scale * 100;
+
 		if (!rootDisk->getHasStartupItemInstalled ()) {
 			installStartupItemWithRootDirectory (rootDisk->getRootDirectory ());
 		}
 	}
-
+	
+	fProgressWindow->setProgressValue (progbase + scale * 100);
+	
 	if (bootDisk->getIsWriteable ()) {
 		setCopyingFile ("\pBootX");
 		bootDisk->installBootXIfNecessary ();
 	}
+	
+	fProgressWindow->setProgressValue (progbase + scale * 150);
 
 	// Now, see if we need to copy stuff from the root-disk to the boot-disk
 	if ((rootDisk != bootDisk) && !(fDebugOptions & kDisableCopyToHelper)) {	
@@ -168,9 +184,11 @@ XPFRestartCommand::DoItThreaded ()
 		FSRef kernelOnRoot;
 		ThrowIfOSErr_AC (getKernelFSRef (rootDisk->getRootDirectory (), &kernelOnRoot));
 		setCopyingFile ("\pmach_kernel");
-		
+
 		XPFSetUID myUID (0);
 		ThrowIfOSErr_AC (FSRefFileCopy (&kernelOnRoot, &helperDir, NULL, NULL, 0, false));
+
+		fProgressWindow->setProgressValue (progbase + scale * 200);		
 		
 		// Copy the Extensions and Extensions.mkext
 		// Note that the FSRefCopy* routines skip copies that aren't necessary
@@ -192,11 +210,17 @@ XPFRestartCommand::DoItThreaded ()
 			setCopyingFile ("\pExtensions.mkext");
 			ThrowIfOSErr_AC (FSRefFileCopy (&rootSystemLibraryExtensionsCacheRef, &helperSystemLibraryRef, NULL, NULL, 0, false));			
 		}	
+		
+		fProgressMin = progbase + scale * 250;
+		fProgressMax = progbase + scale * 900;		
 
 		// Check for the extensions directory. It should exist :-)
 		ThrowIfOSErr_AC (getOrCreateSystemLibraryExtensionsDirectory (rootDisk->getRootDirectory (), &rootSystemLibraryExtensionsRef));
-		ThrowIfOSErr_AC (FSRefFilteredDirectoryCopy (&rootSystemLibraryExtensionsRef, &helperSystemLibraryRef, NULL, NULL, 0, false, 
+		ThrowIfOSErr_AC (FSRefFilteredDirectoryCopy (&rootSystemLibraryExtensionsRef, &helperSystemLibraryRef, NULL, NULL, 0, true, 
 								NULL, CopyFilterGlue, this));
+
+		fProgressMin = fProgressMax;
+		fProgressMax = progbase + scale * 950;
 		
 		// If the root disk was not writeable, then we need to install the extensions in the secondary location
 		// on the helper, so that BootX will pick them up
@@ -204,6 +228,8 @@ XPFRestartCommand::DoItThreaded ()
 			installSecondaryExtensionsWithRootDirectory (&helperDir);
 		}
 	}		
+	
+	fProgressWindow->setProgressValue (progbase + scale * 950);		
 
 	XPFNVRAMSettings *nvram = XPFNVRAMSettings::GetSettings ();
 	
@@ -236,7 +262,7 @@ XPFRestartCommand::DoItThreaded ()
 		gLogFile << "input-device: " << inputDevice << endl_AC;
 		gLogFile << "output-device: " << outputDevice << endl_AC;
 	#endif
-
+	
 	if (!(fDebugOptions & kDisableNVRAMWriting)) {
 		if (nvram->writeToNVRAM () == noErr) {	
 			tellFinderToRestart ();

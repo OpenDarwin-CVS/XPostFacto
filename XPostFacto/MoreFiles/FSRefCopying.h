@@ -279,7 +279,7 @@ typedef CALLBACK_API( Boolean , FSCopyErrProcPtr )(OSErr error, short failedOper
 
 /*****************************************************************************/
 
-typedef CALLBACK_API( Boolean , FSCopyFilterProcPtr )(void *refCon, const FSRef * src);
+typedef CALLBACK_API( Boolean , FSCopyFilterProcPtr )(void *refCon, const FSRef * src, Boolean preflight);
 /*
     This is the prototype for the CopyFilterProc function called by
     FilteredDirectoryCopy and GetLevelSize. If true is returned,
@@ -291,8 +291,8 @@ typedef CALLBACK_API( Boolean , FSCopyFilterProcPtr )(void *refCon, const FSRef 
     
     Also see:   FSRefFilteredDirectoryCopy
 */
-#define CallFSCopyFilterProc(userRoutine, refCon, src) \
-    (*(userRoutine))((refCon), (src))
+#define CallFSCopyFilterProc(userRoutine, refCon, src, preflight) \
+    (*(userRoutine))((refCon), (src), (preflight))
 
 /*****************************************************************************/
 

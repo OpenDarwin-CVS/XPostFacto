@@ -51,7 +51,7 @@ const UInt32 kHFSPlusArchiveVersion = 1;
 #define kCopyBufferSize (16 * 1024)
 
 HFSPlusArchive::HFSPlusArchive (FILE_STREAM_TYPE *stream, pascal Boolean 
-						(*copyFilter) (void *refCon, const FSRef *src), void *refCon)
+						(*copyFilter) (void *refCon, const FSRef *src, Boolean preflight), void *refCon)
 	: fStream (stream), fRefCon (refCon)
 {
 	fCopyFilter = copyFilter;
@@ -292,7 +292,7 @@ HFSPlusArchive::extractDirectoryTo (const FSRef *ref)
 						
 		if (fErr == noErr) {
 			// extract to the directory and then set catalog info
-			if (fCopyFilter) (*fCopyFilter) (fRefCon, &newRef);
+			if (fCopyFilter) (*fCopyFilter) (fRefCon, &newRef, false);
 			FSCatalogInfo newCatalogInfo;
 			BlockMoveData (&fCatalogInfo, &newCatalogInfo, sizeof (fCatalogInfo));
 			extractItemsTo (&newRef);
@@ -333,7 +333,7 @@ HFSPlusArchive::extractFileTo (const FSRef *ref)
 		}
 	}
 	
-	if (fCopyFilter) (*fCopyFilter) (fRefCon, &newRef);
+	if (fCopyFilter) (*fCopyFilter) (fRefCon, &newRef, false);
 	
 	while (true) {
 //		::YieldToAnyThread ();

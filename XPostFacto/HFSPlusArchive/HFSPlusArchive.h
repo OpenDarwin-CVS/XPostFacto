@@ -46,7 +46,7 @@ class HFSPlusArchive {
 public:
 
 	HFSPlusArchive (FILE_STREAM_TYPE *stream, pascal Boolean
-				 (*copyFilter) (void *refCon, const FSRef *src) = NULL,
+				 (*copyFilter) (void *refCon, const FSRef *src, Boolean preflight) = NULL,
 				 void *refCon = NULL);
 
 	~HFSPlusArchive ();
@@ -75,7 +75,7 @@ private:
 	Ptr fCopyBuffer;
 	bool fHeaderWritten;
 	bool fSuspendExtraction;
-	pascal Boolean (*fCopyFilter) (void *refCon, const FSRef *src);
+	pascal Boolean (*fCopyFilter) (void *refCon, const FSRef *src, Boolean preflight);
 	void *fRefCon;
 
 // The rest are temporary variables to minimize stack space in recursion.

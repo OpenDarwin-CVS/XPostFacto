@@ -44,6 +44,7 @@ XPFInstallBootXCommand::DoItThreaded ()
 {
 	setDescription (CStr255_AC (kXPFStringsResource, kInstallingBootX));
 	setCopyingFile ("\pBootX");
+	fProgressMax = 1000;
 	
 	if (fHelperDisk) {
 		fHelperDisk->installBootXIfNecessary (true);
@@ -57,6 +58,7 @@ XPFInstallBootXCommand::DoItThreaded ()
 void
 XPFInstallExtensionsCommand::DoItThreaded ()
 {
+	fProgressMax = 1000;
 	setDescription (CStr255_AC (kXPFStringsResource, kInstallingExtensions));
 	installExtensionsWithRootDirectory (fTargetDisk->getRootDirectory ());
 	fProgressWindow->setFinished ();
@@ -65,6 +67,7 @@ XPFInstallExtensionsCommand::DoItThreaded ()
 void
 XPFInstallStartupCommand::DoItThreaded ()
 {
+	fProgressMax = 1000;
 	setDescription (CStr255_AC (kXPFStringsResource, kInstallingStartupItem));
 	installStartupItemWithRootDirectory (fTargetDisk->getRootDirectory ());
 	fProgressWindow->setFinished ();

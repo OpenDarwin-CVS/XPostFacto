@@ -805,14 +805,15 @@ GetLevelSize (const FSRef *currentDirRef, PreflightGlobals *theGlobals)
 	do
 	{
 		ItemCount actualObjects;
-		theGlobals->result = FSGetCatalogInfoBulk (iterator, 1, &actualObjects, NULL, kFSCatInfoNodeFlags, 
+		theGlobals->result = FSGetCatalogInfoBulk (iterator, 1, &actualObjects, NULL, 
+						kFSCatInfoNodeFlags | kFSCatInfoDataSizes | kFSCatInfoRsrcSizes,
 						&theGlobals->catInfo, &theGlobals->item, NULL, NULL);
 
 		if ( (theGlobals->result == noErr) && (actualObjects == 1) )
 		{
 //			::YieldToAnyThread ();
 			if ( (theGlobals->copyFilterProc == NULL) ||
-				 CallFSCopyFilterProc(theGlobals->copyFilterProc, theGlobals->refCon, &theGlobals->item) ) /* filter if filter proc was supplied */
+				 CallFSCopyFilterProc(theGlobals->copyFilterProc, theGlobals->refCon, &theGlobals->item, true) ) /* filter if filter proc was supplied */
 			{
 				/* Either there's no filter proc OR the filter proc says to use this item */
 				if ( theGlobals->catInfo.nodeFlags & kFSNodeIsDirectoryMask )
@@ -881,7 +882,7 @@ static	OSErr	PreflightDirectoryCopySpace(const FSRef *srcRef,
 											Boolean *spaceOK)
 {
 	OSErr error;
-	unsigned long dstFreeBlocks;
+	long long dstFreeBlocks;
 	PreflightGlobals theGlobals;
 	
 	FSCatalogInfo catInfo;
@@ -895,12 +896,12 @@ static	OSErr	PreflightDirectoryCopySpace(const FSRef *srcRef,
 
 	if ( error == noErr )
 	{
-		/* Convert freeBytes to free disk blocks (512-byte blocks) */
-		dstFreeBlocks = U32SetU(U64ShiftRight(volInfo.freeBytes, 9));
-		
 		/* get allocation block size (always multiple of 512) and divide by 512
 		  to get number of 512-byte blocks per allocation block */
-		theGlobals.dstBlksPerAllocBlk = ((unsigned long) volInfo.blockSize >> 9);
+		theGlobals.dstBlksPerAllocBlk = volInfo.blockSize / 512;
+		
+		/* Convert freeBytes to free disk blocks (512-byte blocks) */
+		dstFreeBlocks = volInfo.freeBytes / 512;
 		
 		theGlobals.allocBlksNeeded = 0;
 				
@@ -941,7 +942,7 @@ static	void	CopyLevel(const FSRef *src,
 		{
 //			::YieldToAnyThread ();
 			if ( (theGlobals->copyFilterProc == NULL) ||
-				 CallFSCopyFilterProc(theGlobals->copyFilterProc, theGlobals->refCon, &theGlobals->item) ) /* filter if filter proc was supplied */
+				 CallFSCopyFilterProc(theGlobals->copyFilterProc, theGlobals->refCon, &theGlobals->item, false) ) /* filter if filter proc was supplied */
 			{
 				/* Either there's no filter proc OR the filter proc says to use this item */
 

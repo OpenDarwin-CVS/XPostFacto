@@ -77,6 +77,7 @@ XPFProgressWindow::setDescription (unsigned char* theText)
 {
 	fSetDescription = true;
 	fDescriptionText.CopyFrom (theText);
+	YieldToThread (kApplicationThreadID);
 }
 	
 void 
@@ -84,6 +85,7 @@ XPFProgressWindow::setStatus (unsigned char* theStatus)
 {
 	fSetStatus = true;
 	fStatusText.CopyFrom (theStatus);
+	YieldToThread (kApplicationThreadID);
 }
 
 void 
@@ -98,6 +100,7 @@ XPFProgressWindow::setProgressMax (ViewCoordinate max)
 {
 	fSetMax = true;
 	fMax = max;
+	YieldToThread (kApplicationThreadID);
 }
 
 void 
@@ -151,19 +154,17 @@ XPFProgressWindow::DoIdle (IdlePhase phase)
 	}
 	
 	if (fSetMin) {
-		fProgress->SetDeterminate (true);
 		fProgress->SetMinimum (fMin, true);
 		fSetMin = false;
 	}
 	
 	if (fSetMax) {
-		fProgress->SetDeterminate (true);
+		fProgress->SetDeterminate (fMax != 0);
 		fProgress->SetMaximum (fMax, true);
 		fSetMax = false;
 	}
 	
 	if (fSetValue) {
-		fProgress->SetDeterminate (true);
 		fProgress->SetValue (fValue, true);
 		fSetValue = false;
 	}

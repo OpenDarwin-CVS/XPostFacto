@@ -108,7 +108,7 @@ XPFCommandThread::Run ()
 #define Inherited TCommand
 
 XPFThreadedCommand::XPFThreadedCommand (XPFPrefs *prefs)
-	: fYielder (1)
+	: fYielder (1), fItemsToCopy (0), fItemsCopied (0), fProgressMin (0), fProgressMax (0)
 {
 	fTargetDisk = prefs->getTargetDisk ();
 	fHelperDisk = fTargetDisk->getHelperDisk ();
@@ -139,6 +139,7 @@ XPFThreadedCommand::DoIt ()
 	XPFCommandThread *thread = TH_new XPFCommandThread (this);
 	fRunner = thread;
 	fProgressWindow->setThread (thread);
+	fProgressWindow->setProgressMax (1000);
 	fProgressWindow->PoseModally ();
 	if (thread->IsAlive ()) thread->Join ();
 	fProgressWindow->Close ();
@@ -154,18 +155,33 @@ XPFThreadedCommand::setCopyingFile (unsigned char *fileName)
 {
 	CStr255_AC message = fCopyWord + " " + fileName;
 	setStatusMessage (message);
-	fYielder.YieldNow ();
 }
 
 void 
 XPFThreadedCommand::setDescription (unsigned char* description)
 {
 	fProgressWindow->setDescription (description);
-	fYielder.YieldNow ();
 }
 
 Boolean 
-XPFThreadedCommand::copyFilter (const FSRef *src)
+XPFThreadedCommand::copyFilter (const FSRef *src, Boolean preflight)
+{
+	fYielder.YieldIfTime ();
+	if (preflight) {
+		fItemsToCopy++;
+	} else {
+		fItemsCopied++;
+		float scale = (float) (fProgressMax - fProgressMin) / (float) fItemsToCopy;
+		fProgressWindow->setProgressValue (fProgressMin + scale * fItemsCopied);
+		FSSpec spec;
+		FSGetCatalogInfo (src, kFSCatInfoNone, NULL, NULL, &spec, NULL);
+	 	setCopyingFile (spec.name);
+	}
+	return !fRunner->ShutdownRequested ();
+}
+
+Boolean 
+XPFThreadedCommand::archiveFilter (const FSRef *src, Boolean preflight)
 {
 	fYielder.YieldIfTime ();
 	FSSpec spec;
@@ -175,9 +191,15 @@ XPFThreadedCommand::copyFilter (const FSRef *src)
 }
 
 pascal Boolean 
-XPFThreadedCommand::CopyFilterGlue (void *refCon, const FSRef *src)
+XPFThreadedCommand::CopyFilterGlue (void *refCon, const FSRef *src, Boolean preflight)
 {
-	return ((XPFThreadedCommand *) refCon)->copyFilter (src);
+	return ((XPFThreadedCommand *) refCon)->copyFilter (src, preflight);
+}
+
+pascal Boolean 
+XPFThreadedCommand::ArchiveFilterGlue (void *refCon, const FSRef *src, Boolean preflight)
+{
+	return ((XPFThreadedCommand *) refCon)->archiveFilter (src, preflight);
 }
 
 // Methods to get or create directories or other FSRefs (with proper permissions and ownership)
@@ -360,7 +382,11 @@ XPFThreadedCommand::updateExtensionsCacheForRootDirectory (FSRef *rootDirectory)
 {
 	if (fDebugOptions & kDisableExtensionsCache) return;
 #ifdef __MACH__
+	fProgressWindow->setProgressMax (0);
+	fProgressWindow->setProgressMin (0);
+	fProgressWindow->setProgressValue (0);
 	setStatusMessage (CStr255_AC ((ResNumber) kXPFStringsResource, kUpdatingExtensionsCache));
+
 	char rootPath [256];
 	ThrowIfOSErr_AC (FSRefMakePath (rootDirectory, (UInt8 *) rootPath, 256));
 	XPFSetUID myUID (0);
@@ -387,6 +413,7 @@ XPFThreadedCommand::installExtensionsWithRootDirectory (FSRef *rootDirectory)
 	
 	ThrowIfOSErr_AC (getOrCreateSystemLibraryExtensionsDirectory (rootDirectory, &systemLibraryExtensionsFolder));
 	copyHFSArchivesTo ('hfsA', &systemLibraryExtensionsFolder);
+	
 	updateExtensionsCacheForRootDirectory (rootDirectory);
 }
 
@@ -439,11 +466,11 @@ XPFThreadedCommand::installStartupItemWithRootDirectory (FSRef *rootDirectory)
 #endif
 }
 
-
 void
 XPFThreadedCommand::copyHFSArchivesTo (ResType type, FSRef *directory)
 {
 	SInt16 archiveCount = CountResources (type);
+	float scale = (float) (fProgressMax - fProgressMin) / (float) archiveCount;
 	for (SInt16 x = 1; x <= archiveCount; x++) {
 		fYielder.YieldIfTime ();
 		if (fRunner->ShutdownRequested ()) return;
@@ -456,8 +483,10 @@ XPFThreadedCommand::copyHFSArchivesTo (ResType type, FSRef *directory)
 		ReleaseResource (hfsA);
 
 		CResourceStream_AC stream (type, resourceID);
-		HFSPlusArchive archive (&stream, CopyFilterGlue, this);
+		HFSPlusArchive archive (&stream, &ArchiveFilterGlue, this);
 		XPFSetUID myUID (0);
 		ThrowIfOSErr_AC (archive.extractArchiveTo (directory));
+
+		fProgressWindow->setProgressValue (fProgressMin + scale * (float) x);
 	}
 }

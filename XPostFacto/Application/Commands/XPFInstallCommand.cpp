@@ -70,7 +70,7 @@ XPFInstallCommand::DoItThreaded ()
 	// installed, so that it won't move the extensions we pre-install
 		
 	setDescription (CStr255_AC (kXPFStringsResource, kInstalling));
-		
+			
 	if (!(fDebugOptions & kDisableCoreServices)) {
 		FSRef coreServicesFolder, cdBootX;
 			
@@ -88,7 +88,12 @@ XPFInstallCommand::DoItThreaded ()
 	
 	// And we install the extensions and startup item to the installTarget
 	
+	fProgressMin = 100;
+	fProgressMax = 150;
 	installExtensionsWithRootDirectory (fTargetDisk->getRootDirectory ());
+
+	fProgressMin = fProgressMax;
+	fProgressMax = 200;
 	installStartupItemWithRootDirectory (fTargetDisk->getRootDirectory ());
 	
 	// Now, set up all the Restart stuff
@@ -101,5 +106,7 @@ XPFInstallCommand::DoItThreaded ()
 	if (fHelperDisk == NULL) fHelperDisk = fTargetDisk;
 	fTargetDisk = fInstallCD;
 	
+	fProgressMin = fProgressMax;
+	fProgressMax = 1000;	
 	XPFRestartCommand::DoItThreaded ();
 }
