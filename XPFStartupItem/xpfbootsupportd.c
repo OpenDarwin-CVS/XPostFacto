@@ -213,6 +213,7 @@ setupRestartInMacOS9 ()
 				&kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 		if (dict) {
 			IORegistryEntrySetCFProperties (options, dict);
+			syslog (LOG_INFO, "Setting reboot to Mac OS 9 because synchronization required.");
 			CFRelease (dict);
 			noSyncRequired = true;
 		}
