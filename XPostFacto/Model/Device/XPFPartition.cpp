@@ -44,6 +44,7 @@ advised of the possibility of such damage.
 #include "HFSPlusVolume.h"
 #include "XPFLog.h"
 #include "XPFBootableDevice.h"
+#include "XPFAuthorization.h"
 
 union VolumeHeader {
 	HFSMasterDirectoryBlock hfs;
@@ -229,6 +230,7 @@ XPFPartition::writeBootBlocks (void *buffer)
 	if (err) {
 		gLogFile << "Could not get path for mountpoint" << endl_AC;
 	} else { 
+	    XPFSetUID myUID (0);
 		int fd = open (path, O_RDONLY);
 	    if (fd == -1) {
 			gLogFile << "Could not open mountpoint to write boot blocks" << endl_AC;
