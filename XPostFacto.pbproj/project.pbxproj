@@ -1786,7 +1786,7 @@
 					<integer>31</integer>
 					<key>maxLog</key>
 					<data>
-					AC6AAA==
+					ABaAAA==
 					</data>
 					<key>minLin</key>
 					<integer>0</integer>
@@ -1807,7 +1807,7 @@
 					<integer>0</integer>
 					<key>minLog</key>
 					<data>
-					/+mAAA==
+					/+qAAA==
 					</data>
 				</dict>
 				<key>analogModem</key>
