@@ -569,8 +569,8 @@ FSRefFileCopy (
 	if ( hasResourceFork )
 	{
 		/* Open the destination resource fork. */
-		err = FSOpenFork (&dstFileRef, dataForkName.length, dataForkName.unicode,
-							/* dstCopyMode */ fsRdWrPerm, &dstDataRefNum);
+		err = FSOpenFork (&dstFileRef, resourceForkName.length, resourceForkName.unicode,
+							/* dstCopyMode */ fsRdWrPerm, &dstRsrcRefNum);
 		if ( err != noErr ) goto ErrorExit;
 	}
 
@@ -596,7 +596,7 @@ FSRefFileCopy (
 	if ( hasResourceFork )
 	{
 		/* Open the source resource fork. */
-		err = FSOpenFork (srcRef, dataForkName.length, dataForkName.unicode,
+		err = FSOpenFork (srcRef, resourceForkName.length, resourceForkName.unicode,
 							/* srcCopyMode */ fsRdPerm, &srcRefNum);
 		if ( err != noErr )
 		{
