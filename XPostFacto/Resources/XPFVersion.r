@@ -51,10 +51,10 @@ RESOURCE 'vers' (1,
 	0x03,
 	0x00,
 	alpha,
-	0x1,
+	0x2,
 	verUs,
-	"3.0.0a1",
-	"3.0.0a1, © 2001, 2002 Other World Computing"
+	"3.0.0a2",
+	"3.0.0a2, © 2001 - 2003 Other World Computing"
 };
 
 RESOURCE 'vers' (3,
@@ -65,10 +65,10 @@ RESOURCE 'vers' (3,
 	0x03,
 	0x00,
 	alpha,
-	0x1,
+	0x2,
 	verUs,
-	"3.0.0a1",
-	"3.0.0a1, © 2001, 2002 Other World Computing"
+	"3.0.0a2",
+	"3.0.0a2, © 2001 - 2003 Other World Computing"
 };
 
 RESOURCE 'vers' (4,
@@ -76,11 +76,11 @@ RESOURCE 'vers' (4,
 "Extensions Version",
 #endif
 	purgeable) {
-	0x02,
-	0x23,
-	final,
+	0x03,
+	0x00,
+	alpha,
 	0x0,
 	verUS,
-	"2.2.3",
-	"2.2.3"
+	"3.0a2",
+	"3.0a2"
 };
