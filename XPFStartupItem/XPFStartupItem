@@ -67,7 +67,7 @@ RunService ()
 StartService ()
 {
 	if ! pid=$(GetPID xpfbootsupportd); then
-		ConsoleMessage "Starting XPostFacto Boot Support"
+		echo "Starting XPostFacto Boot Support"
 		/Library/StartupItems/XPFStartupItem/xpfbootsupportd
     fi
 }
@@ -75,7 +75,7 @@ StartService ()
 StopService ()
 {
     if pid=$(GetPID xpfbootsupportd); then
-        ConsoleMessage "Stopping XPostFacto Boot Support"
+        echo "Stopping XPostFacto Boot Support"
         kill -TERM "${pid}"
     else
         echo "XPostFacto Boot Support is not running."
@@ -85,7 +85,7 @@ StopService ()
 RestartService ()
 {
     if pid=$(GetPID xpfbootsupportd); then
-        ConsoleMessage "Restarting XPostFacto Boot Support"
+        echo "Restarting XPostFacto Boot Support"
         kill -HUP "${pid}"
     else
         StartService
@@ -95,7 +95,7 @@ RestartService ()
 SuspendService ()
 {
     if pid=$(GetPID xpfbootsupportd); then
-        ConsoleMessage "Suspending XPostFacto Boot Support"
+        echo "Suspending XPostFacto Boot Support"
         kill -USR1 "${pid}"
     fi
 }

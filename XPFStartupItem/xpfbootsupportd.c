@@ -95,6 +95,7 @@ void setupRestartInMacOS9 ();
 void reblessMacOS9SystemFolder ();
 bool isOldWorld ();
 bool isMacOS9SystemFolder (char *path);
+int asprintfcompat (char **buffer, const char *format, char *string);
 
 int getPaths (char *rootDevicePath, char *bootDevicePath);
 int getMountPointForOFPath (char *mountPoint, const char *ofPath);
@@ -113,6 +114,20 @@ struct objectinfobuf {
 	uint32_t info_length;
 	fsobj_id_t dirid;
 };
+
+// asprintfcompat because 10.1 doesn't have asprintf
+
+int
+asprintfcompat (char **buffer, const char *format, char *string)
+{
+	int retVal;
+	char temp[1024];
+	temp[0] = 0;
+	retVal = sprintf (temp, format, string);
+	*buffer = malloc (strlen (temp) + 1);
+	strcpy (*buffer, temp);
+	return retVal;
+}
 
 bool
 isOldWorld ()
@@ -450,13 +465,13 @@ initialize_everything ()
 			
 	if (!noSyncRequired) {	
 		// Fill in the paths to each of the files/folders we want to track
-		asprintf (&rootDeviceFiles.kernel.path, "%s/mach_kernel", rootDevicePath);
-		asprintf (&rootDeviceFiles.extensions.path, "%s/System/Library/Extensions", rootDevicePath);
-		asprintf (&rootDeviceFiles.extensionsCache.path, "%s/System/Library/Extensions.mkext", rootDevicePath);
+		asprintfcompat (&rootDeviceFiles.kernel.path, "%s/mach_kernel", rootDevicePath);
+		asprintfcompat (&rootDeviceFiles.extensions.path, "%s/System/Library/Extensions", rootDevicePath);
+		asprintfcompat (&rootDeviceFiles.extensionsCache.path, "%s/System/Library/Extensions.mkext", rootDevicePath);
 		
-		asprintf (&bootDeviceFiles.kernel.path, "%s/mach_kernel", bootDevicePath);
-		asprintf (&bootDeviceFiles.extensions.path, "%s/System/Library/Extensions", bootDevicePath);
-		asprintf (&bootDeviceFiles.extensionsCache.path, "%s/System/Library/Extensions.mkext", bootDevicePath);
+		asprintfcompat (&bootDeviceFiles.kernel.path, "%s/mach_kernel", bootDevicePath);
+		asprintfcompat (&bootDeviceFiles.extensions.path, "%s/System/Library/Extensions", bootDevicePath);
+		asprintfcompat (&bootDeviceFiles.extensionsCache.path, "%s/System/Library/Extensions.mkext", bootDevicePath);
 		
 		// Fill in the "helper" stat stuff. When someone writes to the helper, it's their 
 		// responsiblity to restart us.		

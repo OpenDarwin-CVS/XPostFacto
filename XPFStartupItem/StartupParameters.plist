@@ -4,4 +4,8 @@
   Requires        = ("Disks");
   Uses            = ("System Log");
   OrderPreference = "None";
+  Messages = {
+    start = "Starting XPostFacto Boot Support";
+	stop  = "Stopping XPostFacto Boot Support";
+  };
 }
