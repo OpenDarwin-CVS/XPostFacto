@@ -36,60 +36,144 @@ advised of the possibility of such damage.
 // ===================
 
 #include "ToolboxNVRAM.h"
-#include <Debugging.h>
-
-/*
-
-EXTERN_API_C( long )
-CallUniversalProc(
-  UniversalProcPtr   theProcPtr,
-  ProcInfoType       procInfo,
-  ...);
-
-*/
+#include "XPFLog.h"
     
-ToolboxNVRAM::ToolboxNVRAM ()
-{
-	OSErr err;
-	CFragConnectionID connID = kInvalidID;
-
-	err = GetSharedLibrary( "\pInterfaceLib", kCompiledCFragArch, kReferenceCFrag, &connID, NULL, NULL );
-
-	if ( err == noErr ) err = FindSymbol (connID, "\pCallUniversalProc", (Ptr *) &callUniversalProcPtr, NULL);
-	if ( err == noErr ) err = FindSymbol (connID, "\pGetToolboxTrapAddress", (Ptr *) &callGetToolboxTrapAddressPtr, NULL);
-
-	if ( err != noErr ) {
-		callUniversalProcPtr = NULL;
-		callGetToolboxTrapAddressPtr = NULL;
-		throw err;
-	}
-}  
-
 #define kReadNVRAMProcInfo		0x0398
 #define kWriteNVRAMProcInfo		0x0788
 #define kReadNVRAMSelector		0x022E
 #define kWriteNVRAMSelector		0x032F
 #define kMagicTrapNumber 		0x02F3
 
-UniversalProcPtr
-ToolboxNVRAM::getProcPtr ()
+ToolboxNVRAM::ToolboxNVRAM ()
 {
-	UniversalProcPtr ptr = (*callGetToolboxTrapAddressPtr) (kMagicTrapNumber);
-	return ptr;
-}
+	readFromNVRAM ();
+}  
 
 UInt8 
 ToolboxNVRAM::readByte (unsigned offset)
 {
-	if (callUniversalProcPtr == NULL) throw paramErr;
-	return (*callUniversalProcPtr) (getProcPtr (), kReadNVRAMProcInfo, kReadNVRAMSelector, offset);
+	return CallUniversalProc (GetToolboxTrapAddress (kMagicTrapNumber), kReadNVRAMProcInfo, kReadNVRAMSelector, offset);
 }
 
 void
 ToolboxNVRAM::writeByte (unsigned offset, UInt8 byte)
 {
-	if (callUniversalProcPtr == NULL) throw paramErr;
-	(*callUniversalProcPtr) (getProcPtr (), kWriteNVRAMProcInfo, kWriteNVRAMSelector, offset, byte);
+	CallUniversalProc (GetToolboxTrapAddress (kMagicTrapNumber), kWriteNVRAMProcInfo, kWriteNVRAMSelector, offset, byte);
 }
 
+void
+ToolboxNVRAM::readFromNVRAM ()
+{		
+	char *bufferPtr = (char *) &fBuffer;
+		
+	for (int cnt = 0; cnt < kOFPartitionSize; cnt++) {
+		bufferPtr[cnt] = readByte (kOFPartitionOffset + cnt);
+	}
+		
+	NVRAMValue *current;
+	char *tempString;
+	NVRAMString *nvramString;
+	
+	for (TemplateAutoList_AC <NVRAMValue>::Iterator iter (&fNVRAMValues); (current = iter.Current ()); iter.Next ()) {
+
+		switch (current->getValueType ()) { 
+
+			case kStringValue:
+				nvramString = &fBuffer.stringValues[current->getOffset()];
+				if ((nvramString->offset > kOFPartitionOffset) && (nvramString->length > 0) &&
+						((nvramString->offset + nvramString->length) <= (kOFPartitionOffset + kOFPartitionSize))) {
+					tempString = NewPtr (nvramString->length + 1);
+					memcpy (tempString, bufferPtr + nvramString->offset - kOFPartitionOffset, nvramString->length);
+					tempString[nvramString->length] = 0;
+					current->setStringValue (tempString);
+					DisposePtr (tempString);
+				} else {
+					current->setStringValue ("");
+				}
+				break;
+				
+			case kBooleanValue:
+				current->setBooleanValue ((fBuffer.flags && (1 << (31 - current->getOffset ()))) != 0);
+				break;
+				
+			case kNumericValue:
+				current->setNumericValue (fBuffer.numericValues[current->getOffset ()]);
+				break;
+		}
+	}
+	
+	fHasChanged = false;
+}
+				
+int
+ToolboxNVRAM::writeToNVRAM ()
+{
+//	if (!fHasChanged) return noErr;
+	fHasChanged = false;
+	
+	char *bufferPtr = (char *) &fBuffer;
+
+	Erase_AC (&fBuffer);
+	fBuffer.magic = 0x1275;
+	fBuffer.version = 0x05;
+	fBuffer.pages = 0x08;
+	fBuffer.here = (unsigned) &fBuffer.strings[0] - (unsigned) &fBuffer + kOFPartitionOffset;
+	fBuffer.next = 0;
+	fBuffer.top = kOFPartitionOffset + kOFPartitionSize;
+		
+	NVRAMValue *current;
+	NVRAMString *nvramString;
+	unsigned length;
+	
+	for (TemplateAutoList_AC <NVRAMValue>::Iterator iter (&fNVRAMValues); (current = iter.Current ()); iter.Next ()) {
+
+		switch (current->getValueType ()) { 
+
+			case kStringValue:
+				nvramString = &fBuffer.stringValues[current->getOffset()];
+				length = strlen (current->getStringValue ());
+				fBuffer.top -= length;
+				if (fBuffer.top >= fBuffer.here) {
+					nvramString->offset = fBuffer.top;
+					nvramString->length = length;
+					if (length > 0) BlockMoveData (current->getStringValue (), bufferPtr - kOFPartitionOffset + fBuffer.top , length);
+				}
+				break;
+				
+			case kBooleanValue:
+				fBuffer.flags &= 1 << (31 - current->getOffset ());
+				break;
+				
+			case kNumericValue:
+				fBuffer.numericValues[current->getOffset()] = current->getNumericValue ();
+				break;
+		}
+	}
+				
+	if (fBuffer.top < fBuffer.here) {
+		#if qLogging
+			gLogFile << "NVRAM size limits exceeded" << endl_AC;
+		#endif
+		return -1;
+	}
+	
+ 	fBuffer.checksum = 0;
+	unsigned checksum = 0;
+ 	UInt16 *tmpBuffer = (UInt16 *) &fBuffer;
+ 	for (int cnt = 0; cnt < kOFPartitionSize / 2; cnt++) checksum += tmpBuffer[cnt];
+	checksum %= 0x0000FFFF;
+	fBuffer.checksum = ~checksum;
+	
+	try {
+		for (int cnt = 0; cnt < kOFPartitionSize; cnt++) {
+			writeByte (kOFPartitionOffset + cnt, bufferPtr[cnt]);
+		}
+	}
+	
+	catch (...) {
+		return paramErr;
+	}
+
+	return noErr;
+}
 

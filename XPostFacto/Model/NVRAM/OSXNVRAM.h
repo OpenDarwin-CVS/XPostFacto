@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001, 2002
+Copyright (c) 2002
 Other World Computing
 All rights reserved
 
@@ -31,50 +31,26 @@ advised of the possibility of such damage.
 
 */
 
+#ifndef __OSXNVRAM_H__
+#define __OSXNVRAM_H__
 
-// =============
-//  NVRAM
-// =============
+#include "NVRAM.h"
 
-#ifndef __XPFNVRAMSETTINGS_H__
-#define __XPFNVRAMSETTINGS_H__
-	
-#define kOFStringCapacity 1956
 
-#include "NVRAMValue.h"
-	
-class XPFNVRAMSettings {
+class OSXNVRAM : public XPFNVRAMSettings {
 
 	public:
-
-		virtual void readFromNVRAM () = 0;
-		virtual int writeToNVRAM () = 0;
-						
-		static XPFNVRAMSettings* GetSettings ();
-
-		NVRAMValue *getValue (const char *key);
-		
-		NVRAMValueType getValueType (const char *key);
-		unsigned getOffset (const char *key);
-		
-		virtual char *getStringValue (const char *key);
-		virtual bool getBooleanValue (const char *key);
-		virtual long getNumericValue (const char *key);
-		
-		virtual bool setStringValue (const char *key, const char *value);
-		virtual bool setBooleanValue (const char *key, const bool value);
-		virtual bool setNumericValue (const char *key, const long value);
+	
+		OSXNVRAM ();
+	
+		virtual void readFromNVRAM ();
+		virtual int writeToNVRAM ();
 
 	protected:
 	
-		XPFNVRAMSettings ();
-		virtual ~XPFNVRAMSettings ();	
-
-		static XPFNVRAMSettings *gSettings;			
-		
-		bool fHasChanged;
-		
-		TemplateAutoList_AC <NVRAMValue> fNVRAMValues;			
+		static void processDictionary (const void *key, const void *value, void *context);
+		void setKeyForValue (const void *key, const void *value);
+					
 };
 
 #endif

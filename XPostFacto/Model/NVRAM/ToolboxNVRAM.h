@@ -37,29 +37,54 @@ advised of the possibility of such damage.
 #include "NVRAM.h"
 #include "MixedMode.h"
 
-typedef long (*callUniversalProcPtrType) (  UniversalProcPtr   theProcPtr,
-															ProcInfoType       procInfo,
- 															...);	
+#define kOFPartitionOffset 	0x1800
+#define kOFPartitionSize	0x0800
 
-typedef UniversalProcPtr (*callGetToolboxTrapAddressType) (UInt16 trapNum);      
+#define kOSPartitionOffset 	0x0
+#define kOSPartitionSize	0x0C00
 
+class ToolboxNVRAM : public XPFNVRAMSettings {
 
-class ToolboxNVRAM : public NVRAMVariables {
+	struct NVRAMString {
+		UInt16 offset;
+		UInt16 length;
+	};
+
+	struct NVRAMBuffer {
+		UInt16   magic;   	// 0x1275
+		UInt8    version;	// 0x05
+		UInt8    pages;		// 0x08
+		UInt16   checksum;
+		UInt16   here;
+		UInt16   top;		
+		UInt16   next;		// 0x0000
+		
+		UInt32   flags;
+		
+		long numericValues[9];
+		
+		NVRAMString stringValues[10];
+
+		char strings[kOFStringCapacity];
+	};
 
 	public:
 	
 		ToolboxNVRAM ();
+		virtual void readFromNVRAM ();
+		virtual int writeToNVRAM ();
+		
+	protected:
+	
+		virtual UInt8 readByte (unsigned offset);
+		virtual void writeByte (unsigned offset, UInt8 byte);
+
+		void packStrings ();
+		void packString (NVRAMString &string, char *cache);
 
 	private:
-	
-		UInt8 readByte (unsigned offset);
-		void writeByte (unsigned offset, UInt8 byte);
-		
-		UniversalProcPtr getProcPtr ();
-		
-		callUniversalProcPtrType callUniversalProcPtr;
-		callGetToolboxTrapAddressType callGetToolboxTrapAddressPtr;
-
+					
+		NVRAMBuffer fBuffer;		
 };
 
 #endif
