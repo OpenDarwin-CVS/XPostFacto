@@ -61,7 +61,7 @@ XPFInstallExtensionsCommand::DoItInProgressWindow ()
 {
 	fProgressMax = 1000;
 	setDescription (CStr255_AC (kXPFStringsResource, kInstallingExtensions));
-	installExtensionsWithRootDirectory (fRootDisk->getRootDirectory ());
+	installExtensionsWithRootDirectory (fRootDisk->getRootDirectory (), !fUpdate->getInstallCD ());
 	fProgressWindow->setFinished ();
 }
 
@@ -262,4 +262,26 @@ XPFCheckPermissionsCommand::checkPermissions (FSRef *directory)
 
 	FSCloseIterator (iterator);	
 	return error;
+}
+
+void
+XPFFixSymlinksCommand::DoItInProgressWindow ()
+{
+	setDescription (CStr255_AC ((ResNumber) kXPFStringsResource, kFixingSymbolicLinks));
+	setStatusMessage (CStr255_AC ((ResNumber) kXPFStringsResource, kFixingSymbolicLinks), true);
+	fProgressWindow->setProgressMax (3);
+	
+	MountedVolume *target = fUpdate->getTarget();
+	
+	fProgressWindow->setProgressValue (1, true);
+	target->fixSymlinkAtPath ("etc");
+
+	fProgressWindow->setProgressValue (2, true);
+	target->fixSymlinkAtPath ("tmp");
+
+	fProgressWindow->setProgressValue (3, true);
+	target->fixSymlinkAtPath ("var");	
+	
+	target->checkSymlinks ();
+	fProgressWindow->setFinished ();
 }

@@ -130,4 +130,15 @@ class XPFCheckPermissionsCommand : public XPFThreadedCommand {
 
 };
 
+class XPFFixSymlinksCommand : public XPFThreadedCommand {
+
+	public:
+	
+		XPFFixSymlinksCommand (XPFUpdate *update) : XPFThreadedCommand (update) {}
+									
+		void DoItInProgressWindow ();
+		
+};
+
+
 #endif

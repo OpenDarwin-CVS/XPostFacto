@@ -97,5 +97,18 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			"Register XPostFacto";
 			
 			"G3/G4 CPU upgrade required";
+			
+/* 50 */	"Not installed";
+
+			"The partition map has fewer patch partitions than expected. You may need to reformat "
+			"with Apple's Drive Setup or Intech's Hard Disk SpeedTools in Mac OS 9.x., "
+			"or use a 'Helper Drive' in order to boot from this volume.";
+			
+			"The symbolic links /etc, /tmp, or /var are either missing or corrupted. "
+			"You can attempt to fix this with the 'Fix Symbolic Links' command in the 'Install' menu.";
+
+			"The symbolic links /etc, /tmp, or /var are either missing or corrupted. ";
+				
+			"Fixing symbolic links";	
 	}
 };

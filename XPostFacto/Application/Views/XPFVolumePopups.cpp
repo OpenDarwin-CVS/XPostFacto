@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2003
+Copyright (c) 2003 - 2004
 Other World Computing
 All rights reserved
 
@@ -40,6 +40,7 @@ advised of the possibility of such damage.
 #include "XPFPrefs.h"
 #include "XPostFacto.h"
 #include "XPFLog.h"
+#include "XPFVolumeInspectorWindow.h"
 
 //========================================================================================
 // CLASS XPFVolumePopup
@@ -74,10 +75,12 @@ XPFVolumePopup::DoPostCreate(TDocument* itsDocument)
 		DoUpdate (cNewMountedVolume, iter.Current (), iter.Current (), NULL);
 	}
 	
-	DoUpdate (cSetRebootInMacOS9, fPrefs, NULL, NULL);
-	
 	fApp->AddDependent (this);
-	fPrefs->AddDependent (this);
+
+	if (fPrefs) {
+		DoUpdate (cSetRebootInMacOS9, fPrefs, NULL, NULL);
+		fPrefs->AddDependent (this);
+	}
 }
 
 void 
@@ -136,7 +139,7 @@ XPFVolumePopup::DoUpdate (ChangeID_AC theChange,
 			break;
 			
 		case cSetRebootInMacOS9:
-			SetActiveState (!fPrefs->getRebootInMacOS9 (), false);
+			if (fPrefs) SetActiveState (!fPrefs->getRebootInMacOS9 (), false);
 			break;
 			
 		default:
@@ -211,8 +214,16 @@ void
 XPFHelperPopup::DoPostCreate (TDocument* itsDocument)
 {
 	fUseNoneItem = true;
+	fTarget = NULL;
+	
 	Inherited::DoPostCreate (itsDocument);	
-	DoUpdate (cSetTargetDisk, fPrefs, fPrefs->getTargetDisk (), NULL);
+
+	if (fPrefs) {
+		DoUpdate (cSetTargetDisk, fPrefs, fPrefs->getTargetDisk (), NULL);
+	} else {
+		DoUpdate (cSetVolumeInspectorVolume, GetWindow (), ((XPFVolumeInspectorWindow *) GetWindow ())->getVolume (), NULL);
+		GetWindow ()->AddDependent (this);
+	}
 }
 
 bool 
@@ -224,8 +235,7 @@ XPFHelperPopup::useVolumeInMenu (MountedVolume *volume)
 void 
 XPFHelperPopup::setMountedVolume (MountedVolume *volume)
 {
-	MountedVolume *target = fPrefs->getTargetDisk ();
-	if (target) target->setHelperDisk (volume);
+	if (fTarget) fTarget->setHelperDisk (volume);
 }
 
 void
@@ -239,7 +249,7 @@ XPFHelperPopup::DoUpdate (ChangeID_AC theChange,
 	
 	switch (theChange) {
 		case cSetHelperDisk:
-			if (volume == fPrefs->getTargetDisk ()) {
+			if (volume == fTarget) {
 				if (volume) index = fVolumeList.GetIdentityItemNo (volume->getHelperDisk ());
 				if (index) index += 2;
 				SetCurrentItem (index, true);
@@ -247,6 +257,8 @@ XPFHelperPopup::DoUpdate (ChangeID_AC theChange,
 			break;
 		
 		case cSetTargetDisk:
+		case cSetVolumeInspectorVolume:
+			fTarget = volume;
 			if (volume) {
 				SetActiveState (true, true);
 				EnableItem (1, !volume->getRequiresBootHelper ());
@@ -259,6 +271,57 @@ XPFHelperPopup::DoUpdate (ChangeID_AC theChange,
 			DoUpdate (cSetHelperDisk, changedObject, changeData, NULL);
 			break;
 
+		default:
+			Inherited::DoUpdate (theChange, changedObject, changeData, dependencySpace);
+			break;			
+	}
+}
+
+// =======================
+// XPFVolumeInspectorPopup
+// =======================
+
+#undef Inherited
+#define Inherited XPFVolumePopup
+
+MA_DEFINE_CLASS (XPFVolumeInspectorPopup);
+
+void 
+XPFVolumeInspectorPopup::DoPostCreate (TDocument* itsDocument)
+{
+	fUseNoneItem = false;
+	GetWindow ()->AddDependent (this);
+	Inherited::DoPostCreate (itsDocument);	
+}
+
+bool 
+XPFVolumeInspectorPopup::useVolumeInMenu (MountedVolume *volume)
+{
+	#pragma unused (volume)
+	return true;
+}
+
+void 
+XPFVolumeInspectorPopup::setMountedVolume (MountedVolume *volume)
+{
+	((XPFVolumeInspectorWindow *) GetWindow ())->setVolume (volume);
+}
+
+void
+XPFVolumeInspectorPopup::DoUpdate (ChangeID_AC theChange, 
+								MDependable_AC* changedObject,
+								void* changeData,
+								CDependencySpace_AC* dependencySpace)
+{
+	MountedVolume *volume = (MountedVolume *) changeData;
+	ArrayIndex_AC index = 0;
+	
+	switch (theChange) {
+		case cSetVolumeInspectorVolume:
+			if (volume) index = fVolumeList.GetIdentityItemNo (volume);
+			SetCurrentItem (index, true);
+			break;
+		
 		default:
 			Inherited::DoUpdate (theChange, changedObject, changeData, dependencySpace);
 			break;			

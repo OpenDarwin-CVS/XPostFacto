@@ -50,7 +50,6 @@ MA_DEFINE_CLASS (XPFInstallWarning);
 XPFInstallWarning::~XPFInstallWarning ()
 {
 	RemoveAllDependencies ();
-	if (fIconRef) ReleaseIconRef (fIconRef);
 }
 
 void 
@@ -61,17 +60,6 @@ XPFInstallWarning::DoPostCreate (TDocument* itsDocument)
 	itsDocument->AddDependent (this);
 	
 	fIcon = dynamic_cast_AC (TIcon*, FindPeerView ('inwa'));
-	if (fIcon) {
-		OSErr err = GetIconRef (kOnSystemDisk, kSystemIconsCreator, kAlertCautionIcon, &fIconRef);
-		if (err == noErr) {
-			IconFamilyHandle familyHandle;
-			IconSuiteRef iconSuite;
-
-			err = IconRefToIconFamily (fIconRef, kSelectorAllAvailableData, &familyHandle);
-			if (err == noErr) err = IconFamilyToIconSuite (familyHandle, kSelectorAllAvailableData, &iconSuite);
-			if (err == noErr) fIcon->SetIconSuite (iconSuite, true);
-		}
-	}
 	
 	DoUpdate (cNoCommand, itsDocument, NULL, NULL);
 }
@@ -103,7 +91,6 @@ MA_DEFINE_CLASS (XPFRestartWarning);
 XPFRestartWarning::~XPFRestartWarning ()
 {
 	RemoveAllDependencies ();
-	if (fIconRef) ReleaseIconRef (fIconRef);
 }
 
 void 
@@ -114,17 +101,6 @@ XPFRestartWarning::DoPostCreate (TDocument* itsDocument)
 	itsDocument->AddDependent (this);
 	
 	fIcon = dynamic_cast_AC (TIcon*, FindPeerView ('rewa'));
-	if (fIcon) {
-		OSErr err = GetIconRef (kOnSystemDisk, kSystemIconsCreator, kAlertCautionIcon, &fIconRef);
-		if (err == noErr) {
-			IconFamilyHandle familyHandle;
-			IconSuiteRef iconSuite;
-
-			err = IconRefToIconFamily (fIconRef, kSelectorAllAvailableData, &familyHandle);
-			if (err == noErr) err = IconFamilyToIconSuite (familyHandle, kSelectorAllAvailableData, &iconSuite);
-			if (err == noErr) fIcon->SetIconSuite (iconSuite, true);
-		}
-	}
 	
 	DoUpdate (cNoCommand, itsDocument, NULL, NULL);
 }
@@ -142,4 +118,40 @@ XPFRestartWarning::DoUpdate (ChangeID_AC theChange,
 	if (tooBig) message.CopyFrom (kXPFStringsResource, kTooBigForNVRAM, 255);
 	SetText (message, false);
 	if (fIcon) fIcon->Show (tooBig, true);
+}
+
+//========================================================================================
+// CLASS XPFWarningIcon
+//========================================================================================
+
+#undef Inherited
+#define Inherited TIcon
+
+MA_DEFINE_CLASS (XPFWarningIcon);
+
+IconRef XPFWarningIcon::gIconRef = NULL;
+
+XPFWarningIcon::~XPFWarningIcon ()
+{
+	if (gIconRef) ReleaseIconRef (gIconRef);
+}
+
+void 
+XPFWarningIcon::DoPostCreate (TDocument* itsDocument)
+{
+	Inherited::DoPostCreate (itsDocument);
+
+	if (gIconRef) {
+		AcquireIconRef (gIconRef);
+	} else {
+		GetIconRef (kOnSystemDisk, kSystemIconsCreator, kAlertCautionIcon, &gIconRef);
+	}
+
+	if (gIconRef) {
+		IconFamilyHandle familyHandle;
+		IconSuiteRef iconSuite;
+		OSErr err = IconRefToIconFamily (gIconRef, kSelectorAllAvailableData, &familyHandle);
+		if (err == noErr) err = IconFamilyToIconSuite (familyHandle, kSelectorAllAvailableData, &iconSuite);
+		if (err == noErr) SetIconSuite (iconSuite);
+	}
 }

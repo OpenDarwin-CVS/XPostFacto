@@ -66,8 +66,11 @@ advised of the possibility of such damage.
 #include "vers_rsrc.h"
 #include "XPFFSRef.h"
 #include <stdio.h>
+#include <fcntl.h>
 
 #include "MoreDisks.h"
+
+#define kExpectedFirstHFSPartition 6
 
 MountedVolumeList MountedVolume::gVolumeList;
 
@@ -305,188 +308,8 @@ MountedVolume::installBootXIfNecessary (bool forceInstall)
 			gLogFile << "No partiton info for: " << getVolumeName () << endl_AC;
 		#endif
 	}
-}
-
-bool
-MountedVolume::hasCurrentExtensions (bool useCacheConfig)
-{
-	FSRef extensionsDir;
-	OSErr err = XPFFSRef::getOrCreateSystemLibraryExtensionsDirectory (&fRootDirectory, &extensionsDir, false);
-	if (err != noErr) return false;
-
-	SInt16 archiveCount = CountResources ('hfsA');
-	for (SInt16 x = 1; x <= archiveCount; x++) {
-		SInt16 resourceID;
-		CStr255_AC resourceName;
-		char resourceVersion[128], fileVersion[128];
-		resourceVersion[0] = 0;
-		fileVersion[0] = 0;
-		
-		// Get the resource version
-
-		SetResLoad (false);
-		Handle hfsA = GetIndResource ('hfsA', x);
-		SetResLoad (true);
-		GetResInfo (hfsA, &resourceID, NULL, resourceName);
-		resourceName += ".kext";
-		ReleaseResource (hfsA);
-
-		Handle plist = GetResource ('plst', resourceID);
-		char *key = strstr (*plist, "<key>CFBundleVersion</key>");
-		if (key) {
-			char *start = strstr (key, "<string>");
-			if (start) {
-				start += strlen ("<string>");
-				char *end = strstr (key, "</string>");
-				if (end) {
-					*end = 0;
-					strcpy (resourceVersion, start);
-				}
-			}
-		}
-		ReleaseResource (plist);
-		
-		// Get the file version
-		
-		FSRef extension, contents, infoplist;
-		err = XPFFSRef::getFSRef (&extensionsDir, (CChar255_AC) resourceName, &extension);
-		if (err == noErr) err = XPFFSRef::getFSRef (&extension, "Contents", &contents);
-		if (err == noErr) err = XPFFSRef::getFSRef (&contents, "Info.plist", &infoplist);
-		if (err != noErr) {
-			// The file is not there. If it's not OWCCacheConfig, we just return false.
-			if (resourceName != "OWCCacheConfig.kext") {
-				return false;
-			} else {
-				if (useCacheConfig) {
-					return false;
-				} else {
-					continue; // we don't need to check version numbers :-)
-				}
-			}
-		} else {
-			// The file is there. So just keep going, unless it's OWCCacheConfig and it's not
-			// supposed to be there.
-			if ((resourceName == "OWCCacheConfig.kext") && !useCacheConfig) return false;
-		}
-		
-		CFSSpec_AC infospec;
-		err = FSGetCatalogInfo (&infoplist, kFSCatInfoNone, NULL, NULL, &infospec, NULL);
-		if (err != noErr) return false;
-		CFile_AC versionFile;
-		versionFile.Specify (infospec);
-		err = versionFile.OpenDataFork (); if (err != noErr) return false;
-		long dataSize;
-		err = versionFile.GetDataLength (dataSize); if (err != noErr) return false;
-		Ptr versionData = NewPtr (dataSize + 1);
-		versionFile.ReadData (versionData, dataSize);
-		versionData[dataSize] = 0;
-		key = strstr (versionData, "<key>CFBundleVersion</key>");
-		if (key) {
-			char *start = strstr (key, "<string>");
-			if (start) {
-				start += strlen ("<string>");
-				char *end = strstr (key, "</string>");
-				if (end) {
-					*end = 0;
-					strcpy (fileVersion, start);
-				}
-			}
-		}
-		DisposePtr (versionData);	
-		versionFile.CloseDataFork ();
-		
-		// Compare the versions
-		UInt32 fileVersionInt, resourceVersionInt;
-		VERS_parse_string (fileVersion, &fileVersionInt);
-		VERS_parse_string (resourceVersion, &resourceVersionInt);
-		
-		if (resourceVersionInt > fileVersionInt) return false;
-	}
-
-	return true;
-}
-
-bool 
-MountedVolume::hasCurrentStartupItems ()
-{
-	FSRef startupDir;
-	OSErr err = XPFFSRef::getOrCreateStartupDirectory (&fRootDirectory, &startupDir, false);
-	if (err != noErr) return false;
-
-	SInt16 archiveCount = CountResources ('hfsS');
-	for (SInt16 x = 1; x <= archiveCount; x++) {
-		SInt16 resourceID;
-		CStr255_AC resourceName;
-		char resourceVersion[128], fileVersion[128];
-		resourceVersion[0] = 0;
-		fileVersion[0] = 0;
-		
-		// Get the resource version
-
-		SetResLoad (false);
-		Handle hfsA = GetIndResource ('hfsS', x);
-		SetResLoad (true);
-		GetResInfo (hfsA, &resourceID, NULL, resourceName);
-		ReleaseResource (hfsA);
-
-		Handle plist = GetResource ('plst', resourceID);
-		char *key = strstr (*plist, "<key>CFBundleVersion</key>");
-		if (key) {
-			char *start = strstr (key, "<string>");
-			if (start) {
-				start += strlen ("<string>");
-				char *end = strstr (key, "</string>");
-				if (end) {
-					*end = 0;
-					strcpy (resourceVersion, start);
-				}
-			}
-		}
-		ReleaseResource (plist);
-		
-		// Get the file version
-		
-		FSRef startup, contents, infoplist;
-		err = XPFFSRef::getFSRef (&startupDir, (CChar255_AC) resourceName, &startup);
-		if (err == noErr) err = XPFFSRef::getFSRef (&startup, "Contents", &contents);
-		if (err == noErr) err = XPFFSRef::getFSRef (&contents, "Info.plist", &infoplist);
-		if (err != noErr) return false;
-		
-		CFSSpec_AC infospec;
-		err = FSGetCatalogInfo (&infoplist, kFSCatInfoNone, NULL, NULL, &infospec, NULL);
-		if (err != noErr) return false;
-		CFile_AC versionFile;
-		versionFile.Specify (infospec);
-		err = versionFile.OpenDataFork (); if (err != noErr) return false;
-		long dataSize;
-		err = versionFile.GetDataLength (dataSize); if (err != noErr) return false;
-		Ptr versionData = NewPtr (dataSize + 1);
-		versionFile.ReadData (versionData, dataSize);
-		versionData[dataSize] = 0;
-		key = strstr (versionData, "<key>CFBundleVersion</key>");
-		if (key) {
-			char *start = strstr (key, "<string>");
-			if (start) {
-				start += strlen ("<string>");
-				char *end = strstr (key, "</string>");
-				if (end) {
-					*end = 0;
-					strcpy (fileVersion, start);
-				}
-			}
-		}
-		DisposePtr (versionData);	
-		versionFile.CloseDataFork ();
-		
-		// Compare the versions
-		UInt32 fileVersionInt, resourceVersionInt;
-		VERS_parse_string (fileVersion, &fileVersionInt);
-		VERS_parse_string (resourceVersion, &resourceVersionInt);
-		
-		if (resourceVersionInt > fileVersionInt) return false;
-	}
-
-	return true;
+	
+	Changed (cSetBootXVersion, this);
 }
 
 void
@@ -616,7 +439,10 @@ MountedVolume::blessMacOS9SystemFolder ()
 		finderInfo[0] = fMacOS9SystemFolderNodeID;
 		finderInfo[3] = fMacOS9SystemFolderNodeID;
 		err = FSSetVolumeInfo (fInfo.driveNumber, kFSVolInfoFinderInfo, &volInfo);
-		if (err == noErr) fBlessedFolderID = fMacOS9SystemFolderNodeID;
+		if (err == noErr) {
+			fBlessedFolderID = fMacOS9SystemFolderNodeID;
+			Changed (cSetBlessedFolderID, this);	
+		}
 	}
 	return err;
 }
@@ -647,6 +473,150 @@ static bool IsMacOS9SystemFolder (FSRef *directory)
 	return hasSystem && hasFinder;	
 }
 
+void
+MountedVolume::fixSymlinkAtPath (char *path)
+{
+	if (getSymlinkStatusForPath (path) == kSymlinkStatusCannotFix) return;
+	
+	char linkPath[256];
+	sprintf (linkPath, "private/%s", path);
+	
+#ifdef __MACH__	
+	char filePath[1024];
+	ThrowIfOSErr_AC (FSRefMakePath (getRootDirectory (), (UInt8 *) filePath, 1023));
+	strcat (filePath, "/");
+	strcat (filePath, path);
+		
+	XPFSetUID myUID (0);
+	unlink (filePath);
+	symlink (linkPath, filePath);
+#else
+	FSRef filePath;
+	OSErr err = XPFFSRef::getOrCreateFile (getRootDirectory (), path, 0755, &filePath);
+	if (err != noErr) return;
+
+	HFSUniStr255 dataForkName;
+	FSGetDataForkName (&dataForkName);
+	SInt16 forkRefNum;
+	err = FSOpenFork (&filePath, dataForkName.length, dataForkName.unicode, fsWrPerm, &forkRefNum);
+	if (err != noErr) return;
+
+	FSWriteFork (forkRefNum, fsFromStart, 0, strlen (linkPath), linkPath, NULL);
+	FSSetForkSize (forkRefNum, fsAtMark, 0);
+	FSCloseFork (forkRefNum);
+	
+	FSCatalogInfo catInfo;
+	err = FSGetCatalogInfo (&filePath, kFSCatInfoPermissions | kFSCatInfoFinderInfo, &catInfo, NULL, NULL, NULL);
+	if (err == noErr) {
+		FileInfo *info = (FileInfo *) &catInfo.finderInfo;
+		info->fileType = 'slnk';
+		info->fileCreator = 'rhap';
+		info->finderFlags |= kIsInvisible | kIsAlias;
+		catInfo.permissions[2] &= ~S_IFMT;
+		catInfo.permissions[2] |= S_IFLNK;
+		FSSetCatalogInfo (&filePath, kFSCatInfoPermissions | kFSCatInfoFinderInfo, &catInfo);
+	}
+#endif
+
+	checkSymlinks ();
+}
+
+unsigned
+MountedVolume::getSymlinkStatusForPath (char *path)
+{
+	int linkSize;
+	char linkContents[256] = {0};
+	OSErr err;
+	mode_t mode;
+	
+#ifdef __MACH__
+	char filePath[1024];
+	ThrowIfOSErr_AC (FSRefMakePath (getRootDirectory (), (UInt8 *) filePath, 1023));
+	strcat (filePath, "/");
+	strcat (filePath, path);
+#else
+	FSRef filePath;
+	err = XPFFSRef::getFSRef (getRootDirectory (), path, &filePath);
+	if (err != noErr) return kSymlinkStatusMissing;
+#endif
+	
+#ifdef __MACH__
+	struct stat sb;
+	err = lstat (filePath, &sb);
+	if (err) return kSymlinkStatusMissing;
+	mode = sb.st_mode;
+#else
+	FSCatalogInfo catInfo;
+	err = FSGetCatalogInfo (&filePath, kFSCatInfoNodeFlags | kFSCatInfoPermissions, &catInfo, NULL, NULL, NULL);
+	if (err != noErr) return kSymlinkStatusMissing;
+	if (catInfo.nodeFlags & kFSNodeIsDirectoryMask) return kSymlinkStatusCannotFix;
+	mode = catInfo.permissions[2];
+#endif
+	
+	switch (mode & S_IFMT) {
+		case S_IFLNK:
+#ifdef __MACH__		
+			// In Mac OS X, we do the readlink and break
+			// Otherwise, we fall through to read the file
+			linkSize = readlink (filePath, linkContents, 255);
+			if (linkSize == -1) return kSymlinkStatusCannotFix;
+			linkContents[linkSize] = 0;
+			break;
+#endif
+
+		case S_IFREG:
+		case 0:	
+			// We need to check the content, because that will affect whether we think we
+			// can fix it or not. That is, we'll decline to fix it if the content is wrong.
+#ifdef __MACH__
+			int file = open (filePath, O_RDONLY, 0);
+			if (file == -1) return kSymlinkStatusCannotFix;
+			linkSize = read (file, linkContents, 255);
+			close (file);
+#else
+			HFSUniStr255 dataForkName;
+			FSGetDataForkName (&dataForkName);
+			SInt16 forkRefNum;
+			err = FSOpenFork (&filePath, dataForkName.length, dataForkName.unicode, fsRdPerm, &forkRefNum);
+			if (err != noErr) return kSymlinkStatusCannotFix;
+			err = FSReadFork (forkRefNum, fsFromStart, 0, 255, linkContents, (ByteCount *) &linkSize);
+			FSCloseFork (forkRefNum);
+			if ((err != noErr) && (err != eofErr)) return kSymlinkStatusCannotFix;			
+#endif
+			if (linkSize != -1) linkContents[linkSize] = 0;
+			break;
+			
+		default:
+			return kSymlinkStatusCannotFix;
+			break;
+	}
+	
+	if (strncmp (linkContents, "private/", strlen ("private/"))) return kSymlinkStatusCannotFix;
+	if (strcmp (linkContents + strlen ("private/"), path)) return kSymlinkStatusCannotFix;
+	
+	// If the content was OK, then we return based on whether the link attribute was set
+	return (mode & S_IFMT) == S_IFLNK ? kSymlinkStatusOK : kSymlinkStatusInvalid;
+}
+
+void
+MountedVolume::checkSymlinks ()
+{
+	fSymlinkStatus = kSymlinkStatusOK;
+
+	if (!fHasMachKernel) return;
+	
+	unsigned status = getSymlinkStatusForPath ("etc");
+	if (status > fSymlinkStatus) fSymlinkStatus = status;
+	status = getSymlinkStatusForPath ("var");
+	if (status > fSymlinkStatus) fSymlinkStatus = status;
+	status = getSymlinkStatusForPath ("tmp");
+	if (status > fSymlinkStatus) fSymlinkStatus = status;
+	
+	if (!getIsWriteable () && (fSymlinkStatus != kSymlinkStatusOK)) fSymlinkStatus = kSymlinkStatusCannotFix;
+	
+	Changed (cSetSymlinkStatus, this);
+}
+
 MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *rootDirectory)
 {
 	fValidOpenFirmwareName = false;
@@ -658,6 +628,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	fMacOSXVersion = "";
 	fMacOSXMajorVersion = 0;
 	fTurnedOffIgnorePermissions = false;
+	fSymlinkStatus = kSymlinkStatusOK;
 	
 #ifdef BUILDING_XPF
 	gApplication->AddDependent (this); // for listening for volume deletions
@@ -758,16 +729,6 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	// See if it's HFS Plus
 	{
 		fIsHFSPlus = (info->signature == kHFSPlusSigWord);
-	}
-	
-	// See if OldWorldSupport is installed
-	{
-		CFSSpec_AC supportSpec;
-		OSErr err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Library:Extensions:PatchedAppleNVRAM.kext", &supportSpec);
-		fHasOldWorldSupport = (err == noErr);
-		
-		err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:Library:StartupItems:XPFStartupItem", &supportSpec);
-		fHasStartupItemInstalled = (err == noErr);
 	}
 	
 	// See if it has a Finder (i.e. whether it might be a Darwin disk)
@@ -884,6 +845,9 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	}
 #endif
 
+	// Figure out whether there is a problem with the symlinks
+	checkSymlinks ();
+
 	if (getRequiresBootHelper ()) fHelperDisk = getDefaultHelperDisk ();
 	
 	// See if there is a Mac OS 9 System Folder
@@ -978,9 +942,25 @@ MountedVolume::getBootStatus ()
 	if (!getHasMachKernel ()) return kNoMachKernel;
 	if (!getIsOnBootableDevice ()) return kNotBootable;
 	if (!getValidOpenFirmwareName ()) return kNoOFName;
-	if (!getIsWriteable() && getHasInstaller ()) return kInstallOnly;
 	if (!getWillRunOnCurrentCPU ()) return kCPUNotSupported;
 
+	return kStatusOK;
+}
+
+unsigned
+MountedVolume::getBootWarning ()
+{
+	// We only worry about warnings if there is no fatal problem
+	if (getInstallTargetStatus () && getInstallerStatus ()) return kStatusOK;
+
+	if (fSymlinkStatus == kSymlinkStatusCannotFix) return kInvalidSymlinksCannotFix;
+	if (fSymlinkStatus != kSymlinkStatusOK) return kInvalidSymlinks;
+
+	if (fBootableDevice && !fBootableDevice->getNeedsHelper ()) {
+		XPFPartition* firstPart = fBootableDevice->getFirstHFSPartition ();
+		if (firstPart && firstPart->getPartitionNumber () < kExpectedFirstHFSPartition) return kFewerPartitionsThanExpected;
+	}
+	
 	return kStatusOK;
 }
 

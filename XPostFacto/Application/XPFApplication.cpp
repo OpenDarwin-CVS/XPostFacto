@@ -64,6 +64,7 @@ advised of the possibility of such damage.
 #include "XPFSettingsText.h"
 #include "XPFWarnings.h"
 #include "XPFUpdateWindow.h"
+#include "XPFVolumeInspectorWindow.h"
 
 #include <InternetConfig.h>
 #include <UnicodeConverter.h>
@@ -150,6 +151,9 @@ XPFApplication::XPFApplication() :
 	REGISTER_CLASS_AC (XPFInstallWarning);
 	REGISTER_CLASS_AC (XPFRestartWarning);
 	REGISTER_CLASS_AC (XPFUpdateWindow);
+	REGISTER_CLASS_AC (XPFVolumeInspectorPopup);
+	REGISTER_CLASS_AC (XPFVolumeInspectorWindow);
+	REGISTER_CLASS_AC (XPFWarningIcon);
 	
 	ProcessInfoRec info;
 	FSSpec appSpec, resourceSpec;
@@ -528,6 +532,10 @@ XPFApplication::DoMenuCommand(CommandNumber aCommandNumber) // Override
 			fLogWindow->Select ();
 			break;
 			
+		case cShowVolumeInspectorWindow:
+			XPFVolumeInspectorWindow::ShowInspectorForVolume (NULL);
+			break;
+			
 		case cShowDebugOptions:
 			if (!fShowDebugOptions) addDebugOptionsToHelpMenu ();
 			fShowDebugOptions = true;
@@ -562,6 +570,7 @@ XPFApplication::DoSetupMenus()
 	Enable (cShowLogWindow, enable);
 	Enable (cShowDebugOptions, enable);
 	Enable (cRegisterXPostFacto, enable);
+	Enable (cShowVolumeInspectorWindow, enable);
 	
 	EnableCheck (cDisableRestart, enable, fDebugOptions & kDisableRestart);
 	EnableCheck (cVisibleHelperFiles, enable, fDebugOptions & kVisibleHelperFiles);

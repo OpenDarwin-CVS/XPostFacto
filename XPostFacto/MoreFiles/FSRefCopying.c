@@ -294,6 +294,56 @@ static	OSErr	PreflightFileCopySpace(const FSRef *srcRef,
 /**************/
 
 OSErr
+FSGetOrCreateFileUnicode (
+    const FSRef *parentRef, 
+    UniCharCount nameLength, 
+    const UniChar *name, 
+    FSCatalogInfoBitmap whichInfo, 
+    const FSCatalogInfo *catalogInfo, 
+    FSRef *newRef, 
+    FSSpec *newSpec, 
+    bool create
+)
+{
+	OSErr error;
+	FSRef tempRef;
+	
+	// First we try to get the file (if it exists)
+	error = FSMakeFSRefUnicode (parentRef, nameLength, name, NULL, &tempRef);
+	if (error != noErr) {
+		if (!create) return error;
+		error = FSCreateFileUnicode (parentRef, nameLength, name, whichInfo, catalogInfo, &tempRef, newSpec);
+		if (error != noErr) return error;
+	} else {
+		// It exists. Now, make sure it is a file. Also, get the FSSpec
+		FSCatalogInfo catInfo;
+		error = FSGetCatalogInfo (&tempRef, kFSCatInfoNodeFlags, &catInfo, NULL, newSpec, NULL);
+		if (error != noErr) return error;
+		if (catInfo.nodeFlags & kFSNodeIsDirectoryMask) {
+			return afpDirNotEmpty;
+		} else {
+			// it exists and it is not a directory. We set the catalog info for consistency sake.
+			if (catalogInfo) {
+				error = FSSetCatalogInfo (&tempRef, whichInfo, catalogInfo);
+//				if (error != noErr) return error;    // We'll ignore this error for a moment, as it is expected on the CD
+			}
+		}
+	}
+	if (newRef) memcpy (newRef, &tempRef, sizeof (tempRef));
+
+	#ifdef __MACH__
+		if (whichInfo & kFSCatInfoPermissions) {
+			char path[1024];
+			error = FSRefMakePath (&tempRef, (UInt8 *) path, 1023);
+			if (error != noErr) return error;
+			chown (path, catalogInfo->permissions[0], catalogInfo->permissions[1]);
+		}
+	#endif
+
+	return noErr;
+}
+
+OSErr
 FSGetOrCreateDirectoryUnicode (
     const FSRef *parentRef, 
     UniCharCount nameLength, 

@@ -62,6 +62,13 @@ class XPFBootableDevice;
 typedef TemplateAutoList_AC <MountedVolume> MountedVolumeList;
 typedef TemplateAutoList_AC <MountedVolume>::Iterator MountedVolumeIterator;
 
+enum {
+	kSymlinkStatusOK = 0,
+	kSymlinkStatusMissing,
+	kSymlinkStatusInvalid,
+	kSymlinkStatusCannotFix
+};
+
 class MountedVolume : public MDependable_AC
 {
 	public:
@@ -91,15 +98,10 @@ class MountedVolume : public MDependable_AC
 		bool getHasInstaller () {return fHasInstaller;}
 		bool getIsWriteable () {return fIsWriteable;}
 		bool getValidOpenFirmwareName () {return fValidOpenFirmwareName;}
-		bool getHasOldWorldSupport () {return fHasOldWorldSupport;}
-		bool getHasStartupItemInstalled () {return fHasStartupItemInstalled;}
 		bool getHasFinder () {return fHasFinder;}
 		FSRef* getRootDirectory () {return &fRootDirectory;}
 		const UInt64* getFreeBytes () {return &fInfo.freeBytes;}
-		
-		bool hasCurrentExtensions (bool useCacheConfig);
-		bool hasCurrentStartupItems ();
-		
+				
 		UInt32 getMacOS9SystemFolderNodeID () {return fMacOS9SystemFolderNodeID;}
 		UInt32 getBlessedFolderID () {return fBlessedFolderID;}
 		OSErr blessMacOS9SystemFolder ();
@@ -114,6 +116,11 @@ class MountedVolume : public MDependable_AC
 		unsigned getInstallerStatus ();
 		unsigned getInstallTargetStatus ();
 		unsigned getHelperStatus ();
+		unsigned getBootWarning ();
+		unsigned getSymlinkStatus () {return fSymlinkStatus;}
+		
+		void fixSymlinkAtPath (char *path);
+		void checkSymlinks ();
 		
 		MountedVolume *getHelperDisk () {return fHelperDisk;}
 		void setHelperDisk (MountedVolume *disk, bool callChanged = true);
@@ -144,6 +151,11 @@ class MountedVolume : public MDependable_AC
 		
 		void setHFSName (HFSUniStr255 *name);
 		void setVolumeName (HFSUniStr255 *name);
+		void setSymlinkStatus (unsigned status);
+		
+		unsigned getSymlinkStatusForPath (char *path);
+		
+	private:	
 		
 		FSRef fRootDirectory;
 		CStr255_AC fVolumeName;
@@ -162,14 +174,14 @@ class MountedVolume : public MDependable_AC
 		bool fIsOnBootableDevice;
 		bool fIsWriteable;
 		bool fHasMachKernel;
-		bool fHasOldWorldSupport;
-		bool fHasStartupItemInstalled;
 		bool fIsHFSPlus;
 		bool fHasInstaller;
 		bool fValidOpenFirmwareName;
 		bool fStillThere;
 		bool fHasFinder;
 		bool fTurnedOffIgnorePermissions;
+
+		unsigned fSymlinkStatus;
 		
 		XPFBootableDevice *fBootableDevice;
 		XPFPartition *fPartInfo;

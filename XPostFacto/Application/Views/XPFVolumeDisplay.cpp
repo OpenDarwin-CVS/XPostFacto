@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2003
+Copyright (c) 2003 - 2004
 Other World Computing
 All rights reserved
 
@@ -43,6 +43,7 @@ advised of the possibility of such damage.
 #include "XPFLog.h"
 #include "XPFIODevice.h"
 #include "XPFVolumeList.h"
+#include "XPFVolumeInspectorWindow.h"
 
 #include "UStaticText.h"
 #include "UThemeEnvironment.h"
@@ -110,6 +111,18 @@ XPFVolumeDisplay::DoPostCreate(TDocument* itsDocument)
 	fVolumeName = (TStaticText *) this->FindSubView ('voln');
 	fIcon = (TIcon *) this->FindSubView ('icon');
 	fStatus = (TStaticText *) this->FindSubView ('vols');
+	
+	fWarningIcon = (TIcon *) this->FindSubView ('warn');
+}
+
+void 
+XPFVolumeDisplay::DoEvent (EventNumber eventNumber, TEventHandler* source, TEvent* event)
+{
+	Inherited::DoEvent (eventNumber, source, event);
+
+	if ((eventNumber == mIconHit) && (source == fWarningIcon)) {
+		XPFVolumeInspectorWindow::ShowInspectorForVolume (fVolume);
+	}	
 }
 
 void 
@@ -147,6 +160,7 @@ XPFVolumeDisplay::setVolume (MountedVolume* newVolume)
 	
 	DoUpdate (cSetTargetDisk, fPrefs, fPrefs->getTargetDisk (), NULL);
 	DoUpdate (cSetInstallCD, fPrefs, fPrefs->getInstallCD (), NULL);
+	DoUpdate (cSetSymlinkStatus, fVolume, fVolume, NULL);
 }
 
 void
@@ -197,6 +211,10 @@ XPFVolumeDisplay::DoUpdate	(ChangeID_AC theChange,
 			}
 			break;
 			
+		case cSetSymlinkStatus:
+			if (fVolume == vol) fWarningIcon->Show (fVolume->getBootWarning (), true);
+			break;
+	
 		default:
 			Inherited::DoUpdate (theChange, changedObject, changeData, dependencySpace);
 			break;

@@ -86,6 +86,7 @@ resource 'hlps' (kHelpStringsResource, purgeable) {
 		'mos9', 23;
 		'romn', 24;
 		'uprp', 25;
+		'warn', 26;
 	}
 };
 
@@ -154,6 +155,8 @@ resource 'STR#' (kHelpStringsResource, purgeable) {
 		 "This setting has no effect prior to Mac OS X 10.3";
 		 
 /* 25 */ "Use the PatchedRagoPro.kext to help with video issues on the Wallstreet Powerbooks. "
-		 "Turn it off if it seems to be causing problems."
+		 "Turn it off if it seems to be causing problems.";
+		 
+		 "Click on the warning icon for additional information.";
 	}
 };

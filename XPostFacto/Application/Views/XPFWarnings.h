@@ -53,7 +53,6 @@ public:
 private:
 
 	TIcon *fIcon;
-	IconRef fIconRef;
 	
 };
 
@@ -73,7 +72,21 @@ public:
 private:
 
 	TIcon *fIcon;
-	IconRef fIconRef;
+
+};
+
+class XPFWarningIcon : public TIcon {
+
+	MA_DECLARE_CLONE;
+
+public:
+
+	virtual ~XPFWarningIcon ();
+	virtual void DoPostCreate (TDocument *itsDocument);
+	
+private:
+
+	static IconRef gIconRef;
 
 };
 

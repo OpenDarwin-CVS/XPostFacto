@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001 - 2003
+Copyright (c) 2004
 Other World Computing
 All rights reserved
 
@@ -31,68 +31,54 @@ advised of the possibility of such damage.
 
 */
 
-#ifndef __XPFSTRINGS_H__
 
-#define kXPFStringsResource 2000
+#ifndef __XPFVOLUMEINSPECTORWINDOW_H__
+#define __XPFVOLUMEINSPECTORWINDOW_H__
 
-#define kStatusOK	0
+#include "UWindow.h"
 
-enum {
-	kNotBootable = 1,
-	kNotHFSPlus,
-	kNoMachKernel,
-	kNoOFName,
-	kNoOldWorldSupport,			// 5
-	kNoBootX,
-	kPast8GB,
-	kNotWriteable,
-	kNotInstaller,
-	kRequiresOS9,				// 10
-	kNoNVRAMPatches,
-	kNoMacOSXYet,
-	kXPostFactoHelpMenu,
-	kXPostFactoOnlineHelpMenu,
-	kXPostFactoSourceCodeMenu,	// 15
-	kInstallOnly,
-	kNeedsHelper,
-	kShowLogWindowMenu,
-	kTheWordCopy,
-	kRestarting,				// 20
-	kInstalling,
-	kInstallingBootX,
-	kInstallingExtensions,
-	kInstallingStartupItem,
-	kUpdatingExtensionsCache,	// 25
-	kShowDebugOptions,
-	kHideDebugOptions,
-	kMenuDisableRestart,
-	kMenuDisableNVRAM,
-	kMenuDisableBootX,			// 30
-	kMenuDisableStartupItem,
-	kMenuDisableExtensions,
-	kMenuDisableExtensionsCache,
-	kMenuDisableCoreServices,
-	kMenuDisableHelperCopy,		// 35
-	kMenuVisibleHelper,
-	kRecopyingHelperFiles,
-	kUpdating,
-	kTooBigForNVRAM,
-	kTooBigForNVRAMForInstall,	// 40
-	kInstallWord,
-	kDeleteWord,
-	kSynchronizing,
-	kUninstalling,
-	kBlessingSystemFolder,		// 45
-	kDeletingXPFCache,
-	kCheckingPermissions,
-	kXPostFactoRegisterMenu,
-	kCPUNotSupported,
-	kNotInstalled,				// 50
-	kFewerPartitionsThanExpected,
-	kInvalidSymlinks,
-	kInvalidSymlinksCannotFix,
-	kFixingSymbolicLinks,
+class MountedVolume;
+
+class XPFVolumeInspectorWindow : public TWindow
+{
+	MA_DECLARE_CLONE;
+
+public:
+
+	static void ShowInspectorForVolume (MountedVolume *volume);
+
+	XPFVolumeInspectorWindow (WindowRef itsWMgrWindow = NULL, bool canResize = true, bool canClose = true, bool inDispose = false);
+	virtual ~XPFVolumeInspectorWindow ();	
+		
+	void DoPostCreate (TDocument *itsDocument);
+	void DoUpdate (ChangeID_AC theChange, MDependable_AC* changedObject, void* changeData, CDependencySpace_AC* dependencySpace);
+	
+	void setVolume (MountedVolume *volume);
+	MountedVolume *getVolume () {return fVolume;}
+	
+	void DoMenuCommand (CommandNumber aCommandNumber);
+	void DoSetupMenus ();
+	
+private:
+
+	void updateFields ();
+	
+private:
+
+	static XPFVolumeInspectorWindow *gInstance;
+	
+	MountedVolume *fVolume;
+	
+	TStaticText *fVolumeName;
+	TStaticText *fOpenFirmwareName;
+	TStaticText *fMacOSXVersion;
+	TStaticText *fBootXVersion;
+	TStaticText *fMacOS9FolderID;
+	TStaticText *fBlessedFolderID;
+	
+	TIcon *fWarningIcon;
+	TStaticText *fWarningText;
+	
 };
-
 
 #endif

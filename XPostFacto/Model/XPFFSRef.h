@@ -38,6 +38,7 @@ class XPFFSRef {
 
 public:
 
+	static OSErr getOrCreateFile (FSRef *rootDirectory, char *path, UInt32 mode, FSRef *result, bool create = true, UInt32 uid = 0, UInt32 gid = 0);
 	static OSErr getOrCreateDirectory (FSRef *rootDirectory, char *path, UInt32 mode, FSRef *result, bool create = true, UInt32 uid = 0, UInt32 gid = 0);
 	static OSErr getOrCreateXPFDirectory (FSRef *rootDirectory, FSRef *result, bool create = true);
 	static OSErr getOrCreateSystemLibraryDirectory (FSRef *rootDirectory, FSRef *result, bool create = true);

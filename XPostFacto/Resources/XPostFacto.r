@@ -234,6 +234,8 @@ purgeable) {
 	"-",			noIcon, noKey, noMark, plain, nocommand;
 	"Bless Mac OS 9 System", noIcon, noKey, noMark, plain, cBlessMacOS9SystemFolder;
 	"-",			noIcon, noKey, noMark, plain, nocommand;
+	"Fix Symbolic Links", noIcon, noKey, noMark, plain, cFixSymlinks;
+	"-",			noIcon, noKey, noMark, plain, nocommand;	
 	"Uninstall…",	noIcon, noKey, noMark, plain, cUninstall;
 	}
 };
@@ -267,6 +269,7 @@ purgeable) {
 	"Window",
 	{
 	"Show NVRAM Options",	noIcon, noKey, noMark, plain, cShowOptionsWindow;
+	"Show Volume Inspector", noIcon, noKey, noMark, plain, cShowVolumeInspectorWindow;
 	"Show Log",				noIcon, noKey, noMark, plain, cShowLogWindow;
 	}
 };

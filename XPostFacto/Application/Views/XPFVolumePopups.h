@@ -83,6 +83,25 @@ class XPFHelperPopup : public XPFVolumePopup {
 					MDependable_AC* changedObject,
 					void* changeData,
 					CDependencySpace_AC* dependencySpace);
+					
+private:
+
+	MountedVolume *fTarget;
+	
+};
+
+class XPFVolumeInspectorPopup : public XPFVolumePopup {
+
+	MA_DECLARE_CLONE;
+
+	virtual void DoPostCreate (TDocument* itsDocument);
+	virtual bool useVolumeInMenu (MountedVolume *volume);	
+	virtual void setMountedVolume (MountedVolume *volume);
+
+	virtual void DoUpdate	(ChangeID_AC theChange, 
+					MDependable_AC* changedObject,
+					void* changeData,
+					CDependencySpace_AC* dependencySpace);
 };
 
 class XPFInstallCDPopup : public XPFVolumePopup {

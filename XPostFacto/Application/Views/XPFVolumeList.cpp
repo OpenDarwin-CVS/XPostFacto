@@ -43,6 +43,7 @@ advised of the possibility of such damage.
 #include "XPFLog.h"
 #include "XPFIODevice.h"
 #include "XPFVolumeDisplay.h"
+#include "XPFVolumeInspectorWindow.h"
 
 //========================================================================================
 // CLASS XPFVolumeList
@@ -60,6 +61,8 @@ XPFVolumeList::DoPostCreate(TDocument* itsDocument)
 {
 	fTrackSelection = NULL;
 	fPrefs = (XPFPrefs *) GetDocument ();
+	
+	fLastUpTime = 0;
 
 	TScroller::DoPostCreate (itsDocument);
 	
@@ -100,6 +103,30 @@ XPFVolumeList::DoMouseCommand(CViewPoint&		theMouse,
 	tracker->fViewConstrain = false;
 	PostCommand (tracker);
 }
+
+void 
+XPFVolumeList::DoMouseUp (CViewPoint &theMouse, TToolboxEvent* event, CPoint_AC hysteresis)
+{
+	if (
+		((event->GetWhen() - fLastUpTime) < GetDblTime ()) &&
+		(abs (fLastMousePoint.h - event->GetWhere().h) <= GetStdHysteresis().h) && 
+		(abs (fLastMousePoint.v - event->GetWhere().v) <= GetStdHysteresis().v)
+	) {
+		TView *selection = NULL;
+		for (CSubViewIterator iter (this); iter; ++iter) {
+			if (iter->GetFrame ().Contains (theMouse)) {
+				if (iter->IsActive ()) selection = iter.Current ();
+				break;
+			}
+		}
+		if (selection) XPFVolumeInspectorWindow::ShowInspectorForVolume (((XPFVolumeDisplay *) selection)->getVolume ());
+	}
+	
+	fLastMousePoint = event->GetWhere ();
+	fLastUpTime = event->GetWhen ();	
+
+	Inherited::DoMouseUp (theMouse, event, hysteresis);						   
+}						   
 
 void 
 XPFVolumeList::TrackFeedback(TrackPhase			aTrackPhase,

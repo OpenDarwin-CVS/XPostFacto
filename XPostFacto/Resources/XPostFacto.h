@@ -111,6 +111,14 @@ advised of the possibility of such damage.
 
 #define cSetUsePatchedRagePro			1460
 
+#define cShowVolumeInspectorWindow		1461
+#define cSetVolumeInspectorVolume		1462
+
+#define cFixSymlinks					1463
+#define cSetSymlinkStatus				1464
+#define cSetBootXVersion				1465
+#define cSetBlessedFolderID				1466
+
 // Views and Windows
 // -----------------
 
@@ -120,6 +128,7 @@ advised of the possibility of such damage.
 #define kOptionsWindow				1010
 #define kProgressWindow				1020
 #define kLogWindow					1100
+#define kVolumeInspectorWindow		1110
 
 #define kRestartDialog				1030
 #define kInstallDialog				1032

@@ -1,3 +1,10 @@
+resource 'STR#' (1200, "VolumeDisplay", purgeable) {
+	{	/* array StringArray: 1 elements */
+		/* [1] */
+		"A volume name"
+	}
+};
+
 resource 'STR#' (1001, "Grid Window", purgeable) {
 	{	/* array StringArray: 12 elements */
 		/* [1] */
@@ -27,19 +34,343 @@ resource 'STR#' (1001, "Grid Window", purgeable) {
 	}
 };
 
-resource 'STR#' (1200, "VolumeDisplay", purgeable) {
-	{	/* array StringArray: 1 elements */
-		/* [1] */
-		"A volume name"
-	}
-};
-
 data 'TxSt' (5312, "Application 12, bold") {
 	$"019C 000C 0000 0000 0000 0161"                                                                      /* .œ.........a */
 };
 
 data 'TxSt' (27392, "Application 10, plain") {
 	$"009C 000A 0000 0000 0000 0161"                                                                      /* .œ.Â.......a */
+};
+
+resource 'View' (1200, "VolumeDisplay", purgeable) {
+	MAThreeOhView {
+
+	},
+	{	/* array ViewArray: 5 elements */
+		/* [1] */
+		ViewSignatureAndClassname {
+			'view',
+			550,
+			"XPFVolumeDisplay",
+			'view',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				0,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				40,
+				/* [2] */
+				256
+			},
+			sizeFixed,
+			sizeFixed,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			View {
+
+			},
+			4
+		},
+		/* [2] */
+		ViewSignatureAndClassname {
+			'stat',
+			100,
+			"",
+			'voln',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				4,
+				/* [2] */
+				40
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				176
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			StaticText {
+				mStaticTextHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				5312,
+				dontPreferOutline,
+				autoWrap,
+				dontEraseFirst,
+				justSystem,
+				1200,
+				1
+			},
+			NoSubviews
+		},
+		/* [3] */
+		ViewSignatureAndClassname {
+			'icon',
+			100,
+			"TIcon",
+			'icon',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				4,
+				/* [2] */
+				4
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				32,
+				/* [2] */
+				32
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Icon {
+				mIconHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				preferColor,
+				0
+			},
+			NoSubviews
+		},
+		/* [4] */
+		ViewSignatureAndClassname {
+			'stat',
+			100,
+			"",
+			'vols',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				22,
+				/* [2] */
+				40
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				14,
+				/* [2] */
+				176
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			StaticText {
+				mStaticTextHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				27392,
+				dontPreferOutline,
+				autoWrap,
+				dontEraseFirst,
+				justSystem,
+				-1,
+				1
+			},
+			NoSubviews
+		},
+		/* [5] */
+		ViewSignatureAndClassname {
+			'icon',
+			144,
+			"XPFWarningIcon",
+			'warn',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 1 elements */
+				/* [1] */
+				BehaviorSignatureAndClassname {
+					noID,
+					"XPFHelpBehavior",
+					Behavior {
+						enabled,
+						noIdle
+					}
+				}
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				4,
+				/* [2] */
+				220
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				32,
+				/* [2] */
+				32
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Icon {
+				mIconHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				preferColor,
+				0
+			},
+			NoSubviews
+		}
+	}
 };
 
 resource 'View' (1001, "Grid Window", purgeable) {
@@ -50,7 +381,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 		/* [1] */
 		ViewSignatureAndClassname {
 			'wind',
-			4019,
+			4037,
 			"XPFGridWindow",
 			'WIND',
 			enabled,
@@ -137,7 +468,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 		/* [2] */
 		ViewSignatureAndClassname {
 			'view',
-			1085,
+			1094,
 			"",
 			'invw',
 			enabled,
@@ -602,8 +933,8 @@ resource 'View' (1001, "Grid Window", purgeable) {
 		/* [9] */
 		ViewSignatureAndClassname {
 			'icon',
-			100,
-			"TIcon",
+			109,
+			"XPFWarningIcon",
 			'inwa',
 			notEnabled,
 			noIdle,
@@ -735,7 +1066,7 @@ resource 'View' (1001, "Grid Window", purgeable) {
 		/* [11] */
 		ViewSignatureAndClassname {
 			'view',
-			1882,
+			1891,
 			"",
 			'revw',
 			enabled,
@@ -1594,8 +1925,8 @@ resource 'View' (1001, "Grid Window", purgeable) {
 		/* [23] */
 		ViewSignatureAndClassname {
 			'icon',
-			100,
-			"TIcon",
+			109,
+			"XPFWarningIcon",
 			'rewa',
 			notEnabled,
 			noIdle,
@@ -2268,263 +2599,6 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			emptyUserArea,
 			Separator {
 
-			},
-			NoSubviews
-		}
-	}
-};
-
-resource 'View' (1200, "VolumeDisplay", purgeable) {
-	MAThreeOhView {
-
-	},
-	{	/* array ViewArray: 4 elements */
-		/* [1] */
-		ViewSignatureAndClassname {
-			'view',
-			400,
-			"XPFVolumeDisplay",
-			'view',
-			notEnabled,
-			noIdle,
-			{	/* array BehaviorArray: 0 elements */
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				0,
-				/* [2] */
-				0
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				40,
-				/* [2] */
-				256
-			},
-			sizeFixed,
-			sizeFixed,
-			shown,
-			doesntWantToBeTarget,
-			doesntHandleCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			View {
-
-			},
-			3
-		},
-		/* [2] */
-		ViewSignatureAndClassname {
-			'stat',
-			100,
-			"",
-			'voln',
-			notEnabled,
-			noIdle,
-			{	/* array BehaviorArray: 0 elements */
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				4,
-				/* [2] */
-				40
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				18,
-				/* [2] */
-				212
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			doesntHandleCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			StaticText {
-				mStaticTextHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				5312,
-				dontPreferOutline,
-				autoWrap,
-				dontEraseFirst,
-				justSystem,
-				1200,
-				1
-			},
-			NoSubviews
-		},
-		/* [3] */
-		ViewSignatureAndClassname {
-			'icon',
-			100,
-			"TIcon",
-			'icon',
-			notEnabled,
-			noIdle,
-			{	/* array BehaviorArray: 0 elements */
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				4,
-				/* [2] */
-				4
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				32,
-				/* [2] */
-				32
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			doesntHandleCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			Icon {
-				mIconHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				preferColor,
-				0
-			},
-			NoSubviews
-		},
-		/* [4] */
-		ViewSignatureAndClassname {
-			'stat',
-			100,
-			"",
-			'vols',
-			notEnabled,
-			noIdle,
-			{	/* array BehaviorArray: 0 elements */
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				22,
-				/* [2] */
-				40
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				14,
-				/* [2] */
-				212
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			doesntHandleCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			StaticText {
-				mStaticTextHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				27392,
-				dontPreferOutline,
-				autoWrap,
-				dontEraseFirst,
-				justSystem,
-				-1,
-				1
 			},
 			NoSubviews
 		}

@@ -196,6 +196,21 @@ XPFBootableDevice::partitionWithInfoAndName (FSVolumeInfo *info, HFSUniStr255 *n
 	return retVal;
 }
 
+XPFPartition* 
+XPFBootableDevice::getFirstHFSPartition ()
+{
+	extractPartitionInfo ();
+	XPFPartition *retVal = NULL;
+	UInt32 partNum = 999;
+	for (PartitionIterator iter (fPartitionList); iter.Current (); iter.Next () ) {
+		if (iter->getPartitionNumber () < partNum) {
+			retVal = iter.Current ();
+			partNum = iter->getPartitionNumber ();
+		}
+	}
+	return retVal;
+}
+
 #ifndef __MACH__
 
 bool
@@ -488,7 +503,7 @@ void
 XPFBootableDevice::closeDeviceFile ()
 {
 	if (!fDeviceFile) return; // already closed
-	XPFSetUID (0);
+	XPFSetUID myUID (0);
 	fclose (fDeviceFile);
 	fDeviceFile = NULL;
 }

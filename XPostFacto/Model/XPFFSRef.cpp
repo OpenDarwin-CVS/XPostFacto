@@ -96,6 +96,32 @@ XPFFSRef::getFSRef (FSRef *rootDirectory, char *path, FSRef *result)
 }
 
 OSErr
+XPFFSRef::getOrCreateFile (FSRef *rootDirectory, char *path, UInt32 mode, FSRef *result, bool create, UInt32 uid, UInt32 gid)
+{
+	OSErr err;
+	ByteCount uniLength, converted;
+	UniChar uniChars[256];
+	TextToUnicodeInfo converter;
+
+	ThrowIfOSErr_AC (CreateTextToUnicodeInfoByEncoding (
+		CreateTextEncoding (kTextEncodingMacRoman, kTextEncodingDefaultVariant, kUnicode16BitFormat),
+		&converter));
+		
+	err = ConvertFromTextToUnicode (converter, strlen (path), path, 0, 0, NULL, 0, NULL, 
+			256 * sizeof (UniChar), &converted, &uniLength, uniChars);
+
+	DisposeTextToUnicodeInfo (&converter);
+
+	if (err) return err;
+
+	XPFCatalogInfo catInfo (mode, false, uid, gid);
+	XPFSetUID myUID (0);
+	return FSGetOrCreateFileUnicode (rootDirectory, 
+			uniLength / sizeof (UniChar), uniChars, kFSCatInfoPermissions, &catInfo, 
+			result, NULL, create);
+}
+
+OSErr
 XPFFSRef::getOrCreateDirectory (FSRef *rootDirectory, char *path, UInt32 mode, FSRef *result, bool create, UInt32 uid, UInt32 gid)
 {
 	OSErr err;

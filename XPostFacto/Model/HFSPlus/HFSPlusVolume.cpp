@@ -134,7 +134,7 @@ HFSPlusVolume::getBootXStartBlock ()
     params.fileattr = ATTR_FILE_DATAEXTENTS;
     params.forkattr = 0;
     
-    XPFSetUID (0);
+    XPFSetUID myUID (0);
     int err = getattrlist (path, &params, &attrBuffer, sizeof (attrBuffer), 1); 
     if (err) return 0;
 	if (attrBuffer.extents[1].blockCount == 0) {

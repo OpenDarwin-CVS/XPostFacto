@@ -48,6 +48,7 @@ advised of the possibility of such damage.
 #include "HFSPlusArchive.h"
 #include "XPFUpdate.h"
 #include "XPFUpdateWindow.h"
+#include "vers_rsrc.h"
 
 #include <string.h>
 
@@ -94,6 +95,7 @@ const UInt32 kDebugPanicText	= 1 << 8;
 XPFPrefs::XPFPrefs (TFile* itsFile)
 	: TFileBasedDocument (itsFile),
 		fEnableCacheEarly (false),
+		fUsePatchedRagePro (false),
 		fAutoBoot (true),
 		fBootInSingleUserMode (false),
 		fBootInVerboseMode (false),
@@ -111,7 +113,8 @@ XPFPrefs::XPFPrefs (TFile* itsFile)
 		fTooBigForNVRAM (false),
 		fTooBigForNVRAMForInstall (false),
 		fForceAskSave (false),
-		fRestartOnClose (false)
+		fRestartOnClose (false),
+		fRegisteredVersion (0)
 {
 	SetAskOnClose (true);
 }
@@ -272,6 +275,8 @@ XPFPrefs::PoseSaveDialog ()
 void
 XPFPrefs::getPrefsFromNVRAM ()
 {		
+	bool nvramBootsInto9 = false;
+
 	XPFNVRAMSettings *nvram = XPFNVRAMSettings::GetSettings ();
 
 	char *bootCommand = nvram->getStringValue ("boot-command");
@@ -283,83 +288,124 @@ XPFPrefs::getPrefsFromNVRAM ()
 
 	// Check to see whether NVRAM is set to boot back into Mac OS 9
 	if (strstr (bootDevice, "/AAPL,ROM")) {
-#ifdef __MACH__
-		// If we're in Mac OS X now, we set the prefs to reboot in 9. We don't need to update the change
-		// count because we don't need to rewrite NVRAM if the user just quits.
-		setRebootInMacOS9 (true, false);
-#else
-		// If we're in Mac OS 9, we leave the pref to reboot in X, since that is probably what the user
-		// wants. But we force asking save if we have a target disk already
-		if (fTargetDisk) fForceAskSave = true;
-#endif
-		// In either case, we bail out here, since the rest of the NVRAM settings won't be interesting
-		// if we're booting in 9.
-		return;	
+		// We use the pref to reboot into Mac OS X even if the NVRAM says to boot in 9
+		// But we need to force save in that case
+		nvramBootsInto9 = true;
+		if (!fRebootInMacOS9) fForceAskSave = true;
+	} else {
+		if (fRebootInMacOS9) fForceAskSave = true;
 	}
+
+	// For most settings, we use what is in our preferences rather than what is in NVRAM,
+	// unless there is a setting in NVRAM that is likely meant to override our file setting.
+	// For any mismatch, we force the app to ask about saving. 
 	
-	// For most settings, we use what is in our preferences rather than what is in NVRAM.
-	// But, we ask about saving those preferences if NVRAM is different 
+	if (fAutoBoot != nvram->getBooleanValue ("auto-boot?")) fForceAskSave = true;
 	
-	if (fAutoBoot != nvram->getBooleanValue ("auto-boot?")) fForceAskSave = true;;	
-	if (fBootInSingleUserMode != (strstr (bootCommand, " -s") != 0)) fForceAskSave = true;
-	if (fBootInVerboseMode != (strstr (bootCommand, " -v") != 0)) fForceAskSave = true;
+	if (!nvramBootsInto9) {
+		// None of these will be interesting if nvram was set to boot into 9
 		
-	char *debugString = strstr (bootCommand, "debug=");
-	UInt32 debug = 0;
-	if (debugString) {
-		debugString += strlen ("debug=");
-		debug = strtoul (debugString, NULL, 0);
-	}
-	if (fDebug != debug) fForceAskSave = true;
-	
-	char *romndrvstring = strstr (bootCommand, "romndrv=");
-	UInt32 romndrv = 0;
-	if (romndrvstring) {
-		romndrvstring += strlen ("romndrv=");
-		romndrv = strtoul (romndrvstring, NULL, 0);
-	}
-	if (fUseROMNDRV != romndrv) fForceAskSave = true;
-	
-	// For the target disk and helper disk, we use what is in NVRAM rather than preferences file
-	// But, once again, we ask to save preferences if they are different
-	
-	MountedVolume *bootDisk = MountedVolume::WithOpenFirmwarePath (bootDevice);
-	MountedVolume *rootDisk = bootDisk;
-	
-	char *rdString = strstr (bootCommand, "rd=*");
-	if (rdString) {
-		char rootPath[256];
-		strcpy (rootPath, rdString + strlen ("rd=*"));
-		char *pos = strchr (rootPath, ' ');
-		if (pos) *pos = 0;
-		
-		rootDisk = MountedVolume::WithOpenFirmwarePath (rootPath);
-		if (!rootDisk) rootDisk = bootDisk;
-	}	
-	
-	if (rootDisk && (rootDisk->getBootStatus () == kStatusOK)) {
-		if (rootDisk != fTargetDisk) fForceAskSave = true;
-		setTargetDisk (rootDisk);
-		if (bootDisk && (bootDisk != rootDisk)) {
-			if (bootDisk->getHelperStatus() == kStatusOK) {
-				if (bootDisk != fTargetDisk->getHelperDisk ()) fForceAskSave = true;
-				fTargetDisk->setHelperDisk (bootDisk);
-			} else {
+		if (fBootInSingleUserMode != (strstr (bootCommand, " -s") != 0)) fForceAskSave = true;
+		if (fBootInVerboseMode != (strstr (bootCommand, " -v") != 0)) fForceAskSave = true;
+			
+		char *debugString = strstr (bootCommand, "debug=");
+		if (debugString) {
+			debugString += strlen ("debug=");
+			UInt32 debug = strtoul (debugString, NULL, 0);
+			// If there is an actual debug string in NVRAM, assume we want to use it.
+			if (fDebug != debug) {
+				fDebug = debug;
 				fForceAskSave = true;
 			}
+		} else {
+			// If no debug string, then force save if we have a debug value
+			if (fDebug) fForceAskSave = true;
 		}
-		// We check at launch for available updates to the current configuration
-		// We do it here because we get here where we have a MountedVolume for the current root
-		checkForUpdates (false);
-	} else {
-		// If we can't set the target disk to the current root, then we'd ask
-		// user about saving (since our pref won't match what's in NVRAM).
-		fForceAskSave = true;
+		
+		char *romndrvstring = strstr (bootCommand, "romndrv=");
+		if (romndrvstring) {
+			romndrvstring += strlen ("romndrv=");
+			UInt32 romndrv = strtoul (romndrvstring, NULL, 0);
+			// If there is a romndrv= string, assume we want to use it
+			if (fUseROMNDRV != romndrv) {
+				fUseROMNDRV = romndrv;
+				fForceAskSave = true;
+			}
+		} else {
+			// If no romndrv= string, then force save if we have a romndrv value
+			if (fUseROMNDRV) fForceAskSave = true;
+		}
+		
+		// For the target disk and helper disk, we use what is in NVRAM rather than preferences file
+		// But, once again, we ask to save preferences if they are different
+		
+		MountedVolume *bootDisk = MountedVolume::WithOpenFirmwarePath (bootDevice);
+		MountedVolume *rootDisk = bootDisk;
+		
+		char *rdString = strstr (bootCommand, "rd=*");
+		if (rdString) {
+			char rootPath[1024];
+			strcpy (rootPath, rdString + strlen ("rd=*"));
+			char *pos = strchr (rootPath, ' ');
+			if (pos) *pos = 0;
+			
+			rootDisk = MountedVolume::WithOpenFirmwarePath (rootPath);
+			if (!rootDisk) rootDisk = bootDisk;
+		}	
+		
+		if (rootDisk && (rootDisk->getBootStatus () == kStatusOK)) {
+			if (rootDisk != fTargetDisk) fForceAskSave = true;
+			setTargetDisk (rootDisk);
+			if (bootDisk && (bootDisk != rootDisk)) {
+				if (bootDisk->getHelperStatus() == kStatusOK) {
+					if (bootDisk != fTargetDisk->getHelperDisk ()) fForceAskSave = true;
+					fTargetDisk->setHelperDisk (bootDisk);
+				} else {
+					fForceAskSave = true;
+				}
+			}
+			// We check at launch for available updates to the current configuration
+			// We do it here because we get here where we have a MountedVolume for the current root
+			checkForUpdates (false);
+		} else {
+			// If we can't set the target disk to the current root, then we'd ask
+			// user about saving (since our pref won't match what's in NVRAM).
+			fForceAskSave = true;
+		}
 	}
 	
-	// input device and output device
-	if (getInputDevice (false) != inputDevice) fForceAskSave = true;
-	if (getOutputDevice (false) != outputDevice) fForceAskSave = true;
+	// For input and output devices, we'll use the NVRAM setting if there is no pref setting
+	XPFIODevice *input = XPFIODevice::InputDeviceWithOpenFirmwareName (inputDevice);
+	XPFIODevice *output = XPFIODevice::OutputDeviceWithOpenFirmwareName (outputDevice);
+	
+	if (input) {
+		gLogFile << "Got Input device from NVRAM" << endl_AC;
+		// If we don't have an input-device in prefs, use the one from NVRAM
+		if (!fInputDevice) {
+			gLogFile << "No input device, so setting" << endl_AC;
+			fInputDevice = input;
+			fForceAskSave = true;
+		} else {
+			if (fInputDevice != input) fForceAskSave = true;
+		}
+	} else {
+		// If we have an input device that is not in NVRAM, then force save
+		if (fInputDevice) fForceAskSave = true;
+	}
+	
+	if (output) {
+		gLogFile << "Got Output device from NVRAM" << endl_AC;
+		// If we don't have an output-device in prefs, use the one from NVRAM
+		if (!fOutputDevice) {
+			fOutputDevice = output;
+			fForceAskSave = true;
+		} else {
+			if (fOutputDevice != output) fForceAskSave = true;
+		}
+	} else {
+		// If we have an output device that is not in NVRAM, then force save
+		if (fOutputDevice) fForceAskSave = true;
+	}
 	
 	// throttle
 	UInt32 throttleVal = 0;
@@ -377,8 +423,15 @@ XPFPrefs::getPrefsFromNVRAM ()
 	} else {
 		throttleVal = 0;
 	}
-	gLogFile << fThrottle << " " << throttleVal << endl_AC;
-	if (fThrottle != throttleVal) fForceAskSave = true;
+	
+	if (throttleVal) {
+		if (fThrottle != throttleVal) {
+			fThrottle = throttleVal;
+			fForceAskSave = true;
+		}
+	} else {
+		if (fThrottle) fForceAskSave = true;
+	}
 }
 
 void 
@@ -453,6 +506,21 @@ XPFPrefs::DoUpdate (ChangeID_AC theChange,
 		case cNewMountedVolume:
 			volume->AddDependent (this);
 			if (fInstallCD == NULL) setInstallCD (MountedVolume::GetDefaultInstallerDisk ());
+			
+			// Need to check if it has a helper. Not an efficient method, but easy to write ...
+			for (TemplateAutoList_AC <XPFHelperItem>::Iterator iter (&fHelperList); iter.Current (); iter.Next ()) {
+				if (volume == MountedVolume::WithInfo (&iter->target)) {
+					MountedVolume *helper = MountedVolume::WithInfo (&iter->helper);
+					if (helper) {
+						volume->setHelperDisk (helper);
+					} else {
+						// presumably it needs a helper, so we'll pick another
+						volume->setHelperDisk (volume->getDefaultHelperDisk ());
+					}				
+					break;
+				}
+			}
+
 			break;
 			
 		case cDeleteMountedVolume:
@@ -466,6 +534,20 @@ XPFPrefs::DoUpdate (ChangeID_AC theChange,
 			} else {
 				SetChangeCount (GetChangeCount () + 1);
 			}
+			
+			// Need to update our internal list. This is an inefficient method, but easy to write ...
+			for (TemplateAutoList_AC <XPFHelperItem>::Iterator iter (&fHelperList); iter.Current (); iter.Next ()) {
+				if (volume == MountedVolume::WithInfo (&iter->target)) {
+					MountedVolume *helper = volume->getHelperDisk ();
+					if (helper) {
+						iter->helper = helper->getVolumeInfo ();
+					} else {
+						fHelperList.Delete (iter.Current ());
+					}				
+					break;
+				}
+			}
+			
 			break;
 			
 		default:
@@ -491,7 +573,7 @@ XPFPrefs::DoRead (TFile* aFile, bool forPrinting)
 
 	UInt32 sig, prefsVersion;
 	CStr255_AC device;
-	FSVolumeInfo volInfo;
+	FSVolumeInfo volInfo, helperInfo;
 	
 	DoInitialState ();
 			
@@ -523,21 +605,39 @@ XPFPrefs::DoRead (TFile* aFile, bool forPrinting)
 		UInt32 helpers;
 		fileStream >> helpers;
 		
+		// We need to keep track of helper preferences separately from the actual
+		// MountedVolume instances, because Firewire disks can come and go.
+		// So we maintain our own list, and keep it synchronized with changes
+		// (see the DoUpdate method).
+
 		while (helpers > 0) {
 			helpers--;
 
 			fileStream.ReadBytes (&volInfo, sizeof (volInfo));
-			MountedVolume *vol = MountedVolume::WithInfo (&volInfo);
+			fileStream.ReadBytes (&helperInfo, sizeof (helperInfo));
 			
-			if (vol) {
-				vol->readHelperFromStream (&fileStream);
-			} else {
-				// skip over the helper
-				fileStream.ReadBytes (&volInfo, sizeof (volInfo));
+			MountedVolume *vol = MountedVolume::WithInfo (&volInfo);
+			MountedVolume *helper = MountedVolume::WithInfo (&helperInfo);
+			
+			if (vol && !helper) {
+				// Presumably it needs a helper, so we'll use the default
+				helper = vol->getDefaultHelperDisk ();
+				if (helper) helperInfo = helper->getVolumeInfo ();
+				fForceAskSave = true;
 			}
+			
+			XPFHelperItem *helperItem = new XPFHelperItem;
+			BlockMoveData (&volInfo, &helperItem->target, sizeof (volInfo));
+			BlockMoveData (&helperInfo, &helperItem->helper, sizeof (helperInfo));
+			fHelperList.InsertLast (helperItem);
+			
+			if (vol) vol->setHelperDisk (helper, false);
 		}
 		
 		fileStream >> fUseROMNDRV;
+		fileStream >> fRegisteredVersion;
+		fileStream >> fUsePatchedRagePro;
+		fileStream >> fRebootInMacOS9;
 	}
 	
 	catch (...) {
@@ -651,26 +751,17 @@ XPFPrefs::DoWrite (TFile* aFile, bool makingCopy)
 	
 	// Now, we need to store the choices for Helper Disk (which are per-volume). 
 	
-	UInt32 helpers = 0;
+	fileStream << fHelperList.GetSize ();
 
-	for (MountedVolumeIterator iter (MountedVolume::GetVolumeList ()); iter.Current (); iter.Next ()) {
-		if (iter->getHelperDisk ()) helpers++;
-	}
-
-	fileStream << helpers;
-
-	for (MountedVolumeIterator iter (MountedVolume::GetVolumeList ()); iter.Current (); iter.Next ()) {
-		if (iter->getHelperDisk ()) {
-			info = iter->getVolumeInfo ();
-			fileStream.WriteBytes (&info, sizeof (info));
-			info = iter->getHelperDisk ()->getVolumeInfo ();
-			fileStream.WriteBytes (&info, sizeof (info));
-		}
+	for (TemplateAutoList_AC <XPFHelperItem>::Iterator iter (&fHelperList); iter.Current (); iter.Next ()) {
+		fileStream.WriteBytes (&iter->target, sizeof (iter->target));
+		fileStream.WriteBytes (&iter->helper, sizeof (iter->helper));
 	}	
 	
-	// And the ROMNDRV
-	
 	fileStream << fUseROMNDRV;
+	fileStream << fRegisteredVersion;
+	fileStream << fUsePatchedRagePro;
+	fileStream << fRebootInMacOS9;
 }
 
 void 
@@ -683,6 +774,24 @@ XPFPrefs::DoMakeViews (bool forPrinting)
 	// Not the most elegant place, but we need to do it after reading from NVRAM,
 	// and before Close ()
 	if (fForceAskSave) SetChangeCount (GetChangeCount () + 1);
+	
+	checkRegistration ();
+}
+
+void
+XPFPrefs::checkRegistration ()
+{
+	if (getIsRegistered ()) return;
+	TWindow *dialog = TViewServer::fgViewServer->NewTemplateWindow (kRegisterWindow, NULL);
+	IDType result = dialog->PoseModally ();
+	dialog->Close ();
+	
+	if (result == 'regi') {
+		dialog = TViewServer::fgViewServer->NewTemplateWindow (kRegisterThankYou, NULL);
+		dialog->PoseModally ();
+		dialog->Close ();
+		setIsRegistered (true);
+	}
 }
 
 void 
@@ -700,6 +809,7 @@ XPFPrefs::DoSetupMenus ()
 	Enable (cBlessMacOS9SystemFolder, fTargetDisk && fTargetDisk->getMacOS9SystemFolderNodeID ());
 	Enable (cEmptyCache, fTargetDisk != NULL);
 	Enable (cCheckPermissions, fTargetDisk != NULL);
+	Enable (cFixSymlinks, fTargetDisk && fTargetDisk->getIsWriteable () && fTargetDisk->getSymlinkStatus () != kSymlinkStatusCannotFix);
 }
 
 void 
@@ -762,6 +872,11 @@ XPFPrefs::DoMenuCommand (CommandNumber aCommandNumber)
 		case cCheckPermissions:
 			update = new XPFUpdate (fTargetDisk, fTargetDisk->getHelperDisk ());
 			PerformCommand (TH_new XPFCheckPermissionsCommand (update));
+			break;
+			
+		case cFixSymlinks:
+			update = new XPFUpdate (fTargetDisk, fTargetDisk->getHelperDisk ());
+			PerformCommand (TH_new XPFFixSymlinksCommand (update));
 			break;
 			
 		case cShowOptionsWindow:
@@ -960,7 +1075,7 @@ CStr255_AC
 XPFPrefs::getBootFile (bool forInstall)
 {
 	if (fRebootInMacOS9) return CStr255_AC ("");
-	if (forInstall) return CStr255_AC ("-h");
+	if (forInstall) return CStr255_AC ("-h -i");
 	if (!getTargetDisk ()) return CStr255_AC ("");
 	if (getTargetDisk ()->getHelperDisk ()) return CStr255_AC ("-h");
 	return CStr255_AC ("");
@@ -1014,6 +1129,32 @@ XPFPrefs::getOutputDeviceIndex ()
 }
 
 #pragma mark ----> Accessors
+
+bool 
+XPFPrefs::getIsRegistered ()
+{
+	Handle registerVersion = GetResource ('vers', 4);
+	ThrowIfResError_AC ();
+	return VERS_compare (fRegisteredVersion, **registerVersion) >= 0;
+}
+
+void 
+XPFPrefs::setIsRegistered (bool val)
+{
+	UInt32 newVal;
+	if (val) {
+		Handle registerVersion = GetResource ('vers', 4);
+		ThrowIfResError_AC ();
+		newVal = **registerVersion;
+	} else {
+		newVal = 0;
+	}
+	
+	if (newVal != fRegisteredVersion) {
+		fRegisteredVersion = newVal;
+		Changed (cSetIsRegistered, &val);
+	}
+}
 
 void 
 XPFPrefs::setInstallCD (MountedVolume *theDisk, bool callChanged)
@@ -1096,6 +1237,7 @@ ACCESSOR (BootInSingleUserMode, bool)
 ACCESSOR (AutoBoot, bool)
 ACCESSOR (RebootInMacOS9, bool)
 ACCESSOR (EnableCacheEarly, bool)
+ACCESSOR (UsePatchedRagePro, bool)
 ACCESSOR (Throttle, unsigned)
 ACCESSOR (UseROMNDRV, bool)
 

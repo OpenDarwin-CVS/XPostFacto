@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2003
+Copyright (c) 2003 - 2004
 Other World Computing
 All rights reserved
 
@@ -54,12 +54,13 @@ public:
 								MDependable_AC* changedObject,
 								void* changeData,
 								CDependencySpace_AC* dependencySpace);
+	void DoEvent (EventNumber eventNumber, TEventHandler* source, TEvent* event);
 								
 	void setVolume (MountedVolume* newVolume);
 	MountedVolume *getVolume () {return fVolume;}
 	void DoHighlightSelection (HLState fromHL, HLState toHL);
 	virtual TDrawingEnvironment* DoMakeNewDrawingEnvironment ();
-									
+	
 private:
 	
 	XPFApplication *fApp;
@@ -72,6 +73,7 @@ private:
 	TStaticText *fStatus;
 	TIcon *fIcon;
 	IconRef fIconRef;
+	TIcon *fWarningIcon;
 
 };
 

@@ -82,6 +82,8 @@ class XPFBootableDevice
 		XPFPartition* partitionWithInfo (FSVolumeInfo *info);
 		XPFPartition* partitionWithInfoAndName (FSVolumeInfo *info, HFSUniStr255 *name);
 		
+		XPFPartition* getFirstHFSPartition ();
+		
 #ifdef __MACH__
 		OSErr readBlocks (unsigned int start, unsigned int count, UInt8 **buffer);
 		OSErr writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer);

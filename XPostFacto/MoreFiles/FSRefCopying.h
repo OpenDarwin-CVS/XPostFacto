@@ -68,6 +68,18 @@ FSGetOrCreateDirectoryUnicode (
 );
 
 OSErr
+FSGetOrCreateFileUnicode (
+    const FSRef *parentRef, 
+    UniCharCount nameLength, 
+    const UniChar *name, 
+    FSCatalogInfoBitmap whichInfo, 
+    const FSCatalogInfo *catalogInfo, 
+    FSRef *newRef, 
+    FSSpec *newSpec, 
+    bool create
+);
+
+OSErr
 FSRefDTCopyComment (const FSRef *srcRef, const FSRef *dstRef);
 
 

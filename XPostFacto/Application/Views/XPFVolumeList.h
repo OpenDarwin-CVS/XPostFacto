@@ -74,6 +74,7 @@ public:
 					
 	void ScrollBy (const CViewPoint& delta, bool redraw);
 
+	void DoMouseUp (CViewPoint &theMouse, TToolboxEvent* event, CPoint_AC hysteresis);
 					
 protected:
 
@@ -84,6 +85,9 @@ protected:
 	XPFApplication *fApp;
 	XPFPrefs *fPrefs;
 	TView *fTrackSelection;
+
+	long fLastUpTime;
+	CPoint_AC fLastMousePoint;
 
 };
 
@@ -123,7 +127,7 @@ private:
 
 	TView *fMiddleView;
 	TView *fBottomView;
-
+	
 };
 
 #endif
