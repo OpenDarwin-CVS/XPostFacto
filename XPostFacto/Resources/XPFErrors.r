@@ -82,6 +82,7 @@ resource 'errs' (kReasonResourceID, purgeable) {
 		kNoSuchNVRAMKey, kNoSuchNVRAMKey, 22;
 		kNVRAMPatchParseError, kNVRAMPatchParseError, 23;
 		kWritePartitionOSX, kWritePartitionOSX, 24;
+		kMustSpecifyIODevices, kMustSpecifyIODevices, 25;
 	}
 };
 
@@ -112,7 +113,8 @@ resource 'STR#' (kReasonResourceID, purgeable) {
 					"no such NVRAM key (internal error)";
 					"error parsing NVRAM patch (internal error)";
 					
-					"the Mac OS X version of XPostFacto is unable to install BootX (yet). Try rebooting in Mac OS 9."
+					"the Mac OS X version of XPostFacto is unable to install BootX (yet). Try rebooting in Mac OS 9";
+		/* 25 */	"when auto-boot? is turned off, you must specify an input-device and output-device";
 	}
 };
 

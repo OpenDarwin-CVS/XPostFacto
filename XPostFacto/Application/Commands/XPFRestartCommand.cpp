@@ -91,6 +91,13 @@ XPFRestartCommand::adjustThrottle (XPFNVRAMSettings *nvram) {
 void 
 XPFRestartCommand::DoItThreaded ()
 {
+	if (!fAutoBoot) {
+		// Make sure that input-device and output-device are specified if not auto-booting
+		if (!fInputDevice.Length () || !fOutputDevice.Length ()) {
+			ThrowException_AC (kMustSpecifyIODevices, 0);
+		}
+	}
+
 	MountedVolume *rootDisk = fTargetDisk;
 	MountedVolume *bootDisk;
 	if (fHelperDisk) {
