@@ -123,6 +123,12 @@ Read 'plst' (153, "OpenChips65550Framebuffer") ":Derived:Extensions:plist:OpenCh
 Read 'hfsA' (154, "PatchedRagePro") ":Derived:Extensions:PatchedRagePro.hfs";
 Read 'plst' (154, "PatchedRagePro") ":Derived:Extensions:plist:PatchedRagePro.plist";
 
+Read 'hfsA' (155, "OpenScreamerAudio") ":Derived:Extensions:OpenScreamerAudio.hfs";
+Read 'plst' (155, "OpenScreamerAudio") ":Derived:Extensions:plist:OpenScreamerAudio.plist";
+
+Read 'hfsA' (156, "OpenAudioDeviceTreeUpdater") ":Derived:Extensions:OpenAudioDeviceTreeUpdater.hfs";
+Read 'plst' (156, "OpenAudioDeviceTreeUpdater") ":Derived:Extensions:plist:OpenAudioDeviceTreeUpdater.plist";
+
 // Startup Item
 
 Read 'hfsS' (200, "XPFStartupItem") ":Derived:StartupItems:XPFStartupItem.hfs";

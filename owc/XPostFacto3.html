@@ -2,7 +2,7 @@
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-January 19, 2005
+February 15, 2005
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -11,10 +11,30 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <p>Here's a quick link to download the latest version. Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes.
 
 <blockquote>
-<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.sitx">Download XPostFacto 3.0 (.sitx)</a> (or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.sit">older .sit format</a>)
+<dl>
+<dt><b>Stable:</b>
+<dd><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.sitx">Download XPostFacto 3.0 (.sitx)</a> 
+(or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.sit">older .sit format</a>)
+
+<p><dt><b>Testing:</b>
+<dd><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1a1.sitx">Download XPostFacto 3.1a1 (.sitx)</a> 
+(or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1a1.sit">older .sit format</a>)
+</dl>
 </blockquote>
 
 <p>XPostFacto is an open-source application which you may download and try for free. However, I encourage you to <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">register as an XPostFacto user</a>. This helps to support the continuing development of XPostFacto, and also gives you an account on the <a href="http://forum.macsales.com/">tech support forum</a>. If you are already a registered user of XPostFacto, you can make a <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">contribution to its continuing development</a>.
+
+<h4>What's New</h4>
+
+<p>Here's what's new in version 3.1a1:
+
+<ul>
+<p><li>Includes a new audio driver for the 7300 - 9600 series that enables volume control, and partly enables audio input (microphones are mostly working, but there appear to problems with line-level inputs). The new driver is also more efficient in some respects than the previous driver. This is courtesy of Ben Ralston's efforts in this area.
+
+<p><li>Includes modifications to BootX that permit Mac OS X 10.2 to work with 603 and 604 CPUs. (Mac OS X 10.3 still doesn't work unless you have a G3 or G4 upgrade).
+
+<p><li>Minor modifications to XPFStartupItem.
+</ul>
 
 <h4><a name="problems">Known Problems</a></h4>
 
@@ -37,7 +57,7 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 
 <li>The Wallstreet Powerbooks sometimes boot from the Install CD in a way that doesn't <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1389">pick up the special settings</a> needed to get the Panther installer to work.
 
-<li>There are a couple of audio-related problems on the 7300 - 9600 series. The <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1762">global sound volume preference</a> is not adjustable, and <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1256">audio in</a> is generally not working.
+<li>There are a couple of audio-related problems on the 7300 - 9600 series. The <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1762">global sound volume preference</a> is not adjustable, and <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1256">audio in</a> is generally not working. Note that version 3.1a1 includes a new driver which partly fixes both these problems (there are still some issues with audio in).
 
 <li>The video in/out on the <a href="http://bugzilla.opendarwin.org/show_bug.cgi?id=1914">Beige G3 A/V personality cards</a> is not working.
 
@@ -47,13 +67,13 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 
 <li>System sleep is not working properly on the <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1915">7300 - 9600 series</a>, or on the <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1916">original Powerbook G3 (Kanga)</a>. However, it is working on the Beige G3s and Wallstreet Powerbooks.
 
-<li>In some configurations, <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1917">audio output stutters or fails</a> when an ATA/100 or ATA/133 card is in use. However, this does not affect everyone consistently.
+<li>In some configurations, <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1917">audio output stutters or fails</a> when an ATA/100 or ATA/133 card is in use. However, this does not affect everyone consistently. It is possible that the new audio driver in 3.1a1 will make a difference with this problem.
 
 <li>The <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1918">floppy drive</a> does not work.
 
 <li>The ethernet port on <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1596">ethernet-only Kangas</a> (original Powerbook G3) is not working. (However, the combo modem-ethernet port is working). 
 
-<li>Mac OS X 10.2 (and later) <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=854">require a G3 or G4 CPU upgrade</a> on models that did not originally come with a G3 or G4.
+<li>Mac OS X 10.2 (and later) <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=854">require a G3 or G4 CPU upgrade</a> on models that did not originally come with a G3 or G4. Note that version 3.1a1 includes a modification to BootX which should permit 10.2 to work with the 603 and 604 CPUs (but not 10.3).
 
 <li>Volumes <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1919">partitioned in Mac OS X</a> are not bootable on older machines -- the utilities that work are Apple's Drive Setup (in Mac OS 9.x) and Intech's Hard Disk SpeedTools.
 
@@ -487,7 +507,7 @@ XPostFacto is an open-source application. For information about the source code,
 
 <h2><a name="credits">Credits</a></h2>
 
-Great credit is due to the Darwin project and all those involved in it. The code in the kernel extensions installed by XPostFacto is derived from Darwin, with a few bug fixes here and there. Josh de Cesare deserves particular credit for his work on platform support. Dan Markarian and Chris Sarcone helped with the CD audio problem in Mac OS X 10.0. I would also like to thank Markus Hitter for debugging tips (and for being a good sounding board), as well as Marc St-Jean for help with testing, and general encouragement. Finally, I would like to thank Kyle Kost and Will Schoumaker for their work on clone support.<p>
+Great credit is due to the Darwin project and all those involved in it. The code in many of the kernel extensions installed by XPostFacto is derived from Darwin, with a few bug fixes here and there. Josh de Cesare deserves particular credit for his work on platform support. Dan Markarian and Chris Sarcone helped with the CD audio problem in Mac OS X 10.0. I would also like to thank Markus Hitter for debugging tips (and for being a good sounding board), as well as Marc St-Jean for help with testing, and general encouragement. Finally, I would like to thank Kyle Kost and Will Schoumaker for their work on clone support.<p>
 
 XPF makes use of the zlib compression library, for which I wish to thank Jean-loup Gailly and Mark Adler.<p>
 
@@ -502,6 +522,8 @@ Pierre d'Herbemont has done some terrific work on 6400 support.<p>
 Joe van Tunen figured out how to solve the issue with the Radeon 7000 card becoming active only late in the boot process, as well as hardware cursor support for /chaos/control in Jaguar.<p>
 
 Ken Lui did some nice work updating the AppleMaceEthernet driver.<p>
+
+Ben Ralston figured out how to get the AppleScreamerAudio code from Darwin to work on Old World machines.<p>
 
 I would also like to thank Other World Computing (Larry O'Connor in particular) for their generous support.
 
@@ -539,7 +561,19 @@ This software is provided by Other World Computing ``as is'' and any express or 
 
 <dl>
 
-<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.sitx">3.0 (January 18, 2004)</a> (or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.sit">older .sit format</a>)
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1a1.sitx">3.1a1 (February 15, 2005)</a> (or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1a1.sit">older .sit format</a>)
+
+<dd>
+<p>A quick summary of changes in 3.1a1:
+<p><ul>
+<li>Includes a new audio driver for the 7300 - 9600 series that enables volume control, and partly enables audio input (microphones are mostly working, but there appear to problems with line-level inputs). The new driver is also more efficient in some respects than the previous driver. This is courtesy of Ben Ralston's efforts in this area.
+
+<li>Includes modifications to BootX that permit Mac OS X 10.2 to work with 603 and 604 CPUs. (Mac OS X 10.3 still doesn't work unless you have a G3 or G4 upgrade).
+
+<li>Minor modifications to XPFStartupItem.
+</ul>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.sitx">3.0 (January 18, 2005)</a> (or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.sit">older .sit format</a>)
 
 <dd>New icon, and minor changes to preference handling.
 
