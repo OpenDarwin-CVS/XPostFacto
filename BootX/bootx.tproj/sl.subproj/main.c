@@ -654,6 +654,8 @@ static long GetBootPaths(void)
 {
   long ret, cnt, cnt2, cnt3, cnt4, size, partNum, bootplen, bsdplen;
   char *filePath, *buffer;
+  const char *priv = "\\private";
+  const char *tmp = ",\\tmp\\";
   
   if (gBootSourceNumber == -1) {
     // Get the boot-device
@@ -672,12 +674,18 @@ static long GetBootPaths(void)
 	// Added by ryan.rempel@utoronto.ca
 	// See if it starts with a comma. In that case, prepend the boot-device
 	// This saves me a little NVRAM space (well, in some cases, a fair bit)
+	// And if it starts with \tmp, add the \private as well (again, to save NVRAM space)
+	if (!strncmp (gBootFile, tmp, strlen (tmp))) {
+		int privSize = strlen (priv);
+		memcpy (&gBootFile[privSize + 1], &gBootFile[1], strlen (gBootFile));
+		memcpy (&gBootFile[1], priv, privSize);
+	}
 	if (gBootFile[0] == ',') {
 		int bootDeviceSize = strlen (gBootDevice);
-		memcpy (&gBootFile[bootDeviceSize], gBootFile, size + 1);
+		memcpy (&gBootFile[bootDeviceSize], gBootFile, strlen (gBootFile) + 1);
 		memcpy (gBootFile, gBootDevice, bootDeviceSize);
 	}
-		
+	
     if (gBootFile[0] != '\0') {
       gBootFileType = GetDeviceType(gBootFile);
       gBootSourceNumberMax = 0;
