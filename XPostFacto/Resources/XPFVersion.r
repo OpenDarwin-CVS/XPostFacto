@@ -65,10 +65,10 @@ RESOURCE 'vers' (3,
 	0x02,
 	0x20,
 	beta,
-	0x15,
+	0x17,
 	verUS,
-	"2.2b15",
-	"2.2b15"
+	"2.2b17",
+	"2.2b17"
 };
 
 RESOURCE 'vers' (4,
