@@ -91,6 +91,8 @@ class XPFThreadedCommand : public TCommand {
 		OSErr getExtensionsCacheFSRef (FSRef *rootDirectory, FSRef *result);
 		OSErr getBootXFSRef (FSRef *rootDirectory, FSRef *result);
 		
+		void turnOffIgnorePermissionsForVolume (MountedVolume *volume);
+		
 		void updateExtensionsCacheForRootDirectory (FSRef *rootDirectory);
 		void installExtensionsWithRootDirectory (FSRef *rootDirectory);
 		void installSecondaryExtensionsWithRootDirectory (FSRef *rootDirectory);

@@ -44,6 +44,7 @@ advised of the possibility of such damage.
 #include "UThreads.h"
 #include "MoreFilesExtras.h"
 #include "XPFApplication.h"
+#include "XPFErrors.h"
 
 #ifdef __MACH__
 	#include <sys/types.h>
@@ -111,6 +112,9 @@ XPFThreadedCommand::XPFThreadedCommand (XPFPrefs *prefs)
 {
 	fTargetDisk = prefs->getTargetDisk ();
 	fHelperDisk = fTargetDisk->getHelperDisk ();
+	
+	turnOffIgnorePermissionsForVolume (fTargetDisk);
+	turnOffIgnorePermissionsForVolume (fHelperDisk);
 
 	ThrowIfOSErr_AC (CreateTextToUnicodeInfoByEncoding (
 		CreateTextEncoding (kTextEncodingMacRoman, kTextEncodingDefaultVariant, kUnicode16BitFormat),
@@ -190,6 +194,26 @@ XPFThreadedCommand::getFSRef (FSRef *rootDirectory, char *path, FSRef *result)
 	if (err) return err;
 
 	return FSMakeFSRefUnicode (rootDirectory, uniLength / sizeof (UniChar), uniChars, NULL, result);
+}
+
+void
+XPFThreadedCommand::turnOffIgnorePermissionsForVolume (MountedVolume *volume)
+{
+	if (!volume) return;
+	char path[256];
+	ThrowIfOSErr_AC (FSRefMakePath (volume->getRootDirectory (), (UInt8 *) path, 255));
+	XPFSetUID myUID (0);
+	pid_t pid = fork ();
+	if (pid) {
+		if (pid != -1) {
+			int status;
+			waitpid (pid, &status, 0);
+		}
+	} else {
+		setuid (0);	// because vsdbutil checks the uid, rather than the euid
+		execl ("/usr/sbin/vsdbutil", "vsdbutil", "-a", path, NULL);
+		ThrowException_AC (kInternalError, 0);	// the execl shouldn't return
+	}
 }
 
 OSErr
@@ -347,6 +371,7 @@ XPFThreadedCommand::updateExtensionsCacheForRootDirectory (FSRef *rootDirectory)
 			}
 		} else {
 			execl ("/usr/sbin/kextcache", "kextcache", "-l", "-m", "System/Library/Extensions.mkext", "System/Library/Extensions", NULL);
+			ThrowException_AC (kInternalError, 0);	// the execl shouldn't return
 		}
 	}
 #endif

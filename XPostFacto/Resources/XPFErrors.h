@@ -59,7 +59,8 @@ enum {
 	kNoSuchNVRAMKey,
 	kNVRAMPatchParseError,
 	kWritePartitionOSX,
-	kMustSpecifyIODevices
+	kMustSpecifyIODevices,
+	kInternalError
 };
 
 

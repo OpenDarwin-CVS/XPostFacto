@@ -83,6 +83,7 @@ resource 'errs' (kReasonResourceID, purgeable) {
 		kNVRAMPatchParseError, kNVRAMPatchParseError, 23;
 		kWritePartitionOSX, kWritePartitionOSX, 24;
 		kMustSpecifyIODevices, kMustSpecifyIODevices, 25;
+		kInternalError, kInternalError, 26;
 	}
 };
 
@@ -115,6 +116,7 @@ resource 'STR#' (kReasonResourceID, purgeable) {
 					
 					"the Mac OS X version of XPostFacto is unable to install BootX (yet). Try rebooting in Mac OS 9";
 		/* 25 */	"when auto-boot? is turned off, you must specify an input-device and output-device";
+					"an internal error";
 	}
 };
 
