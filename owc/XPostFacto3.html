@@ -1,8 +1,8 @@
-<body><h2>XPostFacto 3.0a10</h2>
+<body><h2>XPostFacto 3.0a11</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-December 19, 2003
+January 14, 2004
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -11,41 +11,43 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <p>Here's a quick link to download the latest version. 
 
 <blockquote>
-<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a10.sit">Download XPostFacto 3.0a10</a>
+<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a11.sit">Download XPostFacto 3.0a11</a>
 </blockquote>
 
-<p>Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes.  Note that the latest version is an alpha version of XPostFacto 3. "Alpha" means it's not finished yet, and there are likely to be some bugs.
-
-<p><i>A fair number of people are reporting that Panther does not always see their SCSI drives. There are several things that seem to help in some cases -- doing a cold boot rather than a warm boot, unplugging USB devices, powering up or down other drives, etc. It seems that anything which affects the timing of the boot process may help. The underlying cause isn't obvious yet -- I will need to look into it.</i>
-
-<h4>What's new in 3.0a10</h4>
-
-<p>Here's a summary of what's different in 3.0a10. One thing that isn't different yet is that support for built-in video in Panther isn't there yet -- I'll keep working on it.
+<p>Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes.  Note that the latest version is an alpha version of XPostFacto 3. There are two main outstanding issues not yet addressed in version 3.0a11:
 
 <ul>
-<p><li>Version 3 had been automatically installing things on a current Mac OS X installation without asking first. On reflection, this is bad manners, so XPF will now ask before installing anything. XPF will automatically check for things that need to be installed at two points: at launch, and when saving preferences. If there are things that need to be installed, XPF will display a dialog box to ask the user to confirm the install.
- 
- <p><li>XPF now has an "Uninstall..." menu command, which you can use to uninstall the things that XPF has installed on a volume. The one exception is BootX -- what would be required in order to uninstall BootX would be to reinstall an original BootX, and I haven't implemented that yet.
+<li>SCSI devices are sometimes not showing up in Panther -- it appears that revisions to the SCSI drivers for Panther are required. Further information is available in the <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1161">bug report</a>.<p>
 
-<p><li>XPF now only installs kernel extensions which are needed for a particular version of Mac OS X. This will eliminate some spurious error messages in the startup process.
+<li>Built-in video is not yet working in Panther on the 7300 - 9600 series and the Beige G3. I am working on video drivers to correct this problem.<p>
+</ul>
 
-<p><li>Fixes a problem with the Beige G3 and the 10.3.2 update (the GossamerDeviceTreeUpdater wasn't loading in 10.3.2).
+<h4>What's new in 3.0a11</h4>
 
-<p><li>Fixed the permissions which XPostFacto sets for the /Library directory.
+<p>Here's a summary of what's different in 3.0a11.
 
-<p><li>Fixed a bug which caused XPF to crash with the Sonnet ATA 4.0 firmware installed.
+<ul>
+<p><li>XPostFacto now deals with the fact that the Mac OS X Installer blesses the /System/Library/CoreServices folder on the Mac OS X volume (which is problematic if you want to reboot from Mac OS 9 on that volume, and is unnecessary on Old World machines). The XPFStartupItem now automatically re-blesses the Mac OS 9 System Folder on the root volume if it detects that the CoreServices folder has been blessed. Also, there is a "Bless Mac OS 9 System" command in the "Install" menu.
 
-<p><li>Fixed the way that XPF constructs Open Firmware names where a volume has 10 or more partitions.
+<p><li>There is now a "Window" menu in XPostFacto which gives access to the Log Window and the Options Window. This helps deal with 640 x 480 resolution, where the "Options..." button is off-screen.
 
-<p><li>Incorporating the missing kernel extension from 10.2 which controlled the ejection of PC Cards.
+<p><li>OWCCacheConfig was not detecting the correct cache values with a G4/700 on a cold boot (a warm boot worked fine). So I changed the strategy for detecting cache values for the L3 cache -- I'm now assuming a 200 MHz cache speed. Also delayed the cache testing until an accurate CPU speed is determined. There are still some problems with L2 cache testing in Panther -- it seems to work OK in Jaguar, though.
 
-<p><li>Fixed the problem which caused the boot video on video cards on Beige G3 computers to appear late in the boot process.
+<p><li>Fixed a performance problem introduced in the AppleMaceEthernet driver in 3.0a10. 
 
-<p><li>Fixed a problem which prevented the Mac OS X version of XPF from working properly on the Beige G3 and Wallstreet Powerbooks.
+<p><li>Fixed a problem loading the OpenPMUPCCardEject kernel extension in 10.3.2.
 
-<p><li>Network preferences will no longer say that the Ethernet cable is not attached to built-in Ethernet. (I'm not actually successfully detecting whether the cable is attached yet, but it's probably better to say that it is than that it isn't).
+<p><li>XPostFacto is now using a slightly different strategy for finding the Open Firmware name of a volume -- this fixes some cases where the Mac OS X version was unable to find an Open Firmware name.
 
-<p><li>Default to having OWCCacheConfig turned off, rather than on, since it causes trouble for many, and needs to be fixed.
+<p><li>XPostFacto now deletes the extensions cache when installing extensions in Mac OS 9, to make sure that the extensions cache gets updated.
+
+<p><li>When installing BootX, XPostFacto now makes sure that the partition entry indicates that the partition is bootable, and that the boot-blocks are installed on the volume.
+
+<p><li>XPostFacto had been taking some preferences from NVRAM, rather than the preferences file. However, the Mac OS X Installer makes changes to NVRAM, so XPostFacto now favours the prefs file, except with respect to the boot-device.
+
+<p><li>XPF now forces auto-boot? to be on, unless you have the input-device and output-device set.
+
+<p><li>XPostFacto used to use an optimized copy routine to synchronize extensions with the helper every time you quit. Now, it checks the relevant modification dates and only synchronizes when necessary. And, when synchronizing, it does a full copy rather than an optimized copy (since the optimization didn't save that much time and was a potential source of problems).
 
 </ul>
 
@@ -532,25 +534,92 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a11.sit">3.0a11 (January 14, 2004)</a>
+
+<dd>Here's a list of changes since version 3.0a10.
+
+<ul>
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1009">1009 - Bless Mac OS 9 System Folders.</a>
+<br>XPostFacto now has a "Bless Mac OS 9 System" menu command, which will re-bless the Mac OS 9 System Folder on the selected volume. (The Mac OS X Installer blesses the CoreServices folder instead, which is not necessary on Old World machines).
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1118">1118 - Startup item should re-bless Mac OS 9 System Folder.</a>
+<br>The XPFStartupItem now automatically re-blesses the Mac OS 9 System Folder on the root volume if it detects that the CoreServices folder has been blessed instead. This should prevent the problems caused when the Mac OS X Installer blesses CoreServices.
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1210">1210 - Put &quot;Options ...&quot; in a menu (and perhaps &quot;Restart ...&quot; and &quot;Install ...&quot;).</a>
+<br><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1288">1288 - XPostFacto App window too large for 640x480 display.</a>
+<br>There is now a "Window" menu in XPostFacto which gives access to the Log Window and the Options Window. This helps deal with 640 x 480 resolution, where the "Options..." button is off-screen.
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1303">1303 - OWCCacheConfig tests not working right on cold boot with G4/700.</a>
+<br>OWCCacheConfig was not detecting the correct cache values with a G4/700 on a cold boot (a warm boot worked fine). So I changed the strategy for detecting cache values for the L3 cache -- I'm now assuming a 200 MHz cache speed. Also delayed the cache testing until an accurate CPU speed is determined.
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1337">1337 - AppleMaceEthernet slower in 3.0a10 versus 3.0a9.</a>
+<br>Fixed performance problem introduced in Ethernet driver in 3.0a10. 
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1338">1338 - OpenPMUPCCardEject.kext not loading in 10.3.2.</a>
+<br>Fixed a problem loading the OpenPMUPCCardEject.kext in 10.3.2.
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1339">1339 - Mac OS X version sometimes fails to find Open Firmware name.</a>
+<br>XPostFacto is now using a slightly different strategy for finding the Open Firmware name of a volume -- this fixes some cases where the Mac OS X version was unable to find an Open Firmware name.
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1352">1352 - Should delete extensions cache when installing extensions in Mac OS 9.</a>
+<br>Deletes the extensions cache when installing extensions in Mac OS 9, to make sure that the extensions cache gets updated.
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1364">1364 - Improve BootX installation.</a>
+<br>When installing BootX, XPostFacto now makes sure that the partition entry indicates that the partition is bootable, and that the boot-blocks are installed on the volume.
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1375">1375 - Only take the boot-device and helper preferences from NVRAM.</a>
+<br>XPostFacto had been taking some preferences from NVRAM, rather than the preferences file. However, the Mac OS X Installer makes changes to NVRAM, so it is better to take most preferences from the prefs file.
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1378">1378 - Make sure that input-device and output-device are set if auto-boot is false.</a>
+<br>If auto-boot? is false, you need the input-device and output-device set to control the boot process. So XPF now ensures that auto-boot? is true, unless you have the input-device and output-device set.
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1415">1415 - Only synchronize when necessary.</a>
+<br>XPostFacto used to use an optimized copy routine to synchronize extensions with the helper every time. Now, it checks the modification dates and only synchronizes when necessary. And, when synchronizing, it does a full copy rather than an optimized copy (since the optimization didn't save that much time and was a potential source of problems).
+
+</ul>
 
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a10.sit">3.0a10 (December 19, 2003)</a>
 <dd>
 
 Here's the list of changes since 3.0a9. The video drivers for built-in video on Panther are still coming.
 
-<p><ul>
-<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1022">1022 - Install only those items needed for a particular Mac OS X version.</a>
-<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1126">1126 - Ethernet shows up as &quot;cable not attached&quot; in Panther network status.</a>
-<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1153">1153 - Mac OS X version crashes in OFAliases:aliasFor</a>
-<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1159">1159 - Should ask users about installing new versions of extensions etc..</a>
-<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1196">1196 - XPF should use decimal, not hex, for partition number on Firewire devices.</a>
-<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1199">1199 - Should default OWCCacheConfig to &quot;off&quot; until it's working better.</a>
-<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1205">1205 - Permissions on Library and tmp.</a>
-<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1211">1211 - PC cards not ejecting in Panther.</a>
-<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1212">1212 - BootX uses &quot;screen&quot; alias for output, rather than the output-device.</a>
-<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1275">1275 - NVRAM patch resource not accounting for GossamerDeviceTreeUpdater.</a>
-<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1312">1312 - Add &quot;uninstall&quot; feature.</a>
-<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1314">1314 - GossamerDeviceTreeUpdater won't load in 10.3.2</a>
+<ul>
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1022">1022 - Install only those items needed for a particular Mac OS X version.</a>
+<br>XPF now only installs kernel extensions which are needed for a particular version of Mac OS X. This will eliminate some spurious error messages in the startup process.
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1126">1126 - Ethernet shows up as &quot;cable not attached&quot; in Panther network status.</a>
+<br>Network preferences will no longer say that the Ethernet cable is not attached to built-in Ethernet. (I'm not actually successfully detecting whether the cable is attached yet, but it's probably better to say that it is than that it isn't).
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1153">1153 - Mac OS X version crashes in OFAliases:aliasFor</a>
+<br>Fixed a bug which caused XPF to crash with the Sonnet ATA 4.0 firmware installed.
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1159">1159 - Should ask users about installing new versions of extensions etc..</a>
+<br>Version 3 had been automatically installing things on a current Mac OS X installation without asking first. On reflection, this is bad manners, so XPF will now ask before installing anything. XPF will automatically check for things that need to be installed at two points: at launch, and when saving preferences. If there are things that need to be installed, XPF will display a dialog box to ask the user to confirm the install.
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1196">1196 - XPF should use decimal, not hex, for partition number on Firewire devices.</a>
+<br>Fixed the way that XPF constructs Open Firmware names where a volume has 10 or more partitions.
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1199">1199 - Should default OWCCacheConfig to &quot;off&quot; until it's working better.</a>
+<br>Default to having OWCCacheConfig turned off, rather than on, since it causes trouble for many, and needs to be fixed.
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1205">1205 - Permissions on Library and tmp.</a>
+<br>Fixed the permissions which XPostFacto sets for the /Library directory.
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1211">1211 - PC cards not ejecting in Panther.</a>
+<br>Incorporated the missing kernel extension from 10.2 which controlled the ejection of PC Cards.
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1212">1212 - BootX uses &quot;screen&quot; alias for output, rather than the output-device.</a>
+<br>Fixed the problem which caused the boot video on video cards on Beige G3 computers to appear late in the boot process.
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1275">1275 - NVRAM patch resource not accounting for GossamerDeviceTreeUpdater.</a>
+<br>Fixed a problem which prevented the Mac OS X version of XPF from working properly on the Beige G3 and Wallstreet Powerbooks.
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1312">1312 - Add &quot;uninstall&quot; feature.</a>
+<br>XPF now has an "Uninstall..." menu command, which you can use to uninstall the things that XPF has installed on a volume. The one exception is BootX -- what would be required in order to uninstall BootX would be to reinstall an original BootX, and I haven't implemented that yet.
+
+<p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1314">1314 - GossamerDeviceTreeUpdater won't load in 10.3.2</a>
+<br>Fixes a problem with the Beige G3 and the 10.3.2 update (the GossamerDeviceTreeUpdater wasn't loading in 10.3.2).
+
 </ul>
 
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a9.sit">3.0a9 (November 22, 2003)</a>
