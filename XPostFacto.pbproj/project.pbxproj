@@ -1772,7 +1772,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.GossamerDeviceTreeUpdater;
-				MODULE_VERSION = 1.0.0d2;
+				MODULE_VERSION = 1.0.1;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -1813,7 +1813,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.0d2</string>
+	<string>1.0.1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>GossamerDeviceTreeUpdater</key>
@@ -1836,10 +1836,8 @@
 	</dict>
 	<key>OSBundleLibraries</key>
 	<dict>
-		<key>com.apple.kpi.iokit</key>
-		<string>7.0</string>
-		<key>com.apple.kpi.libkern</key>
-		<string>7.0</string>
+		<key>com.apple.kernel.iokit</key>
+		<string>6.9</string>
 	</dict>
 	<key>OSBundleRequired</key>
 	<string>Root</string>
