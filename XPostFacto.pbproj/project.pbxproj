@@ -18,12 +18,6 @@
 			settings = {
 			};
 		};
-		9420F2140524102F00A80003 = {
-			fileRef = F52AC80E03F21A8F01A80002;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		946A5D070525093200A80003 = {
 			children = (
 				946A5D12052509A900A80003,
@@ -223,12 +217,6 @@
 			settings = {
 			};
 		};
-		946B436F04FC0E6100A80003 = {
-			fileRef = F52AC80F03F21A8F01A80002;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		94B8172F047A7ABF00A80003 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -283,18 +271,6 @@
 		94B81737047A848E00A80003 = {
 			isa = PBXTargetDependency;
 			target = F5BF317E03F01EA201A80002;
-		};
-		94BA4E81046FE32600A80003 = {
-			fileRef = F5BF347003F0213301A80002;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		94BA4EE40470009300A80003 = {
-			fileRef = F5BF318503F020F601A80002;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		94BCDEAB046D6BAD00A80003 = {
 			children = (
@@ -510,6 +486,24 @@
 			settings = {
 			};
 		};
+		94CCDC28052D151B00A80003 = {
+			fileRef = F5BF318503F020F601A80002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94CCDC29052D151D00A80003 = {
+			fileRef = F5BF347003F0213301A80002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94CCDC2A052D151F00A80003 = {
+			fileRef = F52AC80E03F21A8F01A80002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		94D732840525FB8F00A80003 = {
 			children = (
 				F58FB3FB02B3D0BE01A80001,
@@ -707,6 +701,7 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
 				PRODUCT_NAME = XPFSync;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
@@ -6011,10 +6006,9 @@
 		F5BF317C03F01EA201A80002 = {
 			buildActionMask = 2147483647;
 			files = (
-				94BA4E81046FE32600A80003,
-				94BA4EE40470009300A80003,
-				946B436F04FC0E6100A80003,
-				9420F2140524102F00A80003,
+				94CCDC28052D151B00A80003,
+				94CCDC29052D151D00A80003,
+				94CCDC2A052D151F00A80003,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
