@@ -79,10 +79,11 @@ XPFInstallCommand::DoIt ()
 		}
 	}
 	
-	// And we install the extensions and startup item to the installTarget
+	// And we install the extensions and startup item and BootX to the installTarget
 	
 	XPFUpdate update (targetDisk, targetDisk->getHelperDisk (), installCD);
 	
+	PerformCommand (TH_new XPFInstallBootXCommand (&update));
 	PerformCommand (TH_new XPFInstallExtensionsCommand (&update));
 	PerformCommand (TH_new XPFInstallStartupCommand (&update));
 		
