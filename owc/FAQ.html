@@ -6,17 +6,13 @@ Ryan Rempel<br>
 
 <dl>
 <dt><p>Where can I go for XPostFacto support?
-<dd>The best way to get support for XPostFacto is to <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">register for support</a> so that you can access the <a href="/OSXCenter/XPostFacto/forum">tech support forum</a> on this site. The cost for this is $10. I will also answer e-mail, but I will catch up on the tech forum first before trying to catch up on e-mail.
+<dd>The best way to get support for XPostFacto is to <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">become a registered user</a> so that you can access the <a href="/OSXCenter/XPostFacto/forum">tech support forum</a> on this site. I try to answer e-mail, but I get a lot of it and can't always deal with it.
 
 <dt><p>Does XPostFacto work with Jaguar (Mac OS X 10.2)?
 <dd>Yes, the latest versions do (2.2 and beyond).
 
 <dt><p>Does XPostFacto work with Panther (Mac OS X 10.3)?
-<dd>Not yet--there are some changes required, and I am working on them.
-I will probably not have Panther support ready before Panther ships, because I need to see the source code, which Apple has not released yet. But I do not expect a long delay once Apple releases the source code.
-
-<dt><p>Will XPostFacto allow the Beige G3 and "Wallstreet" Powerbooks to work with Panther (Mac OS X 10.3)
-<dd>I am working on that, and expect that it will be possible. However, it will not be available on the day Panther ships--there will be some delay.
+<dd><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto3.html">Version 3.0a6</a> has some Panther support for the 7300 - 9600 series. I'm working on support for the Beige G3 and Wallstreet and Kanga Powerbooks as well.
 
 <dt><p>Can I use Apple's Startup Disk control panel to boot Mac OS X?
 <dd>The Startup Disk control panel in Mac OS 9 (and later) does not appear to work when trying to boot Mac OS X on unsupported systems. The older System Disk control panel (available with Darwin and Mac OS X Public Beta) does generally work. And, of course, you can use XPostFacto to select a Mac OS X volume to boot from.
@@ -24,14 +20,11 @@ I will probably not have Panther support ready before Panther ships, because I n
 <dt><p>Can I install Mac OS X Server or Darwin on unsupported systems?
 <dd>Yes, this should work with recent versions of XPostFacto.
 
-<dt><p>Will Mac OS X 10.1 work on unsupported Macs?
-<dd>Version 2.0 (and later) of XPF is able to install Mac OS X 10.1.
-
 <dt><p>Can I install Mac OS 9.2 on an unsupported machine?
 <dd>You can install Mac OS 9.2 while running in Classic mode, and it will work in Classic mode. However, it will not work to boot the machine outside of Classic. So the ideal setup is to have a separate partition for Mac OS 9.1 and 9.2. Then you can use 9.1 to reboot the machine (when necessary), and use 9.2 for Classic. There are some patches which permit installation of Mac OS 9.2 on unsupported machines--see <a href="http://www.os9forever.com/">http://www.os9forever.com/</a>
 
 <dt><p>Can I use my floppy drive in Mac OS X?
-<dd>Yes! There is now a floppy driver, courtesy of the mkLinux project. You can get it from <a href="http://www.darwin-development.org/floppy/">http://www.darwin-development.org/floppy/</a>.
+<dd>There was a floppy driver being worked on, at <a href="http://www.darwin-development.org/floppy/">http://www.darwin-development.org/floppy/</a>. However, it hasn't been updated for a while and I am told that it's not working with 10.2 properly. Your best bet is probably a USB-based floppy drive.
 
 <dt><p>Can I install Mac OS X on unsupported Powerbooks?
 <dd>Version 2.2 of XPostFacto (and up) works with the original Powerbook G3, the 3400, and the 2400, but the support is weak. See the compatibility page for details.
@@ -124,9 +117,6 @@ In this case, the Setup Assistant will not run. I haven't tried this from a fres
 0xB9000000<p>
 
 (but yours may well be different). You can get the value from some of the Mac OS 9 cache utilities. For instance, the PowerLogix cache profiler shows this value in one of its panes.
-
-<dt><p>How can a create a custom Mac OS X Install CD?
-<dd>Version 2.1 of XPostFact will help you with this--see the documentation for instructions.
 
 <dt><p>Why do I get a Type 2 error when trying to launch XPostFacto?
 <dd>This often happens if you launch XPF on a machine that it doesn't work with. I really should deal with this situation more gracefully!
