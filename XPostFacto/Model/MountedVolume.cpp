@@ -76,7 +76,7 @@ MountedVolume::Initialize ()
 {
 	// Initialize the devices
 	XPFBootableDevice::Initialize ();
-
+	
 	// We mark all the current volumes as gone, so that we can see which are
 	// still around.
 	for (MountedVolumeIterator iter (&gVolumeList); iter.Current (); iter.Next ()) {
@@ -93,7 +93,7 @@ MountedVolume::Initialize ()
 		FSRef rootDirectory;
 		err = FSGetVolumeInfo (kFSInvalidVolumeRefNum, item, NULL, 
 				kFSVolInfoCreateDate | kFSVolInfoBlocks | kFSVolInfoSizes | kFSVolInfoFlags | 
-				kFSVolInfoFSInfo | kFSVolInfoDriveInfo , &info, &volName, &rootDirectory);
+				kFSVolInfoFSInfo | kFSVolInfoDriveInfo, &info, &volName, &rootDirectory);
 		if (err == noErr) {
 			MountedVolume *volume = MountedVolume::WithInfo (&info);
 			if (volume) {
@@ -104,7 +104,9 @@ MountedVolume::Initialize ()
 				try {
 					volume = new MountedVolume (&info, &volName, &rootDirectory);
 					gVolumeList.InsertLast (volume);
+#ifdef BUILDING_XPF
 					gApplication->Changed (cNewMountedVolume, volume);
+#endif
 					volume->fStillThere = true;
 				}
 				catch (...) {
@@ -123,8 +125,10 @@ MountedVolume::Initialize ()
 		MountedVolume *current = iter.Current ();
 		if (!current->fStillThere) {
 			if (current->fBootableDevice) current->fBootableDevice->invalidate ();
-			gVolumeList.Delete (current);	
+			gVolumeList.Delete (current);
+#ifdef BUILDING_XPF
 			gApplication->Changed (cDeleteMountedVolume, current);
+#endif
 			delete current;
 		}
 	}
