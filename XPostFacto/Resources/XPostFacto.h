@@ -43,6 +43,7 @@ advised of the possibility of such damage.
 #define mOutputDevice	7
 #define mThrottle		8
 #define mDebug			9
+#define mHelper			10
 
 #define hmInputDevice  "\0x06"
 #define hmOutputDevice "\0x07"
@@ -80,12 +81,15 @@ advised of the possibility of such damage.
 #define cShowSourceCode			1023
 
 #define cInstallExtensions		1024
+#define cSetHelperDisk			1025
 
 #define cFirstInputDevice		1100
 #define cFirstOutputDevice		1200
 
 #define cThrottleBase			1300
 #define kNumThrottleOptions		24
+
+#define cFirstHelperDisk		1400
 
 
 // Command Numbers for identifying changes

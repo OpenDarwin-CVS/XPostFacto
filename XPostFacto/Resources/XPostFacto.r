@@ -165,6 +165,7 @@ resource 'MBAR' (kMBarDisplayed,
 		mApple; 
 		mFile; 
 		mAdvanced; 
+		mHelper;
 		mOpenFirmware; 
 		mThrottle;
 		mDebug;
@@ -313,6 +314,20 @@ purgeable) {
 	{
 		"None", noIcon, noKey, noMark, plain, cSetThrottleNone;
 		"-", noIcon, noKey, noMark, plain, noCommand;
+	}
+};
+
+resource 'CMNU' (mHelper,
+#if qNames
+"mHelper",
+#endif
+purgeable) {
+	mHelper,
+	textMenuProc,
+	EnablingManagedByMacApp,
+	enabled,
+	"Helper",
+	{
 	}
 };
 
