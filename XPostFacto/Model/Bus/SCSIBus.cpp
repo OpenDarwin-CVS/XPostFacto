@@ -171,11 +171,11 @@ SCSIBus::BusWithRegEntryID (RegEntryID *otherRegEntry)
 }
 
 SCSIBus*
-SCSIBus::BusWithDeviceNumber (unsigned val)
+SCSIBus::BusWithOpenFirmwareName (CStr255_AC *ofName)
 {
 	SCSIBus *retVal = NULL;
 	for (SCSIBusIterator iter (&gSCSIBusList); iter.Current(); iter.Next()) {
-		if (iter->fDeviceNumber == val) {
+		if (iter->fOpenFirmwareName == *ofName) {
 			retVal = iter.Current ();
 			break;
 		}
@@ -191,8 +191,6 @@ SCSIBus::~SCSIBus ()
 SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 {
 	fBusNumber = kSCSIBusNumberUnknown;
-	fDeviceNumber = 0;
-	fFunctionNumber = 0;
 
 	ThrowIfNULL_AC (scsiEntry);
 	RegistryEntryIDCopy (scsiEntry, &fRegEntry);
@@ -221,17 +219,20 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 		fBusNumber = nextPCIBusNumber++;
 	}	
 	
-	// Now, as an inelegant workaround, if we already have a bus with this device number,
-	// swap the bus numbers
+	// Now, as an inelegant workaround, if this bus has a function number, then swap bus numbers
+	// with the one that has function number 0
 	
-	if (fDeviceNumber) {
-		SCSIBus *otherBus = BusWithDeviceNumber (fDeviceNumber);
+	char test = fOpenFirmwareName[fOpenFirmwareName.Length() - 1];
+	if (test == ',') {
+		CStr255_AC otherName = fOpenFirmwareName.Copy (1, fOpenFirmwareName.Length() - 2);
+		gLogFile << "Other Bus: " << otherName << endl_AC;
+		SCSIBus *otherBus = BusWithOpenFirmwareName (&otherName);
 		if (otherBus) {
 			int otherBusNumber = otherBus->fBusNumber;
 			otherBus->fBusNumber = fBusNumber;
 			fBusNumber = otherBusNumber;
 		}	
-	}
+	}	
 	
 	#if qLogging
 		gLogFile << "OpenFirmwareName: ";
@@ -241,8 +242,6 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 		gLogFile.WriteCharBytes ((char *) &fShortOpenFirmwareName[1], fShortOpenFirmwareName[0]);
 		gLogFile << endl_AC;
 		gLogFile << "Bus Number: " << fBusNumber << endl_AC;
-		gLogFile << "Device Number: " << fDeviceNumber << endl_AC;
-		gLogFile << "Function Number: " << fFunctionNumber << endl_AC;
 	#endif
 	
 }

@@ -59,7 +59,7 @@ class SCSIBus {
 				
 		static SCSIBus* BusWithNumber (int number);
 		static SCSIBus* BusWithRegEntryID (RegEntryID *regEntry);
-		static SCSIBus* BusWithDeviceNumber (unsigned val);
+		static SCSIBus* BusWithOpenFirmwareName (CStr255_AC *ofName);
 
 		static void Initialize ();
 		static int getBusCount () {return gBusCount;}
@@ -77,8 +77,6 @@ class SCSIBus {
 		int fBusNumber;
 		CStr255_AC fOpenFirmwareName;
 		CStr255_AC fShortOpenFirmwareName;
-		unsigned fDeviceNumber;
-		unsigned fFunctionNumber;
 		
 		static int gBusCount;
 		static SCSIBusList gSCSIBusList;
