@@ -2,7 +2,7 @@
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-March 9, 2005
+March 14, 2005
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -422,7 +422,7 @@ The "Options" button will bring up a dialog that allows you to select various ad
 If Mac OS X will not boot successfully, you are going to want to reboot into Mac OS 9. Here are some ways to do that. None of these will solve your primary problem (i.e. they won't make Mac OS X boot any more successfully), but at least they will get you back to Mac OS 9 again.
 
 <p><ul>
-<li>Reboot with the option-key down. This should return you to Mac OS 9.<p>
+<li>Reboot with the option-key down. This should return you to Mac OS 9. The timing of holding the option-key down is sometimes a little tricky -- you may need to experiment a little, or in some cases you may need to tap the option-key repeatedly to get the timing right (in other cases, you can just hold it down).<p>
 
 <li>If that does not work, reboot with command-option-shift-delete held down.<p>
 
@@ -430,16 +430,20 @@ If Mac OS X will not boot successfully, you are going to want to reboot into Mac
 
 <li>If that does not work, and you are using a G4 upgrade card, you could try booting from the "emergency floppy" that most of the card manufacturers include with the card. (This will help if speculative processing is the issue). Alternatively, you can try reinstalling your original CPU card.<p>
 
-<li>If that does not work, you may need to zap your parameter RAM. The simplest way of doing this is to hold down the command-option-p-r keys while rebooting. The computer will "chime" while it zaps parameter RAM. Allow it to chime several times, and then release the keys. <p>
+<li>If that does not work, you may need to zap your parameter RAM. The simplest way of doing this is to hold down the command-option-p-r keys while rebooting. The computer will "chime" while it zaps parameter RAM. Allow it to chime several times, and then release the keys. Sometimes doing this from a "cold-start" (i.e. after power has been off) is more successful than a "warm-start" (i.e. by pressing command-control-powerkey to reboot). Also, the timing of pressing comand-option-p-r can sometimes make a difference -- sometimes you have to try a couple of times before you get the timing right.<p>
 
 <li>If this does not work, then you may need to press the CUDA reset button on the motherboard for 30 seconds. The CUDA reset button is a small red button usually located near the processor card. <p>
 
 <li>If that does not work, you may need to unplug the computer, remove the motherboard battery, and leave it out for some time. Then reinstall the battery (and make sure to orient it correctly). The amount of time required varies--sometimes it can be as little as few hours, but in other cases you may need to leave it overnight.<p>
 
 <li>It that does not work, it sometimes helps to install a new battery, and try the "zapping parameter RAM" or "pressing CUDA reset button" steps again.
+
+<li>Sometimes it helps to temporarily replace the video card with an older video card (or simply remove it temporarily and use built-in video).
+
+<li>Sometimes it helps to rearrange PCI cards or memory chips.
 </ul>
 
-<p>If you have installed Mac OS X on the same partition as Mac OS 9, rebooting with the option-key down may not work, because the Mac OS X installation process "de-blesses" the Mac OS 9 System Folder. In those cases, you can reboot from the Mac OS 9 CD with the "c" key held down, and take steps to "re-bless" the Mac OS 9 System Folder. The simplest method is to drag the System or Finder file to the desktop and then back into the System Folder. If that doesn't work, one user suggests command-option-double-clicking on the Finder file (I have not tried that yet). Also, you could check to see whether the /System/Library/CoreServices folder has been blessed by the Mac OS X Installer. In that case, you could de-bless that folder by dragging out the fake System file located there. You should then be able to re-bless your Mac OS 9 System Folder.
+<p>If you have installed Mac OS X on the same partition as Mac OS 9, rebooting with the option-key down may not work, because the Mac OS X installation process "de-blesses" the Mac OS 9 System Folder. In those cases, you can reboot from the Mac OS 9 CD with the "c" key held down, and take steps to "re-bless" the Mac OS 9 System Folder. The simplest method is to drag the System or Finder file to the desktop and then back into the System Folder. If that doesn't work, one user suggests command-option-double-clicking on the Finder file (I have not tried that yet). Also, you could check to see whether the /System/Library/CoreServices folder has been blessed by the Mac OS X Installer. In that case, you could de-bless that folder by dragging out the fake System file located there. You should then be able to re-bless your Mac OS 9 System Folder. Also, the XPostFacto application now has a menu command to rebless the Mac OS 9 System folder on a volume.
 
 <h3><a name="diagnosis">Diagnosing the problem</a></h3>
 
