@@ -238,9 +238,6 @@ XPFPrefs::getPrefsFromNVRAM ()
 {		
 	XPFNVRAMSettings *nvram = XPFNVRAMSettings::GetSettings ();
 
-	XPFPlatform *platform = ((XPFApplication *) gApplication)->getPlatform ();
-	if (platform->getCanPatchNVRAM ()) platform->patchNVRAM ();
-	
 	char *bootCommand = nvram->getStringValue ("boot-command");
 	char *bootDevice = nvram->getStringValue ("boot-device");
 	char *bootFile = nvram->getStringValue ("boot-file");
@@ -501,6 +498,10 @@ XPFPrefs::DoRead (TFile* aFile, bool forPrinting)
 	
 	// Now, get prefs from NVRAM to see what's changed (if anything)
 	getPrefsFromNVRAM ();
+	
+	// Then patch the NVRAM so that checkStringLength () works properly
+	XPFPlatform *platform = ((XPFApplication *) gApplication)->getPlatform ();
+	if (platform->getCanPatchNVRAM ()) platform->patchNVRAM ();
 	
 	checkStringLength ();
 }
