@@ -45,7 +45,7 @@ class XPFPrefs : public TFileBasedDocument {
 	
 		XPFPrefs (TFile* itsFile = NULL);
 		~XPFPrefs ();
-
+		
 		// TFileBasedDocument methods
 
 		void DoInitialState ();
@@ -97,6 +97,9 @@ class XPFPrefs : public TFileBasedDocument {
 
 		void setInputDevice (char *label, bool callChanged = true);		
 		void setOutputDevice (char *label, bool callChanged = true);
+		
+		bool getRestartOnClose () {return fRestartOnClose;}
+		void setRestartOnClose (bool val) {fRestartOnClose = val;}
 				
 #define DECLARE_ACCESSORS(type,method) 						\
 	void set##method (type val, bool callChanged = true); 	\
@@ -147,6 +150,7 @@ DECLARE_DEBUG_ACCESSORS (DebugPanicText)
 		bool fUseShortStrings;
 		bool fUseShortStringsForInstall;
 		bool fRebootInMacOS9;
+		bool fRestartOnClose;
 				
 		MountedVolume *fTargetDisk;
 		MountedVolume *fInstallCD;

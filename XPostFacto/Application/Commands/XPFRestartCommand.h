@@ -45,7 +45,6 @@ class XPFRestartCommand : public TCommand {
 		
 	protected:	
 	
-		void tellFinderToRestart ();
 		virtual bool getInstalling () {return false;}
 		
 		bool fRestartNow;

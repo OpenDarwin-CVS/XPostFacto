@@ -102,7 +102,8 @@ XPFPrefs::XPFPrefs (TFile* itsFile)
 		fOutputDevice (NULL),
 		fOptionsWindow (NULL),
 		fDebug (0),
-		fRebootInMacOS9 (false)
+		fRebootInMacOS9 (false),
+		fRestartOnClose (false)
 {
 	SetAskOnClose (true);
 }
@@ -154,6 +155,8 @@ XPFPrefs::Close ()
 #ifdef __MACH__
 	restartStartupItem ();
 #endif
+
+	if (fRestartOnClose) tellFinderToRestart ();
 
 	if (!gApplication->GetDone ()) gApplication->DoMenuCommand (cQuit);
 }
@@ -708,6 +711,33 @@ XPFPrefs::restartStartupItem ()
 	XPFSetUID myUID (0);
 	system ("/Library/StartupItems/XPFStartupItem/XPFStartupItem restart");
 #endif
+}
+
+void
+XPFPrefs::tellFinderToRestart ()
+{
+	if (((XPFApplication *) gApplication)->getDebugOptions () & kDisableRestart) return;
+
+	AEDesc finderAddr;
+	AppleEvent myRestart, nilReply;
+	AEEventClass eventClass;
+
+#ifdef __MACH__
+	eventClass = kCoreEventClass;
+	ProcessSerialNumber psn = {0, kSystemProcess};
+	ThrowIfOSErr_AC (AECreateDesc (typeProcessSerialNumber, &psn, sizeof (psn), &finderAddr));
+#else
+	eventClass = kAEFinderEvents;
+	OSType fndrSig = 'MACS';
+    ThrowIfOSErr_AC (AECreateDesc (typeApplSignature, &fndrSig, sizeof(fndrSig), &finderAddr));
+#endif
+
+   	ThrowIfOSErr_AC (AECreateAppleEvent (eventClass, kAERestart, &finderAddr, kAutoGenerateReturnID,
+                              kAnyTransactionID, &myRestart));
+    ThrowIfOSErr_AC (AESend (&myRestart, &nilReply, kAENoReply + kAECanSwitchLayer + kAEAlwaysInteract,
+                  kAENormalPriority, kAEDefaultTimeout, NULL, NULL));
+	AEDisposeDesc (&myRestart);
+	AEDisposeDesc (&finderAddr);
 }
 
 #pragma mark ----> Accessors for NVRAM values
