@@ -141,7 +141,8 @@ static	OSErr	GetDestinationDirInfo(const FSRef *ref,
 	error = FSGetCatalogInfo (ref, kFSCatInfoNodeFlags | kFSCatInfoUserPrivs, &info, NULL, NULL, NULL);
 
 	*isDirectory = info.nodeFlags & kFSNodeIsDirectoryMask;
-	*isDropBox = userHasDropBoxAccess (info.userPrivileges);
+//	*isDropBox = userHasDropBoxAccess (info.userPrivileges);
+	*isDropBox = false; // so that we don't depend on the rest of MoreFiles	
 	
 	return ( error );
 }
@@ -345,6 +346,7 @@ FSGetOrCreateDirectoryUnicode (
 
 /**************/
 
+/*
 OSErr
 FSRefDTCopyComment (const FSRef *srcRef, const FSRef *dstRef)
 {
@@ -359,6 +361,7 @@ FSRefDTCopyComment (const FSRef *srcRef, const FSRef *dstRef)
  	}
 	return err;
 }
+*/
 
 /*************/
 
@@ -397,7 +400,7 @@ OSErr	FSCopyFork(short srcRefNum,
 
 	while ( (srcError == noErr) && (dstError == noErr) )
 	{
-		::YieldToAnyThread ();
+//		::YieldToAnyThread ();
 		ByteCount actualCount;
 		srcError = FSReadFork (srcRefNum, fsAtMark + noCacheMask, 0, copyBufferSize, copyBufferPtr, &actualCount);
 		dstError = FSWriteFork (dstRefNum, fsAtMark + noCacheMask, 0, actualCount, copyBufferPtr, NULL);
@@ -627,7 +630,7 @@ FSRefFileCopy (
 
 	/* Attempt to copy the comments while both forks are empty.
 	** Ignore the result because we really don't care if it worked or not. */
-	FSRefDTCopyComment (srcRef, &dstFileRef);
+//	FSRefDTCopyComment (srcRef, &dstFileRef);
 
 	/* See which forks we need to copy. By doing this, we won't create a data or resource fork
 	** for the destination unless it's really needed (some foreign file systems such as
@@ -779,17 +782,16 @@ typedef PreflightGlobals *PreflightGlobalsPtr;
 
 /* static prototypes */
 
-static	void	GetLevelSize(long currentDirID,
-							 PreflightGlobals *theGlobals);
+static void	GetLevelSize (const FSRef *currentDirRef, PreflightGlobals *theGlobals);
 
 static	OSErr	PreflightDirectoryCopySpace(const FSRef *srcRef,
 											const FSRef *dstRef,
-											CopyFilterProcPtr copyFilterProc,
+											FSCopyFilterProcPtr copyFilterProc,
 											void *refCon,
 											Boolean *spaceOK);
-
-static	void	CopyLevel(long sourceDirID,
-						  long dstDirID,
+											
+static	void	CopyLevel(const FSRef *src,
+						  const FSRef *dst,
 						  EnumerateGlobals *theGlobals);
 						  
 /*****************************************************************************/
@@ -808,7 +810,7 @@ GetLevelSize (const FSRef *currentDirRef, PreflightGlobals *theGlobals)
 
 		if ( (theGlobals->result == noErr) && (actualObjects == 1) )
 		{
-			::YieldToAnyThread ();
+//			::YieldToAnyThread ();
 			if ( (theGlobals->copyFilterProc == NULL) ||
 				 CallFSCopyFilterProc(theGlobals->copyFilterProc, theGlobals->refCon, &theGlobals->item) ) /* filter if filter proc was supplied */
 			{
@@ -937,7 +939,7 @@ static	void	CopyLevel(const FSRef *src,
 								
 		if ( (theGlobals->error == noErr) && (actualObjects == 1) )
 		{
-			::YieldToAnyThread ();
+//			::YieldToAnyThread ();
 			if ( (theGlobals->copyFilterProc == NULL) ||
 				 CallFSCopyFilterProc(theGlobals->copyFilterProc, theGlobals->refCon, &theGlobals->item) ) /* filter if filter proc was supplied */
 			{
@@ -968,7 +970,7 @@ static	void	CopyLevel(const FSRef *src,
 						{
 							/* Copy comment from old to new directory. */
 							/* Ignore the result because we really don't care if it worked or not. */
-							(void) FSRefDTCopyComment (&currentSrcDir, &newDestDir);
+							// (void) FSRefDTCopyComment (&currentSrcDir, &newDestDir);
 							
 							/* Copy directory attributes (dates, etc.) to newDirID. */
 							/* No errors allowed */
@@ -1197,7 +1199,7 @@ FSRefFilteredDirectoryCopy(
 	{		
 		/* Copy comment from source to destination directory. */
 		/* Ignore the result because we really don't care if it worked or not. */
-		(void) FSRefDTCopyComment(srcRef, &newDstRef);
+		// (void) FSRefDTCopyComment(srcRef, &newDstRef);
 		
 		/* Copy the File Manager attributes */
 		error = FSRefCopyFileMgrAttributes(srcRef, &newDstRef, true);
@@ -1249,30 +1251,30 @@ FSRefDeleteDirectoryContents (FSRef *directory)
 	if (catInfo.nodeFlags & kFSNodeIsDirectoryMask) {
 		// iterate through the directory, deleting as we go. We can't iterate in the usual way,
 		// so we keep creating & releasing the iterator.
-		FSIterator iterator;
-		ThrowIfOSErr_AC (FSOpenIterator (directory, kFSIterateFlat, &iterator));
 		while (true) {
-			::YieldToAnyThread ();
+//			::YieldToAnyThread ();
 			ItemCount actualObjects;
 			FSRef item;
+			FSIterator iterator;
+
+			error = FSOpenIterator (directory, kFSIterateFlat, &iterator);
+			if (error != noErr) return error;
 			error = FSGetCatalogInfoBulk (iterator, 1, &actualObjects, NULL, 
 												kFSCatInfoNodeFlags, &catInfo, &item, NULL, NULL);
+			FSCloseIterator (iterator);
+
 			if (error == errFSNoMoreItems) {
 				error = noErr;
-				FSCloseIterator (iterator);
 				break;
 			} else if (error != noErr) {
-				FSCloseIterator (iterator);
 				return error;
 			} else if (actualObjects == 1) {
-				FSCloseIterator (iterator);
 				if (catInfo.nodeFlags & kFSNodeIsDirectoryMask) {
 					error = FSRefDeleteDirectory (&item);
 				} else {
 					error = FSDeleteObject (&item);
 				}
 				if (error != noErr) return error;
-				ThrowIfOSErr_AC (FSOpenIterator (directory, kFSIterateFlat, &iterator));
 			} 
 		}
 	} else {
