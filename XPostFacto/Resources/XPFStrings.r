@@ -60,6 +60,6 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			"can only be used as an installer.";
 			"requires a helper disk.";
 			"Show Log Window";
-			"Copy";
+			"Copying";
 	}
 };
