@@ -201,6 +201,7 @@ XPFSettingsWindow::DoUpdate(ChangeID_AC theChange,
 			} else {
 				fInputDeviceMenu->SetCurrentItem (index + 2, true);
 			}
+			fAutoBoot->SetActiveState (fPrefs->getInputDevice () && fPrefs->getOutputDevice (), true);
 			break;
 			
 		case cSetOutputDevice:
@@ -210,6 +211,7 @@ XPFSettingsWindow::DoUpdate(ChangeID_AC theChange,
 			} else {
 				fOutputDeviceMenu->SetCurrentItem (index + 2, true);
 			}
+			fAutoBoot->SetActiveState (fPrefs->getInputDevice () && fPrefs->getOutputDevice (), true);
 			break;
 			
 		case cSetThrottle:

@@ -549,6 +549,12 @@ XPFPrefs::DoRead (TFile* aFile, bool forPrinting)
 	if (platform->getCanPatchNVRAM ()) platform->patchNVRAM ();
 	
 	checkStringLength ();
+	
+	// And make sure that auto-boot is on if there is no input device or output device
+	if (!fAutoBoot && (!fInputDevice || !fOutputDevice)) {
+		fAutoBoot = true;
+		fForceAskSave = true;
+	}
 }
 
 void
@@ -1001,6 +1007,28 @@ XPFPrefs::setInstallCD (MountedVolume *theDisk, bool callChanged)
 	}
 }
 
+void
+XPFPrefs::setInputDevice (XPFIODevice *val, bool callChanged) {
+	if (fInputDevice != val) {
+		fInputDevice = val;
+		if (callChanged) {
+			Changed (cSetInputDevice, val);
+			if (val == NULL) setAutoBoot (true);
+		}
+	}
+}
+
+void
+XPFPrefs::setOutputDevice (XPFIODevice *val, bool callChanged) {
+	if (fOutputDevice != val) {
+		fOutputDevice = val;
+		if (callChanged) {
+			Changed (cSetOutputDevice, val);
+			if (val == NULL) setAutoBoot (true);
+		}
+	}
+}
+
 #define ACCESSOR(method,type)										\
 	void XPFPrefs::set##method (type val, bool callChanged) {		\
 		if (f##method != val) {										\
@@ -1033,8 +1061,6 @@ XPFPrefs::setInstallCD (MountedVolume *theDisk, bool callChanged)
 		return (fDebug & k##methodName) ? true : false;							\
 	}
 							
-POINTER_ACCESSOR (InputDevice, XPFIODevice)
-POINTER_ACCESSOR (OutputDevice, XPFIODevice)
 POINTER_ACCESSOR (TargetDisk, MountedVolume)
 	
 ACCESSOR (UseShortStrings, bool)

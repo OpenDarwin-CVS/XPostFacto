@@ -101,7 +101,8 @@ resource 'STR#' (kHelpStringsResource, purgeable) {
 		 "The other settings should generally be off, especially \"Early Breakpoint\".";
 
 /* 5 */	 "Turn off auto-boot if you want to stop at the Open Firmware shell. "
-		 "Generally, you will want auto-boot to be on.";
+		 "Generally, you will want auto-boot to be on. "
+		 "You must select an input-device and output-device before turning auto-boot off.";
 
 		 "Set the input-device if you turn auto-boot off. Otherwise, you can leave it at \"None\".";
 
