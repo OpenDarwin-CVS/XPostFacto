@@ -70,5 +70,5 @@ Read 'BooX' (128, "bootX.xcoff") ":Derived:bootx.xcoff";
 // Other shared stuff
 
 Read 'TEXT' (kCopyrightID, "Copyright") "copyright.h";
-Read 'TEXT' (kHelpID, "Help") "::XPostFacto.html";
+Read 'TEXT' (kHelpID, "Help") "::owc:XPostFacto3.html";
 
