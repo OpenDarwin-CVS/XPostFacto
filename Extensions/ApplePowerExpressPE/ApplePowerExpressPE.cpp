@@ -143,7 +143,9 @@ ApplePowerExpressPE::getDefaultBusSpeeds(long *numSpeeds,
 void
 ApplePowerExpressPE::PMInstantiatePowerDomains(void)
 {
-	root = IOPMrootDomain::construct ();
+	root = (IOPMrootDomain *) IOPMrootDomain::metaClass->alloc ();
+	if (!root) return;
+	root->init ();
     root->attach(this);
     root->start(this);
     root->youAreRoot();

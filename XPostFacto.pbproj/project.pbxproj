@@ -4295,7 +4295,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.ApplePowerSurgePE;
-				MODULE_VERSION = 1.3.1;
+				MODULE_VERSION = 1.3.2;
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = ApplePowerSurgePE;
@@ -4335,7 +4335,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.3.1</string>
+	<string>1.3.2</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>ApplePowerSurgePE</key>
@@ -4358,8 +4358,6 @@
 			<string>IOPlatformExpertDevice</string>
 		</dict>
 	</dict>
-	<key>OSBundleCompatibleVersion</key>
-	<string>1.0.0d1</string>
 	<key>OSBundleLibraries</key>
 	<dict>
 		<key>com.apple.iokit.IOPCIFamily</key>
@@ -6176,7 +6174,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.ApplePowerExpressPE;
-				MODULE_VERSION = 1.3;
+				MODULE_VERSION = 1.3.1;
 				OTHER_CFLAGS = "-fpermissive";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -6217,7 +6215,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.3</string>
+	<string>1.3.1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>ApplePowerExpressPE</key>
@@ -6869,7 +6867,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.ApplePowerStarPE;
-				MODULE_VERSION = 1.2;
+				MODULE_VERSION = 1.2.1;
 				OTHER_CFLAGS = "-fpermissive";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -6910,7 +6908,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.2</string>
+	<string>1.2.1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>ApplePowerStarPE</key>

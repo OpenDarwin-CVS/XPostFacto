@@ -29,6 +29,7 @@
 #include "ApplePowerSurgePE.h"
 #include <IOKit/IODeviceTreeSupport.h>
 #include <IOKit/pwr_mgt/RootDomain.h>
+#include <libkern/c++/OSMetaClass.h>
 
 #include "XPFCPUSettings.h"
 
@@ -159,7 +160,9 @@ ApplePowerSurgePE::getDefaultBusSpeeds(long *numSpeeds,
 void
 ApplePowerSurgePE::PMInstantiatePowerDomains(void)
 {
-	root = IOPMrootDomain::construct ();
+	root = (IOPMrootDomain *) IOPMrootDomain::metaClass->alloc ();
+	if (!root) return;
+	root->init ();
     root->attach(this);
     root->start(this);
     root->youAreRoot();
