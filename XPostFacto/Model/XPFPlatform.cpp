@@ -56,6 +56,7 @@ under the License.
 #include "NVRAM.h"
 #include "XPFErrors.h"
 #include <ctype.h>
+#include <stdio.h>
 
 // Resource manager stuff
 
@@ -105,6 +106,21 @@ XPFPlatform::patchNVRAM ()
 void
 XPFPlatform::loadNVRAMPatch (char *compatible)
 {
+	if (!strcmp (compatible, "OPEN,PowerBook1998")) strcpy (compatible, "AAPL,PowerBook1998");
+	if (!strcmp (compatible, "AAPL,PowerBook1998")) {
+		#ifdef __MACH__
+			// No way to distinguish, so we'll just leave the current patch as is
+			XPFNVRAMSettings *settings = XPFNVRAMSettings::GetSettings ();
+			processOFVariable ("nvramrc", settings->getStringValue ("nvramrc"));
+			return;
+		#else
+			long machineType;
+			Gestalt (gestaltMachineType, &machineType);
+			char typeString [32];
+			sprintf (typeString, ",%u", machineType);
+			strcat (compatible, typeString);
+		#endif
+	}
 	Handle tc = GetResource ('OFtc', 128);
 	ThrowIfNULL_AC (tc);
 	HLock (tc);
@@ -136,7 +152,12 @@ void
 XPFPlatform::processOFVariable (char *name, char *value) {
 	if (!strcmp (name, "nvramrc")) {
 		fNVRAMPatch = NewPtr (strlen (value) + 1);
-		strcpy (fNVRAMPatch, value);	
+		strcpy (fNVRAMPatch, value);
+		char *c = fNVRAMPatch;
+		while (*c) {
+			if (*c == 10) *c = 13;
+			c++;
+		}	
 	}
 }
 

@@ -26,9 +26,6 @@ use-nvramrc? true
 load-base 600000
 diag-device 
 nvramrc hex\
-code ictc! 7E9BFBA6 l, 829F0000 l, 3BFF0004 l, 4E800020 l, c;\
-: $G FFFF0000 pvr@ and dup 80000 = swap C0000 = or ;\
-: $I $G if ictc! else drop then ;\
 : $D find-device ;\
 : $E device-end ;\
 : $L BLpatch ; : $R BRpatch ;\
@@ -40,7 +37,7 @@ code ictc! 7E9BFBA6 l, 829F0000 l, 3BFF0004 l, 4E800020 l, c;\
 10 buffer: km\
 devalias ide0 /pci/@10/ata0\
 devalias ide1 /pci/@10/@34/ata1\
-devalias ide4 /pci/@d/@34/ata4\
+devalias ide4 /pci/@D/@34/ata4\
 dev /aliases\
 : $M delete-property ;\
 " ata-int" $M\
@@ -53,19 +50,11 @@ $E\
 : ck 0 do swap dup 3 >> km + c@ 1 rot 7 and << and or loop ;\
 : bootr 0d word count encode-string " machargs" &a\
 0 0 1 ck if 0 and else dup 1 = if 3d 0 1 else f 3d 0 2 then ck if 40 or then then\
-40 and if bye else 11 $I helpb 1e 0 do ['] boot catch drop 1f4 ms loop then 0 $I bye ;\
-: myboot boot-command eval ;\
+40 and if bye else helpb 1e 0 do ['] boot catch drop 1f4 ms loop then bye ;\
 dev enet\
 62 ' READ 7 - c!\
 : READ { _p _n ; _a } begin _p _n bead -> _a _a 2+\
 if _p c@ 80 and 0= else 1 then until _a ;\
-$E\
-dev /packages/obp-tftp\
-: $M over + ['] noop $L ;\
-: $O ['] open + ;\
-: $M1 dup 24 - -1720 $O $X 6 move 14 + ;\
--5BC $O ' $M1 $L\
-0 $O E8 $M EC $M F0 $M F4 $M F8 + ' true $L\
 $E\
 dev /packages/mac-parts\
 : $M -7E86F0 $X 8000 alloc-mem 7F00 + 4 -7E86F0 $X ;\

@@ -49,13 +49,13 @@ public:
 	bool getCanPatchNVRAM () {return fNVRAMPatch != NULL;}
 	void patchNVRAM ();
 
+	static void getCompatibleFromDeviceTree (char **compatible);
+
 private:
 
 	char *fNVRAMPatch;
 	char *fCompatible;
 	
-	void getCompatibleFromDeviceTree (char **compatible);
-
 	void loadNVRAMPatch (char *compatible);
 	void processOFVariable (char *name, char *value);
 	void parsePatchStream (CStream_AC *patches);	

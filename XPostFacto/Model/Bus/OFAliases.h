@@ -76,6 +76,9 @@ class OFAliases {
 		void aliasFor (const REG_ENTRY_TYPE regEntry, char *outAlias, char *shortAlias);
 		bool matchAliases (char *path, char *ofName);
 		void expandAlias (char *original, char *expanded);
+		
+		AliasEntry* aliasEntryForKey (char *key);
+		void deleteEntryWithKey (char *key);
 
 		TemplateList_AC <AliasEntry> fEntries;
 

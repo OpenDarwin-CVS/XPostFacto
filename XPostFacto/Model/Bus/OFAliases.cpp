@@ -33,6 +33,7 @@ advised of the possibility of such damage.
 
 #include "OFAliases.h"
 #include "XPFLog.h"
+#include "XPFPlatform.h"
 
 #include <stdio.h>
 
@@ -64,75 +65,6 @@ advised of the possibility of such damage.
 
 CAutoPtr_AC <OFAliases> OFAliases::sOFAliases = NULL;
 bool OFAliases::sHasBeenInitialized = false;
-
-AliasEntry::AliasEntry (const char *key, const char *value)
-{
-	fKey = NewPtr (strlen (key) + 1);
-	strcpy (fKey, key);
-	
-	fValue = NewPtr (strlen (value) + 1);
-	strcpy (fValue, value);
-	
-	char *start, *end;
-	start = end = fValue + 1;
-	do {
-		end++;
-		if ((*end == 0) || (*end == '/')) {
-			char *comp = NewPtr (end - start + 1);
-			char save = *end;
-			*end = 0;
-			strcpy (comp, start);
-			fComponents.InsertLast (comp);
-			*end = save;
-			start = end + 1;
-		}
-	} while (*end != 0);
-}
-
-AliasEntry::~AliasEntry ()
-{
-	DisposePtr (fKey);
-	DisposePtr (fValue);
-	for (int x = 1; x <= fComponents.GetSize (); x++) {
-		DisposePtr (fComponents.At (x));
-	} 
-}
-
-char *
-AliasEntry::abbreviate (TemplateList_AC <char> *wholeName) 
-{
-	Ptr result = NewPtr (256);
-	*result = 0;
-	
-	if (fComponents.GetSize () > wholeName->GetSize ()) return result;
-	
-	bool match = true;
-	int x;
-	for (x = 1; x <= fComponents.GetSize (); x++) {
-		char *me = fComponents.At (x);
-		char *you = wholeName->At (x);
-		if (strcmp (me, you)) {
-			match = false;
-			char *atSign = strstr (you, "@");
-			if (atSign) {
-				*atSign = 0;
-				if (!strcmp (me, you)) match = true;
-				*atSign = '@';
-			}
-		}
-		if (!match) break;
-	}
-	
-	if (match) {
-		strcpy (result, fKey);
-		for (x = fComponents.GetSize () + 1; x <= wholeName->GetSize (); x++) {
-			strcat (result, "/");
-			strcat (result, wholeName->At (x));
-		}
-	}
-
-	return result;
-}
 
 class RegEntryLevel {
 
@@ -185,6 +117,69 @@ RegEntryLevel::matchWith (RegEntryLevel *other)
 	// This isn't entirely ideal, but it's the best we can do. Assuming that both were well-formed,
 	// it should work OK.
 	return !strcmp (fName, other->fName);
+}
+
+AliasEntry::AliasEntry (const char *key, const char *value)
+{
+	fKey = NewPtr (strlen (key) + 1);
+	strcpy (fKey, key);
+	
+	fValue = NewPtr (strlen (value) + 1);
+	strcpy (fValue, value);
+	
+	char *start, *end;
+	start = end = fValue + 1;
+	do {
+		end++;
+		if ((*end == 0) || (*end == '/')) {
+			char *comp = NewPtr (end - start + 1);
+			char save = *end;
+			*end = 0;
+			strcpy (comp, start);
+			fComponents.InsertLast (comp);
+			*end = save;
+			start = end + 1;
+		}
+	} while (*end != 0);
+}
+
+AliasEntry::~AliasEntry ()
+{
+	DisposePtr (fKey);
+	DisposePtr (fValue);
+	for (int x = 1; x <= fComponents.GetSize (); x++) {
+		DisposePtr (fComponents.At (x));
+	} 
+}
+
+char *
+AliasEntry::abbreviate (TemplateList_AC <char> *wholeName) 
+{
+	Ptr result = NewPtr (256);
+	*result = 0;
+	
+	if (fComponents.GetSize () > wholeName->GetSize ()) return result;
+	
+	bool match = true;
+	int x;
+	for (x = 1; x <= fComponents.GetSize (); x++) {
+		RegEntryLevel me (fComponents.At (x));
+		RegEntryLevel you (wholeName->At (x));
+		if (!me.matchWith (&you)) {
+			match = false;
+			break;
+		}
+	}
+	
+	if (match) {
+		strcpy (result, fKey);
+		for (x = fComponents.GetSize () + 1; x <= wholeName->GetSize (); x++) {
+			strcat (result, "/");
+			strcat (result, wholeName->At (x));
+		}
+	}
+
+	return result;
 }
 
 void
@@ -268,6 +263,23 @@ OFAliases::OFAliases ()
 	RegistryPropertyIterateDispose(&cookie);	
 	RegistryEntryIDDispose (&aliasEntry);
 #endif
+
+	char *compatible;
+	XPFPlatform::getCompatibleFromDeviceTree (&compatible);
+	if (strstr (compatible, "PowerBook1998")) {
+		deleteEntryWithKey ("ide0");
+		deleteEntryWithKey ("ide1");
+		deleteEntryWithKey ("ide4");
+		deleteEntryWithKey ("ata-int");
+		deleteEntryWithKey ("ata0");
+		deleteEntryWithKey ("ata1");
+		deleteEntryWithKey ("ata4");
+		
+		fEntries.InsertLast (new AliasEntry ("ide0", "/pci/@10/ata0"));
+		fEntries.InsertLast (new AliasEntry ("ide1", "/pci/@10/@34/ata1"));
+		fEntries.InsertLast (new AliasEntry ("ide4", "/pci/@D/@34/ata4"));
+	}
+	DisposePtr (compatible);
 }
 
 OFAliases::~OFAliases ()
@@ -275,6 +287,25 @@ OFAliases::~OFAliases ()
 	for (int x = 1; x <= fEntries.GetSize (); x++) {
 		delete (fEntries.At (x));
 	} 
+}
+
+AliasEntry*
+OFAliases::aliasEntryForKey (char *key)
+{
+	for (int x = 1; x <= fEntries.GetSize (); x++) {
+		if (!strcmp (fEntries.At (x)->getKey (), key)) return fEntries.At (x);
+	}
+	return NULL;
+}
+
+void
+OFAliases::deleteEntryWithKey (char *key)
+{
+	AliasEntry *entry = aliasEntryForKey (key);
+	if (entry) {
+		fEntries.Delete (entry);
+		delete entry;
+	}
 }
 
 void

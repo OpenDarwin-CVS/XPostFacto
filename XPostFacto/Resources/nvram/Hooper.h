@@ -26,9 +26,6 @@ use-nvramrc? true
 load-base 600000
 diag-device 
 nvramrc hex\
-code ictc! 7E9BFBA6 l, 829F0000 l, 3BFF0004 l, 4E800020 l, c;\
-: $G FFFF0000 pvr@ and dup 80000 = swap C0000 = or ;\
-: $I $G if ictc! else drop then ;\
 : $D find-device ;\
 : $E device-end ;\
 : $L BLpatch ; : $R BRpatch ;\
@@ -43,7 +40,7 @@ $E\
 : ck 0 do swap dup 3 >> km + c@ 1 rot 7 and << and or loop ;\
 : bootr 0d word count encode-string " machargs" $a\
 0 0 1 ck if 0 and else dup 1 = if 3d 0 1 else f 3d 0 2 then ck if 40 or then then\
-40 and if bye else 11 $I helpb 1e 0 do ['] boot catch drop 1f4 ms loop then 0 $I bye ;\
+40 and if bye else helpb 1e 0 do ['] boot catch drop 1f4 ms loop then bye ;\
 : myboot boot-command eval ;\
 dev /packages/mac-parts\
 : $M -7E8DD8 $X 8000 alloc-mem 7F00 + 4 -7E8DD8 $X ;\
