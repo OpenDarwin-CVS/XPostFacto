@@ -300,7 +300,7 @@ HFSPlusArchive::extractDirectoryTo (const FSRef *ref)
 			// In Mac OS X, we need to set the user and group, because it doesn't get done by FSSetCatalogInfo
 			#ifdef __MACH__
 				ThrowIfOSErr_AC (FSRefMakePath (&newRef, (UInt8 *) fItemPath, 1023));
-				chown (fItemPath, newCatalogInfo.permissions[0], newCatalogInfo.permissions[1]);
+				if (chown (fItemPath, newCatalogInfo.permissions[0], newCatalogInfo.permissions[1])) throw wrPermErr;
 			#endif
 		} else {
 			throw fErr;   // bail out due to error
@@ -381,7 +381,7 @@ HFSPlusArchive::extractFileTo (const FSRef *ref)
 		// In Mac OS X, we need to set the user and group, because it doesn't get done by FSSetCatalogInfo
 		#ifdef __MACH__
 			ThrowIfOSErr_AC (FSRefMakePath (&newRef, (UInt8 *) fItemPath, 1023));
-			chown (fItemPath, fCatalogInfo.permissions[0], fCatalogInfo.permissions[1]);
+			if (chown (fItemPath, fCatalogInfo.permissions[0], fCatalogInfo.permissions[1])) throw wrPermErr;
 		#endif
 	}
 }	
