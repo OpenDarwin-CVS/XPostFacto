@@ -32,17 +32,62 @@
 #ifndef __ZSTREAM_H__
 #define __ZSTREAM_H__
 
+#ifdef __GNUC__
+#define FILE_STREAM_TYPE fstream
+#define ZSTREAM_TYPE ZStreamRep
+#include <fstream.h>
+#else
+#define FILE_STREAM_TYPE 	CRandomAccessStream_AC
+#define ZSTREAM_TYPE ZStream
 #include "CRandomAccessStream_AC.h"
+#endif
 
 #include "zlib.h"
 
-class ZStream : public CStream_AC {
+enum ZStreamInitState {
+	kZStreamNoInit,
+	kZStreamDeflateInit,
+	kZStreamInflateInit
+};
+
+class ZStream
+#ifndef __GNUC__
+: public CStream_AC
+#endif
+{
 
 	public:
 	
-		ZStream (CRandomAccessStream_AC* stream);
+		ZStream (FILE_STREAM_TYPE *stream);
 		~ZStream ();	
 		
+};
+
+class ZStreamRep
+#ifndef __GNUC__
+: public CStreamRep_AC
+#endif
+{
+
+public:
+
+	ZStreamRep (FILE_STREAM_TYPE *stream);
+	virtual ~ZStreamRep ();
+
+	virtual void WriteBytes(const void* inPtr, long amt);
+	virtual void ReadBytes(void* inPtr, long amt);
+	virtual void Flush();
+
+private:
+
+	void fillBuffer ();
+
+	FILE_STREAM_TYPE *fStream;
+	z_stream fZStream;
+	unsigned char fBuffer [16 * 1024];
+	ZStreamInitState fInitState;
+	long fBytesLeft;
+
 };
 
 #endif

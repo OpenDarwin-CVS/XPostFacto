@@ -31,19 +31,21 @@
 
 #include "HFSPlusArchive.h"
 
+#ifdef __GNUC__
+void ThrowIfOSErr_AC(OSStatus inErr) {if (inErr) throw (inErr);}
+#else
 #include "CStream_AC.h"
+#endif
 
 #include "MoreFilesExtras.h"
 #include <Threads.h>
-
-#include <iostream.h>
 
 const UInt32 kHFSPlusArchiveSignature = 'hfsA';
 const UInt32 kHFSPlusArchiveVersion = 1;
 
 #define kCopyBufferSize (16 * 1024)
 
-HFSPlusArchive::HFSPlusArchive (CRandomAccessStream_AC *stream, pascal Boolean 
+HFSPlusArchive::HFSPlusArchive (FILE_STREAM_TYPE *stream, pascal Boolean 
 						(*copyFilter) (const FSRef *src))
 	: fStream (stream)
 {
@@ -197,8 +199,8 @@ HFSPlusArchive::addContentsToArchive (const FSRef *directory)
 					throw fErr;
 				} else if (fActualObjects == 1) {
 					if (!fHeaderWritten) {
-						fStream << kHFSPlusArchiveSignature;
-						fStream << kHFSPlusArchiveVersion;
+						fStream.WriteBytes (&kHFSPlusArchiveSignature, sizeof (kHFSPlusArchiveSignature));
+						fStream.WriteBytes (&kHFSPlusArchiveVersion, sizeof (kHFSPlusArchiveVersion));
 						fHeaderWritten = true;
 					}
 					archiveCurrentItem ();
@@ -246,8 +248,8 @@ HFSPlusArchive::addToArchive (const FSRef *ref)
 	if (fErr == noErr) {
 		try {
 			if (!fHeaderWritten) {
-				fStream << kHFSPlusArchiveSignature;
-				fStream << kHFSPlusArchiveVersion;
+				fStream.WriteBytes (&kHFSPlusArchiveSignature, sizeof (kHFSPlusArchiveSignature));
+				fStream.WriteBytes (&kHFSPlusArchiveVersion, sizeof (kHFSPlusArchiveVersion));
 				fHeaderWritten = true;
 			}
 			archiveCurrentItem ();
@@ -419,11 +421,11 @@ HFSPlusArchive::extractArchiveTo (const FSRef *ref, bool contiguousAlloc)
 	if (!(fCatalogInfo.nodeFlags & kFSNodeIsDirectoryMask)) return errFSNotAFolder;
 
 	UInt32 signature;
-	fStream >> signature;
+	fStream.ReadBytes (&signature, sizeof (signature));
 	if (signature != kHFSPlusArchiveSignature) return errWrongSignature;
 	
 	UInt32 version;
-	fStream >> version;
+	fStream.ReadBytes (&version, sizeof (version));
 	if (version > kHFSPlusArchiveVersion) return errWrongVersion;
 
 	// Now, start the ball rolling

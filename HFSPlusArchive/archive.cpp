@@ -29,14 +29,12 @@
     
 */  
 
-#include <CFSSpec_AC.h>
-#include <CFile_AC.h>
-#include <CFileStream_AC.h>
-
 #include "HFSPlusArchive.h"
 #include "MoreFilesExtras.h"
 
 #include <Carbon/Carbon.h>
+
+#include <fstream>
 
 int main (int argc, char **argv)
 {
@@ -47,8 +45,8 @@ int main (int argc, char **argv)
 	FSRef theSourceRef;
 	result = FSPathMakeRef ((UInt8 *) argv[1], &theSourceRef, NULL);
 	if (result) return result;
-		
-	CFSSpec_AC theSource;
+
+	FSSpec theSource;
 	result = FSGetCatalogInfo (&theSourceRef, kFSCatInfoNone, NULL, NULL, &theSource, NULL);
 	if (result) return result;
 	
@@ -57,26 +55,19 @@ int main (int argc, char **argv)
 	result = FSPathMakeRef ((UInt8 *) argv[2], &theTargetDirRef, &isDirectory);
 	if (result) return result;
 	if (!isDirectory) return 1;
+		
+	char theName[255];
+	p2cstrcpy (theName, theSource.name);
+	char *pos = strstr (theName, ".");
+	if (pos) *pos = '\0';
+	strcat (theName, ".hfs");
 	
-	CFSSpec_AC theTarget;
-	FSCatalogInfo catInfo;
-	result = FSGetCatalogInfo (&theTargetDirRef, kFSCatInfoNodeID, &catInfo, NULL, &theTarget, NULL);
-	if (result) return result;
-	
-	theTarget.parID = catInfo.nodeID;
-	
-	CStr63_AC theName (theSource.name);
-	unsigned char pos = theName.Pos (".");
-	if (pos) theName.Delete (pos, theName.Length() - pos + 1);
-	theName += ".hfs";
-	theTarget.SetName (theName);
-			
-	CFile_AC theFile (kGenericType_AC, kGenericCreator_AC, true);
+	char thePath[255];
+	snprintf (thePath, 255, "%s/%s", argv[2], theName);
+
+	fstream theStream (thePath, fstream::out);
 	
 	try {
-		theFile.Specify (theTarget);
-		theFile.CreateAndOpen ();
-		CFileStream_AC theStream (&theFile);
 		HFSPlusArchive theArchive (&theStream);
 		OSErr err = theArchive.addToArchive (&theSource);
 		if (err) return err;

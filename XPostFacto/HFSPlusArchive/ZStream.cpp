@@ -31,37 +31,19 @@
 
 #include "ZStream.h"
 #include <iostream.h>
+#include <Files.h>
 
-enum ZStreamInitState {
-	kZStreamNoInit,
-	kZStreamDeflateInit,
-	kZStreamInflateInit
-};
+#ifdef __GNUC__
+#define WRITE_BYTES write
+#define READ_BYTES read
+#define FLUSH flush
+#else
+#define WRITE_BYTES WriteBytes
+#define READ_BYTES ReadBytes
+#define FLUSH flush
+#endif
 
-class ZStreamRep : public CStreamRep_AC {
-
-	public:
-	
-		ZStreamRep (CRandomAccessStream_AC* stream);
-		~ZStreamRep ();
-	
-		virtual void WriteBytes(const void* inPtr, long amt);
-		virtual void ReadBytes(void* inPtr, long amt);
-		virtual void Flush();
-
-	private:
-	
-		void fillBuffer ();	
-	
-		CRandomAccessStream_AC* fStream;
-		z_stream fZStream;
-		unsigned char fBuffer [16 * 1024];
-		ZStreamInitState fInitState;
-		long fBytesLeft;
-		
-};
-
-ZStreamRep::ZStreamRep (CRandomAccessStream_AC* stream)
+ZStreamRep::ZStreamRep (FILE_STREAM_TYPE *stream)
 {
 	fStream = stream;
 
@@ -91,7 +73,7 @@ ZStreamRep::fillBuffer ()
 {
 	if (fBytesLeft > 0) {
 		try {
-			fStream->ReadBytes (fBuffer, fBytesLeft < sizeof(fBuffer) ? fBytesLeft : sizeof(fBuffer));
+			fStream->READ_BYTES (fBuffer, fBytesLeft < sizeof(fBuffer) ? fBytesLeft : sizeof(fBuffer));
 		}
 		catch (...) {
 			// Mainly to catch EOF, but overbroad at this point.
@@ -115,11 +97,11 @@ ZStreamRep::Flush ()
 	int result = deflate (&fZStream, Z_FINISH);
 	switch (result) {
 		case Z_STREAM_END:
-			fStream->WriteBytes (fBuffer, sizeof (fBuffer) - fZStream.avail_out);
+			fStream->WRITE_BYTES (fBuffer, sizeof (fBuffer) - fZStream.avail_out);
 			break;
 	
 		case Z_OK:
-			fStream->WriteBytes (fBuffer, sizeof (fBuffer));
+			fStream->WRITE_BYTES (fBuffer, sizeof (fBuffer));
 			fZStream.next_out = fBuffer;
 			fZStream.avail_out = sizeof (fBuffer);
 			Flush ();
@@ -154,7 +136,7 @@ ZStreamRep::WriteBytes(const void* inPtr, long amt)
 	int result = deflate (&fZStream, Z_NO_FLUSH);
 	if (result != Z_OK) throw result;
 	if (fZStream.avail_out == 0) {
-		fStream->WriteBytes (fBuffer, sizeof (fBuffer));
+		fStream->WRITE_BYTES (fBuffer, sizeof (fBuffer));
 		fZStream.next_out = fBuffer;
 		fZStream.avail_out = sizeof (fBuffer);
 		WriteBytes (fZStream.next_in, fZStream.avail_in);
@@ -164,6 +146,10 @@ ZStreamRep::WriteBytes(const void* inPtr, long amt)
 void
 ZStreamRep::ReadBytes(void* inPtr, long amt)
 {
+#ifdef __GNUC__
+#pragma unused (inPtr, amt)
+	return;
+#else
 	int result;
 	if (amt == 0) return;
 	switch (fInitState) {
@@ -191,11 +177,14 @@ ZStreamRep::ReadBytes(void* inPtr, long amt)
 		fillBuffer ();
 		ReadBytes (fZStream.next_out, fZStream.avail_out);
 	}
+#endif
 }
 
 
-ZStream::ZStream (CRandomAccessStream_AC* stream)
+ZStream::ZStream (FILE_STREAM_TYPE *stream)
+#ifndef __GNUC__
 	: CStream_AC (new ZStreamRep (stream))
+#endif
 {
 	
 }
