@@ -58,6 +58,7 @@ Read 'hfsA' (136, "AppleOHare.kext") ":Derived:Extensions:AppleOHare.hfs";
 Read 'hfsA' (137, "OHareATA.kext") ":Derived:Extensions:OHareATA.hfs";
 Read 'hfsA' (138, "ApplePowerStarPE") ":Derived:Extensions:ApplePowerStarPE.hfs";
 Read 'hfsA' (139, "ApplePowerExpressPE") ":Derived:Extensions:ApplePowerExpressPE.hfs";
+Read 'hfsA' (142, "PatchedNDRVSupport") ":Derived:Extensions:PatchedNDRVSupport.hfs";
 
 // Load the package
 

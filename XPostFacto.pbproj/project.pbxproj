@@ -35,6 +35,7 @@
 				F53C6B0A01B1B30F01A80001,
 				F53C6B1901B1B4A101A80001,
 				F53C6B2701B1B4A101A80001,
+				F5887527030D66FA01A80001,
 				F5EC95B601B1F16601A80001,
 				F53F988D01E7451B01A80001,
 				F53C6A1F01B194DC01A80001,
@@ -107,6 +108,7 @@
 				F53C698101B1926201A80001,
 				F53C698901B1926201A80001,
 				F53C699601B1926201A80001,
+				F588751B030D66DB01A80001,
 				F548C0E002897DDC01A80001,
 			);
 			isa = PBXGroup;
@@ -486,6 +488,7 @@
 				F54E20780267327701A80001,
 				F548C0D70289790D01A80001,
 				F547F71A028EFEEC01A80001,
+				F5887528030D66FA01A80001,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -4598,6 +4601,215 @@
 			settings = {
 			};
 		};
+		F588751B030D66DB01A80001 = {
+			children = (
+				F588751D030D66DB01A80001,
+				F588751F030D66DB01A80001,
+				F5887520030D66DB01A80001,
+			);
+			isa = PBXGroup;
+			path = PatchedNDRVSupport;
+			refType = 4;
+		};
+		F588751D030D66DB01A80001 = {
+			children = (
+				F588751E030D66DB01A80001,
+			);
+			isa = PBXVariantGroup;
+			name = InfoPlist.strings;
+			path = "";
+			refType = 4;
+		};
+		F588751E030D66DB01A80001 = {
+			isa = PBXFileReference;
+			name = English;
+			path = English.lproj/InfoPlist.strings;
+			refType = 4;
+		};
+		F588751F030D66DB01A80001 = {
+			isa = PBXFileReference;
+			path = PatchedNDRVFramebuffer.cpp;
+			refType = 4;
+		};
+		F5887520030D66DB01A80001 = {
+			isa = PBXFileReference;
+			path = PatchedNDRVFramebuffer.h;
+			refType = 4;
+		};
+		F5887521030D66FA01A80001 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		F5887522030D66FA01A80001 = {
+			buildActionMask = 2147483647;
+			files = (
+				F588752D030D69CC01A80001,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5887523030D66FA01A80001 = {
+			buildActionMask = 2147483647;
+			files = (
+				F588752C030D69CB01A80001,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5887524030D66FA01A80001 = {
+			buildActionMask = 2147483647;
+			files = (
+				F588752B030D69CA01A80001,
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5887525030D66FA01A80001 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5887526030D66FA01A80001 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		F5887527030D66FA01A80001 = {
+			buildPhases = (
+				F5887521030D66FA01A80001,
+				F5887522030D66FA01A80001,
+				F5887523030D66FA01A80001,
+				F5887524030D66FA01A80001,
+				F5887525030D66FA01A80001,
+				F5887526030D66FA01A80001,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+				KERNEL_MODULE = YES;
+				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				MODULE_IOKIT = YES;
+				MODULE_NAME = com.macsales.iokit.PatchedNDRVSupport;
+				MODULE_VERSION = 1.0.0d1;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = PatchedNDRVSupport;
+				SECTORDER_FLAGS = "";
+				USE_GCC3 = NO;
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = kext;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = PatchedNDRVSupport;
+			productInstallPath = "$(USER_LIBRARY_DIR)/Bundles";
+			productName = PatchedNDRVSupport;
+			productReference = F5887528030D66FA01A80001;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>PatchedNDRVSupport</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.macsales.iokit.PatchedNDRVSupport</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.0d1</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>1</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.macsales.iokit.PatchedNDRVSupport</string>
+			<key>IOClass</key>
+			<string>PatchedNDRVFramebuffer</string>
+			<key>IOMatchCategory</key>
+			<string>IOFramebuffer</string>
+			<key>IONameMatch</key>
+			<string>display</string>
+			<key>IOProbeScore</key>
+			<integer>20100</integer>
+			<key>IOProviderClass</key>
+			<string>IOPCIDevice</string>
+		</dict>
+	</dict>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.iokit.IONDRVSupport</key>
+		<string>1.2</string>
+	</dict>
+	<key>OSBundleRequired</key>
+	<string>Root</string>
+</dict>
+</plist>
+";
+			shouldUseHeadermap = 0;
+		};
+		F5887528030D66FA01A80001 = {
+			isa = PBXBundleReference;
+			path = PatchedNDRVSupport.kext;
+			refType = 3;
+		};
+		F588752B030D69CA01A80001 = {
+			fileRef = F588751D030D66DB01A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F588752C030D69CB01A80001 = {
+			fileRef = F588751F030D66DB01A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F588752D030D69CC01A80001 = {
+			fileRef = F5887520030D66DB01A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F588752E030D69F001A80001 = {
+			isa = PBXTargetDependency;
+			target = F5887527030D66FA01A80001;
+		};
 		F58C73360238599301A80001 = {
 			isa = PBXTargetDependency;
 			target = F557F68D0226FDFA01A80001;
@@ -4652,6 +4864,7 @@
 				F59D628F01B1D12901A80001,
 				F59D629001B1D12901A80001,
 				F59D629101B1D12901A80001,
+				F588752E030D69F001A80001,
 				F59D629301B1D12901A80001,
 				F59D629401B1D12901A80001,
 				F59D629501B1D12901A80001,
@@ -4713,7 +4926,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "chown root:admin \"${DSTROOT}\"\nchmod 0775 \"${DSTROOT}\"\nchmod a+t \"${DSTROOT}\"\nchown -R root:wheel \"${DSTROOT}/System/Library/Extensions\"\nchmod -R u+w \"${DSTROOT}/System/Library/Extensions\"\n\n# Construct the installer package\n# We need to copy the \"resources\" directory to remove the\n# CVS directory from inside it.\n\necho DSTROOT ${DSTROOT}\necho SRCROOT ${SRCROOT}\necho SYMROOT ${SYMROOT}\n\nmkdir -p \"${SYMROOT}/Package\"\nrm -rf \"${SYMROOT}/Package/Resources\"\ncp -Rp \"${SRCROOT}/Package/Resources\" \"${SYMROOT}/Package\"\nrm -rf \"${SYMROOT}/Package/Resources/CVS\"\n\npackage \"${DSTROOT}\" \"${SRCROOT}/Package/OldWorldSupport.info\" \\\n\t-r \"${SYMROOT}/Package/Resources\" -d \"${SYMROOT}\"\n\nchmod a+x \"${SYMROOT}/OldWorldSupport.pkg/postflight\"\n\n# Now copy the extensions\n\nmkdir -p \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n\nfor FILE in \"${SRCROOT}\"/XPostFacto/Derived/Extensions/*.hfs\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in \"${DSTROOT}\"/System/Library/Extensions/*.kext\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n}\n\nfor FILE in \"${SRCROOT}/XPostFacto/Derived/OldWorldSupport.hfs\"\n{\n\trm \"${FILE}\"\n}\n\n\"${SYMROOT}/hfsplusarchive\" \"${SYMROOT}/OldWorldSupport.pkg\" \"${SRCROOT}/XPostFacto/Derived\"\n\nif test ${SUDO_USER}; then\n\tchown -R ${SUDO_USER} \"${SYMROOT}\"\n\tchown -R ${SUDO_USER} \"${SRCROOT}/XPostFacto/Derived\"\nfi";
+			shellScript = "chown root:admin \"${DSTROOT}\"\nchmod 0775 \"${DSTROOT}\"\nchmod a+t \"${DSTROOT}\"\nchown -R root:wheel \"${DSTROOT}/System/Library/Extensions\"\nchmod -R u+w \"${DSTROOT}/System/Library/Extensions\"\n\n# Construct the installer package\n# We need to copy the \"resources\" directory to remove the\n# CVS directory from inside it.\n\nmkdir -p \"${SYMROOT}/Package\"\nrm -rf \"${SYMROOT}/Package/Resources\"\ncp -Rp \"${SRCROOT}/Package/Resources\" \"${SYMROOT}/Package\"\nrm -rf \"${SYMROOT}/Package/Resources/CVS\"\n\npackage \"${DSTROOT}\" \"${SRCROOT}/Package/OldWorldSupport.info\" \\\n\t-r \"${SYMROOT}/Package/Resources\" -d \"${SYMROOT}\"\n\nchmod a+x \"${SYMROOT}/OldWorldSupport.pkg/postflight\"\n\n# Now copy the extensions\n\nmkdir -p \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n\nfor FILE in \"${SRCROOT}\"/XPostFacto/Derived/Extensions/*.hfs\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in \"${DSTROOT}\"/System/Library/Extensions/*.kext\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n}\n\nfor FILE in \"${SRCROOT}/XPostFacto/Derived/OldWorldSupport.hfs\"\n{\n\trm \"${FILE}\"\n}\n\n\"${SYMROOT}/hfsplusarchive\" \"${SYMROOT}/OldWorldSupport.pkg\" \"${SRCROOT}/XPostFacto/Derived\"\n\nif test ${SUDO_USER}; then\n\tchown -R ${SUDO_USER} \"${SYMROOT}\"\n\tchown -R ${SUDO_USER} \"${SRCROOT}/XPostFacto/Derived\"\nfi";
 		};
 		F5BFE40F0304CD5E01A80001 = {
 			fileRef = F53C6A1501B1943D01A80001;
