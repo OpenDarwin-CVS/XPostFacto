@@ -182,10 +182,17 @@ XPFIODevice::EvaluateDevice (REG_ENTRY_TYPE entry)
 			strcat (label, displayType);
 			strcat (label, ")");
 		}
-		
+	
+#ifdef __MACH__
+		bool active = true;	
+#else
+// The idea is to figure out whether a display connection is being used or not. This is used when
+// setting a default output device. Note that this doesn't work in Mac OS X, but generally
+// the default will have been set by then :-)
 		char buffer[16];
 		bool active = (getRegistryProperty (entry, "driver-ref", buffer) == noErr);
-		
+#endif	
+
 		XPFIODevice *device = new XPFIODevice (label, alias, shortAlias, deviceType, active);
 		
 		if (!strcmp (alias, "kbd") || !strcmp (deviceType, "keyboard")) {
@@ -218,6 +225,18 @@ XPFIODevice::GetDefaultOutputDevice ()
 		if (iter->fDeviceType != "display") continue;
 		if (!iter->fActive) continue;
 		return iter.Current ();
+	}	
+	return NULL;
+}
+
+XPFIODevice*
+XPFIODevice::GetDefaultInputDevice ()
+{
+	Initialize ();
+	for (XPFIODeviceIterator iter (GetInputDeviceList ()); iter.Current(); iter.Next()) {		
+		if (iter->fDeviceType == "keyboard") return iter.Current ();
+		if (iter->fLabel == "keyboard") return iter.Current ();
+		if (!strcmp (iter->fOpenFirmwareName, "kbd")) return iter.Current ();
 	}	
 	return NULL;
 }
@@ -264,6 +283,7 @@ XPFIODevice::Initialize ()
 	    }
 	} 
 	catch (...) {
+		gLogFile << "Error initializing XPFIODevice" << endl_AC;
 	}
 	RegistryEntryIterateDispose (&cookie);
 	

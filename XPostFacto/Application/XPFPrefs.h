@@ -205,6 +205,8 @@ DECLARE_DEBUG_ACCESSORS (DebugPanicText)
 		UInt32	fRegisteredVersion;
 		UInt8 	fRebootInMacOS9;
 		UInt8	fShowHelpTags;
+		UInt8	fNoInputDevice;
+		UInt8	fNoOutputDevice;
 };
 
 #endif

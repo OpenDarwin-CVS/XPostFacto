@@ -117,7 +117,9 @@ XPFPrefs::XPFPrefs (TFile* itsFile)
 		fTooBigForNVRAMForInstall (false),
 		fForceAskSave (false),
 		fRestartOnClose (false),
-		fRegisteredVersion (0)
+		fRegisteredVersion (0),
+		fNoInputDevice (false),
+		fNoOutputDevice (false)
 {
 	SetAskOnClose (true);
 }
@@ -700,6 +702,9 @@ XPFPrefs::DoRead (TFile* aFile, bool forPrinting)
 		
 		fileStream >> fShowHelpTags;
 		implementShowHelpTags ();
+		
+		fileStream >> fNoInputDevice;
+		fileStream >> fNoOutputDevice;
 	}
 	
 	catch (...) {
@@ -707,6 +712,18 @@ XPFPrefs::DoRead (TFile* aFile, bool forPrinting)
 	
 	// Now, get prefs from NVRAM to see what's changed (if anything)
 	getPrefsFromNVRAM ();
+	
+	// If there is no input device or output device, then pick a default
+	// Unless the user has deliberately chosen not to have one
+	if (!fInputDevice && !fNoInputDevice) {
+		setInputDevice (XPFIODevice::GetDefaultInputDevice ());
+		if (fInputDevice) fForceAskSave = true;
+	}
+	
+	if (!fOutputDevice && !fNoOutputDevice) {
+		setOutputDevice (XPFIODevice::GetDefaultOutputDevice ());
+		if (fOutputDevice) fForceAskSave = true;
+	}
 	
 	// Then patch the NVRAM so that checkStringLength () works properly
 	XPFPlatform *platform = ((XPFApplication *) gApplication)->getPlatform ();
@@ -834,6 +851,13 @@ XPFPrefs::DoWrite (TFile* aFile, bool makingCopy)
 	}
 	
 	fileStream << fShowHelpTags;
+	
+	// Record if the user has selected no input/output device
+	fNoInputDevice = !fInputDevice;
+	fNoOutputDevice = !fOutputDevice;
+	
+	fileStream << fNoInputDevice;
+	fileStream << fNoOutputDevice;
 }
 
 void 
