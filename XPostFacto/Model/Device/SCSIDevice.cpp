@@ -111,11 +111,7 @@ SCSIDevice::SCSIDevice (DeviceIdent scsiDevice, SInt16 driverRefNum)
 	fPB = NULL;
 	fPBLength = 0;
 	fInvalid = false;
-	
-	#if qLogging
-		gLogFile << "Creating SCSIDevice" << endl_AC;
-	#endif
-	
+		
 	// Figure out the length for the pb
 	{
 	    SCSIBusInquiryPB busInquiryPB;
@@ -214,9 +210,6 @@ SCSIDevice::SCSIDevice (DeviceIdent scsiDevice, SInt16 driverRefNum)
 
 	// OK, just use the bus number
 	if (!bus) {
-		#if qLogging
-			gLogFile << "Getting BusWithNumber: " << (int) scsiDevice.bus << endl_AC;
-		#endif
 		bus = SCSIBus::BusWithNumber (scsiDevice.bus);
 	}
 	
@@ -246,10 +239,7 @@ SCSIDevice::SCSIDevice (DeviceIdent scsiDevice, SInt16 driverRefNum)
 	
 	#if qLogging
 		if (bus) {
-			gLogFile << "OpenFirmwareName: ";
-			gLogFile.WriteCharBytes ((char *) &fOpenFirmwareName[1], fOpenFirmwareName[0]);
-			gLogFile << endl_AC;
-			gLogFile << "ShortOpenFirmwareName: ";
+			gLogFile << "OpenFirmwareName for SCSI Bus: " << scsiDevice.bus << ": " ;
 			gLogFile.WriteCharBytes ((char *) &fShortOpenFirmwareName[1], fShortOpenFirmwareName[0]);
 			gLogFile << endl_AC;
 		} else {

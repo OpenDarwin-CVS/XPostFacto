@@ -49,10 +49,19 @@ class XPFLog : public CCharOutputSink_AC {
 		bool isActive () {return fActive;}
 		
 		void setViewStream (TTEViewStream *stream) {fViewStream = stream;}
+
+#ifdef __MACH__
+		virtual CStream_AC& Flush();
+#endif
 			
 	private:
 	
 		CFile_AC fLogFile;
+		
+#ifdef __MACH__	
+		char fBuffer [2048];
+#endif
+
 		TTEViewStream *fViewStream;
 		bool fActive;
 

@@ -46,15 +46,6 @@ HFSPlusCatalogNode::HFSPlusCatalogNode (HFSPlusCatalog *catalog, UInt32 nodeNumb
 	// read in the data!
 	ThrowIfOSErr_AC (fCatalog->readBytes (nodeNumber * fCatalog->getNodeSize (), fCatalog->getNodeSize (), (void **) &fData));
 	BlockMoveData (fData, &fNodeDescriptor, sizeof (fNodeDescriptor));
-	
-	#if qLogging
-		gLogFile << "Node Data" << endl_AC;
-		gLogFile << "nodeNumber: " << nodeNumber << endl_AC;
-		gLogFile << "bLink: " << fNodeDescriptor.bLink << endl_AC;
-		gLogFile << "fLink: " << fNodeDescriptor.fLink << endl_AC;
-		gLogFile << "kind: " << (int) fNodeDescriptor.kind << endl_AC;
-		gLogFile << "numRecords: " << fNodeDescriptor.numRecords << endl_AC; 
-	#endif
 }
 
 HFSPlusCatalogNode*
@@ -76,9 +67,6 @@ HFSPlusCatalogNode::findEntry (HFSCatalogNodeID parentID, const HFSUniStr255& no
 		recordOffset--;
 		HFSPlusCatalogKey *key = (HFSPlusCatalogKey *) (fData + *recordOffset);
 		HFSPlusCatalogFile *file = (HFSPlusCatalogFile *) (fData + *recordOffset + key->keyLength + sizeof (UInt16));
-		#if qLogging
-			gLogFile << "parentID: " << key->parentID << endl_AC;
-		#endif
 		if (parentID < key->parentID) {
 			#if qLogging
 				gLogFile << "Gone past desired parent ID" << endl_AC;
@@ -113,9 +101,6 @@ HFSPlusCatalogNode::findVolumeName (HFSUniStr255 *outName)
 	for (int x = 0; x < fNodeDescriptor.numRecords; x++) {
 		recordOffset--;
 		HFSPlusCatalogKey *key = (HFSPlusCatalogKey *) (fData + *recordOffset);
-		#if qLogging
-			gLogFile << "parentID: " << key->parentID << endl_AC;
-		#endif
 		if (fsRtParID < key->parentID) {
 			#if qLogging
 				gLogFile << "Gone past desired parent ID" << endl_AC;

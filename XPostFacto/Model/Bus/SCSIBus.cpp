@@ -140,9 +140,6 @@ SCSIBus::BusWithRegEntryID (RegEntryID *otherRegEntry)
 	for (SCSIBusIterator iter (&gSCSIBusList); iter.Current(); iter.Next()) {
 		if (RegistryEntryIDCompare (&iter->fRegEntry, otherRegEntry)) {
 			retVal = iter.Current ();
-			#if qLogging
-				gLogFile << "Found bus WithRegEntryID" << endl_AC;
-			#endif
 			break;
 		}
 	}
@@ -185,10 +182,6 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 	ThrowIfNULL_AC (scsiEntry);
 	RegistryEntryIDCopy (scsiEntry, &fRegEntry);
 
-	#if qLogging
-		gLogFile << "Creating new SCSI Bus" << endl_AC;
-	#endif
-
 	char alias [256];
 	char shortAlias [256];
 	OFAliases::AliasFor (&fRegEntry, alias, shortAlias);
@@ -215,7 +208,6 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 	char test = fOpenFirmwareName[fOpenFirmwareName.Length() - 1];
 	if (test == ',') {
 		CStr255_AC otherName = fOpenFirmwareName.Copy (1, fOpenFirmwareName.Length() - 2);
-		gLogFile << "Other Bus: " << otherName << endl_AC;
 		SCSIBus *otherBus = BusWithOpenFirmwareName (&otherName);
 		if (otherBus) {
 			int otherBusNumber = otherBus->fBusNumber;
@@ -240,8 +232,7 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
   			RegPropertyValueSize propSize;
   			err = RegistryPropertyGetSize (&foundEntry, "ATA-Channel", &propSize);
   			if ((err == noErr) && (propSize == 4)) {
-  				gLogFile << "Found one: !" << endl_AC;
-			   	fIsActuallyATABus = true;
+ 			   	fIsActuallyATABus = true;
 
 				unsigned channel;
 				ThrowIfOSErr_AC (RegistryPropertyGet (&foundEntry, "ATA-Channel", &channel, &propSize));
@@ -265,27 +256,17 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
     RegistryEntryIterateDispose (&cookie);
 
 	#if qLogging
-		gLogFile << "OpenFirmwareName: ";
-		gLogFile.WriteCharBytes ((char *) &fOpenFirmwareName[1], fOpenFirmwareName[0]);
-		gLogFile << endl_AC;
-		gLogFile << "ShortOpenFirmwareName: ";
+		gLogFile << "SCSI Bus OpenFirmwareName: ";
 		gLogFile.WriteCharBytes ((char *) &fShortOpenFirmwareName[1], fShortOpenFirmwareName[0]);
 		gLogFile << endl_AC;
 		gLogFile << "Bus Number: " << fBusNumber << endl_AC;
 		if (fIsActuallyATABus) {
 			gLogFile << "ATA Channel 0 Name: ";
-			gLogFile.WriteCharBytes ((char *) &fATAOpenFirmwareName0[1], fATAOpenFirmwareName0[0]);
-			gLogFile << endl_AC;
-			gLogFile << "ATA Channel 0 Short Name: ";
 			gLogFile.WriteCharBytes ((char *) &fATAShortOpenFirmwareName0[1], fATAShortOpenFirmwareName0[0]);
 			gLogFile << endl_AC;
 			gLogFile << "ATA Channel 1 Name: ";
-			gLogFile.WriteCharBytes ((char *) &fATAOpenFirmwareName1[1], fATAOpenFirmwareName1[0]);
-			gLogFile << endl_AC;
-			gLogFile << "ATA Channel 1 Short Name: ";
 			gLogFile.WriteCharBytes ((char *) &fATAShortOpenFirmwareName1[1], fATAShortOpenFirmwareName1[0]);
 			gLogFile << endl_AC;
-
 		}
 	#endif
 

@@ -44,16 +44,7 @@ HFSPlusExtentsOverflowNode::HFSPlusExtentsOverflowNode (HFSPlusExtentsOverflow *
 	// read in the data!
 	ThrowIfOSErr_AC (fExtentsOverflow->readBytes (nodeNumber * fExtentsOverflow->getNodeSize (), fExtentsOverflow->getNodeSize (), (void **) &fData));
 	BlockMoveData (fData, &fNodeDescriptor, sizeof (fNodeDescriptor));
-	
-	#if qLogging
-		gLogFile << "Node Data" << endl_AC;
-		gLogFile << "nodeNumber: " << nodeNumber << endl_AC;
-		gLogFile << "bLink: " << fNodeDescriptor.bLink << endl_AC;
-		gLogFile << "fLink: " << fNodeDescriptor.fLink << endl_AC;
-		gLogFile << "kind: " << (int) fNodeDescriptor.kind << endl_AC;
-		gLogFile << "numRecords: " << fNodeDescriptor.numRecords << endl_AC; 
-	#endif
-	
+		
 //	displayRecords ();
 }
 
@@ -104,10 +95,6 @@ HFSPlusExtentsOverflowNode::addExtentsFor (HFSCatalogNodeID nodeID, TemplateArra
 				if (record[y].startBlock == 0) break;
 				*totalBlocksSeen += record[y].blockCount;
 				extentsArray->InsertElementInOrder (&record[y]);
-				#if qLogging
-					gLogFile << "startBlock: " << record[y].startBlock 
-						<< " blockCount: " << record[y].blockCount << endl_AC;
-				#endif
 			}
 		} else {
 			// we've gone too far, so signal an error

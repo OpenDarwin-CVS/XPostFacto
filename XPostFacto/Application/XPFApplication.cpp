@@ -169,7 +169,7 @@ XPFApplication::XPFApplication() :
 XPFApplication::~XPFApplication()
 {
 	gLogFile.setViewStream (NULL);
-	gLogFile << endl_AC << "============" << endl_AC;
+	gLogFile << endl_AC << "Quitting" << endl_AC;
 
 	if (fPlatform) delete fPlatform;
 	if (fAboutBox) delete fAboutBox;

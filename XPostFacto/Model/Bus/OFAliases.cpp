@@ -618,9 +618,7 @@ OFAliases::aliasFor (const REG_ENTRY_TYPE regEntry, char *outAlias, char *shortA
 		strcat (outAlias, "/");
 		strcat (outAlias, wholeName.At (x));
 	}
-	
-	gLogFile << outAlias << endl_AC;
-	
+		
 	// Now, we ask each of the aliases in turn what the name would be if we used their alias
 	// If it is shorter, then we substitute it.
 	

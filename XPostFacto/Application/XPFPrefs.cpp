@@ -550,8 +550,8 @@ XPFPrefs::writePrefsToNVRAM (bool forInstall)
 	
 	#if qLogging
 		gLogFile << "Restarting ..." << endl_AC;
-		gLogFile << "Boot-device: " << bootDevice << endl_AC;
-		gLogFile << "Boot-command: " << bootCommand << endl_AC;
+		gLogFile << "boot-device: " << bootDevice << endl_AC;
+		gLogFile << "boot-command: " << bootCommand << endl_AC;
 		gLogFile << "input-device: " << inputDevice << endl_AC;
 		gLogFile << "output-device: " << outputDevice << endl_AC;
 	#endif

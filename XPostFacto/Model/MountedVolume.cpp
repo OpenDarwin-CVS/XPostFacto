@@ -134,10 +134,6 @@ MountedVolume::Initialize ()
 	}
 	
 	XPFBootableDevice::DeleteInvalidDevices ();
-			
-	#if qLogging
-		gLogFile << "Finished initializing Mounted Volumes" << endl_AC;
-	#endif
 }
 
 void
@@ -732,8 +728,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	{
 		gLogFile << "Volume: ";
 		gLogFile.WriteCharBytes ((char *) &fVolumeName[1], fVolumeName[0]);
-		gLogFile << endl_AC;
-		gLogFile << "Creation Date: " << fCreationDate << endl_AC;
+		gLogFile << " Creation Date: " << fCreationDate << endl_AC;
 	}
 	#endif
 	
@@ -795,10 +790,6 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	#if qLogging
 		if (fValidOpenFirmwareName) {
 			gLogFile << "OpenFirmwareName: ";
-			CStr255_AC openFirmwareName = getOpenFirmwareName (false);
-			gLogFile.WriteCharBytes ((char *) &openFirmwareName[1], openFirmwareName[0]);
-			gLogFile << endl_AC;
-			gLogFile << "ShortOpenFirmwareName: ";
 			CStr255_AC shortOpenFirmwareName = getOpenFirmwareName (true);
 			gLogFile.WriteCharBytes ((char *) &shortOpenFirmwareName[1], shortOpenFirmwareName[0]);
 			gLogFile << endl_AC;

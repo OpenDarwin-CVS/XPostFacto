@@ -156,6 +156,8 @@ HFSPlusVolume::getBootXStartBlock ()
 		#endif
 		ThrowException_AC (kErrorFindingBootXInCatalog, 0);
 	}
+
+/*
 	#if qLogging
 		gLogFile << "BootX extents" << endl_AC;
 		for (int x = 0; x < 8; x++) {
@@ -164,6 +166,7 @@ HFSPlusVolume::getBootXStartBlock ()
 			gLogFile << "blockCount: " << file.dataFork.extents[x].blockCount << endl_AC;
 		}
 	#endif
+*/
 	
 	if (file.dataFork.extents[0].blockCount == file.dataFork.totalBlocks) {
 		return fOffsetIntoPartition + file.dataFork.extents[0].startBlock * (fHeader->blockSize / 512);
@@ -312,9 +315,6 @@ HFSPlusVolume::installBootXIfNecessary (bool forceInstall)
 	ThrowIfNULL_AC (fHeader);
 	
 	if (forceInstall) {
-		#if qLogging
-			gLogFile << "Forcing BootX to install" << endl_AC;
-		#endif
 		installBootX ();
 		fBootXInstallationComplete = true;
 		return;
@@ -324,9 +324,6 @@ HFSPlusVolume::installBootXIfNecessary (bool forceInstall)
 	OSErr err;
 	err = FSMakeFSSpec (volume->getIOVDrvInfo(), fsRtDirID, "\p:BootX.image", &bootXImageSpec);
 	if (err != noErr) {
-		#if qLogging
-			gLogFile << "BootX.image not found." << endl_AC;
-		#endif
 		installBootX ();
 	} else {
 		// We have a BootX.file. So, we'll see whether it has moved.

@@ -33,6 +33,11 @@
 
 #include "UTEViewStream.h"
 
+#ifdef __MACH__
+	#include <syslog.h>
+	#include <stdarg.h>
+#endif
+
 XPFLog gLogFile ("\p:XPostFacto Log");
 
 #include "CFileStream_AC.cpp"
@@ -44,6 +49,11 @@ XPFLog::XPFLog (ConstStr255Param fileName)
 	fActive = false;
 	SInt16 logVRefNum;
 	SInt32 logDirID;
+	
+#ifdef __MACH__
+	fBuffer[0] = 0;
+	openlog ("XPostFacto", 0, LOG_USER);
+#else	
 	try {
 		ThrowIfOSErr_AC (FindFolder (kOnSystemDisk, kPreferencesFolderType, true, &logVRefNum, &logDirID));
 		
@@ -70,19 +80,45 @@ XPFLog::XPFLog (ConstStr255Param fileName)
 	{
 		fActive = false;
 	}
+#endif
 }
 
 XPFLog::~XPFLog ()
 {
-
+#ifdef __MACH__
+	closelog ();
+#endif
 }
 
 void 
 XPFLog::WriteCharBytes(const char* inStr, long inSize)
 {
+#ifdef __MACH__
+	strncat (fBuffer, inStr, 2047 - strlen (fBuffer));
+#endif
+
 	if (fActive) CCharOutputSink_AC::WriteCharBytes (inStr, inSize);
+	
 	if (fViewStream) {
 		fViewStream->WriteCharBytes (inStr, inSize);
 		fViewStream->Flush ();
 	}
 }
+
+#ifdef __MACH__
+
+CStream_AC& 
+XPFLog::Flush ()
+{
+	char *c = fBuffer;
+	while (*c) {
+		if (*c == 13) *c = 10;
+		c++;
+	}
+	syslog (LOG_INFO, fBuffer);
+	fBuffer[0] = 0;
+	
+	return CCharOutputSink_AC::Flush ();
+}
+
+#endif

@@ -228,10 +228,6 @@ XPFIODevice::Initialize ()
 	if (doneOnce) return;
 	doneOnce = true;
 	
-	#if qLogging
-		gLogFile << "Initializing Input and Output Devices" << endl_AC;
-	#endif
-
 #if __MACH__
 
 	mach_port_t iokitPort;

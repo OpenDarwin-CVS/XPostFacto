@@ -45,17 +45,10 @@ HFSPlusExtentsOverflow::HFSPlusExtentsOverflow (HFSPlusVolume *volume)
 	// collect the extents
 	HFSPlusForkData *extentsFile = &header->extentsFile;
 	UInt32 totalBlocksSeen = 0;
-	#if qLogging
-		gLogFile << "Extents overflow extents" << endl_AC;
-	#endif
 	for (int x = 0; x < 8; x++) {
 		if (extentsFile->extents[x].startBlock == 0) break;
 		totalBlocksSeen += extentsFile->extents[x].blockCount;
 		fExtents.InsertElementInOrder (&extentsFile->extents[x]);
-		#if qLogging
-			gLogFile << "startBlock: " << extentsFile->extents[x].startBlock 
-					<< " blockCount: " << extentsFile->extents[x].blockCount << endl_AC;
-		#endif
 	}
 	if (totalBlocksSeen < extentsFile->totalBlocks) {
 		#if qLogging
@@ -75,16 +68,6 @@ HFSPlusExtentsOverflow::HFSPlusExtentsOverflow (HFSPlusVolume *volume)
 	ThrowIfNULL_AC (buffer);
 	BlockMoveData (buffer + sizeof (BTNodeDescriptor), &headerNode, sizeof (headerNode));
 	DisposePtr (buffer);
-
-	#if qLogging
-		gLogFile << "rootNode: " << headerNode.rootNode << endl_AC;
-		gLogFile << "firstLeafNode: " << headerNode.firstLeafNode << endl_AC;
-		gLogFile << "nodeSize: " << headerNode.nodeSize << endl_AC;
-		gLogFile << "totalNodes: " << headerNode.totalNodes << endl_AC;
-		gLogFile << "treeDepth: " << headerNode.treeDepth << endl_AC;
-		gLogFile << "btreeType: " << (unsigned) headerNode.btreeType << endl_AC;
-		gLogFile << "maxKeyLength: " << headerNode.maxKeyLength << endl_AC;
-	#endif
 
 	fNodeSize = headerNode.nodeSize;		
 	fFirstLeafNode = headerNode.firstLeafNode;
