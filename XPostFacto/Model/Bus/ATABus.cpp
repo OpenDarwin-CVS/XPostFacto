@@ -78,7 +78,7 @@ ATABus::Initialize ()
 				ThrowIfNULL_AC (deviceType);
 				ThrowIfOSErr_AC (RegistryPropertyGet (&entry, kDeviceTypeProperty, deviceType, &propSize));
 				deviceType[propSize] = '\0';
-				if (!strcmp (deviceType, "ata") || !strcmp (deviceType, "ATA")) {
+				if (!strcmp (deviceType, "ata") || !strcmp (deviceType, "ATA") || !strcmp (deviceType, "ide")) {
 					// skip if FrmTek
 					err = RegistryPropertyGetSize (&entry, "name", &propSize);
 					char *name = NewPtr (propSize + 1);
