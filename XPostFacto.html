@@ -1,8 +1,8 @@
-<body><h1>XPostFacto 2.2b15</h1>
+<body><h2>XPostFacto 2.2b16</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-August 9, 2002
+August 10, 2002
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. The only difference from a supported installation is 3 extra clicks of your mouse! When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -10,7 +10,9 @@ August 9, 2002
 
 <p>You should also remember to check the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto.html">online version</a> of this documentation from time to time, to see whether there have been any changes.
 
-<p>As of version 2.2b15, it looks as though XPostFacto will be working with Mac OS X 10.2 (aka Jaguar), which is scheduled to be released on August 24. One known problem with Jaguar relates to systems which are still using their original 603 or 604 processor. It is unlikely that this problem will be solved before the 24th. There also appears to be a problem with the appearance of the "pointer cursor" when using onboard video. I will be looking into that to see whether it can be fixed.
+<p>As of version 2.2b15, it looks as though XPostFacto will be working with Mac OS X 10.2 (aka Jaguar), which is scheduled to be released on August 24. There are a couple of issues with Jaguar on unsupported systems at the moment. Jaguar does not work with the 603 or 604 processor--it is limited to the G3 and G4. It may be possible to fix this, but it will not happen before August 24. There is also a problem with the appearance of the "pointer cursor" when using onboard video. I am trying to figure out why, and may be able to fix it. Finally, I am having some trouble starting Classic, and am trying to figure out why.
+
+<p><hr>
 
 <p><ul>
 <li><a href="#links">Download Links and Version History</a>
@@ -74,7 +76,11 @@ August 9, 2002
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
-<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Download/XPostFacto.img.sit">2.2b15 (August 8, 2002)</a>
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Download/XPostFacto.img.sit">2.2b16 (August 10, 2002)</a>
+<dd>
+Fixes a problem which prevented some of the kernel extensions from loading properly in 2.2b15, which could cause a kernel panic early in the boot process. 
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2b15.img.sit">2.2b15 (August 8, 2002)</a>
 <dd>
 <ul>
 <li>Fixes the "kernel panic on first reboot after clean install" problem. 
@@ -510,6 +516,9 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <h2>Revision History</h2>
 
 <dl>
+<dt>August 10, 2002
+<dd>Changes for version 2.2b16.
+
 <dt>August 9, 2002
 <dd>Fixed os9forever link. Added note about "pointer cursor" appearance in 10.2.
 
