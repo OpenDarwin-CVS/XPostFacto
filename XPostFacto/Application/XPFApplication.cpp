@@ -292,6 +292,48 @@ XPFApplication::DoShowHelpFile ()
 }
 
 void
+XPFApplication::installMenuHelpTags (ResNumber menuResID)
+{
+#ifdef __MACH__
+	MenuRef menu = MAGetMenu (menuResID);
+	if (!menu) return;
+
+	Handle help = GetResource ('hmnu', menuResID);	
+	if (help) {
+		CHandleStream_AC stream (help);
+		try {	
+			unsigned pos;
+			
+			stream.OffsetPosition (10);	// skip header
+			UInt16 itemCount = stream.ReadShort ();	// read item count
+			pos = stream.GetPosition ();
+			pos += stream.ReadShort ();
+			stream.SetPosition (pos); // skip skip item
+			
+			for (unsigned item = 0; item < itemCount; item++) {
+				pos = stream.GetPosition ();
+				pos += stream.ReadShort ();
+				UInt16 itemType = stream.ReadShort ();
+				if (itemType == kHMStringItem) {
+					CStr255_AC str = stream.ReadString (255);
+					HMHelpContentRec content = {kMacHelpVersion, {0, 0, 0, 0}, kHMOutsideRightBottomAligned};
+					content.content[0].contentType = kHMPascalStrContent;
+					str.CopyTo (content.content[0].u.tagString);
+					content.content[1].contentType = kHMNoContent;
+					HMSetMenuItemHelpContent (menu, item, &content);				
+				}
+				stream.SetPosition (pos);
+			}
+					
+		} 
+		catch (...) {}
+	}
+#else
+	#pragma unused (menuResID)
+#endif
+}
+
+void
 XPFApplication::DoInitialState ()
 {
 	Inherited::DoInitialState ();
@@ -307,6 +349,10 @@ XPFApplication::DoInitialState ()
 	gLogFile.setViewStream (fViewStream);
 
 	fPlatform = new XPFPlatform;
+	
+	installMenuHelpTags (mWindow);
+	installMenuHelpTags (mInstall);
+	installMenuHelpTags (mCache);
 }
 
 void 

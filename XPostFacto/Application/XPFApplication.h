@@ -106,9 +106,14 @@ class XPFApplication : public TApplication {
 			
 		virtual void DoAEClose(TAppleEvent* message, TAppleEvent* reply);
 		
-	private:			
+	private:		
+		
 		void toggleDebugOption (UInt32 option) {if (fDebugOptions & option) fDebugOptions &= ~option; else fDebugOptions |= option;}
 		void addDebugOptionsToHelpMenu ();
+
+		void installMenuHelpTags (ResNumber menuResID);
+
+	private:
 				
 		XPFAboutBox *fAboutBox;
 		TWindow *fSplash;
