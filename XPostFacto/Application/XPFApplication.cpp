@@ -393,15 +393,19 @@ XPFApplication::OpenNew (CommandNumber itsCommandNumber)
 #ifdef __MACH__
 	if (geteuid () != 0) {
 		OSStatus status = XPFAuthorization::Authenticate ();
-		if (status == errAuthorizationSuccess) {
+		if (status == errAuthorizationSuccess) {		
 			CFURLRef myURL = CFBundleCopyExecutableURL (CFBundleGetMainBundle ());
-			CFStringRef myPathRef = CFURLCopyFileSystemPath (myURL, kCFURLPOSIXPathStyle);
-			char myPath[256];
-			CFStringGetCString (myPathRef, myPath, 256, kCFStringEncodingMacHFS);
-			CFRelease (myPathRef);
-			CFRelease (myURL);
-			
-			XPFAuthorization::ExecuteWithPrivileges (myPath, NULL, NULL);
+			if (myURL) {
+				FSRef myFSRef;
+				if (CFURLGetFSRef (myURL, &myFSRef)) {
+					char myPath[256];
+					OSStatus err = FSRefMakePath (&myFSRef, (UInt8 *) myPath, 255);
+					if (err == noErr) {
+						XPFAuthorization::ExecuteWithPrivileges (myPath, NULL, NULL);				
+					}
+				}
+				CFRelease (myURL);
+			}	
 		}
 		PostCommand (TH_new TQuitCommand);
 		return NULL;
