@@ -84,7 +84,7 @@ OpenChips65550Framebuffer::start (IOService *provider)
 	fDevice = OSDynamicCast (IOPCIDevice, provider);
 	if (!fDevice) return false;
 	fDevice->setIOEnable (true);
-	
+		
 	return super::start (provider);
 }
 
@@ -92,9 +92,9 @@ void
 OpenChips65550Framebuffer::initializeRegisters ()
 {
 	WriteIndexedRegister (EXTENSION_INDEX, MEMORY_CLOCK_DIVISOR_SELECT, 0x00);
-	WriteIndexedRegister (EXTENSION_INDEX, MEMORY_CLOCK_VCO_M_DIVISOR, 0x43);
-	WriteIndexedRegister (EXTENSION_INDEX, MEMORY_CLOCK_VCO_N_DIVISOR, 0x18);
-	WriteIndexedRegister (EXTENSION_INDEX, MEMORY_CLOCK_DIVISOR_SELECT, 0xA1);
+	WriteIndexedRegister (EXTENSION_INDEX, MEMORY_CLOCK_VCO_M_DIVISOR, 0x0C);
+	WriteIndexedRegister (EXTENSION_INDEX, MEMORY_CLOCK_VCO_N_DIVISOR, 0x06);
+	WriteIndexedRegister (EXTENSION_INDEX, MEMORY_CLOCK_DIVISOR_SELECT, 0x91);
 	
 	WriteIndexedRegister (EXTENSION_INDEX, PIXEL_PIPELINE_CONFIGURATION_0, 0x82);
 	WriteIndexedRegister (EXTENSION_INDEX, PIXEL_PIPELINE_CONFIGURATION_1, 0x12);
@@ -149,7 +149,7 @@ IOReturn
 OpenChips65550Framebuffer::getStartupDisplayMode (IODisplayModeID *displayMode, IOIndex *depth)
 {
 	*displayMode = kDisplayMode;
-	*depth = kDepth16Bit;
+	*depth = kDepth8Bit;	// until I get the gamma working in 16 bit
 	
 	return kIOReturnSuccess;
 }
@@ -360,8 +360,6 @@ OpenChips65550Framebuffer::getAttributeForConnection (IOIndex connectIndex, IOSe
 
 IODeviceMemory* 
 OpenChips65550Framebuffer::getVRAMRange (void) {
-	return super::getVRAMRange ();
-
 	IOService *provider = getProvider ();
 	if (!provider) return NULL;
 	IODeviceMemory *mem = provider->getDeviceMemoryWithIndex (0);
@@ -373,8 +371,6 @@ OpenChips65550Framebuffer::getVRAMRange (void) {
 IODeviceMemory* 
 OpenChips65550Framebuffer::getApertureRange (IOPixelAperture aper)
 {
-	return super::getApertureRange (aper);
-
 	if (!fCurrentDisplayMode) return NULL;
 
 	IODeviceMemory *deviceMemory = getVRAMRange ();                      
@@ -407,6 +403,17 @@ OpenChips65550Framebuffer::implementGammaAndCLUT ()
 			break;
 			
 		case kDepth16Bit:
+			if (!fGammaValid) return;
+			fDevice->ioWrite8 (PALETTE_WRITE_INDEX_REGISTER, 0);
+			for (int x = 0; x < 32; x++) {
+				unsigned offset = x * 8;
+				fDevice->ioWrite8 (PALLETE_DATA_REGISTER, fGammaTable.red[offset]);
+				fDevice->ioWrite8 (PALLETE_DATA_REGISTER, fGammaTable.green[offset]);
+				fDevice->ioWrite8 (PALLETE_DATA_REGISTER, fGammaTable.blue[offset]);
+				for (int y = 0; y < (7 * 3); y++) fDevice->ioWrite8 (PALLETE_DATA_REGISTER, 0);
+			}
+			break;
+			
 		case kDepth32Bit:
 			if (!fGammaValid) return;
 			fDevice->ioWrite8 (PALETTE_WRITE_INDEX_REGISTER, 0);
@@ -422,24 +429,44 @@ OpenChips65550Framebuffer::implementGammaAndCLUT ()
 IOReturn 
 OpenChips65550Framebuffer::setGammaTable (UInt32 channelCount, UInt32 dataCount, UInt32 dataWidth, void *data)
 {
-	if ((dataCount != 256) || (dataWidth != 8)) {
+	if (dataCount != 256) {
 		IOLog ("OpenChips65550Framebuffer::setGammaTable dataCount: %lu dataWidth: %lu\n", dataCount, dataWidth);
 		return kIOReturnUnsupported;
 	};
-
-	UInt8 *gammaData = (UInt8 *) data;
 	
-	if (channelCount == 3) {
-		bcopy (gammaData, &fGammaTable, 256 * 3);
-	} else if (channelCount == 1) {
-		for (int x = 0; x < 256; x++) {
-			fGammaTable.red[x] = gammaData[x];
-			fGammaTable.green[x] = gammaData[x];
-			fGammaTable.blue[x] = gammaData[x];
+	if (dataWidth == 8) {
+		UInt8 *gammaData8 = (UInt8 *) data;		
+		if (channelCount == 3) {
+			bcopy (gammaData8, &fGammaTable, 256 * 3);
+		} else if (channelCount == 1) {
+			for (int x = 0; x < 256; x++) {
+				fGammaTable.red[x] = gammaData8[x];
+				fGammaTable.green[x] = gammaData8[x];
+				fGammaTable.blue[x] = gammaData8[x];
+			}
+		} else {
+			return kIOReturnUnsupported;
 		}
+	} else if (dataWidth == 16) {
+		UInt16 *gammaData16 = (UInt16 *) data;		
+		if (channelCount == 3) {
+			for (int x = 0; x < 256; x++) {
+				fGammaTable.red[x] = gammaData16[x] >> 8;
+				fGammaTable.green[x] = gammaData16[x + 256] >> 8;
+				fGammaTable.blue[x] = gammaData16[x + 512] >> 8;
+			}
+		} else if (channelCount == 1) {
+			for (int x = 0; x < 256; x++) {
+				fGammaTable.red[x] = gammaData16[x] >> 8;
+				fGammaTable.green[x] = gammaData16[x] >> 8;
+				fGammaTable.blue[x] = gammaData16[x] >> 8;
+			}
+		} else {
+			return kIOReturnUnsupported;
+		}	
 	} else {
 		return kIOReturnUnsupported;
-	}
+	}   
 	
 	fGammaValid = true;
 	
@@ -479,7 +506,9 @@ OpenChips65550Framebuffer::setDisplayMode (IODisplayModeID displayMode, IOIndex 
 	
 	IOPixelInformation info;
 	getPixelInformation (displayMode, depth, kIOFBSystemAperture, &info);
-	WriteIndexedRegister (CRT_CONTROLLER_INDEX, OFFSET, info.bytesPerRow / 8);
+	UInt32 offset = info.bytesPerRow / 8;
+	WriteIndexedRegister (CRT_CONTROLLER_INDEX, EXTENDED_OFFSET, (offset & 0xFF00) >> 8);
+	WriteIndexedRegister (CRT_CONTROLLER_INDEX, OFFSET, offset & 0xFF);
 	
 	switch (depth) {
 		case kDepth8Bit:
