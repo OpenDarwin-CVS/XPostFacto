@@ -76,6 +76,8 @@ class XPFPartition
 
 		unsigned int getPartitionNumber () {return fPartitionNumber;}
 		bool getHasBootX () {return fHasBootX;}
+		UInt32 getBootXVersion ();
+		UInt32 getMyBootXVersion ();
 		unsigned int getCreationDate () {return fCreationDate;}
 		bool getExtendsPastEightGB () {return fExtendsPastEightGB;}
 		const CStr255_AC& getOpenFirmwareName (bool useShortName) {return useShortName ? fShortOpenFirmwareName : fOpenFirmwareName;}

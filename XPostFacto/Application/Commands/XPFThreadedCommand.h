@@ -39,12 +39,13 @@ advised of the possibility of such damage.
 class XPFPrefs;
 class MountedVolume;
 class XPFProgressWindow;
+class XPFUpdate;
 
 class XPFThreadedCommand : public TCommand {
 
 	public:
 		
-		XPFThreadedCommand (MountedVolume *rootDisk, MountedVolume *bootDisk);
+		XPFThreadedCommand (XPFUpdate *update);
 		
 		void DoIt ();											
 		virtual void DoItInProgressWindow () = 0;
@@ -74,6 +75,8 @@ class XPFThreadedCommand : public TCommand {
 		XPFPrefs *fPrefs;
 		MountedVolume *fRootDisk;
 		MountedVolume *fBootDisk;
+		
+		XPFUpdate *fUpdate;
 		
 		XPFProgressWindow *fProgressWindow;
 		

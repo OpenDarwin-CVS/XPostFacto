@@ -58,6 +58,7 @@ public:
 	void setVolume (MountedVolume* newVolume);
 	MountedVolume *getVolume () {return fVolume;}
 	void DoHighlightSelection (HLState fromHL, HLState toHL);
+	virtual TDrawingEnvironment* DoMakeNewDrawingEnvironment ();
 									
 private:
 	

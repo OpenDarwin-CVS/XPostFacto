@@ -618,6 +618,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	fHelperDisk = NULL;
 	fCreationDate = 0;
 	fMacOSXVersion = "";
+	fMacOSXMajorVersion = 0;
 	
 #ifdef BUILDING_XPF
 	gApplication->AddDependent (this); // for listening for volume deletions
@@ -684,8 +685,22 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 							start += strlen ("<string>");
 							char *end = strstr (key, "</string>");
 							if (end) {
+								char tmp = *end;
 								*end = 0;
 								fMacOSXVersion.CopyFrom (start);
+								*end = tmp;
+							}
+						}
+					}
+					key = strstr (versionData, "<key>ProductBuildVersion</key>");
+					if (key) {
+						char *start = strstr (key, "<string>");
+						if (start) {
+							start += strlen ("<string>");
+							char *end = strstr (key, "</string>");
+							if (end) {
+								*end = 0;
+								fMacOSXMajorVersion = strtoul (start, 0, 0);
 							}
 						}
 					}

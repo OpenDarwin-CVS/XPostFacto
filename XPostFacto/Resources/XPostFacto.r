@@ -227,6 +227,8 @@ purgeable) {
 	"Startup Item", noIcon, noKey, noMark, plain, cInstallStartupItem;
 	"-",			noIcon, noKey, noMark, plain, nocommand;
 	"Recopy Helper Files", noIcon, noKey, noMark, plain, cRecopyHelperFiles;
+	"-",			noIcon, noKey, noMark, plain, nocommand;
+	"Uninstall…",	noIcon, noKey, noMark, plain, cUninstall;
 	}
 };
 

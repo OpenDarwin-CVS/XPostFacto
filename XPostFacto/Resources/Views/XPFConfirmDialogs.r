@@ -1,4 +1,4 @@
-resource 'STR#' (1030, "Restart", purgeable) {
+resource 'STR#' (1030, "Restart") {
 	{	/* array StringArray: 6 elements */
 		/* [1] */
 		"Are you sure you want to change your startup settings?",
@@ -53,6 +53,22 @@ resource 'STR#' (1034, "Install Now", purgeable) {
 		"Install",
 		/* [4] */
 		"Confirm Install"
+	}
+};
+
+resource 'STR#' (1035, "Uninstall", purgeable) {
+	{	/* array StringArray: 5 elements */
+		/* [1] */
+		"Are you sure you want to uninstall XPostFacto?",
+		/* [2] */
+		"All kernel extensions and startup items installed by XPostFacto will be removed "
+		"from $VOLUME$.",
+		/* [3] */
+		"Uninstall",
+		/* [4] */
+		"Cancel",
+		/* [5] */
+		"Confirm Uninstall"
 	}
 };
 
@@ -2095,6 +2111,484 @@ resource 'View' (1034, "Install Now", purgeable) {
 				-1,
 				dontPreferOutline,
 				1030,
+				4
+			},
+			NoSubviews
+		}
+	}
+};
+
+resource 'View' (1035, "Uninstall", purgeable) {
+	MAThreeOhView {
+
+	},
+	{	/* array ViewArray: 6 elements */
+		/* [1] */
+		ViewSignatureAndClassname {
+			'wind',
+			790,
+			"",
+			'WIND',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 1 elements */
+				/* [1] */
+				BehaviorSignatureAndClassname {
+					'dlgb',
+					"",
+					DialogBehavior {
+						enabled,
+						noIdle,
+						modal,
+						'chan',
+						'canc'
+					}
+				}
+			},
+			MAThreeOhView {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				45,
+				/* [2] */
+				45
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				150,
+				/* [2] */
+				518
+			},
+			sizeVariable,
+			sizeVariable,
+			notShown,
+			doesntWantToBeTarget,
+			handlesCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			handlesHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			AdornerListSignatureAndClassname {
+				NoIdentifier,
+				"TAdornerList",
+				AdornerElementSize,
+				AdornerElementSizeShift,
+				DynamicArrayAllocationIncrement,
+				{	/* array AdornerElementArray: 3 elements */
+					/* [1] */
+					AdornFirst,
+					AdornerLocalObject {
+						EraseAdorner
+					},
+					/* [2] */
+					DrawView,
+					AdornerLocalObject {
+						DrawAdorner
+					},
+					/* [3] */
+					AdornLast,
+					AdornerLocalObject {
+						ResizeIconAdorner
+					}
+				}
+			},
+			emptyUserArea,
+			Window {
+				movableDBoxProc,
+				noID,
+				noGoAwayBox,
+				notResizable,
+				ignoreFirstClick,
+				freeOnClosing,
+				disposeOnFree,
+				doesntCloseDocument,
+				dontOpenWithDocument,
+				dontAdaptToScreen,
+				dontStagger,
+				forceOnScreen,
+				center,
+				doesntFloat,
+				doesntHideOnSuspend,
+				generateActivates,
+				filler,
+				1035,
+				5
+			},
+			5
+		},
+		/* [2] */
+		ViewSignatureAndClassname {
+			'icon',
+			100,
+			"TIcon",
+			'icon',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				21,
+				/* [2] */
+				20
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				64,
+				/* [2] */
+				64
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Icon {
+				mIconHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				preferColor,
+				128
+			},
+			NoSubviews
+		},
+		/* [3] */
+		ViewSignatureAndClassname {
+			'stat',
+			100,
+			"",
+			'stat',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				21,
+				/* [2] */
+				117
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				16,
+				/* [2] */
+				373
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			StaticText {
+				mStaticTextHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				autoWrap,
+				dontEraseFirst,
+				justSystem,
+				1035,
+				1
+			},
+			NoSubviews
+		},
+		/* [4] */
+		ViewSignatureAndClassname {
+			'stat',
+			100,
+			"",
+			'sta0',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				47,
+				/* [2] */
+				116
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				31,
+				/* [2] */
+				378
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			StaticText {
+				mStaticTextHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				27392,
+				dontPreferOutline,
+				autoWrap,
+				dontEraseFirst,
+				justSystem,
+				1035,
+				2
+			},
+			NoSubviews
+		},
+		/* [5] */
+		ViewSignatureAndClassname {
+			'butn',
+			207,
+			"",
+			'chan',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				93,
+				/* [2] */
+				400
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				28,
+				/* [2] */
+				100
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			DrawingEnvironmentClassIDAndClassname {
+				10,
+				"TDrawingEnvironment",
+				{3, 3},
+				8,
+				$"FFFF FFFF FFFF FFFF",
+				{	/* array: 3 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0
+				},
+				{	/* array: 3 elements */
+					/* [1] */
+					65535,
+					/* [2] */
+					65535,
+					/* [3] */
+					65535
+				}
+			},
+			AdornerListSignatureAndClassname {
+				NoIdentifier,
+				"TAdornerList",
+				8,
+				AdornerElementSizeShift,
+				8,
+				{	/* array AdornerElementArray: 2 elements */
+					/* [1] */
+					DrawView,
+					AdornerLocalObject {
+						DrawAdorner
+					},
+					/* [2] */
+					AdornAfter,
+					AdornerSignatureAndClassname {
+						'rrct',
+						"",
+						'rrct',
+						freeOnDeletion,
+						$""
+					}
+				}
+			},
+			emptyUserArea,
+			Button {
+				mDismiss,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					4,
+					/* [2] */
+					4,
+					/* [3] */
+					4,
+					/* [4] */
+					4
+				},
+				-1,
+				dontPreferOutline,
+				1035,
+				3
+			},
+			NoSubviews
+		},
+		/* [6] */
+		ViewSignatureAndClassname {
+			'butn',
+			96,
+			"",
+			'canc',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				97,
+				/* [2] */
+				302
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				20,
+				/* [2] */
+				76
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Button {
+				mDismiss,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				1035,
 				4
 			},
 			NoSubviews

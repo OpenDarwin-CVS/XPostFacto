@@ -45,11 +45,12 @@ advised of the possibility of such damage.
 #include "XPFStrings.h"
 #include "XPFAuthorization.h"
 #include "XPFFSRef.h"
+#include "XPFUpdate.h"
 
 #define Inherited XPFThreadedCommand
 
-XPFSynchronizeCommand::XPFSynchronizeCommand (MountedVolume *rootDisk, MountedVolume *bootDisk)
-	: XPFThreadedCommand (rootDisk, bootDisk)
+XPFSynchronizeCommand::XPFSynchronizeCommand (XPFUpdate *update)
+	: XPFThreadedCommand (update)
 {
 
 }
@@ -57,44 +58,8 @@ XPFSynchronizeCommand::XPFSynchronizeCommand (MountedVolume *rootDisk, MountedVo
 void 
 XPFSynchronizeCommand::DoItInProgressWindow ()
 {
-	if (fProgressMin == 0) {
-		setDescription (CStr255_AC (kXPFStringsResource, kUpdating));
-		fProgressMax = 1000;	
-	}
-	
-	float scale = (float) (fProgressMax - fProgressMin) / (float) fProgressMax;
-	unsigned progbase = fProgressMin;
-
-	fProgressMax = progbase + scale * 50;
-	
-	if (fRootDisk->getIsWriteable ()) {
-		if (!fRootDisk->hasCurrentExtensions (fPrefs->getEnableCacheEarly ())) {
-			installExtensionsWithRootDirectory (fRootDisk->getRootDirectory ());
-		}
-				
-		fProgressMin = fProgressMax;
-		fProgressMax = progbase + scale * 100;
-
-		if (!fRootDisk->hasCurrentStartupItems ()) {
-			installStartupItemWithRootDirectory (fRootDisk->getRootDirectory ());
-		}
-	}
-	
-	fProgressWindow->setProgressValue (progbase + scale * 100, true);
-	
-	if (fBootDisk->getIsWriteable ()) {
-		setCopyingFile ("\pBootX", true);
-		fBootDisk->installBootXIfNecessary ();
-	}
-	
-	fProgressWindow->setProgressValue (progbase + scale * 150, true);
-
-	fProgressMin = progbase + scale * 150;
-	fProgressMax = progbase + scale * 950;
-	
+	setDescription (CStr255_AC (kXPFStringsResource, kSynchronizing));
+	fProgressMax = 1000;		
 	synchronizeWithHelper ();
-	
-	fProgressWindow->setProgressValue (progbase + scale * 950, true);	
-	
 	fProgressWindow->setFinished ();
 }

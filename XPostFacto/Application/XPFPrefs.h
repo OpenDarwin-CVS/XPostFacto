@@ -137,6 +137,7 @@ DECLARE_DEBUG_ACCESSORS (DebugPanicText)
 	private:
 			
 		void getPrefsFromNVRAM ();
+		void checkForUpdates (MountedVolume *rootDisk, MountedVolume *bootDisk);
 
 		void tellFinderToRestart ();
 
@@ -155,6 +156,7 @@ DECLARE_DEBUG_ACCESSORS (DebugPanicText)
 		bool fRestartOnClose;
 		bool fTooBigForNVRAM;
 		bool fTooBigForNVRAMForInstall;
+		bool fForceAskSave;
 				
 		MountedVolume *fTargetDisk;
 		MountedVolume *fInstallCD;

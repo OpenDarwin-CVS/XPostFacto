@@ -66,6 +66,7 @@ class HFSPlusVolume {
 		
 		void installBootXIfNecessary (bool forceInstall = false);
 		void installBootX ();
+		UInt32 getBootXVersion ();
 
 		bool matchInfo (FSVolumeInfo *info);
 		bool matchInfoAndName (FSVolumeInfo *info, HFSUniStr255 *name);

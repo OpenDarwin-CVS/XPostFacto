@@ -43,6 +43,7 @@ advised of the possibility of such damage.
 #include "XPFFSRef.h"
 #include "XPFPrefs.h"
 #include "XPFUpdateCommands.h"
+#include "XPFUpdate.h"
 
 #undef Inherited
 #define Inherited XPFRestartCommand
@@ -80,8 +81,10 @@ XPFInstallCommand::DoIt ()
 	
 	// And we install the extensions and startup item to the installTarget
 	
-	PerformCommand (TH_new XPFInstallExtensionsCommand (targetDisk));
-	PerformCommand (TH_new XPFInstallStartupCommand (targetDisk));
+	XPFUpdate update (targetDisk, targetDisk->getHelperDisk (), installCD);
+	
+	PerformCommand (TH_new XPFInstallExtensionsCommand (&update));
+	PerformCommand (TH_new XPFInstallStartupCommand (&update));
 		
 	// And then do the restart
 	

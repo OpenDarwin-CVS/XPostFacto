@@ -98,6 +98,9 @@ advised of the possibility of such damage.
 #define cSetRebootInMacOS9				1449
 #define cSetSelectedVolume				1450
 #define cSetUseROMNDRV					1451
+#define cSetEnabled						1452
+
+#define cUninstall						1453
 
 // Views and Windows
 // -----------------
@@ -113,6 +116,12 @@ advised of the possibility of such damage.
 #define kInstallDialog				1032
 #define kRestartNowDialog			1033
 #define kInstallNowDialog			1034
+#define kUninstallDialog			1035
+
+#define kUpdateWindow				1040
+#define kUpdateItem					1041
+
+#define kVolumeDisplay				1200
 
 // Menus
 // -----

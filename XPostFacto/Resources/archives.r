@@ -99,6 +99,12 @@ Read 'plst' (145, "GossamerDeviceTreeUpdater") ":Derived:Extensions:plist:Gossam
 Read 'hfsA' (146, "OpenPMUPCCardEject") ":Derived:Extensions:OpenPMUPCCardEject.hfs";
 Read 'plst' (146, "OpenPMUPCCardEject") ":Derived:Extensions:plist:OpenPMUPCCardEject.plist";
 
+Read 'hfsA' (147, "AppleMaceEthernetPreJag") ":Derived:Extensions:AppleMaceEthernetPreJag.hfs";
+Read 'plst' (147, "AppleMaceEthernetPreJag") ":Derived:Extensions:plist:AppleMaceEthernetPreJag.plist";
+
+Read 'hfsA' (148, "AppleCurio4K78") ":Derived:Extensions:AppleCurio4K78.hfs";
+Read 'plst' (148, "AppleCurio4K78") ":Derived:Extensions:plist:AppleCurio4K78.plist";
+
 // Startup Item
 
 Read 'hfsS' (200, "XPFStartupItem") ":Derived:StartupItems:XPFStartupItem.hfs";

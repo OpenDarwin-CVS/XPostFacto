@@ -45,6 +45,7 @@ advised of the possibility of such damage.
 #include "XPFVolumeList.h"
 
 #include "UStaticText.h"
+#include "UThemeEnvironment.h"
 
 //========================================================================================
 // CLASS XPFVolumeDisplay
@@ -58,6 +59,12 @@ XPFVolumeDisplay::~XPFVolumeDisplay()
 {
 	ReleaseIconRef (fIconRef);
 	RemoveAllDependencies();
+}
+
+TDrawingEnvironment* 
+XPFVolumeDisplay::DoMakeNewDrawingEnvironment()
+{
+	return new TThemeWhiteEnvironment;
 }
 
 void 

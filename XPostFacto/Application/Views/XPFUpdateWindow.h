@@ -31,71 +31,25 @@ advised of the possibility of such damage.
 
 */
 
-#ifndef __XPFUPDATECOMMANDS_H__
-#define __XPFUPDATECOMMANDS_H__
 
-#include "XPFThreadedCommand.h"
+#ifndef __XPFUPDATEWINDOW_H__
+#define __XPFUPDATEWINDOW_H__
 
-class XPFInstallBootXCommand : public XPFThreadedCommand {
+#include "UWindow.h"
+#include "XPFUpdate.h"
 
-	public:
+class XPFUpdateWindow : public TWindow
+{
+	MA_DECLARE_CLONE;
+
+public:
+
+	void setUpdateItemList (XPFUpdateItemList *list);
 	
-		XPFInstallBootXCommand (XPFUpdate *update) : XPFThreadedCommand (update) {}
-				
-		void DoItInProgressWindow ();
-		
-};	
+private:
 
-class XPFInstallExtensionsCommand : public XPFThreadedCommand {
-
-	public:
+	void parseVersion (char *buffer, UInt32 version);
 	
-		XPFInstallExtensionsCommand (XPFUpdate *update) : XPFThreadedCommand (update) {}
-				
-		void DoItInProgressWindow ();
-							
-};	
-
-class XPFInstallStartupCommand : public XPFThreadedCommand {
-
-	public:
-
-		XPFInstallStartupCommand (XPFUpdate *update) : XPFThreadedCommand (update) {}
-									
-		void DoItInProgressWindow ();
-
-};
-
-class XPFRecopyHelperFilesCommand : public XPFThreadedCommand {
-
-	public:
-
-		XPFRecopyHelperFilesCommand (XPFUpdate *update) : XPFThreadedCommand (update) {}
-									
-		void DoItInProgressWindow ();
-
-};	
-
-class XPFUpdate;
-
-class XPFUpdateCommand : public XPFThreadedCommand {
-
-	public:
-		
-		XPFUpdateCommand (XPFUpdate *update) : XPFThreadedCommand (update) {}
-								
-		void DoItInProgressWindow ();					
-			
-};	
-
-class XPFUninstallCommand : public XPFThreadedCommand {
-
-	public:
-	
-		XPFUninstallCommand (XPFUpdate *update) : XPFThreadedCommand (update) {}
-									
-		void DoItInProgressWindow ();
-
 };
 
 #endif

@@ -36,6 +36,7 @@ advised of the possibility of such damage.
 #include "MountedVolume.h"
 #include "XPFProgressWindow.h"
 #include "XPFStrings.h"
+#include "XPFUpdate.h"
 
 #define Inherited XPFThreadedCommand
 
@@ -73,5 +74,63 @@ XPFRecopyHelperFilesCommand::DoItInProgressWindow ()
 	fProgressMax = 1000;
 	setDescription (CStr255_AC (kXPFStringsResource, kRecopyingHelperFiles));
 	synchronizeWithHelper (true);
+	fProgressWindow->setFinished ();
+}
+
+void
+XPFUpdateCommand::DoItInProgressWindow ()
+{
+	bool updateExtensionsCache = false;
+
+	setDescription (CStr255_AC (kXPFStringsResource, kUpdating));
+	
+	XPFUpdateItemList *list = fUpdate->getItemList ();
+	
+	fProgressWindow->setProgressMax (list->GetSize ());
+
+	for (int x = 1; x <= list->GetSize (); x++) {
+		fProgressWindow->setProgressValue (x, true);
+		XPFUpdateItem *item = list->At (x);
+		if (item->getAction () != kActionNone) {
+			CStr255_AC status (kXPFStringsResource, kUpdating);
+			status += " ";
+			status += item->getResourceName ();
+			setStatusMessage (status, true);
+			
+			item->doUpdate ();
+			
+			SInt16 resourceID = item->getResourceID ();
+			if (resourceID && (resourceID < 200)) updateExtensionsCache = true;
+		}	
+	}
+	
+	if (updateExtensionsCache) updateExtensionsCacheForRootDirectory (fUpdate->getTarget()->getRootDirectory ());
+
+	fProgressWindow->setFinished ();
+}
+
+void
+XPFUninstallCommand::DoItInProgressWindow ()
+{
+	setDescription (CStr255_AC (kXPFStringsResource, kUninstalling));
+	
+	XPFUpdateItemList *list = fUpdate->getItemList ();
+	
+	fProgressWindow->setProgressMax (list->GetSize ());
+
+	for (int x = 1; x <= list->GetSize (); x++) {
+		fProgressWindow->setProgressValue (x, true);
+		XPFUpdateItem *item = list->At (x);
+
+		CStr255_AC status (kXPFStringsResource, kUninstalling);
+		status += " ";
+		status += item->getResourceName ();
+		setStatusMessage (status, true);
+			
+		item->uninstall ();
+	}
+	
+	updateExtensionsCacheForRootDirectory (fUpdate->getTarget()->getRootDirectory ());
+	
 	fProgressWindow->setFinished ();
 }

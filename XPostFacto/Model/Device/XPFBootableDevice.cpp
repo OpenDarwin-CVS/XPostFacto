@@ -52,6 +52,7 @@ advised of the possibility of such damage.
 #include "XPFLog.h"
 #include "XPFErrors.h"
 #include "XPFAuthorization.h"
+#include "vers_rsrc.h"
 
 TemplateAutoList_AC <XPFBootableDevice> XPFBootableDevice::gDeviceList;
 
@@ -306,6 +307,20 @@ XPFBootableDevice::updateBootXIfInstalled (bool forceInstall)
 	for (PartitionIterator iter (fPartitionList); iter.Current (); iter.Next ()) {
 		iter->updateBootXIfInstalled (forceInstall);
 	}
+}
+
+UInt32 
+XPFBootableDevice::getOldestInstalledBootXVersion ()
+{
+	UInt32 retVal = 0xFFFFFFFF;
+	for (PartitionIterator iter (fPartitionList); iter.Current (); iter.Next ()) {
+		if (iter->getHasBootX ()) {
+			UInt32 vers = iter->getMyBootXVersion ();
+			if (VERS_compare (vers, retVal) == -1) retVal = vers;	
+		}
+	}
+	if (retVal == 0xFFFFFFFF) retVal = 0;
+	return retVal;
 }
 
 XPFBootableDevice::XPFBootableDevice 

@@ -41,7 +41,7 @@ class XPFSynchronizeCommand : public XPFThreadedCommand {
 
 	public:
 		
-		XPFSynchronizeCommand (MountedVolume *rootDisk, MountedVolume *bootDisk);							
+		XPFSynchronizeCommand (XPFUpdate *update);							
 		void DoItInProgressWindow ();					
 			
 };	

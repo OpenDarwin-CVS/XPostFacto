@@ -67,6 +67,7 @@ class XPFBootableDevice
 
 		void invalidate () {fInvalid = true;}
 		void updateBootXIfInstalled (bool forceInstall = false);
+		UInt32 getOldestInstalledBootXVersion ();
 
 #if qDebug
 		static void Dump ();

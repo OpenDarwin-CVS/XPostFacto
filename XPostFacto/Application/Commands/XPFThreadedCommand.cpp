@@ -46,6 +46,7 @@ advised of the possibility of such damage.
 #include "XPFApplication.h"
 #include "XPFErrors.h"
 #include "XPFFSRef.h"
+#include "XPFUpdate.h"
 
 #ifdef __MACH__
 	#include <sys/types.h>
@@ -59,11 +60,15 @@ advised of the possibility of such damage.
 
 #define Inherited TCommand
 
-XPFThreadedCommand::XPFThreadedCommand (MountedVolume *rootDisk, MountedVolume *bootDisk)
-	: fRootDisk (rootDisk), fBootDisk (bootDisk), 
-	  fItemsToCopy (0), fItemsCopied (0), fProgressMin (0), fProgressMax (0)
-{		
+XPFThreadedCommand::XPFThreadedCommand (XPFUpdate *update)
+	: fItemsToCopy (0), fItemsCopied (0), fProgressMin (0), fProgressMax (0)
+{	
+	fUpdate = update;
+	
+	fRootDisk = update->getTarget ();
 	fRootDisk->turnOffIgnorePermissions ();
+	
+	fBootDisk = update->getHelper ();
 	if (fBootDisk == NULL) fBootDisk = fRootDisk;
 	if (fBootDisk != fRootDisk) fBootDisk->turnOffIgnorePermissions ();
 
@@ -191,16 +196,7 @@ XPFThreadedCommand::installExtensionsWithRootDirectory (FSRef *rootDirectory)
 	
 	ThrowIfOSErr_AC (XPFFSRef::getOrCreateSystemLibraryExtensionsDirectory (rootDirectory, &systemLibraryExtensionsFolder));
 	copyHFSArchivesTo ('hfsA', &systemLibraryExtensionsFolder);
-	
-	if (!fPrefs->getEnableCacheEarly ()) {
-		FSRef cacheRef;
-		OSErr err = XPFFSRef::getFSRef (&systemLibraryExtensionsFolder, "OWCCacheConfig.kext", &cacheRef);
-		if (err == noErr) {
-			XPFSetUID myUID (0);
-			FSRefDeleteDirectory (&cacheRef);
-		}
-	} 
-	
+		
 	updateExtensionsCacheForRootDirectory (rootDirectory);
 }
 
@@ -212,15 +208,6 @@ XPFThreadedCommand::installSecondaryExtensionsWithRootDirectory (FSRef *rootDire
 	
 	ThrowIfOSErr_AC (XPFFSRef::getOrCreateLibraryExtensionsDirectory (rootDirectory, &libraryExtensionsFolder));
 	copyHFSArchivesTo ('hfsA', &libraryExtensionsFolder);
-
-	if (!fPrefs->getEnableCacheEarly ()) {
-		FSRef cacheRef;
-		OSErr err = XPFFSRef::getFSRef (&libraryExtensionsFolder, "OWCCacheConfig.kext", &cacheRef);
-		if (err == noErr) {
-			XPFSetUID myUID (0);
-			FSRefDeleteDirectory (&cacheRef);
-		}
-	} 	
 }
 
 void
@@ -267,10 +254,25 @@ XPFThreadedCommand::copyHFSArchivesTo (ResType type, FSRef *directory)
 		GetResInfo (hfsA, &resourceID, NULL, NULL);
 		ReleaseResource (hfsA);
 
-		CResourceStream_AC stream (type, resourceID);
-		HFSPlusArchive archive (&stream, &ArchiveFilterGlue, this);
-		XPFSetUID myUID (0);
-		ThrowIfOSErr_AC (archive.extractArchiveTo (directory));
+		XPFUpdateItem *updateItem = fUpdate->getItemWithResourceID (resourceID);
+		if (!updateItem) {
+			gLogFile << "Could not find update item for resource ID: " << resourceID << endl_AC;
+			continue;
+		}
+		
+		if (updateItem->getIsQualified ()) {
+			CResourceStream_AC stream (type, resourceID);
+			HFSPlusArchive archive (&stream, &ArchiveFilterGlue, this);
+			XPFSetUID myUID (0);
+			ThrowIfOSErr_AC (archive.extractArchiveTo (directory));
+		} else {
+			FSRef existingDir;
+			OSErr err = XPFFSRef::getFSRef (directory, (CChar255_AC) updateItem->getResourceName (), &existingDir);
+			if (err == noErr) {
+				XPFSetUID myUID (0);
+				FSRefDeleteDirectory (&existingDir);
+			}
+		}
 
 		fProgressWindow->setProgressValue (fProgressMin + scale * (float) x, true);
 	}
@@ -305,7 +307,10 @@ XPFThreadedCommand::synchronizeWithHelper (bool deleteFirst)
 			}
 			*end = 0;
 			ThrowIfOSErr_AC (XPFFSRef::getOrCreateDirectory (&helperDir, pos, 0755, &helperDir));
-			if (deleteFirst) FSRefDeleteDirectoryContents (&helperDir);
+			if (deleteFirst) {
+				XPFSetUID myUID (0);
+				FSRefDeleteDirectoryContents (&helperDir);
+			}
 			pos = end + 1;
 		}
 			

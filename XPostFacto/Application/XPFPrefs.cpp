@@ -46,6 +46,8 @@ advised of the possibility of such damage.
 #include "XPFAuthorization.h"
 #include "XPFErrors.h"
 #include "HFSPlusArchive.h"
+#include "XPFUpdate.h"
+#include "XPFUpdateWindow.h"
 
 #include <string.h>
 
@@ -108,6 +110,7 @@ XPFPrefs::XPFPrefs (TFile* itsFile)
 		fUseShortStringsForInstall (true),
 		fTooBigForNVRAM (false),
 		fTooBigForNVRAMForInstall (false),
+		fForceAskSave (false),
 		fRestartOnClose (false)
 {
 	SetAskOnClose (true);
@@ -147,9 +150,11 @@ XPFPrefs::Close ()
 				rootDisk = MountedVolume::WithOpenFirmwarePath (rootPath);
 				if (!rootDisk) rootDisk = bootDisk;
 			}	
-			
-			// Now, create and run the command immediately.
-			if (rootDisk) PerformCommand (TH_new XPFSynchronizeCommand (rootDisk, bootDisk));
+						
+			if (rootDisk && (rootDisk != bootDisk)) {
+				XPFUpdate update (rootDisk, bootDisk);
+				PerformCommand (TH_new XPFSynchronizeCommand (&update));
+			}
 		}
 	}
 	
@@ -164,6 +169,27 @@ XPFPrefs::Close ()
 	if (fRestartOnClose) tellFinderToRestart ();
 
 	if (!gApplication->GetDone ()) gApplication->DoMenuCommand (cQuit);
+}
+
+// We check for updates when we read prefs from NVRAM (i.e. at launch time) and
+// when we write prefs to NVRAM (i.e. at quitting time).
+
+void
+XPFPrefs::checkForUpdates (MountedVolume *rootDisk, MountedVolume *bootDisk)
+{
+	XPFUpdate update (rootDisk, bootDisk);
+		
+	if (update.getRequiresAction ()) {
+		MAParamText ("$VOLUME$", rootDisk->getVolumeName ());
+		
+		XPFUpdateWindow *dialog = (XPFUpdateWindow *) TViewServer::fgViewServer->NewTemplateWindow (kUpdateWindow, NULL);
+		dialog->setUpdateItemList (update.getItemList ());
+		
+		IDType result = dialog->PoseModally ();
+		dialog->Close ();
+		
+		if (result == 'upda') PerformCommand (TH_new XPFUpdateCommand (&update));			
+	}
 }
 
 short
@@ -257,8 +283,8 @@ XPFPrefs::getPrefsFromNVRAM ()
 		setRebootInMacOS9 (true, false);
 #else
 		// If we're in Mac OS 9, we leave the pref to reboot in X, since that is probably what the user
-		// wants. But we bump the change count, since we'll have to rewrite NVRAM to achieve that.
-		SetChangeCount (GetChangeCount () + 1);
+		// wants. But we force asking save if we have a target disk already
+		if (fTargetDisk) fForceAskSave = true;
 #endif
 		// In either case, we bail out here, since the rest of the NVRAM settings won't be interesting
 		// if we're booting in 9.
@@ -285,7 +311,6 @@ XPFPrefs::getPrefsFromNVRAM ()
 		debugString += strlen ("debug=");
 		debug = strtoul (debugString, NULL, 0);
 	}
-	if (fDebug != debug) SetChangeCount (GetChangeCount () + 1);
 	fDebug = debug;
 	
 	char *romndrvstring = strstr (bootCommand, "romndrv=");
@@ -312,13 +337,19 @@ XPFPrefs::getPrefsFromNVRAM ()
 	
 	if (rootDisk && (rootDisk->getBootStatus () == kStatusOK)) {
 		setTargetDisk (rootDisk);
-		if (bootDisk && (bootDisk != rootDisk) && (bootDisk->getHelperStatus() == kStatusOK)) {
-			fTargetDisk->setHelperDisk (bootDisk);
+		if (bootDisk && (bootDisk != rootDisk)) {
+			if (bootDisk->getHelperStatus() == kStatusOK) {
+				fTargetDisk->setHelperDisk (bootDisk);
+			} else {
+				fForceAskSave = true;
+			}
 		}
+		// We check at launch for available updates to the current configuration
+		checkForUpdates (fTargetDisk, fTargetDisk->getHelperDisk ());
 	} else {
-		// If we can't set the target disk to the current root, then we'd better
-		// bump the change count. (Since our pref won't match what's in NVRAM).
-		SetChangeCount (GetChangeCount () + 1);
+		// If we can't set the target disk to the current root, then we'd ask
+		// user about saving (since our pref won't match what's in NVRAM).
+		fForceAskSave = true;
 	}
 	
 	// input device
@@ -518,6 +549,8 @@ XPFPrefs::writePrefsToNVRAM (bool forInstall)
 {
 	if (((XPFApplication *) gApplication)->getDebugOptions () & kDisableNVRAMWriting) return;
 
+	if (!forInstall && !fRebootInMacOS9) checkForUpdates (fTargetDisk, fTargetDisk->getHelperDisk ());
+
 	XPFNVRAMSettings *nvram = XPFNVRAMSettings::GetSettings ();
 	
 	CChar255_AC bootDevice (getBootDevice (forInstall));
@@ -624,6 +657,10 @@ XPFPrefs::DoMakeViews (bool forPrinting)
 	((XPFApplication *) gApplication)->CloseSplashWindow ();
 	
 	Inherited::DoMakeViews (forPrinting);
+	
+	// Not the most elegant place, but we need to do it after reading from NVRAM,
+	// and before Close ()
+	if (fForceAskSave) SetChangeCount (GetChangeCount () + 1);
 }
 
 void 
@@ -635,34 +672,56 @@ XPFPrefs::DoSetupMenus ()
 	Enable (cInstallExtensions, true);
 	Enable (cInstallStartupItem, true);
 	Enable (cShowOptionsWindow, true);
-	Enable (cRecopyHelperFiles, fTargetDisk->getHelperDisk () != NULL);
+	Enable (cRecopyHelperFiles, fTargetDisk && fTargetDisk->getHelperDisk () != NULL);
+	Enable (cUninstall, fTargetDisk && fTargetDisk->getIsWriteable ());
 }
 
 void 
 XPFPrefs::DoMenuCommand (CommandNumber aCommandNumber)
 {
+	XPFUpdate *update = NULL;
+
 	switch (aCommandNumber) 
 	{			
 		case cInstallBootX:
-			PostCommand (TH_new XPFInstallBootXCommand (fTargetDisk, fTargetDisk->getHelperDisk ()));
+			update = new XPFUpdate (fTargetDisk, fTargetDisk->getHelperDisk ());
+			PerformCommand (TH_new XPFInstallBootXCommand (update));
 			break;
 			
 		case cInstallExtensions:
-			PostCommand (TH_new XPFInstallExtensionsCommand (fTargetDisk, fTargetDisk->getHelperDisk ()));
+			update = new XPFUpdate (fTargetDisk, fTargetDisk->getHelperDisk ());
+			PerformCommand (TH_new XPFInstallExtensionsCommand (update));
 			break;
 		
 		case cInstallStartupItem:
-			PostCommand (TH_new XPFInstallStartupCommand (fTargetDisk, fTargetDisk->getHelperDisk ()));
+			update = new XPFUpdate (fTargetDisk, fTargetDisk->getHelperDisk ());
+			PerformCommand (TH_new XPFInstallStartupCommand (update));
 			break;
 			
 		case cRecopyHelperFiles:
-			PostCommand (TH_new XPFRecopyHelperFilesCommand (fTargetDisk, fTargetDisk->getHelperDisk ()));
+			update = new XPFUpdate (fTargetDisk, fTargetDisk->getHelperDisk ());
+			PerformCommand (TH_new XPFRecopyHelperFilesCommand (update));
+			break;
+			
+		case cUninstall:
+			MAParamText ("$VOLUME$", fTargetDisk->getVolumeName ());
+				
+			TWindow *dialog = TViewServer::fgViewServer->NewTemplateWindow (kUninstallDialog, NULL);
+			IDType result = dialog->PoseModally ();
+			dialog->Close ();
+				
+			if (result == 'chan') {
+				update = new XPFUpdate (fTargetDisk, fTargetDisk->getHelperDisk ());
+				PerformCommand (TH_new XPFUninstallCommand (update));			
+			}
 			break;
 			
 		default:
 			Inherited::DoMenuCommand (aCommandNumber);
 			break;
 	}
+	
+	if (update) delete update;
 }
 
 void

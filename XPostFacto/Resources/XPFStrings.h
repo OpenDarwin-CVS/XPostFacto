@@ -77,7 +77,11 @@ enum {
 	kRecopyingHelperFiles,
 	kUpdating,
 	kTooBigForNVRAM,
-	kTooBigForNVRAMForInstall	// 40
+	kTooBigForNVRAMForInstall,	// 40
+	kInstallWord,
+	kDeleteWord,
+	kSynchronizing,
+	kUninstalling
 };
 
 

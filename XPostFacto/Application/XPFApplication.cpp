@@ -63,6 +63,7 @@ advised of the possibility of such damage.
 #include "XPFButtons.h"
 #include "XPFSettingsText.h"
 #include "XPFWarnings.h"
+#include "XPFUpdateWindow.h"
 
 #include <InternetConfig.h>
 #include <UnicodeConverter.h>
@@ -148,6 +149,7 @@ XPFApplication::XPFApplication() :
 	REGISTER_CLASS_AC (XPFMacOSXButton);
 	REGISTER_CLASS_AC (XPFInstallWarning);
 	REGISTER_CLASS_AC (XPFRestartWarning);
+	REGISTER_CLASS_AC (XPFUpdateWindow);
 	
 	ProcessInfoRec info;
 	FSSpec appSpec, resourceSpec;

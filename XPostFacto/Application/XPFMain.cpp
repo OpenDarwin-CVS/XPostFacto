@@ -50,6 +50,7 @@ advised of the possibility of such damage.
 #include "USlider.h"
 #include "UNumberText.h"
 #include "UProgressIndicator.h"
+#include "UThemeEnvironment.h"
 
 //----------------------------------------------------------------------------------------
 // main: 
@@ -79,6 +80,7 @@ main()
 		InitUSlider ();
 		InitUNumberText ();
 		InitUProgressIndicator ();
+		InitUThemeEnvironment ();
 
 		XPFApplication xpfApp;			// Allocate application object
 		xpfApp.Run();							// Well lets run it then!

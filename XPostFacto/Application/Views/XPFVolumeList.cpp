@@ -174,7 +174,7 @@ XPFVolumeList::DoUpdate (ChangeID_AC theChange,
 		case cNewMountedVolume:
 			if (useVolumeInList (volume)) {
 				CViewPoint offset (0, fScrollLimit.v);
-				XPFVolumeDisplay *display = (XPFVolumeDisplay *) TViewServer::fgViewServer->DoCreateViews (GetDocument (), this, 1200, offset);
+				XPFVolumeDisplay *display = (XPFVolumeDisplay *) TViewServer::fgViewServer->DoCreateViews (GetDocument (), this, kVolumeDisplay, offset);
 				display->setVolume (volume);
 				this->SetScrollParameters (display->GetSize (), false, true);
 				display->ScrollSelectionIntoView (false);

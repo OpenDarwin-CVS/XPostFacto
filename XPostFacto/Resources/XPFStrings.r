@@ -83,6 +83,12 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			"Updating";
 			
 			"There is not enough NVRAM to store these settings.";
-			"There is not enough NVRAM to store these installation settings.";
+/* 40 */	"There is not enough NVRAM to store these installation settings.";
+			
+			"Install";
+			"Delete";
+			
+			"Synchronizing";
+			"Uninstalling";
 	}
 };

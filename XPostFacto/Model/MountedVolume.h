@@ -80,9 +80,11 @@ class MountedVolume : public MDependable_AC
 		const CStr255_AC& getOpenFirmwareName (bool useShortName) {return useShortName ? fShortOpenFirmwareName : fOpenFirmwareName;}
 		const CStr255_AC& getVolumeName () {return fVolumeName;}
 		const CStr255_AC& getMacOSXVersion () {return fMacOSXVersion;}
+		UInt32 getMacOSXMajorVersion () {return fMacOSXMajorVersion;}
 		unsigned int getCreationDate () {return fCreationDate;}
 		bool getIsHFSPlus () {return fIsHFSPlus;}
 		bool getHasBootX () {if (fPartInfo) return fPartInfo->getHasBootX (); else return false;}
+		UInt32 getBootXVersion () {if (fPartInfo) return fPartInfo->getBootXVersion (); else return 0;}
 		bool getExtendsPastEightGB () {if (fPartInfo) return fPartInfo->getExtendsPastEightGB (); else return false;}
 		bool getIsOnBootableDevice () {return fIsOnBootableDevice;}
 		bool getRequiresBootHelper ();
@@ -147,6 +149,7 @@ class MountedVolume : public MDependable_AC
 		CStr255_AC fOpenFirmwareName;
 		CStr255_AC fShortOpenFirmwareName;
 		CStr255_AC fMacOSXVersion;
+		UInt32 fMacOSXMajorVersion;
 
 		UInt32 fAllocationBlockSize;
 

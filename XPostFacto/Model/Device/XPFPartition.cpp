@@ -220,6 +220,18 @@ XPFPartition::updateBootXIfInstalled (bool forceInstall)
 	}
 }
 
+UInt32 
+XPFPartition::getBootXVersion ()
+{
+	return fSCSIDevice->getOldestInstalledBootXVersion ();
+}
+
+UInt32 
+XPFPartition::getMyBootXVersion ()
+{
+	return fHFSPlusVolume->getBootXVersion ();
+}
+
 void
 XPFPartition::installBootXIfNecessary (bool forceInstall)
 {

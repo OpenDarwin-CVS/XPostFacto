@@ -449,3 +449,17 @@ int VERS_string(char * buffer, UInt32 length, UInt32 vers) {
 finish:
     return result;
 }
+
+
+int VERS_compare (UInt32 vers1, UInt32 vers2)
+{
+	if ((vers1 & 0xFFFF) == 0x8000) vers1 |= 0xFF;
+	if ((vers2 & 0xFFFF) == 0x8000) vers2 |= 0xFF;
+
+	if (vers1 > vers2) return 1;
+	if (vers1 < vers2) return -1;
+         
+    return 0;
+}
+         
+

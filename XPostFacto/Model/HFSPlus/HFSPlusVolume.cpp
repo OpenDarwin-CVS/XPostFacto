@@ -305,6 +305,62 @@ HFSPlusVolume::installBootX ()
 	XPFBootableDevice::EnableCDDriver ();
 }
 
+UInt32
+HFSPlusVolume::getBootXVersion ()
+{
+	MountedVolume* volume = getMountedVolume ();
+	if (!volume) return 0;
+	
+	ThrowIfNULL_AC (fHeader);
+	
+	FSSpec bootXImageSpec;
+	OSErr err;
+	err = FSMakeFSSpec (volume->getIOVDrvInfo(), fsRtDirID, "\p:BootX.image", &bootXImageSpec);
+	if (err != noErr) return 0;
+
+	// We have a BootX.file. So, we'll see whether it has moved.
+	unsigned long firstBootXBlock = 0;
+	try {
+		XPFBootableDevice::DisableCDDriver ();
+		firstBootXBlock = getBootXStartBlock ();
+		XPFBootableDevice::EnableCDDriver ();
+	}
+	catch (...) {
+		XPFBootableDevice::EnableCDDriver ();
+		throw;
+	}
+		
+	if ((firstBootXBlock == 0) || (firstBootXBlock != fPartition->getLgBootStart ())) {
+		gLogFile << "BootX.image moved." << endl_AC;
+		return 0;
+	}
+
+	// it hasn't moved. So we'll get the version.
+	VersRecHndl installedVersion = NULL;
+	SInt16 resourceFork = 0;
+	try {	
+		resourceFork = FSpOpenResFile (&bootXImageSpec, fsRdPerm);
+		ThrowIfResError_AC ();
+		installedVersion = (VersRecHndl) Get1Resource ('vers', 1);
+		ThrowIfNULL_AC (installedVersion);
+		ThrowIfResError_AC ();
+	}
+	catch (...) {
+		// There was a problem accessing the version info. So we'll just return.
+		gLogFile << "Could not access BootX version info." << endl_AC;
+		if (resourceFork > 0) CloseResFile (resourceFork);
+		return 0;		
+	}
+	
+	UInt32 retVal;
+	memcpy (&retVal, &(*installedVersion)->numericVersion, sizeof (retVal));
+	
+	ReleaseResource ((Handle) installedVersion);
+	if (resourceFork > 0) CloseResFile (resourceFork);
+
+	return retVal;
+}
+
 void
 HFSPlusVolume::installBootXIfNecessary (bool forceInstall)
 {
