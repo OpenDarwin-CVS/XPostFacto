@@ -1,0 +1,35 @@
+This directory represents a modification of the AppleScreamerAudio code from
+AppleOnboardAudio-247.2.2 so that it will work with some Old World machines.
+Ben Ralston figured out how to do this, and Ryan Rempel rearranged things a little.
+
+Note that the compiler settings for OpenScreamerAudio have quite a few entries like
+-DAppleScreamerAudio=OpenScreamerAudio. The idea is to avoid duplicate class names
+when loading the kernel extensions, but to make it easy to compare these files with
+the Apple originals (i.e. compare the OpenLegacyAudio directory against the
+AppleLegacyAudio directory from AppleOnboardAudio).
+
+Certain updates to the device tree are managed by the OpenAudioDeviceTreeUpdater --
+the actual updates are set in the Info.plist for that kernel extension.
+
+The advantage of this over the previous OpenOWScreamerAudio is that it allows the
+global hardware volume control to work, and it allows the microphone input to work,
+and it automatically mutes the internal speaker if external speakers are attached.
+
+It seems to be basically working. However, I'm not sure about the microphone input
+quality -- the gain seems to be callibrated too high. I'm testing on a 7300.
+The models with RCA in/out will need some additional work, I expect.
+
+One thing I would like to do is a more thorough comparison of the code which actually
+talks to the hardware as between AppleOWScreamerAudio and AppleScreamerAudio, to see 
+whether there are differences in the way you talk to the hardware. (There is at least
+one difference which is reflected in the Open02DBDMAAudioDMAAudioEngine class).
+
+Also, it would be useful to consult the LinuxPPC or NetBSD source to learn more 
+about the hardware.
+
+Note that I constructed a version of this stuff that actually inherited from Apple02Audio
+and Apple02DBDMAAudioDMAEngine, which did simplify things in some ways. However, it doesn't
+work across different versions of Apple02Audio (i.e. 10.3 vs. 10.3.7), because Apple is not
+really paying attention to binary compatibility for these classes -- Apple always updates them
+together, so it isn't worrying about some of the things you would need to do in order to
+maintain binary compatibility. So that makes subclassing impractical.

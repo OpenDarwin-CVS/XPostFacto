@@ -67,6 +67,18 @@
 			settings = {
 			};
 		};
+		9468B46507AC1B6F00D39D7B = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 9468B33207AC0C1300D39D7B;
+			remoteInfo = OpenScreamerAudio;
+		};
+		9468B46607AC1B6F00D39D7B = {
+			isa = PBXTargetDependency;
+			target = 94B59CA707B970C6005060B1;
+			targetProxy = 9468B46507AC1B6F00D39D7B;
+		};
 		946A5D250525104400A80003 = {
 			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
@@ -586,6 +598,203 @@
 			target = 9490D52C061C8AE700D8F22E;
 			targetProxy = 948201C40620C6A00097B077;
 		};
+		948B2A7A07A6F982007540CE = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		948B2A7B07A6F982007540CE = {
+			buildActionMask = 2147483647;
+			files = (
+				94C19BA407C13A1E004B83EE,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		948B2A7C07A6F982007540CE = {
+			buildActionMask = 2147483647;
+			files = (
+				94C19BA307C13A1B004B83EE,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		948B2A7D07A6F982007540CE = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		948B2A7E07A6F982007540CE = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		948B2A7F07A6F982007540CE = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		948B2A8007A6F982007540CE = {
+			buildPhases = (
+				948B2A7A07A6F982007540CE,
+				948B2A7B07A6F982007540CE,
+				948B2A7C07A6F982007540CE,
+				948B2A7D07A6F982007540CE,
+				948B2A7E07A6F982007540CE,
+				948B2A7F07A6F982007540CE,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "";
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+				KERNEL_MODULE = YES;
+				LIBRARY_SEARCH_PATHS = "";
+				MODULE_IOKIT = YES;
+				MODULE_NAME = com.macsales.iokit.OpenAudioDeviceTreeUpdater;
+				MODULE_VERSION = 1.0.0d1;
+				OTHER_CFLAGS = "-DAudioDeviceTreeUpdater=OpenAudioDeviceTreeUpdater";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = OpenAudioDeviceTreeUpdater;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = kext;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = OpenAudioDeviceTreeUpdater;
+			productInstallPath = "$(USER_LIBRARY_DIR)/Bundles";
+			productName = OpenAudioDeviceTreeUpdater;
+			productReference = 948B2A8107A6F982007540CE;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>OpenAudioDeviceTreeUpdater</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.macsales.iokit.OpenAudioDeviceTreeUpdater</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.0d1</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>PowerSurge</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.macsales.iokit.OpenAudioDeviceTreeUpdater</string>
+			<key>DeviceTreePatches</key>
+			<array>
+				<dict>
+					<key>Node</key>
+					<string>sound</string>
+					<key>NodeData</key>
+					<dict>
+						<key>#-detects</key>
+						<data>
+						AAAAAg==
+						</data>
+						<key>#-inputs</key>
+						<data>
+						AAAAAQ==
+						</data>
+						<key>#-outputs</key>
+						<data>
+						AAAAAg==
+						</data>
+						<key>device-id</key>
+						<data>
+						AAAABQ==
+						</data>
+						<key>model</key>
+						<string>PowerSurgeAudio</string>
+						<key>sound-objects</key>
+						<array>
+							<string>init operation 2 param 00000001 param-size 4</string>
+							<string>detect bit-mask 1 bit-match 1 index 0 device 2 model InSenseBitsDetect</string>
+							<string>detect bit-mask 2 bit-match 2 index 1 device 16 model InSenseBitsDetect</string>
+							<string>input icon-id -16526 index 0 name-id -20520 port-connection 2 port-type 0x656D6963 zero-gain 0 model ExternalMic</string>
+							<string>output device-mask 2 device-match 0 icon-id -16563 index 0 name-id -20525 port-connection 2 port-type 0x6973706B model OutputPort</string>
+							<string>output device-mask 2 device-match 2 icon-id -16563 index 1 name-id -20524 port-connection 1 port-type 0x6864706E model OutputPort</string>
+						</array>
+					</dict>
+					<key>Parent</key>
+					<string>/bandit/gc/awacs</string>
+				</dict>
+			</array>
+			<key>IOClass</key>
+			<string>OpenAudioDeviceTreeUpdater</string>
+			<key>IOMatchCategory</key>
+			<string>OpenAudioDeviceTreeUpdater</string>
+			<key>IONameMatch</key>
+			<array>
+				<string>AAPL,7300</string>
+				<string>AAPL,7500</string>
+				<string>AAPL,8500</string>
+				<string>AAPL,9500</string>
+				<string>AAPL,????</string>
+			</array>
+			<key>IOProviderClass</key>
+			<string>IOPlatformExpertDevice</string>
+		</dict>
+	</dict>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.kernel.iokit</key>
+		<string>1.0b1</string>
+		<key>com.apple.kernel.libkern</key>
+		<string>1.0b1</string>
+	</dict>
+	<key>OSBundleRequired</key>
+	<string>Root</string>
+</dict>
+</plist>
+";
+		};
+		948B2A8107A6F982007540CE = {
+			explicitFileType = wrapper.cfbundle;
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = OpenAudioDeviceTreeUpdater.kext;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		948C7E2B06186AA500493511 = {
 			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
@@ -810,6 +1019,18 @@
 			proxyType = 1;
 			remoteGlobalIDString = F5812B810315F14401A80001;
 			remoteInfo = AppleCurio4K78;
+		};
+		948D376207A6F07100F832E6 = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 948D371007A6DACA00F832E6;
+			remoteInfo = OpenAudioDeviceTreeUpdater;
+		};
+		948D376307A6F07100F832E6 = {
+			isa = PBXTargetDependency;
+			target = 948B2A8007A6F982007540CE;
+			targetProxy = 948D376207A6F07100F832E6;
 		};
 		9490D526061C8AE700D8F22E = {
 			buildActionMask = 2147483647;
@@ -1413,6 +1634,217 @@
 			target = 94B4B912066C02DD00C3EE18;
 			targetProxy = 94B4B943066C0A3900C3EE18;
 		};
+		94B59CA107B970C6005060B1 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		94B59CA207B970C6005060B1 = {
+			buildActionMask = 2147483647;
+			files = (
+				94C19B8907C139EA004B83EE,
+				94C19B8D07C139EA004B83EE,
+				94C19B8E07C139EA004B83EE,
+				94C19B9207C139EA004B83EE,
+				94C19B9307C139EA004B83EE,
+				94C19B9507C139EA004B83EE,
+				94C19B9607C139EA004B83EE,
+				94C19B9707C139EA004B83EE,
+				94C19B9907C139EA004B83EE,
+				94C19B9B07C139EA004B83EE,
+				94C19B9D07C139EA004B83EE,
+				94C19B9F07C139EA004B83EE,
+				94C19BA107C139EA004B83EE,
+				94C19BA207C139EA004B83EE,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94B59CA307B970C6005060B1 = {
+			buildActionMask = 2147483647;
+			files = (
+				94C19B8807C139EA004B83EE,
+				94C19B9107C139EA004B83EE,
+				94C19B9407C139EA004B83EE,
+				94C19B9807C139EA004B83EE,
+				94C19B9A07C139EA004B83EE,
+				94C19B9C07C139EA004B83EE,
+				94C19B9E07C139EA004B83EE,
+				94C19BA007C139EA004B83EE,
+				94C19BF707C13A53004B83EE,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94B59CA407B970C6005060B1 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94B59CA507B970C6005060B1 = {
+			buildActionMask = 2147483647;
+			files = (
+				94C19C4907C13D4F004B83EE,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94B59CA607B970C6005060B1 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		94B59CA707B970C6005060B1 = {
+			buildPhases = (
+				94B59CA107B970C6005060B1,
+				94B59CA207B970C6005060B1,
+				94B59CA307B970C6005060B1,
+				94B59CA407B970C6005060B1,
+				94B59CA507B970C6005060B1,
+				94B59CA607B970C6005060B1,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "Extensions/OpenLegacyAudio/AppleDBDMAAudio Extensions/OpenLegacyAudio";
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+				KERNEL_MODULE = YES;
+				LIBRARY_SEARCH_PATHS = "";
+				MODULE_IOKIT = YES;
+				MODULE_NAME = com.macsales.iokit.OpenScreamerAudio;
+				MODULE_VERSION = 1.0.0d1;
+				OTHER_CFLAGS = "-DAudioPowerObject=OpenAudioAudioPowerObject -DAudioHardwareOutput=OpenAudioHardwareOutput -DAudioHardwareMux=OpenAudioHardwareMux -DAudioHardwareInput=OpenAudioHardwareInput -DAudioHardwareDetect=OpenAudioHardwareDetect -DAppleScreamerAudio=OpenScreamerAudio -DApple02Audio=Open02Audio -DAppleLegacyOnboardAudioUserClient=OpenLegacyOnboardAudioUserClient -DApple02DBDMAAudioDMAEngine=Open02DBDMAAudioDMAEngine -DAudioDeviceTreeParser=OpenAudioDeviceTreeParser";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = OpenScreamerAudio;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = kext;
+			};
+			dependencies = (
+				94C19C4F07C1432E004B83EE,
+			);
+			isa = PBXBundleTarget;
+			name = OpenScreamerAudio;
+			productInstallPath = "$(USER_LIBRARY_DIR)/Bundles";
+			productName = OpenScreamerAudio2;
+			productReference = 94B59CA807B970C6005060B1;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>OpenScreamerAudio</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.macsales.iokit.OpenScreamerAudio</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.0d1</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>OpenScreamerAudio</key>
+		<dict>
+			<key>AOAAttributes</key>
+			<dict>
+				<key>Playthrough</key>
+				<true/>
+				<key>RangeIn</key>
+				<dict>
+					<key>maxLin</key>
+					<integer>31</integer>
+					<key>maxLog</key>
+					<data>
+					AC6AAA==
+					</data>
+					<key>minLin</key>
+					<integer>0</integer>
+					<key>minLog</key>
+					<data>
+					AAAAAA==
+					</data>
+				</dict>
+				<key>RangeOut</key>
+				<dict>
+					<key>maxLin</key>
+					<integer>16</integer>
+					<key>maxLog</key>
+					<data>
+					AAAAAA==
+					</data>
+					<key>minLin</key>
+					<integer>0</integer>
+					<key>minLog</key>
+					<data>
+					/+mAAA==
+					</data>
+				</dict>
+				<key>analogModem</key>
+				<false/>
+			</dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.macsales.iokit.OpenScreamerAudio</string>
+			<key>IOClass</key>
+			<string>OpenScreamerAudio</string>
+			<key>IONameMatch</key>
+			<array>
+				<string>awacs</string>
+				<string>davbus</string>
+			</array>
+			<key>IOProviderClass</key>
+			<string>AppleMacIODevice</string>
+		</dict>
+	</dict>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.iokit.IOAudioFamily</key>
+		<string>1.1fc9</string>
+	</dict>
+	<key>OWCMinInstallBuild</key>
+	<string>7</string>
+</dict>
+</plist>
+";
+		};
+		94B59CA807B970C6005060B1 = {
+			explicitFileType = wrapper.cfbundle;
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = OpenScreamerAudio.kext;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		94B8172F047A7ABF00A80003 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -1435,6 +1867,561 @@
 			isa = PBXTargetDependency;
 			target = 94CC89DB0508E1BC00A80003;
 			targetProxy = 948CD0FD05FBEECE003103DB;
+		};
+		94C19B6707C139B7004B83EE = {
+			children = (
+				94C19CBA07C14735004B83EE,
+				94C19B6A07C139EA004B83EE,
+				94C19B6B07C139EA004B83EE,
+				94C19B6C07C139EA004B83EE,
+				94C19B7207C139EA004B83EE,
+				94C19B7507C139EA004B83EE,
+				94C19B7907C139EA004B83EE,
+				94C19B7A07C139EA004B83EE,
+				94C19B7B07C139EA004B83EE,
+				94C19B7C07C139EA004B83EE,
+				94C19B7D07C139EA004B83EE,
+				94C19B7E07C139EA004B83EE,
+				94C19B7F07C139EA004B83EE,
+				94C19B8007C139EA004B83EE,
+				94C19B8107C139EA004B83EE,
+				94C19B8207C139EA004B83EE,
+				94C19B8307C139EA004B83EE,
+				94C19B8407C139EA004B83EE,
+				94C19B8507C139EA004B83EE,
+				94C19B8607C139EA004B83EE,
+				94C19B8707C139EA004B83EE,
+			);
+			isa = PBXGroup;
+			name = OpenLegacyAudio;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B6A07C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = Apple02Audio.cpp;
+			path = OpenLegacyAudio/Apple02Audio.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B6B07C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = Apple02Audio.h;
+			path = OpenLegacyAudio/Apple02Audio.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B6C07C139EA004B83EE = {
+			children = (
+				94C19B6D07C139EA004B83EE,
+				94C19B6E07C139EA004B83EE,
+				94C19B6F07C139EA004B83EE,
+				94C19B7007C139EA004B83EE,
+				94C19B7107C139EA004B83EE,
+			);
+			isa = PBXGroup;
+			name = AppleDBDMAAudio;
+			path = OpenLegacyAudio/AppleDBDMAAudio;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B6D07C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = Apple02DBDMAAudioClip.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B6E07C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = Apple02DBDMAAudioClip.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B6F07C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			path = Apple02DBDMAAudioDMAEngine.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B7007C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = Apple02DBDMAAudioDMAEngine.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B7107C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = Apple02DBDMAAudioFloatLib.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B7207C139EA004B83EE = {
+			children = (
+				94C19B7307C139EA004B83EE,
+				94C19B7407C139EA004B83EE,
+			);
+			isa = PBXGroup;
+			name = AppleDeviceTreeUpdater;
+			path = OpenLegacyAudio/AppleDeviceTreeUpdater;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B7307C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			path = AppleDTUpdater.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B7407C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = AppleDTUpdater.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B7507C139EA004B83EE = {
+			children = (
+				94C19B7607C139EA004B83EE,
+				94C19B7707C139EA004B83EE,
+				94C19B7807C139EA004B83EE,
+			);
+			isa = PBXGroup;
+			name = AppleScreamerAudio;
+			path = OpenLegacyAudio/AppleScreamerAudio;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B7607C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			path = AppleScreamerAudio.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B7707C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = AppleScreamerAudio.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B7807C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = awacs_hw.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B7907C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = AudioDeviceTreeParser.cpp;
+			path = OpenLegacyAudio/AudioDeviceTreeParser.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B7A07C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = AudioDeviceTreeParser.h;
+			path = OpenLegacyAudio/AudioDeviceTreeParser.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B7B07C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = AudioHardwareCommon.h;
+			path = OpenLegacyAudio/AudioHardwareCommon.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B7C07C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = AudioHardwareConstants.h;
+			path = OpenLegacyAudio/AudioHardwareConstants.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B7D07C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = AudioHardwareDetect.cpp;
+			path = OpenLegacyAudio/AudioHardwareDetect.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B7E07C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = AudioHardwareDetect.h;
+			path = OpenLegacyAudio/AudioHardwareDetect.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B7F07C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = AudioHardwareInput.cpp;
+			path = OpenLegacyAudio/AudioHardwareInput.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B8007C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = AudioHardwareInput.h;
+			path = OpenLegacyAudio/AudioHardwareInput.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B8107C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = AudioHardwareMux.cpp;
+			path = OpenLegacyAudio/AudioHardwareMux.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B8207C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = AudioHardwareMux.h;
+			path = OpenLegacyAudio/AudioHardwareMux.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B8307C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = AudioHardwareOutput.cpp;
+			path = OpenLegacyAudio/AudioHardwareOutput.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B8407C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = AudioHardwareOutput.h;
+			path = OpenLegacyAudio/AudioHardwareOutput.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B8507C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = AudioHardwarePower.cpp;
+			path = OpenLegacyAudio/AudioHardwarePower.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B8607C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = AudioHardwarePower.h;
+			path = OpenLegacyAudio/AudioHardwarePower.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B8707C139EA004B83EE = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = AudioHardwareUtilities.h;
+			path = OpenLegacyAudio/AudioHardwareUtilities.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94C19B8807C139EA004B83EE = {
+			fileRef = 94C19B6A07C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19B8907C139EA004B83EE = {
+			fileRef = 94C19B6B07C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19B8D07C139EA004B83EE = {
+			fileRef = 94C19B7007C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19B8E07C139EA004B83EE = {
+			fileRef = 94C19B7107C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19B9107C139EA004B83EE = {
+			fileRef = 94C19B7607C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19B9207C139EA004B83EE = {
+			fileRef = 94C19B7707C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19B9307C139EA004B83EE = {
+			fileRef = 94C19B7807C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19B9407C139EA004B83EE = {
+			fileRef = 94C19B7907C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19B9507C139EA004B83EE = {
+			fileRef = 94C19B7A07C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19B9607C139EA004B83EE = {
+			fileRef = 94C19B7B07C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19B9707C139EA004B83EE = {
+			fileRef = 94C19B7C07C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19B9807C139EA004B83EE = {
+			fileRef = 94C19B7D07C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19B9907C139EA004B83EE = {
+			fileRef = 94C19B7E07C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19B9A07C139EA004B83EE = {
+			fileRef = 94C19B7F07C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19B9B07C139EA004B83EE = {
+			fileRef = 94C19B8007C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19B9C07C139EA004B83EE = {
+			fileRef = 94C19B8107C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19B9D07C139EA004B83EE = {
+			fileRef = 94C19B8207C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19B9E07C139EA004B83EE = {
+			fileRef = 94C19B8307C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19B9F07C139EA004B83EE = {
+			fileRef = 94C19B8407C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19BA007C139EA004B83EE = {
+			fileRef = 94C19B8507C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19BA107C139EA004B83EE = {
+			fileRef = 94C19B8607C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19BA207C139EA004B83EE = {
+			fileRef = 94C19B8707C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19BA307C13A1B004B83EE = {
+			fileRef = 94C19B7307C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19BA407C13A1E004B83EE = {
+			fileRef = 94C19B7407C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19BF707C13A53004B83EE = {
+			fileRef = 94C19B6F07C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19C1C07C13BFB004B83EE = {
+			buildActionMask = 2147483647;
+			files = (
+				94C19C2607C13C95004B83EE,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94C19C1D07C13BFB004B83EE = {
+			buildActionMask = 2147483647;
+			files = (
+				94C19C2507C13C92004B83EE,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94C19C1E07C13BFB004B83EE = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94C19C1F07C13BFB004B83EE = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94C19C2007C13BFB004B83EE = {
+			buildPhases = (
+				94C19C1C07C13BFB004B83EE,
+				94C19C1D07C13BFB004B83EE,
+				94C19C1E07C13BFB004B83EE,
+				94C19C1F07C13BFB004B83EE,
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "-nostdinc -finline -fno-keep-inline-functions -force_cpusubtype_ALL -mlong-branch -fno-exceptions -static -DKERNEL -DKERNEL_PRIVATE -DDRIVER_PRIVATE -DAPPLE -DNeXT";
+				OTHER_LDFLAGS = "-static";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = libOpenDBDMAAudioFloatLib.a;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			dependencies = (
+			);
+			isa = PBXLibraryTarget;
+			name = OpenDBDMAAudioFloatLib;
+			productInstallPath = /usr/local/lib;
+			productName = OpenDBDMAAudioFloatLib;
+			productReference = 94C19C2107C13BFB004B83EE;
+		};
+		94C19C2107C13BFB004B83EE = {
+			explicitFileType = "compiled.mach-o.dylib";
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = libOpenDBDMAAudioFloatLib.a;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		94C19C2507C13C92004B83EE = {
+			fileRef = 94C19B6D07C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19C2607C13C95004B83EE = {
+			fileRef = 94C19B6E07C139EA004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19C4907C13D4F004B83EE = {
+			fileRef = 94C19C2107C13BFB004B83EE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C19C4E07C1432E004B83EE = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 94C19C2007C13BFB004B83EE;
+			remoteInfo = OpenDBDMAAudioFloatLib;
+		};
+		94C19C4F07C1432E004B83EE = {
+			isa = PBXTargetDependency;
+			target = 94C19C2007C13BFB004B83EE;
+			targetProxy = 94C19C4E07C1432E004B83EE;
+		};
+		94C19CBA07C14735004B83EE = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			name = README;
+			path = OpenLegacyAudio/README;
+			refType = 4;
+			sourceTree = "<group>";
 		};
 		94C360450597CB4E00A80003 = {
 			buildActionMask = 2147483647;
@@ -2869,7 +3856,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				LIBRARY_STYLE = STATIC;
-				OTHER_CFLAGS = "-nostdinc -finline -fno-keep-inline-functions -force_cpusubtype_ALL -mlong-branch -fno-rtti -fno-exceptions -fcheck-new -static -DKERNEL -DKERNEL_PRIVATE -DDRIVER_PRIVATE -DAPPLE -DNeXT";
+				OTHER_CFLAGS = "-nostdinc -finline -fno-keep-inline-functions -force_cpusubtype_ALL -mlong-branch -fno-exceptions -static -DKERNEL -DKERNEL_PRIVATE -DDRIVER_PRIVATE -DAPPLE -DNeXT";
 				OTHER_LDFLAGS = "-static";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -2881,7 +3868,7 @@
 			dependencies = (
 			);
 			isa = PBXLibraryTarget;
-			name = OpenDBDMAAudioFloatLib;
+			name = OpenOWDBDMAAudioFloatLib;
 			productInstallPath = /usr/local/lib;
 			productName = OpenDBDMAAudioFloatLib;
 			productReference = 94E26631054E02A400A80003;
@@ -3623,6 +4610,9 @@
 				94F427650543145400A80003,
 				94CC88EF054C817100A80003,
 				94E26630054E02A400A80003,
+				948B2A8007A6F982007540CE,
+				94B59CA707B970C6005060B1,
+				94C19C2007C13BFB004B83EE,
 				94FC07D3056AE12D00A80003,
 				94C954A7057CFA4D00A80003,
 				94B3FB9B05866E9F00A80003,
@@ -3686,6 +4676,7 @@
 				9490D555061C8DDC00D8F22E,
 				94C3604D0597CD5C00A80003,
 				94CC8146054C189400A80003,
+				94C19B6707C139B7004B83EE,
 				94CC89D20508E13B00A80003,
 				F5FB800D03C7A0DD01A80002,
 				F547F715028EFEEC01A80001,
@@ -4202,6 +5193,9 @@
 				947DFF940617B5230087D76A,
 				9490D52D061C8AE700D8F22E,
 				94B4B913066C02DD00C3EE18,
+				948B2A8107A6F982007540CE,
+				94B59CA807B970C6005060B1,
+				94C19C2107C13BFB004B83EE,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -8927,6 +9921,8 @@
 				947D00330617C03B0087D76A,
 				948201C50620C6A00097B077,
 				94B4B944066C0A3900C3EE18,
+				948D376307A6F07100F832E6,
+				9468B46607AC1B6F00D39D7B,
 			);
 			isa = PBXBundleTarget;
 			name = Package;
