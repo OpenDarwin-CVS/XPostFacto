@@ -52,7 +52,8 @@ enum {
 	kNoMacOSXYet,
 	kXPostFactoHelpMenu,
 	kXPostFactoOnlineHelpMenu,
-	kXPostFactoSourceCodeMenu
+	kXPostFactoSourceCodeMenu,
+	kInstallOnly
 };
 
 

@@ -378,6 +378,8 @@ MountedVolume::getBootStatus ()
 	if (!getIsOnBootableDevice ()) return kNotBootable;
 	if (!getValidOpenFirmwareName ()) return kNoOFName;
 	if (!getHasBootX() && !getIsWriteable ()) return kNoBootX;
+	if (!getIsWriteable() && getHasInstaller ()) return kInstallOnly;
+	if (!getIsWriteable()) return kNotWriteable;
 
 	return kStatusOK;
 }

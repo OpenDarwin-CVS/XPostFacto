@@ -37,15 +37,15 @@ advised of the possibility of such damage.
 
 resource 'STR#' (kXPFStringsResource, purgeable) {
 	{
-/* 1 */		" is not a bootable device.";
-			" is not formatted as an HFS Plus disk.";
-			" is not bootable (Mac OS X is not installed).";
-			" is not bootable (unable to find Open Firmware name).";
-/* 5 */		"' has no OldWorld support installed.";
-			"' is not bootable (BootX has not been installed).";
-			" (May fail because partition extends past 8 GB)";
-			" is not writeable.";
-			"' is not an installation disk.";
+/* 1 */		"is not a bootable device.";
+			"is not formatted as an HFS Plus disk.";
+			"is not bootable (Mac OS X is not installed).";
+			"is not bootable (unable to find Open Firmware name).";
+/* 5 */		"has no OldWorld support installed.";
+			"is not bootable (BootX has not been installed).";
+			"(May fail because partition extends past 8 GB)";
+			"is not writeable.";
+			"is not an installation disk.";
 /* 10 */	"XPostFacto requires Mac OS 9 or later.";
 			"XPostFacto does not know how to patch NVRAM for ";
 			
@@ -57,5 +57,6 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			"^0 Help";
 			"Online Help";
 /* 15 */	"Online Source Code";
+			"can only be used as an installer.";
 	}
 };

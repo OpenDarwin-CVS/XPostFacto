@@ -152,7 +152,8 @@ XPFWindow::updateBootMessage ()
 		case kNotBootable:
 		case kNoOFName:
 		case kNoBootX:
-			if (fPrefs->getBootDisk()->getInstallerStatus() == kStatusOK) break;
+		case kNotWriteable:
+		case kInstallOnly:
 			GetIndString (reason, kXPFStringsResource, bootStatus);
 			message = "'";
 			message += fPrefs->getBootDisk()->getVolumeName ();
