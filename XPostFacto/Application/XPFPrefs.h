@@ -64,7 +64,10 @@ class XPFPrefs : public TFileBasedDocument {
 		
 		virtual void DoSetupMenus (); // Override		
 		virtual void DoMenuCommand (CommandNumber aCommandNumber); // Override
-
+		virtual void DoEvent	(EventNumber eventNumber,
+							TEventHandler* source,
+							TEvent* event);
+						
 		// Accessors
 
 		void setTargetDisk (MountedVolume *theDisk);
@@ -155,6 +158,8 @@ class XPFPrefs : public TFileBasedDocument {
 				
 		XPFIODevice *fInputDevice;
 		XPFIODevice *fOutputDevice;
+		
+		TWindow *fOptionsWindow;
 
 		// Values for prefs file. Don't change type, as that would
 		// break the prefs file format.

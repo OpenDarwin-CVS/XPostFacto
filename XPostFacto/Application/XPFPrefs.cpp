@@ -78,6 +78,7 @@ XPFPrefs::XPFPrefs (TFile* itsFile)
 		fInstallCD (NULL),
 		fInputDevice (NULL),
 		fOutputDevice (NULL),
+		fOptionsWindow (NULL),
 		fDebug (0)
 {
 	fAskOnClose = false;
@@ -85,7 +86,7 @@ XPFPrefs::XPFPrefs (TFile* itsFile)
 
 XPFPrefs::~XPFPrefs ()
 {
-
+	if (fOptionsWindow) delete fOptionsWindow;
 }
 
 #ifdef __MACH__
@@ -183,14 +184,17 @@ XPFPrefs::DoUpdate (ChangeID_AC theChange,
 	ArrayIndex_AC index;
 	
 	switch (theChange) {
-	
-			
+				
 		case cNewMountedVolume:
 			volume->AddDependent (this);
 			break;
 		
 		case cSetHelperDisk:
-			SetChangeCount (GetChangeCount () + 1);
+			if (volume == fTargetDisk) {
+				Changed (cSetHelperDiskForTarget, volume);
+			} else {
+				SetChangeCount (GetChangeCount () + 1);
+			}
 			break;
 			
 		default:
@@ -334,6 +338,7 @@ XPFPrefs::DoSetupMenus ()
 	Enable (cInstallBootX, true);
 	Enable (cInstallExtensions, true);
 	Enable (cInstallStartupItem, true);
+	Enable (cShowOptionsWindow, true);
 }
 
 void 
@@ -352,9 +357,31 @@ XPFPrefs::DoMenuCommand (CommandNumber aCommandNumber)
 		case cInstallStartupItem:
 			PostCommand (TH_new XPFInstallStartupCommand (this));
 			break;
-				
+			
 		default:
 			Inherited::DoMenuCommand (aCommandNumber);
+			break;
+	}
+}
+
+void
+XPFPrefs::DoEvent (EventNumber eventNumber,
+							TEventHandler* source,
+							TEvent* event)
+{
+	switch (eventNumber) {
+		case cShowOptionsWindow:
+			if (fOptionsWindow) {
+				fOptionsWindow->Show (true, false);
+				fOptionsWindow->Select ();
+			} else {
+				fOptionsWindow = TViewServer::fgViewServer->NewTemplateWindow (kOptionsWindow, this);
+				fOptionsWindow->Open ();
+			}
+			break;
+				
+		default:
+			Inherited::DoEvent (eventNumber, source, event);
 			break;
 	}
 }
@@ -501,6 +528,7 @@ XPFPrefs::getBootCommandBase ()
 			
 	if (fBootInVerboseMode) bootCommand += (" -v");
 	if (fBootInSingleUserMode) bootCommand += (" -s");
+	if (fEnableCacheEarly) bootCommand += (" -c");
 	
 	return bootCommand;
 }
