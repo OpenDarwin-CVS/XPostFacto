@@ -47,6 +47,7 @@ advised of the possibility of such damage.
 
 #include <SCSI.h>
 #include "XPFPartition.h"
+#include "NameRegistry.h"
 
 class MountedVolume;
 class HFSPlusVolumeHeader;
@@ -58,7 +59,7 @@ class XPFBootableDevice
 		static void Initialize ();
 		
 		static XPFBootableDevice* DeviceWithInfo (FSVolumeInfo *info);
-														
+		static XPFBootableDevice* DeviceWithDriverRefNum (SInt16 driverRefNum);									
 		static void DeleteInvalidDevices ();
 
 		void invalidate () {fInvalid = true;}
@@ -83,6 +84,8 @@ class XPFBootableDevice
 		const CStr255_AC& getOpenFirmwareName () {return fOpenFirmwareName;}
 		const CStr255_AC& getShortOpenFirmwareName () {return fShortOpenFirmwareName;}
 		
+		virtual bool isFirewireDevice ();
+		
 	protected:	
 
 		XPFBootableDevice (SInt16 driverRefNum);
@@ -92,8 +95,7 @@ class XPFBootableDevice
 			
 		virtual void extractPartitionInfo ();
 		virtual	void readCapacity () = 0;
-
-
+		
 #if qDebug
 		static void PrintPartitionMapEntry (Partition *part);
 #endif
@@ -106,7 +108,8 @@ class XPFBootableDevice
 		bool fInvalid;
 		SInt16 fDriverRefNum;
 		
-		PartitionList *fPartitionList;		
+		PartitionList *fPartitionList;	
+
 };
 
 typedef TemplateAutoList_AC <XPFBootableDevice>::Iterator DeviceIterator;

@@ -39,6 +39,7 @@ advised of the possibility of such damage.
 #include "MountedVolume.h"
 
 #include "ATADevice.h"
+#include "FirewireDevice.h"
 
 #include <Devices.h>
 #include <Files.h>
@@ -76,6 +77,7 @@ bool XPFBootableDevice::fInitialized = false;
 void
 XPFBootableDevice::Initialize ()
 {
+	FirewireDevice::Initialize ();	// we need to do this each time
 	if (fInitialized) return;
 	fInitialized = true;
 	SCSIDevice::Initialize ();
@@ -203,6 +205,12 @@ XPFBootableDevice::~XPFBootableDevice ()
 	if (fPartitionList) delete fPartitionList;
 }
 
+bool
+XPFBootableDevice::isFirewireDevice ()
+{
+	return false;
+}
+
 void 
 XPFBootableDevice::DeleteInvalidDevices ()
 {
@@ -219,8 +227,14 @@ XPFBootableDevice::DeleteInvalidDevices ()
 XPFBootableDevice* 
 XPFBootableDevice::DeviceWithInfo (FSVolumeInfo *info)
 {
+	return DeviceWithDriverRefNum (info->driverRefNum);
+}
+
+XPFBootableDevice*
+XPFBootableDevice::DeviceWithDriverRefNum (SInt16 driverRefNum)
+{
 	for (DeviceIterator iter (&gDeviceList); iter.Current (); iter.Next ()) {
-		if (iter->fDriverRefNum == info->driverRefNum) {
+		if (iter->fDriverRefNum == driverRefNum) {
 			return iter.Current ();
 		}
 	}
