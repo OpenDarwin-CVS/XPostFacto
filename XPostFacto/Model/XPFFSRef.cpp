@@ -96,7 +96,7 @@ XPFFSRef::getFSRef (FSRef *rootDirectory, char *path, FSRef *result)
 }
 
 OSErr
-XPFFSRef::getOrCreateDirectory (FSRef *rootDirectory, char *path, UInt32 mode, FSRef *result, bool create)
+XPFFSRef::getOrCreateDirectory (FSRef *rootDirectory, char *path, UInt32 mode, FSRef *result, bool create, UInt32 uid, UInt32 gid)
 {
 	OSErr err;
 	ByteCount uniLength, converted;
@@ -114,7 +114,7 @@ XPFFSRef::getOrCreateDirectory (FSRef *rootDirectory, char *path, UInt32 mode, F
 
 	if (err) return err;
 
-	XPFCatalogInfo catInfo (mode);
+	XPFCatalogInfo catInfo (mode, true, uid, gid);
 	XPFSetUID myUID (0);
 	return FSGetOrCreateDirectoryUnicode (rootDirectory, 
 			uniLength / sizeof (UniChar), uniChars, kFSCatInfoPermissions, &catInfo, 
@@ -183,7 +183,7 @@ XPFFSRef::getOrCreateCoreServicesDirectory (FSRef *rootDirectory, FSRef *result,
 OSErr
 XPFFSRef::getOrCreateLibraryDirectory (FSRef *rootDirectory, FSRef *result, bool create)
 {
-	return getOrCreateDirectory (rootDirectory, libraryName, 0775, result, create);
+	return getOrCreateDirectory (rootDirectory, libraryName, 0775, result, create, 0, 80);
 }
 
 OSErr
