@@ -819,7 +819,7 @@ XPFPrefs::DoWrite (TFile* aFile, bool makingCopy)
 	fileStream << fRebootInMacOS9;
 	
 	// Now, we store the non-default bus selections (if any)	
-	fileStream << fHelperList.GetSize ();
+	fileStream << fDeviceHints.GetSize ();
 
 	for (TemplateAutoList_AC <XPFDeviceHint>::Iterator iter (&fDeviceHints); iter.Current (); iter.Next ()) {
 		fileStream << iter->deviceIdent;
