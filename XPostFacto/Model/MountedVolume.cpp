@@ -510,6 +510,8 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 		}
 	}
 #endif
+
+	if (getRequiresBootHelper ()) fHelperDisk = GetDefaultHelperDisk ();
 	
 	#if qLogging
 		if (fValidOpenFirmwareName) {
