@@ -68,6 +68,8 @@ class MountedVolume : public MDependable_AC
 	
 		static void Initialize ();
 		
+		void readHelperFromStream (CFileStream_AC *stream);
+		
 		const CStr255_AC& getOpenFirmwareName () {return fOpenFirmwareName;}
 		const CStr255_AC& getShortOpenFirmwareName () {return fShortOpenFirmwareName;}
 		const CStr255_AC& getVolumeName () {return fVolumeName;}

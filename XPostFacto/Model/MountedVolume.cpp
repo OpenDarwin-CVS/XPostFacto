@@ -131,6 +131,19 @@ MountedVolume::Initialize ()
 	#endif
 }
 
+void
+MountedVolume::readHelperFromStream (CFileStream_AC *stream)
+{
+	FSVolumeInfo volInfo;
+	stream->ReadBytes (&volInfo, sizeof (volInfo));
+	MountedVolume *helper = MountedVolume::WithInfo (&volInfo);
+	if (helper) {
+		fHelperDisk = helper;
+	} else {
+		fHelperDisk = GetDefaultHelperDisk ();
+	}
+}
+
 MountedVolume*
 MountedVolume::WithCreationDate (unsigned int date)
 {
@@ -278,6 +291,7 @@ MountedVolume::installBootXIfNecessary (bool forceInstall)
 
 MountedVolume::~MountedVolume ()
 {
+	RemoveAllDependencies ();
 #ifdef __MACH__
 	if (fRegEntry) IOObjectRelease (fRegEntry);
 #endif
@@ -572,6 +586,6 @@ MountedVolume::setHelperDisk (MountedVolume *disk)
 {
 	if (fHelperDisk != disk) {
 		fHelperDisk = disk;
-		
+		Changed (cSetHelperDisk, this);
 	}
 }
