@@ -42,6 +42,7 @@
 #include <sys/param.h>
 #include <sys/ucred.h>
 #include <sys/mount.h>
+#include <sys/attr.h>
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <IOKit/IOKitLib.h>
@@ -91,9 +92,166 @@ void checkForChangesBetween (XPFBootFile *bf1, XPFBootFile *bf2);
 void exitWithError (OSStatus err, int code);
 void turnOffSleepIfUnsupported ();
 void setupRestartInMacOS9 ();
+void reblessMacOS9SystemFolder ();
+bool isOldWorld ();
+bool isMacOS9SystemFolder (char *path);
 
 int getPaths (char *rootDevicePath, char *bootDevicePath);
 int getMountPointForOFPath (char *mountPoint, const char *ofPath);
+
+struct volinfobuf {
+  uint32_t info_length;
+  uint32_t finderinfo[8];
+}; 
+
+struct fileinfobuf {
+  uint32_t info_length;
+  uint32_t finderinfo[8];
+}; 
+
+struct objectinfobuf {	
+	uint32_t info_length;
+	fsobj_id_t dirid;
+};
+
+bool
+isOldWorld ()
+{
+	bool retVal = false;
+	mach_port_t iokitPort;
+	IOMasterPort (MACH_PORT_NULL, &iokitPort);
+	io_service_t platformDevice = NULL; 
+	io_iterator_t iter = NULL;
+	
+	IOServiceGetMatchingServices (iokitPort, IOServiceMatching ("IOPlatformExpertDevice"), &iter);
+	if (iter) {
+		platformDevice = IOIteratorNext (iter);
+		IOObjectRelease (iter);
+	}
+
+	if (platformDevice) {
+		io_iterator_t iterator;
+		IORegistryEntryGetChildIterator (platformDevice, kIOServicePlane, &iterator);
+		if (iterator) {
+			io_object_t child;
+			while ((child = IOIteratorNext (iterator)) && !retVal) {
+				if (IOObjectConformsTo (child, "ApplePowerSurgePE") || IOObjectConformsTo (child, "ApplePowerStarPE") || IOObjectConformsTo (child, "GossamerPE")) retVal = true;
+				IOObjectRelease (child);
+			}
+			IOObjectRelease (iterator);
+		}
+		IOObjectRelease (platformDevice);
+	}
+	return retVal;
+}
+
+bool
+isMacOS9SystemFolder (char *path)
+{
+	if (chdir (path)) return false;
+	bool hasSystem = false;
+	bool hasFinder = false;
+	struct dirent *entry;
+	DIR *dir = opendir (".");
+	if (!dir) return false;
+	
+	while ((entry = readdir (dir)) && (!hasSystem || !hasFinder)) {
+		struct attrlist	alist;
+		struct fileinfobuf finfo;
+		int err;
+	
+		alist.bitmapcount = 5;
+		alist.reserved = 0;
+		alist.commonattr = ATTR_CMN_FNDRINFO;
+		alist.volattr = 0;
+		alist.dirattr = 0;
+		alist.fileattr = 0;
+		alist.forkattr = 0;
+
+		err = getattrlist (entry->d_name, &alist, &finfo, sizeof (finfo), 0);
+		if (err) continue;
+		
+		if ((finfo.finderinfo[0] == 'FNDR') && (finfo.finderinfo[1] == 'MACS')) hasFinder = true;
+		if ((finfo.finderinfo[0] == 'zsys') && (finfo.finderinfo[1] == 'MACS')) hasSystem = true;
+	}
+
+    closedir (dir);
+	return hasSystem && hasFinder;
+}
+
+unsigned
+getMacOS9SystemFolderNodeID ()
+{
+	unsigned retVal = 0;
+	struct dirent *entry;
+	DIR *dir = opendir ("/");
+	
+	while ((entry = readdir (dir)) && (retVal == 0)) {
+		chdir ("/");
+		if (isMacOS9SystemFolder (entry->d_name)) {
+			chdir ("/");
+			
+			struct attrlist alist;
+			struct objectinfobuf attrbuf;
+
+			alist.bitmapcount = 5;
+			alist.reserved = 0;
+			alist.commonattr = ATTR_CMN_OBJID;
+			alist.volattr = 0;
+			alist.dirattr = 0;
+			alist.fileattr = 0;
+			alist.forkattr = 0;
+
+			OSErr err = getattrlist (entry->d_name, &alist, &attrbuf, sizeof (attrbuf), 0);
+			if (err == noErr) retVal = attrbuf.dirid.fid_objno;
+		}
+	}
+
+    closedir (dir);
+	return retVal;	
+}
+
+void
+reblessMacOS9SystemFolder ()
+{
+	// If we're not on an Old World system, then we don't want to unbless CoreServices,
+	// since Mac OS X actually uses the BootX from CoreServices on New World
+	if (!isOldWorld ()) return;
+
+    struct attrlist alist;
+    struct volinfobuf vinfo;
+	int err;
+
+    alist.bitmapcount = 5;
+    alist.reserved = 0;
+    alist.commonattr = ATTR_CMN_FNDRINFO;
+    alist.volattr = ATTR_VOL_INFO;
+    alist.dirattr = 0;
+    alist.fileattr = 0;
+    alist.forkattr = 0;
+
+	err = getattrlist ("/", &alist, &vinfo, sizeof (vinfo), 0);
+    if (err) {
+		syslog (LOG_INFO, "Could not get finder info");
+        return;
+    }
+	
+	syslog (LOG_INFO, "FinderInfo [0]: %lu [3]: %lu [5]: %lu", vinfo.finderinfo[0], vinfo.finderinfo[3], vinfo.finderinfo[5]);
+
+	// We only want to deal with cases where Mac OS X has deblessed the Mac OS 9 system folder
+	// In those cases, Mac OS X sets finderinfo[5] equal to finderinfo[0]
+	if (vinfo.finderinfo[0] != vinfo.finderinfo[5]) return;
+	
+	UInt32 systemFolder = getMacOS9SystemFolderNodeID ();
+	
+	if (systemFolder) {
+		syslog (LOG_INFO, "Reblessing Mac OS 9 System Folder: %lu", systemFolder);
+		vinfo.finderinfo[0] = systemFolder;
+		vinfo.finderinfo[3] = systemFolder;
+		err = setattrlist ("/", &alist, &vinfo.finderinfo, sizeof (vinfo.finderinfo), 0);
+		if (err) syslog (LOG_INFO, "Error setting finder info");
+ 	}
+}
 
 int 
 getMountPointForOFPath (char *mountPoint, const char *ofPath)
@@ -417,6 +575,7 @@ main (int argc, char **argv)
 	openlog ("xpfbootsupportd", 0, LOG_USER);
 	
 	turnOffSleepIfUnsupported ();
+	reblessMacOS9SystemFolder ();
 
 	initialize_everything ();
 	
