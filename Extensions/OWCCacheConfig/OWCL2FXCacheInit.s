@@ -143,11 +143,7 @@ cinoexit:
 			stw		r10,pfl2Size(r2)			; store the L2 size
 				
 			ori		r8,r8,pfL2					; show L2 available
-			lwz		r5,pfl2crOriginal(r2)		; get the original cache setting
-			rlwinm.	r5,r5,0,l2e,l2e				; see if it was enabled
-			bne		ciupdateav					; skip setting it if it was
-			stw		r4,pfl2crOriginal(r2)		; store it
-												
+
 ciupdateav:
 			stw		r8,pfAvailable(r2)			; store Available
 			mtsprg	2,r8						; and cache it

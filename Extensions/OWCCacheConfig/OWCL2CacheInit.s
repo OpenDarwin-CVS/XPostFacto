@@ -51,7 +51,7 @@ for the specific language governing rights and limitations under the License.
 
 /*  Initialize L2 Cache
  *
- *	unsigned OWCCacheInit (unsigned)
+ *	unsigned OWCL2CacheInit (unsigned)
  *
  *  Initialize the L2CR to the specified value. Returns the new L2CR value.
  *
@@ -89,16 +89,30 @@ doSetup:
 
 			mfspr	r9,hid0							; Get the current power-saving mode
 			mfmsr	r7								; Get the current MSR
+
+			lis		r10,hi16(dozem|napm|sleepm|dpmm)	; Mask of power management bits
+			andc	r4,r9,r10						; Clean up the old power bits
 			
-			rlwinm	r4,r9,0,dpm+1,doze-1			; Clear all possible power-saving modes (also disable DPM)	
 			rlwinm	r7,r7,0,MSR_FP_BIT+1,MSR_FP_BIT-1	; Force floating point off
 			rlwinm	r7,r7,0,MSR_VEC_BIT+1,MSR_VEC_BIT-1	; Force vectors off
 			rlwinm	r5,r7,0,MSR_DR_BIT+1,MSR_DR_BIT-1	; Turn off translation		
 			rlwinm	r5,r5,0,MSR_EE_BIT+1,MSR_EE_BIT-1	; Turn off interruptions
 			
 			mtspr	hid0,r4							; Set up the HID
-			isync
+			mfspr	r4,hid0							; Yes, this is silly, keep it here
+			mfspr	r4,hid0							; Yes, this is a duplicate, keep it here
+			mfspr	r4,hid0							; Yes, this is a duplicate, keep it here
+			mfspr	r4,hid0							; Yes, this is a duplicate, keep it here
+			mfspr	r4,hid0							; Yes, this is a duplicate, keep it here
+			mfspr	r4,hid0							; Yes, this is a duplicate, keep it here
 			
+			mtmsr	r5								; Translation and all off
+			isync									; Toss prefetch
+
+			mfspr	r8,l2cr							; Get the L2CR
+			rlwinm.	r2,r8,0,l2e,l2e					; see if it is enabled
+			beq		ciinvdl2						; if not, no reason to flush
+	
 			cmplwi	r11,PROCESSOR_VERSION_750		; only do dssall if appropriate
 			beq		cinoDSS
 			cmplwi	r11,PROCESSOR_VERSION_750FX
@@ -108,15 +122,8 @@ doSetup:
 			sync
 			
 cinoDSS:
-
-			mtmsr	r5								; Translation and all off
-			sync
-			isync									; Toss prefetch
-
-			mfspr	r8,l2cr							; Get the L2CR
-			rlwinm.	r2,r8,0,l2e,l2e					; see if it is enabled
-			beq		ciinvdl2						; if not, no reason to flush
 			
+							
 ;
 ; flush the L2 Cache
 ;
@@ -315,11 +322,6 @@ cinoexit:
 			
 			stw		r0,pfl2Size(r2)				; Store the L2 size
 			
-			lwz		r5,pfl2crOriginal(r2)		; get the original cache setting
-			rlwinm.	r5,r5,0,l2e,l2e				; see if it was enabled
-			bne		cistore						; skip setting it if it was
-			stw		r4,pfl2crOriginal(r2)		; store it
-									
 cistore:
 			stw		r4,pfl2cr(r2)				; store the L2CR
 			stw		r8,pfAvailable(r2)			; store Available

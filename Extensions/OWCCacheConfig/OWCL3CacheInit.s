@@ -335,10 +335,6 @@ cinoexit:
 			stw		r10,pfl2Size(r2)			; store the L2 size
 				
 			ori		r8,r8,pfL2					; show L2 available
-			lwz		r5,pfl2crOriginal(r2)		; get the original cache setting
-			rlwinm.	r5,r5,0,l2e,l2e				; see if it was enabled
-			bne		ciupdatel3					; skip setting it if it was
-			stw		r4,pfl2crOriginal(r2)		; store it
 									
 ciupdatel3:
 			mfspr	r4,l3cr						; get the new L3CR
@@ -354,11 +350,7 @@ ciupdatel3:
 		
 			stw		r10,pfl3Size(r2)
 			
-			ori		r8,r8,pfL3					; show L2 available
-			lwz		r5,pfl3crOriginal(r2)		; get the original cache setting
-			rlwinm.	r5,r5,0,l3e,l3e				; see if it was enabled
-			bne		ciupdateav					; skip setting it if it was
-			stw		r4,pfl3crOriginal(r2)		; store it
+			ori		r8,r8,pfL3					; show L3 available
 			
 ciupdateav:
 			stw		r8,pfAvailable(r2)			; store Available
