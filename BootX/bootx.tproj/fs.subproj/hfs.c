@@ -183,10 +183,16 @@ long HFSLoadFile(CICell ih, char *filePath)
   }
   
   result = ResolvePathToCatalogEntry(filePath, &flags, entry, dirID, 0);
-  if ((result == -1) || ((flags & kFileTypeMask) != kFileTypeFlat)) return -1;
+  if ((result == -1) || ((flags & kFileTypeMask) != kFileTypeFlat)) {
+    printf ("Error from ResolvePathToCatalogEntry for %s\n", filePath);
+    return -1;
+  }
   
   // Check file owner and permissions.
-  if (flags & (kOwnerNotRoot | kPermGroupWrite | kPermOtherWrite)) return -1;
+  if (flags & (kOwnerNotRoot | kPermGroupWrite | kPermOtherWrite)) {
+    printf ("Owner or permissions incorrect for %s\n", filePath);
+    return -1;
+  }
   
   result = ReadFile(entry, &length);
   if (result == -1) return -1;

@@ -62,17 +62,23 @@ long LookupPartition(char *devSpec);
 
 long LoadFile(char *fileSpec)
 {
-  char       devSpec[256];
+  char       devSpec[256] = {0};
   char       *filePath;
   FSLoadFile loadFile;
   long       ret, length, partIndex;
   
   ret = ConvertFileSpec(fileSpec, devSpec, &filePath);
-  if ((ret == -1) || (filePath == NULL)) return -1;
+  if ((ret == -1) || (filePath == NULL)) {
+    printf ("Error from ConvertFileSpec for %s\n", fileSpec);
+    return -1;
+  }
   
   // Get the partition index for devSpec.
   partIndex = LookupPartition(devSpec);
-  if (partIndex == -1) return -1;
+  if (partIndex == -1) {
+    printf ("Error from LookupPartition for %s\n", devSpec);
+    return -1;
+  }
   
   loadFile = gParts[partIndex].loadFile;
   length = loadFile(gParts[partIndex].partIH, filePath);
