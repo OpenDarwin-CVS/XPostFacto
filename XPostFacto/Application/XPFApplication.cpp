@@ -732,50 +732,53 @@ XPFApplication::restart ()
 		return;
 	}
 	
-	setCopyInProgress (true);
-		
-	setCopyingFile ("BootX");
-
-	// Check to see whether we need to install BootX
-	bootDisk->installBootXIfNecessary (fPrefs->getReinstallBootX ());
-
-	// Check whether we need to install Old World Support
-	if (fPrefs->getReinstallExtensions () || !bootDisk->getHasOldWorldSupport ()) {
-		try {
-			FSRef systemFolder, systemLibraryFolder, systemLibraryExtensionsFolder;
-		
-			UniChar systemName[] = {'S', 'y', 's', 't', 'e', 'm'};
-			UniChar libraryName[] = {'L', 'i', 'b', 'r', 'a', 'r', 'y'};
-			UniChar extensionsName[] = {'E', 'x', 't', 'e', 'n', 's', 'i', 'o', 'n', 's'};
-		
-			ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (bootDisk->getRootDirectory(), 
-				sizeof (systemName) / sizeof (UniChar), systemName, kFSCatInfoNone, NULL, 
-				&systemFolder, NULL, NULL));
-			ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&systemFolder, 
-				sizeof (libraryName) / sizeof (UniChar), libraryName, kFSCatInfoNone, NULL, 
-				&systemLibraryFolder, NULL, NULL));
-			ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&systemLibraryFolder,
-				sizeof (extensionsName) / sizeof (UniChar), extensionsName, kFSCatInfoNone, NULL,
-				&systemLibraryExtensionsFolder, NULL, NULL));
-
-			copyHFSArchivesTo (&systemLibraryExtensionsFolder);
-
-			// If there is an existing extensions cache, we'd best delete it
+	if (bootDisk->getIsWriteable ()) {
 	
-			FSRef existingCache;
-			UniChar extensionsCacheName[] = {'E', 'x', 't', 'e', 'n', 's', 'i', 'o', 'n', 's', '.', 'm', 'k', 'e', 'x', 't'};
-			OSErr err = FSMakeFSRefUnicode (&systemLibraryFolder, 
-				sizeof (extensionsCacheName) / sizeof (UniChar), extensionsCacheName, kTextEncodingUnknown,
-				&existingCache);
-			if (err == noErr) FSDeleteObject (&existingCache);
-		}
-		catch (...) {
-			setCopyInProgress (false);
-			throw;
-		}
-	}
+		setCopyInProgress (true);
+			
+		setCopyingFile ("BootX");
 
-	setCopyInProgress (false);
+		// Check to see whether we need to install BootX
+		bootDisk->installBootXIfNecessary (fPrefs->getReinstallBootX ());
+
+		// Check whether we need to install Old World Support
+		if (fPrefs->getReinstallExtensions () || !bootDisk->getHasOldWorldSupport ()) {
+			try {
+				FSRef systemFolder, systemLibraryFolder, systemLibraryExtensionsFolder;
+			
+				UniChar systemName[] = {'S', 'y', 's', 't', 'e', 'm'};
+				UniChar libraryName[] = {'L', 'i', 'b', 'r', 'a', 'r', 'y'};
+				UniChar extensionsName[] = {'E', 'x', 't', 'e', 'n', 's', 'i', 'o', 'n', 's'};
+			
+				ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (bootDisk->getRootDirectory(), 
+					sizeof (systemName) / sizeof (UniChar), systemName, kFSCatInfoNone, NULL, 
+					&systemFolder, NULL, NULL));
+				ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&systemFolder, 
+					sizeof (libraryName) / sizeof (UniChar), libraryName, kFSCatInfoNone, NULL, 
+					&systemLibraryFolder, NULL, NULL));
+				ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&systemLibraryFolder,
+					sizeof (extensionsName) / sizeof (UniChar), extensionsName, kFSCatInfoNone, NULL,
+					&systemLibraryExtensionsFolder, NULL, NULL));
+
+				copyHFSArchivesTo (&systemLibraryExtensionsFolder);
+
+				// If there is an existing extensions cache, we'd best delete it
+		
+				FSRef existingCache;
+				UniChar extensionsCacheName[] = {'E', 'x', 't', 'e', 'n', 's', 'i', 'o', 'n', 's', '.', 'm', 'k', 'e', 'x', 't'};
+				OSErr err = FSMakeFSRefUnicode (&systemLibraryFolder, 
+					sizeof (extensionsCacheName) / sizeof (UniChar), extensionsCacheName, kTextEncodingUnknown,
+					&existingCache);
+				if (err == noErr) FSDeleteObject (&existingCache);
+			}
+			catch (...) {
+				setCopyInProgress (false);
+				throw;
+			}
+		}
+
+		setCopyInProgress (false);
+	}
 
 	NVRAMVariables *nvram = NVRAMVariables::GetVariables ();
 	CChar255_AC bootDevice (fPrefs->getBootDevice ());
