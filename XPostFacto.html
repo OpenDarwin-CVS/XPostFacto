@@ -1,8 +1,8 @@
-<body><h2>XPostFacto 2.2.2</h2>
+<body><h2>XPostFacto 2.2.3</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-September 12, 2002
+October 7, 2002
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. The only difference from a supported installation is 3 extra clicks of your mouse! When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -76,7 +76,16 @@ September 12, 2002
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
-<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Download/XPostFacto.sit">2.2.2 (September 12, 2002)</a>
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Download/XPostFacto.sit">2.2.3 (October 7, 2002)</a>
+<dd>
+<ul>
+<li>Fixes a couple of problems with Darwin 6. 
+Will now recognize the Darwin 6 Install CD as an installer. Also, will automatically boot in verbose mode when booting Darwin.
+<li>Will now find the correct Open Firmware name for the Sonnet ATA/100 card with the 2.3.5 firmware applied. 
+Users report that the boot process still fails, though, so further investigation is required. 
+</ul>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2.2.sit">2.2.2 (September 12, 2002)</a>
 <dd>
 <ul>
 <li>Fixes the problem starting Classic in Mac OS X 10.2. Remember to reinstall the extensions in order to apply the fix. (You can do this from within Mac OS X now by launching XPostFacto). 
@@ -319,8 +328,8 @@ This release allows you to throttle (i.e. slow down) a G3 or G4 processor upgrad
 <p>Here is a quick survey of what works and what doesn't work on the machines that XPostFacto supports. For information about the compatibility of peripheral devices, check the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=Compatibility.html">compatibility page</a>. 
 
 <dl>
-<p><dt><b><a name="cpus">CPUs</a></b>
-<p><dd>Mac OS X does not work with a 601 CPU. Therefore, if you have a 7500 with the original 601 processor, you will need to install a CPU upgrade before installing Mac OS X. 
+<dt><p><b><a name="cpus">CPUs</a></b>
+<dd><p>Mac OS X does not work with a 601 CPU. Therefore, if you have a 7500 with the original 601 processor, you will need to install a CPU upgrade before installing Mac OS X. 
 
 <P>Mac OS X 10.2 does not work with a 603 or 604 CPU either. It is possible that this may be fixed in time, once Apple makes the latest kernel sources available.
 
@@ -328,38 +337,38 @@ This release allows you to throttle (i.e. slow down) a G3 or G4 processor upgrad
 
 <p>The 9500MP and 9600MP work, but only one processor is active at this time. I have been working on MP support from time to time, but have not made much progress lately.
 
-<p><dt><b><a name="floppy">Floppy Drive</a></b>
-<p><dd>Mac OS X does not come with support for the floppy drive, but you can install a driver from <a href="http://www.darwin-development.org/floppy/">http://www.darwin-development.org/floppy/</a> to add support.
+<dt><p><b><a name="floppy">Floppy Drive</a></b>
+<dd><p>Mac OS X does not come with support for the floppy drive, but you can install a driver from <a href="http://www.darwin-development.org/floppy/">http://www.darwin-development.org/floppy/</a> to add support.
 
-<p><dt><b><a name="sound">Sound and Video</a></b>
-<p><dd>Sound out works. However, it is not possible to change the volume globally (you can change the volume in applications such as iTunes).
+<dt><p><b><a name="sound">Sound and Video</a></b>
+<dd><p>Sound out works. However, it is not possible to change the volume globally (you can change the volume in applications such as iTunes).
 
 <p>Sound in does not work yet.
 
 <p>Video in and out does not work yet (on those models that have it--the 7600 and 8600, I believe).
 
-<p><dt><b><a name="adb">ADB Keyboard and Mouse</a></b>
-<p><dd>ADB keyboards and mice generally work. If you are tempted to replace them with a USB keyboard and mouse, it is useful to keep your ADB keyboard and mouse around. This is because the boot-time key combinations only work on ADB keyboards, and the built-in support for ADB comes in handy sometimes if you run into trouble.
+<dt><p><b><a name="adb">ADB Keyboard and Mouse</a></b>
+<dd><p>ADB keyboards and mice generally work. If you are tempted to replace them with a USB keyboard and mouse, it is useful to keep your ADB keyboard and mouse around. This is because the boot-time key combinations only work on ADB keyboards, and the built-in support for ADB comes in handy sometimes if you run into trouble.
 
-<p><dt><b><a name="SCSI">Internal and External SCSI</a></b>
-<p><dd>The internal and external SCSI bus both work. However, there are some users who have trouble with the internal SCSI bus. One thing that you need to double-check is that your SCSI termination is correct, because Mac OS X is picky about that. In general, Mac OS X is sensitive to timing issues on the SCSI bus. Sometimes removing unnecessary devices helps. Also, you will sometimes need to adjust the jumper settings on drives connected to the internal bus, to make sure that they spin up automatically at boot time (the "Disable Unit Attention" jumper is one that sometimes needs to be changed).
+<dt><p><b><a name="SCSI">Internal and External SCSI</a></b>
+<dd><p>The internal and external SCSI bus both work. However, there are some users who have trouble with the internal SCSI bus. One thing that you need to double-check is that your SCSI termination is correct, because Mac OS X is picky about that. In general, Mac OS X is sensitive to timing issues on the SCSI bus. Sometimes removing unnecessary devices helps. Also, you will sometimes need to adjust the jumper settings on drives connected to the internal bus, to make sure that they spin up automatically at boot time (the "Disable Unit Attention" jumper is one that sometimes needs to be changed).
 
-<p><dt><b><a name="SerialPorts">Serial Ports</a></b>
-<p><dd>The serial ports generally work, though not all serial devices are supported. Some modems work, but serial printers are not supported. Localtalk does not work in Mac OS X (i.e. Appletalk over the printer port). However, you can get localtalk-to-ethernet adapters.
+<dt><p><b><a name="SerialPorts">Serial Ports</a></b>
+<dd><p>The serial ports generally work, though not all serial devices are supported. Some modems work, but serial printers are not supported. Localtalk does not work in Mac OS X (i.e. Appletalk over the printer port). However, you can get localtalk-to-ethernet adapters.
 
-<p><dt><b><a name="Ethernet">Ethernet</a></b>
-<p><dd>The built-in ethernet connection works, with the exception of the Powerbooks that have an Ethernet-only connection. Those do not work, but the combo Ethernet-Modem connections do work (at least for ethernet).
+<dt><p><b><a name="Ethernet">Ethernet</a></b>
+<dd><p>The built-in ethernet connection works, with the exception of the Powerbooks that have an Ethernet-only connection. Those do not work, but the combo Ethernet-Modem connections do work (at least for ethernet).
 
-<p><dt><b><a name="InternalModem">Internal Modem</a></b>
-<p><dd>I have not tested the internal modem in the Powerbooks--I suppose I should!
+<dt><p><b><a name="InternalModem">Internal Modem</a></b>
+<dd><p>I have not tested the internal modem in the Powerbooks--I suppose I should!
 
-<p><dt><b><a name="Sleep">Sleep</a></b>
-<p><dd>Display sleep works, and is safe. Disk sleep works and seems safe in Mac OS X 10.1 and later. In Mac OS X 10.0, there were some reports of data corruption upon waking for sleep.
+<dt><p><b><a name="Sleep">Sleep</a></b>
+<dd><p>Display sleep works, and is safe. Disk sleep works and seems safe in Mac OS X 10.1 and later. In Mac OS X 10.0, there were some reports of data corruption upon waking for sleep.
 
 <p>System sleep is not working yet. On the desktop models, it fails gracefully (or at least reasonably gracefully--I seem to lose my Internet connection sometimes). <b>On the Powerbooks, however, sleep crashes the system.</b> So it is important to turn sleep off in the Energy Saver preference panel in the System Preferences application.
 
-<p><dt><b><a name="PCCards">PCMCIA Cards and Cardbus Cards</a></b>
-<p><dd>PCMCIA cards appear not to work in the Powerbooks. However, some CardBus cards do seem to work.
+<dt><p><b><a name="PCCards">PCMCIA Cards and Cardbus Cards</a></b>
+<dd><p>PCMCIA cards appear not to work in the Powerbooks. However, some CardBus cards do seem to work.
 
 </dl>
 
@@ -572,6 +581,9 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <h2>Revision History</h2>
 
 <dl>
+<dt>October 7, 2002
+<dd>Changes for version 2.2.3.
+
 <dt>September 12, 2002
 <dd>Changes for version 2.2.2.
 
