@@ -35,10 +35,7 @@ PatchedBlockStorageDriver::checkForMedia (void)
     IOLockLock (_mediaStateLock);    
 
     result = getProvider()->reportMediaState (&currentState, &changed);
-	if (!changed) {
-		changed = currentState ? !_mediaPresent : _mediaPresent;
-		if (changed) setProperty ("Bug fix applied", "");
-	}
+	changed = currentState ? !_mediaPresent : _mediaPresent;
 	
     if (result != kIOReturnSuccess) {		/* the poll operation failed */
         IOLog("%s[IOBlockStorageDriver]::checkForMedia; err '%s' from reportMediaState\n", getName(), stringFromReturn (result));
