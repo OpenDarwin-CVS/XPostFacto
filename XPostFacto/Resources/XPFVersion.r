@@ -65,7 +65,7 @@ RESOURCE 'vers' (3,
 	0x03,
 	0x00,
 	final,
-	0x00,
+	0xFF,
 	verUs,
 	"3.0",
 	"3.0, © 2001 - 2004 Other World Computing"
