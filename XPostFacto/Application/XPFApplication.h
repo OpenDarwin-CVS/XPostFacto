@@ -38,6 +38,9 @@ advised of the possibility of such damage.
 #include "UApplication.h"
 #include "CCooperativeThread_AC.h"
 #include "CThreadRunner_AC.h"
+#include "XPFPlatform.h"
+
+extern UInt32 gSystemVersion;
 
 //----------------------------------------------------------------------------------------
 // XPFApplication
@@ -46,8 +49,10 @@ advised of the possibility of such damage.
 class XPFWindow;
 class XPFAboutBox;
 class MountedVolume;
+class TTEViewStream;
+class CLogReporter;
 
-class NVRAMVariables;
+class XPFNVRAMSettings;
 class XPFPrefs;
 
 class XPFApplication : public TApplication {
@@ -58,71 +63,46 @@ class XPFApplication : public TApplication {
 		
 		virtual ~XPFApplication();
 			// Destructor
+					
+		// TApplication glue
+		
+		void DoInitialState ();
+		
+		TDocument* DoMakeDocument (CommandNumber /* itsCommandNumber */, TFile* itsFile);
+		TFile* FindOrCreatePrefsFile (CommandNumber itsCommand);
+		virtual TDocument* OpenNew (CommandNumber itsCommandNumber);
 			
-		virtual void DoAboutBox();
-		void DoShowHelpFile ();
-		void DoInstallExtensions ();
-		
-		void launchURL (CStr255_AC theURL);
-		
-		void reportFatalError (CStr255_AC error);
+		virtual void HandleDiskEvent (TToolboxEvent* event);
+							
+		virtual void InstallHelpMenuItems();
 			
-		virtual void HandleDiskEvent(TToolboxEvent* event);
-		virtual void RegainControl(bool checkClipboard);
-			
-		virtual TDocument* OpenNew(CommandNumber itsCommandNumber);
-		virtual TDocument* OpenOld(CommandNumber itsOpenCommand, CList_AC* aFileList);
+		// Accessors
 		
-		bool getHasHFSPlusAPIs () {return fHasHFSPlusAPIs;}
-		bool getRunningInBlueBox () {return fRunningInBlueBox;}
-						
-		void copyHFSArchivesTo (FSRef *directory);
-				
-		void setCopyInProgress (bool val);
-		bool getCopyInProgress () {return fCopyInProgress;}
-		const CPascalStr_AC& getCopyingFile () {return fCopyingFile;}
-		void setCopyingFile (CStr255_AC copyMessage);
-		
-		XPFPrefs* getPrefs () {return fPrefs;}
+		XPFPlatform* getPlatform () {return fPlatform;}
 		
 		// Commands
-		virtual void InstallHelpMenuItems();
+		void CloseSplashWindow ();
+		void launchURL (CStr255_AC theURL);
+		void reportFatalError (CStr255_AC error);
 		
 		virtual void DoSetupMenus(); // Override		
 		virtual void DoMenuCommand(CommandNumber aCommandNumber); // Override
+		virtual void DoAboutBox();
+		void DoShowHelpFile ();
+			
+		virtual void DoAEClose(TAppleEvent* message, TAppleEvent* reply);
 		
-		void prepare ();
-		void restart ();
-		void install ();
-		
-		unsigned canBoot ();
-		
-		Boolean copyFilter (const FSRef *src);	
-		
-	private:
-		void tellFinderToRestart ();
-		
-		void adjustThrottle (NVRAMVariables *nvram);
-				
-		void initializeNVRAM ();
-		void initializeThrottleMenu ();
-		
-		void installExtensionsWithRootDirectory (const FSRef *rootDirectory);
-		void installExtensionsInMacOSX ();
-		
-		XPFWindow *fMainWindow;
+	private:						
+		TWindow *fMainWindow;
 		XPFAboutBox *fAboutBox;
+		TWindow *fSplash;
+		TWindow *fLogWindow;
+		
+		CAutoPtr_AC <TTEViewStream> fViewStream;
+		CAutoPtr_AC <CLogReporter> fReporter;
 			
 		XPFPrefs *fPrefs;
-			
-		bool fHasHFSPlusAPIs;
-		bool fRunningInBlueBox;
-		
-		bool fHasL2Cache;
-	
-		bool fCopyInProgress;
-		CStr255_AC fCopyingFile;
-		
+		XPFPlatform *fPlatform;
 };	
 
 #endif
