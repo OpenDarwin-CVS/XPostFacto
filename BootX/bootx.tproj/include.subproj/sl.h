@@ -34,7 +34,7 @@
 #define _BOOTX_SL_H_
 
 #define kBootXVersion "59.1.1"
-#define kBootXVersionXPF "3.1"
+#define kBootXVersionXPF "3.2"
 
 #define kFailToBoot (1)
 
@@ -167,6 +167,8 @@ extern char gHaveKernelCache;
 extern char gBootDevice[256];
 extern char gBootFile[256];
 extern char gApparentBootFile[256];
+
+extern char gUseXPFInstallRequired;
 
 extern char gTempStr[4096];
 

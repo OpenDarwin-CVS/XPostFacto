@@ -64,6 +64,7 @@ enum {
 #define kPropOSBundleLibraries  ("OSBundleLibraries")
 #define kPropIOKitPersonalities ("IOKitPersonalities")
 #define kPropIONameMatch        ("IONameMatch")
+#define kPropXPFInstallRequired	("XPFInstallRequired")
 
 struct Tag {
   long       type;
@@ -161,7 +162,9 @@ long LoadDrivers(char *dirSpec)
 			char *system = strstr (dirSpec, "\\System\\Library");
 			if (system) {
 				strcpy (system, system + strlen ("\\System"));
+				gUseXPFInstallRequired = 1;
 				FileLoadDrivers (dirSpec, 0);
+				gUseXPFInstallRequired = 0;
 			}   
 		}
 	} else {
@@ -591,7 +594,9 @@ static long ParseXML(char *buffer, ModulePtr *module, TagPtr *personalities)
   
   if (length == -1) return -1;
   
-  required = GetProperty(moduleDict, kPropOSBundleRequired);
+  required = 0;
+  if (gUseXPFInstallRequired) required = GetProperty (moduleDict, kPropXPFInstallRequired);
+  if (!required) required = GetProperty(moduleDict, kPropOSBundleRequired);
   if ((required == 0) || (required->type != kTagTypeString) ||
       !strcmp(required->string, "Safe Boot")) {
     FreeTag(moduleDict);

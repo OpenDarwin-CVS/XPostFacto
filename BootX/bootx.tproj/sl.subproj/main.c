@@ -68,6 +68,7 @@ long gBootMode = kBootModeNormal;
 long gBootDeviceType;
 long gBootFileType;
 char gHaveKernelCache = 0;
+char gUseXPFInstallRequired = 0;
 char gBootDevice[256] = {0};
 char gBootFile[256] = {0};
 char gApparentBootFile[256] = {0};

@@ -54,7 +54,6 @@ bool
 GossamerNDRVSupport::start (IOService *provider)
 {
 	if (fInstance) return false;
-	fInstance = this;
 
 	if (!super::start (provider)) return false;
 	
@@ -98,6 +97,8 @@ GossamerNDRVSupport::start (IOService *provider)
 		}
 	}
 	
+	fInstance = this;
+
 	return true;
 }
 
@@ -107,6 +108,8 @@ GossamerNDRVSupport::stop (IOService *provider)
 	if (fATISetMBRES.entry) fATISetMBRES.entry->address = fATISetMBRES.address;
 	if (fATISetMonitorTermination.entry) fATISetMonitorTermination.entry->address = fATISetMonitorTermination.address;
 	if (fATIIsAllInOne.entry) fATIIsAllInOne.entry->address = fATIIsAllInOne.address;
+	
+	fInstance = NULL;
 
 	super::stop (provider);
 }

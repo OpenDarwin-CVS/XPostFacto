@@ -51,10 +51,10 @@ RESOURCE 'vers' (1,
 	0x03,
 	0x10,
 	alpha,
-	0x2,
+	0x3,
 	verUs,
-	"3.1a2",
-	"3.1a2, © 2001 - 2005 Other World Computing"
+	"3.1a3",
+	"3.1a3, © 2001 - 2005 Other World Computing"
 };
 
 RESOURCE 'vers' (3,
@@ -63,12 +63,12 @@ RESOURCE 'vers' (3,
 #endif
 	purgeable) {
 	0x03,
-	0x10,
+	0x20,
 	final,
 	0xFF,
 	verUs,
-	"3.1",
-	"3.1, © 2001 - 2005 Other World Computing"
+	"3.2",
+	"3.2, © 2001 - 2005 Other World Computing"
 };
 
 RESOURCE 'vers' (4,

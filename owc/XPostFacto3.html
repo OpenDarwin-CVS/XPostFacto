@@ -2,7 +2,7 @@
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-March 14, 2005
+March 28, 2005
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -13,26 +13,20 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <blockquote>
 <dl>
 <dt><b>Stable:</b>
-<dd><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.sitx">Download XPostFacto 3.0 (.sitx)</a> 
+<dd><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.sitx">Download XPostFacto 3.0 (.sitx)</a> 
 (or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.sit">older .sit format</a>)
 
 <p><dt><b>Testing:</b>
-<dd><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1a2.sitx">Download XPostFacto 3.1a2 (.sitx)</a> 
-(or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1a2.sit">older .sit format</a>)
+<dd><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1a3.sitx">Download XPostFacto 3.1a3 (.sitx)</a> 
+(or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1a3.sit">older .sit format</a>)
 </dl>
 </blockquote>
 
-<p>XPostFacto is an open-source application which you may download and try for free. However, I encourage you to <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">register as an XPostFacto user</a>. This helps to support the continuing development of XPostFacto, and also gives you an account on the <a href="http://forum.macsales.com/">tech support forum</a>. If you are already a registered user of XPostFacto, you can make a <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">contribution to its continuing development</a>.
+<p>XPostFacto is an open-source application which you may download and try for free. However, I encourage you to contribute to the ongoing work on XPostFacto by <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">registering as an XPostFacto user</a> ($25). This helps to support the continuing development of XPostFacto, and also gives you an account on the <a href="http://forum.macsales.com/">tech support forum</a>. If you are already a registered user of XPostFacto, you can make a <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">contribution to its continuing development</a>.
 
 <h4>What's New</h4>
 
-<p>Here's what's new in version 3.1a2:
-
-<ul>
-<p><li>Makes the new audio driver for the 7300 - 9600 series work with Mac OS X 10.2.
-
-<p><li>Eliminates the (no longer applicable) warning for 603 and 604 CPUs under 10.2.
-</ul>
+<p>Version 3.1a3 makes some changes to the settings which control the stage (in the boot process) at which certain kernel extensions are loaded. The required settings vary depending on whether it is a "normal" boot or an installation from CD. BootX will now notice this and make the necessary adjustments. This will avoid some error messages early in the boot process. I had thought those error messages were harmless, but it seems that it may be a contributing factor in the "black screen" problem on the Beige G3s (the actual mechanism is obscure, but it is possible that these changes may help, at least with some subset of the problem).
 
 <h4><a name="problems">Known Problems</a></h4>
 
@@ -49,7 +43,7 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 
 <li>There are some problems with <a href="http://bugzilla.opendarwin.org/show_bug.cgi?id=1171">video in Panther on the Wallstreet Powerbooks</a>, at least in some configurations. One problem is a kernel panic (or perhaps a WindowServer failure) which seems to correspond with high levels of disk activity. Another problem is colour problems. Enabling the "Use PatchedRagePro" option in XPF can help. This enables the PatchedRagePro.kext, which does two things. For video with a device-id of 0x4C50, it activates the ATIRagePro.kext. This is the equivalent of the <a href ="http://www.xlr8yourmac.com/OSX/osx_ragepro_driver_tip.html">Info.plist modification described at XLR8YourMac</a>, except that it doesn't actually modify ATIRagePro.kext. For video with a device-id of 0x4C47, it disables the ATIRageProGA.plugin, which seems to solve a problem with using "thousands" of colours.
 
-<li>A similar problem sometimes occurs with <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1708">Beige G3 video in Panther</a> -- it is some kind of kernel panic or WindowServer failure.
+<li>A similar problem sometimes occurs with <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1708">Beige G3 video in Panther</a> -- it is some kind of kernel panic or WindowServer failure. It is possible that version 3.1a3 will help with at least some cases of this problem.
 
 <li>The <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1374">Panther video driver for Kanga</a> (Original Powerbook G3) only supports 256 colours for the moment.
 
@@ -564,6 +558,11 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1a3.sitx">3.1a3 (March 28, 2005)</a> (or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1a3.sit">older .sit format</a>)
+
+<dd>
+<p>Version 3.1a3 makes some changes to the settings which control the stage (in the boot process) at which certain kernel extensions are loaded. The required settings vary depending on whether it is a "normal" boot or an installation from CD. BootX will now notice this and make the necessary adjustments. This will avoid some error messages early in the boot process. I had thought those error messages were harmless, but it seems that it may be a contributing factor in the "black screen" problem on the Beige G3s (the actual mechanism is obscure, but it is possible that these changes may help, at least with some subset of the problem).
 
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1a2.sitx">3.1a2 (March 1, 2005)</a> (or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1a2.sit">older .sit format</a>)
 
