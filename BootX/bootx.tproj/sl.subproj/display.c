@@ -362,6 +362,16 @@ static long OpenDisplay(long displayNum)
     if (ret != -1) {
       strcat(screenPath, ":0");
       screenIH = Open(screenPath);
+	  
+	  // Work around problem with Radeon 7000 on Old World machines
+	  // Adapted from code by Joe van Tunen
+	  if (screenIH == 0) {
+	    if (strcmp (&screenPath[ret - 4], "@0,0:0" ) == 0) {
+		  screenPath[ret - 4] = '\0';
+		  strcat (screenPath, ":0");
+		  screenIH = Open (screenPath);
+        }
+	  }
     }
   }
   
