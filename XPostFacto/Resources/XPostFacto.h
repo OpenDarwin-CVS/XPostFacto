@@ -73,6 +73,7 @@ advised of the possibility of such damage.
 #define cToggleDebugSystemLog	1018
 #define cToggleDebugARP			1019
 #define cToggleDebugOldGDB		1020
+#define cToggleDebugPanicText	1025
 
 #define cShowHelpFile			1021
 #define cShowOnlineHelpFile		1022

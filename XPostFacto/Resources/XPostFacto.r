@@ -247,6 +247,7 @@ purgeable) {
 		"Extra Diagnostics", noIcon, noKey, noMark, plain, cToggleDebugSystemLog;
 		"Debugger ARP", noIcon, noKey, noMark, plain, cToggleDebugARP;
 		"Support old GDB", noIcon, noKey, noMark, plain, cToggleDebugOldGDB;
+		"Show Panic Text", noIcon, noKey, noMark, plain, cToggleDebugPanicText;
 	}
 };
 

@@ -75,6 +75,7 @@ XPFPrefs::XPFPrefs ()
 	fDebug.syslog = false;
 	fDebug.arp = false;
 	fDebug.oldgdb = false;
+	fDebug.panicText = false;
 }
 
 void
@@ -567,6 +568,15 @@ XPFPrefs::setDebugOldGDB (bool val)
 	}
 }
 
+void
+XPFPrefs::setDebugPanicText (bool val)
+{
+	if (fDebug.panicText != val) {
+		fDebug.panicText = val;
+		Changed (cToggleDebugPanicText, NULL);
+	}
+}
+
 CStr255_AC 
 XPFPrefs::getBootCommand ()
 {
@@ -583,9 +593,10 @@ XPFPrefs::getBootCommand ()
 	if (fDebug.syslog) 		debug |= 1 << 5;
 	if (fDebug.arp)			debug |= 1 << 6;
 	if (fDebug.oldgdb)		debug |= 1 << 7;
+	if (fDebug.panicText)	debug |= 1 << 8;
 	
 	if (debug) {
-		char debugValue [12];
+		char debugValue [32];
 		sprintf (debugValue, " debug=0x%X", debug);
 		bootCommand += debugValue;
 	}

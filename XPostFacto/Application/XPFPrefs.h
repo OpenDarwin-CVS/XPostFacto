@@ -47,6 +47,7 @@ struct XPFDebug {
 	bool	syslog;
 	bool	arp;
 	bool	oldgdb;
+	bool	panicText;
 };
 
 class XPFPrefs : public MDependable_AC {
@@ -114,6 +115,7 @@ class XPFPrefs : public MDependable_AC {
 		void setDebugSyslog (bool val);
 		void setDebugARP (bool val);
 		void setDebugOldGDB (bool val);
+		void setDebugPanicText (bool val);
 		
 		bool getDebugBreakpoint () {return fDebug.breakpoint;}
 		bool getDebugPrintf () {return fDebug.printf;}
@@ -123,6 +125,7 @@ class XPFPrefs : public MDependable_AC {
 		bool getDebugSyslog () {return fDebug.syslog;}
 		bool getDebugARP () {return fDebug.arp;}
 		bool getDebugOldGDB () {return fDebug.oldgdb;}
+		bool getDebugPanicText () {return fDebug.panicText;}
 		
 	private:
 	

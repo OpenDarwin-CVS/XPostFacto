@@ -322,6 +322,7 @@ XPFWindow::DoUpdate(ChangeID_AC theChange,
 		case cToggleDebugSystemLog:
 		case cToggleDebugARP:
 		case cToggleDebugOldGDB:
+		case cToggleDebugPanicText:
 			updateBootMessage ();
 			updateInstallMessage ();
 			break;

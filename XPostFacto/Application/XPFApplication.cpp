@@ -424,6 +424,10 @@ XPFApplication::DoMenuCommand(CommandNumber aCommandNumber) // Override
 		case cToggleDebugOldGDB:
 			fPrefs->setDebugOldGDB (!fPrefs->getDebugOldGDB ());
 			break;
+			
+		case cToggleDebugPanicText:
+			fPrefs->setDebugPanicText (!fPrefs->getDebugPanicText ());
+			break;
 	
 		default:
 			if ((aCommandNumber >= cFirstInputDevice) && (aCommandNumber < fPrefs->getNextInputDevice ())) {
@@ -483,6 +487,7 @@ XPFApplication::DoSetupMenus()
 	EnableCheck (cToggleDebugSystemLog, notCopying, fPrefs->getDebugSyslog ());
 	EnableCheck (cToggleDebugARP, notCopying, fPrefs->getDebugARP ());
 	EnableCheck (cToggleDebugOldGDB, notCopying, fPrefs->getDebugOldGDB ());
+	EnableCheck (cToggleDebugPanicText, notCopying, fPrefs->getDebugPanicText ());
 	
 	Enable (cShowHelpFile, true);
 	Enable (cShowOnlineHelpFile, true);
