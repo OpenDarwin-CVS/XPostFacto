@@ -58,6 +58,10 @@ public:
   virtual bool start(IOService *provider);
   virtual IOService* createNub (IORegistryEntry *from);
   virtual bool passiveMatch (OSDictionary * matching, bool changesOK = false);
+  
+  void initForPM (IOService *provider);
+  IOReturn setPowerState (unsigned long powerStateOrdinal, IOService* whatDevice);
+  
 };
 
 

@@ -108,6 +108,10 @@ bool AppleGrandCentral::start(IOService *provider)
     appleNMI->initNMI(interruptController, nmiData);
   } 
   
+  registerService ();
+
+  initForPM (provider);
+  
   return true;
 }
 
@@ -137,6 +141,42 @@ AppleGrandCentral::createNub (IORegistryEntry *from)
 
     return (nub);
 }
+
+// Joe van Tunen figured out that we need some power management code here
+
+void 
+AppleGrandCentral::initForPM (IOService *provider) 
+{ 
+	PMinit ();						// initialize superclass variables
+	provider->joinPMtree (this);	// attach into the power management hierarchy
+
+#define kNumberOfPowerStates 2
+
+	static IOPMPowerState ourPowerStates[kNumberOfPowerStates] = {
+		{1,0,0,0,0,0,0,0,0,0,0,0},
+		{1,IOPMDeviceUsable,IOPMPowerOn,IOPMPowerOn,0,0,0,0,0,0,0,0}
+	};
+
+	// register ourselves with ourself as policy-maker 
+	if (pm_vars != NULL) registerPowerDriver (this, ourPowerStates, kNumberOfPowerStates);
+} 
+
+IOReturn 
+AppleGrandCentral::setPowerState (unsigned long powerStateOrdinal, IOService* whatDevice) 
+{ 
+	// Do not do anything if the state is invalid.
+	if (powerStateOrdinal >= kNumberOfPowerStates) return IOPMAckImplied; 
+
+	if (powerStateOrdinal == 0) { 
+		kprintf("gc would be powered off here\n"); 
+	} 
+
+	if (powerStateOrdinal == 1) { 
+		kprintf("gc would be powered on here\n"); 
+	} 
+
+	return IOPMAckImplied; 
+} 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
