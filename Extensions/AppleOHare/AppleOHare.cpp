@@ -397,7 +397,8 @@ AppleOHare::sleepState(bool sleepMe)
 {
     if (sleepMe) {
         // Saves the state and creates the conditions for sleep:
-
+		kprintf ("AppleOHare::sleepMe %s\n", ohareNum == kPrimaryOHare ? "primary" : "secondary");
+		
         // Disables and saves all the interrupts:
         kprintf("AppleOHare::sleepState saveInterruptState\n");
         saveInterruptState();
@@ -452,30 +453,22 @@ AppleOHare::sleepState(bool sleepMe)
 void AppleOHare::saveInterruptState()
 {
     // Save the interrupt state
-    savedState.interruptMask1 = *(UInt32*)(ohareBaseAddress + kMask1Offset);
-    eieio();
-    savedState.interruptMask2 = *(UInt32*)(ohareBaseAddress + kMask2Offset);
+    savedState.interruptMask = *(UInt32*)(ohareBaseAddress + kMaskOffset);
     eieio();
 }
 
 void AppleOHare::restoreInterruptState()
 {
     // Clears all the possible pending interrupts
-    *(UInt32*)(ohareBaseAddress + kClear1Offset) = 0xFFFFFFFF;
-    eieio();
-    *(UInt32*)(ohareBaseAddress + kClear2Offset) = 0xFFFFFFFF;
+    *(UInt32*)(ohareBaseAddress + kClearOffset) = 0xFFFFFFFF;
     eieio();
 
     // Restores the interrupts
-    *(UInt32*)(ohareBaseAddress + kMask1Offset) = savedState.interruptMask1;
-    eieio();
-    *(UInt32*)(ohareBaseAddress + kMask2Offset) = savedState.interruptMask2;
+    *(UInt32*)(ohareBaseAddress + kMaskOffset) = savedState.interruptMask;
     eieio();
 
     // Clears all the possible pending interrupts (again)
-    *(UInt32*)(ohareBaseAddress + kClear1Offset) = 0xFFFFFFFF;
-    eieio();
-    *(UInt32*)(ohareBaseAddress + kClear2Offset) = 0xFFFFFFFF;
+    *(UInt32*)(ohareBaseAddress + kClearOffset) = 0xFFFFFFFF;
     eieio();
 }
 

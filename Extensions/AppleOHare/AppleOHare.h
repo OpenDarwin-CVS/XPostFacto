@@ -46,11 +46,6 @@
 #define kClearOffset     (0x00028)
 #define kLevelsOffset    (0x0002C)
 
-#define kMask1Offset	(0x00024)
-#define kMask2Offset	(0x00014)
-#define kClear1Offset	(0x00028)
-#define kClear2Offset	(0x00018)
-
 class AppleOHareInterruptController;
 
 class AppleOHare : public AppleMacIO
@@ -136,8 +131,7 @@ private:
 
     struct OHareState {
         bool                thisStateIsValid;
-        UInt32				interruptMask1;
-        UInt32				interruptMask2;
+        UInt32				interruptMask;
         UInt32				featureControlReg;
         UInt32				auxControlReg;
         DBDMAChannelRegisters		savedDBDMAState[12];
