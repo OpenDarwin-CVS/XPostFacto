@@ -30,16 +30,17 @@
 */  
 
 #include "XPFLog.h"
-#include "Sound.h"
+
+#include "UTEViewStream.h"
 
 XPFLog gLogFile ("\p:XPostFacto Log");
 
 #include "CFileStream_AC.cpp"
 
-XPFLog::XPFLog (ConstStr255Param fileName) 
-	: fLogFile ('TEXT', '????', true), 
-	  CCharOutputSink_AC (TH_new CFileStreamRep_AC (&fLogFile))
+XPFLog::XPFLog (ConstStr255Param fileName)
+:  CCharOutputSink_AC (TH_new CFileStreamRep_AC (&fLogFile)), fLogFile ('TEXT', '????', true)
 {
+	fViewStream = NULL;
 	fActive = false;
 	SInt16 logVRefNum;
 	SInt32 logDirID;
@@ -80,4 +81,8 @@ void
 XPFLog::WriteCharBytes(const char* inStr, long inSize)
 {
 	if (fActive) CCharOutputSink_AC::WriteCharBytes (inStr, inSize);
+	if (fViewStream) {
+		fViewStream->WriteCharBytes (inStr, inSize);
+		fViewStream->Flush ();
+	}
 }

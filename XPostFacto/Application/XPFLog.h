@@ -36,6 +36,8 @@
 
 #include "CCharOutputSink_AC.h"
 
+class TTEViewStream;
+
 class XPFLog : public CCharOutputSink_AC {
 
 	public:
@@ -45,10 +47,13 @@ class XPFLog : public CCharOutputSink_AC {
 		
 		virtual void WriteCharBytes (const char* inBytes, long inAmt);
 		bool isActive () {return fActive;}
+		
+		void setViewStream (TTEViewStream *stream) {fViewStream = stream;}
 			
 	private:
 	
 		CFile_AC fLogFile;
+		TTEViewStream *fViewStream;
 		bool fActive;
 
 };
