@@ -78,6 +78,8 @@ class OFAliases {
 
 #ifdef __MACH__		
 		static void processDictionary (const void *key, const void *value, void *context);
+		static OSStatus RegistryCStrEntryToName (io_registry_entry_t *entryID, io_registry_entry_t *parentEntry, char *nameComponent, Boolean *done);
+		static Boolean RegistryEntryIDCompare (const io_registry_entry_t *id1, const io_registry_entry_t *id2);
 #endif
 		
 };
