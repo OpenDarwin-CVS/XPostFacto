@@ -1,5 +1,5 @@
 
-#include "CWMacAppRez_car_n.r"
+#include "CWMacAppRez_ppc_n.r"
 #include "MacAppTypes.r"
 #include "ViewTypes.r"
 #include "Types.r"
