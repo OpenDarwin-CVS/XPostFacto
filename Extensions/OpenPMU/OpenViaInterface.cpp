@@ -814,7 +814,7 @@ OpenViaInterface::srInteruptPending(void)
 
 #undef super
 #define super OpenViaInterface
-OSDefineMetaClassAndStructors(AppleIntrrViaInterface,OpenViaInterface)
+OSDefineMetaClassAndStructors(OpenIntrrViaInterface,OpenViaInterface)
 
 // --------------------------------------------------------------------------
 //
@@ -823,7 +823,7 @@ OSDefineMetaClassAndStructors(AppleIntrrViaInterface,OpenViaInterface)
 // Purpose:
 //
 void
-AppleIntrrViaInterface::disableSRInterrupt ( void )
+OpenIntrrViaInterface::disableSRInterrupt ( void )
 {
     super::disableSRInterrupt();
 
@@ -831,7 +831,7 @@ AppleIntrrViaInterface::disableSRInterrupt ( void )
         interruptSource->disableInterrupt(VIA_DEV_VIA0);
 
 #ifdef VERBOSE_LOGS_ON_VIA_INTR
-    kprintf("AppleIntrrViaInterface::disableSRInterrupt\n");
+    kprintf("OpenIntrrViaInterface::disableSRInterrupt\n");
 #endif // VERBOSE_LOGS_ON_VIA_INTR
 }
 
@@ -842,7 +842,7 @@ AppleIntrrViaInterface::disableSRInterrupt ( void )
 // Purpose:
 //
 void
-AppleIntrrViaInterface::enableSRInterrupt ( void )
+OpenIntrrViaInterface::enableSRInterrupt ( void )
 {
     if (interruptSource != NULL)
         interruptSource->enableInterrupt(VIA_DEV_VIA0);
@@ -850,7 +850,7 @@ AppleIntrrViaInterface::enableSRInterrupt ( void )
     super::enableSRInterrupt();
 
 #ifdef VERBOSE_LOGS_ON_VIA_INTR
-    kprintf("AppleIntrrViaInterface::enableSRInterrupt\n");
+    kprintf("OpenIntrrViaInterface::enableSRInterrupt\n");
 #endif // VERBOSE_LOGS_ON_VIA_INTR
 
 }
@@ -870,9 +870,9 @@ AppleIntrrViaInterface::enableSRInterrupt ( void )
 //	have been cleared by the ohare ISR.
 
 /* static */ void
-AppleIntrrViaInterface::shiftRegisterInt (OSObject *castMeToAppleIntrrViaInterface, IOInterruptEventSource *, int)
+OpenIntrrViaInterface::shiftRegisterInt (OSObject *castMeToOpenIntrrViaInterface, IOInterruptEventSource *, int)
 {
-    AppleIntrrViaInterface *myThis = OSDynamicCast(AppleIntrrViaInterface, castMeToAppleIntrrViaInterface);
+    OpenIntrrViaInterface *myThis = OSDynamicCast(OpenIntrrViaInterface, castMeToOpenIntrrViaInterface);
 
     if (myThis != NULL) {
         myThis->disableSRInterrupt();
@@ -888,7 +888,7 @@ AppleIntrrViaInterface::shiftRegisterInt (OSObject *castMeToAppleIntrrViaInterfa
 // Purpose:
 //         this prepare the syncer for the wait:
 void
-AppleIntrrViaInterface::prepareSync()
+OpenIntrrViaInterface::prepareSync()
 {
     kern_return_t kr;
     
@@ -905,7 +905,7 @@ AppleIntrrViaInterface::prepareSync()
 //         waits on the syncer. This function will return only once
 //         sigTheSync is called.
 void
-AppleIntrrViaInterface::waitForSync()
+OpenIntrrViaInterface::waitForSync()
 {
     // Wait here from now on
     semaphore_wait(mySync);
@@ -923,7 +923,7 @@ AppleIntrrViaInterface::waitForSync()
 //         signal the sync restarting the thread that was stopped in the
 //         waitForSync.
 void
-AppleIntrrViaInterface::sigTheSync()
+OpenIntrrViaInterface::sigTheSync()
 {
     semaphore_signal(mySync);
 }
@@ -937,7 +937,7 @@ AppleIntrrViaInterface::sigTheSync()
 //         initial status and calls processState for the first time so that the
 //         sequence of interrupts kicks in:
 bool
-AppleIntrrViaInterface::sendToPMU(PMUrequestPtr theRequest)
+OpenIntrrViaInterface::sendToPMU(PMUrequestPtr theRequest)
 {
     assert(theRequest != NULL);
 
@@ -957,7 +957,7 @@ AppleIntrrViaInterface::sendToPMU(PMUrequestPtr theRequest)
     enableSRInterrupt();
 
 #ifdef VERBOSE_LOGS_ON_VIA_INTR
-    kprintf("AppleIntrrViaInterface::sendToPMU(0x%02x) START\n", transferState.currentTransfer->pmCommand);
+    kprintf("OpenIntrrViaInterface::sendToPMU(0x%02x) START\n", transferState.currentTransfer->pmCommand);
 #endif // VERBOSE_LOGS_ON_VIA_INTR
 
     // defines the state following the transmission of the
@@ -985,13 +985,13 @@ AppleIntrrViaInterface::sendToPMU(PMUrequestPtr theRequest)
     }
 
 #ifdef VERBOSE_LOGS_ON_VIA_INTR
-    kprintf("AppleIntrrViaInterface::sendToPMU(0x%02x) next state %d\n", transferState.currentTransfer->pmCommand, transferState.currentInterruptState);
+    kprintf("OpenIntrrViaInterface::sendToPMU(0x%02x) next state %d\n", transferState.currentTransfer->pmCommand, transferState.currentInterruptState);
 #endif // VERBOSE_LOGS_ON_VIA_INTR
 
     // Waits until the PMU is actually ready
     if (!waitForAck(true, 32)) {
 #ifdef VERBOSE_LOGS_ON_VIA_INTR
-        kprintf("AppleIntrrViaInterface::sendToPMU(0x%02x) waitForAck(true, 32) fails\n", transferState.currentTransfer->pmCommand);
+        kprintf("OpenIntrrViaInterface::sendToPMU(0x%02x) waitForAck(true, 32) fails\n", transferState.currentTransfer->pmCommand);
 #endif // VERBOSE_LOGS_ON_VIA_INTR
         return false;
     }
@@ -1010,11 +1010,11 @@ AppleIntrrViaInterface::sendToPMU(PMUrequestPtr theRequest)
 
 #ifdef VERBOSE_LOGS_ON_VIA_INTR
     if ((!waitForAck(true, 32)) || (!transferState.success)) {
-        kprintf("AppleIntrrViaInterface::sendToPMU(0x%02x) waitForAck(true, 32) fails: WARNING PMU IN BAD STATE\n", transferState.currentTransfer->pmCommand);
+        kprintf("OpenIntrrViaInterface::sendToPMU(0x%02x) waitForAck(true, 32) fails: WARNING PMU IN BAD STATE\n", transferState.currentTransfer->pmCommand);
         return false;
     }
 
-    kprintf("AppleIntrrViaInterface::sendToPMU(0x%02x) END \n", transferState.currentTransfer->pmCommand);
+    kprintf("OpenIntrrViaInterface::sendToPMU(0x%02x) END \n", transferState.currentTransfer->pmCommand);
 #endif // VERBOSE_LOGS_ON_VIA_INTR
 
     // and return how it went:
@@ -1036,7 +1036,7 @@ AppleIntrrViaInterface::sendToPMU(PMUrequestPtr theRequest)
 //        more data.
 //
 void
-AppleIntrrViaInterface::actUponState()
+OpenIntrrViaInterface::actUponState()
 {
 #ifdef VERBOSE_LOGS_ON_VIA_INTR
     AbsoluteTime currentTime;
@@ -1047,7 +1047,7 @@ AppleIntrrViaInterface::actUponState()
     clock_get_uptime(&currentTime);
     myTime = AbsoluteTime_to_scalar(&currentTime) / divider;
 
-    kprintf("AppleIntrrViaInterface::actUponState(%d) at time %d\n", transferState.currentInterruptState, myTime);
+    kprintf("OpenIntrrViaInterface::actUponState(%d) at time %d\n", transferState.currentInterruptState, myTime);
 #endif // VERBOSE_LOGS_ON_VIA_INTR
 
     // First of all: is this a real interrupt or a glich:
@@ -1065,7 +1065,7 @@ AppleIntrrViaInterface::actUponState()
         clock_get_uptime(&currentTime);
         myTime = AbsoluteTime_to_scalar(&currentTime) / divider;
 
-        kprintf("AppleIntrrViaInterface::actUponState(%d) intial waitForAck(false, 320) failed at time %d\n", transferState.currentInterruptState, myTime);
+        kprintf("OpenIntrrViaInterface::actUponState(%d) intial waitForAck(false, 320) failed at time %d\n", transferState.currentInterruptState, myTime);
 #endif // VERBOSE_LOGS_ON_VIA_INTR
 
         transferState.success = false;
@@ -1098,7 +1098,7 @@ AppleIntrrViaInterface::actUponState()
             // Waits to be sure that the pmu is ready to receive a byte (and sends it).
             if (!waitForAck(true, 32)) {
 #ifdef VERBOSE_LOGS_ON_VIA_INTR
-                kprintf("AppleIntrrViaInterface::actUponState(%d) kSendLenght waitForAck(true, 32) failed\n", transferState.currentInterruptState);
+                kprintf("OpenIntrrViaInterface::actUponState(%d) kSendLenght waitForAck(true, 32) failed\n", transferState.currentInterruptState);
 #endif // VERBOSE_LOGS_ON_VIA_INTR
 
                 transferState.success = false;
@@ -1122,7 +1122,7 @@ AppleIntrrViaInterface::actUponState()
             // Waits to be sure that the pmu is ready again.
             if (!waitForAck(true, 32)) {
 #ifdef VERBOSE_LOGS_ON_VIA_INTR
-                kprintf("AppleIntrrViaInterface::actUponState(%d) kSendData waitForAck(true, 32) failed\n", transferState.currentInterruptState);
+                kprintf("OpenIntrrViaInterface::actUponState(%d) kSendData waitForAck(true, 32) failed\n", transferState.currentInterruptState);
 #endif // VERBOSE_LOGS_ON_VIA_INTR
 
                 transferState.success = false;
@@ -1132,7 +1132,7 @@ AppleIntrrViaInterface::actUponState()
             // If we still have bytes to send:
             if (transferState.numberOfTransferedBytes < transferState.numberOfBytesToBeTransfered) {
 #ifdef VERBOSE_LOGS_ON_VIA_INTR
-                kprintf("AppleIntrrViaInterface::actUponState() kSendData sending byte no %d\n", transferState.numberOfTransferedBytes);
+                kprintf("OpenIntrrViaInterface::actUponState() kSendData sending byte no %d\n", transferState.numberOfTransferedBytes);
 #endif // VERBOSE_LOGS_ON_VIA_INTR
 
                 // Send the next data-byte to the pmu:
@@ -1157,7 +1157,7 @@ AppleIntrrViaInterface::actUponState()
             // Waits to be sure that the pmu is ready again.
             if (!waitForAck(true, 32)) {
 #ifdef VERBOSE_LOGS_ON_VIA_INTR
-                kprintf("AppleIntrrViaInterface::actUponState(%d) kSendData kSwitchToRead(true, 32) failed\n", transferState.currentInterruptState);
+                kprintf("OpenIntrrViaInterface::actUponState(%d) kSendData kSwitchToRead(true, 32) failed\n", transferState.currentInterruptState);
 #endif // VERBOSE_LOGS_ON_VIA_INTR
 
                 transferState.success = false;
@@ -1233,7 +1233,7 @@ AppleIntrrViaInterface::actUponState()
                 // Waits to be sure that the pmu is ready again.
                 if (!waitForAck(true, 32)) {
 #ifdef VERBOSE_LOGS_ON_VIA_INTR
-                    kprintf("AppleIntrrViaInterface::actUponState(%d) kReadLenght kSwitchToRead(true, 32) failed\n", transferState.currentInterruptState);
+                    kprintf("OpenIntrrViaInterface::actUponState(%d) kReadLenght kSwitchToRead(true, 32) failed\n", transferState.currentInterruptState);
 #endif // VERBOSE_LOGS_ON_VIA_INTR
 
                     transferState.success = false;
@@ -1248,7 +1248,7 @@ AppleIntrrViaInterface::actUponState()
 
         case kReadData:
 #ifdef VERBOSE_LOGS_ON_VIA_INTR
-            kprintf("AppleIntrrViaInterface::actUponState() kReadData read byte no %d\n", transferState.numberOfTransferedBytes);
+            kprintf("OpenIntrrViaInterface::actUponState() kReadData read byte no %d\n", transferState.numberOfTransferedBytes);
 #endif // VERBOSE_LOGS_ON_VIA_INTR
 
             // Read the next data-byte to the pmu:
@@ -1259,7 +1259,7 @@ AppleIntrrViaInterface::actUponState()
                 // again wait for the pmu to be rady.
                 if (!waitForAck(true, 32)) {
 #ifdef VERBOSE_LOGS_ON_VIA_INTR
-                    kprintf("AppleIntrrViaInterface::actUponState(%d) kReadData kSwitchToRead(true, 32) failed\n", transferState.currentInterruptState);
+                    kprintf("OpenIntrrViaInterface::actUponState(%d) kReadData kSwitchToRead(true, 32) failed\n", transferState.currentInterruptState);
 #endif // VERBOSE_LOGS_ON_VIA_INTR
 
                     transferState.success = false;
@@ -1285,7 +1285,7 @@ AppleIntrrViaInterface::actUponState()
     // best thing to do is to signal and let the source-task to continue
     if (transferState.currentInterruptState == kInterfaceIdle) {
 #ifdef VERBOSE_LOGS_ON_VIA_INTR
-    kprintf("AppleIntrrViaInterface::actUponState end of a sequence , signal the sync\n");
+    kprintf("OpenIntrrViaInterface::actUponState end of a sequence , signal the sync\n");
 #endif // VERBOSE_LOGS_ON_VIA_INTR
         sigTheSync();
     }
@@ -1295,7 +1295,7 @@ AppleIntrrViaInterface::actUponState()
     clock_get_uptime(&currentTime);
     myTime = AbsoluteTime_to_scalar(&currentTime) / divider;
 
-    kprintf("AppleIntrrViaInterface::actUponState the next will be: %d time %d\n", transferState.currentInterruptState, myTime);
+    kprintf("OpenIntrrViaInterface::actUponState the next will be: %d time %d\n", transferState.currentInterruptState, myTime);
 #endif // VERBOSE_LOGS_ON_VIA_INTR
 }
 
@@ -1306,7 +1306,7 @@ AppleIntrrViaInterface::actUponState()
 // Purpose:
 //         sends a byte ro the PMU
 void
-AppleIntrrViaInterface::sendIntrByte(char byte)
+OpenIntrrViaInterface::sendIntrByte(char byte)
 {
     // set shift register to output
     *VIA1_auxillaryControl |= 0x1C;
@@ -1321,7 +1321,7 @@ AppleIntrrViaInterface::sendIntrByte(char byte)
     eieio();
 
 #ifdef VERBOSE_LOGS_ON_VIA_INTR
-    kprintf("AppleIntrrViaInterface::sendIntrByte sends for 0x%02x\n", (UInt8)byte);
+    kprintf("OpenIntrrViaInterface::sendIntrByte sends for 0x%02x\n", (UInt8)byte);
 #endif // VERBOSE_LOGS_ON_VIA_INTR
 }
 
@@ -1332,7 +1332,7 @@ AppleIntrrViaInterface::sendIntrByte(char byte)
 // Purpose:
 //         reads a byte from the PMU
 char
-AppleIntrrViaInterface::readIntrByte()
+OpenIntrrViaInterface::readIntrByte()
 {
     // read the data byte
     UInt8 byte = *VIA1_shift;
@@ -1344,7 +1344,7 @@ AppleIntrrViaInterface::readIntrByte()
     eieio();
 
 #ifdef VERBOSE_LOGS_ON_VIA_INTR
-    kprintf("AppleIntrrViaInterface::readIntrByte returns for 0x%02x\n", (UInt8)byte);
+    kprintf("OpenIntrrViaInterface::readIntrByte returns for 0x%02x\n", (UInt8)byte);
 #endif // VERBOSE_LOGS_ON_VIA_INTR
 
     return ((char)byte);
@@ -1358,7 +1358,7 @@ AppleIntrrViaInterface::readIntrByte()
 // Purpose:
 //         that's the usual start
 bool
-AppleIntrrViaInterface::start(IOService *provider)
+OpenIntrrViaInterface::start(IOService *provider)
 {
     // Call the super to setup the pmu:
     if (!super::start(provider))
@@ -1369,7 +1369,7 @@ AppleIntrrViaInterface::start(IOService *provider)
     if (interruptSource != NULL) {
         IOReturn ret = interruptSource->registerInterrupt(VIA_DEV_VIA0, this, (IOInterruptAction) shiftRegisterInt);
         if (ret != kIOReturnSuccess) {
-            kprintf("AppleIntrrViaInterface::start registerInterrupt fails with error %s\n", stringFromReturn(ret));
+            kprintf("OpenIntrrViaInterface::start registerInterrupt fails with error %s\n", stringFromReturn(ret));
             panic("interruptSource->registerInterrupt fails\n");
             return false;
         }
@@ -1387,7 +1387,7 @@ AppleIntrrViaInterface::start(IOService *provider)
 // Purpose:
 //         that's the usual stop
 void
-AppleIntrrViaInterface::stop(IOService *provider)
+OpenIntrrViaInterface::stop(IOService *provider)
 {
     if (interruptSource != NULL) {
         interruptSource->unregisterInterrupt(VIA_DEV_VIA0);
@@ -1405,7 +1405,7 @@ AppleIntrrViaInterface::stop(IOService *provider)
 //         inherits the processPMURequest from the polling driver to start to
 //         rollover of the interrupt transfer.
 bool
-AppleIntrrViaInterface::processPMURequest(PMUrequestPtr plugInMessage)
+OpenIntrrViaInterface::processPMURequest(PMUrequestPtr plugInMessage)
 {
     // proceed with an interrupt-based transfer only if the kernel services
     // are trustable and of course if we have an interrupt source.
@@ -1417,7 +1417,7 @@ AppleIntrrViaInterface::processPMURequest(PMUrequestPtr plugInMessage)
         takeVIALock();
 
 #ifdef VERBOSE_LOGS_ON_VIA_INTR
-        kprintf("AppleIntrrViaInterface::processPMURequest starts for 0x%02x\n", plugInMessage->pmCommand);
+        kprintf("OpenIntrrViaInterface::processPMURequest starts for 0x%02x\n", plugInMessage->pmCommand);
 #endif // VERBOSE_LOGS_ON_VIA_INTR
 
         bool success = sendToPMU(plugInMessage);
@@ -1429,7 +1429,7 @@ AppleIntrrViaInterface::processPMURequest(PMUrequestPtr plugInMessage)
         enablePMUInterrupt();
 
 #ifdef VERBOSE_LOGS_ON_VIA_INTR
-        kprintf("AppleIntrrViaInterface::processPMURequest ends for 0x%02x\n", plugInMessage->pmCommand);
+        kprintf("OpenIntrrViaInterface::processPMURequest ends for 0x%02x\n", plugInMessage->pmCommand);
 #endif // VERBOSE_LOGS_ON_VIA_INTR
 
         // returns how it did go:

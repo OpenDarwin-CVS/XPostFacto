@@ -171,9 +171,9 @@ public:
 // This is a subclass of ApplePolledViaInterface
 // same interface but interrupt driven instead than using the
 // polling mechanism.
-class AppleIntrrViaInterface : public OpenViaInterface
+class OpenIntrrViaInterface : public OpenViaInterface
 {
-    OSDeclareDefaultStructors(AppleIntrrViaInterface)
+    OSDeclareDefaultStructors(OpenIntrrViaInterface)
 private:
     // Interrupt vectors:
     enum {
@@ -212,7 +212,7 @@ private:
     volatile semaphore_t mySync;
 
     // This is the real interrupt handler:
-    static void shiftRegisterInt (OSObject *castMeToAppleIntrrViaInterface, IOInterruptEventSource *, int);
+    static void shiftRegisterInt (OSObject *castMeToOpenIntrrViaInterface, IOInterruptEventSource *, int);
 
 protected: // protected METHODS
     // Enables and disables the shift register

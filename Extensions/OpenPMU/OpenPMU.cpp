@@ -113,7 +113,7 @@ OpenPMUInterface::start(IOService *nub)
     // is an empty class that inherits all the funtionality
     // from the polled driver there is not too much
     // difference between the two drivers.
-    theHWInterface = new AppleIntrrViaInterface; // interrupt driven interface
+    theHWInterface = new OpenIntrrViaInterface; // interrupt driven interface
 
     // A faliture in creating the interface is a global faliture for the driver
     // after all if we can not talk with the hardware there is little point in
