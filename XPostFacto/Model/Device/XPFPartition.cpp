@@ -61,7 +61,11 @@ XPFPartition::XPFPartition (XPFBootableDevice *device, Partition *part, int part
 	fCreationDate = 0;
 	fHFSPlusVolume = NULL;
 	BlockMoveData (part, &fPartition, sizeof (fPartition));
+	gLogFile << "Partition: " << partNumber << " pmParType: " << (char *) part->pmParType << endl_AC;
+	
 	if (!strcmp ((char *) fPartition.pmParType, "Apple_HFS")) {
+		gLogFile << "pmPyPartStart: " << fPartition.pmPyPartStart << " pmLgDataStart: " << fPartition.pmLgDataStart << endl_AC;
+	
 		VolumeHeader *header = NULL;
 		ThrowIfOSErr_AC (readBlocks (2, 1, (void **) &header));
 		ThrowIfNULL_AC (header);
@@ -95,10 +99,6 @@ XPFPartition::XPFPartition (XPFBootableDevice *device, Partition *part, int part
 	if (fCreationDate) fHFSPlusVolume = new HFSPlusVolume (this, fOffsetToHFSPlusVolume);
 	
 	fBootableDevice->AddDependent (this);
-
-	#if qLogging
-		if (fCreationDate) gLogFile << "Partition: " << partNumber << " CreationDate: " << fCreationDate << endl_AC;
-	#endif
 }
 
 void

@@ -272,11 +272,6 @@ XPFBootableDevice::extractPartitionInfo ()
 				return;;
 			}
 			for (int x = 0; x < pmCount; x++) {
-				#if qLogging
-					gLogFile << "Partition: " << x + 1 << " Type: " << (char *) (pm + x)->pmParType
-						<< " Processor: " << (char *) (pm + x)->pmProcessor << endl_AC;
-				#endif
-			
 				try {
 					XPFPartition *info = new XPFPartition (this, pm + x, x + 1);
 					fPartitionList->InsertLast (info);
@@ -566,10 +561,19 @@ OSErr
 XPFBootableDevice::readBlocks (unsigned int start, unsigned int count, UInt8 **buffer)
 {
 	ThrowIfNULL_AC (buffer);
-	if (fBlockSize == 0) return -1;
+
+	if (fBlockSize == 0) {
+		gLogFile << "XPFBootableDevice::readBlocks fBlockSize = 0" << endl_AC;
+		return -1;
+	}
 	
 	openDeviceFile ();
-	if (fDeviceFile == NULL) return -1;
+	if (fDeviceFile == NULL) {
+		gLogFile << "XPFBootableDevice::readBlocks error opening device file" << endl_AC;
+		return -1;
+    }
+
+	gLogFile << "XPFBootableDevice::readBlocks start: " << start << " count: " << count << endl_AC;
     
     // the start and count will be in terms of 512 byte blocks
     // we will allocate the buffer ourselves with NewPtr
@@ -589,8 +593,16 @@ XPFBootableDevice::readBlocks (unsigned int start, unsigned int count, UInt8 **b
  	
  	XPFSetUID uid (0);
  
-	fseeko (fDeviceFile, (off_t) start * (off_t) fBlockSize, SEEK_SET);
-	fread (*buffer, fBlockSize, count, fDeviceFile);
+	int err = fseeko (fDeviceFile, (off_t) start * (off_t) fBlockSize, SEEK_SET);
+	if (err != noErr) {
+		gLogFile << "XPFBootableDevice::readBlocks fseeko returned err: " << err << endl_AC;
+		return err;
+	}
+	
+	int numRead = fread (*buffer, fBlockSize, count, fDeviceFile);
+	if (numRead != count) {
+		gLogFile << "XPFBootableDevice::readBlocks wanted: " << count << " read: " << numRead << endl_AC;
+	}
 	
 	if (byteOffset != 0) {
 		// need to realign the buffer
@@ -613,8 +625,16 @@ XPFBootableDevice::writeBlocks (unsigned int start, unsigned int count, UInt8 *b
 	openDeviceFile ();
 	if (fDeviceFile == NULL) return -1;
 	
-	fseeko (fDeviceFile, (off_t) start * (off_t) fBlockSize, SEEK_SET);
-	fwrite (buffer, fBlockSize, count, fDeviceFile);
+	int err = fseeko (fDeviceFile, (off_t) start * (off_t) fBlockSize, SEEK_SET);
+	if (err != noErr) {
+		gLogFile << "XPFBootableDevice::writeBlocks fseeko returned err: " << err << endl_AC;
+		return err;
+	}
+
+	int numWritten = fwrite (buffer, fBlockSize, count, fDeviceFile);
+	if (numWritten != count) {
+		gLogFile << "XPFBootableDevice::writeBlocks wanted: " << count << " written: " << numWritten << endl_AC;
+	}
 	
 	return noErr;
 }

@@ -60,6 +60,9 @@ HFSPlusVolume::HFSPlusVolume (XPFPartition *thePartition, unsigned long offsetTo
 	fOffsetIntoPartition = offsetToData;
 	fHeader = NULL;
 	ThrowIfOSErr_AC (readBlocks (2, 1, (void **) &fHeader));
+	
+	gLogFile << "HFSPlusVolume fOffsetIntoPartition: " << fOffsetIntoPartition << " blockSize: " << fHeader->blockSize << endl_AC;
+	
 	Erase_AC (&fVolumeName);
 	HFSPlusCatalog catalog (this);
 	catalog.findVolumeNameAndCreateDate (&fVolumeName, &fHeader->createDate);
