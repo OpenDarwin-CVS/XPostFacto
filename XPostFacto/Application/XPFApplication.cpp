@@ -443,6 +443,7 @@ XPFApplication::HandleDiskEvent(TToolboxEvent* event)
 {
 	TApplication::HandleDiskEvent (event);
 	MountedVolume::Initialize ();
+	if (!fPrefs->getInstallCD ()) fPrefs->setInstallCD (MountedVolume::GetDefaultInstallerDisk ());
 }
 
 void 

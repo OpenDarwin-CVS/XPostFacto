@@ -209,6 +209,7 @@ XPFPrefs::RegainControl ()
 {
 	Inherited::RegainControl ();
 	MountedVolume::Initialize ();
+	if (!fInstallCD) setInstallCD (MountedVolume::GetDefaultInstallerDisk ());
 }
 
 void

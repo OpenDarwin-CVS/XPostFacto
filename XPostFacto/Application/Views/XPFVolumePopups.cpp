@@ -121,6 +121,7 @@ XPFVolumePopup::DoUpdate (ChangeID_AC theChange,
 				fVolumeList.InsertLast (volume);
 				AddItem (volume->getVolumeName ());
 				volume->AddDependent (this);
+				ForceRedraw ();
 			}
 			break;
 		

@@ -177,6 +177,8 @@ XPFVolumeList::DoUpdate (ChangeID_AC theChange,
 			XPFVolumeDisplay *display = (XPFVolumeDisplay *) TViewServer::fgViewServer->DoCreateViews (GetDocument (), this, 1200, offset);
 			display->setVolume (volume);
 			this->SetScrollParameters (display->GetSize (), false, true);
+			display->ScrollSelectionIntoView (false);
+			this->ForceRedraw ();
 			break;
 		
 		default:
