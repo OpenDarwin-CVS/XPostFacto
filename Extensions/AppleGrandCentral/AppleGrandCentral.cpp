@@ -47,7 +47,6 @@ OSDefineMetaClassAndStructors(AppleGrandCentral, AppleMacIO);
 bool AppleGrandCentral::start(IOService *provider)
 {
   IOInterruptAction  handler;
-  IOPhysicalAddress  base;
   OSData *           data;
   AppleNMI           *appleNMI;
   IOService          *sixty6;
@@ -58,12 +57,7 @@ bool AppleGrandCentral::start(IOService *provider)
   // Call MacIO's start.
   if (!super::start(provider))
     return false;
-  
-  // Necessary for Control NDRV.
-  base = fMemory->getPhysicalAddress();
-  data = OSData::withBytes(&base, sizeof(base));
-  if (data != 0) provider->setProperty("AAPL,address", data);
-  
+    
   // Make sure the sixty6 node exists.
   if (provider->childFromPath("sixty6", gIODTPlane) == 0) {
     sixty6 = new IOService;
@@ -74,11 +68,18 @@ bool AppleGrandCentral::start(IOService *provider)
     }
   }
   
-  // Make nubs for the children.
-  publishBelow( provider );
-  
   // get the base address of the this GrandCentral.
   grandCentralBaseAddress = fMemory->getVirtualAddress();
+
+  // Necessary for Control NDRV.
+  data = OSData::withBytes (&grandCentralBaseAddress, sizeof (grandCentralBaseAddress));
+  if (data != 0) {
+	provider->setProperty ("AAPL,address", data);
+    data->release ();
+  }
+  
+  // Make nubs for the children.
+  publishBelow( provider );
   
   getPlatform()->setCPUInterruptProperties(provider);
   
