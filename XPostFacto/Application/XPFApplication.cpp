@@ -500,15 +500,27 @@ XPFApplication::install ()
 		UniChar libraryName[] = {'L', 'i', 'b', 'r', 'a', 'r', 'y'};
 		UniChar extensionsName[] = {'E', 'x', 't', 'e', 'n', 's', 'i', 'o', 'n', 's'};
 		
+		FSCatalogInfo catInfo, tmpCatInfo;
+		
+		catInfo.permissions[0] = 0;
+		catInfo.permissions[1] = 0;
+		catInfo.permissions[2] = 0x41ED;
+		catInfo.permissions[3] = 0;
+
+		tmpCatInfo.permissions[0] = 0;
+		tmpCatInfo.permissions[1] = 0;
+		tmpCatInfo.permissions[2] = 0x43FF;
+		tmpCatInfo.permissions[3] = 0;
+
 		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (fPrefs->getInstallDisk()->getRootDirectory(), 
-			sizeof (systemName) / sizeof (UniChar), systemName, kFSCatInfoNone, NULL, 
+			sizeof (systemName) / sizeof (UniChar), systemName, kFSCatInfoPermissions, &catInfo, 
 			&systemFolder, NULL, NULL));
 		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&systemFolder, 
-			sizeof (libraryName) / sizeof (UniChar), libraryName, kFSCatInfoNone, NULL, 
+			sizeof (libraryName) / sizeof (UniChar), libraryName, kFSCatInfoPermissions, &catInfo, 
 			&systemLibraryFolder, NULL, NULL));
 		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&systemLibraryFolder,
-			sizeof (extensionsName) / sizeof (UniChar), extensionsName, kFSCatInfoNone, NULL,
-			&systemLibraryExtensionsFolder, NULL, NULL));
+			sizeof (extensionsName) / sizeof (UniChar), extensionsName, kFSCatInfoPermissions, &catInfo,
+			&systemLibraryExtensionsFolder, NULL, NULL));	
 						
 		// Now we copy over any of the hfs archives
 
@@ -531,10 +543,10 @@ XPFApplication::install ()
 		FSRef privateFolder, privateTmpFolder;
 		
 		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (fPrefs->getInstallDisk()->getRootDirectory (),
-			sizeof (privateName) / sizeof (UniChar), privateName, kFSCatInfoNone, NULL,
+			sizeof (privateName) / sizeof (UniChar), privateName, kFSCatInfoPermissions, &catInfo,
 			&privateFolder, NULL, NULL));
 		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&privateFolder, 
-			sizeof (tmpName) / sizeof (UniChar), tmpName, kFSCatInfoNone, NULL,
+			sizeof (tmpName) / sizeof (UniChar), tmpName, kFSCatInfoPermissions, &tmpCatInfo,
 			&privateTmpFolder, NULL, NULL));
 
 		// Now, copy the kernel from the CD
@@ -592,6 +604,25 @@ XPFApplication::install ()
 			ThrowIfOSErr_AC (FSRefFilteredDirectoryCopy (&cdSystemLibraryExtensionsFolder, &tmpSystemLibraryFolder, NULL, NULL, 0, false, 
 									NULL, copyFilterGlue));
 		}
+		
+		// Now, we will copy BootX from the CD, to make the Installer think that Mac OS X is already
+		// installed, so that it won't move the extensions we pre-installed
+		
+		FSRef systemLibraryCoreServicesFolder, cdSystemLibraryCoreServicesFolder, cdBootX;
+		UniChar coreServicesName[] = {'C', 'o', 'r', 'e', 'S', 'e', 'r', 'v', 'i', 'c', 'e', 's'};
+		UniChar bootXName[] = {'B', 'o', 'o', 't', 'X'};
+		
+		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&systemLibraryFolder,
+			sizeof (coreServicesName) / sizeof (UniChar), coreServicesName, kFSCatInfoPermissions, &catInfo,
+			&systemLibraryCoreServicesFolder, NULL, NULL));	
+		ThrowIfOSErr_AC (FSMakeFSRefUnicode (&cdSystemLibraryFolder,
+				sizeof (coreServicesName) / sizeof (UniChar), coreServicesName, kTextEncodingUnknown, &cdSystemLibraryCoreServicesFolder));
+		ThrowIfOSErr_AC (FSMakeFSRefUnicode (&cdSystemLibraryCoreServicesFolder, 
+			sizeof (bootXName) / sizeof (UniChar), bootXName, kTextEncodingUnknown, &cdBootX));
+
+		setCopyingFile ("BootX");
+		err = FSRefFileCopy (&cdBootX, &systemLibraryCoreServicesFolder, NULL, NULL, 0, false);
+		if (err != dupFNErr) ThrowIfOSErr_AC (err);
 		
 		// Now, we need to setup the /Library/Extensions folder in tmp with our extra stuff
 
