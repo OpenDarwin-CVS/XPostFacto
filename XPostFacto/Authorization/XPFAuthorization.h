@@ -36,6 +36,24 @@ advised of the possibility of such damage.
 #define __XPFAUTHORIZATION_H__
 
 #ifdef __MACH__
+	#include <sys/types.h>
+	#include <unistd.h>
+#endif
+
+class XPFSetUID {
+
+	public:
+	
+		XPFSetUID (unsigned newUID = 0, unsigned newGID = 0);		
+		~XPFSetUID ();
+		
+	private:
+	
+		unsigned fRestoreUID;
+		unsigned fRestoreGID;
+};
+
+#ifdef __MACH__
 
 #include <Security/Security.h>
 

@@ -37,6 +37,24 @@ advised of the possibility of such damage.
 
 #include <StdArg.h>
 
+XPFSetUID::XPFSetUID (unsigned newUID, unsigned newGID) {
+#ifdef __MACH__
+	fRestoreUID = geteuid ();
+	fRestoreGID = getegid ();
+	if (fRestoreUID != newUID) seteuid (newUID);
+	if (fRestoreGID != newGID) setegid (newGID);
+#else
+	#pragma unused (newUID, newGID)
+#endif
+}
+		
+XPFSetUID::~XPFSetUID () {
+#ifdef __MACH__
+	seteuid (fRestoreUID);
+	setegid (fRestoreGID);
+#endif
+}
+
 XPFAuthorization XPFAuthorization::gXPFAuthorization;
 
 XPFAuthorization::XPFAuthorization ()
