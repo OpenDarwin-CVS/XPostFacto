@@ -51,10 +51,10 @@ RESOURCE 'vers' (1,
 	0x02,
 	0x20,
 	beta,
-	0x09,
+	0x11,
 	verUs,
-	"2.2b10",
-	"XPostFacto 2.2b10, © 2001, 2002 Other World Computing"
+	"2.2b11",
+	"XPostFacto 2.2b11, © 2001, 2002 Other World Computing"
 };
 
 RESOURCE 'vers' (3,
@@ -65,7 +65,7 @@ RESOURCE 'vers' (3,
 	0x02,
 	0x20,
 	beta,
-	0x010,
+	0x10,
 	verUS,
 	"2.2b10",
 	"2.2b10"
@@ -79,7 +79,7 @@ RESOURCE 'vers' (4,
 	0x02,
 	0x20,
 	beta,
-	0x09,
+	0x10,
 	verUS,
 	"2.2b10",
 	"2.2b10"
