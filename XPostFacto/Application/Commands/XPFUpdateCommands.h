@@ -76,7 +76,15 @@ class XPFRecopyHelperFilesCommand : public XPFThreadedCommand {
 
 };	
 
-class XPFUpdate;
+class XPFBlessMacOS9SystemFolderCommand : public XPFThreadedCommand {
+
+	public:
+	
+		XPFBlessMacOS9SystemFolderCommand (XPFUpdate *update) : XPFThreadedCommand (update) {}
+									
+		void DoItInProgressWindow ();
+	
+};
 
 class XPFUpdateCommand : public XPFThreadedCommand {
 

@@ -101,6 +101,7 @@ advised of the possibility of such damage.
 #define cSetEnabled						1452
 
 #define cUninstall						1453
+#define cBlessMacOS9SystemFolder		1454
 
 // Views and Windows
 // -----------------

@@ -110,6 +110,14 @@ XPFUpdateCommand::DoItInProgressWindow ()
 }
 
 void
+XPFBlessMacOS9SystemFolderCommand::DoItInProgressWindow ()
+{
+	setDescription (CStr255_AC (kXPFStringsResource, kBlessingSystemFolder));
+	fUpdate->getTarget()->blessMacOS9SystemFolder ();	
+	fProgressWindow->setFinished ();
+}
+
+void
 XPFUninstallCommand::DoItInProgressWindow ()
 {
 	setDescription (CStr255_AC (kXPFStringsResource, kUninstalling));

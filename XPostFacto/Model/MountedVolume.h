@@ -100,6 +100,10 @@ class MountedVolume : public MDependable_AC
 		
 		bool hasCurrentExtensions (bool useCacheConfig);
 		bool hasCurrentStartupItems ();
+		
+		UInt32 getMacOS9SystemFolderNodeID () {return fMacOS9SystemFolderNodeID;}
+		UInt32 getBlessedFolderID () {return fBlessedFolderID;}
+		OSErr blessMacOS9SystemFolder ();
 				
 		void installBootXIfNecessary (bool forceInstall = false);
 		
@@ -150,6 +154,9 @@ class MountedVolume : public MDependable_AC
 		CStr255_AC fShortOpenFirmwareName;
 		CStr255_AC fMacOSXVersion;
 		UInt32 fMacOSXMajorVersion;
+		
+		UInt32 fBlessedFolderID;
+		UInt32 fMacOS9SystemFolderNodeID;
 
 		UInt32 fAllocationBlockSize;
 

@@ -674,6 +674,7 @@ XPFPrefs::DoSetupMenus ()
 	Enable (cShowOptionsWindow, true);
 	Enable (cRecopyHelperFiles, fTargetDisk && fTargetDisk->getHelperDisk () != NULL);
 	Enable (cUninstall, fTargetDisk && fTargetDisk->getIsWriteable ());
+	Enable (cBlessMacOS9SystemFolder, fTargetDisk && fTargetDisk->getMacOS9SystemFolderNodeID ()); 
 }
 
 void 
@@ -701,6 +702,11 @@ XPFPrefs::DoMenuCommand (CommandNumber aCommandNumber)
 		case cRecopyHelperFiles:
 			update = new XPFUpdate (fTargetDisk, fTargetDisk->getHelperDisk ());
 			PerformCommand (TH_new XPFRecopyHelperFilesCommand (update));
+			break;
+			
+		case cBlessMacOS9SystemFolder:
+			update = new XPFUpdate (fTargetDisk, fTargetDisk->getHelperDisk ());
+			PerformCommand (TH_new XPFBlessMacOS9SystemFolderCommand (update));
 			break;
 			
 		case cUninstall:

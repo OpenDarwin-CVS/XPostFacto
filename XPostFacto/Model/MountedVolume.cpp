@@ -612,6 +612,50 @@ MountedVolume::getPartitionInfo () {
 
 #endif
 
+OSErr
+MountedVolume::blessMacOS9SystemFolder ()
+{
+	if (!fMacOS9SystemFolderNodeID) return noErr;
+	if (fMacOS9SystemFolderNodeID == fBlessedFolderID) return noErr;
+	
+	FSVolumeInfo volInfo;
+	OSErr err = FSGetVolumeInfo (fInfo.driveNumber, 0, NULL, kFSVolInfoFinderInfo, &volInfo, NULL, NULL);
+	if (err == noErr) {
+		UInt32 *finderInfo = (UInt32 *) volInfo.finderInfo;
+		finderInfo[0] = fMacOS9SystemFolderNodeID;
+		finderInfo[3] = fMacOS9SystemFolderNodeID;
+		err = FSSetVolumeInfo (fInfo.driveNumber, kFSVolInfoFinderInfo, &volInfo);
+		if (err == noErr) fBlessedFolderID = fMacOS9SystemFolderNodeID;
+	}
+	return err;
+}
+
+static bool IsMacOS9SystemFolder (FSRef *directory)
+{
+	bool hasFinder = false;
+	bool hasSystem = false;
+	FSIterator iterator;
+	FSOpenIterator (directory, kFSIterateFlat, &iterator);
+	OSErr err = noErr;
+	
+	while ((err == noErr) && (!hasFinder || !hasSystem)) {
+		ItemCount actualObjects;
+		FSCatalogInfo catInfo;
+		FSRef item;
+		err = FSGetCatalogInfoBulk (iterator, 1, &actualObjects, NULL, kFSCatInfoNodeFlags | kFSCatInfoFinderInfo, &catInfo, &item, NULL, NULL);
+		if ((err == noErr) && (actualObjects == 1)) {
+			if (!(catInfo.nodeFlags & kFSNodeIsDirectoryMask)) {
+				FileInfo *fileInfo = (FileInfo *) catInfo.finderInfo;
+				if ((fileInfo->fileType == 'zsys') && (fileInfo->fileCreator == 'MACS')) hasSystem = true;
+				if ((fileInfo->fileType == 'FNDR') && (fileInfo->fileCreator == 'MACS')) hasFinder = true;
+			}
+		}
+	}
+	
+	FSCloseIterator (iterator);
+	return hasSystem && hasFinder;	
+}
+
 MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *rootDirectory)
 {
 	fValidOpenFirmwareName = false;
@@ -805,6 +849,39 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 
 	if (getRequiresBootHelper ()) fHelperDisk = getDefaultHelperDisk ();
 	
+	// See if there is a Mac OS 9 System Folder
+	fMacOS9SystemFolderNodeID = 0;
+	fBlessedFolderID = 0;
+	
+	if (getInstallTargetStatus () == kStatusOK) {
+		FSVolumeInfo volInfo;
+		OSErr err = FSGetVolumeInfo (fInfo.driveNumber, 0, NULL, kFSVolInfoFinderInfo, &volInfo, NULL, NULL);
+		if (err == noErr) {
+			UInt32 *finderInfo = (UInt32 *) volInfo.finderInfo;
+			fBlessedFolderID = finderInfo[0];
+		}
+		
+		UInt32 retVal = 0;
+		FSIterator iterator;
+		FSOpenIterator (&fRootDirectory, kFSIterateFlat, &iterator);
+		err = noErr;
+		
+		while ((err == noErr) && (fMacOS9SystemFolderNodeID == 0)) {
+			ItemCount actualObjects;
+			FSCatalogInfo catInfo;
+			FSRef item;
+			err = FSGetCatalogInfoBulk (iterator, 1, &actualObjects, NULL, kFSCatInfoNodeFlags | kFSCatInfoNodeID, &catInfo, &item, NULL, NULL);
+			if ((err == noErr) && (actualObjects == 1)) {
+				if (catInfo.nodeFlags & kFSNodeIsDirectoryMask) {
+					if (IsMacOS9SystemFolder (&item)) fMacOS9SystemFolderNodeID = catInfo.nodeID;
+				}
+			}
+		}
+		
+		gLogFile << "Blessed folder: " << fBlessedFolderID << " Mac OS 9 System Folder: " << fMacOS9SystemFolderNodeID << endl_AC;
+		FSCloseIterator (iterator);
+	}
+		
 	#if qLogging
 		if (fValidOpenFirmwareName) {
 			gLogFile << "OpenFirmwareName: ";

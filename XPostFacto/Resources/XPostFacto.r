@@ -230,6 +230,8 @@ purgeable) {
 	"-",			noIcon, noKey, noMark, plain, nocommand;
 	"Recopy Helper Files", noIcon, noKey, noMark, plain, cRecopyHelperFiles;
 	"-",			noIcon, noKey, noMark, plain, nocommand;
+	"Bless Mac OS 9 System", noIcon, noKey, noMark, plain, cBlessMacOS9SystemFolder;
+	"-",			noIcon, noKey, noMark, plain, nocommand;
 	"Uninstall…",	noIcon, noKey, noMark, plain, cUninstall;
 	}
 };

@@ -90,5 +90,6 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			
 			"Synchronizing";
 			"Uninstalling";
+/* 45 */	"Blessing Mac OS 9 System Folder";
 	}
 };

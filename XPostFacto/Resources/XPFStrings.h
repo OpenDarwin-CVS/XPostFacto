@@ -81,7 +81,8 @@ enum {
 	kInstallWord,
 	kDeleteWord,
 	kSynchronizing,
-	kUninstalling
+	kUninstalling,
+	kBlessingSystemFolder		// 45
 };
 
 
