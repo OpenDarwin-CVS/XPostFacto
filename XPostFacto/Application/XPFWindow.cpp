@@ -65,6 +65,7 @@ XPFWindow::DoPostCreate(TDocument* itsDocument)
 	fMessageText = (TStaticText *) this->FindSubView ('Mess');
 	fInstallCluster = (TView *) this->FindSubView ('Clus');
 	fInstallMessageText = (TStaticText *) this->FindSubView ('Inme');
+	fHelpButton = (TButton *) this->FindSubView ('Help');
 	
 	CStr255_AC title ("XPostFacto ");
 	title += kXPFVersion;
@@ -106,6 +107,8 @@ XPFWindow::DoEvent(EventNumber eventNumber,
 		fPrefs->setInstallDisk (MountedVolume::GetVolumeList()->At (fInstallMenu->GetCurrentItem()));
 	} else if ((eventNumber == mButtonHit) && (source == fInstallButton)) {
 		fApp->install ();
+	} else if ((eventNumber == mButtonHit) && (source == fHelpButton)) {
+		fApp->DoShowHelpFile ();
 	}
 }
 

@@ -1,38 +1,37 @@
 data 'ALIB' (0) {
-	$"B929 8774"                                                                                          /* ╣)Зt */
+	$"B94F AFAE"                                                                                                                                          /* ╣Oпо */
 };
 
 data 'ALIB' (1) {
-	$"03E8 03E8 03E8 03E8 03E8 03E8 03E8 03E9 03EA"                                                       /* .ш.ш.ш.ш.ш.ш.ш.щ.ъ */
+	$"03E8 03E8 03E8 03E8 03E8 03E8 03E8 03E9 03EA"                                                                                                       /* .ш.ш.ш.ш.ш.ш.ш.щ.ъ */
 };
 
 data 'ALIB' (2) {
-	$"03F1 0000 0001 03E8 0000 0005 03EA 0000 0003 03EF 0000 0001 03F0 0000 0001 03EC"                    /* .ё.....ш.....ъ.....я.....Ё.....ь */
-	$"0000 0001"                                                                                          /* .... */
+	$"03F1 0000 0001 03E8 0000 0005 03EA 0000 0003 03EF 0000 0001 03F0 0000 0001 03EC 0000 0001 03F4 0000 0001"                                           /* .ё.....ш.....ъ.....я.....Ё.....ь.....Ї.... */
 };
 
 data 'ALIB' (3) {
-	$"0000"                                                                                               /* .. */
+	$"0000"                                                                                                                                               /* .. */
 };
 
 data 'ALIB' (4) {
-	$"0000 00AE 0000 012C 0000 0035 0000 00FF 0101 0101 01"                                               /* ...о...,...5... ..... */
+	$"0000 00AE 0000 012C 0000 0035 0000 00FF 0101 0101 01"                                                                                               /* ...о...,...5... ..... */
 };
 
 data 'ALIB' (1000) {
-	$"0005 0101 0101 01"                                                                                  /* ....... */
+	$"0006 0101 0101 0101"                                                                                                                                /* ........ */
 };
 
 data 'ALIB' (1001) {
-	$"0004 0100 0301"                                                                                     /* ...... */
+	$"0004 0100 0301"                                                                                                                                     /* ...... */
 };
 
 data 'ALIB' (1002) {
-	$"0003 0101 01"                                                                                       /* ..... */
+	$"0003 0101 01"                                                                                                                                       /* ..... */
 };
 
 resource 'STR#' (1000) {
-	{	/* array StringArray: 5 elements */
+	{	/* array StringArray: 6 elements */
 		/* [1] */
 		"OK",
 		/* [2] */
@@ -42,21 +41,22 @@ resource 'STR#' (1000) {
 		/* [4] */
 		"Install",
 		/* [5] */
-		"Install Mac OS X To"
+		"Install Mac OS X To",
+		/* [6] */
+		"?"
 	}
 };
 
 resource 'STR#' (1001) {
 	{	/* array StringArray: 4 elements */
 		/* [1] */
-		"http://eshop.macsales.com/OSXCenter/",
+		"http://eshop.macsales.com/OSXCenter/XPostFacto/",
 		/* [2] */
 		"",
 		/* [3] */
 		"Static Text",
 		/* [4] */
-		"For updates and information about this utility, visit Other World Computing's we"
-		"b site at:"
+		"For updates and information about this utility, visit Other World Computing's web site at:"
 	}
 };
 
@@ -239,6 +239,20 @@ resource 'TxSt' (1011) {
 	""
 };
 
+resource 'TxSt' (1012) {
+	tsPlain,
+	0,
+	{	/* array: 3 elements */
+		/* [1] */
+		0x0,
+		/* [2] */
+		0x0,
+		/* [3] */
+		0x0
+	},
+	""
+};
+
 resource 'TxSt' (1013) {
 	tsPlain,
 	0,
@@ -257,11 +271,11 @@ resource 'View' (1004, "MainWindow", purgeable) {
 	MAThreeOhView {
 
 	},
-	{	/* array ViewArray: 9 elements */
+	{	/* array ViewArray: 10 elements */
 		/* [1] */
 		ViewSignatureAndClassname {
 			'wind',
-			1066,
+			1168,
 			"XPFWindow",
 			noID,
 			enabled,
@@ -279,9 +293,9 @@ resource 'View' (1004, "MainWindow", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				320,
+				344,
 				/* [2] */
-				362
+				364
 			},
 			sizeVariable,
 			sizeVariable,
@@ -338,7 +352,7 @@ resource 'View' (1004, "MainWindow", purgeable) {
 				1002,
 				2
 			},
-			2
+			3
 		},
 		/* [2] */
 		ViewSignatureAndClassname {
@@ -364,7 +378,7 @@ resource 'View' (1004, "MainWindow", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				16,
+				33,
 				/* [2] */
 				16
 			},
@@ -438,7 +452,7 @@ resource 'View' (1004, "MainWindow", purgeable) {
 				/* [1] */
 				23,
 				/* [2] */
-				192
+				186
 			},
 			sizeFixed,
 			sizeVariable,
@@ -644,7 +658,7 @@ resource 'View' (1004, "MainWindow", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				166,
+				183,
 				/* [2] */
 				16
 			},
@@ -899,6 +913,71 @@ resource 'View' (1004, "MainWindow", purgeable) {
 				3
 			},
 			NoSubviews
+		},
+		/* [10] */
+		ViewSignatureAndClassname {
+			'butn',
+			96,
+			"",
+			'Help',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				12,
+				/* [2] */
+				320
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				20,
+				/* [2] */
+				24
+			},
+			sizeFixed,
+			sizeFixed,
+			shown,
+			doesntWantToBeTarget,
+			handlesCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			handlesHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Button {
+				mButtonHit,
+				notHilited,
+				notDimmed,
+				notSizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				1012,
+				dontPreferOutline,
+				1000,
+				6
+			},
+			NoSubviews
 		}
 	}
 };
@@ -1081,7 +1160,7 @@ resource 'View' (1005, "About Box", purgeable) {
 				/* [1] */
 				21,
 				/* [2] */
-				237
+				260
 			},
 			sizeFixed,
 			sizeFixed,
@@ -1443,3 +1522,4 @@ resource 'vers' (1, purgeable) {
 	"3.0.1",
 	"Last modified using Ad Lib 3.0.1"
 };
+

@@ -72,6 +72,8 @@ advised of the possibility of such damage.
 #include <UnicodeConverter.h>
 #include <CodeFragments.h>
 
+#include <InternetConfig.h>
+
 #include "ThreadUtilities_AC.h"
 
 #include "XPostFacto.h"
@@ -151,6 +153,51 @@ XPFApplication::DoAboutBox()
 	} else {
 		fAboutBox->Show (true, false);
 		fAboutBox->Select ();
+	}
+}
+
+void
+XPFApplication::launchURL (CStr255_AC theURL)
+{
+	long start = 0, end = theURL[0];
+	ICInstance inst;
+	ThrowIfOSErr_AC (ICStart (&inst, 'usuX'));
+	ThrowIfOSErr_AC (ICLaunchURL (inst, "\p", &theURL[1], theURL[0], &start, &end));
+	ICStop (inst);
+}
+
+void
+XPFApplication::DoShowHelpFile ()
+{
+	// First, we write out the help text to a temporary file
+	Handle helpText = GetResource ('TEXT', kHelpID);
+	if (helpText) {
+		DetachResource (helpText);
+		CFile_AC helpFile ('TEXT', '????', true);
+		CFSSpec_AC helpSpec;
+		ThrowIfOSErr_AC (FindFolder (kOnAppropriateDisk, kTemporaryFolderType, kCreateFolder, &helpSpec.vRefNum, &helpSpec.parID));
+		helpSpec.SetName ("XPostFacto Help.html");
+		helpFile.Specify (helpSpec);
+		helpFile.DeleteCFile ();
+		helpFile.CreateAndOpen ();
+		HLock (helpText);
+		long helpTextSize = GetHandleSize (helpText);
+		OSErr err = helpFile.WriteData (*helpText, helpTextSize);
+		HUnlock (helpText);
+		ThrowIfOSErr_AC (err);
+		ThrowIfOSErr_AC (helpFile.CloseFile ());
+		DisposeIfHandle_AC (helpText);
+		
+		// Now, we open the file with a browser
+		FSRef helpFileRef;
+		ThrowIfOSErr_AC (FSpMakeFSRef (&helpSpec, &helpFileRef));
+		CFURLRef urlRef = CFURLCreateFromFSRef (NULL, &helpFileRef);
+		CFStringRef urlStringRef = CFURLGetString (urlRef);
+		Str255 urlString;
+		CFStringGetPascalString (urlStringRef, urlString, 255, CFStringGetSystemEncoding());
+		CFRelease (urlRef);
+
+		launchURL (urlString);		
 	}
 }
 
@@ -240,6 +287,17 @@ XPFApplication::OpenOld(CommandNumber itsOpenCommand, CList_AC* aFileList)
 	return OpenNew (itsOpenCommand);
 }
 
+void 
+XPFApplication::InstallHelpMenuItems()
+{
+	CStr255_AC theMenuName;
+	GetIndString (theMenuName, kXPFStringsResource, kXPostFactoHelpMenu);
+	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (theMenuName, cShowHelpFile);
+	GetIndString (theMenuName, kXPFStringsResource, kXPostFactoOnlineHelpMenu);
+	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (theMenuName, cShowOnlineHelpFile);
+	GetIndString (theMenuName, kXPFStringsResource, kXPostFactoSourceCodeMenu);
+	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (theMenuName, cShowSourceCode);
+}
 
 void 
 XPFApplication::DoMenuCommand(CommandNumber aCommandNumber) // Override 
@@ -248,6 +306,18 @@ XPFApplication::DoMenuCommand(CommandNumber aCommandNumber) // Override
 	{			
 		case cQuit:
 			TApplication::DoMenuCommand (aCommandNumber);
+			break;
+			
+		case cShowHelpFile:
+			DoShowHelpFile ();
+			break;
+			
+		case cShowOnlineHelpFile:
+			launchURL ("\phttp://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto.html");
+			break;
+			
+		case cShowSourceCode:
+			launchURL ("\phttp://www.opendarwin.org/cgi-bin/cvsweb.cgi/proj/XPostFacto/");
 			break;
 
 		case cToggleVerboseMode:
@@ -376,7 +446,10 @@ XPFApplication::DoSetupMenus()
 	EnableCheck (cToggleDebugSystemLog, notCopying, fPrefs->getDebugSyslog ());
 	EnableCheck (cToggleDebugARP, notCopying, fPrefs->getDebugARP ());
 	EnableCheck (cToggleDebugOldGDB, notCopying, fPrefs->getDebugOldGDB ());
-
+	
+	Enable (cShowHelpFile, true);
+	Enable (cShowOnlineHelpFile, true);
+	Enable (cShowSourceCode, true);
 }
 
 Boolean 

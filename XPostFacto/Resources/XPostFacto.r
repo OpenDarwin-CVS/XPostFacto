@@ -85,7 +85,8 @@ advised of the possibility of such damage.
 
 #define kXPFWindowID				kDefaultWindowID
 
-Read 'TEXT' (1005, "Copyright") "copyright.h";
+Read 'TEXT' (kCopyrightID, "Copyright") "copyright.h";
+Read 'TEXT' (kHelpID, "Help") "::XPostFacto.html";
 
 // Memory Management Resources
 // ---------------------------

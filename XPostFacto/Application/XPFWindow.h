@@ -74,6 +74,7 @@ private:
 	TStaticText *fMessageText;
 	TView *fInstallCluster;
 	TStaticText *fInstallMessageText;
+	TButton *fHelpButton;
 };
 
 

@@ -49,7 +49,10 @@ enum {
 	kNotInstaller,
 	kRequiresOS9,
 	kNoNVRAMPatches,
-	kNoMacOSXYet
+	kNoMacOSXYet,
+	kXPostFactoHelpMenu,
+	kXPostFactoOnlineHelpMenu,
+	kXPostFactoSourceCodeMenu
 };
 
 

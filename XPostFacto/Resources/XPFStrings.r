@@ -49,5 +49,8 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 /* 10 */	"XPostFacto requires Mac OS 9 or later.";
 			"XPostFacto does not know how to patch NVRAM for ";
 			"XPostFacto does not work in Mac OS X (yet).";
+			"^0 Help";
+			"Online Help";
+/* 15 */	"Online Source Code";
 	}
 };

@@ -74,6 +74,10 @@ advised of the possibility of such damage.
 #define cToggleDebugARP			1019
 #define cToggleDebugOldGDB		1020
 
+#define cShowHelpFile			1021
+#define cShowOnlineHelpFile		1022
+#define cShowSourceCode			1023
+
 #define cFirstInputDevice		1100
 #define cFirstOutputDevice		1200
 
@@ -97,5 +101,8 @@ advised of the possibility of such damage.
 
 #define kSignature			'usuX'			// Application signature 
 
+
+#define kCopyrightID	1005
+#define kHelpID			1006
 
 #endif

@@ -60,6 +60,9 @@ class XPFApplication : public TApplication {
 			// Destructor
 			
 		virtual void DoAboutBox();
+		void DoShowHelpFile ();
+		
+		void launchURL (CStr255_AC theURL);
 		
 		void reportFatalError (CStr255_AC error);
 			
@@ -82,6 +85,8 @@ class XPFApplication : public TApplication {
 		XPFPrefs* getPrefs () {return fPrefs;}
 		
 		// Commands
+		virtual void InstallHelpMenuItems();
+		
 		virtual void DoSetupMenus(); // Override		
 		virtual void DoMenuCommand(CommandNumber aCommandNumber); // Override
 		

@@ -33,9 +33,11 @@ advised of the possibility of such damage.
 
 
 #include "XPFAboutBox.h"
+#include "XPFApplication.h"
 #include <iostream.h>
 #include <InternetConfig.h>
 #include <Sound.h>
+#include "XPostFacto.h"
 
 MA_DEFINE_CLASS (XPFAboutBox);
 
@@ -51,7 +53,7 @@ XPFAboutBox::DoPostCreate (TDocument* itsDocument)
 	fURL = (TStaticText *) this->FindSubView ('urlT');
 	fCopyrightNotice = (TTEView *) this->FindSubView ('Copy');
 	
-	fCopyrightText = GetResource ('TEXT', 1005);
+	fCopyrightText = GetResource ('TEXT', kCopyrightID);
 	if (fCopyrightText) {
 		DetachResource (fCopyrightText);
 		fCopyrightNotice->StuffText (fCopyrightText);
@@ -66,13 +68,6 @@ XPFAboutBox::DoEvent(EventNumber eventNumber,
 	TWindow::DoEvent (eventNumber, source, event);
 	if ((eventNumber == mStaticTextHit) && (source == fURL)) {
 		CStr255_AC theURL = fURL->GetText ();
-		long start = 0, end = theURL[0];
-		ICInstance inst;
-		ThrowIfOSErr_AC (ICStart (&inst, 'usuX'));
-		#ifndef qCarbon
-			ThrowIfOSErr_AC (ICFindConfigFile (inst, 0, NULL));
-		#endif
-		ThrowIfOSErr_AC (ICLaunchURL (inst, "\p", &theURL[1], theURL[0], &start, &end));
-		ICStop (inst);
+		((XPFApplication *) gApplication)->launchURL (theURL);
 	} 
 }
