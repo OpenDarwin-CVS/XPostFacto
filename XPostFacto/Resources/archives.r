@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001, 2002
+Copyright (c) 2001 - 2003
 Other World Computing
 All rights reserved
 
@@ -59,6 +59,7 @@ Read 'hfsA' (137, "OHareATA.kext") ":Derived:Extensions:OHareATA.hfs";
 Read 'hfsA' (138, "ApplePowerStarPE") ":Derived:Extensions:ApplePowerStarPE.hfs";
 Read 'hfsA' (139, "ApplePowerExpressPE") ":Derived:Extensions:ApplePowerExpressPE.hfs";
 Read 'hfsA' (142, "PatchedNDRVSupport") ":Derived:Extensions:PatchedNDRVSupport.hfs";
+Read 'hfsA' (143, "OWCCacheConfig") ":Derived:Extensions:OWCCacheConfig.hfs";
 
 // Set up the BootX file for extraction
 
