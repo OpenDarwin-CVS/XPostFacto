@@ -1160,19 +1160,29 @@ MountedVolume::getWillRunOnCurrentCPU ()
 {
 	if (!fMacOSXMajorVersion) return true;
 
-	long cpuFamily;
-	if (Gestalt (gestaltNativeCPUfamily, &cpuFamily) == noErr) {
-		switch (cpuFamily) {
+	bool retVal = true;
+
+	long cpuType;
+	if (Gestalt (gestaltNativeCPUtype, &cpuType) == noErr) {
+		switch (cpuType) {
 			case gestaltCPU601:
-				return false;
+				retVal = false;
+				break;
 				
 			case gestaltCPU603:
 			case gestaltCPU604:
-				return fMacOSXMajorVersion < 6;
+			case gestaltCPU603e:
+			case gestaltCPU603ev:
+			case gestaltCPU604e:
+			case gestaltCPU604ev:
+				retVal = fMacOSXMajorVersion < 6; 
+				break;
 		}
 	}
 	
-	return true;
+	if (!retVal) gLogFile << "Gestalt gestaltNativeCPUType: " << cpuType << endl_AC;
+	
+	return retVal;
 }
 
 unsigned
