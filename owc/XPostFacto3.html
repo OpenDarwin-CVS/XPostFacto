@@ -1,8 +1,8 @@
-<body><h2>XPostFacto 3.0b9</h2>
+<body><h2>XPostFacto 3.0b10</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-October 26, 2004
+November 13, 2004
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -11,24 +11,21 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <p>Here's a quick link to download the latest version. Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes.
 
 <blockquote>
-<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0b9.sit">Download XPostFacto 3.0b9</a>
+<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0b10.sit">Download XPostFacto 3.0b10</a>
 </blockquote>
 
 <p>XPostFacto is an open-source application which you may download and try for free. However, I encourage you to <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">register as an XPostFacto user</a>. This helps to support the continuing development of XPostFacto, and also gives you an account on the <a href="http://forum.macsales.com/">tech support forum</a>. If you are already a registered user of XPostFacto, you can make a <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">contribution to its continuing development</a>.
 
-<h4>What's new in 3.0b9</h4>
+<h4>What's new in 3.0b10</h4>
 
-<p>Here is a quick summary of what's new in version 3.0b9. I am expecting this to be the last beta version before officially releasing version 3.0. So, I am particularly looking for two kinds of problem reports at the moment: (a) things that used to work in a previous version of XPF but do not work now; and (b) things which do not work and are not sufficiently documented as "known problems" below.
+<p>Here is a quick summary of what's new in version 3.0b10. I had been hoping that 3.0b9 would be the last beta version before releasing 3.0, but there turned out to be a couple of problems that seemed possible to fix within a reasonable time.
 
 <ul>
-<li>Will now set a <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2093">default input-device and output-device</a>, unless the user has specifically chosen to have none.
+<li>Make sure the XPostFacto updates all the <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2136">kernel extension caches</a> when installing extensions. Also, check for several problems which can affect the caches.
 
-<li>Added a menu command to <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2328">save the log file</a>.
+<li>When <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2360">synchronization fails</a>, set the computer to reboot in Mac OS 9 for safety, and do not proceed with the restart.  
 
-<li>Show an error message when there is a <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2329">problem reading from a volume</a>, rather than just leaving it out of the volume list.
-
-<li>Show a warning rather than an error when XPF <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2090">fails to detect a G3/G4 CPU upgrade</a>, since there had been some cases where XPF was not detecting the CPU type properly.
-
+<li>Hopefully fix an error which caused XPF to sometimes stall when an <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2363">network drive was mounted</a>.
 </ul>
 
 <h4><a name="problems">Known Problems</a></h4>
@@ -553,6 +550,19 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0b10.sit">3.0b10 (November 13, 2004)</a>
+
+<dd>Here is a quick summary of what's new in version 3.0b10. I had been hoping that 3.0b9 would be the last beta version before releasing 3.0, but there turned out to be a couple of problems that seemed possible to fix within a reasonable time.
+
+<ul>
+<li>Make sure the XPostFacto updates all the <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2136">kernel extension caches</a> when installing extensions. Also, check for several problems which can affect the caches.
+
+<li>When <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2360">synchronization fails</a>, set the computer to reboot in Mac OS 9 for safety, and do not proceed with the restart.  
+
+<li>Hopefully fix an error which caused XPF to sometimes stall when an <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2363">network drive was mounted</a>.
+
+</ul>
 
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0b9.sit">3.0b9 (October 26, 2004)</a>
 
