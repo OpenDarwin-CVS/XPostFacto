@@ -105,12 +105,8 @@ FirewireDevice::FirewireDevice (RegEntryID *regEntry, SInt16 driverRefNum)
 	fNeedsHelper = true;
 		
 	#if qLogging
-		gLogFile << "OpenFirmwareName: ";
-		gLogFile.WriteCharBytes ((char *) &fOpenFirmwareName[1], fOpenFirmwareName[0]);
-		gLogFile << endl_AC;
-		gLogFile << "ShortOpenFirmwareName: ";
-		gLogFile.WriteCharBytes ((char *) &fShortOpenFirmwareName[1], fShortOpenFirmwareName[0]);
-		gLogFile << endl_AC;
+		gLogFile << "OpenFirmwareName: " << (CChar255_AC) fOpenFirmwarName << endl_AC;
+		gLogFile << "ShortOpenFirmwareName: " << (CChar255_AC) fShortOpenFirmwareName << endl_AC;
 	#endif;
 }
 

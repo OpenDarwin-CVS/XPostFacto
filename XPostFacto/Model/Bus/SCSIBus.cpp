@@ -260,17 +260,11 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
     RegistryEntryIterateDispose (&cookie);
 
 	#if qLogging
-		gLogFile << "SCSI Bus OpenFirmwareName: ";
-		gLogFile.WriteCharBytes ((char *) &fShortOpenFirmwareName[1], fShortOpenFirmwareName[0]);
-		gLogFile << endl_AC;
+		gLogFile << "SCSI Bus OpenFirmwareName: " << (CChar255_AC) fShortOpenFirmwareName << endl_AC;
 		gLogFile << "Bus Number: " << fBusNumber << endl_AC;
 		if (fIsActuallyATABus) {
-			gLogFile << "ATA Channel 0 Name: ";
-			gLogFile.WriteCharBytes ((char *) &fATAShortOpenFirmwareName0[1], fATAShortOpenFirmwareName0[0]);
-			gLogFile << endl_AC;
-			gLogFile << "ATA Channel 1 Name: ";
-			gLogFile.WriteCharBytes ((char *) &fATAShortOpenFirmwareName1[1], fATAShortOpenFirmwareName1[0]);
-			gLogFile << endl_AC;
+			gLogFile << "ATA Channel 0 Name: " << (CChar255_AC) fATAShortOpenFirmwareName0 << endl_AC;
+			gLogFile << "ATA Channel 1 Name: " << (CChar255_AC) fATAShortOpenFirmwareName1 << endl_AC;
 		}
 	#endif
 

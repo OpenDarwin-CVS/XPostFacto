@@ -218,9 +218,7 @@ SCSIDevice::SCSIDevice (DeviceIdent scsiDevice, SInt16 driverRefNum)
 	
 	#if qLogging
 		if (fSCSIBus) {
-			gLogFile << "OpenFirmwareName for SCSI Bus: " << scsiDevice.bus << ": " ;
-			gLogFile.WriteCharBytes ((char *) &fShortOpenFirmwareName[1], fShortOpenFirmwareName[0]);
-			gLogFile << endl_AC;
+			gLogFile << "OpenFirmwareName for SCSI Bus: " << scsiDevice.bus << ": " << (CChar255_AC) fShortOpenFirmwareName << endl_AC;
 		} else {
 			gLogFile << "Could not find Open Firmware name for SCSI bus: " << scsiDevice.bus << endl_AC;
 		}
