@@ -98,6 +98,7 @@ XPFBootableDevice::Initialize ()
 	}
 	catch (...) {
 		EnableCDDriver ();
+		gLogFile << "Error initalizing XPFBootableDevice" << endl_AC;
 		throw;
 	}
 	
@@ -277,7 +278,7 @@ XPFBootableDevice::extractPartitionInfo ()
 					fPartitionList->InsertLast (info);
 				}
 				catch (...) {
-				
+					gLogFile << "Error in XPFPartition::XPFPartition" << endl_AC;
 				}
 			}
 		}	
@@ -289,6 +290,7 @@ XPFBootableDevice::extractPartitionInfo ()
 	}
 	catch (...) {
 		EnableCDDriver ();
+		gLogFile << "Error extracting partition info" << endl_AC;
 		throw;
 	}
 	

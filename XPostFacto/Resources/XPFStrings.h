@@ -101,6 +101,7 @@ enum {
 	kXPostFactoName,
 	kSaveCurrentLog,
 	kXPostFactoLog,
+	kNotInitialized,
 };
 
 

@@ -181,7 +181,7 @@ ATADevice::Initialize ()
 	        gDeviceList.InsertLast (new ATADevice (pb.ataPBDeviceID, pb.ataDrvrRefNum));
 	    }
 	    catch (...) {
-	    
+	    	gLogFile << "Error in ATADevice::ATADevice" << endl_AC;
 	    }
     }
 }

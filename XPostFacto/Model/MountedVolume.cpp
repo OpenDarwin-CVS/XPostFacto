@@ -109,19 +109,12 @@ MountedVolume::Initialize ()
 				// catch name changes for the UI
 				volume->setHFSName (&volName);
 			} else if (info.totalBlocks) {
-				try {
-					volume = new MountedVolume (&info, &volName, &rootDirectory);
-					gVolumeList.InsertLast (volume);
+				volume = new MountedVolume (&info, &volName, &rootDirectory);
+				gVolumeList.InsertLast (volume);
 #ifdef BUILDING_XPF
-					gApplication->Changed (cNewMountedVolume, volume);
+				gApplication->Changed (cNewMountedVolume, volume);
 #endif
-					volume->fStillThere = true;
-				}
-				catch (...) {
-					#if qLogging
-						gLogFile << "Error initializing MountedVolume" << endl_AC;
-					#endif
-				}			
+				volume->fStillThere = true;
 			}
 		}	
 	} while (err == noErr);
@@ -558,6 +551,7 @@ MountedVolume::checkBootXVersion ()
 			XPFBootableDevice::EnableCDDriver ();
 		}
 		catch (...) {
+			gLogFile << "Error getting BootX start block" << endl_AC;
 			XPFBootableDevice::EnableCDDriver ();
 		}
 			
@@ -901,166 +895,82 @@ MountedVolume::checkBlessedFolder ()
 	gLogFile << "Blessed folder: " << fBlessedFolderID << " Mac OS 9 System Folder: " << fMacOS9SystemFolderNodeID << endl_AC;
 }
 
-MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *rootDirectory)
+void
+MountedVolume::checkMacOSXVersion ()
 {
-	fPartition = NULL;
-	fBootableDevice = NULL;
-	fHelperDisk = NULL;
-	fCreationDate = 0;
-	fMacOSXVersion = "";
-	fMacOSXMajorVersion = 0;
-	fTurnedOffIgnorePermissions = false;
-	fSymlinkStatus = kSymlinkStatusOK;
-	fIsAttachedToPCICard = false;
-	fBootXVersion = 0;
-	fPartitionNumber = 0;
-	fOpenFirmwareName[0] = 0;
-	fShortOpenFirmwareName[0] = 0;
-	fIsDarwin = false;
-	
-#ifdef BUILDING_XPF
-	gApplication->AddDependent (this); // for listening for volume deletions
-#endif
-
-	// Copy the info
-	{				
-#ifdef __MACH__
-		// It looks like I'm not getting a useable drive number from the info
-		// So I'll try getting it from the rootDirectory instead
-		FSSpec rootDirSpec;
-		FSGetCatalogInfo (rootDirectory, kFSCatInfoNone, NULL, NULL, &rootDirSpec, NULL);
-		info->driveNumber = rootDirSpec.vRefNum;
-#endif
- 	
-		BlockMoveData (info, &fInfo, sizeof (FSVolumeInfo));
-		BlockMoveData (name, &fHFSName, sizeof (HFSUniStr255));
-	
-		setVolumeName (&fHFSName);
-		
-		fCreationDate = info->createDate.lowSeconds;
-		fAllocationBlockSize = info->blockSize;
-		
-		BlockMoveData (rootDirectory, &fRootDirectory, sizeof (fRootDirectory));
-	}
-		
-	// See if it's got a mach_kernel
-	{
-		CFSSpec_AC kernel;
-		OSErr err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:mach_kernel", &kernel);
-		fHasMachKernel = (err == noErr);
-	}
-		
-	// See if it's an installer
-	{
-		CFSSpec_AC installer;
-		OSErr err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Installation:CDIS:", &installer);
-		// check for Darwin as well
-		if (err != noErr) err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Installation:packages:Essentials.pkg", &installer);
-		if (err != noErr) err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Installation:RPMS:", &installer);
-		if (err != noErr) err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Installation:AppleBinary:", &installer);
-		fHasInstaller = (err == noErr);
-	}
-	
-	// See what version of Mac OS X is installed, if any
-	{
-		CFSSpec_AC versionSpec;
-		OSErr err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Library:CoreServices:SystemVersion.plist", &versionSpec);
-		if (err == fnfErr) err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Library:Extensions:System.kext:Info.plist", &versionSpec);
-		if (err == fnfErr) err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Library:Extensions:System.kext:Contents:Info.plist", &versionSpec);
-		if (err == noErr) {
-			CFile_AC versionFile;
-			versionFile.Specify (versionSpec);
-			err = versionFile.OpenDataFork ();
-			long dataSize;
-			err = versionFile.GetDataLength (dataSize);
-			if (dataSize && (dataSize < 4096) && (err == noErr)) {
-				Ptr versionData = NewPtr (dataSize + 1);
-				err = versionFile.ReadData (versionData, dataSize);
-				if (err == noErr) {
-					versionData[dataSize] = 0;
-					char *key = strstr (versionData, "<key>ProductUserVisibleVersion</key>");
-					if (!key) key = strstr (versionData, "<key>ProductVersion</key>");
-					if (!key) key = strstr (versionData, "<key>CFBundleVersion</key>");
-					if (key) {
-						char *start = strstr (key, "<string>");
-						if (start) {
-							start += strlen ("<string>");
-							char *end = strstr (key, "</string>");
-							if (end) {
-								char tmp = *end;
-								*end = 0;
-								fMacOSXVersion.CopyFrom (start);
-								*end = tmp;
-							}
-						}
-					}
-					key = strstr (versionData, "<key>ProductBuildVersion</key>");
-					if (!key) {
-						key = strstr (versionData, "<key>CFBundleVersion</key>");
-						if (key) fIsDarwin = true;
-					}
-					if (key) {
-						char *start = strstr (key, "<string>");
-						if (start) {
-							start += strlen ("<string>");
-							char *end = strstr (key, "</string>");
-							if (end) {
-								*end = 0;
-								fMacOSXMajorVersion = strtoul (start, 0, 0);
-							}
+	CFSSpec_AC versionSpec;
+	OSErr err = FSMakeFSSpec (fInfo.driveNumber, fsRtDirID, "\p:System:Library:CoreServices:SystemVersion.plist", &versionSpec);
+	if (err == fnfErr) err = FSMakeFSSpec (fInfo.driveNumber, fsRtDirID, "\p:System:Library:Extensions:System.kext:Info.plist", &versionSpec);
+	if (err == fnfErr) err = FSMakeFSSpec (fInfo.driveNumber, fsRtDirID, "\p:System:Library:Extensions:System.kext:Contents:Info.plist", &versionSpec);
+	if (err == noErr) {
+		CFile_AC versionFile;
+		versionFile.Specify (versionSpec);
+		err = versionFile.OpenDataFork ();
+		long dataSize;
+		err = versionFile.GetDataLength (dataSize);
+		if (dataSize && (dataSize < 4096) && (err == noErr)) {
+			Ptr versionData = NewPtr (dataSize + 1);
+			err = versionFile.ReadData (versionData, dataSize);
+			if (err == noErr) {
+				versionData[dataSize] = 0;
+				char *key = strstr (versionData, "<key>ProductUserVisibleVersion</key>");
+				if (!key) key = strstr (versionData, "<key>ProductVersion</key>");
+				if (!key) key = strstr (versionData, "<key>CFBundleVersion</key>");
+				if (key) {
+					char *start = strstr (key, "<string>");
+					if (start) {
+						start += strlen ("<string>");
+						char *end = strstr (key, "</string>");
+						if (end) {
+							char tmp = *end;
+							*end = 0;
+							fMacOSXVersion.CopyFrom (start);
+							*end = tmp;
 						}
 					}
 				}
-				DisposePtr (versionData);	
+				key = strstr (versionData, "<key>ProductBuildVersion</key>");
+				if (!key) {
+					key = strstr (versionData, "<key>CFBundleVersion</key>");
+					if (key) fIsDarwin = true;
+				}
+				if (key) {
+					char *start = strstr (key, "<string>");
+					if (start) {
+						start += strlen ("<string>");
+						char *end = strstr (key, "</string>");
+						if (end) {
+							*end = 0;
+							fMacOSXMajorVersion = strtoul (start, 0, 0);
+						}
+					}
+				}
 			}
-			versionFile.CloseDataFork ();
+			DisposePtr (versionData);	
 		}
+		versionFile.CloseDataFork ();
 	}
-			
-	// See if it's writeable
-	{
-		fIsWriteable = !(info->flags & (kFSVolFlagHardwareLockedMask | kFSVolFlagSoftwareLockedMask));
-	}
-	
-	// See if it's HFS Plus
-	{
-		fIsHFSPlus = (info->signature == kHFSPlusSigWord);
-	}
-	
-	// See if it has a Finder (i.e. whether it might be a Darwin disk)
-	{
-		CFSSpec_AC finderSpec;
-		OSErr err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Library:CoreServices:Finder.app:", &finderSpec);
-		fHasFinder = (err == noErr);
-	}
-	
-	// Do some logging
-	#if qLogging
-	{
-		gLogFile << "Volume: " << (CChar255_AC) fVolumeName << " Creation Date: " << fCreationDate << endl_AC;
-	}
-	#endif
-	
-	// Now get the Device and Partition
-	// We do this a little differently in Mac OS X
-	
+}
+
+void
+MountedVolume::checkDeviceAndPartition ()
+{
 #ifdef __MACH__
 	io_object_t regEntry = getRegEntry ();
 	if (regEntry) {
 		fBootableDevice = XPFBootableDevice::DeviceForRegEntry (regEntry);
-		if (fBootableDevice) fPartition = fBootableDevice->partitionWithInfoAndName (info, name);
+		if (fBootableDevice) fPartition = fBootableDevice->partitionWithInfoAndName (&fInfo, &fHFSName);
 		IOObjectRelease (regEntry);
 	}
 #else
-
-	fBootableDevice = XPFBootableDevice::DeviceWithInfo (info);
+	fBootableDevice = XPFBootableDevice::DeviceWithInfo (&fInfo);
 	
-	if (!fBootableDevice && MoreDriveSupportsDriverGestalt (info->driveNumber)) {
+	if (!fBootableDevice && MoreDriveSupportsDriverGestalt (fInfo.driveNumber)) {
 		DriverGestaltParam pbGestalt;
 		Erase_AC (&pbGestalt);
 
-		pbGestalt.ioVRefNum = info->driveNumber;
-		pbGestalt.ioCRefNum	= info->driverRefNum;
+		pbGestalt.ioVRefNum = fInfo.driveNumber;
+		pbGestalt.ioCRefNum	= fInfo.driverRefNum;
 		pbGestalt.csCode = kDriverGestaltCode;
 		pbGestalt.driverGestaltSelector = kdgNameRegistryEntry;
 
@@ -1073,21 +983,21 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 		}		
 	}
 
-	if (!fBootableDevice) fBootableDevice = XPFBootableDevice::DeviceWithInfoAndName (info, name);
+	if (!fBootableDevice) fBootableDevice = XPFBootableDevice::DeviceWithInfoAndName (&fInfo, &fHFSName);
 
 	if (fBootableDevice) {
 		if (fBootableDevice->isFirewireDevice ()) {
 			// Try MoreGetPartitionInfo
 			partInfoRec partInfo;
-			OSErr err = MoreGetPartitionInfo (info->driveNumber, &partInfo);
+			OSErr err = MoreGetPartitionInfo (fInfo.driveNumber, &partInfo);
 
 			if (err != noErr) {
 				// Try DriverGestalt
 				DriverGestaltParam pbGestalt;
 				Erase_AC (&pbGestalt);
 
-				pbGestalt.ioVRefNum = info->driveNumber;
-				pbGestalt.ioCRefNum	= info->driverRefNum;
+				pbGestalt.ioVRefNum = fInfo.driveNumber;
+				pbGestalt.ioCRefNum	= fInfo.driverRefNum;
 				pbGestalt.csCode = kDriverGestaltCode;
 				pbGestalt.driverGestaltSelector = kdgOpenFirmwareBootSupport;
 
@@ -1107,7 +1017,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 			
 			if (err == noErr) fPartitionNumber = partInfo.partitionNumber;
 		} else {
-			fPartition = fBootableDevice->partitionWithInfoAndName (info, name);
+			fPartition = fBootableDevice->partitionWithInfoAndName (&fInfo, &fHFSName);
 		}
 	}
 #endif
@@ -1117,17 +1027,100 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 		fPartitionNumber = fPartition->getPartitionNumber ();
 		fPartition->AddDependent (this);
 	}
+}
 
-	if (getRequiresBootHelper ()) fHelperDisk = getDefaultHelperDisk ();
+MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *rootDirectory)
+{
+	fPartition = NULL;
+	fBootableDevice = NULL;
+	fHelperDisk = NULL;
+	fCreationDate = 0;
+	fMacOSXVersion = "";
+	fMacOSXMajorVersion = 0;
+	fTurnedOffIgnorePermissions = false;
+	fSymlinkStatus = kSymlinkStatusOK;
+	fIsAttachedToPCICard = false;
+	fBootXVersion = 0;
+	fPartitionNumber = 0;
+	fOpenFirmwareName[0] = 0;
+	fShortOpenFirmwareName[0] = 0;
+	fIsDarwin = false;
+	fFullyInitialized = false;
 	
-	checkSymlinks ();
-	checkBlessedFolder ();
-	checkBootXVersion ();
-	checkOpenFirmwareName ();
+	// Wrap entire method in try block, to catch exceptions
+	// The idea is to show all devices, even if there is an error initializing them
+	try {
+	
+		#ifdef BUILDING_XPF
+			gApplication->AddDependent (this); // for listening for volume deletions
+		#endif
 		
-	#if qLogging
-		gLogFile << "OpenFirmwareName: " << fShortOpenFirmwareName << endl_AC;
-	#endif	
+		// Copy the info
+		#ifdef __MACH__
+			// It looks like I'm not getting a useable drive number from the info
+			// So I'll try getting it from the rootDirectory instead
+			FSSpec rootDirSpec;
+			FSGetCatalogInfo (rootDirectory, kFSCatInfoNone, NULL, NULL, &rootDirSpec, NULL);
+			info->driveNumber = rootDirSpec.vRefNum;
+		#endif
+ 	
+		BlockMoveData (info, &fInfo, sizeof (FSVolumeInfo));
+		BlockMoveData (name, &fHFSName, sizeof (HFSUniStr255));	
+		setVolumeName (&fHFSName);
+		fCreationDate = info->createDate.lowSeconds;
+		fAllocationBlockSize = info->blockSize;
+		BlockMoveData (rootDirectory, &fRootDirectory, sizeof (fRootDirectory));
+			
+		// See if it's got a mach_kernel
+		CFSSpec_AC kernel;
+		OSErr err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:mach_kernel", &kernel);
+		fHasMachKernel = (err == noErr);
+			
+		// See if it's an installer
+		CFSSpec_AC installer;
+		err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Installation:CDIS:", &installer);
+		// check for Darwin as well
+		if (err != noErr) err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Installation:packages:Essentials.pkg", &installer);
+		if (err != noErr) err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Installation:RPMS:", &installer);
+		if (err != noErr) err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Installation:AppleBinary:", &installer);
+		fHasInstaller = (err == noErr);
+				
+		// See if it's writeable
+		fIsWriteable = !(info->flags & (kFSVolFlagHardwareLockedMask | kFSVolFlagSoftwareLockedMask));
+		
+		// See if it's HFS Plus
+		fIsHFSPlus = (info->signature == kHFSPlusSigWord);
+		
+		// See if it has a Finder (i.e. whether it might be a Darwin disk)
+		CFSSpec_AC finderSpec;
+		err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Library:CoreServices:Finder.app:", &finderSpec);
+		fHasFinder = (err == noErr);
+		
+		gLogFile << "MountedVolume::MountedVolume fVolumeName: " << (CChar255_AC) fVolumeName << " Creation Date: " << fCreationDate << endl_AC;
+		
+		checkDeviceAndPartition ();
+		checkSymlinks ();
+		checkBlessedFolder ();
+		checkBootXVersion ();
+		checkMacOSXVersion ();
+		checkOpenFirmwareName ();
+			
+		if (getRequiresBootHelper ()) fHelperDisk = getDefaultHelperDisk ();
+		
+		gLogFile << "MountedVolume::MountedVolume OpenFirmwareName: " << fShortOpenFirmwareName << endl_AC;
+
+		fFullyInitialized = true;
+	}
+
+	catch (CException_AC &ex) {
+		CString_AC errString;
+		LookupErrString (ex.GetError (), errReasonID, errString);
+		gLogFile << "MountedVolume::MountedVolume error: " << ex.GetError() << ": " << (CChar255_AC) errString << endl_AC;
+	}
+
+	catch (...) {
+		gLogFile << "MountedVolume::MountedVolume error: unknown" << endl_AC;
+	}
 }
 
 void
@@ -1188,6 +1181,7 @@ MountedVolume::getWillRunOnCurrentCPU ()
 unsigned
 MountedVolume::getHelperStatus ()
 {
+	if (!fFullyInitialized) return kNotInitialized;
 	if (!getBootableDevice ()) return kNotBootable;
 	if (!strcmp (getOpenFirmwareName (false), "")) return kNotBootable;
 	if (!getIsWriteable ()) return kNotWriteable;
@@ -1201,6 +1195,7 @@ MountedVolume::getHelperStatus ()
 unsigned
 MountedVolume::getBootStatus ()
 {
+	if (!fFullyInitialized) return kNotInitialized;
 	if (!getBootableDevice ()) return kNotBootable;
 	if (!strcmp (getOpenFirmwareName (false), "")) return kNotBootable;
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
@@ -1246,6 +1241,7 @@ MountedVolume::getBootWarning (bool forInstall)
 unsigned
 MountedVolume::getInstallTargetStatus ()
 {
+	if (!fFullyInitialized) return kNotInitialized;
 	if (!getBootableDevice ()) return kNotBootable;
 	if (!strcmp (getOpenFirmwareName (false), "")) return kNotBootable;
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
@@ -1258,6 +1254,7 @@ MountedVolume::getInstallTargetStatus ()
 unsigned
 MountedVolume::getInstallerStatus ()
 {
+	if (!fFullyInitialized) return kNotInitialized;
 	if (!getHasInstaller ()) return kNotInstaller;
 
 	if (!getBootableDevice ()) return kNotBootable;

@@ -130,5 +130,7 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			"XPostFacto";
 			"Save Current Log";
 			"XPostFacto Log";
+			
+			"Check log for error";
 	}
 };

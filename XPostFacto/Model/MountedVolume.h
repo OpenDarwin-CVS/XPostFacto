@@ -162,6 +162,8 @@ class MountedVolume : public MDependable_AC
 		OSErr writeBootBlocksIfNecessary (bool forceInstall = false);
 		
 		void checkOpenFirmwareName ();
+		void checkMacOSXVersion ();
+		void checkDeviceAndPartition ();
 		
 	private:	
 		
@@ -189,6 +191,7 @@ class MountedVolume : public MDependable_AC
 		bool fTurnedOffIgnorePermissions;
 		bool fIsAttachedToPCICard;
 		bool fIsDarwin;
+		bool fFullyInitialized;
 
 		unsigned fSymlinkStatus;
 		
