@@ -55,6 +55,8 @@ XPFSetUID::~XPFSetUID () {
 #endif
 }
 
+#ifdef __MACH__
+
 XPFAuthorization XPFAuthorization::gXPFAuthorization;
 
 XPFAuthorization::XPFAuthorization ()
@@ -104,3 +106,5 @@ XPFAuthorization::ExecuteWithPrivileges (const char *pathToTool,
 
 	return AuthorizationExecuteWithPrivileges (gXPFAuthorization.fAuthorization, pathToTool, 0, arguments, communicationsPipe);
 }
+
+#endif
