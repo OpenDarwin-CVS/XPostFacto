@@ -156,7 +156,7 @@ long LoadDrivers(char *dirSpec)
 	// Added by ryan.rempel@utoronto.ca
 	// Loads drivers from /Library/Extensions as well, when doing an install
 	// The purpose of this is to load extra drivers when booting from a CD
-	if (strstr (dirSpec, "\\private\\tmp\\")) {
+	if (strstr (dirSpec, "\\private\\tmp\\") || strstr (dirSpec, ".XPostFacto")) {
 		strcpy (gExtensionsSpec, dirSpec);
 		strcat (gExtensionsSpec, "Library\\");
 		FileLoadDrivers (gExtensionsSpec, 0);
