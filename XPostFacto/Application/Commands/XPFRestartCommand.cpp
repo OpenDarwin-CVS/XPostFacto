@@ -184,7 +184,7 @@ XPFRestartCommand::DoItThreaded ()
 			// It doesn't exist on the root. So make sure it doesn't exist on the helper.
 			FSRef helperExtensionsCacheRef;
 			OSErr helperErr = getExtensionsCacheFSRef (&helperDir, &helperExtensionsCacheRef);
-			if (helperErr == noErr) ThrowIfOSErr_AC (FSDeleteObject (&helperDir));
+			if (helperErr == noErr) ThrowIfOSErr_AC (FSDeleteObject (&helperExtensionsCacheRef));
 		} else {
 			ThrowIfOSErr_AC (rootErr);
 			setCopyingFile ("\pExtensions.mkext");
