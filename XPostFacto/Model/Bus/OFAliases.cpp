@@ -430,7 +430,7 @@ OFAliases::aliasFor (const REG_ENTRY_TYPE regEntry, char *outAlias, char *shortA
 #endif
 			
 	UInt32 propSize;
-	Ptr prop;
+	char prop[256];
 
 	unsigned regValue;
 	char nameComponent[256];
@@ -441,6 +441,7 @@ OFAliases::aliasFor (const REG_ENTRY_TYPE regEntry, char *outAlias, char *shortA
  	
 	Boolean finished = false;
 	while (!finished) {
+		nameComponent[0] = 0;
  		ThrowIfOSErr_AC (RegistryCStrEntryToName (&iterEntry, &parentEntry, nameComponent, &finished));
 		if (finished) break;
 		workString[0] = 0;
@@ -473,14 +474,12 @@ OFAliases::aliasFor (const REG_ENTRY_TYPE regEntry, char *outAlias, char *shortA
 			propSize = 0;
 			if (CFGetTypeID (cfValue) == CFDataGetTypeID ()) {
 				propSize = CFDataGetLength ((CFDataRef) cfValue);
-				prop = NewPtr (propSize + 1);
-				CFDataGetBytes ((CFDataRef) cfValue, CFRangeMake (0, propSize), (UInt8 *) prop);
+				CFDataGetBytes ((CFDataRef) cfValue, CFRangeMake (0, propSize), (UInt8*) prop);
 			}
 			CFRelease (cfValue); 
 #else
 		err = RegistryPropertyGetSize (&parentEntry, "device_type", &propSize);
 		if (err == noErr) {
-			prop = NewPtr (propSize + 1);
 			ThrowIfOSErr_AC (RegistryPropertyGet (&parentEntry, "device_type", prop, &propSize));
 #endif
 
@@ -601,7 +600,7 @@ OFAliases::aliasFor (const REG_ENTRY_TYPE regEntry, char *outAlias, char *shortA
 		ThrowIfOSErr_AC (RegistryEntryIDCopy (&parentEntry, &iterEntry));
 		RegistryEntryIDDispose (&parentEntry);
 #endif
-	
+
 		temp = NewPtr (strlen (workString) + 1);
 		strcpy (temp, workString);
 		wholeName.InsertFirst (temp);

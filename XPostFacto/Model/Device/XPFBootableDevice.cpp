@@ -403,6 +403,7 @@ XPFBootableDevice*
 XPFBootableDevice::DeviceForRegEntry (io_registry_entry_t startpoint)
 {
 	XPFBootableDevice *retVal = NULL;
+	if (!IORegistryEntryInPlane (startpoint, kIOServicePlane)) return retVal;
 
 	// First we find the next IOMedia device above
 	io_iterator_t iterator;
