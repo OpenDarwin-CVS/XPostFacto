@@ -33,7 +33,6 @@
 #include <IOKit/IOTypes.h>
 #include <libkern/c++/OSContainers.h>
 
-
 extern const OSSymbol * gIONameKey;
 extern const OSSymbol * gIOLocationKey;
 
@@ -56,7 +55,7 @@ enum {
 
 class IORegistryEntry : public OSObject
 {
-    friend IORegistryIterator;
+    friend class IORegistryIterator;
 
     OSDeclareDefaultStructors(IORegistryEntry)
 
