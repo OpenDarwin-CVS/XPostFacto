@@ -41,19 +41,12 @@
 	
 */
 
-#include <MacTypes.h>
-#include <MacErrors.h>
-#include <MacMemory.h>
-#include <Files.h>
-#include <Script.h>
-#include <Math64.h>
-
 #include "FSRefCopying.h"
 #include "MoreFiles.h"
 #include "MoreFilesExtras.h"
 #include "MoreDesktopMgr.h"
-#include "FSRefCopying.h"
 
+#include <Math64.h>
 #include <Threads.h>
 
 /*****************************************************************************/

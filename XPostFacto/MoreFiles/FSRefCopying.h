@@ -45,11 +45,8 @@
 	
 */
 
-#ifndef __FSREFCOPYING__
-#define __FSREFCOPYING__
-
-#include <MacTypes.h>
-#include <Files.h>
+#ifndef __FSREFCOPYING_H__
+#define __FSREFCOPYING_H__
 
 #include "DirectoryCopy.h"
 
