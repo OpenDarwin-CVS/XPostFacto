@@ -56,7 +56,7 @@ private:
   
 public:
   virtual bool start(IOService *provider);
-
+  virtual IOService* createNub (IORegistryEntry *from);
   virtual bool passiveMatch (OSDictionary * matching, bool changesOK = false);
 };
 
@@ -87,5 +87,16 @@ public:
   virtual void causeVector(long vectorNumber, IOInterruptVector *vector);
 };
 
+
+class AppleGrandCentralDevice : public AppleMacIODevice
+{
+
+	OSDeclareDefaultStructors (AppleGrandCentralDevice);
+
+public:
+
+	virtual IOReturn getResources (void);
+    
+};
 
 #endif /* ! _APPLE_GRANDCENTRAL_H */

@@ -75,7 +75,7 @@ static void AllocateEventLog( UInt32 size )
 		return;
 
 	g.evLogFlag = 0;            /* assume insufficient memory   */
-	g.evLogBuf = (UInt8*)kalloc( size );
+	g.evLogBuf = (UInt8*) IOMalloc (size);
 	if ( !g.evLogBuf )
 	{
 		kprintf( "AllocateEventLog - CurioSCSIController evLog allocation failed " );
@@ -564,7 +564,7 @@ IOReturn CurioSCSIController::allocHdwAndChanMem()
 
 
     fCCLSize  = page_size;
-    fCCL      = (UInt8*)kalloc( fCCLSize );
+    fCCL      = (UInt8*) IOMallocContiguous (fCCLSize, page_size, &fCCLPhysAddr);
     if ( !fCCL )
     {   PAUSE( 0, fCCLSize, 'CCA-', "allocHdwAndChanMem - can't allocate channel command area.\n" );
         ioReturn = kIOReturnNoMemory;
@@ -572,11 +572,6 @@ IOReturn CurioSCSIController::allocHdwAndChanMem()
 
     if ( ioReturn == kIOReturnSuccess )
     {
-            /* Get the physical address corresponding the DBDMA channel area:   */
-
-		fCCLPhysAddr = pmap_extract(	kernel_pmap,
-										(vm_offset_t)fCCL );
-
 		g.cclPhysAddr   = (UInt32)fCCLPhysAddr;  // for debugging ease
 		g.cclLogAddr    = (UInt32)fCCL;
         if ( ioReturn != kIOReturnSuccess )
@@ -2241,7 +2236,7 @@ void CurioSCSIController::releaseHardwareMemoryMaps()
 
 	if ( fCCL )
 	{
-	    IOFree( fCCL, fCCLSize );
+	    IOFreeContiguous (fCCL, fCCLSize);
 	}
 
 	return;

@@ -124,6 +124,19 @@ AppleGrandCentral::passiveMatch (OSDictionary *matching, bool changesOK)
 	return super::passiveMatch (matching, changesOK);
 }
 
+IOService* 
+AppleGrandCentral::createNub (IORegistryEntry *from)
+{
+    IOService *nub = new AppleGrandCentralDevice;
+
+    if (nub && !nub->init (from, gIODTPlane)) {
+		nub->release ();
+		nub = 0;
+    }
+
+    return (nub);
+}
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #undef  super
@@ -295,3 +308,18 @@ void AppleGrandCentralInterruptController::causeVector(long vectorNumber, IOInte
   pendingEvents |= 1 << vectorNumber;
   parentNub->causeInterrupt(0);
 }
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+#undef super
+#define super AppleMacIODevice
+
+OSDefineMetaClassAndStructors(AppleGrandCentralDevice, AppleMacIODevice);
+
+IOReturn 
+AppleGrandCentralDevice::getResources (void)
+{
+    return (((AppleGrandCentral *) getProvider())->getNubResources (this));
+}
+
+
