@@ -1299,7 +1299,6 @@
 			);
 			buildSettings = {
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
-				OPTIMIZATION_CFLAGS = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -1374,7 +1373,7 @@
 	<key>OSBundleLibraries</key>
 	<dict>
 		<key>com.apple.kernel.iokit</key>
-		<string>6.9.9</string>
+		<string>1.0b1</string>
 	</dict>
 	<key>OSBundleRequired</key>
 	<string>Root</string>
