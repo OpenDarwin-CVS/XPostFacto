@@ -203,14 +203,27 @@ setupRestartInMacOS9 ()
 	IOMasterPort (MACH_PORT_NULL, &iokitPort);
 	io_registry_entry_t options = IORegistryEntryFromPath (iokitPort, "IODeviceTree:/options");
 	if (options) {
-		CFTypeRef keys[3] = {CFSTR ("boot-device"), CFSTR ("boot-command"), CFSTR ("boot-file")};
-		CFTypeRef values[3] = {CFSTR ("/AAPL,ROM"), CFSTR ("boot"), CFSTR ("")};
+		CFTypeRef keys[3] = {
+			CFStringCreateWithCString (kCFAllocatorDefault, "boot-device", kCFStringEncodingASCII), 
+			CFStringCreateWithCString (kCFAllocatorDefault, "boot-command", kCFStringEncodingASCII), 
+			CFStringCreateWithCString (kCFAllocatorDefault, "boot-file", kCFStringEncodingASCII)
+		};
+		CFTypeRef values[3] = {
+			CFStringCreateWithCString (kCFAllocatorDefault, "/AAPL,ROM", kCFStringEncodingASCII), 
+			CFStringCreateWithCString (kCFAllocatorDefault, "boot", kCFStringEncodingASCII), 
+			CFStringCreateWithCString (kCFAllocatorDefault, "", kCFStringEncodingASCII)
+		};
 		CFDictionaryRef dict = CFDictionaryCreate (kCFAllocatorDefault, keys, values, 3, 
 				&kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 		if (dict) {
 			IORegistryEntrySetCFProperties (options, dict);
 			CFRelease (dict);
 			noSyncRequired = true;
+		}
+		int x;
+		for (x = 0; x < 3; x++) {
+			CFRelease (keys[x]);
+			CFRelease (values[x]);
 		}
 		IOObjectRelease (options);
 	}
@@ -234,7 +247,15 @@ turnOffSleepIfUnsupported ()
 {
 	mach_port_t iokitPort;
 	IOMasterPort (MACH_PORT_NULL, &iokitPort);
-	io_service_t platformDevice = IOServiceGetMatchingService (iokitPort, IOServiceMatching ("IOPlatformExpertDevice"));
+	io_service_t platformDevice = NULL; 
+	io_iterator_t iter = NULL;
+	
+	IOServiceGetMatchingServices (iokitPort, IOServiceMatching ("IOPlatformExpertDevice"), &iter);
+	if (iter) {
+		platformDevice = IOIteratorNext (iter);
+		IOObjectRelease (iter);
+	}
+
 	if (platformDevice) {
 		io_iterator_t iterator;
 		IORegistryEntryGetChildIterator (platformDevice, kIOServicePlane, &iterator);
