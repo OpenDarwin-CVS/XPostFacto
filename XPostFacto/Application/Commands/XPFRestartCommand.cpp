@@ -65,9 +65,19 @@ XPFRestartCommand::tellFinderToRestart ()
 {
 	AEDesc finderAddr;
 	AppleEvent myRestart, nilReply;
+	AEEventClass eventClass;
+
+#ifdef __MACH__
+	eventClass = kCoreEventClass;
+	ProcessSerialNumber psn = {0, kSystemProcess};
+	ThrowIfOSErr_AC (AECreateDesc (typeProcessSerialNumber, &psn, sizeof (psn), &finderAddr));
+#else
+	eventClass = kAEFinderEvents;
 	OSType fndrSig = 'MACS';
     ThrowIfOSErr_AC (AECreateDesc (typeApplSignature, &fndrSig, sizeof(fndrSig), &finderAddr));
-   	ThrowIfOSErr_AC (AECreateAppleEvent (kAEFinderEvents, kAERestart, &finderAddr, kAutoGenerateReturnID,
+#endif
+
+   	ThrowIfOSErr_AC (AECreateAppleEvent (eventClass, kAERestart, &finderAddr, kAutoGenerateReturnID,
                               kAnyTransactionID, &myRestart));
     ThrowIfOSErr_AC (AESend (&myRestart, &nilReply, kAENoReply + kAECanSwitchLayer + kAEAlwaysInteract,
                   kAENormalPriority, kAEDefaultTimeout, NULL, NULL));
