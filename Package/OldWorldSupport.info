@@ -1,0 +1,16 @@
+Title Unsupported Kernel Extensions
+Version April 7, 2001
+Description Installs kernel extensions to permit Mac OS X to work on some unsupported machines.
+DefaultLocation /
+Diskname (null)
+DeleteWarning 
+NeedsAuthorization YES
+DisableStop NO
+UseUserMask NO
+Application NO
+Relocatable NO
+Required NO
+InstallOnly NO
+RequiresReboot NO
+InstallFat NO
+OverwritePermissions NO
