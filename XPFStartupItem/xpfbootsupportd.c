@@ -166,28 +166,33 @@ initialize_everything ()
 {
 	int err;
 	char rootDevicePath[256], bootDevicePath[256];
+	rootDevicePath[0] = 0;
+	bootDevicePath[0] = 0;
 	
-	err = getPaths (rootDevicePath, bootDevicePath); if (err) exitWithError (err, 1);
-	
-	noSyncRequired = !strcmp (rootDevicePath, bootDevicePath);
-	
-	syslog (LOG_INFO, "rootDevicePath = %s", rootDevicePath);
-	syslog (LOG_INFO, "bootDevicePath = %s", bootDevicePath);
-	
-	// Fill in the paths to each of the files/folders we want to track
-	
-	asprintf (&rootDeviceFiles.kernel.path, "%s/mach_kernel", rootDevicePath);
-	asprintf (&rootDeviceFiles.extensions.path, "%s/System/Library/Extensions", rootDevicePath);
-	asprintf (&rootDeviceFiles.extensionsCache.path, "%s/System/Library/Extensions.mkext", rootDevicePath);
-	
-	asprintf (&bootDeviceFiles.kernel.path, "%s/mach_kernel", bootDevicePath);
-	asprintf (&bootDeviceFiles.extensions.path, "%s/System/Library/Extensions", bootDevicePath);
-	asprintf (&bootDeviceFiles.extensionsCache.path, "%s/System/Library/Extensions.mkext", bootDevicePath);
-	
-	// Fill in the "helper" stat stuff. When someone writes to the helper, it's their 
-	// responsiblity to restart us.
-	
-	statDeviceFiles (&bootDeviceFiles);
+	err = getPaths (rootDevicePath, bootDevicePath); 
+	if (err) {
+		noSyncRequired = true;
+		syslog (LOG_INFO, "Could not get device paths");
+	} else {
+		noSyncRequired = !strcmp (rootDevicePath, bootDevicePath);
+		syslog (LOG_INFO, "rootDevicePath = %s", rootDevicePath);
+		syslog (LOG_INFO, "bootDevicePath = %s", bootDevicePath);
+	}
+			
+	if (!noSyncRequired) {	
+		// Fill in the paths to each of the files/folders we want to track
+		asprintf (&rootDeviceFiles.kernel.path, "%s/mach_kernel", rootDevicePath);
+		asprintf (&rootDeviceFiles.extensions.path, "%s/System/Library/Extensions", rootDevicePath);
+		asprintf (&rootDeviceFiles.extensionsCache.path, "%s/System/Library/Extensions.mkext", rootDevicePath);
+		
+		asprintf (&bootDeviceFiles.kernel.path, "%s/mach_kernel", bootDevicePath);
+		asprintf (&bootDeviceFiles.extensions.path, "%s/System/Library/Extensions", bootDevicePath);
+		asprintf (&bootDeviceFiles.extensionsCache.path, "%s/System/Library/Extensions.mkext", bootDevicePath);
+		
+		// Fill in the "helper" stat stuff. When someone writes to the helper, it's their 
+		// responsiblity to restart us.		
+		statDeviceFiles (&bootDeviceFiles);
+	}
 	
 	reinitializeNow = 0;	
 }
