@@ -42,6 +42,8 @@ class OpenG3AIODisplay : public IODisplayParameterHandler {
 
 private:
 	OSDictionary *fDisplayParams;
+	IOService *fHeathrow;
+	const OSSymbol *fHeathrowSafeWriteRegUInt8;
 
 public:
 	virtual IOService* probe (IOService *provider, SInt32 *score);

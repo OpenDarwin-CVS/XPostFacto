@@ -23,68 +23,27 @@
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#define 	heathrowID		(0xf3000034)
-#define 	heathrowTermEna		(1 << 3)
-#define 	heathrowTermDir		(1 << 0)
+#define heathrowID					(0x34)
+#define heathrowTermEna				(1 << 27)   // was 1 << 3, but must reverse bytes
+#define heathrowTermDir				(1 << 24)   // was 1 << 0, but must reverse bytes
 
-#define 	heathrowFeatureControl	(0xf3000038)
-#define 	heathrowMBRES		(1 << 24)
+#define heathrowFeatureControl		(0x38)
+#define heathrowMBRES				(1 << 0)	// was 1 << 24, but must reverse bytes
 
-#define 	heathrowBrightnessControl (0xf3000032)
-#define		defaultBrightness	144
-#define 	heathrowContrastControl (0xf3000033)
-#define		defaultContrast		183
+#define heathrowBrightnessControl   (0x32)
+#define	defaultBrightness			144
+#define heathrowContrastControl		(0x33)
+#define	defaultContrast				183
 
-#define 	gossamerSystemReg	(0xff000004)
-#define		gossamerAllInOne	(1 << 20)
+#define gossamerSystemReg1			(0xff000004)
+#define	gossamerAllInOne			(1 << 4)
 
-extern "C" {
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void GossamerATISetMBRES (UInt32 state)
-{
-	UInt32	value;
-
-	value = ml_phys_read (heathrowFeatureControl);
-
-	if (state == 0) value &= ~heathrowMBRES;
-		else if (state == 1) value |= heathrowMBRES;
-
-	ml_phys_write (heathrowFeatureControl, value);
-	eieio();
-}
-
-void GossamerATISetMonitorTermination (Boolean enable)
-{
-	UInt32	value;
-
-	value = ml_phys_read (heathrowID);
-
-	value |= heathrowTermEna;
-	if (enable) value |= heathrowTermDir;
-		else value &= ~heathrowTermDir;
-
-	ml_phys_write (heathrowID, value);
-	eieio();
-}
-
-Boolean GossamerATIIsAllInOne (void)
-{
-	Boolean	rtn;
-	static bool	didBrightness;
-
-	rtn = (0 == (ml_phys_read (gossamerSystemReg) & 0xFFFF0000 & gossamerAllInOne));
-	if (rtn && !didBrightness) {
-		ml_phys_write_byte (heathrowBrightnessControl, defaultBrightness);
-		eieio();
-		ml_phys_write_byte (heathrowContrastControl, defaultContrast);
-		eieio();
-		didBrightness = true;
-	}
-	return (rtn);
-}
-
-} // extern "C"
-
+IOService* GossamerNDRVSupport::fHeathrow;	
+const OSSymbol* GossamerNDRVSupport::fHeathrowSafeWriteRegUInt8 = OSSymbol::withCString ("heathrow_safeWriteRegUInt8");
+const OSSymbol* GossamerNDRVSupport::fHeathrowSafeWriteRegUInt32 = OSSymbol::withCString ("heathrow_safeWriteRegUInt32");
+	
 #define super IOService
 
 OSDefineMetaClassAndStructors (GossamerNDRVSupport, IOService);
@@ -94,16 +53,24 @@ GossamerNDRVSupport* GossamerNDRVSupport::fInstance = NULL;
 bool
 GossamerNDRVSupport::start (IOService *provider)
 {
+	if (fInstance) return false;
+	fInstance = this;
+
+	if (!super::start (provider)) return false;
+	
 	unsigned x, y;
 	
 	fATISetMBRES.entry = NULL;
 	fATISetMonitorTermination.entry = NULL;
 	fATIIsAllInOne.entry = NULL;
-	
-	if (fInstance) return false;
-	if (!super::start (provider)) return false;
-	fInstance = this;
 
+	mach_timespec_t timeout = {5, 0};
+	fHeathrow = waitForService (serviceMatching ("Heathrow"), &timeout);
+	if (!fHeathrow) {
+		IOLog ("GossamerNDRVSupport::start could not find Heathrow\n");
+		return false;
+	}
+	
 	for (x = 0; x < IONumNDRVLibraries; x++) {
 		if (!strcmp (IONDRVLibraries[x].name, "ATIUtils")) break;
 	}
@@ -119,15 +86,15 @@ GossamerNDRVSupport::start (IOService *provider)
 		if (!strcmp (functionName, "ATISetMBRES")) {
 			fATISetMBRES.entry = function;
 			fATISetMBRES.address = function->address;
-			function->address = (void *) GossamerATISetMBRES;
+			function->address = (void *) GossamerNDRVSupport::ATISetMBRES;
 		} else if (!strcmp (functionName, "ATISetMonitorTermination")) {
 			fATISetMonitorTermination.entry = function;
 			fATISetMonitorTermination.address = function->address;
-			function->address = (void *) GossamerATISetMonitorTermination;		
+			function->address = (void *) GossamerNDRVSupport::ATISetMonitorTermination;		
 		} else if (!strcmp (functionName, "ATIIsAllInOne")) {
 			fATIIsAllInOne.entry = function;
 			fATIIsAllInOne.address = function->address;
-			function->address = (void *) GossamerATIIsAllInOne;		
+			function->address = (void *) GossamerNDRVSupport::ATIIsAllInOne;		
 		}
 	}
 	
@@ -144,3 +111,32 @@ GossamerNDRVSupport::stop (IOService *provider)
 	super::stop (provider);
 }
 
+void 
+GossamerNDRVSupport::ATISetMBRES (UInt32 state)
+{
+	fHeathrow->callPlatformFunction (fHeathrowSafeWriteRegUInt32, false, (void *) heathrowFeatureControl, 
+			(void *) heathrowMBRES, (void *) (state ? heathrowMBRES : 0), (void *) 0);
+}
+
+void 
+GossamerNDRVSupport::ATISetMonitorTermination (Boolean enable)
+{
+	fHeathrow->callPlatformFunction (fHeathrowSafeWriteRegUInt32, false, (void *) heathrowID, 
+			(void *) (heathrowTermEna | heathrowTermDir), 
+			(void *) (enable ? heathrowTermEna | heathrowTermDir : heathrowTermEna), (void *) 0);
+}
+
+Boolean 
+GossamerNDRVSupport::ATIIsAllInOne (void)
+{
+	static bool	didBrightness = false;
+	static Boolean rtn = (0 == (ml_phys_read_half (gossamerSystemReg1) & gossamerAllInOne));
+	if (rtn && !didBrightness) {
+		fHeathrow->callPlatformFunction (fHeathrowSafeWriteRegUInt8, false, (void *) heathrowBrightnessControl, 
+				(void *) 0xFF, (void *) defaultBrightness, (void *) 0);
+		fHeathrow->callPlatformFunction (fHeathrowSafeWriteRegUInt8, false, (void *) heathrowContrastControl, 
+				(void *) 0xFF, (void *) defaultContrast, (void *) 0);
+		didBrightness = true;
+	}
+	return (rtn);
+}

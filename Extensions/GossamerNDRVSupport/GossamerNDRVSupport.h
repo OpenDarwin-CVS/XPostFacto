@@ -49,6 +49,10 @@ public:
 
 	virtual bool start (IOService *provider);
 	virtual	void stop (IOService *provider);
+
+	static void ATISetMBRES (UInt32 state);
+	static void ATISetMonitorTermination (Boolean enable);
+	static Boolean ATIIsAllInOne (void);
 	
 private:
 
@@ -56,6 +60,10 @@ private:
 	FunctionEntryCache fATISetMonitorTermination;
 	FunctionEntryCache fATIIsAllInOne;
 	
+	static IOService *fHeathrow;	
+	static const OSSymbol *fHeathrowSafeWriteRegUInt8;
+	static const OSSymbol *fHeathrowSafeWriteRegUInt32;
+
 	static GossamerNDRVSupport *fInstance;
 
 };

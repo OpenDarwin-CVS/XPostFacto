@@ -31,8 +31,8 @@ static void OpenG3AIODisplaySaveXPRAM (OSDictionary *params);
 
 OSDefineMetaClassAndStructors (OpenG3AIODisplay, IODisplayParameterHandler);
 
-#define heathrowBrightnessControl (0xf3000033)
-#define heathrowContrastControl (0xf3000032)
+#define heathrowBrightnessControl (0x33)
+#define heathrowContrastControl (0x32)
 
 IOService * 
 OpenG3AIODisplay::probe (IOService *provider, SInt32 *score)
@@ -50,7 +50,13 @@ OpenG3AIODisplay::start (IOService *provider)
 
     fDisplayParams = OSDynamicCast (OSDictionary, getProperty (gIODisplayParametersKey));
     if (!fDisplayParams) return (false);
-
+	
+	mach_timespec_t timeout = {5, 0};
+	fHeathrow = waitForService (serviceMatching ("Heathrow"), &timeout);
+	if (!fHeathrow) return false;
+	
+	fHeathrowSafeWriteRegUInt8 = OSSymbol::withCString ("heathrow_safeWriteRegUInt8");
+	
     return (true);
 }
 
@@ -80,9 +86,11 @@ bool
 OpenG3AIODisplay::doIntegerSet (OSDictionary *params, const OSSymbol *paramName, UInt32 value)
 {
     if (paramName == gIODisplayBrightnessKey) {
-		ml_phys_write_byte (heathrowBrightnessControl, value);
+		fHeathrow->callPlatformFunction (fHeathrowSafeWriteRegUInt8, false, (void *) heathrowBrightnessControl,
+				(void *) 0xFF, (void *) value, (void *) 0); 
     } else if (paramName == gIODisplayContrastKey) {
-        ml_phys_write_byte (heathrowContrastControl, value);
+		fHeathrow->callPlatformFunction (fHeathrowSafeWriteRegUInt8, false, (void *) heathrowContrastControl,
+				(void *) 0xFF, (void *) value, (void *) 0); 
     } else if (paramName == gIODisplayParametersCommitKey)
         OpenG3AIODisplaySaveXPRAM (fDisplayParams);
     else return (false);
