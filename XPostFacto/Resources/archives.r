@@ -105,6 +105,9 @@ Read 'plst' (147, "AppleMaceEthernetPreJag") ":Derived:Extensions:plist:AppleMac
 Read 'hfsA' (148, "AppleCurio4K78") ":Derived:Extensions:AppleCurio4K78.hfs";
 Read 'plst' (148, "AppleCurio4K78") ":Derived:Extensions:plist:AppleCurio4K78.plist";
 
+Read 'hfsA' (149, "OpenControlFramebuffer") ":Derived:Extensions:OpenControlFramebuffer.hfs";
+Read 'plst' (149, "OpenControlFramebuffer") ":Derived:Extensions:plist:OpenControlFramebuffer.plist";
+
 // Startup Item
 
 Read 'hfsS' (200, "XPFStartupItem") ":Derived:StartupItems:XPFStartupItem.hfs";
@@ -113,7 +116,7 @@ Read 'plst' (200, "XPFStartupItem") ":Derived:StartupItems:plist:XPFStartupItem.
 // Application Support
 
 Read 'hfsB' (300, "XPFPartitionInfo") ":Derived:ApplicationSupport:XPFPartitionInfo.hfs";
-Read 'plst' (300, "XPFPartitionInfo") ":Derived:ApplicationSupport:XPFPartitionInfo.hfs";
+Read 'plst' (300, "XPFPartitionInfo") ":Derived:ApplicationSupport:plist:XPFPartitionInfo.plist";
 
 // Set up the BootX file for extraction
 

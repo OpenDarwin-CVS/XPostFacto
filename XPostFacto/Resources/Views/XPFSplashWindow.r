@@ -298,7 +298,7 @@ resource 'STR#' (1009, "Splash Window", purgeable) {
 		/* [1] */
 		"XPostFacto",
 		/* [2] */
-		"(c) 2001 - 2003, Other World Computing"
+		"(c) 2001 - 2004, Other World Computing"
 	}
 };
 
