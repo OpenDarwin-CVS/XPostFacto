@@ -411,6 +411,8 @@ XPFApplication::OpenNew (CommandNumber itsCommandNumber)
 		return NULL;
 	} else {
 		seteuid (getuid ()); // we'll set it back when we need to
+		ProcessSerialNumber currentProcess = {0, kCurrentProcess};
+		SetFrontProcess (&currentProcess);
 	}
 #endif
 
