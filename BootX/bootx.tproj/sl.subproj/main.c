@@ -248,6 +248,7 @@ static long InitEverything(ClientInterfacePtr ciPtr)
   
   // printf now works.
   printf("\n\nMac OS X Loader\n");
+  printf("XPostFacto %s, based on BootX %s\n", kBootXVersionXPF, kBootXVersion);
 
   // Added by ryan.rempel@utoronto.ca
   // On Kanga, we sometimes get MMU errors that are cured by a reset-all
