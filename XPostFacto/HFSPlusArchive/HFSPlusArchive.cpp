@@ -448,6 +448,9 @@ HFSPlusArchive::extractArchiveTo (const FSRef *ref, bool contiguousAlloc)
 	catch (int error) {
 		fErr = error;
 	}
+	catch (CException_AC &ex) {
+		fErr = ex.GetError ();
+	}
 	catch (...) {
 		fErr = -27;
 	}
