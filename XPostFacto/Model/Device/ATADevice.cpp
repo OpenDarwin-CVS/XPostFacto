@@ -372,7 +372,7 @@ ATADevice::checkOpenFirmwareName ()
 	ataDeviceID *deviceID = (ataDeviceID *) &fDeviceIdent;
 	
 	sprintf (fOpenFirmwareName, "%s/@%d", fBus->getOpenFirmwareName (false), deviceID->devNum);
-	sprintf (fShortOpenFirmwareName, "%/@%d", fBus->getOpenFirmwareName (true), deviceID->devNum);
+	sprintf (fShortOpenFirmwareName, "%s/@%d", fBus->getOpenFirmwareName (true), deviceID->devNum);
 	
 	Changed (cSetOpenFirmwareName, this);
 }
