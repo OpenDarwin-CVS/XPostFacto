@@ -361,7 +361,7 @@ void
 XPFApplication::AboutToLoseControl (bool saveClipboard)
 {
 #ifndef __MACH__
-	fPrefs->setShowHelpTags (HMGetBalloons ());	// pick up any changes through help menu
+	if (!GetDone ()) fPrefs->setShowHelpTags (HMGetBalloons ());	// pick up any changes through help menu
 	HMSetBalloons (fSystemShowHelpTags);		// restore the system-wide setting
 #endif
 
