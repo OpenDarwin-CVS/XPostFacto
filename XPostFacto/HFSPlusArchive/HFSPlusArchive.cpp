@@ -40,14 +40,19 @@ void ThrowIfOSErr_AC(OSStatus inErr) {if (inErr) throw (inErr);}
 #include "MoreFilesExtras.h"
 #include <Threads.h>
 
+#ifdef __MACH__
+	#include <sys/types.h>
+	#include <unistd.h>
+#endif
+
 const UInt32 kHFSPlusArchiveSignature = 'hfsA';
 const UInt32 kHFSPlusArchiveVersion = 1;
 
 #define kCopyBufferSize (16 * 1024)
 
 HFSPlusArchive::HFSPlusArchive (FILE_STREAM_TYPE *stream, pascal Boolean 
-						(*copyFilter) (const FSRef *src))
-	: fStream (stream)
+						(*copyFilter) (void *refCon, const FSRef *src), void *refCon)
+	: fStream (stream), fRefCon (refCon)
 {
 	fCopyFilter = copyFilter;
 	fErr = noErr;
@@ -287,11 +292,16 @@ HFSPlusArchive::extractDirectoryTo (const FSRef *ref)
 						
 		if (fErr == noErr) {
 			// extract to the directory and then set catalog info
-			if (fCopyFilter) (*fCopyFilter) (&newRef);
+			if (fCopyFilter) (*fCopyFilter) (fRefCon, &newRef);
 			FSCatalogInfo newCatalogInfo;
 			BlockMoveData (&fCatalogInfo, &newCatalogInfo, sizeof (fCatalogInfo));
 			extractItemsTo (&newRef);
 			ThrowIfOSErr_AC (FSSetCatalogInfo (&newRef, kFSCatInfoSettableInfo, &newCatalogInfo));
+			// In Mac OS X, we need to set the user and group, because it doesn't get done by FSSetCatalogInfo
+			#ifdef __MACH__
+				ThrowIfOSErr_AC (FSRefMakePath (&newRef, (UInt8 *) fItemPath, 255));
+				chown (fItemPath, newCatalogInfo.permissions[0], newCatalogInfo.permissions[1]);
+			#endif
 		} else {
 			throw fErr;   // bail out due to error
 		}
@@ -323,7 +333,7 @@ HFSPlusArchive::extractFileTo (const FSRef *ref)
 		}
 	}
 	
-	if (fCopyFilter) (*fCopyFilter) (&newRef);
+	if (fCopyFilter) (*fCopyFilter) (fRefCon, &newRef);
 	
 	while (true) {
 //		::YieldToAnyThread ();
@@ -366,8 +376,13 @@ HFSPlusArchive::extractFileTo (const FSRef *ref)
 		if (forkRefNum) ThrowIfOSErr_AC (FSCloseFork (forkRefNum));
 	}
 	
-	if (!fSuspendExtraction && !fileExists) {
+	if (!fSuspendExtraction) {
 		ThrowIfOSErr_AC (FSSetCatalogInfo (&newRef, kFSCatInfoSettableInfo, &fCatalogInfo));
+		// In Mac OS X, we need to set the user and group, because it doesn't get done by FSSetCatalogInfo
+		#ifdef __MACH__
+			ThrowIfOSErr_AC (FSRefMakePath (&newRef, (UInt8 *) fItemPath, 255));
+			chown (fItemPath, fCatalogInfo.permissions[0], fCatalogInfo.permissions[1]);
+		#endif
 	}
 }	
 

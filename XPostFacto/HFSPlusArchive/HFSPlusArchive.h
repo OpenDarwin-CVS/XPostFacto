@@ -46,7 +46,8 @@ class HFSPlusArchive {
 public:
 
 	HFSPlusArchive (FILE_STREAM_TYPE *stream, pascal Boolean
-				 (*copyFilter) (const FSRef *src) = NULL);
+				 (*copyFilter) (void *refCon, const FSRef *src) = NULL,
+				 void *refCon = NULL);
 
 	~HFSPlusArchive ();
 
@@ -74,7 +75,8 @@ private:
 	Ptr fCopyBuffer;
 	bool fHeaderWritten;
 	bool fSuspendExtraction;
-	pascal Boolean (*fCopyFilter) (const FSRef *src);
+	pascal Boolean (*fCopyFilter) (void *refCon, const FSRef *src);
+	void *fRefCon;
 
 // The rest are temporary variables to minimize stack space in recursion.
 // This is probably premature optimization, but oh well.
@@ -85,6 +87,7 @@ private:
 	OSErr fErr;
 	ItemCount fActualObjects;
 	bool fContiguousAlloc;
+	char fItemPath[256];
 };
 
 #endif
