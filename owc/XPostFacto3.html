@@ -1,31 +1,33 @@
-<body><h2>XPostFacto 3.0a3</h2>
+<body><h2>XPostFacto 3.0a4</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-September 1, 2003
+September 22, 2003
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
-<p>You should also remember to check the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto.html">online version</a> of this documentation from time to time, to see whether there have been any changes.
-
-<p>XPostFacto 2.2 (and later) works with Mac OS X 10.2, aka Jaguar (as well as previous versions of Mac OS X). There are a couple of issues with Jaguar on unsupported systems. The most serious is that Jaguar simply does not work with the 603 or 604 processor--it will only work if you have a G3 or G4 upgrade installed. 
+You should also remember to check the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto.html">online version</a> of this documentation from time to time, to see whether there have been any changes.
 
 <p>XPostFacto does not work with Panther (Mac OS X 10.3) yet, but I am working on it.
+
+XPostFacto does with Mac OS X 10.2, aka Jaguar (as well as previous versions of Mac OS X). There are a couple of issues with Jaguar on unsupported systems. The most serious is that Jaguar simply does not work with the 603 or 604 processor--it will only work if you have a G3 or G4 upgrade installed. 
 
 <p>Here's a quick link to download the latest version. 
 
 <blockquote>
-<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a3.sit">Download XPostFacto 3.0a3</a>
+<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a4.sit">Download XPostFacto 3.0a4</a>
 </blockquote>
 
 <p>Previous versions are also available in the <a href="#links">version history</a> below.  Note that the latest version is an alpha version of XPostFacto 3. "Alpha" means it's not finished yet, and there are likely to be some bugs. You can consult the <a href="#links">version history</a> for some notes about what is and isn't working at the moment.
 
+<p><b>If you have tried XPostFacto 3.0a3 already</b>, you can see the changes since then in the <a href="#links">version history</a> below. One important point is that the startup item has been updated in version 3.0a4, but I haven't yet implemented an "automatic" install for it. So you will need to install the new startup item using the "Install" menu of XPostFacto. Another point worth mentioning is the new "Show Debug Options" command in the "Help" menu. It adds several debug options to the Help menu which permit you to disable certain things that XPostFacto would otherwise do. It is mainly useful for debugging purposes--for instance, when you want to test copying files to a helper, but don't want to restart.
+
 <p>Here are some notes for those who are familiar with XPostFacto 2, and are trying out XPostFacto 3.
 
 <p><ul>
-<li>The user interface is completely redesigned. But it's not entirely finished yet. I think that the main window is probably a little too "cluttered" at the moment. I will be giving some thought to how I might simplify that. <b>Any suggestions with respect to the user interface would be greatly appreciated.</b> My goal for this release was to include all the elements of the user interface which were needed in one form or another, even if some of them aren't entirely implemented yet, and some of them need some streamlining.<p>
+<li>XPF 3 allows you to use a "helper" disk in the boot process. The purpose is to permit booting from some volumes that would otherwise not be bootable (for instance, Firewire drives, and CDs). If you don't need a helper, you should select "none." 
 
-<li>XPF 3 allows you to use a "helper" disk in the boot process. The purpose is to permit booting from some volumes that would otherwise not be bootable (for instance, Firewire drives, and CDs). If you don't need a helper, you should select "none." <b>If anyone can think of a better word than "helper" to describe this, I would be grateful.</b><p>
+I'm looking for a better word for this than "helper"--so far the best idea appears to be "boot proxy".<p>
 
 <li>The "helper" mechanism works by copying the kernel, and kernel extensions, from the target volume to an invisible directory in the helper (an .XPostFacto directory at the root level of the drive). XPostFacto then sets up the boot process so that the earliest part occurs from the helper, but boot process switches to the target volume once the kernel is loaded.<p>
 
@@ -462,6 +464,28 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a4.sit">3.0a4 (September 22, 2003)</a>
+<dd>Here's a list of the bugs fixed since 3.0a3. If you have noticed one of these bugs in 3.0a3, I'd be most grateful if you could test 3.0a4 and verify that the bug is actually fixed. In case you're interested, here's a link to the <a href="http://www.opendarwin.org/bugzilla/showdependencytree.cgi?id=951">bugs I'm hoping to fix<a/> before I release a beta version (but I might not get to all of them).
+<p>
+<ul>
+    <li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=858">858 - Mac OS X version should construct Open Firmware names in the same way as Mac OS 9 version.</a>
+    <li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=861">861 - Test support for BootCD.</a>
+    <li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=866">866 - Update Extensions.mkext when installing extensions in Mac OS X.</a>
+    <li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=875">875 - Launching URLs doesn't work in the Mac OS 9 version.</a>
+    <li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=883">883 - Cannot eject disks while XPostFacto is running.</a>
+    <li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=897">897 - Volume list should show why some drives are not bootable.</a>
+    <li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=908">908 - Must turn off &quot;ignore ownership&quot; before installing extensions etc..</a>
+    <li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=910">910 - Make &quot;debug&quot; options available to facilitate testing.</a>
+    <li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=912">912 - Volume scroll list does not scroll selected volume into view upon launch.</a>
+    <li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=913">913 - Volume scroll list should scroll in proper increments.</a>
+    <li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=926">926 - Use application font (not system font) in log window.</a>
+    <li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=929">929 - Ownership of created directories wrong in Mac OS 9 version.</a>
+    <li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=930">930 - Newly mounted volume not showing up right away in Mac OS 9.</a>
+    <li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=932">932 - Fix deletion of Extensions.mkext from helper when deleted from target.</a>
+    <li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=934">934 - xpfbootsupportd crashes AFTER successfully updating the Extensions folder.</a>
+    <li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=943">943 - Need icon for Mac OS X version.</a>
+</ul>
+
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a3.sit">3.0a3 (September 1, 2003)</a>
 <dd>A pretty major rewrite. This is an alpha version, which means that there are some features not implemented yet, and probably some bugs. Here's a quick summary of what <b>should</b> be working (but may still have bugs), and what is not implemented yet.
 
