@@ -112,7 +112,9 @@ advised of the possibility of such damage.
 //	include kDefaultRsrcName  'CMNU' (mApple);			// Grab the default Apple menus
 //	include kDefaultRsrcName  'CMNU' (mFile);			// Grab the default File menus
 	include kDefaultRsrcName  'CMNU' (mEdit);			// Grab the default Edit menu
+#if qCarbon
 	include kDefaultRsrcName  'CMNU' (mEditAqua);		// Grab the default Edit menu for aqua
+#endif
 //	include kDefaultRsrcName  'ALRT' (phAboutApp);		// Grab the default about box
 	include kDefaultRsrcName  'aete' (0);				// Grab the default AppleEvent terminology
 //	include kDefaultRsrcName  'STR#' (kDefaultCredits);	// Grab the default credits
