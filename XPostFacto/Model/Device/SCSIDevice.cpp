@@ -44,27 +44,6 @@ advised of the possibility of such damage.
 #include "XPFLog.h"
 #include "XPFErrors.h"
 
-#if !qCarbonMach0
-
-union DriverGestaltInfo
-{
-	DriverGestaltSyncResponse		sync;
-	DriverGestaltBootResponse		boot;
-	DriverGestaltDevTResponse		devt;
-	DriverGestaltIntfResponse		intf;
-	DriverGestaltEjectResponse		ejec;
-	DriverGestaltPowerResponse		powr;
-	DriverGestaltFlushResponse		flus;
-	DriverGestaltOFBootSupportResponse ofbt;
-	DriverGestaltNameRegistryResponse nmrg;
-	DriverGestaltDeviceReferenceResponse dvrf;
-	DriverGestaltAPIResponse		dAPI;
-	UInt32							i;
-};
-typedef union DriverGestaltInfo DriverGestaltInfo;
-
-#endif
-
 void
 SCSIDevice::Initialize ()
 {

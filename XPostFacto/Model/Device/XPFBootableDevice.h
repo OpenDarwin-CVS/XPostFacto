@@ -62,6 +62,8 @@ class XPFBootableDevice
 		static XPFBootableDevice* DeviceWithInfo (FSVolumeInfo *info);		
 		static XPFBootableDevice* DeviceWithDriverRefNum (SInt16 driverRefNum);	
 #endif	
+
+		static XPFBootableDevice* DeviceWithOpenFirmwareName (char *ofName);
 						
 		static void DeleteInvalidDevices ();
 

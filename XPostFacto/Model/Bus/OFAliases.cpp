@@ -403,8 +403,8 @@ OFAliases::aliasFor (const REG_ENTRY_TYPE regEntry, char *outAlias, char *shortA
 {			
 #ifdef __MACH__
 	if (!IORegistryEntryInPlane (regEntry, kIODeviceTreePlane)) {
-		outAlias[0] = 0;
-		shortAlias[0] = 0;
+		if (outAlias) outAlias[0] = 0;
+		if (shortAlias) shortAlias[0] = 0;
 		return;
 	}
 
@@ -635,15 +635,17 @@ OFAliases::aliasFor (const REG_ENTRY_TYPE regEntry, char *outAlias, char *shortA
 	
 	// Now, we construct the short alias by using the "@" where available
 	
-	strcpy (shortAlias, outAlias);
-	
-	char *at;
-	char *start = shortAlias;
-	while ((at = strstr (start, "@"))) {
-		start = at;
-		while ((*start != '/') && (start >= shortAlias)) start--;
-		BlockMoveData (at, start + 1, strlen (at) + 1);
-		start += 2;
+	if (shortAlias) {
+		strcpy (shortAlias, outAlias);
+
+		char *at;
+		char *start = shortAlias;
+		while ((at = strstr (start, "@"))) {
+			start = at;
+			while ((*start != '/') && (start >= shortAlias)) start--;
+			BlockMoveData (at, start + 1, strlen (at) + 1);
+			start += 2;
+		}
 	}
 
 #ifdef __MACH__

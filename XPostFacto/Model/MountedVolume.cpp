@@ -826,11 +826,56 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	}
 #else
 	fBootableDevice = XPFBootableDevice::DeviceWithInfo (info);
+	
+	if (!fBootableDevice && MoreDriveSupportsDriverGestalt (info->driveNumber)) {
+		DriverGestaltParam pbGestalt;
+		Erase_AC (&pbGestalt);
+
+		pbGestalt.ioVRefNum = info->driveNumber;
+		pbGestalt.ioCRefNum	= info->driverRefNum;
+		pbGestalt.csCode = kDriverGestaltCode;
+		pbGestalt.driverGestaltSelector = kdgNameRegistryEntry;
+
+		OSErr status = PBStatusSync ((ParmBlkPtr) &pbGestalt);
+
+		if (status == noErr) {
+			char alias [1024] = {0};
+			OFAliases::AliasFor (GetDriverGestaltNameRegistryResponse (&pbGestalt)->entryID, alias, NULL);
+			fBootableDevice = XPFBootableDevice::DeviceWithOpenFirmwareName (alias);
+		}		
+	}
+
 	if (fBootableDevice) {
 		fIsOnBootableDevice = true;
 		if (fBootableDevice->isFirewireDevice ()) {
+			// Try MoreGetPartitionInfo
 			partInfoRec partInfo;
 			OSErr err = MoreGetPartitionInfo (info->driveNumber, &partInfo);
+
+			if (err != noErr) {
+				// Try DriverGestalt
+				DriverGestaltParam pbGestalt;
+				Erase_AC (&pbGestalt);
+
+				pbGestalt.ioVRefNum = info->driveNumber;
+				pbGestalt.ioCRefNum	= info->driverRefNum;
+				pbGestalt.csCode = kDriverGestaltCode;
+				pbGestalt.driverGestaltSelector = kdgOpenFirmwareBootSupport;
+
+				err = PBStatusSync ((ParmBlkPtr) &pbGestalt);
+
+				if (err == noErr) partInfo.partitionNumber = GetDriverGestaltOFBootSupportResponse (&pbGestalt)->bootPartitionMapEntry;
+			}
+			
+			if (err != noErr) {
+				// This is a terrible hack, but I happen to know that the Mac OS X Installer puts
+				// it's HFS volume on partition 9, so ...
+				if (fHasInstaller) {
+					partInfo.partitionNumber = 9;
+					err = noErr;
+				}
+			}
+			
 			if (err == noErr) {
 				fValidOpenFirmwareName = fBootableDevice->getValidOpenFirmwareName ();
 				fOpenFirmwareName.CopyFrom (fBootableDevice->getOpenFirmwareName (false));

@@ -53,29 +53,9 @@ advised of the possibility of such damage.
 #include "XPFErrors.h"
 #include "XPFAuthorization.h"
 #include "vers_rsrc.h"
+#include "OFAliases.h"
 
 TemplateAutoList_AC <XPFBootableDevice> XPFBootableDevice::gDeviceList;
-
-#ifndef __MACH__
-
-union DriverGestaltInfo
-{
-	DriverGestaltSyncResponse		sync;
-	DriverGestaltBootResponse		boot;
-	DriverGestaltDevTResponse		devt;
-	DriverGestaltIntfResponse		intf;
-	DriverGestaltEjectResponse		ejec;
-	DriverGestaltPowerResponse		powr;
-	DriverGestaltFlushResponse		flus;
-	DriverGestaltOFBootSupportResponse ofbt;
-	DriverGestaltNameRegistryResponse nmrg;
-	DriverGestaltDeviceReferenceResponse dvrf;
-	DriverGestaltAPIResponse		dAPI;
-	UInt32							i;
-};
-typedef union DriverGestaltInfo DriverGestaltInfo;
-
-#endif
 
 // .AppleCD contants 
 
@@ -482,6 +462,17 @@ XPFBootableDevice::DeviceWithDriverRefNum (SInt16 driverRefNum)
 }
 
 #endif
+
+XPFBootableDevice* 
+XPFBootableDevice::DeviceWithOpenFirmwareName (char *ofName)
+{
+	for (DeviceIterator iter (&gDeviceList); iter.Current (); iter.Next ()) {
+		if (OFAliases::MatchAliases (ofName, (CChar255_AC) iter->getOpenFirmwareName (false))) {
+			return iter.Current ();
+		}
+	}
+	return NULL;
+}
 
 #ifdef __MACH__
 
