@@ -367,9 +367,11 @@ XPFBootableDevice::XPFBootableDevice
 	CFStringRef bsdName = (CFStringRef) IORegistryEntryCreateCFProperty (entry, CFSTR ("BSD Name"), NULL, 0);
 	if (bsdName) {
 		strcpy (fBSDName, "/dev/r");
-		CFStringGetCString (bsdName, fBSDName + 6, 27, kCFStringEncodingASCII); 
+		CFStringGetCString (bsdName, fBSDName + 6, 26, kCFStringEncodingASCII); 
 		CFRelease (bsdName);
 	}
+	
+	gLogFile << "Created XPFBootableDevice for BSD name: " << fBSDName << endl_AC;
 
 #endif
 }
@@ -425,8 +427,8 @@ XPFBootableDevice::DeviceForRegEntry (io_registry_entry_t startpoint)
 	CFStringRef bsdNameRef = (CFStringRef) IORegistryEntryCreateCFProperty (entry, CFSTR ("BSD Name"), NULL, 0);
 	
 	if (bsdNameRef) {
-		strcpy (bsdName, "/dev/");
-		CFStringGetCString (bsdNameRef, bsdName + 5, 27, kCFStringEncodingASCII); 
+		strcpy (bsdName, "/dev/r");
+		CFStringGetCString (bsdNameRef, bsdName + 6, 26, kCFStringEncodingASCII); 
 		CFRelease (bsdNameRef);
 	}
 
@@ -438,6 +440,8 @@ XPFBootableDevice::DeviceForRegEntry (io_registry_entry_t startpoint)
 	}
 	
 	retVal = new XPFBootableDevice (entry);
+	gDeviceList.InsertLast (retVal);
+	
 	IOObjectRelease (entry);
 	return retVal;
 }
