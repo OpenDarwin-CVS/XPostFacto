@@ -95,6 +95,8 @@ XPFPartition::XPFPartition (XPFBootableDevice *device, Partition *part, int part
 	fMountedVolume = NULL;
 	fCreationDate = 0;
 	fHFSPlusVolume = NULL;
+	fOffsetToHFSPlusVolume = 0;
+	
 	BlockMoveData (part, &fPartition, sizeof (fPartition));
 	gLogFile << "Partition: " << partNumber << " pmParType: " << (char *) part->pmParType << endl_AC;
 	
@@ -110,8 +112,10 @@ XPFPartition::XPFPartition (XPFBootableDevice *device, Partition *part, int part
 		
 			fCreationDate = header->hfs.drCrDate;
 			if (header->hfs.drEmbedSigWord == kHFSPlusSigWord) {
-				fOffsetToHFSPlusVolume = header->hfs.drAlBlSt 
-								+ header->hfs.drEmbedExtent.startBlock * (header->hfs.drAlBlkSiz / 512);
+				fOffsetToHFSPlusVolume = (UInt32) header->hfs.drAlBlkSiz;
+				fOffsetToHFSPlusVolume /= 512;
+				fOffsetToHFSPlusVolume *= (UInt32) header->hfs.drEmbedExtent.startBlock;
+				fOffsetToHFSPlusVolume += (UInt32) header->hfs.drAlBlSt;
 			} else {
 				fCreationDate = 0;
 				#if qLogging
@@ -133,8 +137,12 @@ XPFPartition::XPFPartition (XPFBootableDevice *device, Partition *part, int part
 	fExtendsPastEightGB = (part->pmPyPartStart + part->pmPartBlkCnt) > (8UL * 1024 / 512 * 1024 * 1024 );
 	
 	checkOpenFirmwareName ();
+
+	gLogFile << "fOffsetToHFSPlusVolume: " << fOffsetToHFSPlusVolume << endl_AC;
 	
 	if (fCreationDate) fHFSPlusVolume = new HFSPlusVolume (this, fOffsetToHFSPlusVolume);
+	
+	gLogFile << "fOffsetToHFSPlusVolume: " << fOffsetToHFSPlusVolume << endl_AC;
 	
 	fBootableDevice->AddDependent (this);
 }

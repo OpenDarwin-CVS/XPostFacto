@@ -59,6 +59,9 @@ HFSPlusVolume::HFSPlusVolume (XPFPartition *thePartition, unsigned long offsetTo
 	fPartition = thePartition;
 	fOffsetIntoPartition = offsetToData;
 	fHeader = NULL;
+	
+	gLogFile << "offsetToData: " << fOffsetIntoPartition << endl_AC;
+	
 	ThrowIfOSErr_AC (readBlocks (2, 1, (void **) &fHeader));
 	
 	gLogFile << "HFSPlusVolume fOffsetIntoPartition: " << fOffsetIntoPartition << " blockSize: " << fHeader->blockSize << endl_AC;
