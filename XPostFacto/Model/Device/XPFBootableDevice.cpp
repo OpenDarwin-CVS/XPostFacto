@@ -275,8 +275,8 @@ XPFBootableDevice::XPFBootableDevice
 	
 	CFStringRef bsdName = (CFStringRef) IORegistryEntryCreateCFProperty (entry, CFSTR ("BSD Name"), NULL, 0);
 	if (bsdName) {
-		strcpy (fBSDName, "/dev/");
-		CFStringGetCString (bsdName, fBSDName + 5, 27, kCFStringEncodingASCII); 
+		strcpy (fBSDName, "/dev/r");
+		CFStringGetCString (bsdName, fBSDName + 6, 27, kCFStringEncodingASCII); 
 		CFRelease (bsdName);
 	}
 
