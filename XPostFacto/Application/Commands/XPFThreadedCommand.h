@@ -112,6 +112,8 @@ class XPFThreadedCommand : public TCommand {
 		CThreadRunner_AC fRunner;
 		
 		CStr63_AC fCopyWord;
+		
+		UInt32 fDebugOptions;
 };
 
 #endif

@@ -51,6 +51,7 @@ advised of the possibility of such damage.
 #include "HFSPlusArchive.h"
 #include "XPFErrors.h"
 #include "XPFBootableDevice.h"
+#include "XPFApplication.h"
 
 #include <iostream.h>
 #include "XPostFacto.h"
@@ -271,6 +272,8 @@ MountedVolume::WithOpenFirmwarePath (char *path)
 void
 MountedVolume::installBootXIfNecessary (bool forceInstall)
 {
+	if (((XPFApplication *) gApplication)->getDebugOptions () & kDisableBootX) return;
+	
 	if (!getIsWriteable()) {
 		if (getHasBootX ()) {
 			// we'll just assume that it's really installed. I really should check

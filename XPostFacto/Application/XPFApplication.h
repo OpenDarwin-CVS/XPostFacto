@@ -55,6 +55,18 @@ class CLogReporter;
 class XPFNVRAMSettings;
 class XPFPrefs;
 
+enum {
+	kDisableRestart 			= 1 << 0,
+	kVisibleHelperFiles 		= 1 << 1,
+	kDisableNVRAMWriting		= 1 << 2,
+	kDisableCopyToHelper		= 1 << 3,
+	kDisableBootX				= 1 << 4,
+	kDisableExtensionsCache 	= 1 << 5,
+	kDisableExtensions			= 1 << 6,
+	kDisableStartupItem			= 1 << 7,
+	kDisableCoreServices		= 1 << 8
+};
+
 class XPFApplication : public TApplication {
 
 	public:
@@ -79,6 +91,7 @@ class XPFApplication : public TApplication {
 		// Accessors
 		
 		XPFPlatform* getPlatform () {return fPlatform;}
+		UInt32 getDebugOptions () {return fDebugOptions;}
 		
 		// Commands
 		void CloseSplashWindow ();
@@ -92,7 +105,9 @@ class XPFApplication : public TApplication {
 			
 		virtual void DoAEClose(TAppleEvent* message, TAppleEvent* reply);
 		
-	private:						
+	private:			
+		void toggleDebugOption (UInt32 option) {if (fDebugOptions & option) fDebugOptions &= ~option; else fDebugOptions |= option;}
+				
 		XPFAboutBox *fAboutBox;
 		TWindow *fSplash;
 		TWindow *fLogWindow;
@@ -102,6 +117,9 @@ class XPFApplication : public TApplication {
 			
 		XPFPrefs *fPrefs;
 		XPFPlatform *fPlatform;
+		
+		bool fShowDebugOptions;
+		UInt32 fDebugOptions;
 };	
 
 #endif

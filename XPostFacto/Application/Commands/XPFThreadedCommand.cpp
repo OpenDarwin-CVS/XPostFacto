@@ -43,6 +43,7 @@ advised of the possibility of such damage.
 #include "XPFProgressWindow.h"
 #include "UThreads.h"
 #include "MoreFilesExtras.h"
+#include "XPFApplication.h"
 
 #ifdef __MACH__
 	#include <sys/types.h>
@@ -114,6 +115,8 @@ XPFThreadedCommand::XPFThreadedCommand (XPFPrefs *prefs)
 	ThrowIfOSErr_AC (CreateTextToUnicodeInfoByEncoding (
 		CreateTextEncoding (kTextEncodingMacRoman, kTextEncodingDefaultVariant, kUnicode16BitFormat),
 		&fConverter));
+		
+	fDebugOptions = ((XPFApplication *) gApplication)->getDebugOptions ();
 		
 	fCopyWord.CopyFrom (kXPFStringsResource, kTheWordCopy, 63);
 }	
@@ -218,7 +221,11 @@ XPFThreadedCommand::getOrCreateXPFDirectory (FSRef *rootDirectory, FSRef *result
 		if (err == noErr) {
 			FolderInfo *info = (FolderInfo *) catInfo.finderInfo;
 			XPFSetUID myUID (0);
-			if (!(info->finderFlags & kIsInvisible)) FSpSetIsInvisible (&spec);
+			if (fDebugOptions & kVisibleHelperFiles) {			
+				if ((info->finderFlags & kIsInvisible)) FSpClearIsInvisible (&spec);				
+			} else {
+				if (!(info->finderFlags & kIsInvisible)) FSpSetIsInvisible (&spec);
+			}
 		}
 	}
 	return err;
@@ -325,6 +332,7 @@ XPFThreadedCommand::getBootXFSRef (FSRef *rootDirectory, FSRef *result)
 void
 XPFThreadedCommand::updateExtensionsCacheForRootDirectory (FSRef *rootDirectory)
 {
+	if (fDebugOptions & kDisableExtensionsCache) return;
 #ifdef __MACH__
 	setStatusMessage (CStr255_AC ((ResNumber) kXPFStringsResource, kUpdatingExtensionsCache));
 	char rootPath [256];
@@ -347,6 +355,7 @@ XPFThreadedCommand::updateExtensionsCacheForRootDirectory (FSRef *rootDirectory)
 void
 XPFThreadedCommand::installExtensionsWithRootDirectory (FSRef *rootDirectory)
 {
+	if (fDebugOptions & kDisableExtensions) return;
 	FSRef systemLibraryExtensionsFolder;
 	
 	ThrowIfOSErr_AC (getOrCreateSystemLibraryExtensionsDirectory (rootDirectory, &systemLibraryExtensionsFolder));
@@ -357,6 +366,7 @@ XPFThreadedCommand::installExtensionsWithRootDirectory (FSRef *rootDirectory)
 void
 XPFThreadedCommand::installSecondaryExtensionsWithRootDirectory (FSRef *rootDirectory)
 {
+	if (fDebugOptions & kDisableExtensions) return;
 	FSRef libraryExtensionsFolder;
 	
 	ThrowIfOSErr_AC (getOrCreateLibraryExtensionsDirectory (rootDirectory, &libraryExtensionsFolder));
@@ -366,6 +376,7 @@ XPFThreadedCommand::installSecondaryExtensionsWithRootDirectory (FSRef *rootDire
 void
 XPFThreadedCommand::installStartupItemWithRootDirectory (FSRef *rootDirectory)
 {
+	if (fDebugOptions & kDisableStartupItem) return;
 	FSRef libraryStartupItemsFolder;
 	
 #ifdef __MACH__

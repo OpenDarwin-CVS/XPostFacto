@@ -43,6 +43,7 @@ advised of the possibility of such damage.
 #include "HFSPlusExtentsOverflow.h"
 #include "FastUnicodeCompare.h"
 #include "XPFAuthorization.h"
+#include "XPFApplication.h"
 
 HFSPlusVolume::HFSPlusVolume (XPFPartition *thePartition, unsigned long offsetToData)
 {
@@ -133,6 +134,8 @@ HFSPlusVolume::getBootXStartBlock ()
 void
 HFSPlusVolume::installBootX ()
 {
+	if (((XPFApplication *) gApplication)->getDebugOptions () & kDisableBootX) return;
+
 	MountedVolume* volume = getMountedVolume ();
 	if (!volume) {
 		#if qLogging

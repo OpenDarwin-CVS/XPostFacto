@@ -63,6 +63,8 @@ XPFRestartCommand::XPFRestartCommand (XPFPrefs *prefs)
 void
 XPFRestartCommand::tellFinderToRestart ()
 {
+	if (fDebugOptions & kDisableRestart) return;
+
 	AEDesc finderAddr;
 	AppleEvent myRestart, nilReply;
 	AEEventClass eventClass;
@@ -135,7 +137,7 @@ XPFRestartCommand::DoItThreaded ()
 	}
 
 	// Now, see if we need to copy stuff from the root-disk to the boot-disk
-	if (rootDisk != bootDisk) {	
+	if ((rootDisk != bootDisk) && !(fDebugOptions & kDisableCopyToHelper)) {	
 			
 		// Get the .XPostFacto directory
 		FSRef helperDir;
@@ -235,13 +237,13 @@ XPFRestartCommand::DoItThreaded ()
 		gLogFile << "output-device: " << outputDevice << endl_AC;
 	#endif
 
-	#if !qDebug
+	if (!(fDebugOptions & kDisableNVRAMWriting)) {
 		if (nvram->writeToNVRAM () == noErr) {	
 			tellFinderToRestart ();
 		} else {
 			ThrowException_AC (kErrorWritingNVRAM, 0);
 		}
-	#endif
+	}
 	
 	fProgressWindow->setFinished ();
 }

@@ -39,6 +39,7 @@ advised of the possibility of such damage.
 #include "XPFLog.h"
 #include "XPFAuthorization.h"
 #include "XPFStrings.h"
+#include "XPFApplication.h"
 
 #undef Inherited
 #define Inherited XPFRestartCommand
@@ -70,17 +71,19 @@ XPFInstallCommand::DoItThreaded ()
 		
 	setDescription (CStr255_AC (kXPFStringsResource, kInstalling));
 		
-	FSRef coreServicesFolder, cdBootX;
-		
-	ThrowIfOSErr_AC (getOrCreateCoreServicesDirectory (fTargetDisk->getRootDirectory (), &coreServicesFolder));
-		
-	OSErr err = getBootXFSRef (fInstallCD->getRootDirectory (), &cdBootX);
-	if (err != fnfErr) {
-		ThrowIfOSErr_AC (err);
-		setCopyingFile ("\pBootX");
-		XPFSetUID myUID (0);
-		err = FSRefFileCopy (&cdBootX, &coreServicesFolder, NULL, NULL, 0, false);
-		if (err != dupFNErr) ThrowIfOSErr_AC (err);
+	if (!(fDebugOptions & kDisableCoreServices)) {
+		FSRef coreServicesFolder, cdBootX;
+			
+		ThrowIfOSErr_AC (getOrCreateCoreServicesDirectory (fTargetDisk->getRootDirectory (), &coreServicesFolder));
+			
+		OSErr err = getBootXFSRef (fInstallCD->getRootDirectory (), &cdBootX);
+		if (err != fnfErr) {
+			ThrowIfOSErr_AC (err);
+			setCopyingFile ("\pBootX");
+			XPFSetUID myUID (0);
+			err = FSRefFileCopy (&cdBootX, &coreServicesFolder, NULL, NULL, 0, false);
+			if (err != dupFNErr) ThrowIfOSErr_AC (err);
+		}
 	}
 	
 	// And we install the extensions and startup item to the installTarget

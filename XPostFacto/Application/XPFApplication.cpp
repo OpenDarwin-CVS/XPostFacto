@@ -121,6 +121,8 @@ public:
 XPFApplication::XPFApplication() :
 	TApplication (kFileType, kSignature)
 {
+	fShowDebugOptions = false;
+	fDebugOptions = 0;
 	fAboutBox = NULL;
 	fLogWindow = NULL;
 	fWantsNavigationServices = true;
@@ -446,6 +448,12 @@ XPFApplication::HandleDiskEvent(TToolboxEvent* event)
 void 
 XPFApplication::InstallHelpMenuItems()
 {
+#ifdef __MACH__
+	static bool doneOnce = false;
+	if (doneOnce) return;
+	doneOnce = true;
+#endif
+
 	CStr255_AC theMenuName;
 	GetIndString (theMenuName, kXPFStringsResource, kXPostFactoHelpMenu);
 	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (theMenuName, cShowHelpFile);
@@ -456,6 +464,8 @@ XPFApplication::InstallHelpMenuItems()
 	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem ("-", cNoCommand);
 	GetIndString (theMenuName, kXPFStringsResource, kShowLogWindowMenu);
 	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (theMenuName, cShowLogWindow);
+	GetIndString (theMenuName, kXPFStringsResource, fShowDebugOptions ? kHideDebugOptions : kShowDebugOptions);
+	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (theMenuName, cShowDebugOptions);
 }
 
 void 
@@ -483,6 +493,24 @@ XPFApplication::DoMenuCommand(CommandNumber aCommandNumber) // Override
 			fLogWindow->Show (true, false);
 			fLogWindow->Select ();
 			break;
+			
+		case cShowDebugOptions:
+			fShowDebugOptions = !fShowDebugOptions;
+			if (!fShowDebugOptions) fDebugOptions = 0;
+			#ifdef __MACH__
+				SetCommandName (cShowDebugOptions, kXPFStringsResource, fShowDebugOptions ? kHideDebugOptions : kShowDebugOptions);
+			#endif
+			break;
+			
+		case cDisableRestart: 			toggleDebugOption (kDisableRestart); break;
+		case cVisibleHelperFiles: 		toggleDebugOption (kVisibleHelperFiles); break;
+		case cDisableNVRAMWriting: 		toggleDebugOption (kDisableNVRAMWriting); break;
+		case cDisableBootX: 			toggleDebugOption (kDisableBootX); break;
+		case cDisableCopyToHelper: 		toggleDebugOption (kDisableCopyToHelper); break;
+		case cDisableExtensions: 		toggleDebugOption (kDisableExtensions); break;
+		case cDisableExtensionsCache:	toggleDebugOption (kDisableExtensionsCache); break;
+		case cDisableStartupItem: 		toggleDebugOption (kDisableStartupItem); break;
+		case cDisableCoreServices: 		toggleDebugOption (kDisableCoreServices); break;
 				
 		default:
 			TApplication::DoMenuCommand(aCommandNumber);
@@ -494,9 +522,30 @@ void
 XPFApplication::DoSetupMenus() 
 {
 	TApplication::DoSetupMenus();
+	
+	TMenuBarManager::fgMenuBarManager->SetPreferredMenuBarID (fShowDebugOptions
+		#ifdef __MACH__
+			? kDebugOptionsMBarAqua : kMBarAqua
+		#else
+			? kDebugOptionsMBar : kMBarDisplayed
+		#endif
+	);
 		
-	Enable (cShowHelpFile, true);
-	Enable (cShowOnlineHelpFile, true);
-	Enable (cShowSourceCode, true);
-	Enable (cShowLogWindow, true);
+	bool enable = !InModalState ();
+	
+	Enable (cShowHelpFile, enable);
+	Enable (cShowOnlineHelpFile, enable);
+	Enable (cShowSourceCode, enable);
+	Enable (cShowLogWindow, enable);
+	Enable (cShowDebugOptions, enable);
+	
+	EnableCheck (cDisableRestart, enable, fDebugOptions & kDisableRestart);
+	EnableCheck (cVisibleHelperFiles, enable, fDebugOptions & kVisibleHelperFiles);
+	EnableCheck (cDisableNVRAMWriting, enable, fDebugOptions & kDisableNVRAMWriting);
+	EnableCheck (cDisableCopyToHelper, enable, fDebugOptions & kDisableCopyToHelper);
+	EnableCheck (cDisableBootX, enable, fDebugOptions & kDisableBootX);
+	EnableCheck (cDisableExtensions, enable, fDebugOptions & kDisableExtensions);
+	EnableCheck (cDisableExtensionsCache, enable, fDebugOptions & kDisableExtensionsCache);
+	EnableCheck (cDisableStartupItem, enable, fDebugOptions & kDisableStartupItem);
+	EnableCheck (cDisableCoreServices, enable, fDebugOptions & kDisableCoreServices);	
 }

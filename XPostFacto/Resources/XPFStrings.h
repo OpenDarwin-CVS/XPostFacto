@@ -42,27 +42,29 @@ enum {
 	kNotHFSPlus,
 	kNoMachKernel,
 	kNoOFName,
-	kNoOldWorldSupport,
+	kNoOldWorldSupport,			// 5
 	kNoBootX,
 	kPast8GB,
 	kNotWriteable,
 	kNotInstaller,
-	kRequiresOS9,
+	kRequiresOS9,				// 10
 	kNoNVRAMPatches,
 	kNoMacOSXYet,
 	kXPostFactoHelpMenu,
 	kXPostFactoOnlineHelpMenu,
-	kXPostFactoSourceCodeMenu,
+	kXPostFactoSourceCodeMenu,	// 15
 	kInstallOnly,
 	kNeedsHelper,
 	kShowLogWindowMenu,
 	kTheWordCopy,
-	kRestarting,
+	kRestarting,				// 20
 	kInstalling,
 	kInstallingBootX,
 	kInstallingExtensions,
 	kInstallingStartupItem,
-	kUpdatingExtensionsCache
+	kUpdatingExtensionsCache,	// 25
+	kShowDebugOptions,
+	kHideDebugOptions
 };
 
 
