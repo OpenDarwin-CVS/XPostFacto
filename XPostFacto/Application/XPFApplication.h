@@ -107,6 +107,7 @@ class XPFApplication : public TApplication {
 		
 	private:			
 		void toggleDebugOption (UInt32 option) {if (fDebugOptions & option) fDebugOptions &= ~option; else fDebugOptions |= option;}
+		void addDebugOptionsToHelpMenu ();
 				
 		XPFAboutBox *fAboutBox;
 		TWindow *fSplash;

@@ -64,7 +64,16 @@ enum {
 	kInstallingStartupItem,
 	kUpdatingExtensionsCache,	// 25
 	kShowDebugOptions,
-	kHideDebugOptions
+	kHideDebugOptions,
+	kMenuDisableRestart,
+	kMenuDisableNVRAM,
+	kMenuDisableBootX,			// 30
+	kMenuDisableStartupItem,
+	kMenuDisableExtensions,
+	kMenuDisableExtensionsCache,
+	kMenuDisableCoreServices,
+	kMenuDisableHelperCopy,		// 35
+	kMenuVisibleHelper
 };
 
 

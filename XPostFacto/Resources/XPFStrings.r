@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001, 2002
+Copyright (c) 2001 - 2003
 Other World Computing
 All rights reserved
 
@@ -67,7 +67,17 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			"Installing Extensions";
 			"Installing Startup Item";
 /* 25 */	"Updating Extensions Cache";
-			"Show Debug Menu";
+			"Show Debug Options";
 			"Hide Debug Menu";
+			
+			"Disable Restart";
+			"Disable NVRAM Writing";
+/* 30 */	"Disable BootX Install";
+			"Disable StartupItem Install";
+			"Disable Extensions Install";
+			"Disable Extensions.mkext Update";
+			"Disable CoreServices Copy";
+/* 35 */	"Disable Helper Copy";
+			"Keep Helper Visible";
 	}
 };

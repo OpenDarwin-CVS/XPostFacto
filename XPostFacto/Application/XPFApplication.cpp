@@ -446,15 +446,24 @@ XPFApplication::HandleDiskEvent(TToolboxEvent* event)
 	if (!fPrefs->getInstallCD ()) fPrefs->setInstallCD (MountedVolume::GetDefaultInstallerDisk ());
 }
 
+void
+XPFApplication::addDebugOptionsToHelpMenu ()
+{
+	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem ("-", cNoCommand);
+	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (CString_AC ((ResNumber) kXPFStringsResource, kMenuDisableRestart), cDisableRestart);
+	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (CString_AC ((ResNumber) kXPFStringsResource, kMenuDisableNVRAM), cDisableNVRAMWriting);
+	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (CString_AC ((ResNumber) kXPFStringsResource, kMenuDisableBootX), cDisableBootX);
+	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (CString_AC ((ResNumber) kXPFStringsResource, kMenuDisableStartupItem), cDisableStartupItem);
+	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (CString_AC ((ResNumber) kXPFStringsResource, kMenuDisableExtensions), cDisableExtensions);
+	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (CString_AC ((ResNumber) kXPFStringsResource, kMenuDisableExtensionsCache), cDisableExtensionsCache);
+	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (CString_AC ((ResNumber) kXPFStringsResource, kMenuDisableCoreServices), cDisableCoreServices);
+	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (CString_AC ((ResNumber) kXPFStringsResource, kMenuDisableHelperCopy), cDisableCopyToHelper);
+	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (CString_AC ((ResNumber) kXPFStringsResource, kMenuVisibleHelper), cVisibleHelperFiles);
+}
+
 void 
 XPFApplication::InstallHelpMenuItems()
 {
-#ifdef __MACH__
-	static bool doneOnce = false;
-	if (doneOnce) return;
-	doneOnce = true;
-#endif
-
 	CStr255_AC theMenuName;
 	GetIndString (theMenuName, kXPFStringsResource, kXPostFactoHelpMenu);
 	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (theMenuName, cShowHelpFile);
@@ -465,8 +474,10 @@ XPFApplication::InstallHelpMenuItems()
 	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem ("-", cNoCommand);
 	GetIndString (theMenuName, kXPFStringsResource, kShowLogWindowMenu);
 	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (theMenuName, cShowLogWindow);
-	GetIndString (theMenuName, kXPFStringsResource, fShowDebugOptions ? kHideDebugOptions : kShowDebugOptions);
+	GetIndString (theMenuName, kXPFStringsResource, kShowDebugOptions);
 	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (theMenuName, cShowDebugOptions);
+	
+	if (fShowDebugOptions) addDebugOptionsToHelpMenu ();
 }
 
 void 
@@ -496,11 +507,8 @@ XPFApplication::DoMenuCommand(CommandNumber aCommandNumber) // Override
 			break;
 			
 		case cShowDebugOptions:
-			fShowDebugOptions = !fShowDebugOptions;
-			if (!fShowDebugOptions) fDebugOptions = 0;
-			#ifdef __MACH__
-				SetCommandName (cShowDebugOptions, kXPFStringsResource, fShowDebugOptions ? kHideDebugOptions : kShowDebugOptions);
-			#endif
+			if (!fShowDebugOptions) addDebugOptionsToHelpMenu ();
+			fShowDebugOptions = true;
 			break;
 			
 		case cDisableRestart: 			toggleDebugOption (kDisableRestart); break;
@@ -524,14 +532,6 @@ XPFApplication::DoSetupMenus()
 {
 	TApplication::DoSetupMenus();
 	
-	TMenuBarManager::fgMenuBarManager->SetPreferredMenuBarID (fShowDebugOptions
-		#ifdef __MACH__
-			? kDebugOptionsMBarAqua : kMBarAqua
-		#else
-			? kDebugOptionsMBar : kMBarDisplayed
-		#endif
-	);
-		
 	bool enable = !InModalState ();
 	
 	Enable (cShowHelpFile, enable);

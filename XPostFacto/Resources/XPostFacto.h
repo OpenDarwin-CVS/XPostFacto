@@ -108,10 +108,6 @@ advised of the possibility of such damage.
 // -----
 
 #define mInstall 70
-#define mDebugOptions 71
-
-#define kDebugOptionsMBar		1007
-#define kDebugOptionsMBarAqua	1008
 	
 // Finder Information
 // ------------------
