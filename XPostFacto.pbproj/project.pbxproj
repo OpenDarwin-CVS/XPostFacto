@@ -5,6 +5,11 @@
 	};
 	objectVersion = 34;
 	objects = {
+		F514D82002B3C94D01A80001 = {
+			isa = PBXFileReference;
+			path = XPostFacto.html;
+			refType = 4;
+		};
 		F53C690F01B191BA01A80001 = {
 			buildStyles = (
 				F53C691101B191BA01A80001,
@@ -43,6 +48,9 @@
 				F53C691301B1926201A80001,
 				F53C695501B1926201A80001,
 				F53C69A201B1926201A80001,
+				F514D82002B3C94D01A80001,
+				F58FB3FA02B3D06B01A80001,
+				F58FB3FB02B3D0BE01A80001,
 				F53C6A1601B194DC01A80001,
 			);
 			isa = PBXGroup;
@@ -507,7 +515,7 @@
 				F53C6AAA01B19CA601A80001,
 			);
 			buildSettings = {
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/bootx/Include\"";
+				HEADER_SEARCH_PATHS = BootX/bootx/include.subproj;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				OTHER_CFLAGS = "-static";
 				OTHER_LDFLAGS = "-nostdlib -e _StartTVector -seg1addr 01C00000";
@@ -2343,7 +2351,7 @@
 				F53F989A01E7451B01A80001,
 			);
 			buildSettings = {
-				HEADER_SEARCH_PATHS = "/Developer/Headers/FlatCarbon \"${SRCROOT}/Unsupported UtilityX/MoreFiles/CHeaders\" \"${SRCROOT}/Unsupported UtilityX/MoreFiles/Sources\"";
+				HEADER_SEARCH_PATHS = "/Developer/Headers/FlatCarbon XPostFacto/MoreFiles/CHeaders \"XPostFacto/Unsupported UtilityX/MoreFiles/Sources\"";
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				OTHER_CFLAGS = "-DwantDebugging=0 -DqCarbon=1 -DqPowerPC=1";
 				OTHER_LDFLAGS = "";
@@ -2535,6 +2543,12 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		F545535102BD41AB01A80001 = {
+			isa = PBXFileReference;
+			name = postflight;
+			path = Resources/postflight;
+			refType = 4;
 		};
 		F547F715028EFEEC01A80001 = {
 			children = (
@@ -4649,9 +4663,20 @@
 			isa = PBXTargetDependency;
 			target = F557F68D0226FDFA01A80001;
 		};
+		F58FB3FA02B3D06B01A80001 = {
+			isa = PBXFileReference;
+			path = DeveloperNotes;
+			refType = 4;
+		};
+		F58FB3FB02B3D0BE01A80001 = {
+			isa = PBXFileReference;
+			path = FixTypesAndCreators.sh;
+			refType = 4;
+		};
 		F59D628601B1D09901A80001 = {
 			children = (
 				F53C69A501B1926201A80001,
+				F545535102BD41AB01A80001,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -4677,18 +4702,18 @@
 			};
 			dependencies = (
 				F54DBA8602B139A701A80001,
+				F564382A01C2B3E601A80001,
+				F59D629201B1D12901A80001,
 				F547F725028F0E5501A80001,
 				F548C0D80289790D01A80001,
 				F54E20790267327701A80001,
 				F58C73360238599301A80001,
 				F557F6A40226FF1001A80001,
 				F557F6A60226FF1001A80001,
-				F564382A01C2B3E601A80001,
 				F59D628E01B1D12901A80001,
 				F59D628F01B1D12901A80001,
 				F59D629001B1D12901A80001,
 				F59D629101B1D12901A80001,
-				F59D629201B1D12901A80001,
 				F59D629301B1D12901A80001,
 				F59D629401B1D12901A80001,
 				F59D629501B1D12901A80001,
@@ -4749,7 +4774,7 @@
 			neededFileNames = (
 			);
 			shellPath = /bin/sh;
-			shellScript = "chown root:admin \"${DSTROOT}\"\nchmod 0775 \"${DSTROOT}\"\nchmod a+t \"${DSTROOT}\"\nchown -R root:wheel \"${DSTROOT}/System/Library/Extensions\"\nchmod -R u+w \"${DSTROOT}/System/Library/Extensions\"\n\npackage \"${DSTROOT}\" \"${SRCROOT}/Package/OldWorldSupport.info\" \\\n\t-r \"${SRCROOT}/Package/Resources\" -d \"${SYMROOT}\"\n\nmkdir -p \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n\nfor FILE in \"${SRCROOT}\"/XPostFacto/Derived/Extensions/*.hfs\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in \"${DSTROOT}\"/System/Library/Extensions/*.kext\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n}\n\nfor FILE in \"${SRCROOT}/XPostFacto/Derived/OldWorldSupport.hfs\"\n{\n\trm \"${FILE}\"\n}\n\n\"${SYMROOT}/hfsplusarchive\" \"${SYMROOT}/OldWorldSupport.pkg\" \"${SRCROOT}/XPostFacto/Derived\"\n\nif test ${SUDO_USER}; then\n\tchown -R ${SUDO_USER} \"${SYMROOT}\"\n\tchown -R ${SUDO_USER} \"${SRCROOT}/XPostFacto/Derived\"\nfi";
+			shellScript = "chown root:admin \"${DSTROOT}\"\nchmod 0775 \"${DSTROOT}\"\nchmod a+t \"${DSTROOT}\"\nchown -R root:wheel \"${DSTROOT}/System/Library/Extensions\"\nchmod -R u+w \"${DSTROOT}/System/Library/Extensions\"\n\n# Construct the installer package\n# We need to copy the \"resources\" directory to remove the\n# CVS directory from inside it.\n\nmkdir -p \"${SYMROOT}/Package\"\nrm -rf \"${SYMROOT}/Package/Resources\"\ncp -Rp \"${SRCROOT}/Package/Resources\" \"${SYMROOT}/Package\"\nrm -rf \"${SYMROOT}/Package/Resources/CVS\"\n\npackage \"${DSTROOT}\" \"${SRCROOT}/Package/OldWorldSupport.info\" \\\n\t-r \"${SYMROOT}/Package/Resources\" -d \"${SYMROOT}\"\n\nchmod a+x \"${SYMROOT}/OldWorldSupport.pkg/postflight\"\n\n# Now copy the extensions\n\nmkdir -p \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n\nfor FILE in \"${SRCROOT}\"/XPostFacto/Derived/Extensions/*.hfs\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in \"${DSTROOT}\"/System/Library/Extensions/*.kext\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n}\n\nfor FILE in \"${SRCROOT}/XPostFacto/Derived/OldWorldSupport.hfs\"\n{\n\trm \"${FILE}\"\n}\n\n\"${SYMROOT}/hfsplusarchive\" \"${SYMROOT}/OldWorldSupport.pkg\" \"${SRCROOT}/XPostFacto/Derived\"\n\nif test ${SUDO_USER}; then\n\tchown -R ${SUDO_USER} \"${SYMROOT}\"\n\tchown -R ${SUDO_USER} \"${SRCROOT}/XPostFacto/Derived\"\nfi";
 		};
 		F5EC95B401B1F16601A80001 = {
 			children = (
@@ -4775,7 +4800,7 @@
 			);
 			buildSettings = {
 				DEBUGGING_SYMBOLS = NO;
-				HEADER_SEARCH_PATHS = "/Developer/Headers/FlatCarbon \"${SRCROOT}/Unsupported UtilityX/MoreFiles/CHeaders\" \"${SRCROOT}/Unsupported UtilityX/MoreFiles/Sources\"";
+				HEADER_SEARCH_PATHS = "/Developer/Headers/FlatCarbon XPostFacto/MoreFiles/CHeaders XPostFacto/MoreFiles/Sources";
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				OTHER_CFLAGS = "-DwantDebugging=0 -DqCarbon=1 -DqPowerPC=1";
 				OTHER_REZFLAGS = "";
