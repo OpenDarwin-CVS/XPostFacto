@@ -141,6 +141,11 @@ HFSPlusVolume::installBootX ()
 		return;
 	}
 	
+#ifdef __MACH__
+	// Not working in Mac OS X yet.
+	ThrowException_AC (kWritePartitionOSX, 0);
+#endif
+	
 	XPFSetUID myUID (0);
 	
 	FSRef bootXRef;

@@ -57,7 +57,8 @@ enum {
 	kCouldNotObtainAuthorization,
 	kWrongNVRAMType,
 	kNoSuchNVRAMKey,
-	kNVRAMPatchParseError
+	kNVRAMPatchParseError,
+	kWritePartitionOSX
 };
 
 

@@ -81,6 +81,7 @@ resource 'errs' (kReasonResourceID, purgeable) {
 		kWrongNVRAMType, kWrongNVRAMType, 21;
 		kNoSuchNVRAMKey, kNoSuchNVRAMKey, 22;
 		kNVRAMPatchParseError, kNVRAMPatchParseError, 23;
+		kWritePartitionOSX, kWritePartitionOSX, 24;
 	}
 };
 
@@ -110,6 +111,8 @@ resource 'STR#' (kReasonResourceID, purgeable) {
 					"wrong NVRAM type (internal error)";
 					"no such NVRAM key (internal error)";
 					"error parsing NVRAM patch (internal error)";
+					
+					"the Mac OS X version of XPostFacto is unable to install BootX (yet). Try rebooting in Mac OS 9."
 	}
 };
 

@@ -335,7 +335,10 @@ XPFPrefs::DoSetupMenus ()
 {
 	Inherited::DoSetupMenus ();
 	
+#ifndef __MACH__
+	// not working yet in Mac OS X
 	Enable (cInstallBootX, true);
+#endif
 	Enable (cInstallExtensions, true);
 	Enable (cInstallStartupItem, true);
 	Enable (cShowOptionsWindow, true);

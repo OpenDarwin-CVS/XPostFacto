@@ -156,6 +156,11 @@ XPFPartition::writePartition ()
 	#if qLogging
 		gLogFile << "Writing partition info ..." << endl_AC;
 	#endif
+	
+	#if __MACH__
+		ThrowException_AC (kWritePartitionOSX, 0);
+	#endif
+		
 	ThrowIfOSErr_AC (fSCSIDevice->writeBlocks (fPartitionNumber, 1, (UInt8 *) &fPartition));
 }
 

@@ -125,7 +125,8 @@ resource 'STR#' (kHelpStringsResource, purgeable) {
 		 "To restart from an Install CD, select the destination as the target volume, and then use the "
 		 "'Install' button below.";
 		 
-		 "Install Mac OS X to the selected target volume, using the Install CD selected in the 'Use CD' menu.";
+		 "Install Mac OS X to the selected target volume, using the Install CD selected in the 'Use CD' menu."
+		 " Not working yet in the Mac OS X version of XPostFacto.";
 		 
 		 "Select an Install CD to use for installing Mac OS X.";
 		 
