@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001, 2002
+Copyright (c) 2001 - 2004
 Other World Computing
 All rights reserved
 
@@ -32,63 +32,8 @@ advised of the possibility of such damage.
 */
 
 #include "MacAppTypes.r"
+#include "Balloons.r"
 #include "XPFHelpStrings.h"
-
-type 'hlps' {
-	wide array HelpStrings {
-		literal longint;	// the identifier
-		integer;			// Index in STR# of string
-		fill word;
-	};
-};
-
-resource 'hlps' (kHelpStringsResource, purgeable) {
-	{
-		'null', 1;
-		'sinm', 2;
-		'verm', 3;
-		'debg', 4;
-		'debr', 4;
-		'depr', 4;
-		'denm', 4;
-		'dekp', 4;
-		'dudd', 4;
-		'dedi', 4;
-		'deda', 4;
-		'deso', 4;
-		'auto', 5;
-		'inpd', 6;
-		'intx', 6;
-		'outd', 7;
-		'outx', 7;
-		'cach', 8;
-		'thro', 9;
-		'thtx', 9;
-		'thrt', 9;
-		'exdb', 10;
-		'boli', 11;
-		'voln', 11;
-		'info', 12;
-		'nvrm', 13;
-		'opti', 14;
-		'owcp', 15;
-		'hlpd', 16;
-		'hlps', 16;
-		'rest', 17;
-		'inst', 18;
-		'incd', 19;
-		'incs', 19;
-		'exof', 20;
-		'selu', 21;
-		'updb', 22;
-		'rsst', 23;
-		'mosx', 23;
-		'mos9', 23;
-		'romn', 24;
-		'uprp', 25;
-		'warn', 26;
-	}
-};
 
 resource 'STR#' (kHelpStringsResource, purgeable) {
 	{
@@ -158,5 +103,45 @@ resource 'STR#' (kHelpStringsResource, purgeable) {
 		 "Turn it off if it seems to be causing problems.";
 		 
 		 "Click on the warning icon for additional information.";
+		 
+		 "Select a volume to inspect.";
+		 
+		 "Specify the bus which this volume is attached to. The bus which XPF would select is underlined. "
+		 "If XPF is not choosing the correct bus, this is a bug in XPF which should be fixed.";
+	}
+};
+
+resource 'hdlg' (kHelpStringsResource, purgeable) {
+	HelpMgrVersion, 1, hmDefaultOptions, 0, 5,
+	HMSkipItem {},
+	{
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 1, kHelpStringsResource, 1, kHelpStringsResource, 1, kHelpStringsResource, 1},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 2, kHelpStringsResource, 2, kHelpStringsResource, 2, kHelpStringsResource, 2},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 3, kHelpStringsResource, 3, kHelpStringsResource, 3, kHelpStringsResource, 3},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 4, kHelpStringsResource, 4, kHelpStringsResource, 4, kHelpStringsResource, 4},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 5, kHelpStringsResource, 5, kHelpStringsResource, 5, kHelpStringsResource, 5},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 6, kHelpStringsResource, 6, kHelpStringsResource, 6, kHelpStringsResource, 6},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 7, kHelpStringsResource, 7, kHelpStringsResource, 7, kHelpStringsResource, 7},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 8, kHelpStringsResource, 8, kHelpStringsResource, 8, kHelpStringsResource, 8},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 9, kHelpStringsResource, 9, kHelpStringsResource, 9, kHelpStringsResource, 9},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 10, kHelpStringsResource, 10, kHelpStringsResource, 10, kHelpStringsResource, 10},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 11, kHelpStringsResource, 11, kHelpStringsResource, 11, kHelpStringsResource, 11},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 12, kHelpStringsResource, 12, kHelpStringsResource, 12, kHelpStringsResource, 12},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 13, kHelpStringsResource, 13, kHelpStringsResource, 13, kHelpStringsResource, 13},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 14, kHelpStringsResource, 14, kHelpStringsResource, 14, kHelpStringsResource, 14},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 15, kHelpStringsResource, 15, kHelpStringsResource, 15, kHelpStringsResource, 15},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 16, kHelpStringsResource, 16, kHelpStringsResource, 16, kHelpStringsResource, 16},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 17, kHelpStringsResource, 17, kHelpStringsResource, 17, kHelpStringsResource, 17},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 18, kHelpStringsResource, 18, kHelpStringsResource, 18, kHelpStringsResource, 18},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 19, kHelpStringsResource, 19, kHelpStringsResource, 19, kHelpStringsResource, 19},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 20, kHelpStringsResource, 20, kHelpStringsResource, 20, kHelpStringsResource, 20},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 21, kHelpStringsResource, 21, kHelpStringsResource, 21, kHelpStringsResource, 21},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 22, kHelpStringsResource, 22, kHelpStringsResource, 22, kHelpStringsResource, 22},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 23, kHelpStringsResource, 23, kHelpStringsResource, 23, kHelpStringsResource, 23},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 24, kHelpStringsResource, 24, kHelpStringsResource, 24, kHelpStringsResource, 24},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 25, kHelpStringsResource, 25, kHelpStringsResource, 25, kHelpStringsResource, 25},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 26, kHelpStringsResource, 26, kHelpStringsResource, 26, kHelpStringsResource, 26},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 27, kHelpStringsResource, 27, kHelpStringsResource, 27, kHelpStringsResource, 27},
+		HMStringResItem {{1,1}, {0,0,0,0}, kHelpStringsResource, 28, kHelpStringsResource, 28, kHelpStringsResource, 28, kHelpStringsResource, 28},
 	}
 };

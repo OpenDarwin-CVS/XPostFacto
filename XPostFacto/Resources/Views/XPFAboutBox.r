@@ -14,12 +14,21 @@ resource 'View' (1005, "About Box", purgeable) {
 		/* [1] */
 		ViewSignatureAndClassname {
 			'wind',
-			985,
+			991,
 			"XPFAboutBox",
 			'WIND',
 			enabled,
 			noIdle,
-			{	/* array BehaviorArray: 0 elements */
+			{	/* array BehaviorArray: 1 elements */
+				/* [1] */
+				BehaviorSignatureAndClassname {
+					noID,
+					"XPFHelpBehavior",
+					Behavior {
+						enabled,
+						noIdle
+					}
+				}
 			},
 			MAThreeOhView {
 
@@ -121,7 +130,7 @@ resource 'View' (1005, "About Box", purgeable) {
 				/* [1] */
 				16,
 				/* [2] */
-				320
+				330
 			},
 			sizeVariable,
 			sizeVariable,
@@ -130,10 +139,10 @@ resource 'View' (1005, "About Box", purgeable) {
 			doesntHandleCursor,
 			letsSubViewsHandleCursor,
 			noCursorID,
-			doesntHandleHelp,
+			handlesHelp,
 			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
+			2001,
+			15,
 			NoDrawingEnvironment {
 
 			},
@@ -237,21 +246,12 @@ resource 'View' (1005, "About Box", purgeable) {
 		/* [4] */
 		ViewSignatureAndClassname {
 			'pict',
-			131,
+			102,
 			"TPicture",
 			'owcp',
 			enabled,
 			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"TBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
+			{	/* array BehaviorArray: 0 elements */
 			},
 			MARelease13View {
 
@@ -272,13 +272,13 @@ resource 'View' (1005, "About Box", purgeable) {
 			sizeVariable,
 			shown,
 			doesntWantToBeTarget,
-			handlesCursor,
+			doesntHandleCursor,
 			letsSubViewsHandleCursor,
 			noCursorID,
-			doesntHandleHelp,
+			handlesHelp,
 			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
+			2001,
+			15,
 			NoDrawingEnvironment {
 
 			},
@@ -425,7 +425,7 @@ resource 'View' (1005, "About Box", purgeable) {
 					/* [1] */
 					270,
 					/* [2] */
-					576
+					574
 				},
 				{	/* array: 2 elements */
 					/* [1] */

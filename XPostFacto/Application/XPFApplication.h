@@ -87,6 +87,19 @@ class XPFApplication : public TApplication {
 		virtual void HandleDiskEvent (TToolboxEvent* event);
 							
 		virtual void InstallHelpMenuItems();
+		
+#ifndef __MACH__
+		virtual void GetHelpParameters(	ResNumber			helpResource,
+										short				helpIndex,
+										short				helpState,
+										HMMessageRecord&	helpMessage,
+										CPoint_AC&			localQDTip,
+										CRect_AC&			localQDRect,
+										short&				balloonVariant);
+#endif
+			
+		virtual void AboutToLoseControl (bool saveClipboard);
+		virtual void RegainControl (bool checkClipboard);
 			
 		// Accessors
 		
@@ -127,6 +140,9 @@ class XPFApplication : public TApplication {
 		
 		bool fShowDebugOptions;
 		UInt32 fDebugOptions;
+		
+		bool fSystemShowHelpTags;
+		
 };	
 
 #endif

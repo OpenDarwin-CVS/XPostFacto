@@ -77,6 +77,7 @@ main()
 		InitUUpDownControl ();
 		InitUNumberText ();
 		InitUIcon (true);
+		InitUSmallIcon ();
 		InitUSlider ();
 		InitUNumberText ();
 		InitUProgressIndicator ();

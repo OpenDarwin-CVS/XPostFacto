@@ -65,7 +65,6 @@ private:
 	XPFApplication *fApp;
 	XPFPrefs *fPrefs;
 
-	TStaticText *fHelpText;
 	TStaticText *fThrottleText;
 
 	TPopup *fInputDeviceMenu;

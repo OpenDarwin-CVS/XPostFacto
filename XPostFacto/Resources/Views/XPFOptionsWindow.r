@@ -10,16 +10,25 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 	MAThreeOhView {
 
 	},
-	{	/* array ViewArray: 42 elements */
+	{	/* array ViewArray: 50 elements */
 		/* [1] */
 		ViewSignatureAndClassname {
 			'wind',
-			5224,
+			4976,
 			"XPFSettingsWindow",
 			'WIND',
 			enabled,
 			noIdle,
-			{	/* array BehaviorArray: 0 elements */
+			{	/* array BehaviorArray: 1 elements */
+				/* [1] */
+				BehaviorSignatureAndClassname {
+					noID,
+					"XPFHelpBehavior",
+					Behavior {
+						enabled,
+						noIdle
+					}
+				}
 			},
 			MAThreeOhView {
 
@@ -96,159 +105,9 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 				1010,
 				28
 			},
-			41
+			27
 		},
 		/* [2] */
-		ViewSignatureAndClassname {
-			'chkb',
-			132,
-			"",
-			'verm',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				48,
-				/* [2] */
-				56
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				18,
-				/* [2] */
-				160
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			CheckBox {
-				mCheckBoxHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				off,
-				1010,
-				1
-			},
-			NoSubviews
-		},
-		/* [3] */
-		ViewSignatureAndClassname {
-			'chkb',
-			132,
-			"",
-			'sinm',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				74,
-				/* [2] */
-				56
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				18,
-				/* [2] */
-				160
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			CheckBox {
-				mCheckBoxHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				off,
-				1010,
-				2
-			},
-			NoSubviews
-		},
-		/* [4] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -316,703 +175,19 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [5] */
-		ViewSignatureAndClassname {
-			'chkb',
-			132,
-			"",
-			'debr',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				232,
-				/* [2] */
-				56
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				18,
-				/* [2] */
-				160
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			CheckBox {
-				mCheckBoxHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				off,
-				1010,
-				4
-			},
-			NoSubviews
-		},
-		/* [6] */
-		ViewSignatureAndClassname {
-			'chkb',
-			132,
-			"",
-			'depr',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				258,
-				/* [2] */
-				56
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				18,
-				/* [2] */
-				160
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			CheckBox {
-				mCheckBoxHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				off,
-				1010,
-				5
-			},
-			NoSubviews
-		},
-		/* [7] */
-		ViewSignatureAndClassname {
-			'chkb',
-			132,
-			"",
-			'denm',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				284,
-				/* [2] */
-				56
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				18,
-				/* [2] */
-				160
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			CheckBox {
-				mCheckBoxHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				off,
-				1010,
-				6
-			},
-			NoSubviews
-		},
-		/* [8] */
-		ViewSignatureAndClassname {
-			'chkb',
-			132,
-			"",
-			'dekp',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				310,
-				/* [2] */
-				56
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				18,
-				/* [2] */
-				160
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			CheckBox {
-				mCheckBoxHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				off,
-				1010,
-				7
-			},
-			NoSubviews
-		},
-		/* [9] */
-		ViewSignatureAndClassname {
-			'chkb',
-			132,
-			"",
-			'dudd',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				336,
-				/* [2] */
-				56
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				18,
-				/* [2] */
-				160
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			CheckBox {
-				mCheckBoxHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				off,
-				1010,
-				8
-			},
-			NoSubviews
-		},
-		/* [10] */
-		ViewSignatureAndClassname {
-			'chkb',
-			132,
-			"",
-			'dedi',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				362,
-				/* [2] */
-				56
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				18,
-				/* [2] */
-				160
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			CheckBox {
-				mCheckBoxHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				off,
-				1010,
-				9
-			},
-			NoSubviews
-		},
-		/* [11] */
-		ViewSignatureAndClassname {
-			'chkb',
-			132,
-			"",
-			'deda',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				388,
-				/* [2] */
-				56
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				18,
-				/* [2] */
-				160
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			CheckBox {
-				mCheckBoxHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				off,
-				1010,
-				10
-			},
-			NoSubviews
-		},
-		/* [12] */
-		ViewSignatureAndClassname {
-			'chkb',
-			132,
-			"",
-			'deso',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				414,
-				/* [2] */
-				56
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				18,
-				/* [2] */
-				160
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			CheckBox {
-				mCheckBoxHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				off,
-				1010,
-				11
-			},
-			NoSubviews
-		},
-		/* [13] */
-		ViewSignatureAndClassname {
-			'chkb',
-			132,
-			"",
-			'desp',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				440,
-				/* [2] */
-				56
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				18,
-				/* [2] */
-				160
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			CheckBox {
-				mCheckBoxHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				off,
-				1010,
-				12
-			},
-			NoSubviews
-		},
-		/* [14] */
+		/* [3] */
 		ViewSignatureAndClassname {
 			'stat',
-			173,
+			138,
 			"",
 			'exdb',
 			enabled,
 			noIdle,
-			{	/* array BehaviorArray: 2 elements */
+			{	/* array BehaviorArray: 1 elements */
 				/* [1] */
 				BehaviorSignatureAndClassname {
 					noID,
 					"XPFOpenURLBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				},
-				/* [2] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
 					Behavior {
 						enabled,
 						noIdle
@@ -1026,7 +201,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 				/* [1] */
 				468,
 				/* [2] */
-				76
+				75
 			},
 			{	/* array: 2 elements */
 				/* [1] */
@@ -1038,13 +213,13 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			sizeVariable,
 			shown,
 			doesntWantToBeTarget,
-			handlesCursor,
+			doesntHandleCursor,
 			letsSubViewsHandleCursor,
 			noCursorID,
-			doesntHandleHelp,
+			handlesHelp,
 			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
+			2001,
+			10,
 			NoDrawingEnvironment {
 
 			},
@@ -1077,7 +252,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [15] */
+		/* [4] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -1145,419 +320,19 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [16] */
-		ViewSignatureAndClassname {
-			'chkb',
-			132,
-			"",
-			'auto',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				48,
-				/* [2] */
-				436
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				18,
-				/* [2] */
-				166
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			CheckBox {
-				mCheckBoxHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				off,
-				1010,
-				15
-			},
-			NoSubviews
-		},
-		/* [17] */
-		ViewSignatureAndClassname {
-			'popp',
-			151,
-			"TPopup",
-			'inpd',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				78,
-				/* [2] */
-				436
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				20,
-				/* [2] */
-				166
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			Popup {
-				mPopupHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				0,
-				1,
-				0,
-				plain,
-				justSystem,
-				dontUseAddResMenu,
-				noID,
-				-1,
-				1
-			},
-			NoSubviews
-		},
-		/* [18] */
-		ViewSignatureAndClassname {
-			'popp',
-			151,
-			"TPopup",
-			'outd',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				110,
-				/* [2] */
-				436
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				20,
-				/* [2] */
-				166
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			Popup {
-				mPopupHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				0,
-				1,
-				0,
-				plain,
-				justSystem,
-				dontUseAddResMenu,
-				noID,
-				-1,
-				1
-			},
-			NoSubviews
-		},
-		/* [19] */
+		/* [5] */
 		ViewSignatureAndClassname {
 			'stat',
-			135,
-			"",
-			'intx',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				80,
-				/* [2] */
-				328
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				16,
-				/* [2] */
-				100
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			StaticText {
-				mStaticTextHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				autoWrap,
-				dontEraseFirst,
-				justRight,
-				1010,
-				16
-			},
-			NoSubviews
-		},
-		/* [20] */
-		ViewSignatureAndClassname {
-			'stat',
-			135,
-			"",
-			'outx',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				112,
-				/* [2] */
-				328
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				16,
-				/* [2] */
-				100
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			StaticText {
-				mStaticTextHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				autoWrap,
-				dontEraseFirst,
-				justRight,
-				1010,
-				17
-			},
-			NoSubviews
-		},
-		/* [21] */
-		ViewSignatureAndClassname {
-			'stat',
-			173,
+			138,
 			"",
 			'exof',
 			enabled,
 			noIdle,
-			{	/* array BehaviorArray: 2 elements */
+			{	/* array BehaviorArray: 1 elements */
 				/* [1] */
 				BehaviorSignatureAndClassname {
 					noID,
 					"XPFOpenURLBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				},
-				/* [2] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
 					Behavior {
 						enabled,
 						noIdle
@@ -1583,13 +358,13 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			sizeVariable,
 			shown,
 			doesntWantToBeTarget,
-			handlesCursor,
+			doesntHandleCursor,
 			letsSubViewsHandleCursor,
 			noCursorID,
-			doesntHandleHelp,
+			handlesHelp,
 			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
+			2001,
+			20,
 			NoDrawingEnvironment {
 
 			},
@@ -1622,7 +397,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [22] */
+		/* [6] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -1690,334 +465,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [23] */
-		ViewSignatureAndClassname {
-			'slid',
-			146,
-			"",
-			'thro',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				236,
-				/* [2] */
-				436
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				18,
-				/* [2] */
-				132
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			Slider {
-				mControlHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				0,
-				rightJustify,
-				0,
-				24,
-				0,
-				0
-			},
-			NoSubviews
-		},
-		/* [24] */
-		ViewSignatureAndClassname {
-			'stat',
-			135,
-			"",
-			'thtx',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				236,
-				/* [2] */
-				360
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				18,
-				/* [2] */
-				70
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			StaticText {
-				mStaticTextHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				autoWrap,
-				dontEraseFirst,
-				justRight,
-				1010,
-				20
-			},
-			NoSubviews
-		},
-		/* [25] */
-		ViewSignatureAndClassname {
-			'chkb',
-			132,
-			"",
-			'cach',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				206,
-				/* [2] */
-				436
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				18,
-				/* [2] */
-				166
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			CheckBox {
-				mCheckBoxHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				off,
-				1010,
-				21
-			},
-			NoSubviews
-		},
-		/* [26] */
-		ViewSignatureAndClassname {
-			'stat',
-			211,
-			"",
-			'thrt',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				236,
-				/* [2] */
-				576
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				18,
-				/* [2] */
-				26
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			AdornerListSignatureAndClassname {
-				NoIdentifier,
-				"TAdornerList",
-				8,
-				AdornerElementSizeShift,
-				8,
-				{	/* array AdornerElementArray: 2 elements */
-					/* [1] */
-					AdornFirst,
-					AdornerSignatureAndClassname {
-						'bfad',
-						"TBorderFrameAdorner",
-						'bfad',
-						freeOnDeletion,
-						$""
-					},
-					/* [2] */
-					DrawView,
-					AdornerLocalObject {
-						DrawAdorner
-					}
-				}
-			},
-			emptyUserArea,
-			StaticText {
-				mStaticTextHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				autoWrap,
-				dontEraseFirst,
-				justCenter,
-				1010,
-				20
-			},
-			NoSubviews
-		},
-		/* [27] */
+		/* [7] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -2085,143 +533,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [28] */
-		ViewSignatureAndClassname {
-			'stat',
-			100,
-			"",
-			'hlpt',
-			notEnabled,
-			noIdle,
-			{	/* array BehaviorArray: 0 elements */
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				430,
-				/* [2] */
-				328
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				66,
-				/* [2] */
-				274
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			doesntHandleCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			StaticText {
-				mStaticTextHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				27392,
-				dontPreferOutline,
-				autoWrap,
-				dontEraseFirst,
-				justSystem,
-				1010,
-				23
-			},
-			NoSubviews
-		},
-		/* [29] */
-		ViewSignatureAndClassname {
-			'stat',
-			100,
-			"",
-			'sta3',
-			notEnabled,
-			noIdle,
-			{	/* array BehaviorArray: 0 elements */
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				402,
-				/* [2] */
-				292
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				16,
-				/* [2] */
-				36
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			doesntHandleCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			StaticText {
-				mStaticTextHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				autoWrap,
-				dontEraseFirst,
-				justRight,
-				1010,
-				24
-			},
-			NoSubviews
-		},
-		/* [30] */
+		/* [8] */
 		ViewSignatureAndClassname {
 			'sepr',
 			66,
@@ -2269,7 +581,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [31] */
+		/* [9] */
 		ViewSignatureAndClassname {
 			'sepr',
 			66,
@@ -2317,7 +629,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [32] */
+		/* [10] */
 		ViewSignatureAndClassname {
 			'sepr',
 			66,
@@ -2365,7 +677,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [33] */
+		/* [11] */
 		ViewSignatureAndClassname {
 			'sepr',
 			66,
@@ -2413,55 +725,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [34] */
-		ViewSignatureAndClassname {
-			'sepr',
-			66,
-			"",
-			'sep4',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 0 elements */
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				408,
-				/* [2] */
-				330
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				13,
-				/* [2] */
-				308
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			doesntHandleCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			Separator {
-
-			},
-			NoSubviews
-		},
-		/* [35] */
+		/* [12] */
 		ViewSignatureAndClassname {
 			'sepr',
 			66,
@@ -2509,7 +773,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [36] */
+		/* [13] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -2577,7 +841,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [37] */
+		/* [14] */
 		ViewSignatureAndClassname {
 			'sepr',
 			66,
@@ -2625,82 +889,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [38] */
-		ViewSignatureAndClassname {
-			'chkb',
-			132,
-			"",
-			'romn',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				140,
-				/* [2] */
-				56
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				18,
-				/* [2] */
-				160
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			CheckBox {
-				mCheckBoxHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				off,
-				1010,
-				26
-			},
-			NoSubviews
-		},
-		/* [39] */
+		/* [15] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -2768,7 +957,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [40] */
+		/* [16] */
 		ViewSignatureAndClassname {
 			'sepr',
 			66,
@@ -2816,7 +1005,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [41] */
+		/* [17] */
 		ViewSignatureAndClassname {
 			'stat',
 			115,
@@ -2837,7 +1026,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				80,
+				123,
 				/* [2] */
 				274
 			},
@@ -2848,10 +1037,10 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			doesntHandleCursor,
 			letsSubViewsHandleCursor,
 			noCursorID,
-			doesntHandleHelp,
+			handlesHelp,
 			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
+			2001,
+			13,
 			NoDrawingEnvironment {
 
 			},
@@ -2884,24 +1073,1065 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [42] */
+		/* [18] */
 		ViewSignatureAndClassname {
-			'chkb',
-			132,
+			'view',
+			993,
 			"",
-			'uprp',
+			'view',
 			enabled,
 			noIdle,
-			{	/* array BehaviorArray: 1 elements */
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
 				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
+				232,
+				/* [2] */
+				56
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				226,
+				/* [2] */
+				160
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			handlesHelp,
+			letsSubViewsHandleHelp,
+			2001,
+			4,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			View {
+
+			},
+			9
+		},
+		/* [19] */
+		ViewSignatureAndClassname {
+			'chkb',
+			97,
+			"",
+			'debr',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				0,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				160
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			0,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			CheckBox {
+				mCheckBoxHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				off,
+				1010,
+				4
+			},
+			NoSubviews
+		},
+		/* [20] */
+		ViewSignatureAndClassname {
+			'chkb',
+			97,
+			"",
+			'depr',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				26,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				160
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			0,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			CheckBox {
+				mCheckBoxHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				off,
+				1010,
+				5
+			},
+			NoSubviews
+		},
+		/* [21] */
+		ViewSignatureAndClassname {
+			'chkb',
+			97,
+			"",
+			'denm',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				52,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				160
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			0,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			CheckBox {
+				mCheckBoxHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				off,
+				1010,
+				6
+			},
+			NoSubviews
+		},
+		/* [22] */
+		ViewSignatureAndClassname {
+			'chkb',
+			97,
+			"",
+			'dekp',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				78,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				160
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			0,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			CheckBox {
+				mCheckBoxHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				off,
+				1010,
+				7
+			},
+			NoSubviews
+		},
+		/* [23] */
+		ViewSignatureAndClassname {
+			'chkb',
+			97,
+			"",
+			'dudd',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				104,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				160
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			0,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			CheckBox {
+				mCheckBoxHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				off,
+				1010,
+				8
+			},
+			NoSubviews
+		},
+		/* [24] */
+		ViewSignatureAndClassname {
+			'chkb',
+			97,
+			"",
+			'dedi',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				130,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				160
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			0,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			CheckBox {
+				mCheckBoxHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				off,
+				1010,
+				9
+			},
+			NoSubviews
+		},
+		/* [25] */
+		ViewSignatureAndClassname {
+			'chkb',
+			97,
+			"",
+			'deda',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				156,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				160
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			0,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			CheckBox {
+				mCheckBoxHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				off,
+				1010,
+				10
+			},
+			NoSubviews
+		},
+		/* [26] */
+		ViewSignatureAndClassname {
+			'chkb',
+			97,
+			"",
+			'deso',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				182,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				160
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			0,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			CheckBox {
+				mCheckBoxHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				off,
+				1010,
+				11
+			},
+			NoSubviews
+		},
+		/* [27] */
+		ViewSignatureAndClassname {
+			'chkb',
+			97,
+			"",
+			'desp',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				208,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				160
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			CheckBox {
+				mCheckBoxHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				off,
+				1010,
+				12
+			},
+			NoSubviews
+		},
+		/* [28] */
+		ViewSignatureAndClassname {
+			'chkb',
+			115,
+			"XPFHelpTagCheckbox",
+			'chkb',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				476,
+				/* [2] */
+				604
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				16,
+				/* [2] */
+				34
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			CheckBox {
+				mCheckBoxHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				off,
+				1010,
+				30
+			},
+			NoSubviews
+		},
+		/* [29] */
+		ViewSignatureAndClassname {
+			'view',
+			169,
+			"",
+			'vie0',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				48,
+				/* [2] */
+				56
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				160
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			handlesHelp,
+			letsSubViewsHandleHelp,
+			2001,
+			3,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			View {
+
+			},
+			1
+		},
+		/* [30] */
+		ViewSignatureAndClassname {
+			'chkb',
+			97,
+			"",
+			'verm',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				0,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				160
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			CheckBox {
+				mCheckBoxHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				off,
+				1010,
+				1
+			},
+			NoSubviews
+		},
+		/* [31] */
+		ViewSignatureAndClassname {
+			'view',
+			169,
+			"",
+			'vie1',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				74,
+				/* [2] */
+				56
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				160
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			handlesHelp,
+			letsSubViewsHandleHelp,
+			2001,
+			2,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			View {
+
+			},
+			1
+		},
+		/* [32] */
+		ViewSignatureAndClassname {
+			'chkb',
+			97,
+			"",
+			'sinm',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				0,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				160
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			CheckBox {
+				mCheckBoxHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				off,
+				1010,
+				2
+			},
+			NoSubviews
+		},
+		/* [33] */
+		ViewSignatureAndClassname {
+			'view',
+			169,
+			"",
+			'vie2',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				140,
+				/* [2] */
+				56
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				160
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			handlesHelp,
+			letsSubViewsHandleHelp,
+			2001,
+			24,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			View {
+
+			},
+			1
+		},
+		/* [34] */
+		ViewSignatureAndClassname {
+			'chkb',
+			97,
+			"",
+			'romn',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				0,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				160
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			CheckBox {
+				mCheckBoxHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				off,
+				1010,
+				26
+			},
+			NoSubviews
+		},
+		/* [35] */
+		ViewSignatureAndClassname {
+			'view',
+			169,
+			"",
+			'vie3',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
 			},
 			MARelease13View {
 
@@ -2922,7 +2152,55 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			sizeVariable,
 			shown,
 			doesntWantToBeTarget,
-			handlesCursor,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			handlesHelp,
+			letsSubViewsHandleHelp,
+			2001,
+			25,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			View {
+
+			},
+			1
+		},
+		/* [36] */
+		ViewSignatureAndClassname {
+			'chkb',
+			97,
+			"",
+			'uprp',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				0,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				160
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
 			letsSubViewsHandleCursor,
 			noCursorID,
 			doesntHandleHelp,
@@ -2958,12 +2236,889 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 				29
 			},
 			NoSubviews
+		},
+		/* [37] */
+		ViewSignatureAndClassname {
+			'view',
+			169,
+			"",
+			'vie4',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				48,
+				/* [2] */
+				436
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				166
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			handlesHelp,
+			letsSubViewsHandleHelp,
+			2001,
+			5,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			View {
+
+			},
+			1
+		},
+		/* [38] */
+		ViewSignatureAndClassname {
+			'chkb',
+			97,
+			"",
+			'auto',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				0,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				166
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			CheckBox {
+				mCheckBoxHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				off,
+				1010,
+				15
+			},
+			NoSubviews
+		},
+		/* [39] */
+		ViewSignatureAndClassname {
+			'view',
+			294,
+			"",
+			'vie5',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				78,
+				/* [2] */
+				328
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				22,
+				/* [2] */
+				274
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			handlesHelp,
+			letsSubViewsHandleHelp,
+			2001,
+			6,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			View {
+
+			},
+			2
+		},
+		/* [40] */
+		ViewSignatureAndClassname {
+			'popp',
+			116,
+			"TPopup",
+			'inpd',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				0,
+				/* [2] */
+				108
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				20,
+				/* [2] */
+				166
+			},
+			sizeFixed,
+			sizeFixed,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Popup {
+				mPopupHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				0,
+				1,
+				0,
+				plain,
+				justSystem,
+				dontUseAddResMenu,
+				noID,
+				-1,
+				1
+			},
+			NoSubviews
+		},
+		/* [41] */
+		ViewSignatureAndClassname {
+			'stat',
+			100,
+			"",
+			'intx',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				2,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				16,
+				/* [2] */
+				100
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			StaticText {
+				mStaticTextHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				autoWrap,
+				dontEraseFirst,
+				justRight,
+				1010,
+				16
+			},
+			NoSubviews
+		},
+		/* [42] */
+		ViewSignatureAndClassname {
+			'view',
+			294,
+			"",
+			'vie6',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				110,
+				/* [2] */
+				327
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				22,
+				/* [2] */
+				274
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			handlesHelp,
+			letsSubViewsHandleHelp,
+			2001,
+			7,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			View {
+
+			},
+			2
+		},
+		/* [43] */
+		ViewSignatureAndClassname {
+			'stat',
+			100,
+			"",
+			'outx',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				2,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				16,
+				/* [2] */
+				100
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			StaticText {
+				mStaticTextHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				autoWrap,
+				dontEraseFirst,
+				justRight,
+				1010,
+				17
+			},
+			NoSubviews
+		},
+		/* [44] */
+		ViewSignatureAndClassname {
+			'popp',
+			116,
+			"TPopup",
+			'outd',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				0,
+				/* [2] */
+				108
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				20,
+				/* [2] */
+				166
+			},
+			sizeFixed,
+			sizeFixed,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Popup {
+				mPopupHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				0,
+				1,
+				0,
+				plain,
+				justSystem,
+				dontUseAddResMenu,
+				noID,
+				-1,
+				1
+			},
+			NoSubviews
+		},
+		/* [45] */
+		ViewSignatureAndClassname {
+			'view',
+			169,
+			"",
+			'vie7',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				206,
+				/* [2] */
+				436
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				166
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			handlesHelp,
+			letsSubViewsHandleHelp,
+			2001,
+			8,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			View {
+
+			},
+			1
+		},
+		/* [46] */
+		ViewSignatureAndClassname {
+			'chkb',
+			97,
+			"",
+			'cach',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				0,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				166
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			CheckBox {
+				mCheckBoxHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				off,
+				1010,
+				21
+			},
+			NoSubviews
+		},
+		/* [47] */
+		ViewSignatureAndClassname {
+			'view',
+			471,
+			"",
+			'vie8',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				236,
+				/* [2] */
+				360
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				242
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			handlesHelp,
+			letsSubViewsHandleHelp,
+			2001,
+			9,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			View {
+
+			},
+			3
+		},
+		/* [48] */
+		ViewSignatureAndClassname {
+			'stat',
+			176,
+			"",
+			'thrt',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				0,
+				/* [2] */
+				216
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				26
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			AdornerListSignatureAndClassname {
+				NoIdentifier,
+				"TAdornerList",
+				8,
+				AdornerElementSizeShift,
+				8,
+				{	/* array AdornerElementArray: 2 elements */
+					/* [1] */
+					AdornFirst,
+					AdornerSignatureAndClassname {
+						'bfad',
+						"TBorderFrameAdorner",
+						'bfad',
+						freeOnDeletion,
+						$""
+					},
+					/* [2] */
+					DrawView,
+					AdornerLocalObject {
+						DrawAdorner
+					}
+				}
+			},
+			emptyUserArea,
+			StaticText {
+				mStaticTextHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				autoWrap,
+				dontEraseFirst,
+				justCenter,
+				1010,
+				20
+			},
+			NoSubviews
+		},
+		/* [49] */
+		ViewSignatureAndClassname {
+			'slid',
+			111,
+			"",
+			'thro',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				0,
+				/* [2] */
+				76
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				132
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Slider {
+				mControlHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				0,
+				rightJustify,
+				0,
+				24,
+				0,
+				0
+			},
+			NoSubviews
+		},
+		/* [50] */
+		ViewSignatureAndClassname {
+			'stat',
+			100,
+			"",
+			'thtx',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				0,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				70
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			StaticText {
+				mStaticTextHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				autoWrap,
+				dontEraseFirst,
+				justRight,
+				1010,
+				20
+			},
+			NoSubviews
 		}
 	}
 };
 
 resource 'STR#' (1010, "Additional Settings", purgeable) {
-	{	/* array StringArray: 29 elements */
+	{	/* array StringArray: 30 elements */
 		/* [1] */
 		"Verbose",
 		/* [2] */
@@ -3021,7 +3176,9 @@ resource 'STR#' (1010, "Additional Settings", purgeable) {
 		/* [28] */
 		"Additional Settings",
 		/* [29] */
-		"Use PatchedRagePro"
+		"Use PatchedRagePro",
+		/* [30] */
+		"?"
 	}
 };
 

@@ -38,6 +38,7 @@ advised of the possibility of such damage.
 #include "XPFRestartCommand.h"
 #include "XPostFacto.h"
 #include "XPFStrings.h"
+#include "XPFApplication.h"
 
 //========================================================================================
 // CLASS XPFInstallButton
@@ -250,6 +251,82 @@ XPFMacOSXButton::DoUpdate (ChangeID_AC theChange,
 	
 		case cSetRebootInMacOS9:
 			DoEvent (((XPFPrefs *) GetDocument ())->getRebootInMacOS9 () ? mTurnOff : mTurnOn, this, NULL);
+			break;
+			
+		default:
+			Inherited::DoUpdate (theChange, changedObject, changeData, dependencySpace);
+			break;
+	}
+}
+
+//========================================================================================
+// CLASS XPFHelpTagCheckbox
+//========================================================================================
+
+#undef Inherited
+#define Inherited TCheckBox
+
+MA_DEFINE_CLASS (XPFHelpTagCheckbox);
+
+IconRef XPFHelpTagCheckbox::gIconRef = NULL;
+ 
+XPFHelpTagCheckbox::~XPFHelpTagCheckbox ()
+{
+	if (gIconRef) ReleaseIconRef (gIconRef);
+}
+
+void 
+XPFHelpTagCheckbox::DoPostCreate (TDocument* itsDocument)
+{
+	Inherited::DoPostCreate (itsDocument);
+	
+	fPrefs = ((XPFApplication *) gApplication)->getPrefs ();
+	fPrefs->AddDependent (this);
+	DoUpdate (cSetShowHelpTags, fPrefs, NULL, NULL);
+	
+	SetText ("", true);
+	
+	if (gIconRef) {
+		AcquireIconRef (gIconRef);
+	} else {
+		GetIconRef (kOnSystemDisk, kSystemIconsCreator, kHelpIcon, &gIconRef);
+	}
+	
+	if (gIconRef) {
+		CViewPoint location (18, 0);
+		CViewPoint size (16, 16);
+		
+		TSmallIcon *icon = new TSmallIcon (location, size);
+		AddSubView (icon);
+		icon->DoPostCreate (itsDocument);
+
+		IconFamilyHandle familyHandle;
+		IconSuiteRef iconSuite;
+		OSErr err = IconRefToIconFamily (gIconRef, kSelectorAllAvailableData, &familyHandle);
+		if (err == noErr) err = IconFamilyToIconSuite (familyHandle, kSelectorAllAvailableData, &iconSuite);
+		if (err == noErr) icon->SetIconSuite (iconSuite, true);
+	}
+}
+
+void 
+XPFHelpTagCheckbox::DoEvent(EventNumber eventNumber,
+						TEventHandler* source,
+						TEvent* event)
+{
+	Inherited::DoEvent (eventNumber, source, event);
+	if (eventNumber == mCheckBoxHit) fPrefs->setShowHelpTags (this->IsOn ());
+}
+
+void
+XPFHelpTagCheckbox::DoUpdate (ChangeID_AC theChange, 
+								MDependable_AC* changedObject,
+								void* changeData,
+								CDependencySpace_AC* dependencySpace)
+{
+	switch (theChange) {
+	
+		case cSetShowHelpTags:
+			this->SetValue (fPrefs->getShowHelpTags (), true);
 			break;
 			
 		default:

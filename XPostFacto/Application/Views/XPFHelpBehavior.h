@@ -39,17 +39,20 @@ class XPFHelpBehavior : public TBehavior {
 	MA_DECLARE_CLONE;
 
 	public:
+	
 		XPFHelpBehavior (IDType itsIdentifier = kNoIdentifier);
 
 		void DoPostCreate (TDocument* itsDocument);
 
-		virtual bool DoSetCursor(const CViewPoint& localPoint, RgnHandle cursorRegion);
-		virtual bool DoUnsetCursor();
+		static pascal OSStatus HelpTagCallback (WindowRef inWindow, Point inGlobalMouse, HMContentRequest inRequest, HMContentProvidedType *outContentProvided, HMHelpContentPtr ioHelpContent);
+		
+		~XPFHelpBehavior ();
 	
 	private:
 
-		TStaticText *fHelpText;
-		CString_AC fHelpString;
+		static TView* DeepestSubviewWithHelp (TView *view, CViewPoint &vp);
+		
+		HMWindowContentUPP fWindowContentUPP;
 
 };
 

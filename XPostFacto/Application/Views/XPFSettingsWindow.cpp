@@ -76,7 +76,6 @@ XPFSettingsWindow::DoPostCreate(TDocument* itsDocument)
 	constructIODeviceMenu (fInputDeviceMenu, XPFIODevice::GetInputDeviceList ());
 	constructIODeviceMenu (fOutputDeviceMenu, XPFIODevice::GetOutputDeviceList ());
 
-	fHelpText = dynamic_cast_or_throw_AC (TStaticText*, this->FindSubView ('hlpt'));
 	fThrottleText = dynamic_cast_or_throw_AC (TStaticText*, this->FindSubView ('thrt'));
 	
 	fToggleDebugBreakpoint = dynamic_cast_or_throw_AC (TCheckBox*, this->FindSubView ('debr'));

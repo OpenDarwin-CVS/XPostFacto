@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001, 2002
+Copyright (c) 2001 - 2004
 Other World Computing
 All rights reserved
 
@@ -33,11 +33,7 @@ advised of the possibility of such damage.
 
 #include "XPFHelpBehavior.h"
 #include "XPFHelpStrings.h"
-
-struct HelpStringResource {
-	IDType idType;
-	short index;
-};
+#include "XPFLog.h"
 
 MA_DEFINE_CLASS (XPFHelpBehavior);
 
@@ -45,45 +41,78 @@ MA_DEFINE_CLASS (XPFHelpBehavior);
 
 XPFHelpBehavior::XPFHelpBehavior (IDType itsIdentifier)
 	: TBehavior (itsIdentifier),
-		fHelpText (NULL)
+		fWindowContentUPP (NULL)
 {
 }
 
-bool 
-XPFHelpBehavior::DoSetCursor (const CViewPoint& localPoint, RgnHandle cursorRegion)
+XPFHelpBehavior::~XPFHelpBehavior ()
 {
-	#pragma unused (localPoint, cursorRegion)
-	if (fHelpText) fHelpText->SetText (fHelpString, true);
-	return true;
+	if (fWindowContentUPP) DisposeHMWindowContentUPP (fWindowContentUPP);
 }
 
-bool 
-XPFHelpBehavior::DoUnsetCursor ()
+TView* 
+XPFHelpBehavior::DeepestSubviewWithHelp (TView *view, CViewPoint &vp)
 {
-	if (fHelpText) fHelpText->SetText ("", true);
-	return true;
+	TView *retVal = NULL;
+	
+	for (CSubViewIterator iter (view); iter.Current (); iter.Next ()) {
+		if (iter->IsShown () && iter->GetFrame().Contains (vp)) {
+			CViewPoint subviewpt = iter->SuperViewToLocal (vp);
+			retVal = DeepestSubviewWithHelp (iter.Current (), subviewpt);
+			break;	
+		}
+	}
+		
+	if (!retVal && (view->GetHelpID () != kNoResource)) retVal = view;
+
+	return retVal;
+}
+
+pascal OSStatus 
+XPFHelpBehavior::HelpTagCallback (WindowRef inWindow, Point inGlobalMouse, HMContentRequest inRequest, HMContentProvidedType *outContentProvided, HMHelpContentPtr ioHelpContent)
+{
+	*outContentProvided = kHMContentNotProvided;
+	
+	if (inRequest == kHMSupplyContent) {
+		TWindow *window = TWindow::WMgrToWindow (inWindow);
+		if (!window) return noErr;
+		
+		CPoint_AC mouse (inGlobalMouse);
+		GlobalToLocal (&mouse);
+		CViewPoint viewPoint = window->QDToView (mouse);
+
+		TView *helpView = DeepestSubviewWithHelp (window, viewPoint);
+		if (!helpView) return noErr;
+
+		CViewRect global (0, 0, 0, 0);
+
+		TView *sv = helpView->GetSuperView ();
+		if (sv) global = window->LocalToGlobal (sv->LocalToRootView (helpView->GetFrame ()));
+			
+		*outContentProvided =  kHMContentProvided;
+		ioHelpContent->absHotRect = global.AsRect ();
+		ioHelpContent->tagSide = kHMOutsideBottomLeftAligned;
+		ioHelpContent->content[0].contentType = kHMStringResContent;
+		ioHelpContent->content[0].u.tagStringRes.hmmResID = helpView->GetHelpID ();
+		ioHelpContent->content[0].u.tagStringRes.hmmIndex = helpView->GetHelpIndex ();
+		ioHelpContent->content[1].contentType = kHMNoContent;
+	} 
+	
+	return noErr;
 }
 
 void
 XPFHelpBehavior::DoPostCreate (TDocument* itsDocument)
 {
 	Inherited::DoPostCreate (itsDocument);
+		
+	TWindow *owner = dynamic_cast_AC (TWindow*, fOwner);
 	
-	fHelpText = (TStaticText *) fOwner->GetWindow ()->FindSubView ('hlpt');
+#ifdef __MACH__
+	if (owner) {
+		fWindowContentUPP = NewHMWindowContentUPP (HelpTagCallback);
+		HMInstallWindowContentCallback (owner->GetWindowRef (), fWindowContentUPP);
+	} 
+#endif
 	
-	fOwner->SetEnable (true);
-	((TView *) fOwner)->SetHandlesCursor (true);
-	
-	Handle helpStrings = GetResource ('hlps', kHelpStringsResource);
-	if (helpStrings) {
-		CTempHandleLock_AC lock (helpStrings);
-		HelpStringResource *r = (HelpStringResource *) *helpStrings;
-		unsigned handleLength = GetHandleSize (helpStrings) / sizeof (HelpStringResource);
-		for (unsigned x = 0; x < handleLength; x++) {
-			if (r[x].idType == fOwner->GetIdentifier ()) {
-				fHelpString = CString_AC (kHelpStringsResource, r[x].index);
-				break;
-			}
-		}
-	}
 }

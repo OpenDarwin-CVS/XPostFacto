@@ -66,6 +66,8 @@ advised of the possibility of such damage.
 #include "XPFUpdateWindow.h"
 #include "XPFVolumeInspectorWindow.h"
 #include "XPFBusPopup.h"
+#include "Sound.h"
+
 
 #include <InternetConfig.h>
 #include <UnicodeConverter.h>
@@ -156,6 +158,7 @@ XPFApplication::XPFApplication() :
 	REGISTER_CLASS_AC (XPFVolumeInspectorWindow);
 	REGISTER_CLASS_AC (XPFWarningIcon);
 	REGISTER_CLASS_AC (XPFBusPopup);
+	REGISTER_CLASS_AC (XPFHelpTagCheckbox);
 	
 	ProcessInfoRec info;
 	FSSpec appSpec, resourceSpec;
@@ -291,6 +294,27 @@ XPFApplication::DoShowHelpFile ()
 	}
 }
 
+#ifndef __MACH__
+void 
+XPFApplication::GetHelpParameters(	ResNumber			helpResource,
+									short				helpIndex,
+									short				helpState,
+									HMMessageRecord&	helpMessage,
+									CPoint_AC&			localQDTip,
+									CRect_AC&			localQDRect,
+									short&				balloonVariant)
+{
+	// The TDispatcher method limits things to the application's own resource fork,
+	// whereas we want to use the SharedResources.rsrc.
+
+	unsigned long options;
+	short theProc;
+	short count;
+
+	::ThrowIfOSErr_AC(HMGetIndHelpMsg(kHMDialogResType, helpResource, helpIndex, helpState, &options, localQDTip, localQDRect, &theProc, &balloonVariant, &helpMessage, &count));
+}
+#endif
+
 void
 XPFApplication::installMenuHelpTags (ResNumber menuResID)
 {
@@ -334,6 +358,28 @@ XPFApplication::installMenuHelpTags (ResNumber menuResID)
 }
 
 void
+XPFApplication::AboutToLoseControl (bool saveClipboard)
+{
+#ifndef __MACH__
+	fPrefs->setShowHelpTags (HMGetBalloons ());	// pick up any changes through help menu
+	HMSetBalloons (fSystemShowHelpTags);		// restore the system-wide setting
+#endif
+
+	Inherited::AboutToLoseControl (saveClipboard);
+}
+
+void
+XPFApplication::RegainControl (bool checkClipboard)
+{
+#ifndef __MACH__
+	fSystemShowHelpTags = HMGetBalloons ();		// pick up any changes to the system-wide setting
+	fPrefs->implementShowHelpTags ();
+#endif
+
+	Inherited::RegainControl (checkClipboard);
+}
+
+void
 XPFApplication::DoInitialState ()
 {
 	Inherited::DoInitialState ();
@@ -349,6 +395,10 @@ XPFApplication::DoInitialState ()
 	gLogFile.setViewStream (fViewStream);
 
 	fPlatform = new XPFPlatform;
+
+#ifndef __MACH__	
+	fSystemShowHelpTags = HMGetBalloons ();
+#endif
 	
 	installMenuHelpTags (mWindow);
 	installMenuHelpTags (mInstall);

@@ -122,6 +122,8 @@ advised of the possibility of such damage.
 #define cSetBus							1467
 #define cSetOpenFirmwareName			1468
 
+#define cSetShowHelpTags				1469
+
 // Views and Windows
 // -----------------
 

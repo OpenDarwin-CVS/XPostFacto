@@ -109,6 +109,7 @@ XPFPrefs::XPFPrefs (TFile* itsFile)
 		fOptionsWindow (NULL),
 		fDebug (0),
 		fRebootInMacOS9 (false),
+		fShowHelpTags (true),
 		fUseROMNDRV (false),
 		fUseShortStrings (true),
 		fUseShortStringsForInstall (true),
@@ -129,7 +130,12 @@ XPFPrefs::~XPFPrefs ()
 void
 XPFPrefs::Close ()
 {
-	// First, do the superclass Close, so that we save if we need to save etc.
+#ifndef __MACH__
+	// Sync with changes to balloon help
+	setShowHelpTags (HMGetBalloons ());
+#endif
+
+	// Do the superclass Close, so that we save if we need to save etc.
 	Inherited::Close ();
 	
 	try {	
@@ -692,7 +698,10 @@ XPFPrefs::DoRead (TFile* aFile, bool forPrinting)
 		
 			if (bus && device) device->setBus (bus);
 #endif
-		}		
+		}
+		
+		fileStream >> fShowHelpTags;
+		implementShowHelpTags ();
 	}
 	
 	catch (...) {
@@ -824,7 +833,9 @@ XPFPrefs::DoWrite (TFile* aFile, bool makingCopy)
 	for (TemplateAutoList_AC <XPFDeviceHint>::Iterator iter (&fDeviceHints); iter.Current (); iter.Next ()) {
 		fileStream << iter->deviceIdent;
 		fileStream.WriteString (iter->busOFName);
-	}		
+	}
+	
+	fileStream << fShowHelpTags;
 }
 
 void 
@@ -1216,6 +1227,26 @@ XPFPrefs::setIsRegistered (bool val)
 	if (newVal != fRegisteredVersion) {
 		fRegisteredVersion = newVal;
 		Changed (cSetIsRegistered, &val);
+	}
+}
+
+void
+XPFPrefs::implementShowHelpTags ()
+{
+#ifdef __MACH__
+	HMSetHelpTagsDisplayed (fShowHelpTags);
+#else
+	HMSetBalloons (fShowHelpTags);
+#endif
+}
+
+void
+XPFPrefs::setShowHelpTags (bool val, bool callChanged)
+{
+	if (val != fShowHelpTags) {
+		fShowHelpTags = val;
+		implementShowHelpTags ();
+		if (callChanged) Changed (cSetShowHelpTags, &val);
 	}
 }
 

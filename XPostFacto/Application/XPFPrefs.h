@@ -120,6 +120,8 @@ class XPFPrefs : public TFileBasedDocument {
 		void setIsRegistered (bool val);
 		
 		void checkRegistration ();
+		
+		void implementShowHelpTags ();
 				
 #define DECLARE_ACCESSORS(type,method) 						\
 	void set##method (type val, bool callChanged = true); 	\
@@ -137,6 +139,7 @@ DECLARE_ACCESSORS (bool, BootInVerboseMode)
 DECLARE_ACCESSORS (bool, BootInSingleUserMode)
 DECLARE_ACCESSORS (bool, AutoBoot)		
 DECLARE_ACCESSORS (bool, RebootInMacOS9)
+DECLARE_ACCESSORS (bool, ShowHelpTags)
 DECLARE_ACCESSORS (bool, EnableCacheEarly)
 DECLARE_ACCESSORS (bool, UsePatchedRagePro)
 DECLARE_ACCESSORS (bool, UseShortStrings)
@@ -200,7 +203,8 @@ DECLARE_DEBUG_ACCESSORS (DebugPanicText)
 		UInt32	fDebug;
 		UInt8	fUseROMNDRV;
 		UInt32	fRegisteredVersion;
-		UInt8 fRebootInMacOS9;
+		UInt8 	fRebootInMacOS9;
+		UInt8	fShowHelpTags;
 };
 
 #endif

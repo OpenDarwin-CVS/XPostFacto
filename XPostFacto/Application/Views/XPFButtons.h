@@ -35,6 +35,9 @@ advised of the possibility of such damage.
 #define __XPFBUTTONS_H__
 
 #include "UButton.h"
+#include "UCheckbox.h"
+
+class XPFPrefs;
 
 class XPFInstallButton : public TButton {
 
@@ -115,6 +118,28 @@ public:
 					MDependable_AC* changedObject,
 					void* changeData,
 					CDependencySpace_AC* dependencySpace);
+
+};
+
+class XPFHelpTagCheckbox : public TCheckBox {
+
+	MA_DECLARE_CLONE;
+
+public:
+
+	virtual void DoPostCreate (TDocument* itsDocument);
+	
+	virtual void DoEvent (EventNumber eventNumber, TEventHandler* source, TEvent* event);
+						
+	virtual void DoUpdate (ChangeID_AC theChange, MDependable_AC* changedObject, void* changeData, CDependencySpace_AC* dependencySpace);
+
+	virtual ~XPFHelpTagCheckbox ();
+
+private:
+
+	XPFPrefs *fPrefs;
+	
+	static IconRef gIconRef;
 
 };
 

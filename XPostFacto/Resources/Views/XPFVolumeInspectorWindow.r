@@ -6,16 +6,25 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 	MAThreeOhView {
 
 	},
-	{	/* array ViewArray: 21 elements */
+	{	/* array ViewArray: 25 elements */
 		/* [1] */
 		ViewSignatureAndClassname {
 			'wind',
-			2418,
+			2697,
 			"XPFVolumeInspectorWindow",
 			'WIND',
 			enabled,
 			noIdle,
-			{	/* array BehaviorArray: 0 elements */
+			{	/* array BehaviorArray: 1 elements */
+				/* [1] */
+				BehaviorSignatureAndClassname {
+					noID,
+					"XPFHelpBehavior",
+					Behavior {
+						enabled,
+						noIdle
+					}
+				}
 			},
 			MAThreeOhView {
 
@@ -92,81 +101,9 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 				1110,
 				1
 			},
-			20
+			21
 		},
 		/* [2] */
-		ViewSignatureAndClassname {
-			'popp',
-			133,
-			"XPFVolumeInspectorPopup",
-			'volu',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 0 elements */
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				20,
-				/* [2] */
-				20
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				20,
-				/* [2] */
-				200
-			},
-			sizeFixed,
-			sizeFixed,
-			shown,
-			doesntWantToBeTarget,
-			doesntHandleCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			Popup {
-				mPopupHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				0,
-				1,
-				0,
-				plain,
-				justSystem,
-				dontUseAddResMenu,
-				noID,
-				-1,
-				1
-			},
-			NoSubviews
-		},
-		/* [3] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -234,7 +171,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [4] */
+		/* [3] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -302,7 +239,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [5] */
+		/* [4] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -370,7 +307,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [6] */
+		/* [5] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -438,7 +375,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [7] */
+		/* [6] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -506,7 +443,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [8] */
+		/* [7] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -574,7 +511,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [9] */
+		/* [8] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -642,7 +579,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [10] */
+		/* [9] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -710,7 +647,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [11] */
+		/* [10] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -778,7 +715,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [12] */
+		/* [11] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -846,7 +783,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [13] */
+		/* [12] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -914,7 +851,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [14] */
+		/* [13] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -982,24 +919,15 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [15] */
+		/* [14] */
 		ViewSignatureAndClassname {
 			'stat',
-			129,
+			100,
 			"",
 			'hlps',
 			notEnabled,
 			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"TBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
+			{	/* array BehaviorArray: 0 elements */
 			},
 			MARelease13View {
 
@@ -1023,10 +951,10 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			doesntHandleCursor,
 			letsSubViewsHandleCursor,
 			noCursorID,
-			doesntHandleHelp,
+			handlesHelp,
 			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
+			2001,
+			16,
 			NoDrawingEnvironment {
 
 			},
@@ -1059,88 +987,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [16] */
-		ViewSignatureAndClassname {
-			'popp',
-			159,
-			"XPFHelperPopup",
-			'hlpd',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				246,
-				/* [2] */
-				190
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				20,
-				/* [2] */
-				200
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			handlesCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			Popup {
-				mPopupHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				130,
-				dontPreferOutline,
-				0,
-				1,
-				0,
-				plain,
-				justSystem,
-				dontUseAddResMenu,
-				noID,
-				-1,
-				1
-			},
-			NoSubviews
-		},
-		/* [17] */
+		/* [15] */
 		ViewSignatureAndClassname {
 			'icon',
 			109,
@@ -1205,7 +1052,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [18] */
+		/* [16] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -1226,7 +1073,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				152,
+				134,
 				/* [2] */
 				200
 			},
@@ -1273,7 +1120,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [19] */
+		/* [17] */
 		ViewSignatureAndClassname {
 			'sepr',
 			66,
@@ -1321,24 +1168,15 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			NoSubviews
 		},
-		/* [20] */
+		/* [18] */
 		ViewSignatureAndClassname {
 			'stat',
-			129,
+			100,
 			"",
 			'hlp0',
 			notEnabled,
 			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"TBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
+			{	/* array BehaviorArray: 0 elements */
 			},
 			MARelease13View {
 
@@ -1398,12 +1236,198 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			NoSubviews
 		},
+		/* [19] */
+		ViewSignatureAndClassname {
+			'chkb',
+			115,
+			"XPFHelpTagCheckbox",
+			'chkb',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				416,
+				/* [2] */
+				366
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				16,
+				/* [2] */
+				34
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			CheckBox {
+				mCheckBoxHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				off,
+				1110,
+				19
+			},
+			NoSubviews
+		},
+		/* [20] */
+		ViewSignatureAndClassname {
+			'view',
+			205,
+			"",
+			'view',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				20,
+				/* [2] */
+				20
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				22,
+				/* [2] */
+				200
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			handlesHelp,
+			letsSubViewsHandleHelp,
+			2001,
+			27,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			View {
+
+			},
+			1
+		},
 		/* [21] */
 		ViewSignatureAndClassname {
 			'popp',
-			121,
-			"XPFBusPopup",
-			'busp',
+			133,
+			"XPFVolumeInspectorPopup",
+			'volu',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				0,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				20,
+				/* [2] */
+				200
+			},
+			sizeFixed,
+			sizeFixed,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Popup {
+				mPopupHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				0,
+				1,
+				0,
+				plain,
+				justSystem,
+				dontUseAddResMenu,
+				noID,
+				-1,
+				1
+			},
+			NoSubviews
+		},
+		/* [22] */
+		ViewSignatureAndClassname {
+			'view',
+			193,
+			"",
+			'vie0',
 			enabled,
 			noIdle,
 			{	/* array BehaviorArray: 0 elements */
@@ -1419,6 +1443,54 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
+				22,
+				/* [2] */
+				200
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			handlesHelp,
+			letsSubViewsHandleHelp,
+			2001,
+			28,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			View {
+
+			},
+			1
+		},
+		/* [23] */
+		ViewSignatureAndClassname {
+			'popp',
+			121,
+			"XPFBusPopup",
+			'busp',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				0,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
 				20,
 				/* [2] */
 				200
@@ -1427,7 +1499,127 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			sizeVariable,
 			shown,
 			doesntWantToBeTarget,
-			handlesCursor,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Popup {
+				mPopupHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				130,
+				dontPreferOutline,
+				0,
+				1,
+				0,
+				plain,
+				justSystem,
+				dontUseAddResMenu,
+				noID,
+				-1,
+				1
+			},
+			NoSubviews
+		},
+		/* [24] */
+		ViewSignatureAndClassname {
+			'view',
+			196,
+			"",
+			'vie1',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				246,
+				/* [2] */
+				190
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				22,
+				/* [2] */
+				200
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			handlesHelp,
+			letsSubViewsHandleHelp,
+			2001,
+			16,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			View {
+
+			},
+			1
+		},
+		/* [25] */
+		ViewSignatureAndClassname {
+			'popp',
+			124,
+			"XPFHelperPopup",
+			'hlpd',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				0,
+				/* [2] */
+				0
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				20,
+				/* [2] */
+				200
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
 			letsSubViewsHandleCursor,
 			noCursorID,
 			doesntHandleHelp,
@@ -1474,7 +1666,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 };
 
 resource 'STR#' (1110, "Volume Inspector", purgeable) {
-	{	/* array StringArray: 18 elements */
+	{	/* array StringArray: 19 elements */
 		/* [1] */
 		"Volume Inspector",
 		/* [2] */
@@ -1510,7 +1702,9 @@ resource 'STR#' (1110, "Volume Inspector", purgeable) {
 		/* [17] */
 		"Warning Text",
 		/* [18] */
-		"Bus:"
+		"Bus:",
+		/* [19] */
+		"?"
 	}
 };
 
