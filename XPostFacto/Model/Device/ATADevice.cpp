@@ -60,20 +60,11 @@ advised of the possibility of such damage.
 #include "ATABus.h"
 #include "MountedVolume.h"
 
-#include <Devices.h>
-#include <Files.h>
-#include <NameRegistry.h>
-#include <iostream.h>
-#include <HFSVolumes.h>
-#include <DriverGestalt.h>
-#include <stdio.h>
-#include <LowMem.h>
-
 #include "XPFLog.h"
 #include "XPFErrors.h"
-#include "SCSI.h"
 
-#include "ATA.h"
+#include <stdio.h>
+#include <ATA.h>
 
 #define kATATimeout 2000L
 
@@ -160,38 +151,13 @@ ATADevice::ATAHardwarePresent ()
 	return ATABus::getBusCount () > 0;
 }
 
-ataManagerProcPtr ATADevice::gATAManagerProcPtr = NULL;
-
-SInt16 
-ATADevice::callATAManager (ataPB * pb)
-{
-	if (gATAManagerProcPtr == 0) return paramErr;
-	SInt16 result = (*gATAManagerProcPtr) (pb);
-	return result;
-}
-
 void
 ATADevice::Initialize ()
 {
 	ATABus::Initialize ();
 	
 	if (!ATAHardwarePresent ()) return;
-	
-	// First, we set up the calls to ataManager
-	if (!gATAManagerProcPtr) {
-		OSErr err;
-		CFragConnectionID connID = kInvalidID;
-
-		err = GetSharedLibrary( "\pInterfaceLib", kCompiledCFragArch,
-			kReferenceCFrag, &connID, NULL, NULL );
-
-		if ( err == noErr ) {
-			err = FindSymbol (connID, "\pataManager", (Ptr *) &gATAManagerProcPtr, NULL);
-		} 
-
-		if ( err != noErr ) gATAManagerProcPtr = NULL;
-	}
-	
+		
 	// Now the idea is to find all the devices on the ATA bus
 	
 	ataDrvrRegister     pb;
@@ -202,14 +168,14 @@ ATADevice::Initialize ()
     pb.ataPBFunctionCode    =   kATAMgrFindDriverRefnum;
     pb.ataPBVers            =   kATAPBVers1;
     pb.ataPBDeviceID        =   kATAStartIterateDeviceID;
-    status                  =   callATAManager((ataPB*) &pb );
+    status                  =   ataManager ((ataPB*) &pb);
 
 	// loop through devices
     for (pb.ataPBDeviceID = (UInt32) pb.ataDeviceNextID;
          pb.ataPBDeviceID != kATAEndIterateDeviceID;
          pb.ataPBDeviceID = (UInt32) pb.ataDeviceNextID)
     {           
-        ThrowIfOSErr_AC (callATAManager ((ataPB*) &pb));
+        ThrowIfOSErr_AC (ataManager ((ataPB*) &pb));
         try {
 	        gDeviceList.InsertLast (new ATADevice (pb.ataPBDeviceID, pb.ataDrvrRefNum));
 	    }
@@ -218,11 +184,6 @@ ATADevice::Initialize ()
 	    }
     }
 }
-
-union VolumeHeader {
-	HFSMasterDirectoryBlock hfs;
-	HFSPlusVolumeHeader hfsplus;
-};
 
 void
 ATADevice::readCapacity ()
@@ -244,7 +205,7 @@ ATADevice::readCapacity ()
 	    pb.ataPBTimeOut         =   kATATimeout;
 	    pb.ataPBBuffer          =   (UInt8 *) &info;
 	    
-	    ThrowIfOSErr_AC (callATAManager ((ataPB*) &pb ));
+	    ThrowIfOSErr_AC (ataManager ((ataPB*) &pb));
 
 		info.total_sectors = SWAP_SHORTS (info.total_sectors);
 		info.lba_sectors = SWAP_SHORTS (info.lba_sectors);
@@ -287,7 +248,7 @@ ATADevice::ATADevice (UInt32 ataDevice, SInt16 driverRefNum)
 		pb.ataPBDeviceID        =   fDeviceIdent;
 		pb.ataPBTimeOut    		=   kATATimeout;
 		
-		ThrowIfOSErr_AC (callATAManager ((ataPB*) &pb));
+		ThrowIfOSErr_AC (ataManager ((ataPB*) &pb));
 		
 		fATADeviceType = pb.ataDeviceType;
 		fATASocketType = pb.ataSocketType;
@@ -470,7 +431,7 @@ ATADevice::writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer)
 	    pb.ataPBTaskFile.ataTFSDH = 0xA0 | lba | slave | head;
 	    pb.ataPBTaskFile.ataTFCommand = kATAcmdWrite;
 
-	    status = callATAManager((ataPB*) &pb );
+	    status = ataManager ((ataPB*) &pb);
 		
 		if (status != noErr) {
 			#if qLogging
@@ -546,7 +507,7 @@ ATADevice::atapiTestUnitReady ()
 
     testUnit->opcode = kScsiCmdTestUnitReady;
     
-    status = callATAManager((ataPB*) &pb );
+    status = ataManager ((ataPB*) &pb);
     return (status == noErr);
 }
 
@@ -596,7 +557,7 @@ ATADevice::readATAPIBlocks (unsigned int start, unsigned int count, UInt8 *buffe
 	    readCmd->len2 = (blocks >> 8) & 0xFF;
 	    readCmd->len1 = blocks & 0xFF;
 
-	    status = callATAManager((ataPB*) &pb );
+	    status = ataManager ((ataPB*) &pb);
 		if (status != noErr) {
 			#if qLogging
 				gLogFile << "Error " << status << " reading blocks" << endl_AC;
@@ -652,7 +613,7 @@ ATADevice::readATABlocks (unsigned int start, unsigned int count, UInt8 *buffer)
 	    pb.ataPBTaskFile.ataTFSDH = 0xA0 | lba | slave | head;
 	    pb.ataPBTaskFile.ataTFCommand = kATAcmdRead;
 
-	    status = callATAManager((ataPB*) &pb );
+	    status = ataManager ((ataPB*) &pb);
 		
 		if (status != noErr) {
 			#if qLogging
@@ -708,6 +669,3 @@ ATADevice::readBlocks (unsigned int start, unsigned int count, UInt8 **buffer)
 
 	return status;
 }
-
-
-

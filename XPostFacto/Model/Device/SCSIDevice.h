@@ -44,12 +44,8 @@ advised of the possibility of such damage.
 #ifndef __SCSIDEVICE_H__
 #define __SCSIDEVICE_H__
 
-#include <SCSI.h>
-#include "XPFPartition.h"
 #include "XPFBootableDevice.h"
-
-class MountedVolume;
-class HFSPlusVolumeHeader;
+#include <SCSI.h>
 
 class SCSIDevice : public XPFBootableDevice
 {

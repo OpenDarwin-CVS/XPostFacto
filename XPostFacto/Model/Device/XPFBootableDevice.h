@@ -45,9 +45,7 @@ advised of the possibility of such damage.
 #ifndef __XPFBOOTABLEDEVICE_H__
 #define __XPFBOOTABLEDEVICE_H__
 
-#include <SCSI.h>
 #include "XPFPartition.h"
-#include "NameRegistry.h"
 
 class MountedVolume;
 class HFSPlusVolumeHeader;
@@ -58,8 +56,13 @@ class XPFBootableDevice
 		
 		static void Initialize ();
 		
-		static XPFBootableDevice* DeviceWithInfo (FSVolumeInfo *info);
-		static XPFBootableDevice* DeviceWithDriverRefNum (SInt16 driverRefNum);									
+#ifdef __MACH__	
+		static XPFBootableDevice* DeviceForRegEntry (io_registry_entry_t entry);
+#else
+		static XPFBootableDevice* DeviceWithInfo (FSVolumeInfo *info);		
+		static XPFBootableDevice* DeviceWithDriverRefNum (SInt16 driverRefNum);	
+#endif	
+						
 		static void DeleteInvalidDevices ();
 
 		void invalidate () {fInvalid = true;}
@@ -76,25 +79,39 @@ class XPFBootableDevice
 		XPFPartition* partitionWithInfo (FSVolumeInfo *info);
 		XPFPartition* partitionWithInfoAndName (FSVolumeInfo *info, HFSUniStr255 *name);
 		
+#ifdef __MACH__
+		OSErr readBlocks (unsigned int start, unsigned int count, UInt8 **buffer);
+		OSErr writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer);
+		void readCapacity ();
+#else
 		virtual OSErr readBlocks (unsigned int start, unsigned int count, UInt8 **buffer) = 0;
 		virtual OSErr writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer) = 0;
+		virtual	void readCapacity () = 0;
+#endif
 
 		bool getValidOpenFirmwareName () {return fValidOpenFirmwareName;}
 		
 		const CStr255_AC& getOpenFirmwareName () {return fOpenFirmwareName;}
 		const CStr255_AC& getShortOpenFirmwareName () {return fShortOpenFirmwareName;}
 		
+		virtual bool getNeedsHelper () {return fNeedsHelper;}
+		
+#ifndef __MACH__
 		virtual bool isFirewireDevice ();
+#endif
 		
 	protected:	
 
+#ifdef __MACH__
+		XPFBootableDevice (io_registry_entry_t entry);
+#else
 		XPFBootableDevice (SInt16 driverRefNum);
-		
+#endif
+	
 		static TemplateAutoList_AC <XPFBootableDevice> gDeviceList;
 		static bool fInitialized;	
 			
 		virtual void extractPartitionInfo ();
-		virtual	void readCapacity () = 0;
 		
 #if qDebug
 		static void PrintPartitionMapEntry (Partition *part);
@@ -106,7 +123,14 @@ class XPFBootableDevice
 		unsigned int fBlockCount;
 		unsigned int fBlockSize;
 		bool fInvalid;
+		bool fNeedsHelper;
+		
+#ifdef __MACH__
+		io_registry_entry_t fRegEntry;
+		char fBSDName[32];
+#else
 		SInt16 fDriverRefNum;
+#endif
 		
 		PartitionList *fPartitionList;	
 

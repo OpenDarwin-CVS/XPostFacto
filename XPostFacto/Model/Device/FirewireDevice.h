@@ -44,13 +44,7 @@ advised of the possibility of such damage.
 #ifndef __FIREWIREDEVICE_H__
 #define __FIREWIREDEVICE_H__
 
-#include <SCSI.h>
-#include "XPFPartition.h"
 #include "XPFBootableDevice.h"
-#include <NameRegistry.h>
-
-class MountedVolume;
-class HFSPlusVolumeHeader;
 
 class FirewireDevice : public XPFBootableDevice
 {
@@ -64,7 +58,7 @@ class FirewireDevice : public XPFBootableDevice
 		OSErr writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer);
 		
 		virtual bool isFirewireDevice ();
-		
+				
 	protected:
 	
 		virtual void extractPartitionInfo ();
@@ -73,10 +67,7 @@ class FirewireDevice : public XPFBootableDevice
 
 		FirewireDevice (RegEntryID *regEntry, SInt16 driverRefNum);
 		
-		RegEntryID	fRegEntry;
-
 		void readCapacity ();
-
 };
 
 #endif

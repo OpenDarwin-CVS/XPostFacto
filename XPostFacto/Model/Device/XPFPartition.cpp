@@ -33,21 +33,15 @@ advised of the possibility of such damage.
 
 
 #include "MoreFilesExtras.h"
-#include "SCSIBus.h"
 #include "MountedVolume.h"
 #include "XPFErrors.h"
 
-#include <Devices.h>
-#include <Files.h>
-#include <NameRegistry.h>
-#include <iostream.h>
-#include <HFSVolumes.h>
-#include <DriverGestalt.h>
 #include <stdio.h>
 
 #include "HFSPlusCatalog.h"
 #include "HFSPlusVolume.h"
 #include "XPFLog.h"
+#include "XPFBootableDevice.h"
 
 union VolumeHeader {
 	HFSMasterDirectoryBlock hfs;

@@ -34,8 +34,9 @@ advised of the possibility of such damage.
 #ifndef __XPFPARTITION_H__
 #define __XPFPARTITION_H__
 
-#include <Files.h>
-#include <SCSI.h>
+#ifndef __MACH__
+	#include <AppleDiskPartitions.h>
+#endif
 
 class XPFBootableDevice;
 class MountedVolume;

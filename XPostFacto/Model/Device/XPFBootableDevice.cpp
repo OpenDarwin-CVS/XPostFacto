@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001, 2002
+Copyright (c) 2001 - 2003
 Other World Computing
 All rights reserved
 
@@ -35,25 +35,27 @@ advised of the possibility of such damage.
 #include "XPFBootableDevice.h"
 #include "XPFPartition.h"
 #include "MoreFilesExtras.h"
-#include "SCSIBus.h"
 #include "MountedVolume.h"
 
-#include "ATADevice.h"
-#include "FirewireDevice.h"
+#ifndef __MACH__
+	#include "ATADevice.h"
+	#include "FirewireDevice.h"
+	#include "SCSIDevice.h"
+	
+	#include <DriverGestalt.h>
+	#include <HFSVolumes.h>
+#endif
 
-#include <Devices.h>
-#include <Files.h>
-#include <NameRegistry.h>
 #include <iostream.h>
-#include <HFSVolumes.h>
-#include <DriverGestalt.h>
 #include <stdio.h>
 
 #include "XPFLog.h"
 #include "XPFErrors.h"
-#include "SCSI.h"
+#include "XPFAuthorization.h"
 
 TemplateAutoList_AC <XPFBootableDevice> XPFBootableDevice::gDeviceList;
+
+#ifndef __MACH__
 
 union DriverGestaltInfo
 {
@@ -72,16 +74,22 @@ union DriverGestaltInfo
 };
 typedef union DriverGestaltInfo DriverGestaltInfo;
 
+#endif
+
 bool XPFBootableDevice::fInitialized = false;
 
 void
 XPFBootableDevice::Initialize ()
 {
+// In Mac OS X, we don't both to initialize. We just construct as needed.
+// Also, we don't use the subclasses--one class will do.
+#ifndef __MACH__
 	FirewireDevice::Initialize ();	// we need to do this each time
 	if (fInitialized) return;
 	fInitialized = true;
 	SCSIDevice::Initialize ();
 	ATADevice::Initialize ();
+#endif
 }
 
 XPFPartition*
@@ -111,8 +119,7 @@ XPFBootableDevice::partitionWithInfo (FSVolumeInfo *info)
 	}
 	return retVal;
 }
-		
-		
+
 XPFPartition* 
 XPFBootableDevice::partitionWithInfoAndName (FSVolumeInfo *info, HFSUniStr255 *name)
 {
@@ -126,6 +133,16 @@ XPFBootableDevice::partitionWithInfoAndName (FSVolumeInfo *info, HFSUniStr255 *n
 	}
 	return retVal;
 }
+
+#ifndef __MACH__
+
+bool
+XPFBootableDevice::isFirewireDevice ()
+{
+	return false;
+}
+
+#endif
 
 void
 XPFBootableDevice::extractPartitionInfo ()
@@ -147,7 +164,7 @@ XPFBootableDevice::extractPartitionInfo ()
 			#if qLogging
 				gLogFile << "Invalid partition map" << endl_AC;
 			#endif
-			ThrowException_AC (kInvalidPartitionMap, 0);
+			return;
 		}
 		int pmCount = pm->pmMapBlkCnt;
 		if (pm) DisposePtr ((Ptr) pm);
@@ -157,7 +174,7 @@ XPFBootableDevice::extractPartitionInfo ()
 			#if qLogging
 				gLogFile << "Error reading partition map" << endl_AC;
 			#endif
-			ThrowException_AC (kErrorReadingPartitionMap, 0);
+			return;;
 		}
 		for (int x = 0; x < pmCount; x++) {
 			#if qLogging
@@ -192,23 +209,55 @@ XPFBootableDevice::updateBootXIfInstalled (bool forceInstall)
 	}
 }
 
-XPFBootableDevice::XPFBootableDevice (SInt16 driverRefNum)
+XPFBootableDevice::XPFBootableDevice 
+#ifdef __MACH__
+(io_registry_entry_t entry)
+#else
+(SInt16 driverRefNum)
+#endif
 {
 	fValidOpenFirmwareName = false;
 	fInvalid = false;
+	fNeedsHelper = false;
+	
+#ifdef __MACH__
+	fRegEntry = entry;
+	if (entry) IOObjectRetain (entry);
+	fBSDName[0] = 0;
+#else
 	fDriverRefNum = driverRefNum;
+#endif
+
 	fPartitionList = NULL;
+	fBlockSize = 0;
+	fBlockCount = 0;
+	
+#ifdef __MACH__
+	// Figure out whether we need a helper or not
+	// So far, we just check to see if we are a firewire device
+	io_iterator_t iterator;
+	IORegistryEntryCreateIterator (entry, kIOServicePlane, 
+				kIORegistryIterateRecursively | kIORegistryIterateParents, &iterator);
+ 	io_registry_entry_t parent;
+	
+	while ((parent = IOIteratorNext (iterator)) != NULL) {
+		if (IOObjectConformsTo (parent, "IOFirewireDevice")) {
+			fNeedsHelper = true;
+			IOObjectRelease (parent);
+			break;
+		}
+		IOObjectRelease (parent);
+	}
+	IOObjectRelease (iterator);
+#endif
 }
 
 XPFBootableDevice::~XPFBootableDevice ()
 {
 	if (fPartitionList) delete fPartitionList;
-}
-
-bool
-XPFBootableDevice::isFirewireDevice ()
-{
-	return false;
+#ifdef __MACH__
+	if (fRegEntry) IOObjectRelease (fRegEntry);
+#endif
 }
 
 void 
@@ -223,6 +272,45 @@ XPFBootableDevice::DeleteInvalidDevices ()
 		}
 	}
 }
+
+#ifdef __MACH__
+
+XPFBootableDevice*
+XPFBootableDevice::DeviceForRegEntry (io_registry_entry_t startpoint)
+{
+	XPFBootableDevice *retVal = NULL;
+
+	// First we find the next IOMedia device above
+	io_iterator_t iterator;
+	IORegistryEntryCreateIterator (startpoint, kIOServicePlane, 
+				kIORegistryIterateRecursively | kIORegistryIterateParents, &iterator);
+ 	io_registry_entry_t entry;
+	bool found = false;
+	
+	for (entry = IOIteratorNext (iterator); entry != NULL; entry = IOIteratorNext (iterator)) {
+		if (IOObjectConformsTo (entry, "IOMedia")) {
+			found = true;
+			break;
+		}
+		IOObjectRelease (entry);
+	}
+	IOObjectRelease (iterator);
+
+	if (!found) return NULL;
+	
+	for (DeviceIterator iter (&gDeviceList); iter.Current (); iter.Next ()) {
+		if (IOObjectIsEqualTo (iter->fRegEntry, entry)) {
+			IOObjectRelease (entry);
+			return iter.Current ();
+		}
+	}
+	
+	retVal = new XPFBootableDevice (entry);
+	IOObjectRelease (entry);
+	return retVal;
+}
+
+#else
 
 XPFBootableDevice* 
 XPFBootableDevice::DeviceWithInfo (FSVolumeInfo *info)
@@ -240,6 +328,107 @@ XPFBootableDevice::DeviceWithDriverRefNum (SInt16 driverRefNum)
 	}
 	return NULL;
 }
+
+#endif
+
+#ifdef __MACH__
+
+OSErr 
+XPFBootableDevice::readBlocks (unsigned int start, unsigned int count, UInt8 **buffer)
+{
+	ThrowIfNULL_AC (buffer);
+	if (fBlockSize == 0) return;
+	if (fBSDName[0] == 0) return;
+    
+    // the start and count will be in terms of 512 byte blocks
+    // we will allocate the buffer ourselves with NewPtr
+    // the caller must dispose of the buffer with DisposePtr
+    
+    unsigned int byteOffset = 0;
+ 
+    if (fBlockSize != 512) {
+    	long long startBytes = start * 512;
+    	start = startBytes / fBlockSize;
+    	byteOffset = startBytes % fBlockSize;
+    	count = (((count * 512) + byteOffset - 1) / fBlockSize) + 1;
+    }
+     
+ 	*buffer = (UInt8 *) NewPtr (count * fBlockSize);
+ 	ThrowIfNULL_AC (*buffer);
+ 
+ 	char *arguments[5];
+ 	asprintf (&arguments[0], "bs=%lu", fBlockSize);
+ 	asprintf (&arguments[1], "if=%s", fBSDName);
+ 	asprintf (&arguments[2], "skip=%lu", start);
+ 	asprintf (&arguments[3], "count=%lu", count);
+ 	arguments[4] = 0;
+
+	FILE *pipe;
+	XPFAuthorization::ExecuteWithPrivileges ("/bin/dd", arguments, &pipe);
+
+	fread (*buffer, fBlockSize, count, pipe);
+	fclose (pipe);
+	
+	if (byteOffset != 0) {
+		// need to realign the buffer
+		char *mark = (char *) *buffer;
+		mark += byteOffset;
+		BlockMoveData (mark, *buffer, (count * fBlockSize) - byteOffset);
+	}
+
+	return noErr;
+}
+
+OSErr 
+XPFBootableDevice::writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer)
+{
+	ThrowIfNULL_AC (buffer);
+	if (fBlockSize != 512) ThrowException_AC (kWrite512ByteBlocksOnly, 0);
+	if (fBSDName[0] == 0) return;
+     
+ 	char *arguments[5];
+ 	asprintf (&arguments[0], "bs=%lu", fBlockSize);
+ 	asprintf (&arguments[1], "of=%s", fBSDName);
+ 	asprintf (&arguments[2], "seek=%lu", start);
+ 	asprintf (&arguments[3], "count=%lu", count);
+ 	arguments[4] = 0;
+
+	FILE *pipe;
+	XPFAuthorization::ExecuteWithPrivileges ("/bin/dd", arguments, &pipe);
+
+	fwrite (buffer, fBlockSize, count, pipe);
+	fclose (pipe);
+	
+	return noErr;
+}
+
+void 
+XPFBootableDevice::readCapacity ()
+{
+	// Get the block size and block count
+	CFNumberRef blockSize = (CFNumberRef) IORegistryEntryCreateCFProperty (fRegEntry, CFSTR ("Preferred Block Size"), NULL, 0);
+	if (blockSize) {
+		CFNumberGetValue (blockSize, kCFNumberLongType, &fBlockSize);
+		CFRelease (blockSize);
+	}
+
+	SInt64 tempByteSize;
+	CFNumberRef byteSize = (CFNumberRef) IORegistryEntryCreateCFProperty (fRegEntry, CFSTR ("Size"), NULL, 0);
+	if (byteSize) {
+		CFNumberGetValue (byteSize, kCFNumberSInt64Type, &tempByteSize);
+		fBlockCount = tempByteSize / fBlockSize;	
+		CFRelease (byteSize);	
+	}
+	
+	CFStringRef bsdName = (CFStringRef) IORegistryEntryCreateCFProperty (fRegEntry, CFSTR ("BSD Name"), NULL, 0);
+	if (bsdName) {
+		strcpy (fBSDName, "/dev/");
+		CFStringGetCString (bsdName, fBSDName + 5, 27, kCFStringEncodingASCII); 
+		CFRelease (bsdName);
+	}
+}
+
+#endif  // __MACH__
 
 #if qDebug
 

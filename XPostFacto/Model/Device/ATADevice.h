@@ -44,15 +44,7 @@ advised of the possibility of such damage.
 #ifndef __ATADEVICE_H__
 #define __ATADEVICE_H__
 
-#include <SCSI.h>
-#include <ATA.h>
-#include "XPFPartition.h"
 #include "XPFBootableDevice.h"
-
-class MountedVolume;
-class HFSPlusVolumeHeader;
-
-typedef pascal SInt16 (*ataManagerProcPtr) (ataPB *pb);	
 
 class ATADevice : public XPFBootableDevice
 {
@@ -84,8 +76,6 @@ class ATADevice : public XPFBootableDevice
 		unsigned long fHeads;
 		unsigned long fSectors; 
 		
-		static ataManagerProcPtr gATAManagerProcPtr; 
-		static SInt16 callATAManager (ataPB * pb);
 };
 
 #endif

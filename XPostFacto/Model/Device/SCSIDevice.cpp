@@ -38,17 +38,13 @@ advised of the possibility of such damage.
 #include "SCSIBus.h"
 #include "MountedVolume.h"
 
-#include <Devices.h>
-#include <Files.h>
-#include <NameRegistry.h>
-#include <iostream.h>
-#include <HFSVolumes.h>
 #include <DriverGestalt.h>
 #include <stdio.h>
 
 #include "XPFLog.h"
 #include "XPFErrors.h"
-#include "SCSI.h"
+
+#if !qCarbonMach0
 
 union DriverGestaltInfo
 {
@@ -66,6 +62,8 @@ union DriverGestaltInfo
 	UInt32							i;
 };
 typedef union DriverGestaltInfo DriverGestaltInfo;
+
+#endif
 
 void
 SCSIDevice::Initialize ()
@@ -85,7 +83,11 @@ SCSIDevice::Initialize ()
 	driverPB.scsiPBLength = sizeof (SCSIDriverPB);
 	driverPB.scsiCompletion = NULL;
 	driverPB.scsiFlags = 0;
+#if qCarbonMach0
+	return;
+#else
 	driverPB.scsiFunctionCode = SCSILookupRefNumXref;
+#endif
 	* ((long *) &driverPB.scsiDevice) = 0xFFFFFFFFL;
 	
 	do {
@@ -98,11 +100,6 @@ SCSIDevice::Initialize ()
 		driverPB.scsiDevice = driverPB.scsiNextDevice;
 	} while (driverPB.scsiDevice.bus != 0xFF);	
 }
-
-union VolumeHeader {
-	HFSMasterDirectoryBlock hfs;
-	HFSPlusVolumeHeader hfsplus;
-};
 
 SCSIDevice::SCSIDevice (DeviceIdent scsiDevice, SInt16 driverRefNum)
 	: XPFBootableDevice (driverRefNum)

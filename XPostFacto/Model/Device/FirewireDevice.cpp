@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001, 2002
+Copyright (c) 2001 - 2003
 Other World Computing
 All rights reserved
 
@@ -38,38 +38,11 @@ advised of the possibility of such damage.
 #include "SCSIBus.h"
 #include "MountedVolume.h"
 
-#include <Devices.h>
-#include <Files.h>
-#include <NameRegistry.h>
-#include <iostream.h>
-#include <HFSVolumes.h>
-#include <DriverGestalt.h>
-#include <stdio.h>
-
 #include "XPFLog.h"
 #include "XPFErrors.h"
-#include "SCSI.h"
-#include "XPFNameRegistry.h"
 #include "OFAliases.h"
 
 #include "MoreDisks.h"
-
-union DriverGestaltInfo
-{
-	DriverGestaltSyncResponse		sync;
-	DriverGestaltBootResponse		boot;
-	DriverGestaltDevTResponse		devt;
-	DriverGestaltIntfResponse		intf;
-	DriverGestaltEjectResponse		ejec;
-	DriverGestaltPowerResponse		powr;
-	DriverGestaltFlushResponse		flus;
-	DriverGestaltOFBootSupportResponse ofbt;
-	DriverGestaltNameRegistryResponse nmrg;
-	DriverGestaltDeviceReferenceResponse dvrf;
-	DriverGestaltAPIResponse		dAPI;
-	UInt32							i;
-};
-typedef union DriverGestaltInfo DriverGestaltInfo;
 
 void
 FirewireDevice::Initialize ()
@@ -80,8 +53,6 @@ FirewireDevice::Initialize ()
 		gLogFile << "Finding Firewire devices" << endl_AC;
 	#endif
 
-	if ((Ptr) RegistryEntryIDInit == (Ptr) kUnresolvedCFragSymbolAddress) return;
-	
 	RegEntryIter cookie;
     RegEntryID entry;
     Boolean done = false;
@@ -115,16 +86,11 @@ FirewireDevice::Initialize ()
     RegistryEntryIterateDispose (&cookie);
 }
 
-union VolumeHeader {
-	HFSMasterDirectoryBlock hfs;
-	HFSPlusVolumeHeader hfsplus;
-};
-
 FirewireDevice::FirewireDevice (RegEntryID *regEntry, SInt16 driverRefNum)
 	: XPFBootableDevice (driverRefNum)
 {
 	#if qLogging
-		gLogFile << "Creating Firewire Device for " << driverRefNum << endl_AC;
+		gLogFile << "Creating Firewire Device" << endl_AC;
 	#endif
 	
 	char alias[256];
@@ -135,6 +101,8 @@ FirewireDevice::FirewireDevice (RegEntryID *regEntry, SInt16 driverRefNum)
 	fValidOpenFirmwareName = true;
 	fOpenFirmwareName.CopyFrom (alias);
 	fShortOpenFirmwareName.CopyFrom (shortAlias);
+	
+	fNeedsHelper = true;
 		
 	#if qLogging
 		gLogFile << "OpenFirmwareName: ";
@@ -146,6 +114,12 @@ FirewireDevice::FirewireDevice (RegEntryID *regEntry, SInt16 driverRefNum)
 	#endif;
 }
 
+bool
+FirewireDevice::isFirewireDevice ()
+{
+	return true;
+}
+
 void 
 FirewireDevice::extractPartitionInfo ()
 {
@@ -155,12 +129,6 @@ FirewireDevice::extractPartitionInfo ()
 FirewireDevice::~FirewireDevice ()
 {
 
-}
-
-bool
-FirewireDevice::isFirewireDevice ()
-{
-	return true;
 }
 
 void
