@@ -96,6 +96,9 @@ Read 'plst' (144, "OpenOWScreamerAudio") ":Derived:Extensions:plist:OpenOWScream
 Read 'hfsA' (145, "GossamerDeviceTreeUpdater") ":Derived:Extensions:GossamerDeviceTreeUpdater.hfs";
 Read 'plst' (145, "GossamerDeviceTreeUpdater") ":Derived:Extensions:plist:GossamerDeviceTreeUpdater.plist";
 
+Read 'hfsA' (146, "OpenPMUPCCardEject") ":Derived:Extensions:OpenPMUPCCardEject.hfs";
+Read 'plst' (146, "OpenPMUPCCardEject") ":Derived:Extensions:plist:OpenPMUPCCardEject.plist";
+
 // Startup Item
 
 Read 'hfsS' (200, "XPFStartupItem") ":Derived:StartupItems:XPFStartupItem.hfs";
