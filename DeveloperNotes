@@ -1,0 +1,179 @@
+XPostFacto Developer Notes
+==========================
+
+June 9, 2002
+Ryan Rempel
+osxguru@macsales.com
+
+Here are some things you will need to know in order to build XPostFacto successfully.
+And I will probably forget some details, so feel free to ask if you run into
+trouble.
+
+Overview
+========
+
+Building XPostFacto involves both a ProjectBuilder project and a CodeWarrior project.
+This folder represents a single Project Builder project, which has targets for 
+building the following items:
+
+1. Each kernel extension which XPostFacto installs.
+
+2. A customized version of BootX, with a shell script to convert the product to
+   xcoff format and copy the xcoff to the CodeWarrior project.
+
+3. The hfsplusarchive tool, which packages folders into an archive that XPostFacto
+   knows how to unpack and install, with all HFS+ metadata intact.
+
+4. A "Package" target, which (through dependencies) builds everything else, and has a shell
+   script which packages up everything for the CodeWarrior project.
+   
+The XPostFacto folder insider this folder (also called XPostFacto, which may be a little
+confusing, I suppose) contains the CodeWarrior project, which builds the Mac OS 9 application 
+called XPostFacto. The "Derived" folder in the CodeWarrior project is special. It is where 
+the ProjectBuilder project copies the bootx.xcoff and the kernel extensions (as archived 
+by hfsplusarchive).
+
+The main dependency that is not included in the XPostFacto sources is MacApp. The 
+XPostFacto application is based on MacApp. Also, the hfsplusarchive tool uses MacApp.
+The latter is a little unfortunate, I now realize, since it means that you cannot 
+build everything with a pure Darwin system (since it would lack Carbon, which MacApp
+requires). It should be possible, though, to re-implement hfsplusarchive with
+libraries available in pure Darwin--I will put that on my list of things to do. (The
+advantage of the way it works now is that I basically use the same code base to 
+archive things in Mac OS X and unarchive them in Mac OS 9).
+
+So you will need to download MacApp, and build its libraries, both in Mac OS 9 and in
+Mac OS X. In Mac OS X, I am using the static library libACS.a, which is installed in
+/usr/local/lib. I have put MacApp itself at the following path:
+
+/Library/Frameworks/Apple C++ Frameworks
+
+If yours is not there, the easiest thing to do would probably be to put an alias 
+there. Otherwise, you will need to modify the access paths in the CodeWarrior
+targets.
+
+I am using MacApp version 15 or so. As for IDE versions, I am using ProjectBuilder 
+1.1.1, and CodeWarrior 6. (I suppose I should really upgrade CodeWarrior, but I 
+haven't experienced a really compelling need to do so yet).
+
+One other detail I should mention is that XPostFacto is a Carbon application. The reason
+is that I would like eventually for it to run in Mac OS X as well as Mac OS 9. At the
+moment it does not, since a fair bit of its code will need to be conditionalized for
+Mac OS X and I haven't gotten around to doing that yet. (The one advantage is that if
+you launch it in Mac OS X, it will at least just crash rather than starting Classic).
+
+It is also worth mentioning that XPostFacto requires Mac OS 9 or later. The reason is
+that the APIs for dealing with HFS+ volumes only became available in Mac OS 9. This is
+important in two respects. First, it permits XPostFacto to copy files with long filenames
+from the Mac OS X Install CD. Second, it permits XPostFacto to preserve unix-style
+permissions when it copies files (and unarchives them). I have thought about trying
+to get XPostFacto to run in Mac OS 8, but it is not clear to me whether it would be
+possible to work around the lack of the HFS+ APIs.
+
+The Build Process
+=================
+
+So, assuming that you have MacApp downloaded and you have built its libraries, here's
+the rest of the build process:
+
+1. The FixTypesAndCreators.sh file in this directory is a shell script for setting
+   types and creators to what CodeWarrior expects. You would run it this way. Generally,
+   you would only have to do this when you first check files out of the cvs repository.
+
+   sh FixTypesAndCreators.sh
+
+2. Build BootX and all the kernel extensions, so the CodeWarrior project can use them. The
+   easiest way to do that is with this command (executed in this directory):
+
+   sudo pbxbuild install
+
+   You need to use sudo, because we want the kernel extensions to be owned by root.
+   The kernel extensions will initially be "installed" under /tmp somewhere, but the 
+   "Package" target has a shell script that archives them for the CodeWarrior project
+   to use. (The shell script in the "Package" target also resets the ownership of some
+   files back to you, rather than root--this makes it easier to build things as yourself
+   later, or just to delete the built files).
+
+3. Open the XPostFacto.mcp CodeWarrior project, and make the "Final" target. This should
+   work without anything special at this point, I believe.
+
+You can build individual kernel extensions within Project Builder for testing
+purposes. But once you want to incorporate them into XPostFacto, you will need to repeat
+the "sudo pbxbuild install" step (and then rebuild XPostFacto). (For BootX, you need not
+perform the "sudo pbxbuild install"--building it within ProjectBuilder is sufficient).
+
+Quirks
+======
+
+Here are some random quirks that you may want to know about.
+
+Mac OS X 10.0 Headers
+=====================
+
+You will notice that the IOService.h and IORegistryEntry.h headers are included in 
+Extensions/IOKit. Each of the kernel extension targets is set up to use those 
+headers (by having Extensions included in the header search paths). The reason is that 
+these are the Mac OS X 10.0 version of these headers, and using them permits the kernel
+extensions to load in both Mac OS X 10.0 and 10.1.
+
+Another 10.0 vs. 10.1 issue worth noting is that PatchedIOSCSICDDrive only loads in 10.0,
+while PatchedSCSIDeviceType05 only loads in 10.1.
+
+Kernel Extension Status
+=======================
+
+Most of the kernel extensions are taken from Darwin sources from Mac OS X public beta
+vintage, with a variety of bug fixes and updates required to keep them working.
+
+The PowerStarCPU.kext represents an attempt to get sleep working on the powerbooks.
+It isn't working yet.
+
+The PowerSurgeCPU.kext represents an attempt to get 604MP support working. It isn't
+working yet either.
+
+The PatchedIOSSCICDDrive.kext and PatchedSCSIDeviceType05.kext work around certain
+problems in SCSI CD support in Mac OS X. There are still some problems with some
+CD-ROM devices that could probably be fixed.
+
+PatchedNVRAM.kext fixes a problem reading and writing NVRAM on older machines.
+
+OpenPMU.kext is based on the last open-source version of the ApplePMU driver.
+(Unfortunately, the current version is not open source, and the current binary
+included in Mac OS X panics on older systems).
+
+XPostFacto Resource Targets
+===========================
+
+There are two files in the CodeWarrior project that have resource forks:
+XPFIcons.rsrc and XPostFacto.view. XPFIcons.rsrc contains the Finder icons.
+XPostFacto.view defines windows and views for XPostFacto (originally created with
+Ad Lib). The CodeWarrior project is set up so that XPFIcons.rsrc and XPostFacto.view are
+built from Rez files (XPFIcons.r and XPFView.r). There is a target to build each of
+them (the "Icons" target and the "View" target). The way it works is that the 
+"Icons" target and the "View" target build XPFIcons.rsrc and XPostFacto.view,
+which are, in turn, included in the other targets. You don't ordinarily have to pay 
+attention to this, because the target dependencies are set up so that it just works. 
+The reason it is set up this way is so that the Rez files are the ones included 
+in the cvs repository.
+
+The one time you need to pay attention to all this is when you want to change the icons
+or the views. If you change the Rez files directly, then that just works. However, you
+may well want to edit the XPFIcons.rsrc file with an icon editor, or edit XPostFacto.view
+with AdLib. If you do that, remember that these files are derived from the Rez files.
+So, once you have edited the resource files, you will need to DeRez them and substitute
+the result for the original Rez files. Fortunately, this is easy. Once you have edited the
+resource file, just select it in the CodeWarrior project and choose "Dissassemble" from
+the "Project" menu. This should give you a DeRez'd version.
+
+The other cvs integration detail is that the XPostFacto.mcp project is checked into the 
+cvs repository as a binary file (since that is what it is). That isn't entirely ideal,
+I suppose, but it should work. I thought of using the exported .xml file instead, but
+a quick experiment exporting and re-importing did not work well (perhaps a later version
+of CodeWarrior handles this better).
+
+That's All
+==========
+
+Those are all the notes that occur to me at the moment. I should probably write up some
+notes about the way the XPostFacto CodeWarrior application is structured, but I will put
+that in a separate document when I do it.
