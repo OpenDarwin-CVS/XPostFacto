@@ -66,6 +66,12 @@ class SCSIBus {
 		
 		const CStr255_AC& getOpenFirmwareName () {return fOpenFirmwareName;}
 		const CStr255_AC& getShortOpenFirmwareName () {return fShortOpenFirmwareName;}
+		const CStr255_AC& getATAOpenFirmwareName0 () {return fATAOpenFirmwareName0;}
+		const CStr255_AC& getATAShortOpenFirmwareName0 () {return fATAShortOpenFirmwareName0;}
+		const CStr255_AC& getATAOpenFirmwareName1 () {return fATAOpenFirmwareName1;}
+		const CStr255_AC& getATAShortOpenFirmwareName1 () {return fATAShortOpenFirmwareName1;}
+		
+		bool getIsActuallyATABus () {return fIsActuallyATABus;}
 		
 		~SCSIBus ();
 
@@ -77,6 +83,12 @@ class SCSIBus {
 		int fBusNumber;
 		CStr255_AC fOpenFirmwareName;
 		CStr255_AC fShortOpenFirmwareName;
+		
+		bool fIsActuallyATABus;
+		CStr255_AC fATAOpenFirmwareName0;
+		CStr255_AC fATAShortOpenFirmwareName0;
+		CStr255_AC fATAOpenFirmwareName1;
+		CStr255_AC fATAShortOpenFirmwareName1;
 		
 		static int gBusCount;
 		static SCSIBusList gSCSIBusList;

@@ -191,6 +191,7 @@ SCSIBus::~SCSIBus ()
 SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 {
 	fBusNumber = kSCSIBusNumberUnknown;
+	fIsActuallyATABus = false;
 
 	ThrowIfNULL_AC (scsiEntry);
 	RegistryEntryIDCopy (scsiEntry, &fRegEntry);
@@ -234,6 +235,60 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 		}	
 	}	
 	
+	// Now, see if this is actually an ATA bus
+	
+	RegEntryIter cookie;
+    RegEntryID foundEntry;
+    Boolean done = false;
+    RegEntryIterationOp iterOp = kRegIterChildren;
+    OSErr err = RegistryEntryIterateCreate (&cookie);
+    RegistryEntryIterateSet (&cookie, scsiEntry);
+    RegistryEntryIDInit (&foundEntry);
+
+    while (true) {
+        err = RegistryEntryIterate (&cookie, iterOp, &foundEntry, &done);
+        if (!done && (err == noErr)) {		   	
+  			RegPropertyValueSize propSize;
+  			err = RegistryPropertyGetSize (&foundEntry, "ATA-Channel", &propSize);
+  			if ((err == noErr) && (propSize == 4)) {
+  				gLogFile << "Found one: !" << endl_AC;
+			   	fIsActuallyATABus = true;
+
+				unsigned channel;
+				ThrowIfOSErr_AC (RegistryPropertyGet (&foundEntry, "ATA-Channel", &channel, &propSize));
+				OFAliases::AliasFor (&foundEntry, alias, shortAlias);
+
+				unsigned reg;
+				err = RegistryPropertyGetSize (&foundEntry, "reg", &propSize);
+				if ((err == noErr) && (propSize == 4)) {
+					ThrowIfOSErr_AC (RegistryPropertyGet (&foundEntry, "reg", &reg, &propSize));
+					char buffer[24];
+					sprintf (buffer, "@%X", reg);
+					strcat (alias, buffer);
+					char *pos = shortAlias + strlen (shortAlias);
+					while ((*pos != '/') && (pos > shortAlias)) pos--;
+					pos++;
+					*pos = 0;
+					strcat (shortAlias, buffer);
+				}
+
+				if (channel == 0) {
+					fATAOpenFirmwareName0.CopyFrom (alias);
+					fATAShortOpenFirmwareName0.CopyFrom (shortAlias);
+				} else if (channel == 1) {
+					fATAOpenFirmwareName1.CopyFrom (alias);
+					fATAShortOpenFirmwareName1.CopyFrom (shortAlias);				
+				}	
+				
+			}
+	        RegistryEntryIDDispose (&foundEntry);
+        } else {
+        	break;
+        }
+        iterOp = kRegIterContinue;
+    }
+    RegistryEntryIterateDispose (&cookie);
+
 	#if qLogging
 		gLogFile << "OpenFirmwareName: ";
 		gLogFile.WriteCharBytes ((char *) &fOpenFirmwareName[1], fOpenFirmwareName[0]);
@@ -242,6 +297,21 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 		gLogFile.WriteCharBytes ((char *) &fShortOpenFirmwareName[1], fShortOpenFirmwareName[0]);
 		gLogFile << endl_AC;
 		gLogFile << "Bus Number: " << fBusNumber << endl_AC;
+		if (fIsActuallyATABus) {
+			gLogFile << "ATA Channel 0 Name: ";
+			gLogFile.WriteCharBytes ((char *) &fATAOpenFirmwareName0[1], fATAOpenFirmwareName0[0]);
+			gLogFile << endl_AC;
+			gLogFile << "ATA Channel 0 Short Name: ";
+			gLogFile.WriteCharBytes ((char *) &fATAShortOpenFirmwareName0[1], fATAShortOpenFirmwareName0[0]);
+			gLogFile << endl_AC;
+			gLogFile << "ATA Channel 1 Name: ";
+			gLogFile.WriteCharBytes ((char *) &fATAOpenFirmwareName1[1], fATAOpenFirmwareName1[0]);
+			gLogFile << endl_AC;
+			gLogFile << "ATA Channel 1 Short Name: ";
+			gLogFile.WriteCharBytes ((char *) &fATAShortOpenFirmwareName1[1], fATAShortOpenFirmwareName1[0]);
+			gLogFile << endl_AC;
+
+		}
 	#endif
 	
 }
