@@ -62,10 +62,7 @@ HFSPlusVolume::HFSPlusVolume (XPFPartition *thePartition, unsigned long offsetTo
 	ThrowIfOSErr_AC (readBlocks (2, 1, (void **) &fHeader));
 	Erase_AC (&fVolumeName);
 	HFSPlusCatalog catalog (this);
-	catalog.findVolumeName (&fVolumeName);
-
-//	HFSPlusExtentsOverflow extentsOverflow (this);
-
+	catalog.findVolumeNameAndCreateDate (&fVolumeName, &fHeader->createDate);
 }
 
 HFSPlusVolume::~HFSPlusVolume ()

@@ -95,12 +95,13 @@ HFSPlusCatalogNode::findEntry (HFSCatalogNodeID parentID, const HFSUniStr255& no
 }
 
 int 
-HFSPlusCatalogNode::findVolumeName (HFSUniStr255 *outName)
+HFSPlusCatalogNode::findVolumeNameAndCreateDate (HFSUniStr255 *outName, UInt32 *outDate)
 {
 	UInt16 *recordOffset = (UInt16 *) (fData + fCatalog->getNodeSize ());
 	for (int x = 0; x < fNodeDescriptor.numRecords; x++) {
 		recordOffset--;
 		HFSPlusCatalogKey *key = (HFSPlusCatalogKey *) (fData + *recordOffset);
+		HFSPlusCatalogFolder *folder = (HFSPlusCatalogFolder *) (fData + *recordOffset + key->keyLength + sizeof (UInt16));
 		if (fsRtParID < key->parentID) {
 			#if qLogging
 				gLogFile << "Gone past desired parent ID" << endl_AC;
@@ -109,6 +110,7 @@ HFSPlusCatalogNode::findVolumeName (HFSUniStr255 *outName)
 		} else if (key->parentID == fsRtParID) {
 			// We've got one
 			BlockMoveData (&key->nodeName, outName, sizeof (HFSUniStr255));
+			*outDate = folder->createDate;
 			return 1;
 		}
 	}

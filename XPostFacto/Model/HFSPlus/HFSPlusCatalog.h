@@ -56,7 +56,7 @@ class HFSPlusCatalog {
 		HFSPlusCatalog (HFSPlusVolume *volume);
 		
 		int findEntry (HFSCatalogNodeID parentID, const HFSUniStr255& nodeName, HFSPlusCatalogFile *file);
-		int findVolumeName (HFSUniStr255 *outName);
+		int findVolumeNameAndCreateDate (HFSUniStr255 *outName, UInt32 *outDate);
 
 		UInt32 getNodeSize () {return fNodeSize;}
 };

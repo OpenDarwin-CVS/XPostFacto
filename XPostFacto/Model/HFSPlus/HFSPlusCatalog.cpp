@@ -137,12 +137,12 @@ HFSPlusCatalog::findEntry (HFSCatalogNodeID parentID, const HFSUniStr255& nodeNa
 }
 
 int
-HFSPlusCatalog::findVolumeName (HFSUniStr255 *outName)
+HFSPlusCatalog::findVolumeNameAndCreateDate (HFSUniStr255 *outName, UInt32 *outDate)
 {
 	HFSPlusCatalogNode *node = new HFSPlusCatalogNode (this, fFirstLeafNode);
 	int result = 0;
 	while (result == 0) {
-		result = node->findVolumeName (outName);
+		result = node->findVolumeNameAndCreateDate (outName, outDate);
 		if (result == 0) {
 			// not found yet, but keep looking
 			HFSPlusCatalogNode *nextNode = node->newNextNode ();

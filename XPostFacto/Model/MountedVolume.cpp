@@ -95,6 +95,9 @@ MountedVolume::Initialize ()
 				kFSVolInfoCreateDate | kFSVolInfoBlocks | kFSVolInfoSizes | kFSVolInfoFlags | 
 				kFSVolInfoFSInfo | kFSVolInfoDriveInfo, &info, &volName, &rootDirectory);
 		if (err == noErr) {
+			FSCatalogInfo rootInfo;
+			FSGetCatalogInfo (&rootDirectory, kFSCatInfoCreateDate, &rootInfo, NULL, NULL, NULL);
+			info.createDate.lowSeconds = rootInfo.createDate.lowSeconds;
 			MountedVolume *volume = MountedVolume::WithInfo (&info);
 			if (volume) {
 				volume->fStillThere = true;
