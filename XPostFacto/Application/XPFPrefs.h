@@ -105,6 +105,11 @@ class XPFPrefs : public TFileBasedDocument {
 		
 		bool getRestartOnClose () {return fRestartOnClose;}
 		void setRestartOnClose (bool val) {fRestartOnClose = val;}
+		
+		bool getIsRegistered ();
+		void setIsRegistered (bool val);
+		
+		void checkRegistration ();
 				
 #define DECLARE_ACCESSORS(type,method) 						\
 	void set##method (type val, bool callChanged = true); 	\
@@ -180,6 +185,7 @@ DECLARE_DEBUG_ACCESSORS (DebugPanicText)
 		UInt8	fEnableCacheEarly;
 		UInt32	fDebug;
 		UInt8	fUseROMNDRV;
+		UInt32	fRegisteredVersion;
 };
 
 #endif

@@ -106,6 +106,8 @@ advised of the possibility of such damage.
 #define cCheckPermissions				1456
 #define cInstallEverything				1457
 
+#define cSetIsRegistered				1458
+
 // Views and Windows
 // -----------------
 
@@ -124,6 +126,9 @@ advised of the possibility of such damage.
 
 #define kUpdateWindow				1040
 #define kUpdateItem					1041
+
+#define kRegisterWindow				1050
+#define kRegisterThankYou			1051
 
 #define kVolumeDisplay				1200
 

@@ -50,11 +50,11 @@ RESOURCE 'vers' (1,
 	purgeable) {
 	0x03,
 	0x00,
-	alpha,
-	0x11,
+	beta,
+	0x1,
 	verUs,
-	"3.0a17",
-	"3.0a17, © 2001 - 2004 Other World Computing"
+	"3.0b1",
+	"3.0b1, © 2001 - 2004 Other World Computing"
 };
 
 RESOURCE 'vers' (3,
@@ -70,3 +70,18 @@ RESOURCE 'vers' (3,
 	"3.0b2",
 	"3.0b2, © 2001 - 2004 Other World Computing"
 };
+
+RESOURCE 'vers' (4,
+#if qNames
+"Register Version",
+#endif
+	purgeable) {
+	0x03,
+	0x0,
+	final,
+	0x0,
+	verUs,
+	"3.0",
+	"3.0, © 2001 - 2004 Other World Computing"
+};
+

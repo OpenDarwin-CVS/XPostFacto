@@ -46,6 +46,7 @@ resource 'urls' (kURLResource, purgeable) {
 	{
 		'exdb', 1;
 		'exof', 2;
+		'regn', 3;
 	}
 };
 
@@ -53,5 +54,6 @@ resource 'STR#' (kURLResource, purgeable) {
 	{
 /* 1 */  "http://developer.apple.com/documentation/Darwin/Conceptual/KernelProgramming/build/chapter_18_section_5.html";
 		 "http://developer.apple.com/technotes/tn/tn1061.html";
+		 "https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm"
 	}
 };

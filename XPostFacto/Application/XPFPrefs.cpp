@@ -48,6 +48,7 @@ advised of the possibility of such damage.
 #include "HFSPlusArchive.h"
 #include "XPFUpdate.h"
 #include "XPFUpdateWindow.h"
+#include "vers_rsrc.h"
 
 #include <string.h>
 
@@ -111,7 +112,8 @@ XPFPrefs::XPFPrefs (TFile* itsFile)
 		fTooBigForNVRAM (false),
 		fTooBigForNVRAMForInstall (false),
 		fForceAskSave (false),
-		fRestartOnClose (false)
+		fRestartOnClose (false),
+		fRegisteredVersion (0)
 {
 	SetAskOnClose (true);
 }
@@ -303,11 +305,7 @@ XPFPrefs::getPrefsFromNVRAM ()
 	if (fAutoBoot != nvram->getBooleanValue ("auto-boot?")) fForceAskSave = true;;	
 	if (fBootInSingleUserMode != (strstr (bootCommand, " -s") != 0)) fForceAskSave = true;
 	if (fBootInVerboseMode != (strstr (bootCommand, " -v") != 0)) fForceAskSave = true;
-	
-	// we set -c if the user does *not* want to enable the cache early
-	// If no -c, we don't assume anything
-	if (fEnableCacheEarly != (strstr (bootCommand, " -c") == 0)) fForceAskSave = true;
-	
+		
 	char *debugString = strstr (bootCommand, "debug=");
 	UInt32 debug = 0;
 	if (debugString) {
@@ -542,6 +540,7 @@ XPFPrefs::DoRead (TFile* aFile, bool forPrinting)
 		}
 		
 		fileStream >> fUseROMNDRV;
+		fileStream >> fRegisteredVersion;
 	}
 	
 	catch (...) {
@@ -672,9 +671,8 @@ XPFPrefs::DoWrite (TFile* aFile, bool makingCopy)
 		}
 	}	
 	
-	// And the ROMNDRV
-	
 	fileStream << fUseROMNDRV;
+	fileStream << fRegisteredVersion;
 }
 
 void 
@@ -687,6 +685,24 @@ XPFPrefs::DoMakeViews (bool forPrinting)
 	// Not the most elegant place, but we need to do it after reading from NVRAM,
 	// and before Close ()
 	if (fForceAskSave) SetChangeCount (GetChangeCount () + 1);
+	
+	checkRegistration ();
+}
+
+void
+XPFPrefs::checkRegistration ()
+{
+	if (getIsRegistered ()) return;
+	TWindow *dialog = TViewServer::fgViewServer->NewTemplateWindow (kRegisterWindow, NULL);
+	IDType result = dialog->PoseModally ();
+	dialog->Close ();
+	
+	if (result == 'regi') {
+		dialog = TViewServer::fgViewServer->NewTemplateWindow (kRegisterThankYou, NULL);
+		dialog->PoseModally ();
+		dialog->Close ();
+		setIsRegistered (true);
+	}
 }
 
 void 
@@ -932,10 +948,7 @@ XPFPrefs::getBootCommandBase ()
 	}
 			
 	if (fBootInVerboseMode) bootCommand += (" -v");
-	if (fBootInSingleUserMode) bootCommand += (" -s");
-	
-	// We set -c if the user does *not* want to enable the cache early
-	if (!fEnableCacheEarly) bootCommand += (" -c");
+	if (fBootInSingleUserMode) bootCommand += (" -s");	
 	if (fUseROMNDRV) bootCommand += (" romndrv=1");
 	
 	return bootCommand;
@@ -1021,6 +1034,32 @@ XPFPrefs::getOutputDeviceIndex ()
 }
 
 #pragma mark ----> Accessors
+
+bool 
+XPFPrefs::getIsRegistered ()
+{
+	Handle registerVersion = GetResource ('vers', 4);
+	ThrowIfResError_AC ();
+	return VERS_compare (fRegisteredVersion, **registerVersion) >= 0;
+}
+
+void 
+XPFPrefs::setIsRegistered (bool val)
+{
+	UInt32 newVal;
+	if (val) {
+		Handle registerVersion = GetResource ('vers', 4);
+		ThrowIfResError_AC ();
+		newVal = **registerVersion;
+	} else {
+		newVal = 0;
+	}
+	
+	if (newVal != fRegisteredVersion) {
+		fRegisteredVersion = newVal;
+		Changed (cSetIsRegistered, &val);
+	}
+}
 
 void 
 XPFPrefs::setInstallCD (MountedVolume *theDisk, bool callChanged)
