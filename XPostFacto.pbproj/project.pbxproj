@@ -25,6 +25,20 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		944AD928067424E500FC3507 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = lzss.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		944AD929067424E500FC3507 = {
+			fileRef = 944AD928067424E500FC3507;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		94606078057BA4A300FE8769 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -54,8 +68,7 @@
 			};
 		};
 		946A5D250525104400A80003 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = Cocoa.framework;
 			path = /System/Library/Frameworks/Cocoa.framework;
@@ -1203,8 +1216,7 @@
 		};
 		94B3FB9C05866E9F00A80003 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = OpenPMUPCCardEject.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -1253,6 +1265,153 @@
 			isa = PBXTargetDependency;
 			target = 94B3FB9B05866E9F00A80003;
 			targetProxy = 948CD0FE05FBEECE003103DB;
+		};
+		94B4B90D066C02DD00C3EE18 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94B4B90E066C02DD00C3EE18 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94B4B90F066C02DD00C3EE18 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94B4B910066C02DD00C3EE18 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94B4B911066C02DD00C3EE18 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94B4B912066C02DD00C3EE18 = {
+			buildPhases = (
+				94B4B90D066C02DD00C3EE18,
+				94B4B90E066C02DD00C3EE18,
+				94B4B90F066C02DD00C3EE18,
+				94B4B910066C02DD00C3EE18,
+				94B4B911066C02DD00C3EE18,
+			);
+			buildSettings = {
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = PatchedRagePro;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = kext;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = PatchedRagePro;
+			productInstallPath = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+			productName = OpenRagePro;
+			productReference = 94B4B913066C02DD00C3EE18;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.macsales.iokit.PatchedRagePro</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>0x4c471002</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.ATIRagePro</string>
+			<key>IOClass</key>
+			<string>ATIRagePro</string>
+			<key>IOGLBundleName</key>
+			<string>ATIRageProGLDriver</string>
+			<key>IOMatchCategory</key>
+			<string>IOAccelerator</string>
+			<key>IOPCIMatch</key>
+			<string>0x4c471002</string>
+			<key>IOProbeScore</key>
+			<integer>500</integer>
+			<key>IOProviderClass</key>
+			<string>IOPCIDevice</string>
+		</dict>
+		<key>0x4c501002</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.ATIRagePro</string>
+			<key>IOCFPlugInTypes</key>
+			<dict>
+				<key>ACCF0000-0000-0000-0000-000a2789904e</key>
+				<string>ATIRageProGA.plugin</string>
+			</dict>
+			<key>IOClass</key>
+			<string>ATIRagePro</string>
+			<key>IOGLBundleName</key>
+			<string>ATIRageProGLDriver</string>
+			<key>IOMatchCategory</key>
+			<string>IOAccelerator</string>
+			<key>IOPCIMatch</key>
+			<string>0x4c501002</string>
+			<key>IOProviderClass</key>
+			<string>IOPCIDevice</string>
+		</dict>
+	</dict>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.kernel.iokit</key>
+		<string>1.0b1</string>
+	</dict>
+	<key>OSBundleRequired</key>
+	<string>Root</string>
+</dict>
+</plist>
+";
+		};
+		94B4B913066C02DD00C3EE18 = {
+			explicitFileType = wrapper.cfbundle;
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = PatchedRagePro.kext;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		94B4B943066C0A3900C3EE18 = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 94B4B912066C02DD00C3EE18;
+			remoteInfo = PatchedRagePro;
+		};
+		94B4B944066C0A3900C3EE18 = {
+			isa = PBXTargetDependency;
+			target = 94B4B912066C02DD00C3EE18;
+			targetProxy = 94B4B943066C0A3900C3EE18;
 		};
 		94B8172F047A7ABF00A80003 = {
 			fileEncoding = 4;
@@ -1420,8 +1579,7 @@
 		};
 		94C3604C0597CB4E00A80003 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = OpenControlFramebuffer.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -1666,8 +1824,7 @@
 		};
 		94C7506B05F8EA3600A80003 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = PatchedBlockStorageDriver.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -1774,8 +1931,7 @@
 		};
 		94C954A8057CFA4D00A80003 = {
 			explicitFileType = "compiled.mach-o.executable";
-			fallbackIsa = PBXFileReference;
-			isa = PBXExecutableFileReference;
+			isa = PBXFileReference;
 			path = splitPEF;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -2089,8 +2245,7 @@
 		};
 		94CC88F0054C817100A80003 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = OpenOWScreamerAudio.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -2314,8 +2469,7 @@
 		};
 		94CC89DC0508E1BC00A80003 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = OWCDumpIORegistry.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -2490,8 +2644,7 @@
 		};
 		94D432AC05583C1100A80003 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = AppleMaceEthernetPreJag.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -2735,8 +2888,7 @@
 		};
 		94E26631054E02A400A80003 = {
 			explicitFileType = "compiled.mach-o.dylib";
-			fallbackIsa = PBXFileReference;
-			isa = PBXLibraryReference;
+			isa = PBXFileReference;
 			path = libAppleDBDMAAudioFloatLib.a;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -2849,19 +3001,18 @@
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>3.0</string>
+	<string>3.0.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>3.0</string>
+	<string>3.0.1</string>
 </dict>
 </plist>
 ";
 		};
 		94E53E080561CA9D00A80003 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = XPFStartupItem.;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -3082,8 +3233,7 @@
 		};
 		94F427660543145400A80003 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = XPFPartitionInfo.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -3234,7 +3384,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.GossamerDeviceTreeUpdater;
-				MODULE_VERSION = 1.0.2;
+				MODULE_VERSION = 1.0.3;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -3275,7 +3425,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.2</string>
+	<string>1.0.3</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>GossamerDeviceTreeUpdater</key>
@@ -3311,8 +3461,7 @@
 		};
 		94FC07D4056AE12D00A80003 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = GossamerDeviceTreeUpdater.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -3414,8 +3563,7 @@
 			};
 		};
 		F52AC80E03F21A8F01A80002 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = ApplicationServices.framework;
 			path = /System/Library/Frameworks/ApplicationServices.framework;
@@ -3423,8 +3571,7 @@
 			sourceTree = "<absolute>";
 		};
 		F52AC80F03F21A8F01A80002 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = CoreServices.framework;
 			path = /System/Library/Frameworks/CoreServices.framework;
@@ -3482,6 +3629,7 @@
 				94C3604B0597CB4E00A80003,
 				9490D52C061C8AE700D8F22E,
 				947DFF930617B5230087D76A,
+				94B4B912066C02DD00C3EE18,
 			);
 		};
 		F53C691001B191BA01A80001 = {
@@ -3500,8 +3648,6 @@
 			sourceTree = "<group>";
 		};
 		F53C691101B191BA01A80001 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -3514,8 +3660,6 @@
 			name = Development;
 		};
 		F53C691201B191BA01A80001 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -4057,6 +4201,7 @@
 				947DFBF8061763170087D76A,
 				947DFF940617B5230087D76A,
 				9490D52D061C8AE700D8F22E,
+				94B4B913066C02DD00C3EE18,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -4065,24 +4210,21 @@
 		};
 		F53C6A1701B194DC01A80001 = {
 			explicitFileType = "compiled.mach-o.executable";
-			fallbackIsa = PBXFileReference;
-			isa = PBXExecutableFileReference;
+			isa = PBXFileReference;
 			path = bootx;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F53C6A1801B194DC01A80001 = {
 			explicitFileType = "compiled.mach-o.executable";
-			fallbackIsa = PBXFileReference;
-			isa = PBXExecutableFileReference;
+			isa = PBXFileReference;
 			path = "macho-to-xcoff";
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F53C6A1901B194DC01A80001 = {
 			explicitFileType = "compiled.mach-o.executable";
-			fallbackIsa = PBXFileReference;
-			isa = PBXExecutableFileReference;
+			isa = PBXFileReference;
 			path = "fcode-to-c";
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -4097,15 +4239,16 @@
 			);
 			buildSettings = {
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = "BootX/bootx.tproj/include.subproj \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/usr/include/gcc/darwin/2.95.2\" \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/usr/include\"";
+				HEADER_SEARCH_PATHS = BootX/bootx.tproj/include.subproj;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
-				OTHER_CFLAGS = "-static";
+				OTHER_CFLAGS = "-static -D_ANSI_SOURCE";
 				OTHER_LDFLAGS = "-nostdlib -e _StartTVector -seg1addr 05600000";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = bootx;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
+				USE_GCC3_PFE_SUPPORT = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 			};
 			dependencies = (
@@ -4179,6 +4322,7 @@
 				F5BFE4210304D49701A80001,
 				F5BFE4220304D49801A80001,
 				9460607B057BA4A300FE8769,
+				944AD929067424E500FC3507,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4389,8 +4533,7 @@
 		};
 		F53C6AB401B19FD401A80001 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = AppleCurio.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -4560,8 +4703,7 @@
 		};
 		F53C6AC201B1A29901A80001 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = AppleGrandCentral.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -4584,7 +4726,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.AppleGrandCentral;
-				MODULE_VERSION = 1.1.1;
+				MODULE_VERSION = 1.2;
 				OTHER_CFLAGS = "-fpermissive -D_BIG_ENDIAN=__BIG_ENDIAN__";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -4625,7 +4767,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.1.1</string>
+	<string>1.2</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>AppleGrandCentral</key>
@@ -4726,8 +4868,7 @@
 		};
 		F53C6AD301B1A6D301A80001 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = AppleMaceEthernet.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -4965,16 +5106,14 @@
 		};
 		F53C6AEB01B1ACE201A80001 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = ApplePowerSurgePE.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F53C6AEC01B1ACE201A80001 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = PowerSurgeCPU.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -5304,8 +5443,7 @@
 		};
 		F53C6B0901B1B30F01A80001 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = PatchedAppleNVRAM.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -5470,16 +5608,14 @@
 		};
 		F53C6B1701B1B4A001A80001 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = PatchedIOSCSICDDrive.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F53C6B1801B1B4A001A80001 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = PatchedSCSIDeviceType05.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -5903,8 +6039,7 @@
 		};
 		F53F988C01E7451A01A80001 = {
 			explicitFileType = "compiled.mach-o.executable";
-			fallbackIsa = PBXFileReference;
-			isa = PBXExecutableFileReference;
+			isa = PBXFileReference;
 			path = hfsplusextract;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -6229,8 +6364,7 @@
 		};
 		F547F71A028EFEEC01A80001 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = PowerStarCPU.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -6398,8 +6532,7 @@
 		};
 		F548C0D70289790D01A80001 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = OpenPMU.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -6847,8 +6980,7 @@
 		};
 		F54E20780267327701A80001 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = ApplePowerExpressPE.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -7051,8 +7183,7 @@
 		};
 		F557F6800226FD2201A80001 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = OHareATA.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -7230,8 +7361,7 @@
 		};
 		F557F68C0226FDFA01A80001 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = AppleOHare.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -7535,8 +7665,7 @@
 		};
 		F557F6A30226FF1001A80001 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = ApplePowerStarPE.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -8082,6 +8211,7 @@
 		};
 		F572EEA70254E9E801A80001 = {
 			children = (
+				944AD928067424E500FC3507,
 				F572EEA90254E9E801A80001,
 				F572EEAA0254E9E801A80001,
 				F572EEAB0254E9E801A80001,
@@ -8489,8 +8619,7 @@
 		};
 		F5812B820315F14401A80001 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = AppleCurio4K78.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -8626,7 +8755,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.PatchedNDRVSupport;
-				MODULE_VERSION = 1.0.0d1;
+				MODULE_VERSION = 1.0.1;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -8667,7 +8796,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.0d1</string>
+	<string>1.0.1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>1</key>
@@ -8703,8 +8832,7 @@
 		};
 		F5887528030D66FA01A80001 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = PatchedNDRVSupport.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -8747,8 +8875,7 @@
 		};
 		F59D628701B1D0D601A80001 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = OldWorldSupport.pkg;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -8799,6 +8926,7 @@
 				947DFC43061766120087D76A,
 				947D00330617C03B0087D76A,
 				948201C50620C6A00097B077,
+				94B4B944066C0A3900C3EE18,
 			);
 			isa = PBXBundleTarget;
 			name = Package;
@@ -8927,8 +9055,7 @@
 		};
 		F5BF317F03F01EA201A80002 = {
 			explicitFileType = "compiled.mach-o.executable";
-			fallbackIsa = PBXFileReference;
-			isa = PBXExecutableFileReference;
+			isa = PBXFileReference;
 			path = xpfbootsupportd;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -8978,8 +9105,7 @@
 			sourceTree = "<group>";
 		};
 		F5BF318503F020F601A80002 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = CoreFoundation.framework;
 			path = /System/Library/Frameworks/CoreFoundation.framework;
@@ -8987,8 +9113,7 @@
 			sourceTree = "<absolute>";
 		};
 		F5BF347003F0213301A80002 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = IOKit.framework;
 			path = /System/Library/Frameworks/IOKit.framework;
@@ -9228,8 +9353,7 @@
 		};
 		F5EC95B501B1F16601A80001 = {
 			explicitFileType = "compiled.mach-o.executable";
-			fallbackIsa = PBXFileReference;
-			isa = PBXExecutableFileReference;
+			isa = PBXFileReference;
 			path = hfsplusarchive;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -9379,8 +9503,7 @@
 			};
 		};
 		F5EC95CC01B1F40001A80001 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = Carbon.framework;
 			path = /System/Library/Frameworks/Carbon.framework;
@@ -9713,7 +9836,7 @@
 			);
 			isa = PBXBundleTarget;
 			name = "OWCCacheConfig Extension";
-			productInstallPath = "$(USER_LIBRARY_DIR)/Bundles";
+			productInstallPath = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 			productName = "OWCCacheConfig Extension";
 			productReference = F5FB800B03C7A0AD01A80002;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -9771,8 +9894,7 @@
 		};
 		F5FB800B03C7A0AD01A80002 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = OWCCacheConfig.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
