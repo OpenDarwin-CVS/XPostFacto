@@ -165,11 +165,17 @@ the result for the original Rez files. Fortunately, this is easy. Once you have 
 resource file, just select it in the CodeWarrior project and choose "Dissassemble" from
 the "Project" menu. This should give you a DeRez'd version.
 
-The other cvs integration detail is that the XPostFacto.mcp project is checked into the 
+CVS Integration
+===============
+
+Another cvs integration detail is that the XPostFacto.mcp project is checked into the 
 cvs repository as a binary file (since that is what it is). That isn't entirely ideal,
 I suppose, but it should work. I thought of using the exported .xml file instead, but
 a quick experiment exporting and re-importing did not work well (perhaps a later version
 of CodeWarrior handles this better).
+
+Also, if you create or edit files to put in the cvs repository, it seems best to use
+Unix line endings.
 
 That's All
 ==========
