@@ -44,6 +44,10 @@ class GossamerDeviceTreeUpdater : public IOService
 			
 		static void updateDeviceTree (void *argument);
 		
+	private:
+	
+		void disableBuiltInVideo ();	// temporary, until I get it working
+		
 };
 
 #endif

@@ -46,7 +46,34 @@ GossamerDeviceTreeUpdater::start (IOService *provider)
 	
 	IOCreateThread (&updateDeviceTree, provider);
 	
+	// This is temporary, until I get it working
+	if (!IODTMatchNubWithKeys (provider, "'AAPL,PowerBook1998'")) disableBuiltInVideo ();
+	
 	return true;
+}
+
+#define kDisplayDisabled "display,disabled"
+
+void
+GossamerDeviceTreeUpdater::disableBuiltInVideo ()
+{
+	IORegistryIterator *iter = IORegistryIterator::iterateOver (gIODTPlane, kIORegistryIterateRecursively);
+	if (iter == NULL) return;
+		
+	IORegistryEntry *entry = iter->getCurrentEntry ();
+	while (entry) {
+		OSData *deviceType = OSDynamicCast (OSData, entry->getProperty ("device_type"));
+		if (deviceType && !strcmp ((const char *) deviceType->getBytesNoCopy (), "display")) {
+			OSData *driver = OSDynamicCast (OSData, entry->getProperty ("driver,AAPL,MacOS,PowerPC"));
+			if (!driver) {
+				OSData *disableDeviceType = OSData::withBytes (kDisplayDisabled, strlen (kDisplayDisabled) + 1);
+				entry->setProperty ("device_type", disableDeviceType);
+				disableDeviceType->release ();
+			}
+		}
+		entry = iter->getNextObject ();
+	} 
+	iter->release ();
 }
 
 void
