@@ -89,6 +89,21 @@ SCSIBus::Initialize ()
 					gBusCount++;
 				}
 				DisposePtr (deviceType);				
+			} else {
+				// It had no device_type. So it might be the UltraTek100+ with the 2.3.5 firmware
+				// If so, pretend that it is a SCSI bus
+				err = RegistryPropertyGetSize (&entry, "name", &propSize);
+				if (err == noErr) {
+					char *name = NewPtr (propSize + 1);
+					ThrowIfOSErr_AC (RegistryPropertyGet (&entry, "name", name, &propSize));
+					name[propSize] = '\0';	
+					if (!strcmp (name, "UltraTek100+")) {
+						SCSIBus *newBus = new SCSIBus (&entry);
+						gSCSIBusList.InsertLast (newBus);	
+						gBusCount++;
+					}	
+					DisposePtr (name);
+				}
 			}
 	        RegistryEntryIDDispose (&entry);
         } else {
