@@ -568,6 +568,11 @@ NVRAMVariables::loadNVRAMPatch ()
 		BlockMoveData (*settings, zeroTerminatedSettings, handleSize);
 		zeroTerminatedSettings[handleSize] = 0;
 		
+		// and fix line endings
+		for (int x = handleSize; x >= 0; x--) {
+			if (zeroTerminatedSettings[x] == 10) zeroTerminatedSettings[x] = 13;
+		}
+
 		HUnlock (settings);
 		ReleaseResource (settings);
 		processNVRAMPatch (zeroTerminatedSettings);

@@ -56,6 +56,9 @@ XPFAboutBox::DoPostCreate (TDocument* itsDocument)
 	fCopyrightText = GetResource ('TEXT', kCopyrightID);
 	if (fCopyrightText) {
 		DetachResource (fCopyrightText);
+		for (int x = GetHandleSize (fCopyrightText) - 1; x >= 0; x--) {
+			if ((*fCopyrightText)[x] == 10) (*fCopyrightText)[x] = 13;
+		}
 		fCopyrightNotice->StuffText (fCopyrightText);
 	}
 }
