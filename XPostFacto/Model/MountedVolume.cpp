@@ -48,6 +48,9 @@ advised of the possibility of such damage.
 #include <iostream.h>
 #include "XPostFacto.h"
 #include "XPFStrings.h"
+#include <stdio.h>
+
+#include "MoreDisks.h"
 
 MountedVolumeList MountedVolume::gVolumeList;
 
@@ -134,7 +137,7 @@ MountedVolume::Initialize ()
 		item++;
 		FSRef rootDirectory;
 		err = FSGetVolumeInfo (kFSInvalidVolumeRefNum, item, NULL, 
-				kFSVolInfoCreateDate | kFSVolInfoBlocks | kFSVolInfoFlags | 
+				kFSVolInfoCreateDate | kFSVolInfoBlocks | kFSVolInfoSizes | kFSVolInfoFlags | 
 				kFSVolInfoFSInfo | kFSVolInfoDriveInfo, &info, &volName, &rootDirectory);
 		if (err == noErr) {
 			MountedVolume *volume = MountedVolume::WithInfoAndName (&info, &volName);
@@ -265,7 +268,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	fPartInfo = NULL;
 	fBootableDevice = NULL;
 	fCreationDate = 0;
-		
+			
 	// Copy the info
 	{
 		BlockMoveData (info, &fInfo, sizeof (FSVolumeInfo));
@@ -357,12 +360,26 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	fValidOpenFirmwareName = false;
 	if (fBootableDevice) {
 		fIsOnBootableDevice = true;
-		fPartInfo = fBootableDevice->partitionWithInfoAndName (info, name);
-		if (fPartInfo) {
-			fValidOpenFirmwareName = fPartInfo->getValidOpenFirmwareName ();
-			fPartInfo->setMountedVolume (this);
+		if (fBootableDevice->isFirewireDevice ()) {
+			partInfoRec partInfo;
+			OSErr err = MoreGetPartitionInfo (info->driveNumber, &partInfo);
+			if (err == noErr) {
+				fValidOpenFirmwareName = fBootableDevice->getValidOpenFirmwareName ();
+				fOpenFirmwareName.CopyFrom (fBootableDevice->getOpenFirmwareName ());
+				fShortOpenFirmwareName.CopyFrom (fBootableDevice->getShortOpenFirmwareName ());
+				char buffer[16];
+				sprintf (buffer, ":%d", partInfo.partitionNumber);
+				fOpenFirmwareName += buffer;
+				fShortOpenFirmwareName += buffer;
+			}
 		} else {
-			fValidOpenFirmwareName = false;
+			fPartInfo = fBootableDevice->partitionWithInfoAndName (info, name);
+			if (fPartInfo) {
+				fValidOpenFirmwareName = fPartInfo->getValidOpenFirmwareName ();
+				fOpenFirmwareName.CopyFrom (fPartInfo->getOpenFirmwareName ());
+				fShortOpenFirmwareName.CopyFrom (fPartInfo->getShortOpenFirmwareName ());
+				fPartInfo->setMountedVolume (this);
+			}
 		}
 	}
 	
@@ -379,7 +396,15 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 		} else {
 			gLogFile << "Could not find Open Firmware name." << endl_AC;
 		}
-	#endif
+	#endif	
+}
+
+bool
+MountedVolume::getRequiresBootHelper () {
+	if (fIsOnBootableDevice) {
+		return (fBootableDevice->isFirewireDevice () || !getIsWriteable ());
+	}
+	return false;
 }
 
 unsigned
@@ -389,9 +414,9 @@ MountedVolume::getBootStatus ()
 	if (!getHasMachKernel ()) return kNoMachKernel;
 	if (!getIsOnBootableDevice ()) return kNotBootable;
 	if (!getValidOpenFirmwareName ()) return kNoOFName;
-	if (!getHasBootX() && !getIsWriteable ()) return kNoBootX;
+//	if (!getHasBootX() && !getIsWriteable ()) return kNoBootX;
 	if (!getIsWriteable() && getHasInstaller ()) return kInstallOnly;
-	if (!getIsWriteable()) return kNotWriteable;
+//	if (!getIsWriteable()) return kNotWriteable;
 
 	return kStatusOK;
 }

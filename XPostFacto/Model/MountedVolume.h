@@ -78,14 +78,15 @@ class MountedVolume : public MDependable_AC
 		friend ostream& operator << (ostream& os, MountedVolume& volume);
 #endif
 		
-		const CStr255_AC& getOpenFirmwareName () {if (fPartInfo) return fPartInfo->getOpenFirmwareName (); else return "";}
-		const CStr255_AC& getShortOpenFirmwareName () {if (fPartInfo) return fPartInfo->getShortOpenFirmwareName (); else return "";}
+		const CStr255_AC& getOpenFirmwareName () {return fOpenFirmwareName;}
+		const CStr255_AC& getShortOpenFirmwareName () {return fShortOpenFirmwareName;}
 		const CStr255_AC& getVolumeName () {return fVolumeName;}
 		unsigned int getCreationDate () {return fCreationDate;}
 		bool getIsHFSPlus () {return fIsHFSPlus;}
 		bool getHasBootX () {if (fPartInfo) return fPartInfo->getHasBootX (); else return false;}
 		bool getExtendsPastEightGB () {if (fPartInfo) return fPartInfo->getExtendsPastEightGB (); else return false;}
 		bool getIsOnBootableDevice () {return fIsOnBootableDevice;}
+		bool getRequiresBootHelper ();
 		bool getHasMachKernel () {return fHasMachKernel;}
 		bool getHasInstaller () {return fHasInstaller;}
 		bool getIsWriteable () {return fIsWriteable;}
@@ -93,6 +94,7 @@ class MountedVolume : public MDependable_AC
 		bool getHasOldWorldSupport () {return fHasOldWorldSupport;}
 		bool getHasFinder () {return fHasFinder;}
 		FSRef* getRootDirectory () {return &fRootDirectory;}
+		const UInt64* getFreeBytes () {return &fInfo.freeBytes;}
 		
 		bool getHasBeenPrepared () {return fHasBeenPrepared;}
 		void setHasBeenPrepared (bool val) {fHasBeenPrepared = val;}
@@ -120,6 +122,8 @@ class MountedVolume : public MDependable_AC
 		CStr255_AC fVolumeName;
 		HFSUniStr255 fHFSName;
 		FSVolumeInfo fInfo;
+		CStr255_AC fOpenFirmwareName;
+		CStr255_AC fShortOpenFirmwareName;
 
 		UInt32 fAllocationBlockSize;
 
