@@ -1266,12 +1266,6 @@
 			settings = {
 			};
 		};
-		9496FEEF0600C8F000EEA628 = {
-			fileRef = F53C697201B1926201A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		94B3FB9505866E9F00A80003 = {
 			buildActionMask = 2147483647;
 			files = (
@@ -3517,7 +3511,6 @@
 		94D432A805583C1100A80003 = {
 			buildActionMask = 2147483647;
 			files = (
-				9496FEEF0600C8F000EEA628,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4112,7 +4105,6 @@
 		94F427620543145400A80003 = {
 			buildActionMask = 2147483647;
 			files = (
-				94F4276F0543163F00A80003,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4234,7 +4226,6 @@
 			children = (
 				94F427690543161A00A80003,
 				94F4276A0543161A00A80003,
-				94F4276D0543163F00A80003,
 			);
 			isa = PBXGroup;
 			name = XPFPartitionInfo;
@@ -4267,31 +4258,6 @@
 		};
 		94F4276C0543161A00A80003 = {
 			fileRef = 94F4276A0543161A00A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		94F4276D0543163F00A80003 = {
-			children = (
-				94F4276E0543163F00A80003,
-			);
-			isa = PBXVariantGroup;
-			name = InfoPlist.strings;
-			path = "";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		94F4276E0543163F00A80003 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.strings;
-			name = English;
-			path = XPFPartitionInfo/English.lproj/InfoPlist.strings;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		94F4276F0543163F00A80003 = {
-			fileRef = 94F4276D0543163F00A80003;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -4709,7 +4675,6 @@
 			children = (
 				F53C695701B1926201A80001,
 				F53C695801B1926201A80001,
-				F53C695C01B1926201A80001,
 			);
 			isa = PBXGroup;
 			path = AppleCurio;
@@ -4732,30 +4697,10 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		F53C695C01B1926201A80001 = {
-			children = (
-				F53C695D01B1926201A80001,
-			);
-			isa = PBXVariantGroup;
-			name = InfoPlist.strings;
-			path = "";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F53C695D01B1926201A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.strings;
-			name = English;
-			path = English.lproj/InfoPlist.strings;
-			refType = 4;
-			sourceTree = "<group>";
-		};
 		F53C695E01B1926201A80001 = {
 			children = (
 				F53C695F01B1926201A80001,
 				F53C696001B1926201A80001,
-				F53C696401B1926201A80001,
 			);
 			isa = PBXGroup;
 			path = AppleGrandCentral;
@@ -4778,25 +4723,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		F53C696401B1926201A80001 = {
-			children = (
-				F53C696501B1926201A80001,
-			);
-			isa = PBXVariantGroup;
-			name = InfoPlist.strings;
-			path = "";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F53C696501B1926201A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.strings;
-			name = English;
-			path = English.lproj/InfoPlist.strings;
-			refType = 4;
-			sourceTree = "<group>";
-		};
 		F53C696601B1926201A80001 = {
 			children = (
 				F53C696801B1926201A80001,
@@ -4805,7 +4731,6 @@
 				F53C696F01B1926201A80001,
 				F53C697001B1926201A80001,
 				F53C697101B1926201A80001,
-				F53C697201B1926201A80001,
 			);
 			isa = PBXGroup;
 			path = AppleMaceEthernet;
@@ -4860,30 +4785,10 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		F53C697201B1926201A80001 = {
-			children = (
-				F53C697301B1926201A80001,
-			);
-			isa = PBXVariantGroup;
-			name = InfoPlist.strings;
-			path = "";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F53C697301B1926201A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.strings;
-			name = English;
-			path = English.lproj/InfoPlist.strings;
-			refType = 4;
-			sourceTree = "<group>";
-		};
 		F53C697401B1926201A80001 = {
 			children = (
 				F53C697601B1926201A80001,
 				F53C697701B1926201A80001,
-				F53C697C01B1926201A80001,
 			);
 			isa = PBXGroup;
 			path = ApplePowerSurgePE;
@@ -4906,52 +4811,13 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		F53C697C01B1926201A80001 = {
-			children = (
-				F53C697D01B1926201A80001,
-			);
-			isa = PBXVariantGroup;
-			name = InfoPlist.strings;
-			path = "";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F53C697D01B1926201A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.strings;
-			name = English;
-			path = English.lproj/InfoPlist.strings;
-			refType = 4;
-			sourceTree = "<group>";
-		};
 		F53C698101B1926201A80001 = {
 			children = (
-				F53C698201B1926201A80001,
 				F53C698401B1926201A80001,
 				F53C698501B1926201A80001,
 			);
 			isa = PBXGroup;
 			path = PatchedAppleNVRAM;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F53C698201B1926201A80001 = {
-			children = (
-				F53C698301B1926201A80001,
-			);
-			isa = PBXVariantGroup;
-			name = InfoPlist.strings;
-			path = "";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F53C698301B1926201A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.strings;
-			name = English;
-			path = English.lproj/InfoPlist.strings;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -4973,7 +4839,6 @@
 		};
 		F53C698901B1926201A80001 = {
 			children = (
-				F53C698A01B1926201A80001,
 				F53C698C01B1926201A80001,
 				F53C698D01B1926201A80001,
 				F53C698E01B1926201A80001,
@@ -4983,25 +4848,6 @@
 			);
 			isa = PBXGroup;
 			path = PatchedIOSCSICDDrive;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F53C698A01B1926201A80001 = {
-			children = (
-				F53C698B01B1926201A80001,
-			);
-			isa = PBXVariantGroup;
-			name = InfoPlist.strings;
-			path = "";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F53C698B01B1926201A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.strings;
-			name = English;
-			path = English.lproj/InfoPlist.strings;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -5055,7 +4901,6 @@
 		};
 		F53C699601B1926201A80001 = {
 			children = (
-				F53C699701B1926201A80001,
 				F53C699901B1926201A80001,
 				F53C699A01B1926201A80001,
 				F53C699B01B1926201A80001,
@@ -5065,25 +4910,6 @@
 			);
 			isa = PBXGroup;
 			path = PatchedSCSIDeviceType05;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F53C699701B1926201A80001 = {
-			children = (
-				F53C699801B1926201A80001,
-			);
-			isa = PBXVariantGroup;
-			name = InfoPlist.strings;
-			path = "";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F53C699801B1926201A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.strings;
-			name = English;
-			path = English.lproj/InfoPlist.strings;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -5656,7 +5482,6 @@
 		F53C6AB901B19FD401A80001 = {
 			buildActionMask = 2147483647;
 			files = (
-				F53C6ABE01B1A00A01A80001,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5685,12 +5510,6 @@
 		};
 		F53C6ABD01B1A00A01A80001 = {
 			fileRef = F53C695701B1926201A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F53C6ABE01B1A00A01A80001 = {
-			fileRef = F53C695C01B1926201A80001;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -5821,7 +5640,6 @@
 		F53C6AC701B1A29901A80001 = {
 			buildActionMask = 2147483647;
 			files = (
-				F53C6ACC01B1A31E01A80001,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5850,12 +5668,6 @@
 		};
 		F53C6ACB01B1A31E01A80001 = {
 			fileRef = F53C695F01B1926201A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F53C6ACC01B1A31E01A80001 = {
-			fileRef = F53C696401B1926201A80001;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -6024,16 +5836,9 @@
 		F53C6ADE01B1A6D301A80001 = {
 			buildActionMask = 2147483647;
 			files = (
-				F53C6ADF01B1A6D301A80001,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F53C6ADF01B1A6D301A80001 = {
-			fileRef = F53C697201B1926201A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F53C6AE001B1A6D301A80001 = {
 			buildActionMask = 2147483647;
@@ -6053,7 +5858,6 @@
 		};
 		F53C6AE501B1AC0501A80001 = {
 			children = (
-				F53C6AE601B1AC0501A80001,
 				F53C6AE901B1AC0501A80001,
 				F53C6AEA01B1AC0501A80001,
 			);
@@ -6062,25 +5866,6 @@
 			path = Extensions/PowerSurgeCPU;
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
-		};
-		F53C6AE601B1AC0501A80001 = {
-			children = (
-				F53C6AE701B1AC0501A80001,
-			);
-			isa = PBXVariantGroup;
-			name = InfoPlist.strings;
-			path = "";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F53C6AE701B1AC0501A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.strings;
-			name = English;
-			path = English.lproj/InfoPlist.strings;
-			refType = 4;
-			sourceTree = "<group>";
 		};
 		F53C6AE901B1AC0501A80001 = {
 			fileEncoding = 30;
@@ -6238,7 +6023,6 @@
 		F53C6AF101B1ACE201A80001 = {
 			buildActionMask = 2147483647;
 			files = (
-				F53C6AFD01B1AD1C01A80001,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6378,7 +6162,6 @@
 		F53C6AF801B1ACE201A80001 = {
 			buildActionMask = 2147483647;
 			files = (
-				F53C6B0101B1AD1C01A80001,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6411,12 +6194,6 @@
 			settings = {
 			};
 		};
-		F53C6AFD01B1AD1C01A80001 = {
-			fileRef = F53C697C01B1926201A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F53C6AFF01B1AD1C01A80001 = {
 			fileRef = F53C6AEA01B1AC0501A80001;
 			isa = PBXBuildFile;
@@ -6425,12 +6202,6 @@
 		};
 		F53C6B0001B1AD1C01A80001 = {
 			fileRef = F53C6AE901B1AC0501A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F53C6B0101B1AD1C01A80001 = {
-			fileRef = F53C6AE601B1AC0501A80001;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -6573,16 +6344,9 @@
 		F53C6B1001B1B30F01A80001 = {
 			buildActionMask = 2147483647;
 			files = (
-				F53C6B1101B1B30F01A80001,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F53C6B1101B1B30F01A80001 = {
-			fileRef = F53C698201B1926201A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F53C6B1201B1B30F01A80001 = {
 			buildActionMask = 2147483647;
@@ -6769,16 +6533,9 @@
 		F53C6B2301B1B4A101A80001 = {
 			buildActionMask = 2147483647;
 			files = (
-				F53C6B2401B1B4A101A80001,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F53C6B2401B1B4A101A80001 = {
-			fileRef = F53C698A01B1926201A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F53C6B2501B1B4A101A80001 = {
 			buildActionMask = 2147483647;
@@ -6980,16 +6737,9 @@
 		F53C6B3101B1B4A101A80001 = {
 			buildActionMask = 2147483647;
 			files = (
-				F53C6B3201B1B4A101A80001,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F53C6B3201B1B4A101A80001 = {
-			fileRef = F53C699701B1926201A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F53C6B3301B1B4A101A80001 = {
 			buildActionMask = 2147483647;
@@ -7302,17 +7052,10 @@
 			settings = {
 			};
 		};
-		F544950E0260D8C401A80001 = {
-			fileRef = F557F68A0226FDFA01A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F547F715028EFEEC01A80001 = {
 			children = (
 				F547F716028EFEEC01A80001,
 				F547F717028EFEEC01A80001,
-				F547F718028EFEEC01A80001,
 			);
 			isa = PBXGroup;
 			name = PowerStarCPU;
@@ -7334,25 +7077,6 @@
 			lastKnownFileType = sourcecode.c.h;
 			name = PowerStarCPU.h;
 			path = PowerStarCPU/PowerStarCPU.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F547F718028EFEEC01A80001 = {
-			children = (
-				F547F719028EFEEC01A80001,
-			);
-			isa = PBXVariantGroup;
-			name = InfoPlist.strings;
-			path = "";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F547F719028EFEEC01A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.strings;
-			name = English;
-			path = PowerStarCPU/English.lproj/InfoPlist.strings;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -7492,16 +7216,9 @@
 		F547F721028EFEEC01A80001 = {
 			buildActionMask = 2147483647;
 			files = (
-				F547F722028EFEEC01A80001,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F547F722028EFEEC01A80001 = {
-			fileRef = F547F718028EFEEC01A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F547F723028EFEEC01A80001 = {
 			buildActionMask = 2147483647;
@@ -7930,7 +7647,6 @@
 			children = (
 				F54E20740267327701A80001,
 				F54E20750267327701A80001,
-				F54E20760267327701A80001,
 			);
 			isa = PBXGroup;
 			path = ApplePowerExpressPE;
@@ -7950,25 +7666,6 @@
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
 			path = ApplePowerExpressPE.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F54E20760267327701A80001 = {
-			children = (
-				F54E20770267327701A80001,
-			);
-			isa = PBXVariantGroup;
-			name = InfoPlist.strings;
-			path = "";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F54E20770267327701A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.strings;
-			name = English;
-			path = English.lproj/InfoPlist.strings;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -8126,16 +7823,9 @@
 		F54E20800267327701A80001 = {
 			buildActionMask = 2147483647;
 			files = (
-				F54E20810267327701A80001,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F54E20810267327701A80001 = {
-			fileRef = F54E20760267327701A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F54E20820267327701A80001 = {
 			buildActionMask = 2147483647;
@@ -8157,7 +7847,6 @@
 			children = (
 				F557F6970226FE6701A80001,
 				F557F6980226FE6701A80001,
-				F557F6990226FE6701A80001,
 			);
 			isa = PBXGroup;
 			name = OHareATA;
@@ -8168,7 +7857,6 @@
 			children = (
 				F557F6880226FDFA01A80001,
 				F557F6890226FDFA01A80001,
-				F557F68A0226FDFA01A80001,
 			);
 			isa = PBXGroup;
 			name = AppleOHare;
@@ -8295,7 +7983,6 @@
 		F557F6850226FD2201A80001 = {
 			buildActionMask = 2147483647;
 			files = (
-				F557F69D0226FE6701A80001,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8331,25 +8018,6 @@
 			lastKnownFileType = sourcecode.c.h;
 			name = AppleOHare.h;
 			path = AppleOHare/AppleOHare.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F557F68A0226FDFA01A80001 = {
-			children = (
-				F557F68B0226FDFA01A80001,
-			);
-			isa = PBXVariantGroup;
-			name = InfoPlist.strings;
-			path = "";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F557F68B0226FDFA01A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.strings;
-			name = English;
-			path = AppleOHare/English.lproj/InfoPlist.strings;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -8532,7 +8200,6 @@
 		F557F6930226FDFA01A80001 = {
 			buildActionMask = 2147483647;
 			files = (
-				F544950E0260D8C401A80001,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8571,25 +8238,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		F557F6990226FE6701A80001 = {
-			children = (
-				F557F69A0226FE6701A80001,
-			);
-			isa = PBXVariantGroup;
-			name = InfoPlist.strings;
-			path = "";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F557F69A0226FE6701A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.strings;
-			name = English;
-			path = OHareATA/English.lproj/InfoPlist.strings;
-			refType = 4;
-			sourceTree = "<group>";
-		};
 		F557F69B0226FE6701A80001 = {
 			fileRef = F557F6980226FE6701A80001;
 			isa = PBXBuildFile;
@@ -8602,17 +8250,10 @@
 			settings = {
 			};
 		};
-		F557F69D0226FE6701A80001 = {
-			fileRef = F557F6990226FE6701A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F557F69E0226FF1001A80001 = {
 			children = (
 				F557F69F0226FF1001A80001,
 				F557F6A00226FF1001A80001,
-				F557F6A10226FF1001A80001,
 			);
 			isa = PBXGroup;
 			name = ApplePowerStarPE;
@@ -8635,25 +8276,6 @@
 			lastKnownFileType = sourcecode.c.h;
 			name = ApplePowerStarPE.h;
 			path = ApplePowerStarPE/ApplePowerStarPE.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F557F6A10226FF1001A80001 = {
-			children = (
-				F557F6A20226FF1001A80001,
-			);
-			isa = PBXVariantGroup;
-			name = InfoPlist.strings;
-			path = "";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F557F6A20226FF1001A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.strings;
-			name = English;
-			path = ApplePowerStarPE/English.lproj/InfoPlist.strings;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -8811,16 +8433,9 @@
 		F557F6AD0226FF1001A80001 = {
 			buildActionMask = 2147483647;
 			files = (
-				F557F6AE0226FF1001A80001,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F557F6AE0226FF1001A80001 = {
-			fileRef = F557F6A10226FF1001A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F557F6AF0226FF1001A80001 = {
 			buildActionMask = 2147483647;
@@ -9507,7 +9122,6 @@
 		F5812B7E0315F14401A80001 = {
 			buildActionMask = 2147483647;
 			files = (
-				F5812B860315F15E01A80001,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9630,39 +9244,13 @@
 			settings = {
 			};
 		};
-		F5812B860315F15E01A80001 = {
-			fileRef = F53C695C01B1926201A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F588751B030D66DB01A80001 = {
 			children = (
-				F588751D030D66DB01A80001,
 				F588751F030D66DB01A80001,
 				F5887520030D66DB01A80001,
 			);
 			isa = PBXGroup;
 			path = PatchedNDRVSupport;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F588751D030D66DB01A80001 = {
-			children = (
-				F588751E030D66DB01A80001,
-			);
-			isa = PBXVariantGroup;
-			name = InfoPlist.strings;
-			path = "";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F588751E030D66DB01A80001 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.strings;
-			name = English;
-			path = English.lproj/InfoPlist.strings;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -9710,7 +9298,6 @@
 		F5887524030D66FA01A80001 = {
 			buildActionMask = 2147483647;
 			files = (
-				F588752B030D69CA01A80001,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9830,12 +9417,6 @@
 			path = PatchedNDRVSupport.kext;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		F588752B030D69CA01A80001 = {
-			fileRef = F588751D030D66DB01A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		F588752C030D69CB01A80001 = {
 			fileRef = F588751F030D66DB01A80001;
