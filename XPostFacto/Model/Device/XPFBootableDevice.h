@@ -65,6 +65,7 @@ class XPFBootableDevice : public MDependable_AC
 #endif	
 
 		static XPFBootableDevice* DeviceWithOpenFirmwareName (char *ofName);
+		static XPFBootableDevice* DeviceWithInfoAndName (FSVolumeInfo *info, HFSUniStr255 *name);
 						
 		static void DeleteInvalidDevices ();
 

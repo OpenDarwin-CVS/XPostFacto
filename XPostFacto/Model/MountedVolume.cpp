@@ -1031,6 +1031,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 		IOObjectRelease (regEntry);
 	}
 #else
+
 	fBootableDevice = XPFBootableDevice::DeviceWithInfo (info);
 	
 	if (!fBootableDevice && MoreDriveSupportsDriverGestalt (info->driveNumber)) {
@@ -1050,6 +1051,8 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 			fBootableDevice = XPFBootableDevice::DeviceWithOpenFirmwareName (alias);
 		}		
 	}
+
+	if (!fBootableDevice) fBootableDevice = XPFBootableDevice::DeviceWithInfoAndName (info, name);
 
 	if (fBootableDevice) {
 		if (fBootableDevice->isFirewireDevice ()) {
