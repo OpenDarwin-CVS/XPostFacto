@@ -43,6 +43,7 @@ advised of the possibility of such damage.
 #include "stdio.h"
 #include "XPFProgressWindow.h"
 #include "XPFStrings.h"
+#include "XPFAuthorization.h"
 
 #define Inherited XPFThreadedCommand
 
@@ -155,6 +156,8 @@ XPFRestartCommand::DoItThreaded ()
 		FSRef kernelOnRoot;
 		ThrowIfOSErr_AC (getKernelFSRef (rootDisk->getRootDirectory (), &kernelOnRoot));
 		setCopyingFile ("\pmach_kernel");
+		
+		XPFSetUID myUID (0);
 		ThrowIfOSErr_AC (FSRefFileCopy (&kernelOnRoot, &helperDir, NULL, NULL, 0, false));
 		
 		// Copy the Extensions and Extensions.mkext
