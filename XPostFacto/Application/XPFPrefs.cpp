@@ -716,6 +716,16 @@ XPFPrefs::DoMenuCommand (CommandNumber aCommandNumber)
 			}
 			break;
 			
+		case cShowOptionsWindow:
+			if (fOptionsWindow) {
+				fOptionsWindow->Show (true, false);
+				fOptionsWindow->Select ();
+			} else {
+				fOptionsWindow = TViewServer::fgViewServer->NewTemplateWindow (kOptionsWindow, this);
+				fOptionsWindow->Open ();
+			}
+			break;
+			
 		default:
 			Inherited::DoMenuCommand (aCommandNumber);
 			break;

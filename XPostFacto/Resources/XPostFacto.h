@@ -126,7 +126,8 @@ advised of the possibility of such damage.
 // Menus
 // -----
 
-#define mInstall 70
+#define mInstall 	70
+#define mWindow 	71
 	
 // Finder Information
 // ------------------

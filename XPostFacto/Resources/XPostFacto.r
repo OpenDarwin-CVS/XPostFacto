@@ -156,6 +156,7 @@ resource 'MBAR' (kMBarDisplayed,
 		mFile;
 		mEdit;
 		mInstall;
+		mWindow;
 	}
 };
 
@@ -170,6 +171,7 @@ purgeable)
 		mApple;
 		mEditAqua;
 		mInstall;
+		mWindow;
 	}
 };
 #endif
@@ -229,6 +231,22 @@ purgeable) {
 	"Recopy Helper Files", noIcon, noKey, noMark, plain, cRecopyHelperFiles;
 	"-",			noIcon, noKey, noMark, plain, nocommand;
 	"Uninstall…",	noIcon, noKey, noMark, plain, cUninstall;
+	}
+};
+
+resource 'CMNU' (mWindow,
+#if qNames
+"mWindow",
+#endif
+purgeable) {
+	mWindow,
+	textMenuProc,
+	EnablingManagedByMacApp,
+	enabled,
+	"Window",
+	{
+	"Show NVRAM Options",	noIcon, noKey, noMark, plain, cShowOptionsWindow;
+	"Show Log",				noIcon, noKey, noMark, plain, cShowLogWindow;
 	}
 };
 

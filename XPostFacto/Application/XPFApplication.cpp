@@ -488,8 +488,6 @@ XPFApplication::InstallHelpMenuItems()
 	GetIndString (theMenuName, kXPFStringsResource, kXPostFactoSourceCodeMenu);
 	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (theMenuName, cShowSourceCode);
 	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem ("-", cNoCommand);
-	GetIndString (theMenuName, kXPFStringsResource, kShowLogWindowMenu);
-	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (theMenuName, cShowLogWindow);
 	GetIndString (theMenuName, kXPFStringsResource, kShowDebugOptions);
 	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (theMenuName, cShowDebugOptions);
 	
