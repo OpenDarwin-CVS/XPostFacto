@@ -203,7 +203,7 @@ XPFBootableDevice::getFirstHFSPartition ()
 	XPFPartition *retVal = NULL;
 	UInt32 partNum = 999;
 	for (PartitionIterator iter (fPartitionList); iter.Current (); iter.Next () ) {
-		if (iter->getPartitionNumber () < partNum) {
+		if (iter->getIsHFSPlusVolume () && iter->getPartitionNumber () < partNum) {
 			retVal = iter.Current ();
 			partNum = iter->getPartitionNumber ();
 		}
@@ -276,14 +276,12 @@ XPFBootableDevice::extractPartitionInfo ()
 						<< " Processor: " << (char *) (pm + x)->pmProcessor << endl_AC;
 				#endif
 			
-				if (!strcmp ((char *) (pm + x)->pmParType, "Apple_HFS")) {
-					try {
-						XPFPartition *info = new XPFPartition (this, pm + x, x + 1);
-						fPartitionList->InsertLast (info);
-					}
-					catch (...) {
-					
-					}
+				try {
+					XPFPartition *info = new XPFPartition (this, pm + x, x + 1);
+					fPartitionList->InsertLast (info);
+				}
+				catch (...) {
+				
 				}
 			}
 		}	
@@ -307,22 +305,28 @@ union VolumeHeader {
 };
 
 void 
-XPFBootableDevice::updateBootXIfInstalled (bool forceInstall)
+XPFBootableDevice::installBootXToPartition (XPFPartition *part)
 {
 	for (PartitionIterator iter (fPartitionList); iter.Current (); iter.Next ()) {
-		iter->updateBootXIfInstalled (forceInstall);
+		// We install if the partition is the one specified, or if BootX is already installed
+		if (iter->getClaimsBootXInstalled () || (iter.Current () == part)) {
+			iter->installBootX ();
+		}
 	}
 }
 
 UInt32 
-XPFBootableDevice::getOldestInstalledBootXVersion ()
+XPFBootableDevice::getActiveBootXVersion ()
 {
 	UInt32 retVal = 0xFFFFFFFF;
 	for (PartitionIterator iter (fPartitionList); iter.Current (); iter.Next ()) {
-		if (iter->getHasBootX ()) {
-			UInt32 vers = iter->getMyBootXVersion ();
-			if (VERS_compare (vers, retVal) == -1) retVal = vers;	
-		}
+		UInt32 vers = iter->getBootXVersion ();
+		// The idea here is to return the oldest installed version of BootX on the device,
+		// or 0 if there is no BootX installed at all. So we skip 0's that get returned, 
+		// except that if nothing else gets returned then we will ultimately return 0 as well.
+		// getBootXVersion will return kBootXImproperlyInstalled if BootX is not installed properly 
+		if (vers == 0) continue;
+		if (VERS_compare (vers, retVal) == -1) retVal = vers;	
 	}
 	if (retVal == 0xFFFFFFFF) retVal = 0;
 	return retVal;

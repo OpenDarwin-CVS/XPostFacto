@@ -99,9 +99,17 @@ void
 XPFUpdateWindow::parseVersion (char *buffer, UInt32 version)
 {	
 	buffer[0] = 0;
-	if (version) {
-		VERS_string (buffer, 32, version);
-	} else {
-		strcpy (buffer, "n/a");
+	switch (version) {
+		case kBootXNotInstalled:
+			strcpy (buffer, "n/a");
+			break;
+			
+		case kBootXImproperlyInstalled:
+			strcpy (buffer, "(n/a)");
+			break;
+			
+		default: 
+			VERS_string (buffer, 32, version);
+			break;
 	}
 }

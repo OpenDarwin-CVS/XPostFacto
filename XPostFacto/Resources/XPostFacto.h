@@ -163,4 +163,10 @@ advised of the possibility of such damage.
 #define kCopyrightID	1005
 #define kHelpID			1006
 
+// BootX version constants
+// -----------------------
+
+#define kBootXNotInstalled			0
+#define kBootXImproperlyInstalled	1
+
 #endif

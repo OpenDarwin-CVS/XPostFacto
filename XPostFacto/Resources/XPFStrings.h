@@ -95,6 +95,7 @@ enum {
 	kNoHFSWrapper,				// 55
 	kBogus8GBWarning,
 	k8GBWarning,
+	kRequiresInstallation,
 };
 
 

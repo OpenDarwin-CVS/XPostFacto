@@ -119,5 +119,7 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			"One workaround is to copy an installation from another drive, using Carbon Copy Cloner.";
 			
 			"This volume cannot be used to boot Mac OS X, because it extends past the 8 GB mark on the disk."; 
+			
+			"Requires installation";
 	}
 };

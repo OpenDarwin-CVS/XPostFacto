@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001, 2002
+Copyright (c) 2001 - 2004
 Other World Computing
 All rights reserved
 
@@ -49,7 +49,6 @@ class XPFPartition
 
 		unsigned int fPartitionNumber;
 		Partition fPartition;
-		bool fHasBootX;
 		MountedVolume *fMountedVolume;
 		
 		unsigned int fCreationDate;
@@ -57,12 +56,10 @@ class XPFPartition
 		UInt32 fTotalBlocks;
 		
 		bool fExtendsPastEightGB;
-		XPFBootableDevice *fSCSIDevice;
+		XPFBootableDevice *fBootableDevice;
 		CStr255_AC fOpenFirmwareName;
 		CStr255_AC fShortOpenFirmwareName;
 		unsigned long fOffsetToHFSPlusVolume;
-		bool fBootXInstallationComplete;
-		bool fIsHFSPlusVolume;
 		
 		HFSPlusVolume *fHFSPlusVolume;
 	
@@ -75,26 +72,27 @@ class XPFPartition
 		void setMountedVolume (MountedVolume *vol) {fMountedVolume = vol;}
 
 		unsigned int getPartitionNumber () {return fPartitionNumber;}
-		bool getHasBootX () {return fHasBootX;}
-		UInt32 getBootXVersion ();
-		UInt32 getMyBootXVersion ();
 		unsigned int getCreationDate () {return fCreationDate;}
 		bool getExtendsPastEightGB () {return fExtendsPastEightGB;}
 		bool getHasHFSWrapper () {return fOffsetToHFSPlusVolume;}
 		const CStr255_AC& getOpenFirmwareName (bool useShortName) {return useShortName ? fShortOpenFirmwareName : fOpenFirmwareName;}
-
-		void updateBootXIfInstalled (bool forceInstall = false);
-		void installBootXIfNecessary (bool forceInstall = false);
-		void setBootXValues (unsigned loadAddress, unsigned entryPoint, unsigned size);
-		
-		bool matchInfo (FSVolumeInfo *info);
-		bool matchInfoAndName (FSVolumeInfo *info, HFSUniStr255 *name);
-		
 		bool getValidOpenFirmwareName ();
+		bool getIsHFSPlusVolume () {return fHFSPlusVolume;}
+
+		bool getClaimsBootXInstalled ();
+		UInt32 getBootXVersion ();
+		void installBootX ();
+		void setBootXValues (unsigned loadAddress, unsigned entryPoint, unsigned size);
+		unsigned long getBootXStartBlock ();
 		
 		unsigned long getLgBootStart () {return fPartition.pmLgBootStart;}
 		void setLgBootStart (unsigned long start) {fPartition.pmLgBootStart = start;}
 
+		char* getProcessor () {return (char *) fPartition.pmProcessor;}
+		
+		bool matchInfo (FSVolumeInfo *info);
+		bool matchInfoAndName (FSVolumeInfo *info, HFSUniStr255 *name);
+				
 		OSErr readBlocks (unsigned int start, unsigned int count, void **buffer);
 		OSErr writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer);
 		void writePartition ();

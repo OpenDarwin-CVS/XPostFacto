@@ -34,11 +34,10 @@ advised of the possibility of such damage.
 #ifndef __HFSPLUSVOLUME_H__
 #define __HFSPLUSVOLUME_H__
 
-#include "XPFPartition.h"
-
 #include <HFSVolumes.h>
 
 class MountedVolume;
+class XPFPartition;
 
 class HFSPlusVolume {
 
@@ -48,14 +47,12 @@ class HFSPlusVolume {
 	
 		unsigned long fOffsetIntoPartition;
 		XPFPartition *fPartition;
-		bool fBootXInstallationComplete;
 		HFSUniStr255 fVolumeName;
 
-		unsigned long getBootXStartBlock ();
-		MountedVolume *getMountedVolume () {if (fPartition) return fPartition->getMountedVolume (); else return NULL;}
-		OSErr writeBootBlocksIfNecessary (bool forceInstall = false);
-
+		MountedVolume *getMountedVolume ();
+		
 	public:
+
 		HFSPlusVolume (XPFPartition *thePartition, unsigned long offsetToVolume);
 		~HFSPlusVolume ();
 
@@ -65,15 +62,11 @@ class HFSPlusVolume {
 		OSErr readBlocks (unsigned int start, unsigned int count, void **buffer);
 		OSErr readAllocationBlocks (unsigned int start, unsigned int count, void **buffer);
 		
-		void installBootXIfNecessary (bool forceInstall = false);
-		void installBootX ();
-		UInt32 getBootXVersion ();
-
 		bool matchInfo (FSVolumeInfo *info);
 		bool matchInfoAndName (FSVolumeInfo *info, HFSUniStr255 *name);
-
-		static SInt16 CompareVersions( NumVersion *vers1, NumVersion *vers2 );
-
+		
+		unsigned long getBootXStartBlock ();
+		
 };
 
 #endif

@@ -131,13 +131,15 @@ XPFVolumeInspectorWindow::updateFields ()
 		fMacOSXVersion->SetTextWithStrListID (kXPFStringsResource, kNotInstalled, true);
 	}
 	
-	UInt32 bootXVersion = fVolume->getBootXVersion ();
-	if (bootXVersion) {
+	UInt32 bootXVersion = fVolume->getActiveBootXVersion ();
+	if (bootXVersion == kBootXNotInstalled) {
+		fBootXVersion->SetTextWithStrListID (kXPFStringsResource, kNotInstalled, true);	
+	} else if (bootXVersion == kBootXImproperlyInstalled) {
+		fBootXVersion->SetTextWithStrListID (kXPFStringsResource, kRequiresInstallation, true);
+	} else {
 		char vers [32];
 		VERS_string (vers, 31, bootXVersion);
 		fBootXVersion->SetText (vers, true);	
-	} else {
-		fBootXVersion->SetTextWithStrListID (kXPFStringsResource, kNotInstalled, true);	
 	}
 	
 	char buffer[32];

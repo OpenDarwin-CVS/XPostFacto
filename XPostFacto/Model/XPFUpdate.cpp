@@ -289,7 +289,7 @@ XPFBootXUpdate::XPFBootXUpdate (XPFUpdate *update)
 {
 	MountedVolume *bootDisk = fUpdate->getHelper ();
 	if (!bootDisk) bootDisk = fUpdate->getTarget ();
-	fInstalledVersion = bootDisk->getBootXVersion ();
+	fInstalledVersion = bootDisk->getActiveBootXVersion ();
 	
 	VersRecHndl ourVersion = (VersRecHndl) GetResource ('vers', 3);
 	ThrowIfNULL_AC (ourVersion);
@@ -307,7 +307,7 @@ XPFBootXUpdate::doUpdate ()
 {
 	MountedVolume *bootDisk = fUpdate->getHelper ();
 	if (!bootDisk) bootDisk = fUpdate->getTarget ();
-	bootDisk->installBootXIfNecessary (true);	
+	bootDisk->installBootX ();	
 }
 
 void

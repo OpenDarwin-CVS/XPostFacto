@@ -68,8 +68,9 @@ class XPFBootableDevice
 		static void DeleteInvalidDevices ();
 
 		void invalidate () {fInvalid = true;}
-		void updateBootXIfInstalled (bool forceInstall = false);
-		UInt32 getOldestInstalledBootXVersion ();
+
+		void installBootXToPartition (XPFPartition *part);
+		UInt32 getActiveBootXVersion ();
 
 #if qDebug
 		static void Dump ();

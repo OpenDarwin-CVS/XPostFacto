@@ -52,7 +52,7 @@ XPFInstallBootXCommand::DoItInProgressWindow ()
 	setDescription (CStr255_AC (kXPFStringsResource, kInstallingBootX));
 	setCopyingFile ("\pBootX", true);
 	fProgressMax = 1000;
-	fBootDisk->installBootXIfNecessary (true);	
+	fBootDisk->installBootX ();	
 	fProgressWindow->setFinished ();
 }
 

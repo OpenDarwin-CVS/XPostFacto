@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001 - 2003
+Copyright (c) 2001 - 2004
 Other World Computing
 All rights reserved
 
@@ -54,10 +54,9 @@ It can focus on MountedVolume.
 #ifndef __MOUNTED_VOLUME_H__
 #define __MOUNTED_VOLUME_H__
 
-#include "XPFPartition.h"
-
 class MountedVolume;
 class XPFBootableDevice;
+class XPFPartition;
 
 typedef TemplateAutoList_AC <MountedVolume> MountedVolumeList;
 typedef TemplateAutoList_AC <MountedVolume>::Iterator MountedVolumeIterator;
@@ -75,10 +74,7 @@ class MountedVolume : public MDependable_AC
 	
 		static void Initialize ();
 		
-		void DoUpdate (ChangeID_AC theChange, 
-							MDependable_AC* changedObject,
-							void* changeData,
-							CDependencySpace_AC* dependencySpace);
+		void DoUpdate (ChangeID_AC theChange, MDependable_AC* changedObject, void* changeData, CDependencySpace_AC* dependencySpace);
 		
 		void turnOffIgnorePermissions ();
 		
@@ -88,10 +84,8 @@ class MountedVolume : public MDependable_AC
 		UInt32 getMacOSXMajorVersion () {return fMacOSXMajorVersion;}
 		unsigned int getCreationDate () {return fCreationDate;}
 		bool getIsHFSPlus () {return fIsHFSPlus;}
-		bool getHasBootX () {if (fPartInfo) return fPartInfo->getHasBootX (); else return false;}
-		UInt32 getBootXVersion () {if (fPartInfo) return fPartInfo->getBootXVersion (); else return 0;}
-		bool getExtendsPastEightGB () {if (fPartInfo) return fPartInfo->getExtendsPastEightGB (); else return false;}
-		bool getIsOnBootableDevice () {return fIsOnBootableDevice;}
+		bool getExtendsPastEightGB ();
+		XPFBootableDevice* getBootableDevice () {return fBootableDevice;}
 		bool getWillRunOnCurrentCPU ();
 		bool getRequiresBootHelper ();
 		bool getHasMachKernel () {return fHasMachKernel;}
@@ -105,8 +99,13 @@ class MountedVolume : public MDependable_AC
 		UInt32 getMacOS9SystemFolderNodeID () {return fMacOS9SystemFolderNodeID;}
 		UInt32 getBlessedFolderID () {return fBlessedFolderID;}
 		OSErr blessMacOS9SystemFolder ();
+		void checkBlessedFolder ();
 				
-		void installBootXIfNecessary (bool forceInstall = false);
+		void installBootX ();
+		void installBootXImageFile ();
+		void checkBootXVersion ();
+		UInt32 getActiveBootXVersion ();
+		UInt32 getBootXVersion () {return fBootXVersion;}
 		
 		short getIOVDrvInfo () {return fInfo.driveNumber;}
 		short getIOVDRefNum () {return fInfo.driverRefNum;}
@@ -143,17 +142,17 @@ class MountedVolume : public MDependable_AC
 		io_object_t getPartitionInfo ();
 #endif
 
-		~MountedVolume ();
-			
 	private:
 	
 		MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *rootDirectory);
 		
 		void setHFSName (HFSUniStr255 *name);
 		void setVolumeName (HFSUniStr255 *name);
-		void setSymlinkStatus (unsigned status);
-		
+
+		void setSymlinkStatus (unsigned status);		
 		unsigned getSymlinkStatusForPath (char *path);
+		
+		OSErr writeBootBlocksIfNecessary (bool forceInstall = false);
 		
 	private:	
 		
@@ -168,10 +167,10 @@ class MountedVolume : public MDependable_AC
 		
 		UInt32 fBlessedFolderID;
 		UInt32 fMacOS9SystemFolderNodeID;
+		UInt32 fBootXVersion;
 
 		UInt32 fAllocationBlockSize;
 
-		bool fIsOnBootableDevice;
 		bool fIsWriteable;
 		bool fHasMachKernel;
 		bool fIsHFSPlus;
@@ -185,7 +184,7 @@ class MountedVolume : public MDependable_AC
 		unsigned fSymlinkStatus;
 		
 		XPFBootableDevice *fBootableDevice;
-		XPFPartition *fPartInfo;
+		XPFPartition *fPartition;
 		
 		MountedVolume *fHelperDisk;
 		

@@ -57,7 +57,9 @@ advised of the possibility of such damage.
 #include "XPFLog.h"
 #include "XPFErrors.h"
 #include "XPFBootableDevice.h"
+#include "XPFPartition.h"
 #include "XPFAuthorization.h"
+#include "XCOFFDecoder.h"
 
 #include <iostream.h>
 #include "XPostFacto.h"
@@ -175,7 +177,7 @@ MountedVolume::getDefaultHelperDisk ()
 {
 	MountedVolume *retVal = NULL;
 	for (MountedVolumeIterator iter (GetVolumeList ()); iter.Current(); iter.Next()) {
-		if (iter->getIsOnBootableDevice () && !iter->getRequiresBootHelper () && (iter.Current() != this)) {
+		if (iter->getBootableDevice () && !iter->getRequiresBootHelper () && (iter.Current() != this)) {
 			if (retVal) {
 				if (iter->getFreeBytes () > retVal->getFreeBytes ()) retVal = iter.Current (); 
 			} else {
@@ -285,31 +287,211 @@ MountedVolume::WithOpenFirmwarePath (char *path)
 	return retVal;
 }
 
+bool 
+MountedVolume::getExtendsPastEightGB () 
+{
+	return fPartition ? fPartition->getExtendsPastEightGB () : false;
+}
+
+UInt32
+MountedVolume::getActiveBootXVersion () 
+{
+	return fBootableDevice ? fBootableDevice->getActiveBootXVersion () : 0;
+}
+
+OSErr
+MountedVolume::writeBootBlocksIfNecessary (bool forceInstall)
+{
+	Ptr bootBlocks = NULL;
+
+	if (!forceInstall) {
+		OSErr err = fPartition->readBootBlocks ((void **) &bootBlocks);
+		if (err != noErr) return err;
+		if ((bootBlocks[0] == 0x4C) && (bootBlocks[1] == 0x4B)) {
+			DisposePtr (bootBlocks);
+			return noErr;
+		}
+		DisposePtr (bootBlocks);
+	}
+		
+	gLogFile << "Writing boot blocks ..." << endl_AC;
+	bootBlocks = NewPtr (1024);
+		
+#ifdef __MACH__
+	FILE *bootBlockData = fopen ("/usr/share/misc/bootblockdata", "r");
+	if (bootBlockData == NULL) {
+		gLogFile << "Could not open /usr/share/misc/bootblockdata" << endl_AC;
+		DisposePtr (bootBlocks);
+		return fnfErr;
+	}
+	size_t bytesRead = fread (bootBlocks, 1, 1024, bootBlockData);
+	if (bytesRead != 1024) {
+		gLogFile << "Could not read /usr/share/misc/bootBlockData" << endl_AC;
+		DisposePtr (bootBlocks);
+		return fnfErr;
+	}
+	fclose (bootBlockData);
+#else
+	Handle bootBlockResource = GetResource ('boot', 1);
+	if (bootBlockResource == NULL) {
+		gLogFile << "Could not find boot block resource" << endl_AC;
+		DisposePtr (bootBlocks);
+		return fnfErr;
+	}
+	if (GetHandleSize (bootBlockResource) != 1024) {
+		gLogFile << "Boot block resource wrong size" << endl_AC;
+		DisposePtr (bootBlocks);
+		return fnfErr;
+	}
+	BlockMoveData (*bootBlockResource, bootBlocks, 1024);
+	ReleaseResource (bootBlockResource);
+#endif
+
+	if ((bootBlocks[0] != 0x4C) || (bootBlocks[1] != 0x4B)) {
+		gLogFile << "Wrong signature in boot block data" << endl_AC;
+		DisposePtr (bootBlocks);
+		return fnfErr;
+	}
+	
+	OSErr err = fPartition->writeBootBlocks (bootBlocks);
+
+	DisposePtr (bootBlocks);
+	return err;
+}
+
 void
-MountedVolume::installBootXIfNecessary (bool forceInstall)
+MountedVolume::installBootX ()
 {
 #ifdef BUILDING_XPF
 	if (((XPFApplication *) gApplication)->getDebugOptions () & kDisableBootX) return;
 #endif
 	
-	if (!getIsWriteable()) {
-		if (getHasBootX ()) {
-			// we'll just assume that it's really installed. I really should check
-			// and throw an exception if it isn't
-			return;
+	if (!getIsWriteable ()) ThrowException_AC (kVolumeNotWriteable, 0);
+
+	if (fBootableDevice) fBootableDevice->installBootXToPartition (fPartition);
+}
+
+void
+MountedVolume::installBootXImageFile ()
+{
+#ifdef __MACH__
+	// Check to make sure we've got partition info to work with
+	io_object_t partInfo = getPartitionInfo ();
+	if (partInfo) {
+		IOObjectRelease (partInfo);
+	} else {
+		ThrowException_AC (kWritePartitionOSX, 0);
+	}
+#endif
+
+	ThrowIfNULL_AC (fPartition);
+
+	XPFSetUID myUID (0);
+	
+	FSRef bootXRef;
+	FSSpec bootXSpec;
+	try {
+		UniChar bootXName[] = {'B', 'o', 'o', 't', 'X', '.', 'i', 'm', 'a', 'g', 'e'};
+		OSErr err = FSCreateFileUnicode (getRootDirectory (), 
+				sizeof (bootXName) / sizeof (UniChar), bootXName, kFSCatInfoNone, NULL, &bootXRef, NULL);
+		if (err == dupFNErr) {
+			err = noErr;
+			ThrowIfOSErr_AC (FSMakeFSRefUnicode (getRootDirectory (), 
+					sizeof (bootXName) / sizeof (UniChar), bootXName, kTextEncodingUnknown, &bootXRef));
+			ThrowIfOSErr_AC (FSDeleteObject (&bootXRef));
+			ThrowIfOSErr_AC (FSCreateFileUnicode (getRootDirectory (), 
+				sizeof (bootXName) / sizeof (UniChar), bootXName, kFSCatInfoNone, NULL, &bootXRef, NULL));
 		} else {
-			ThrowException_AC (kVolumeNotWriteable, 0);
+			ThrowIfOSErr_AC (err);
 		}
 	}
-	if (fPartInfo) {
-		fPartInfo->installBootXIfNecessary (forceInstall);
-	} else {
-		#if gLogging
-			gLogFile << "No partiton info for: " << getVolumeName () << endl_AC;
+	catch (...) {
+		#if qLogging
+			gLogFile << "Error creating BootX file" << endl_AC;
 		#endif
+		ThrowException_AC (kErrorExtractingBootX, 0);
 	}
 	
-	Changed (cSetBootXVersion, this);
+	CResourceStream_AC stream ('BooX', 128);
+	
+	SInt16 forkRefNum = 0;
+	try {
+		XCOFFDecoder decoder (&stream);
+
+		HFSUniStr255 dataForkName;
+		FSGetDataForkName (&dataForkName);
+		ThrowIfOSErr_AC (FSOpenFork (&bootXRef, dataForkName.length, dataForkName.unicode, 
+							fsRdWrPerm, &forkRefNum));
+		UInt64 actualCount;
+		ThrowIfOSErr_AC (FSAllocateFork (forkRefNum, kFSAllocAllOrNothingMask | kFSAllocContiguousMask,
+							fsFromStart, 0, decoder.getSize (), &actualCount));
+		if (actualCount < decoder.getSize ()) ThrowException_AC (kErrorExtractingBootX, 0);
+		
+		decoder.unpackToFork (forkRefNum);
+		fPartition->setBootXValues (decoder.getLoadAddress(), decoder.getEntryPoint(), decoder.getSize());
+		
+		FSCloseFork (forkRefNum);
+	}
+	catch (...) {
+		if (forkRefNum) FSCloseFork (forkRefNum);
+		#if qLogging
+			gLogFile << "Error extracting BootX" << endl_AC;
+		#endif
+		throw;
+	}
+	
+#ifdef __MACH__
+	sync ();
+	sync ();
+#else
+	ThrowIfOSErr_AC (FlushVol (NULL, getIOVDrvInfo ()));
+#endif
+
+	ThrowIfOSErr_AC (FSGetCatalogInfo (&bootXRef, kFSCatInfoNone, NULL, NULL, &bootXSpec, NULL));
+ 	FSpSetIsInvisible (&bootXSpec);
+	
+#ifdef BUILDING_XPF	
+	// Now I add versioning info to the resource fork.
+	Handle bootXVersion = GetResource ('vers', 3);
+	ThrowIfResError_AC ();
+	Handle xpfVersion = GetResource ('vers', 1);
+	ThrowIfResError_AC ();
+	DetachResource (bootXVersion);
+	DetachResource (xpfVersion);
+	ThrowIfResError_AC ();	
+	FSpCreateResFile (&bootXSpec, '    ', '    ', smRoman);
+	ThrowIfResError_AC ();
+	SInt16 resourceFork = FSpOpenResFile (&bootXSpec, fsRdWrPerm);
+	ThrowIfResError_AC ();
+ 	AddResource (bootXVersion, 'vers', 1, "\p");
+ 	ThrowIfResError_AC ();
+ 	AddResource (xpfVersion, 'vers', 2, "\p");
+ 	ThrowIfResError_AC ();
+	CloseResFile (resourceFork);
+	ThrowIfResError_AC ();
+#endif
+
+	XPFBootableDevice::DisableCDDriver (); 	
+ 	try {
+		writeBootBlocksIfNecessary ();
+ 	
+		fPartition->setLgBootStart (fPartition->getBootXStartBlock ());
+		if (fPartition->getLgBootStart () == 0) {
+			#if qLogging
+				gLogFile << "Error finding start block for BootX" << endl_AC;
+			#endif
+			ThrowException_AC (kErrorExtractingBootX, 0);
+		} else {
+			fPartition->writePartition ();
+		}
+	}
+	catch (...) {
+		XPFBootableDevice::EnableCDDriver ();
+		throw;
+	}
+	XPFBootableDevice::EnableCDDriver ();
+	
+	checkBootXVersion ();
 }
 
 void
@@ -337,9 +519,64 @@ MountedVolume::turnOffIgnorePermissions ()
 #endif
 }
 
-MountedVolume::~MountedVolume ()
+void
+MountedVolume::checkBootXVersion ()
 {
-	RemoveAllDependencies ();
+	OSErr err;
+	VersRecHndl installedVersion = NULL;
+	SInt16 resourceFork = 0;
+	fBootXVersion = kBootXImproperlyInstalled;
+
+	do {
+		// If the partition info doesn't claim that it is installed, then it's not installed
+		if (!fPartition || !fPartition->getClaimsBootXInstalled ()) {
+			fBootXVersion = kBootXNotInstalled;
+			continue;
+		}
+
+		// OK, check to see if there is a file there 
+		FSSpec bootXImageSpec;
+		err = FSMakeFSSpec (getIOVDrvInfo(), fsRtDirID, "\p:BootX.image", &bootXImageSpec);
+		if (err != noErr) continue;
+
+		// We have a BootX.file. So, we'll see whether it has moved.
+		unsigned long firstBootXBlock = 0;
+		try {
+			XPFBootableDevice::DisableCDDriver ();
+			firstBootXBlock = fPartition->getBootXStartBlock ();
+			XPFBootableDevice::EnableCDDriver ();
+		}
+		catch (...) {
+			XPFBootableDevice::EnableCDDriver ();
+		}
+			
+		if ((firstBootXBlock == 0) || (firstBootXBlock != fPartition->getLgBootStart ())) {
+			gLogFile << "BootX.image moved." << endl_AC;
+			continue;
+		}
+
+		// it hasn't moved. So we'll get the version.
+		try {	
+			resourceFork = FSpOpenResFile (&bootXImageSpec, fsRdPerm);
+			ThrowIfResError_AC ();
+			installedVersion = (VersRecHndl) Get1Resource ('vers', 1);
+			ThrowIfNULL_AC (installedVersion);
+			ThrowIfResError_AC ();
+		}
+		catch (...) {
+			// There was a problem accessing the version info. So we'll just return.
+			gLogFile << "Could not access BootX version info." << endl_AC;
+			continue;		
+		}
+		
+		memcpy (&fBootXVersion, &(*installedVersion)->numericVersion, sizeof (fBootXVersion));
+
+	} while (false);
+
+	Changed (cSetBootXVersion, this);
+	
+	if (installedVersion) ReleaseResource ((Handle) installedVersion);
+	if (resourceFork > 0) CloseResFile (resourceFork);
 }
 
 void
@@ -439,11 +676,10 @@ MountedVolume::blessMacOS9SystemFolder ()
 		finderInfo[0] = fMacOS9SystemFolderNodeID;
 		finderInfo[3] = fMacOS9SystemFolderNodeID;
 		err = FSSetVolumeInfo (fInfo.driveNumber, kFSVolInfoFinderInfo, &volInfo);
-		if (err == noErr) {
-			fBlessedFolderID = fMacOS9SystemFolderNodeID;
-			Changed (cSetBlessedFolderID, this);	
-		}
 	}
+	
+	checkBlessedFolder ();
+	
 	return err;
 }
 
@@ -617,11 +853,47 @@ MountedVolume::checkSymlinks ()
 	Changed (cSetSymlinkStatus, this);
 }
 
+void
+MountedVolume::checkBlessedFolder ()
+{
+	fMacOS9SystemFolderNodeID = 0;
+	fBlessedFolderID = 0;
+	
+	FSVolumeInfo volInfo;
+	OSErr err = FSGetVolumeInfo (fInfo.driveNumber, 0, NULL, kFSVolInfoFinderInfo, &volInfo, NULL, NULL);
+	if (err == noErr) {
+		UInt32 *finderInfo = (UInt32 *) volInfo.finderInfo;
+		fBlessedFolderID = finderInfo[0];
+	}
+	
+	UInt32 retVal = 0;
+	FSIterator iterator;
+	FSOpenIterator (&fRootDirectory, kFSIterateFlat, &iterator);
+	err = noErr;
+	
+	while ((err == noErr) && (fMacOS9SystemFolderNodeID == 0)) {
+		ItemCount actualObjects;
+		FSCatalogInfo catInfo;
+		FSRef item;
+		err = FSGetCatalogInfoBulk (iterator, 1, &actualObjects, NULL, kFSCatInfoNodeFlags | kFSCatInfoNodeID, &catInfo, &item, NULL, NULL);
+		if ((err == noErr) && (actualObjects == 1)) {
+			if (catInfo.nodeFlags & kFSNodeIsDirectoryMask) {
+				if (IsMacOS9SystemFolder (&item)) fMacOS9SystemFolderNodeID = catInfo.nodeID;
+			}
+		}
+	}
+	
+	FSCloseIterator (iterator);
+
+	Changed (cSetBlessedFolderID, this);
+	
+	gLogFile << "Blessed folder: " << fBlessedFolderID << " Mac OS 9 System Folder: " << fMacOS9SystemFolderNodeID << endl_AC;
+}
+
 MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *rootDirectory)
 {
 	fValidOpenFirmwareName = false;
-	fIsOnBootableDevice = false;
-	fPartInfo = NULL;
+	fPartition = NULL;
 	fBootableDevice = NULL;
 	fHelperDisk = NULL;
 	fCreationDate = 0;
@@ -630,6 +902,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	fTurnedOffIgnorePermissions = false;
 	fSymlinkStatus = kSymlinkStatusOK;
 	fIsAttachedToPCICard = false;
+	fBootXVersion = 0;
 	
 #ifdef BUILDING_XPF
 	gApplication->AddDependent (this); // for listening for volume deletions
@@ -742,9 +1015,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	// Do some logging
 	#if qLogging
 	{
-		gLogFile << "Volume: ";
-		gLogFile.WriteCharBytes ((char *) &fVolumeName[1], fVolumeName[0]);
-		gLogFile << " Creation Date: " << fCreationDate << endl_AC;
+		gLogFile << "Volume: " << (CChar255_AC) fVolumeName << " Creation Date: " << fCreationDate << endl_AC;
 	}
 	#endif
 	
@@ -758,10 +1029,9 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	if (regEntry) {
 		fBootableDevice = XPFBootableDevice::DeviceForRegEntry (regEntry);
 		if (fBootableDevice) {
-			fIsOnBootableDevice = true;
-			fPartInfo = fBootableDevice->partitionWithInfoAndName (info, name);
-			if (fPartInfo) {
-				fPartInfo->setMountedVolume (this);
+			fPartition = fBootableDevice->partitionWithInfoAndName (info, name);
+			if (fPartition) {
+				fPartition->setMountedVolume (this);
 				
 				char alias[256], shortAlias[256];
 				OFAliases::AliasFor (regEntry, alias, shortAlias);
@@ -795,7 +1065,6 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	}
 
 	if (fBootableDevice) {
-		fIsOnBootableDevice = true;
 		if (fBootableDevice->isFirewireDevice ()) {
 			// Try MoreGetPartitionInfo
 			partInfoRec partInfo;
@@ -835,12 +1104,12 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 				fShortOpenFirmwareName += buffer;
 			}
 		} else {
-			fPartInfo = fBootableDevice->partitionWithInfoAndName (info, name);
-			if (fPartInfo) {
-				fValidOpenFirmwareName = fPartInfo->getValidOpenFirmwareName ();
-				fOpenFirmwareName.CopyFrom (fPartInfo->getOpenFirmwareName (false));
-				fShortOpenFirmwareName.CopyFrom (fPartInfo->getOpenFirmwareName (true));
-				fPartInfo->setMountedVolume (this);
+			fPartition = fBootableDevice->partitionWithInfoAndName (info, name);
+			if (fPartition) {
+				fValidOpenFirmwareName = fPartition->getValidOpenFirmwareName ();
+				fOpenFirmwareName.CopyFrom (fPartition->getOpenFirmwareName (false));
+				fShortOpenFirmwareName.CopyFrom (fPartition->getOpenFirmwareName (true));
+				fPartition->setMountedVolume (this);
 			}
 		}
 	}
@@ -858,37 +1127,9 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	}
 	
 	// See if there is a Mac OS 9 System Folder
-	fMacOS9SystemFolderNodeID = 0;
-	fBlessedFolderID = 0;
+	checkBlessedFolder ();
 	
-	if (getInstallTargetStatus () == kStatusOK) {
-		FSVolumeInfo volInfo;
-		OSErr err = FSGetVolumeInfo (fInfo.driveNumber, 0, NULL, kFSVolInfoFinderInfo, &volInfo, NULL, NULL);
-		if (err == noErr) {
-			UInt32 *finderInfo = (UInt32 *) volInfo.finderInfo;
-			fBlessedFolderID = finderInfo[0];
-		}
-		
-		UInt32 retVal = 0;
-		FSIterator iterator;
-		FSOpenIterator (&fRootDirectory, kFSIterateFlat, &iterator);
-		err = noErr;
-		
-		while ((err == noErr) && (fMacOS9SystemFolderNodeID == 0)) {
-			ItemCount actualObjects;
-			FSCatalogInfo catInfo;
-			FSRef item;
-			err = FSGetCatalogInfoBulk (iterator, 1, &actualObjects, NULL, kFSCatInfoNodeFlags | kFSCatInfoNodeID, &catInfo, &item, NULL, NULL);
-			if ((err == noErr) && (actualObjects == 1)) {
-				if (catInfo.nodeFlags & kFSNodeIsDirectoryMask) {
-					if (IsMacOS9SystemFolder (&item)) fMacOS9SystemFolderNodeID = catInfo.nodeID;
-				}
-			}
-		}
-		
-		gLogFile << "Blessed folder: " << fBlessedFolderID << " Mac OS 9 System Folder: " << fMacOS9SystemFolderNodeID << endl_AC;
-		FSCloseIterator (iterator);
-	}
+	checkBootXVersion ();
 		
 	#if qLogging
 		if (fValidOpenFirmwareName) {
@@ -904,10 +1145,8 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 bool
 MountedVolume::getRequiresBootHelper () 
 {
-	if (fIsOnBootableDevice) {
-		return (fBootableDevice->getNeedsHelper () || !getIsWriteable ());
-	}
-	return false;
+	if (!fBootableDevice) return false;
+	return fBootableDevice->getNeedsHelper () || !getIsWriteable ();
 }
 
 bool
@@ -934,7 +1173,7 @@ unsigned
 MountedVolume::getHelperStatus ()
 {
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
-	if (!getIsOnBootableDevice ()) return kNotBootable;
+	if (!getBootableDevice ()) return kNotBootable;
 	if (!getValidOpenFirmwareName ()) return kNoOFName;
 	if (!getIsWriteable ()) return kNotWriteable;
 	if (fBootableDevice->getNeedsHelper ()) return kNeedsHelper;
@@ -947,7 +1186,7 @@ MountedVolume::getBootStatus ()
 {
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
 	if (!getHasMachKernel ()) return kNoMachKernel;
-	if (!getIsOnBootableDevice ()) return kNotBootable;
+	if (!getBootableDevice ()) return kNotBootable;
 	if (!getValidOpenFirmwareName ()) return kNoOFName;
 	if (!getWillRunOnCurrentCPU ()) return kCPUNotSupported;
 
@@ -968,7 +1207,7 @@ MountedVolume::getBootWarning (bool forInstall)
 			XPFPartition* firstPart = fBootableDevice->getFirstHFSPartition ();
 			if (firstPart && firstPart->getPartitionNumber () < kExpectedFirstHFSPartition) return kFewerPartitionsThanExpected;
 
-			if (fPartInfo && !fPartInfo->getHasHFSWrapper ()) return kNoHFSWrapper;
+			if (fPartition && !fPartition->getHasHFSWrapper ()) return kNoHFSWrapper;
 		}
 
 		if (fBootableDevice->isReallyATADevice () && getExtendsPastEightGB ()) {
@@ -988,7 +1227,7 @@ unsigned
 MountedVolume::getInstallTargetStatus ()
 {
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
-	if (!getIsOnBootableDevice ()) return kNotBootable;
+	if (!getBootableDevice ()) return kNotBootable;
 	if (!getValidOpenFirmwareName ()) return kNoOFName;
 	if (!getIsWriteable ()) return kNotWriteable;
 
@@ -1002,7 +1241,7 @@ MountedVolume::getInstallerStatus ()
 
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
 	if (!getHasMachKernel ()) return kNoMachKernel;
-	if (!getIsOnBootableDevice ()) return kNotBootable;
+	if (!getBootableDevice ()) return kNotBootable;
 	if (!getValidOpenFirmwareName ()) return kNoOFName;
 	if (!getWillRunOnCurrentCPU ()) return kCPUNotSupported;
 	
@@ -1028,6 +1267,10 @@ MountedVolume::DoUpdate (ChangeID_AC theChange, MDependable_AC* changedObject, v
 	switch (theChange) {			
 		case cDeleteMountedVolume:
 			if (volume == fHelperDisk) setHelperDisk (getDefaultHelperDisk ());
+			break;
+			
+		case cSetBootXVersion:
+			Changed (cSetBootXVersion, this);
 			break;
 	}
 }

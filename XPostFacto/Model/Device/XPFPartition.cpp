@@ -45,6 +45,7 @@ advised of the possibility of such damage.
 #include "XPFLog.h"
 #include "XPFBootableDevice.h"
 #include "XPFAuthorization.h"
+#include "XPostFacto.h"
 
 union VolumeHeader {
 	HFSMasterDirectoryBlock hfs;
@@ -53,15 +54,11 @@ union VolumeHeader {
 
 XPFPartition::XPFPartition (XPFBootableDevice *device, Partition *part, int partNumber)
 {
-	fBootXInstallationComplete = false;
-	fSCSIDevice = device;
+	fBootableDevice = device;
 	fPartitionNumber = partNumber;
-	fHasBootX = !strcmp ((char *) part->pmProcessor, "powerpc");
 	fMountedVolume = NULL;
 	fCreationDate = 0;
-	fIsHFSPlusVolume = false;
 	fHFSPlusVolume = NULL;
-	gLogFile << "pmStatus: " << part->pmPartStatus << endl_AC;
 	BlockMoveData (part, &fPartition, sizeof (fPartition));
 	if (!strcmp ((char *) fPartition.pmParType, "Apple_HFS")) {
 		VolumeHeader *header = NULL;
@@ -99,11 +96,10 @@ XPFPartition::XPFPartition (XPFBootableDevice *device, Partition *part, int part
 	fOpenFirmwareName += buffer;
 	fShortOpenFirmwareName += buffer;
 	
-	fIsHFSPlusVolume = (fCreationDate != 0);
-	if (fIsHFSPlusVolume) fHFSPlusVolume = new HFSPlusVolume (this, fOffsetToHFSPlusVolume);
+	if (fCreationDate) fHFSPlusVolume = new HFSPlusVolume (this, fOffsetToHFSPlusVolume);
 
 	#if qLogging
-		gLogFile << "Partition: " << partNumber << " CreationDate: " << fCreationDate << endl_AC;
+		if (fCreationDate) gLogFile << "Partition: " << partNumber << " CreationDate: " << fCreationDate << endl_AC;
 	#endif
 }
 
@@ -115,14 +111,14 @@ XPFPartition::~XPFPartition ()
 OSErr
 XPFPartition::readBlocks (unsigned int start, unsigned int count, void **buffer)
 {
-	return fSCSIDevice->readBlocks (start + fPartition.pmPyPartStart + 
+	return fBootableDevice->readBlocks (start + fPartition.pmPyPartStart + 
 			fPartition.pmLgDataStart, count, (UInt8 **) buffer);
 }
 
 OSErr 
 XPFPartition::writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer)
 {
-	return fSCSIDevice->writeBlocks (start + fPartition.pmPyPartStart +
+	return fBootableDevice->writeBlocks (start + fPartition.pmPyPartStart +
 			fPartition.pmLgDataStart, count, buffer);
 }
 
@@ -166,7 +162,7 @@ XPFPartition::setBootXValues (unsigned loadAddress, unsigned entryPoint, unsigne
 
 bool 
 XPFPartition::getValidOpenFirmwareName () {
-	return fSCSIDevice->getValidOpenFirmwareName ();
+	return fBootableDevice->getValidOpenFirmwareName ();
 }
 
 void
@@ -216,7 +212,7 @@ XPFPartition::writePartition ()
 		
 	#else		
 
-		ThrowIfOSErr_AC (fSCSIDevice->writeBlocks (fPartitionNumber, 1, (UInt8 *) &fPartition));
+		ThrowIfOSErr_AC (fBootableDevice->writeBlocks (fPartitionNumber, 1, (UInt8 *) &fPartition));
 
 	#endif
 }
@@ -258,14 +254,14 @@ XPFPartition::readBootBlocks (void **buffer)
 }
 
 void
-XPFPartition::updateBootXIfInstalled (bool forceInstall)
+XPFPartition::installBootX ()
 {
-	if (fHasBootX) {
-		// if it is an HFS Plus Volume, then we install BootX
-		// otherwise, we prevent it from loading at boot time
-		if (fIsHFSPlusVolume) {
-			fHFSPlusVolume->installBootXIfNecessary (forceInstall);
-		} else {
+	// If it is a mounted volume, we ask it to install. 
+	// Otherwise, we make sure the processor field isn't set to powerpc
+	if (fMountedVolume) {
+		fMountedVolume->installBootXImageFile ();
+	} else {
+		if (!strcmp ((char *) fPartition.pmProcessor, "powerpc")) {
 			#if qLogging
 				gLogFile << "Disabling boot partition from previous installation" << endl_AC;
 			#endif
@@ -275,28 +271,23 @@ XPFPartition::updateBootXIfInstalled (bool forceInstall)
 	}
 }
 
-UInt32 
+UInt32
 XPFPartition::getBootXVersion ()
 {
-	return fSCSIDevice->getOldestInstalledBootXVersion ();
+	return fMountedVolume ? fMountedVolume->getBootXVersion () : 0;
 }
 
-UInt32 
-XPFPartition::getMyBootXVersion ()
+bool 
+XPFPartition::getClaimsBootXInstalled ()
 {
-	return fHFSPlusVolume->getBootXVersion ();
+	return !strcmp ((char *) fPartition.pmProcessor, "powerpc");
 }
 
-void
-XPFPartition::installBootXIfNecessary (bool forceInstall)
+unsigned long 
+XPFPartition::getBootXStartBlock ()
 {
-	// first, we update any BootX installation on this device
-	fSCSIDevice->updateBootXIfInstalled (forceInstall);
-	
-	// then we install BootX here
-	fHFSPlusVolume->installBootXIfNecessary (forceInstall);
+	return fHFSPlusVolume ? fHFSPlusVolume->getBootXStartBlock () : 0;
 }
-
 
 #if qDebug
 
@@ -304,8 +295,8 @@ void
 XPFPartition::dump ()
 {
 	#if qDebug
-		printf ("partitionNumber:%u, isAppleHFS:%d, hasBootX:%d, creationDate:%u\r",
-			 fPartitionNumber, fHasBootX, fCreationDate);
+		printf ("partitionNumber:%u, isAppleHFS:%d, bootXVersion:0x%X, creationDate:%u\r",
+			 fPartitionNumber, getBootXVersion (), fCreationDate);
 	#endif
 }
 
