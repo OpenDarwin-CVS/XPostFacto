@@ -1201,7 +1201,7 @@ MountedVolume::getBootStatus ()
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
 	if (!getHasMachKernel ()) return kNoMachKernel;
 	if (!fPartitionNumber) return kNoPartitionNumber;
-	if (!getWillRunOnCurrentCPU ()) return kCPUNotSupported;
+//	if (!getWillRunOnCurrentCPU ()) return kCPUNotSupported;
 
 	return kStatusOK;
 }
@@ -1214,6 +1214,8 @@ MountedVolume::getBootWarning (bool forInstall)
 
 	if (fSymlinkStatus == kSymlinkStatusCannotFix) return kInvalidSymlinksCannotFix;
 	if (fSymlinkStatus != kSymlinkStatusOK) return kInvalidSymlinks;
+
+	if (!getWillRunOnCurrentCPU ()) return kCPUNotSupported;
 
 	if (fBootableDevice) {
 		if (!getHelperDisk ()) {
@@ -1262,7 +1264,7 @@ MountedVolume::getInstallerStatus ()
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
 	if (!getHasMachKernel ()) return kNoMachKernel;
 	if (!fPartitionNumber) return kNoPartitionNumber;
-	if (!getWillRunOnCurrentCPU ()) return kCPUNotSupported;
+//	if (!getWillRunOnCurrentCPU ()) return kCPUNotSupported;
 	
 	return kStatusOK;
 }
