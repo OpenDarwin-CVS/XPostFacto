@@ -48,7 +48,12 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			"' is not an installation disk.";
 /* 10 */	"XPostFacto requires Mac OS 9 or later.";
 			"XPostFacto does not know how to patch NVRAM for ";
-			"XPostFacto does not work in Mac OS X (yet).";
+			
+			"XPostFacto does not work in Mac OS X (yet). "
+			"The one useful thing it can do is install the "
+			"current version of the extensions. For this, use the "
+			"'Install Extensions' command in the 'File' menu.";
+
 			"^0 Help";
 			"Online Help";
 /* 15 */	"Online Source Code";
