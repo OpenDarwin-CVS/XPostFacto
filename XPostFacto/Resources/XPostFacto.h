@@ -109,6 +109,8 @@ advised of the possibility of such damage.
 #define cSetIsRegistered				1458
 #define cRegisterXPostFacto				1459
 
+#define cSetUsePatchedRagePro			1460
+
 // Views and Windows
 // -----------------
 

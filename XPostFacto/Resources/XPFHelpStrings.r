@@ -85,6 +85,7 @@ resource 'hlps' (kHelpStringsResource, purgeable) {
 		'mosx', 23;
 		'mos9', 23;
 		'romn', 24;
+		'uprp', 25;
 	}
 };
 
@@ -151,5 +152,8 @@ resource 'STR#' (kHelpStringsResource, purgeable) {
 		 
 		 "Force Mac OS X 10.3 (Panther) to use video drivers it would otherwise reject as too old. "
 		 "This setting has no effect prior to Mac OS X 10.3";
+		 
+/* 25 */ "Use the PatchedRagoPro.kext to help with video issues on the Wallstreet Powerbooks. "
+		 "Turn it off if it seems to be causing problems."
 	}
 };

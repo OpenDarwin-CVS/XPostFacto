@@ -95,6 +95,7 @@ const UInt32 kDebugPanicText	= 1 << 8;
 XPFPrefs::XPFPrefs (TFile* itsFile)
 	: TFileBasedDocument (itsFile),
 		fEnableCacheEarly (false),
+		fUsePatchedRagePro (false),
 		fAutoBoot (true),
 		fBootInSingleUserMode (false),
 		fBootInVerboseMode (false),
@@ -634,6 +635,7 @@ XPFPrefs::DoRead (TFile* aFile, bool forPrinting)
 		
 		fileStream >> fUseROMNDRV;
 		fileStream >> fRegisteredVersion;
+		fileStream >> fUsePatchedRagePro;
 	}
 	
 	catch (...) {
@@ -756,6 +758,7 @@ XPFPrefs::DoWrite (TFile* aFile, bool makingCopy)
 	
 	fileStream << fUseROMNDRV;
 	fileStream << fRegisteredVersion;
+	fileStream << fUsePatchedRagePro;
 }
 
 void 
@@ -1225,6 +1228,7 @@ ACCESSOR (BootInSingleUserMode, bool)
 ACCESSOR (AutoBoot, bool)
 ACCESSOR (RebootInMacOS9, bool)
 ACCESSOR (EnableCacheEarly, bool)
+ACCESSOR (UsePatchedRagePro, bool)
 ACCESSOR (Throttle, unsigned)
 ACCESSOR (UseROMNDRV, bool)
 

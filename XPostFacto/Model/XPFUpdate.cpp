@@ -260,6 +260,8 @@ XPFUpdateItem::getIsQualified ()
 	// This isn't quite how I should handle this, but it will work for now
 	if (fResourceName == "OWCCacheConfig.kext") {
 		return ((XPFApplication *) gApplication)->getPrefs()->getEnableCacheEarly ();
+	} else if (fResourceName == "PatchedRagePro.kext") {
+		return ((XPFApplication *) gApplication)->getPrefs()->getUsePatchedRagePro ();
 	}
 	
 	return true;

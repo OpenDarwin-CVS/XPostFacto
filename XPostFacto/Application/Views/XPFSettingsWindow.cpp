@@ -99,6 +99,7 @@ XPFSettingsWindow::DoPostCreate(TDocument* itsDocument)
 	
 	fAutoBoot = dynamic_cast_or_throw_AC (TCheckBox*, this->FindSubView ('auto'));
 	fEnableCacheEarly = dynamic_cast_or_throw_AC (TCheckBox*, this->FindSubView ('cach'));
+	fUsePatchedRagePro = dynamic_cast_or_throw_AC (TCheckBox*, this->FindSubView ('uprp'));
 
 	fUseROMNDRV = dynamic_cast_or_throw_AC (TCheckBox*, this->FindSubView ('romn'));
 	
@@ -168,6 +169,8 @@ XPFSettingsWindow::DoEvent(EventNumber eventNumber,
 				fPrefs->setBootInSingleUserMode (newValue);
 			} else if (source == fEnableCacheEarly) {
 				fPrefs->setEnableCacheEarly (newValue);
+			} else if (source == fUsePatchedRagePro) {
+				fPrefs->setUsePatchedRagePro (newValue);
 			} else if (source == fAutoBoot) {
 				fPrefs->setAutoBoot (newValue);
 			} else if (source == fUseROMNDRV) {
@@ -223,6 +226,7 @@ XPFSettingsWindow::DoUpdate(ChangeID_AC theChange,
 		case cSetBootInVerboseMode:
 		case cSetBootInSingleUserMode:
 		case cSetEnableCacheEarly:
+		case cSetUsePatchedRagePro:
 		case cSetAutoBoot:
 		case cSetDebugBreakpoint:
 		case cSetDebugPrintf:
@@ -245,6 +249,7 @@ XPFSettingsWindow::DoUpdate(ChangeID_AC theChange,
 			fVerboseMode->SetValue (fPrefs->getBootInVerboseMode (), true);
 			fSingleUserMode->SetValue (fPrefs->getBootInSingleUserMode (), true);
 			fEnableCacheEarly->SetValue (fPrefs->getEnableCacheEarly (), true);
+			fUsePatchedRagePro->SetValue (fPrefs->getUsePatchedRagePro (), true);
 			fAutoBoot->SetValue (fPrefs->getAutoBoot (), true);
 			fUseROMNDRV->SetValue (fPrefs->getUseROMNDRV (), true);
 			break;

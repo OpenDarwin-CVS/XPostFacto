@@ -133,6 +133,7 @@ DECLARE_ACCESSORS (bool, BootInSingleUserMode)
 DECLARE_ACCESSORS (bool, AutoBoot)		
 DECLARE_ACCESSORS (bool, RebootInMacOS9)
 DECLARE_ACCESSORS (bool, EnableCacheEarly)
+DECLARE_ACCESSORS (bool, UsePatchedRagePro)
 DECLARE_ACCESSORS (bool, UseShortStrings)
 DECLARE_ACCESSORS (bool, UseShortStringsForInstall)
 DECLARE_ACCESSORS (unsigned, Throttle)
@@ -190,6 +191,7 @@ DECLARE_DEBUG_ACCESSORS (DebugPanicText)
 		UInt8	fBootInSingleUserMode;
 		UInt8	fAutoBoot;
 		UInt8	fEnableCacheEarly;
+		UInt8	fUsePatchedRagePro;
 		UInt32	fDebug;
 		UInt8	fUseROMNDRV;
 		UInt32	fRegisteredVersion;

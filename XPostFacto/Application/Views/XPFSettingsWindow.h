@@ -89,6 +89,7 @@ private:
 	
 	TCheckBox *fAutoBoot;
 	TCheckBox *fEnableCacheEarly;
+	TCheckBox *fUsePatchedRagePro;
 
 	TSlider *fThrottle;
 };

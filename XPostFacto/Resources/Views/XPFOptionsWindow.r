@@ -10,11 +10,11 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 	MAThreeOhView {
 
 	},
-	{	/* array ViewArray: 41 elements */
+	{	/* array ViewArray: 42 elements */
 		/* [1] */
 		ViewSignatureAndClassname {
 			'wind',
-			5086,
+			5224,
 			"XPFSettingsWindow",
 			'WIND',
 			enabled,
@@ -96,7 +96,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 				1010,
 				28
 			},
-			40
+			41
 		},
 		/* [2] */
 		ViewSignatureAndClassname {
@@ -340,7 +340,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				206,
+				232,
 				/* [2] */
 				56
 			},
@@ -415,7 +415,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				232,
+				258,
 				/* [2] */
 				56
 			},
@@ -490,7 +490,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				258,
+				284,
 				/* [2] */
 				56
 			},
@@ -565,7 +565,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				284,
+				310,
 				/* [2] */
 				56
 			},
@@ -640,7 +640,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				310,
+				336,
 				/* [2] */
 				56
 			},
@@ -715,7 +715,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				336,
+				362,
 				/* [2] */
 				56
 			},
@@ -790,7 +790,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				362,
+				388,
 				/* [2] */
 				56
 			},
@@ -865,7 +865,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				388,
+				414,
 				/* [2] */
 				56
 			},
@@ -940,7 +940,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				414,
+				440,
 				/* [2] */
 				56
 			},
@@ -1024,9 +1024,9 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				442,
+				468,
 				/* [2] */
-				75
+				76
 			},
 			{	/* array: 2 elements */
 				/* [1] */
@@ -1092,7 +1092,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				178,
+				204,
 				/* [2] */
 				20
 			},
@@ -2284,7 +2284,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				181,
+				207,
 				/* [2] */
 				70
 			},
@@ -2482,7 +2482,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				424,
+				450,
 				/* [2] */
 				12
 			},
@@ -2883,12 +2883,87 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 				1
 			},
 			NoSubviews
+		},
+		/* [42] */
+		ViewSignatureAndClassname {
+			'chkb',
+			132,
+			"",
+			'uprp',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 1 elements */
+				/* [1] */
+				BehaviorSignatureAndClassname {
+					noID,
+					"XPFHelpBehavior",
+					Behavior {
+						enabled,
+						noIdle
+					}
+				}
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				166,
+				/* [2] */
+				56
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				18,
+				/* [2] */
+				160
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			handlesCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			CheckBox {
+				mCheckBoxHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				-1,
+				dontPreferOutline,
+				off,
+				1010,
+				29
+			},
+			NoSubviews
 		}
 	}
 };
 
 resource 'STR#' (1010, "Additional Settings", purgeable) {
-	{	/* array StringArray: 28 elements */
+	{	/* array StringArray: 29 elements */
 		/* [1] */
 		"Verbose",
 		/* [2] */
@@ -2944,7 +3019,9 @@ resource 'STR#' (1010, "Additional Settings", purgeable) {
 		/* [27] */
 		"Summary",
 		/* [28] */
-		"Additional Settings"
+		"Additional Settings",
+		/* [29] */
+		"Use PatchedRagePro"
 	}
 };
 
