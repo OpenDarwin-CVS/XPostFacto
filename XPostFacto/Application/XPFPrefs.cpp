@@ -162,8 +162,6 @@ XPFPrefs::DoInitialState ()
 	Inherited::DoInitialState ();
 
 	MountedVolume::Initialize ();
-	fTargetDisk = MountedVolume::GetDefaultRootDisk ();
-	fInstallCD = MountedVolume::GetDefaultInstallerDisk ();
 	
 	for (MountedVolumeIterator iter (MountedVolume::GetVolumeList ()); iter.Current (); iter.Next ()) {
 		iter->AddDependent (this);
@@ -172,6 +170,49 @@ XPFPrefs::DoInitialState ()
 	gApplication->AddDependent (this);
 	
 	checkStringLength ();
+	
+#ifdef __MACH__
+	// Figure out what the current root disk is, according to the NVRAM
+	// Then, update things if necessary
+	
+	XPFNVRAMSettings *nvram = XPFNVRAMSettings::GetSettings ();
+	
+	char *bootCommand = nvram->getStringValue ("boot-command");
+	char *bootDevice = nvram->getStringValue ("boot-device");
+		
+	MountedVolume *bootDisk = MountedVolume::WithOpenFirmwarePath (bootDevice);
+	MountedVolume *rootDisk = NULL;
+	
+	char *rdString = strstr (bootCommand, "rd=*");
+	if (rdString) {
+		char str[256];
+		strcpy (str, rdString + strlen ("rd=*"));
+		char *pos = strchr (str, ' ');
+		if (pos) *pos = 0;
+		
+		rootDisk = MountedVolume::WithOpenFirmwarePath (rdString);
+	}
+	
+	if (rootDisk == NULL) rootDisk = bootDisk;
+
+	if (bootDisk) bootDisk->installBootXIfNecessary ();
+	
+	if (rootDisk) {
+		fTargetDisk = rootDisk; // this is a workaround to make the commands work--we reset it below 
+
+		if (!rootDisk->hasCurrentExtensions ()) {
+			PostCommand (TH_new XPFInstallExtensionsCommand (this));
+		}
+	
+		if (!rootDisk->hasCurrentStartupItems ()) {
+			PostCommand (TH_new XPFInstallStartupCommand (this));
+		}	
+	}
+#endif
+
+	// Now, really set the defaults
+	fTargetDisk = MountedVolume::GetDefaultRootDisk ();
+	fInstallCD = MountedVolume::GetDefaultInstallerDisk ();
 }
 
 void

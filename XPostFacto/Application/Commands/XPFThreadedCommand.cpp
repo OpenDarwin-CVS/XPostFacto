@@ -45,41 +45,13 @@ advised of the possibility of such damage.
 #include "MoreFilesExtras.h"
 #include "XPFApplication.h"
 #include "XPFErrors.h"
+#include "XPFFSRef.h"
 
 #ifdef __MACH__
 	#include <sys/types.h>
 	#include <sys/wait.h>
 	#include <sys/stat.h>
 #endif
-
-// String constants
-
-char systemName[] =  "System";
-char libraryName[] = "Library";
-char extensionsName[] = "Extensions"; 
-char extensionsCacheName[] = "Extensions.mkext";
-char privateName[] = "private";
-char tmpName[] = "tmp";
-char kernelName[] = "mach_kernel";
-char coreServicesName[] = "CoreServices";
-char bootXName[] = "BootX";
-char installName[] = "XPFInstall";
-char XPFName[] = ".XPostFacto";
-char startupItemsName[] = "StartupItems";
-
-// Constructor for getting the right permissions and ownership
-
-class XPFCatalogInfo : public FSCatalogInfo {
-
-	public:
-
-		XPFCatalogInfo (UInt32 mode, bool isDirectory = true, UInt32 uid = 0, UInt32 gid = 0) {
-			permissions[0] = uid;
-			permissions[1] = gid;
-			permissions[2] = mode | (isDirectory ? 040000 : 0100000);
-			permissions[3] = 0;
-		}
-};
 
 // ------------------
 // XPFCommandThread
@@ -116,19 +88,10 @@ XPFThreadedCommand::XPFThreadedCommand (XPFPrefs *prefs)
 	turnOffIgnorePermissionsForVolume (fTargetDisk);
 	turnOffIgnorePermissionsForVolume (fHelperDisk);
 
-	ThrowIfOSErr_AC (CreateTextToUnicodeInfoByEncoding (
-		CreateTextEncoding (kTextEncodingMacRoman, kTextEncodingDefaultVariant, kUnicode16BitFormat),
-		&fConverter));
-		
 	fDebugOptions = ((XPFApplication *) gApplication)->getDebugOptions ();
 		
 	fCopyWord.CopyFrom (kXPFStringsResource, kTheWordCopy, 63);
 }	
-
-XPFThreadedCommand::~XPFThreadedCommand ()
-{
-	DisposeTextToUnicodeInfo (&fConverter);
-}
 
 // Methods to run things threaded
 
@@ -202,22 +165,6 @@ XPFThreadedCommand::ArchiveFilterGlue (void *refCon, const FSRef *src, Boolean p
 	return ((XPFThreadedCommand *) refCon)->archiveFilter (src, preflight);
 }
 
-// Methods to get or create directories or other FSRefs (with proper permissions and ownership)
-
-OSErr
-XPFThreadedCommand::getFSRef (FSRef *rootDirectory, char *path, FSRef *result)
-{
-	fYielder.YieldIfTime ();
-	OSErr err;
-	ByteCount uniLength, converted;
-	UniChar uniChars[256];
-	err = ConvertFromTextToUnicode (fConverter, strlen (path), path, 0, 0, NULL, 0, NULL, 
-			256 * sizeof (UniChar), &converted, &uniLength, uniChars);
-	if (err) return err;
-
-	return FSMakeFSRefUnicode (rootDirectory, uniLength / sizeof (UniChar), uniChars, NULL, result);
-}
-
 void
 XPFThreadedCommand::turnOffIgnorePermissionsForVolume (MountedVolume *volume)
 {
@@ -238,141 +185,6 @@ XPFThreadedCommand::turnOffIgnorePermissionsForVolume (MountedVolume *volume)
 		ThrowException_AC (kInternalError, 0);	// the execl shouldn't return
 	}
 #endif
-}
-
-OSErr
-XPFThreadedCommand::getOrCreateDirectory (FSRef *rootDirectory, char *path, UInt32 mode, FSRef *result)
-{
-	fYielder.YieldIfTime ();
-	OSErr err;
-	ByteCount uniLength, converted;
-	UniChar uniChars[256];
-	err = ConvertFromTextToUnicode (fConverter, strlen (path), path, 0, 0, NULL, 0, NULL, 
-			256 * sizeof (UniChar), &converted, &uniLength, uniChars);
-	if (err) return err;
-
-	XPFCatalogInfo catInfo (mode);
-	XPFSetUID myUID (0);
-	return FSGetOrCreateDirectoryUnicode (rootDirectory, 
-			uniLength / sizeof (UniChar), uniChars, kFSCatInfoPermissions, &catInfo, 
-			result, NULL, NULL);
-}
-
-OSErr
-XPFThreadedCommand::getOrCreateXPFDirectory (FSRef *rootDirectory, FSRef *result)
-{
-	OSErr err = getOrCreateDirectory (rootDirectory, XPFName, 0755, result);
-	if (err == noErr) {
-		FSSpec spec;
-		FSCatalogInfo catInfo;
-		err = FSGetCatalogInfo (result, kFSCatInfoFinderInfo, &catInfo, NULL, &spec, NULL);
-		if (err == noErr) {
-			FolderInfo *info = (FolderInfo *) catInfo.finderInfo;
-			XPFSetUID myUID (0);
-			if (fDebugOptions & kVisibleHelperFiles) {			
-				if ((info->finderFlags & kIsInvisible)) FSpClearIsInvisible (&spec);				
-			} else {
-				if (!(info->finderFlags & kIsInvisible)) FSpSetIsInvisible (&spec);
-			}
-		}
-	}
-	return err;
-}
-
-OSErr
-XPFThreadedCommand::getOrCreateSystemLibraryDirectory (FSRef *rootDirectory, FSRef *result)
-{
-	OSErr err;
-	FSRef systemRef;
-	
-	err = getOrCreateDirectory (rootDirectory, systemName, 0755, &systemRef);
-	if (err != noErr) return err;
-	
-	return getOrCreateDirectory (&systemRef, libraryName, 0755, result);
-}
-
-OSErr
-XPFThreadedCommand::getOrCreateSystemLibraryExtensionsDirectory (FSRef *rootDirectory, FSRef *result)
-{
-	OSErr err;
-	FSRef systemLibraryRef;
-	
-	err = getOrCreateSystemLibraryDirectory (rootDirectory, &systemLibraryRef);
-	if (err != noErr) return err;
-	
-	return getOrCreateDirectory (&systemLibraryRef, extensionsName, 0755, result);
-}
-
-OSErr
-XPFThreadedCommand::getOrCreateCoreServicesDirectory (FSRef *rootDirectory, FSRef *result)
-{
-	OSErr err;
-	FSRef systemLibraryRef;
-	
-	err = getOrCreateSystemLibraryDirectory (rootDirectory, &systemLibraryRef);
-	if (err != noErr) return err;
-	
-	return getOrCreateDirectory (&systemLibraryRef, coreServicesName, 0755, result);
-}
-
-OSErr
-XPFThreadedCommand::getOrCreateLibraryDirectory (FSRef *rootDirectory, FSRef *result)
-{
-	return getOrCreateDirectory (rootDirectory, libraryName, 0755, result);
-}
-
-OSErr
-XPFThreadedCommand::getOrCreateStartupDirectory (FSRef *rootDirectory, FSRef *result)
-{
-	OSErr err;
-	FSRef libraryRef;
-	
-	err = getOrCreateLibraryDirectory (rootDirectory, &libraryRef);
-	if (err != noErr) return err;
-	
-	return getOrCreateDirectory (&libraryRef, startupItemsName, 0755, result); 
-}
-
-OSErr
-XPFThreadedCommand::getOrCreateLibraryExtensionsDirectory (FSRef *rootDirectory, FSRef *result)
-{
-	OSErr err;
-	FSRef libraryRef;
-	
-	err = getOrCreateLibraryDirectory (rootDirectory, &libraryRef);
-	if (err != noErr) return err;
-				
-	return getOrCreateDirectory (&libraryRef, extensionsName, 0755, result);
-}
-
-OSErr
-XPFThreadedCommand::getKernelFSRef (FSRef *rootDirectory, FSRef *result)
-{
-	return getFSRef (rootDirectory, kernelName, result);
-}
-
-OSErr
-XPFThreadedCommand::getExtensionsCacheFSRef (FSRef *rootDirectory, FSRef *result)
-{
-	FSRef libraryRef;
-	OSErr err;
-	
-	err = getOrCreateSystemLibraryDirectory (rootDirectory, &libraryRef);
-	if (err != noErr) return err;
-	
-	return getFSRef (&libraryRef, extensionsCacheName, result);
-}
-
-OSErr
-XPFThreadedCommand::getBootXFSRef (FSRef *rootDirectory, FSRef *result)
-{
-	FSRef coreServicesRef;
-	OSErr err;
-	
-	err = getOrCreateCoreServicesDirectory (rootDirectory, &coreServicesRef);
-	if (err != noErr) return err;
-	
-	return getFSRef (&coreServicesRef, bootXName, result);
 }
 
 // Install methods
@@ -411,7 +223,7 @@ XPFThreadedCommand::installExtensionsWithRootDirectory (FSRef *rootDirectory)
 	if (fDebugOptions & kDisableExtensions) return;
 	FSRef systemLibraryExtensionsFolder;
 	
-	ThrowIfOSErr_AC (getOrCreateSystemLibraryExtensionsDirectory (rootDirectory, &systemLibraryExtensionsFolder));
+	ThrowIfOSErr_AC (XPFFSRef::getOrCreateSystemLibraryExtensionsDirectory (rootDirectory, &systemLibraryExtensionsFolder));
 	copyHFSArchivesTo ('hfsA', &systemLibraryExtensionsFolder);
 	
 	updateExtensionsCacheForRootDirectory (rootDirectory);
@@ -423,7 +235,7 @@ XPFThreadedCommand::installSecondaryExtensionsWithRootDirectory (FSRef *rootDire
 	if (fDebugOptions & kDisableExtensions) return;
 	FSRef libraryExtensionsFolder;
 	
-	ThrowIfOSErr_AC (getOrCreateLibraryExtensionsDirectory (rootDirectory, &libraryExtensionsFolder));
+	ThrowIfOSErr_AC (XPFFSRef::getOrCreateLibraryExtensionsDirectory (rootDirectory, &libraryExtensionsFolder));
 	copyHFSArchivesTo ('hfsA', &libraryExtensionsFolder);
 }
 
@@ -455,7 +267,7 @@ XPFThreadedCommand::installStartupItemWithRootDirectory (FSRef *rootDirectory)
 	}
 #endif 
 		
-	ThrowIfOSErr_AC (getOrCreateStartupDirectory (rootDirectory, &libraryStartupItemsFolder));	
+	ThrowIfOSErr_AC (XPFFSRef::getOrCreateStartupDirectory (rootDirectory, &libraryStartupItemsFolder));	
 	copyHFSArchivesTo ('hfsS', &libraryStartupItemsFolder);
 
 #ifdef __MACH__

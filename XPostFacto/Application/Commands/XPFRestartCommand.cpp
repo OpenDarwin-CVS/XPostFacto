@@ -44,6 +44,7 @@ advised of the possibility of such damage.
 #include "XPFProgressWindow.h"
 #include "XPFStrings.h"
 #include "XPFAuthorization.h"
+#include "XPFFSRef.h"
 
 #define Inherited XPFThreadedCommand
 
@@ -131,14 +132,14 @@ XPFRestartCommand::DoItThreaded ()
 	fProgressMax = progbase + scale * 50;
 	
 	if (rootDisk->getIsWriteable ()) {
-		if (!rootDisk->getHasOldWorldSupport ()) {
+		if (!rootDisk->hasCurrentExtensions ()) {
 			installExtensionsWithRootDirectory (rootDisk->getRootDirectory ());
 		}
 				
 		fProgressMin = fProgressMax;
 		fProgressMax = progbase + scale * 100;
 
-		if (!rootDisk->getHasStartupItemInstalled ()) {
+		if (!rootDisk->hasCurrentStartupItems ()) {
 			installStartupItemWithRootDirectory (rootDisk->getRootDirectory ());
 		}
 	}
@@ -157,7 +158,7 @@ XPFRestartCommand::DoItThreaded ()
 			
 		// Get the .XPostFacto directory
 		FSRef helperDir;
-		ThrowIfOSErr_AC (getOrCreateXPFDirectory (bootDisk->getRootDirectory (), &helperDir));
+		ThrowIfOSErr_AC (XPFFSRef::getOrCreateXPFDirectory (bootDisk->getRootDirectory (), &helperDir));
 
 		// Now, get the directory which corresponds to the root disk
 		char rootName[255];
@@ -175,14 +176,14 @@ XPFRestartCommand::DoItThreaded ()
 				end++;
 			}
 			*end = 0;
-			ThrowIfOSErr_AC (getOrCreateDirectory (&helperDir, pos, 0755, &helperDir));
+			ThrowIfOSErr_AC (XPFFSRef::getOrCreateDirectory (&helperDir, pos, 0755, &helperDir));
 			pos = end + 1;
 		}
 			
 		// Now, copy the mach_kernel file
 		// Note the FSRefFileCopy will skip the copy if the files are the same
 		FSRef kernelOnRoot;
-		ThrowIfOSErr_AC (getKernelFSRef (rootDisk->getRootDirectory (), &kernelOnRoot));
+		ThrowIfOSErr_AC (XPFFSRef::getKernelFSRef (rootDisk->getRootDirectory (), &kernelOnRoot));
 		setCopyingFile ("\pmach_kernel");
 
 		XPFSetUID myUID (0);
@@ -195,15 +196,15 @@ XPFRestartCommand::DoItThreaded ()
 		FSRef helperSystemLibraryRef;
 		FSRef rootSystemLibraryExtensionsRef, rootSystemLibraryExtensionsCacheRef;
 
-		ThrowIfOSErr_AC (getOrCreateSystemLibraryDirectory (&helperDir, &helperSystemLibraryRef));
+		ThrowIfOSErr_AC (XPFFSRef::getOrCreateSystemLibraryDirectory (&helperDir, &helperSystemLibraryRef));
 	
 		// Check for the Extensions.mkext.
-		OSErr rootErr = getExtensionsCacheFSRef (rootDisk->getRootDirectory (), &rootSystemLibraryExtensionsCacheRef);
+		OSErr rootErr = XPFFSRef::getExtensionsCacheFSRef (rootDisk->getRootDirectory (), &rootSystemLibraryExtensionsCacheRef);
 
 		if (rootErr == fnfErr) {
 			// It doesn't exist on the root. So make sure it doesn't exist on the helper.
 			FSRef helperExtensionsCacheRef;
-			OSErr helperErr = getExtensionsCacheFSRef (&helperDir, &helperExtensionsCacheRef);
+			OSErr helperErr = XPFFSRef::getExtensionsCacheFSRef (&helperDir, &helperExtensionsCacheRef);
 			if (helperErr == noErr) ThrowIfOSErr_AC (FSDeleteObject (&helperExtensionsCacheRef));
 		} else {
 			ThrowIfOSErr_AC (rootErr);
@@ -215,7 +216,7 @@ XPFRestartCommand::DoItThreaded ()
 		fProgressMax = progbase + scale * 900;		
 
 		// Check for the extensions directory. It should exist :-)
-		ThrowIfOSErr_AC (getOrCreateSystemLibraryExtensionsDirectory (rootDisk->getRootDirectory (), &rootSystemLibraryExtensionsRef));
+		ThrowIfOSErr_AC (XPFFSRef::getOrCreateSystemLibraryExtensionsDirectory (rootDisk->getRootDirectory (), &rootSystemLibraryExtensionsRef));
 		ThrowIfOSErr_AC (FSRefFilteredDirectoryCopy (&rootSystemLibraryExtensionsRef, &helperSystemLibraryRef, NULL, NULL, 0, true, 
 								NULL, CopyFilterGlue, this));
 
@@ -229,7 +230,7 @@ XPFRestartCommand::DoItThreaded ()
 		}
 	}		
 	
-	fProgressWindow->setProgressValue (progbase + scale * 950);		
+	fProgressWindow->setProgressValue (progbase + scale * 950);	
 
 	XPFNVRAMSettings *nvram = XPFNVRAMSettings::GetSettings ();
 	
@@ -263,7 +264,9 @@ XPFRestartCommand::DoItThreaded ()
 		gLogFile << "output-device: " << outputDevice << endl_AC;
 	#endif
 	
-	if (!(fDebugOptions & kDisableNVRAMWriting)) {
+	fYielder.YieldIfEvent ();
+	
+	if (!(fDebugOptions & kDisableNVRAMWriting) && !fRunner->ShutdownRequested ()) {
 		if (nvram->writeToNVRAM () == noErr) {	
 			tellFinderToRestart ();
 		} else {

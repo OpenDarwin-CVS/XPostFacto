@@ -40,6 +40,7 @@ advised of the possibility of such damage.
 #include "XPFAuthorization.h"
 #include "XPFStrings.h"
 #include "XPFApplication.h"
+#include "XPFFSRef.h"
 
 #undef Inherited
 #define Inherited XPFRestartCommand
@@ -74,9 +75,9 @@ XPFInstallCommand::DoItThreaded ()
 	if (!(fDebugOptions & kDisableCoreServices)) {
 		FSRef coreServicesFolder, cdBootX;
 			
-		ThrowIfOSErr_AC (getOrCreateCoreServicesDirectory (fTargetDisk->getRootDirectory (), &coreServicesFolder));
+		ThrowIfOSErr_AC (XPFFSRef::getOrCreateCoreServicesDirectory (fTargetDisk->getRootDirectory (), &coreServicesFolder));
 			
-		OSErr err = getBootXFSRef (fInstallCD->getRootDirectory (), &cdBootX);
+		OSErr err = XPFFSRef::getBootXFSRef (fInstallCD->getRootDirectory (), &cdBootX);
 		if (err != fnfErr) {
 			ThrowIfOSErr_AC (err);
 			setCopyingFile ("\pBootX");

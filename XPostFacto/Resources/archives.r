@@ -43,25 +43,57 @@ advised of the possibility of such damage.
 // Load archives into resource fork
 
 Read 'hfsA' (130, "AppleMaceEthernet") ":Derived:Extensions:AppleMaceEthernet.hfs";
+Read 'plst' (130, "AppleMaceEthernet") ":Derived:Extensions:plist:AppleMaceEthernet.plist";
+
 Read 'hfsA' (140, "OpenPMU") ":Derived:Extensions:OpenPMU.hfs";
+Read 'plst' (140, "OpenPMU") ":Derived:Extensions:plist:OpenPMU.plist";
+
 Read 'hfsA' (141, "PowerStarCPU") ":Derived:Extensions:PowerStarCPU.hfs";
+Read 'plst' (141, "PowerStarCPU") ":Derived:Extensions:plist:PowerStarCPU.plist";
+
 Read 'hfsA' (128, "AppleGrandCentral") ":Derived:Extensions:AppleGrandCentral.hfs";
+Read 'plst' (128, "AppleGrandCentral") ":Derived:Extensions:plist:AppleGrandCentral.plist";
+
 Read 'hfsA' (129, "ApplePowerSurgePE") ":Derived:Extensions:ApplePowerSurgePE.hfs";
-Read 'hfsA' (131, "AppleCurio") 	   ":Derived:Extensions:AppleCurio.hfs";
+Read 'plst' (129, "ApplePowerSurgePE") ":Derived:Extensions:plist:ApplePowerSurgePE.plist";
+
+Read 'hfsA' (131, "AppleCurio") ":Derived:Extensions:AppleCurio.hfs";
+Read 'plst' (131, "AppleCurio") ":Derived:Extensions:plist:AppleCurio.plist";
+
 Read 'hfsA' (132, "PatchedIOSCSICDDrive") ":Derived:Extensions:PatchedIOSCSICDDrive.hfs";
+Read 'plst' (132, "PatchedIOSCSICDDrive") ":Derived:Extensions:plist:PatchedIOSCSICDDrive.plist";
+
 Read 'hfsA' (133, "PatchedAppleNVRAM") ":Derived:Extensions:PatchedAppleNVRAM.hfs";
+Read 'plst' (133, "PatchedAppleNVRAM") ":Derived:Extensions:plist:PatchedAppleNVRAM.plist";
+
 Read 'hfsA' (134, "PatchedSCSIDeviceType05") ":Derived:Extensions:PatchedSCSIDeviceType05.hfs";
+Read 'plst' (134, "PatchedSCSIDeviceType05") ":Derived:Extensions:plist:PatchedSCSIDeviceType05.plist";
+
 Read 'hfsA' (135, "PowerSurgeCPU") ":Derived:Extensions:PowerSurgeCPU.hfs";
-Read 'hfsA' (136, "AppleOHare.kext") ":Derived:Extensions:AppleOHare.hfs";
-Read 'hfsA' (137, "OHareATA.kext") ":Derived:Extensions:OHareATA.hfs";
+Read 'plst' (135, "PowerSurgeCPU") ":Derived:Extensions:plist:PowerSurgeCPU.plist";
+
+Read 'hfsA' (136, "AppleOHare") ":Derived:Extensions:AppleOHare.hfs";
+Read 'plst' (136, "AppleOHare") ":Derived:Extensions:plist:AppleOHare.plist";
+
+Read 'hfsA' (137, "OHareATA") ":Derived:Extensions:OHareATA.hfs";
+Read 'plst' (137, "OHareATA") ":Derived:Extensions:plist:OHareATA.plist";
+
 Read 'hfsA' (138, "ApplePowerStarPE") ":Derived:Extensions:ApplePowerStarPE.hfs";
+Read 'plst' (138, "ApplePowerStarPE") ":Derived:Extensions:plist:ApplePowerStarPE.plist";
+
 Read 'hfsA' (139, "ApplePowerExpressPE") ":Derived:Extensions:ApplePowerExpressPE.hfs";
+Read 'plst' (139, "ApplePowerExpressPE") ":Derived:Extensions:plist:ApplePowerExpressPE.plist";
+
 Read 'hfsA' (142, "PatchedNDRVSupport") ":Derived:Extensions:PatchedNDRVSupport.hfs";
+Read 'plst' (142, "PatchedNDRVSupport") ":Derived:Extensions:plist:PatchedNDRVSupport.plist";
+
 // Read 'hfsA' (143, "OWCCacheConfig") ":Derived:Extensions:OWCCacheConfig.hfs";
+// Read 'plst' (143, "OWCCacheConfig") ":Derived:Extensions:plist:OWCCacheConfig.plist";
 
 // Startup Item
 
-Read 'hfsS' (128, "XPFBootSupport") ":Derived:StartupItems:XPFStartupItem.hfs";
+Read 'hfsS' (200, "XPFStartupItem") ":Derived:StartupItems:XPFStartupItem.hfs";
+Read 'plst' (200, "XPFStartupItem") ":Derived:StartupItems:plist:XPFStartupItem.plist";
 
 // Set up the BootX file for extraction
 

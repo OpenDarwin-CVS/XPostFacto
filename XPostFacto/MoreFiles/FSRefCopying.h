@@ -63,7 +63,8 @@ FSGetOrCreateDirectoryUnicode (
     const FSCatalogInfo *catalogInfo, 
     FSRef *newRef, 
     FSSpec *newSpec, 
-    UInt32 *newDirID
+    UInt32 *newDirID,
+    bool create
 );
 
 OSErr

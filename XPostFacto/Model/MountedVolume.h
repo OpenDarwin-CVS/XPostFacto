@@ -94,6 +94,9 @@ class MountedVolume : public MDependable_AC
 		bool getHasFinder () {return fHasFinder;}
 		FSRef* getRootDirectory () {return &fRootDirectory;}
 		const UInt64* getFreeBytes () {return &fInfo.freeBytes;}
+		
+		bool hasCurrentExtensions ();
+		bool hasCurrentStartupItems ();
 				
 		void installBootXIfNecessary (bool forceInstall = false);
 		

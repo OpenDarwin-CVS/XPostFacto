@@ -64,7 +64,6 @@ class XPFThreadedCommand : public TCommand {
 	public:
 		
 		XPFThreadedCommand (XPFPrefs *prefs);
-		~XPFThreadedCommand ();
 		
 		void DoIt ();											
 		virtual void DoItThreaded () = 0;
@@ -78,20 +77,6 @@ class XPFThreadedCommand : public TCommand {
 	
 		Boolean copyFilter (const FSRef *src, Boolean preflight);
 		Boolean archiveFilter (const FSRef *src, Boolean preflight);
-
-		OSErr getOrCreateDirectory (FSRef *rootDirectory, char *path, UInt32 mode, FSRef *result);
-		OSErr getOrCreateXPFDirectory (FSRef *rootDirectory, FSRef *result);
-		OSErr getOrCreateSystemLibraryDirectory (FSRef *rootDirectory, FSRef *result);
-		OSErr getOrCreateSystemLibraryExtensionsDirectory (FSRef *rootDirectory, FSRef *result);
-		OSErr getOrCreateCoreServicesDirectory (FSRef *rootDirectory, FSRef *result);
-		OSErr getOrCreateLibraryDirectory (FSRef *rootDirectory, FSRef *result);
-		OSErr getOrCreateStartupDirectory (FSRef *rootDirectory, FSRef *result);
-		OSErr getOrCreateLibraryExtensionsDirectory (FSRef *rootDirectory, FSRef *result);
-
-		OSErr getFSRef (FSRef *rootDirectory, char *path, FSRef *result);
-		OSErr getKernelFSRef (FSRef *rootDirectory, FSRef *result);
-		OSErr getExtensionsCacheFSRef (FSRef *rootDirectory, FSRef *result);
-		OSErr getBootXFSRef (FSRef *rootDirectory, FSRef *result);
 		
 		void turnOffIgnorePermissionsForVolume (MountedVolume *volume);
 		
@@ -108,8 +93,6 @@ class XPFThreadedCommand : public TCommand {
 		
 		MountedVolume *fTargetDisk;
 		MountedVolume *fHelperDisk;
-		
-		TextToUnicodeInfo fConverter;
 		
 		XPFProgressWindow *fProgressWindow;
 		CThreadYielder_AC fYielder;

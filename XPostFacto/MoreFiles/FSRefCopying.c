@@ -302,7 +302,8 @@ FSGetOrCreateDirectoryUnicode (
     const FSCatalogInfo *catalogInfo, 
     FSRef *newRef, 
     FSSpec *newSpec, 
-    UInt32 *newDirID
+    UInt32 *newDirID,
+    bool create
 )
 {
 	OSErr error;
@@ -311,7 +312,7 @@ FSGetOrCreateDirectoryUnicode (
 	// First we try to get the directory (if it exists)
 	error = FSMakeFSRefUnicode (parentRef, nameLength, name, NULL, &tempRef);
 	if (error != noErr) {
-		// It doesn't exist. So we create it!
+		if (!create) return error;
 		error = FSCreateDirectoryUnicode (parentRef, nameLength, name, whichInfo, catalogInfo, &tempRef, newSpec, newDirID);
 		if (error != noErr) return error;
 	} else {

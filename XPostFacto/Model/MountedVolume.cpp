@@ -57,6 +57,8 @@ advised of the possibility of such damage.
 #include "XPostFacto.h"
 #include "XPFStrings.h"
 #include "OFAliases.h"
+#include "vers_rsrc.h"
+#include "XPFFSRef.h"
 #include <stdio.h>
 
 #include "MoreDisks.h"
@@ -294,6 +296,172 @@ MountedVolume::installBootXIfNecessary (bool forceInstall)
 			gLogFile << "No partiton info for: " << getVolumeName () << endl_AC;
 		#endif
 	}
+}
+
+bool
+MountedVolume::hasCurrentExtensions ()
+{
+	FSRef extensionsDir;
+	OSErr err = XPFFSRef::getOrCreateSystemLibraryExtensionsDirectory (&fRootDirectory, &extensionsDir, false);
+	if (err != noErr) return false;
+
+	SInt16 archiveCount = CountResources ('hfsA');
+	for (SInt16 x = 1; x <= archiveCount; x++) {
+		SInt16 resourceID;
+		CStr255_AC resourceName;
+		char resourceVersion[128], fileVersion[128];
+		resourceVersion[0] = 0;
+		fileVersion[0] = 0;
+		
+		// Get the resource version
+
+		SetResLoad (false);
+		Handle hfsA = GetIndResource ('hfsA', x);
+		SetResLoad (true);
+		GetResInfo (hfsA, &resourceID, NULL, resourceName);
+		resourceName += ".kext";
+		ReleaseResource (hfsA);
+
+		Handle plist = GetResource ('plst', resourceID);
+		char *key = strstr (*plist, "<key>CFBundleVersion</key>");
+		if (key) {
+			char *start = strstr (key, "<string>");
+			if (start) {
+				start += strlen ("<string>");
+				char *end = strstr (key, "</string>");
+				if (end) {
+					*end = 0;
+					strcpy (resourceVersion, start);
+				}
+			}
+		}
+		ReleaseResource (plist);
+		
+		// Get the file version
+		
+		FSRef extension, contents, infoplist;
+		err = XPFFSRef::getFSRef (&extensionsDir, (CChar255_AC) resourceName, &extension);
+		if (err == noErr) err = XPFFSRef::getFSRef (&extension, "Contents", &contents);
+		if (err == noErr) err = XPFFSRef::getFSRef (&contents, "Info.plist", &infoplist);
+		if (err != noErr) return false;
+		
+		CFSSpec_AC infospec;
+		err = FSGetCatalogInfo (&infoplist, kFSCatInfoNone, NULL, NULL, &infospec, NULL);
+		if (err != noErr) return false;
+		CFile_AC versionFile;
+		versionFile.Specify (infospec);
+		err = versionFile.OpenDataFork (); if (err != noErr) return false;
+		long dataSize;
+		err = versionFile.GetDataLength (dataSize); if (err != noErr) return false;
+		Ptr versionData = NewPtr (dataSize + 1);
+		versionFile.ReadData (versionData, dataSize);
+		versionData[dataSize] = 0;
+		key = strstr (versionData, "<key>CFBundleVersion</key>");
+		if (key) {
+			char *start = strstr (key, "<string>");
+			if (start) {
+				start += strlen ("<string>");
+				char *end = strstr (key, "</string>");
+				if (end) {
+					*end = 0;
+					strcpy (fileVersion, start);
+				}
+			}
+		}
+		DisposePtr (versionData);	
+		versionFile.CloseDataFork ();
+		
+		// Compare the versions
+		UInt32 fileVersionInt, resourceVersionInt;
+		VERS_parse_string (fileVersion, &fileVersionInt);
+		VERS_parse_string (resourceVersion, &resourceVersionInt);
+		
+		if (resourceVersionInt > fileVersionInt) return false;
+	}
+
+	return true;
+}
+
+bool 
+MountedVolume::hasCurrentStartupItems ()
+{
+	FSRef startupDir;
+	OSErr err = XPFFSRef::getOrCreateStartupDirectory (&fRootDirectory, &startupDir, false);
+	if (err != noErr) return false;
+
+	SInt16 archiveCount = CountResources ('hfsS');
+	for (SInt16 x = 1; x <= archiveCount; x++) {
+		SInt16 resourceID;
+		CStr255_AC resourceName;
+		char resourceVersion[128], fileVersion[128];
+		resourceVersion[0] = 0;
+		fileVersion[0] = 0;
+		
+		// Get the resource version
+
+		SetResLoad (false);
+		Handle hfsA = GetIndResource ('hfsS', x);
+		SetResLoad (true);
+		GetResInfo (hfsA, &resourceID, NULL, resourceName);
+		ReleaseResource (hfsA);
+
+		Handle plist = GetResource ('plst', resourceID);
+		char *key = strstr (*plist, "<key>CFBundleVersion</key>");
+		if (key) {
+			char *start = strstr (key, "<string>");
+			if (start) {
+				start += strlen ("<string>");
+				char *end = strstr (key, "</string>");
+				if (end) {
+					*end = 0;
+					strcpy (resourceVersion, start);
+				}
+			}
+		}
+		ReleaseResource (plist);
+		
+		// Get the file version
+		
+		FSRef startup, infoplist;
+		err = XPFFSRef::getFSRef (&startupDir, (CChar255_AC) resourceName, &startup);
+		if (err == noErr) err = XPFFSRef::getFSRef (&startup, "version.plist", &infoplist);
+		if (err != noErr) return false;
+		
+		CFSSpec_AC infospec;
+		err = FSGetCatalogInfo (&infoplist, kFSCatInfoNone, NULL, NULL, &infospec, NULL);
+		if (err != noErr) return false;
+		CFile_AC versionFile;
+		versionFile.Specify (infospec);
+		err = versionFile.OpenDataFork (); if (err != noErr) return false;
+		long dataSize;
+		err = versionFile.GetDataLength (dataSize); if (err != noErr) return false;
+		Ptr versionData = NewPtr (dataSize + 1);
+		versionFile.ReadData (versionData, dataSize);
+		versionData[dataSize] = 0;
+		key = strstr (versionData, "<key>CFBundleVersion</key>");
+		if (key) {
+			char *start = strstr (key, "<string>");
+			if (start) {
+				start += strlen ("<string>");
+				char *end = strstr (key, "</string>");
+				if (end) {
+					*end = 0;
+					strcpy (fileVersion, start);
+				}
+			}
+		}
+		DisposePtr (versionData);	
+		versionFile.CloseDataFork ();
+		
+		// Compare the versions
+		UInt32 fileVersionInt, resourceVersionInt;
+		VERS_parse_string (fileVersion, &fileVersionInt);
+		VERS_parse_string (resourceVersion, &resourceVersionInt);
+		
+		if (resourceVersionInt > fileVersionInt) return false;
+	}
+
+	return true;
 }
 
 MountedVolume::~MountedVolume ()
