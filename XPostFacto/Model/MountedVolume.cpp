@@ -621,6 +621,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	fBootableDevice = NULL;
 	fHelperDisk = NULL;
 	fCreationDate = 0;
+	fMacOSXVersion = "";
 	
 #ifdef BUILDING_XPF
 	gApplication->AddDependent (this); // for listening for volume deletions

@@ -174,7 +174,11 @@ XPFPrefs::PoseConfirmDialog (bool forInstall, bool quitting)
 	MountedVolume *bootDisk = forInstall ? fInstallCD : fTargetDisk;
 	
 	CStr255_AC version (fRebootInMacOS9 ? "Mac OS 9" : "Mac OS X ");
-	if (!fRebootInMacOS9) version += bootDisk->getMacOSXVersion ();
+	if (!fRebootInMacOS9) {
+		if (!bootDisk) return kNoButton;
+		if (!forInstall && (bootDisk->getBootStatus () != kStatusOK)) return kNoButton;
+		version += bootDisk->getMacOSXVersion ();
+	}	
 	
 	MAParamText ("$OS$", version);
 	MAParamText ("$VOLUME$", fRebootInMacOS9 ? "a Mac OS 9 volume" : bootDisk->getVolumeName ());
