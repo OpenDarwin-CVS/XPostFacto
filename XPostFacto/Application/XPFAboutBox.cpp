@@ -35,8 +35,9 @@ advised of the possibility of such damage.
 #include "XPFAboutBox.h"
 #include "XPFApplication.h"
 #include <iostream.h>
+
 #include <InternetConfig.h>
-#include <Sound.h>
+
 #include "XPostFacto.h"
 
 MA_DEFINE_CLASS (XPFAboutBox);
