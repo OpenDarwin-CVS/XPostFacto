@@ -693,7 +693,7 @@
                 <SETTING><NAME>DumpBrowserInfo</NAME><VALUE>false</VALUE></SETTING>
                 <SETTING><NAME>CacheSubprojects</NAME><VALUE>true</VALUE></SETTING>
                 <SETTING><NAME>UseThirdPartyDebugger</NAME><VALUE>false</VALUE></SETTING>
-                <SETTING><NAME>BrowserGenerator</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>BrowserGenerator</NAME><VALUE>2</VALUE></SETTING>
                 <SETTING><NAME>DebuggerAppPath</NAME>
                     <SETTING><NAME>Path</NAME><VALUE></VALUE></SETTING>
                     <SETTING><NAME>PathFormat</NAME><VALUE>Generic</VALUE></SETTING>
@@ -705,7 +705,7 @@
                     <SETTING><NAME>PathFormat</NAME><VALUE>Generic</VALUE></SETTING>
                     <SETTING><NAME>PathRoot</NAME><VALUE>Absolute</VALUE></SETTING>
                 </SETTING>
-                <SETTING><NAME>CodeCompletionPrefixFileName</NAME><VALUE>MacHeaders.c</VALUE></SETTING>
+                <SETTING><NAME>CodeCompletionPrefixFileName</NAME><VALUE>DebugPrefix.h</VALUE></SETTING>
                 <SETTING><NAME>CodeCompletionMacroFileName</NAME><VALUE>MacOS_Carbon_C++_Macros.h</VALUE></SETTING>
 
                 <!-- Settings for "Debugger Target" panel -->
@@ -813,7 +813,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@G#&#148;&#144;"&#168;T</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@GD&#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -3634,7 +3634,7 @@
                 <SETTING><NAME>DumpBrowserInfo</NAME><VALUE>false</VALUE></SETTING>
                 <SETTING><NAME>CacheSubprojects</NAME><VALUE>true</VALUE></SETTING>
                 <SETTING><NAME>UseThirdPartyDebugger</NAME><VALUE>false</VALUE></SETTING>
-                <SETTING><NAME>BrowserGenerator</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>BrowserGenerator</NAME><VALUE>2</VALUE></SETTING>
                 <SETTING><NAME>DebuggerAppPath</NAME>
                     <SETTING><NAME>Path</NAME><VALUE></VALUE></SETTING>
                     <SETTING><NAME>PathFormat</NAME><VALUE>Generic</VALUE></SETTING>
@@ -3646,7 +3646,7 @@
                     <SETTING><NAME>PathFormat</NAME><VALUE>Generic</VALUE></SETTING>
                     <SETTING><NAME>PathRoot</NAME><VALUE>Absolute</VALUE></SETTING>
                 </SETTING>
-                <SETTING><NAME>CodeCompletionPrefixFileName</NAME><VALUE>MacHeaders.c</VALUE></SETTING>
+                <SETTING><NAME>CodeCompletionPrefixFileName</NAME><VALUE>FinalPrefix.h</VALUE></SETTING>
                 <SETTING><NAME>CodeCompletionMacroFileName</NAME><VALUE>MacOS_Carbon_C++_Macros.h</VALUE></SETTING>
 
                 <!-- Settings for "Debugger Target" panel -->
@@ -3754,7 +3754,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@G#&#148;&#144;"&#168;T</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@GD&#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -6390,7 +6390,7 @@
                 <SETTING><NAME>DumpBrowserInfo</NAME><VALUE>false</VALUE></SETTING>
                 <SETTING><NAME>CacheSubprojects</NAME><VALUE>true</VALUE></SETTING>
                 <SETTING><NAME>UseThirdPartyDebugger</NAME><VALUE>false</VALUE></SETTING>
-                <SETTING><NAME>BrowserGenerator</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>BrowserGenerator</NAME><VALUE>2</VALUE></SETTING>
                 <SETTING><NAME>DebuggerAppPath</NAME>
                     <SETTING><NAME>Path</NAME><VALUE></VALUE></SETTING>
                     <SETTING><NAME>PathFormat</NAME><VALUE>Generic</VALUE></SETTING>
@@ -6402,7 +6402,7 @@
                     <SETTING><NAME>PathFormat</NAME><VALUE>Generic</VALUE></SETTING>
                     <SETTING><NAME>PathRoot</NAME><VALUE>Absolute</VALUE></SETTING>
                 </SETTING>
-                <SETTING><NAME>CodeCompletionPrefixFileName</NAME><VALUE>MacHeaders.c</VALUE></SETTING>
+                <SETTING><NAME>CodeCompletionPrefixFileName</NAME><VALUE>FinalPrefix.h</VALUE></SETTING>
                 <SETTING><NAME>CodeCompletionMacroFileName</NAME><VALUE>MacOS_Carbon_C++_Macros.h</VALUE></SETTING>
 
                 <!-- Settings for "Debugger Target" panel -->
@@ -6510,7 +6510,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@G#&#148;&#144;"&#168;T</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@GD&#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -9572,7 +9572,7 @@
                 <SETTING><NAME>DumpBrowserInfo</NAME><VALUE>false</VALUE></SETTING>
                 <SETTING><NAME>CacheSubprojects</NAME><VALUE>true</VALUE></SETTING>
                 <SETTING><NAME>UseThirdPartyDebugger</NAME><VALUE>false</VALUE></SETTING>
-                <SETTING><NAME>BrowserGenerator</NAME><VALUE>1</VALUE></SETTING>
+                <SETTING><NAME>BrowserGenerator</NAME><VALUE>2</VALUE></SETTING>
                 <SETTING><NAME>DebuggerAppPath</NAME>
                     <SETTING><NAME>Path</NAME><VALUE></VALUE></SETTING>
                     <SETTING><NAME>PathFormat</NAME><VALUE>Generic</VALUE></SETTING>
@@ -9584,7 +9584,7 @@
                     <SETTING><NAME>PathFormat</NAME><VALUE>Generic</VALUE></SETTING>
                     <SETTING><NAME>PathRoot</NAME><VALUE>Absolute</VALUE></SETTING>
                 </SETTING>
-                <SETTING><NAME>CodeCompletionPrefixFileName</NAME><VALUE>MacHeaders.c</VALUE></SETTING>
+                <SETTING><NAME>CodeCompletionPrefixFileName</NAME><VALUE>DebugPrefix.h</VALUE></SETTING>
                 <SETTING><NAME>CodeCompletionMacroFileName</NAME><VALUE>MacOS_Carbon_C++_Macros.h</VALUE></SETTING>
 
                 <!-- Settings for "Debugger Target" panel -->
@@ -9692,7 +9692,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@G#&#148;&#144;"&#168;T</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@GD&#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -12746,7 +12746,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@G#&#148;&#144;"&#168;T</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@GD&#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -13713,7 +13713,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@G#&#148;&#144;"&#168;T</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@GD&#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -14460,7 +14460,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@G#&#148;&#144;"&#168;T</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@GD&#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
