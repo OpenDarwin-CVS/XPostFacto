@@ -255,9 +255,12 @@ XPFPrefs::getPrefsFromNVRAM ()
 	// For the rest of the settings, we bump the change count if we make changes to what was in the
 	// prefs file. That way, we ensure that the prefs file and the contents of NVRAM stay in sync.
 
+	// Note that we don't apply the "-v" setting because we may have set that automatically to deal
+	// with Darwin boots. So the preferences file will control that setting exclusively.
+
 	setAutoBoot (nvram->getBooleanValue ("auto-boot?"));	
 	setBootInSingleUserMode ((strstr (bootCommand, " -s")) != 0);
-	setBootInVerboseMode ((strstr (bootCommand, " -v")) != 0);
+//	setBootInVerboseMode ((strstr (bootCommand, " -v")) != 0);
 	setEnableCacheEarly ((strstr (bootCommand, " -c")) != 0);
 	
 	char *debugString = strstr (bootCommand, "debug=");
