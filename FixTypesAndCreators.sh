@@ -1,6 +1,6 @@
 #!/bin/sh
 
-find XPostFacto \(  -name '*.cpp' -or -name '*.c' -or -name '*.h' -or -name '*.r' \) \
+find XPostFacto \(  -name '*.cpp' -or -name '*.c' -or -name '*.h' -or -name '*.r' -or -name '*.xml' \) \
 	-exec /Developer/Tools/SetFile -t TEXT -c CWIE {} \;
 
 find XPostFacto -name '*.mcp' \
