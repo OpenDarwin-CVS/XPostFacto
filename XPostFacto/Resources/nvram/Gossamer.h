@@ -57,13 +57,6 @@ dev enet\
 : READ { _p _n ; _a } begin _p _n bead -> _a _a 2+\
 if _p c@ 80 and 0= else 1 then until _a ;\
 $E\
-dev /packages/obp-tftp\
-: $M over + ['] noop $L ;\
-: $O ['] open + ;\
-: $M1 dup 24 - -1720 $O $X 6 move 14 + ;\
--5BC $O ' $M1 $L\
-0 $O E8 $M EC $M F0 $M F4 $M F8 + ' true $L\
-$E\
 dev /packages/mac-parts\
 : $M -7E89E0 $X 8000 alloc-mem 7F00 + 4 -7E89E0 $X ;\
 ' load 268 - ' $M $L\
