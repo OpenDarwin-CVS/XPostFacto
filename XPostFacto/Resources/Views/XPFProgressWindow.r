@@ -3,15 +3,9 @@ data 'TxSt' (27392, "Application 10, plain") {
 };
 
 resource 'STR#' (1020, "Progress Window", purgeable) {
-	{	/* array StringArray: 4 elements */
+	{	/* array StringArray: 1 elements */
 		/* [1] */
-		"Description",
-		/* [2] */
-		"Cancel",
-		/* [3] */
-		"Status",
-		/* [4] */
-		"OK"
+		"Stop"
 	}
 };
 
@@ -19,11 +13,11 @@ resource 'View' (1020, "Progress Window", purgeable) {
 	MAThreeOhView {
 
 	},
-	{	/* array ViewArray: 6 elements */
+	{	/* array ViewArray: 4 elements */
 		/* [1] */
 		ViewSignatureAndClassname {
 			'wind',
-			812,
+			493,
 			"XPFProgressWindow",
 			'WIND',
 			enabled,
@@ -37,7 +31,7 @@ resource 'View' (1020, "Progress Window", purgeable) {
 						enabled,
 						noIdle,
 						modal,
-						'okay',
+						noID,
 						'canc'
 					}
 				}
@@ -53,9 +47,9 @@ resource 'View' (1020, "Progress Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				159,
+				99,
 				/* [2] */
-				338
+				412
 			},
 			sizeVariable,
 			sizeVariable,
@@ -117,77 +111,9 @@ resource 'View' (1020, "Progress Window", purgeable) {
 				-1,
 				1
 			},
-			5
+			3
 		},
 		/* [2] */
-		ViewSignatureAndClassname {
-			'stat',
-			100,
-			"",
-			'desc',
-			notEnabled,
-			noIdle,
-			{	/* array BehaviorArray: 0 elements */
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				19,
-				/* [2] */
-				29
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				18,
-				/* [2] */
-				276
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			doesntHandleCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			NoDrawingEnvironment {
-
-			},
-			NoAdorners {
-
-			},
-			emptyUserArea,
-			StaticText {
-				mStaticTextHit,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0,
-					/* [4] */
-					0
-				},
-				-1,
-				dontPreferOutline,
-				autoWrap,
-				dontEraseFirst,
-				justSystem,
-				1020,
-				1
-			},
-			NoSubviews
-		},
-		/* [3] */
 		ViewSignatureAndClassname {
 			'butn',
 			96,
@@ -202,9 +128,9 @@ resource 'View' (1020, "Progress Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				121,
+				15,
 				/* [2] */
-				148
+				326
 			},
 			{	/* array: 2 elements */
 				/* [1] */
@@ -248,11 +174,11 @@ resource 'View' (1020, "Progress Window", purgeable) {
 				-1,
 				dontPreferOutline,
 				1020,
-				2
+				1
 			},
 			NoSubviews
 		},
-		/* [4] */
+		/* [3] */
 		ViewSignatureAndClassname {
 			'stat',
 			100,
@@ -267,15 +193,15 @@ resource 'View' (1020, "Progress Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				76,
+				50,
 				/* [2] */
-				29
+				18
 			},
 			{	/* array: 2 elements */
 				/* [1] */
 				31,
 				/* [2] */
-				281
+				277
 			},
 			sizeVariable,
 			sizeVariable,
@@ -315,117 +241,12 @@ resource 'View' (1020, "Progress Window", purgeable) {
 				autoWrap,
 				dontEraseFirst,
 				justSystem,
-				1020,
-				3
-			},
-			NoSubviews
-		},
-		/* [5] */
-		ViewSignatureAndClassname {
-			'butn',
-			207,
-			"",
-			'okay',
-			enabled,
-			noIdle,
-			{	/* array BehaviorArray: 0 elements */
-			},
-			MARelease13View {
-
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				117,
-				/* [2] */
-				232
-			},
-			{	/* array: 2 elements */
-				/* [1] */
-				28,
-				/* [2] */
-				81
-			},
-			sizeVariable,
-			sizeVariable,
-			shown,
-			doesntWantToBeTarget,
-			doesntHandleCursor,
-			letsSubViewsHandleCursor,
-			noCursorID,
-			doesntHandleHelp,
-			letsSubViewsHandleHelp,
-			noHelpID,
-			1,
-			DrawingEnvironmentClassIDAndClassname {
-				9,
-				"TDrawingEnvironment",
-				{3, 3},
-				8,
-				$"FFFF FFFF FFFF FFFF",
-				{	/* array: 3 elements */
-					/* [1] */
-					0,
-					/* [2] */
-					0,
-					/* [3] */
-					0
-				},
-				{	/* array: 3 elements */
-					/* [1] */
-					65535,
-					/* [2] */
-					65535,
-					/* [3] */
-					65535
-				}
-			},
-			AdornerListSignatureAndClassname {
-				NoIdentifier,
-				"TAdornerList",
-				8,
-				AdornerElementSizeShift,
-				8,
-				{	/* array AdornerElementArray: 2 elements */
-					/* [1] */
-					DrawView,
-					AdornerLocalObject {
-						DrawAdorner
-					},
-					/* [2] */
-					AdornAfter,
-					AdornerSignatureAndClassname {
-						'rrct',
-						"",
-						'rrct',
-						freeOnDeletion,
-						$""
-					}
-				}
-			},
-			emptyUserArea,
-			Button {
-				mDismiss,
-				notHilited,
-				notDimmed,
-				sizeable,
-				{	/* array: 4 elements */
-					/* [1] */
-					4,
-					/* [2] */
-					4,
-					/* [3] */
-					4,
-					/* [4] */
-					4
-				},
 				-1,
-				dontPreferOutline,
-				1020,
-				4
+				1
 			},
 			NoSubviews
 		},
-		/* [6] */
+		/* [4] */
 		ViewSignatureAndClassname {
 			'prog',
 			105,
@@ -440,9 +261,9 @@ resource 'View' (1020, "Progress Window", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				47,
+				18,
 				/* [2] */
-				27
+				18
 			},
 			{	/* array: 2 elements */
 				/* [1] */
@@ -494,3 +315,4 @@ resource 'View' (1020, "Progress Window", purgeable) {
 		}
 	}
 };
+

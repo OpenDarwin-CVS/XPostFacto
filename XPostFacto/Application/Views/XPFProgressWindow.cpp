@@ -58,13 +58,10 @@ XPFProgressWindow::DoPostCreate (TDocument* itsDocument)
 {
 	TWindow::DoPostCreate (itsDocument);
 	
-	fDescription = (TStaticText *) FindSubView ('desc');
 	fStatus = (TStaticText *) FindSubView ('stut');
-	fOkay = (TButton *) FindSubView ('okay');
 	fCancel = (TButton *) FindSubView ('canc');
 	fProgress = (TProgressIndicator *) FindSubView ('prog');
-	
-	fOkay->SetActiveState (false, true);
+	fDialog = GetDialogBehavior ();
 	
 	SetIdleFreq (1);
 }
@@ -130,20 +127,18 @@ XPFProgressWindow::DoIdle (IdlePhase phase)
 	if (phase != idleContinue) return TWindow::DoIdle (phase);
 	
 	if (fFinished) {
-		fOkay->SetActiveState (true, true);
-		fCancel->SetActiveState (false, true);
 		fFinished = false;
+		if (fDialog) fDialog->Dismiss ('cncl', false);
 	}
 	
 	if (fHasException) {
 		fHasException = false;
 		ErrorAlert (fException.GetError (), fException.GetExceptionMessage ());
-		TDialogBehavior *itsDialog = GetDialogBehavior ();
-		if (itsDialog) itsDialog->Dismiss ('cncl', false);
+		if (fDialog) fDialog->Dismiss ('cncl', false);
 	}
 	
 	if (fSetDescription) {
-		fDescription->SetText (fDescriptionText, true);
+		this->SetTitle (fDescriptionText);
 		fSetDescription = false;
 	}
 	

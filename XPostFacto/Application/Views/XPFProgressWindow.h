@@ -67,11 +67,10 @@ public:
 	
 private:
 
-	TStaticText *fDescription;
 	TStaticText *fStatus;
-	TButton *fOkay;
 	TButton *fCancel;
 	TProgressIndicator *fProgress;
+	TDialogBehavior *fDialog;
 	
 	CStr255_AC fDescriptionText;
 	CStr255_AC fStatusText;
