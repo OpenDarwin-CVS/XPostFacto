@@ -440,6 +440,9 @@ OpenControlFramebuffer::setAttribute (IOSelect attribute, UInt32 value)
 				reg22 = OSSwapLittleToHostInt32 (fRegister[22].reg); eieio ();
 				reg22 &= ~0xF00;
 				fRegister[22].reg = OSSwapHostToLittleInt32 (reg22); eieio ();
+#else
+// So, in the meantime, just reimplement the gamma / clut
+				implementGammaAndCLUT ();
 #endif
 
 				handleEvent (kIOFBNotifyDidPowerOn);			
@@ -453,6 +456,14 @@ OpenControlFramebuffer::setAttribute (IOSelect attribute, UInt32 value)
 				reg22 = OSSwapLittleToHostInt32 (fRegister[22].reg); eieio ();
 				reg22 |= 0xF00;
 				fRegister[22].reg = OSSwapHostToLittleInt32 (reg22); eieio ();
+#else
+// So, in the meantime, just fade to black ...
+				for (int x = 0; x < 256; x++) {
+					fColorRegister[0].reg = x; eieio ();
+					fColorRegister[3].reg = 0; eieio ();
+					fColorRegister[3].reg = 0; eieio ();
+					fColorRegister[3].reg = 0; eieio ();
+				}
 #endif
 
 				handleEvent (kIOFBNotifyDidPowerOff);			
