@@ -68,9 +68,14 @@ long gBootDeviceType;
 long gBootFileType;
 char gBootDevice[256];
 char gBootFile[256];
+char gApparentBootFile[256];
 char gRootDir[256];
 
 char gTempStr[4096];
+
+// make this a global, since used by SetProp
+// pointed out by Joe van Tunen
+char ofBootArgs[128];   
 
 long *gDeviceTreeMMTmp = 0;
 
@@ -368,7 +373,7 @@ static long SetUpBootArgs(void)
   long               graphicsBoot = 1;
   long               ret, cnt, size, dash;
   long               sKey, vKey, keyPos;
-  char               ofBootArgs[128], *ofArgs, tc, keyStr[8];
+  char               *ofArgs, tc, keyStr[8];
   unsigned char      mem_regs[kMaxDRAMBanks*16];
   unsigned long      mem_banks, bank_shift;
   
@@ -762,6 +767,7 @@ static long GetBootPaths(void)
   char *filePath, *buffer;
   const char *priv = "\\private";
   const char *tmp = ",\\tmp\\";
+  gApparentBootFile[0] = 0;
   
   if (gBootSourceNumber == -1) {
     // Get the boot-device
@@ -799,15 +805,22 @@ static long GetBootPaths(void)
 		}
 		pos = strstr (ofBootArgs, "rd=*");
 		if (pos) {
+			// isolate the rd variable
 			pos += 4;
+			end = strstr (pos, " ");
+			if (end) *end = 0;
+			
+			// set the apparent boot-file
+			sprintf (gApparentBootFile, "%s,\\mach_kernel", pos);
+			
+			// set the "real" boot-file to where XPostFacto has copied it to
 			while (*pos == '/') pos++;
 			end = pos;
-			while ((*end != 0) && (*end != ' ')) {
+			while (*end) {
 				if (*end == '/') *end = '\\';
 				if (*end == ':') *end = ';';
 				end++;
 			}
-			*end = 0;
 			sprintf (gBootFile, ",\\.XPostFacto\\%s\\mach_kernel", pos);
 		}
 	}
@@ -964,7 +977,11 @@ static long GetBootPaths(void)
     }
   }
   
-  SetProp(gChosenPH, "rootpath", gBootFile, strlen(gBootFile) + 1);
+  if (gApparentBootFile[0]) {
+    SetProp(gChosenPH, "rootpath", gApparentBootFile, strlen(gApparentBootFile) + 1);
+  } else {
+	SetProp(gChosenPH, "rootpath", gBootFile, strlen(gBootFile) + 1);
+  }
   
   gBootSourceNumber++;
   

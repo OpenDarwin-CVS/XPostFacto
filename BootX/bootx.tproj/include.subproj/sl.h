@@ -164,6 +164,7 @@ extern long gBootDeviceType;
 extern long gBootFileType;
 extern char gBootDevice[256];
 extern char gBootFile[256];
+extern char gApparentBootFile[256];
 extern char gRootDir[256];
 
 extern char gTempStr[4096];
@@ -215,6 +216,7 @@ extern long InitDisplays(void);
 extern long DrawSplashScreen(long stage);
 extern long DrawFailedBootPicture(void);
 extern void GetMainScreenPH(Boot_Video_Ptr video);
+extern long LoadDisplayDrivers(char *rootDir);
 
 // Externs for drivers.c
 extern long LoadDrivers(char *dirPath);
@@ -227,5 +229,7 @@ extern long ParseConfigFile(char *addr);
 // added by ryan.rempel@utoronto.ca
 extern int parse_boot_arg (char	*arg_string, void *arg_ptr);
 
+// Externs for PEFSupport.c
+extern unsigned long GetSymbolFromPEF(char *name, char *pef, void *desc, long descSize);
 
 #endif /* ! _BOOTX_SL_H_ */

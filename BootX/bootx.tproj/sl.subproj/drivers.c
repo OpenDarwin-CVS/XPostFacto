@@ -157,6 +157,10 @@ long LoadDrivers(char *dirSpec)
     strcpy(gExtensionsSpec, dirSpec);
     strcat(gExtensionsSpec, "System\\Library\\");
     FileLoadDrivers(gExtensionsSpec, 0);
+	
+    strcpy(gExtensionsSpec, dirSpec);
+	strcat(gExtensionsSpec, "System\\Library\\Extensions\\OpenNDRV\\");
+	LoadDisplayDrivers (gExtensionsSpec);
 
 	// Added by ryan.rempel@utoronto.ca
 	// Loads drivers from /Library/Extensions as well, when doing an install
@@ -165,6 +169,10 @@ long LoadDrivers(char *dirSpec)
 		strcpy (gExtensionsSpec, dirSpec);
 		strcat (gExtensionsSpec, "Library\\");
 		FileLoadDrivers (gExtensionsSpec, 0);
+		
+		strcpy(gExtensionsSpec, dirSpec);
+		strcat(gExtensionsSpec, "Library\\Extensions\\OpenNDRV\\");
+		LoadDisplayDrivers (gExtensionsSpec);
 	}
   } else {
     return 0;

@@ -50,12 +50,38 @@ struct DisplayInfo {
 
 typedef struct DisplayInfo DisplayInfo, *DisplayInfoPtr;
 
+// The Driver Description
+enum {
+  kInitialDriverDescriptor	= 0,
+  kVersionOneDriverDescriptor	= 1,
+  kTheDescriptionSignature	= 'mtej',
+  kDriverDescriptionSignature	= 'pdes'
+};
+
+struct DriverType {
+  unsigned char nameInfoStr[32]; // Driver Name/Info String
+  unsigned long	version;         // Driver Version Number - really NumVersion
+};
+typedef struct DriverType DriverType;
+
+struct DriverDescription {
+  unsigned long driverDescSignature; // Signature field of this structure
+  unsigned long driverDescVersion;   // Version of this data structure
+  DriverType    driverType;          // Type of Driver
+  char          otherStuff[512];
+};
+typedef struct DriverDescription DriverDescription;
+
+#define	kMagic1		'Joy!'
+#define	kMagic2		'peff'
+#define kMagic3		'pwpc'
 
 static long FindDisplays(void);
 static long OpenDisplays(void);
 static long OpenDisplay(long displayNum);
 static long InitDisplay(long displayNum);
 static long LookUpCLUTIndex(long index, long depth);
+static long LoadDisplayDriver(char *pef, long pefLen);
 
 static long        gNumDisplays;
 static long        gMainDisplayNum;
@@ -278,7 +304,8 @@ void GetMainScreenPH(Boot_Video_Ptr video)
 static long FindDisplays(void)
 {
   CICell screenPH, controlPH;
-  long   cnt;
+  long   cnt, size;
+  char prop[128];
   
   // Find all the screens in the system.
   screenPH = 0;
@@ -293,10 +320,32 @@ static long FindDisplays(void)
   controlPH = FindDevice("/chaos/control");
   if (gStdOutPH == controlPH) gStdOutPH = 0;
   
-  // Find the main screen using the screen alias or chaos/control.
+  // Find the main screen using the chaos/control, the output-device, or the screen alias.
+  // If there is a /chaos/control, it looks like we have to use it. Otherwise, we end up
+  // with a kernel panic when the NDRV loads later. I think it is because IONDRVFramebuffer
+  // does some special memory mapping for the boot-display. Basically, it seems that if
+  // /chaos/control is around, we need to use it as the boot-display. However, it's not so
+  // bad, as if there is no monitor attached, the Open will fail below, and we'll actually
+  // get another screen anyway.
+  // So the changes here are mostly for the sake of the Beige G3, so that something other than
+  // the screen alias can be the boot-display.
+  
   gMainDisplayNum = -1;
-  screenPH = FindDevice("screen");
-  if (screenPH == -1) screenPH = controlPH;
+  
+  screenPH = controlPH;
+  if (screenPH == -1) {
+	size = GetProp (gOptionsPH, "output-device", prop, 127);
+	if (size == -1) prop[0] = '\0'; else prop[size] = '\0';
+	screenPH = FindDevice (prop);
+	if (screenPH != -1) {
+		size = GetProp (screenPH, "device_type", prop, 127);
+		if (size == -1) prop[0] = '\0'; else prop[size] = '\0';
+		if (strcmp (prop, "display")) screenPH = -1;
+	}
+	
+	if (screenPH == -1) screenPH = FindDevice("screen");
+  }
+  
   for (cnt = 0; cnt < gNumDisplays; cnt++)
     if (gDisplays[cnt].screenPH == screenPH) gMainDisplayNum = cnt;
   
@@ -325,8 +374,7 @@ static long OpenDisplays(void)
     for (cnt = 0; cnt < gNumDisplays; cnt++) {
       OpenDisplay(cnt);
     }
-  }
-  
+  }  
   return 0;
 }
 
@@ -491,6 +539,124 @@ static long LookUpCLUTIndex(long index, long depth)
   }
   
   return result;
+}
+
+
+long LoadDisplayDrivers (char *rootDir)
+{  
+	char *currentContainer, *fileEnd;
+	long ret, flags, index, time;
+	long fileLen;
+	char dirSpec[512], *name;
+	index = 0;
+	
+	printf ("Loading display drivers from %s\n", rootDir);
+	
+	while (1) {
+		strcpy (dirSpec, rootDir);
+		
+		ret = GetDirEntry (dirSpec, &index, &name, &flags, &time);
+		if (ret == -1) break;
+		
+		if ((flags & kFileTypeMask) != kFileTypeFlat) continue;
+		
+		strcat (dirSpec, name);
+		
+		printf ("Loading driver from %s\n", dirSpec);
+		
+		fileLen = LoadFile (dirSpec);
+		if ((fileLen == 0) || (fileLen == -1)) {
+			printf ("Error loading file: %ld\n", fileLen);
+			continue;
+		}
+		
+		currentContainer = (char *) kLoadAddr;
+		fileEnd = currentContainer + fileLen;
+		
+		while (currentContainer < fileEnd) {
+			unsigned *nextContainer = (unsigned *) currentContainer;
+			while (++nextContainer < (unsigned *) fileEnd) if ((nextContainer[0] == kMagic1) && (nextContainer[1] == kMagic2) && (nextContainer[2] == kMagic3)) break;
+
+			ret = LoadDisplayDriver (currentContainer, ((unsigned) nextContainer) - ((unsigned) currentContainer));
+			if (ret == -1) printf ("Error loading %s\n", dirSpec);
+			
+			currentContainer = (char *) nextContainer;
+		}
+	}
+	
+	return 0;
+}
+
+
+static long LoadDisplayDriver (char *pef, long pefLen)
+{
+	char              *currentPef, *buffer;
+	long              currentPefLen;
+	long              curDisplay;
+	char              descripName[] = " TheDriverDescription";
+	long              err;
+	DriverDescription descrip;
+	DriverDescription curDesc;
+	char              matchName[40];
+	unsigned long     newVersion;
+	unsigned long     curVersion;
+	CICell            screenPH;
+  
+	descripName[0] = strlen (descripName + 1);
+	err = GetSymbolFromPEF (descripName, pef, &descrip, sizeof(descrip));
+	if (err != 0) {
+		printf ("\nGetSymbolFromPEF returns %ld\n", err);
+		return -1;
+	}
+	
+	if ((descrip.driverDescSignature != kTheDescriptionSignature) ||
+			(descrip.driverDescVersion != kInitialDriverDescriptor)) {
+		printf ("Incorrect signature or version\n");
+		return -1;
+	}
+  
+	strncpy (matchName, descrip.driverType.nameInfoStr + 1, descrip.driverType.nameInfoStr[0]);
+	newVersion = descrip.driverType.version;
+	if ((newVersion & 0xffff) == 0x8000) newVersion |= 0xff; // final stage, release rev  
+
+	printf ("Finding display for %s\n", matchName);
+  
+	for (curDisplay = 0; curDisplay < gNumDisplays; curDisplay++) {
+		screenPH = gDisplays[curDisplay].screenPH;
+		if (MatchThis (screenPH, matchName) != 0) continue;
+    
+		err = GetPackageProperty (screenPH, "driver,AAPL,MacOS,PowerPC", &currentPef, &currentPefLen);
+    
+		if (err == 0) {
+			err = GetSymbolFromPEF(descripName,currentPef,&curDesc,sizeof(curDesc));
+			if (err == 0) {
+				if ((curDesc.driverDescSignature == kTheDescriptionSignature) &&
+						(curDesc.driverDescVersion == kInitialDriverDescriptor)) {
+					curVersion = curDesc.driverType.version;
+					if ((curVersion & 0xffff) == 0x8000) curVersion |= 0xff; // final stage, release rev
+					if (newVersion <= curVersion) {
+						printf ("Newer version already installed\n");
+						pefLen = 0;
+					}
+				}
+			}
+		}
+    
+		if (pefLen == 0) continue;
+    
+		printf ("Installing patch driver\n");
+
+		buffer = (char *) AllocateBootXMemory (pefLen);
+		if (buffer == NULL) {
+			printf ("No space for the NDRV\n");
+			return -1;
+		}
+		bcopy (pef, buffer, pefLen);
+    
+		SetProp (screenPH, "driver,AAPL,MacOS,PowerPC", buffer, pefLen);
+	}
+	
+	return 0;
 }
 
 
