@@ -776,7 +776,7 @@ void MaceEnet::timeoutOccurred(IOTimerEventSource * /*timer*/)
 
         // Poll link status periodically.
         
-        monitorLinkStatus();
+//        monitorLinkStatus();
         
 	// Clean-up after the debugger if the debugger was active.
 	//
