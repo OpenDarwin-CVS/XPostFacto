@@ -32,6 +32,9 @@
 
 #include "XPFCPUSettings.h"
 
+#define kIOPropertyPhysicalInterconnectLocationKey	"Physical Interconnect Location"
+#define kIOPropertyInternalKey						"Internal"
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #define super ApplePlatformExpert
@@ -68,6 +71,12 @@ ApplePowerSurgePE::platformAdjustService (IOService *service)
 		data = OSDynamicCast(OSData, service->getProperty ("linebytes"));
 		if (!data) return false;
 	}
+
+	if (service->metaCast ("IOSCSIParallelInterfaceProtocolTransport")) {
+		service->setProperty (kIOPropertyPhysicalInterconnectLocationKey, kIOPropertyInternalKey);
+		return true;
+	}
+	
 	return super::platformAdjustService (service);
 }
 
