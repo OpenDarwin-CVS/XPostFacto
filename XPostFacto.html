@@ -1,8 +1,8 @@
-<body><h2>XPostFacto 2.2b17</h2>
+<body><h2>XPostFacto 2.2</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-August 18, 2002
+August 23, 2002
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. The only difference from a supported installation is 3 extra clicks of your mouse! When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -10,7 +10,9 @@ August 18, 2002
 
 <p>You should also remember to check the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto.html">online version</a> of this documentation from time to time, to see whether there have been any changes.
 
-<p>It looks as though the latest version of XPostFacto will be working with Mac OS X 10.2 (aka Jaguar), which is scheduled to be released on August 24. There are a couple of issues with Jaguar on unsupported systems. The most serious is that Jaguar simply does not work with the 603 or 604 processor--it is limited to the G3 and G4. It may be possible to fix this, but it will not happen before August 24. Some people (including me) are also having trouble getting Classic to work, but others report that it works fine. So it is not clear whether that problem has any relationship with unsupported systems.
+<p>XPostFacto 2.2 works with Mac OS X 10.2, aka Jaguar (as well as previous versions of Mac OS X). There are a couple of issues with Jaguar on unsupported systems. The most serious is that Jaguar simply does not work with the 603 or 604 processor--it is limited to the G3 and G4. It may be possible to fix this once Apple pushes the latest source code out. Also, some people (including me) are having trouble getting Classic to work, but others report that it works fine. So it is not clear whether that problem has any relationship with unsupported systems.
+
+<p>A note about version numbers: XPostFacto 2.2 is no longer in beta, because it appears to work with Mac OS X 10.2 at this point. However, that does not mean that it is perfect. There are still a variety of known problems and issues that can come up (as elaborated below).
 
 <p><hr>
 
@@ -76,7 +78,30 @@ August 18, 2002
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
-<dt><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Download/XPostFacto.img.sit">2.2b17 (August 18, 2002)</a>
+<dt><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Download/XPostFacto.sit">2.2 (August 23, 2002)</a>
+<dd>
+<p>The changes since version 2.2b17 are as follows:<p>
+
+<ul>
+<li>Fixes problem with booting from external SCSI drives in Mac OS X 10.0.
+<li>Only allows the "install" button to be used with the Install CD (not "restart").
+</ul>
+
+<p>And here is a summary of the changes since version 2.11 (the last non-beta version):<p>
+
+<ul>
+<li>Support for Mac OS X 10.2 (aka Jaguar).
+<li>Partial support for the original Powerbook G3, the 2400, and the 3400. (There are still some significant limitations).
+<li>Support for the Beige G3s.
+<li>Support for some additional PowerComputing models.
+<li>Support for leaving onboard video disconnected when using a video card.
+<li>Support for UltraTek IDE cards (along with OWC's firmware update).
+<li>The "throttle" feature, which slows down the CPU in the earliest part of the boot process, and helps booting some SCSI devices when using a CPU upgrade card.
+<li>No longer panics on first reboot after clean install.
+<li>Better documentation.
+</ul>
+
+<dt><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2b17.img.sit">2.2b17 (August 18, 2002)</a>
 <dd>
 <ul>
 <li>Fixes the "file not found" error when trying to install Mac OS X 10.0 (the error was introduced in version 2.2b15).
@@ -88,7 +113,7 @@ August 18, 2002
 This takes the place of the "package" file which was formerly included.
 </ul>
 
-<dt><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto.img.sit">2.2b16 (August 10, 2002)</a>
+<dt><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2b16.img.sit">2.2b16 (August 10, 2002)</a>
 <dd><p>
 Fixes a problem which prevented some of the kernel extensions from loading properly in 2.2b15, which could cause a kernel panic early in the boot process. 
 
@@ -270,7 +295,7 @@ This release allows you to throttle (i.e. slow down) a G3 or G4 processor upgrad
 
 <dt><p><b><a name="CD">You need the Mac OS X Install CD</a></b>
 <dd>
-<p>I almost forgot to mention this one! You can use XPostFacto to install Mac OS X, Mac OS X Server, or Darwin. But you do need the Install CD. XPostFacto should work with Mac OS X 10.0, 10.1, and 10.2, as well as their Mac OS X Server and Darwin equivalents. However, Mac OS X 10.2 compatibility is still being tested (as of version 2.2b15, it seems pretty good, apart from machines that still are using a 603 or 604 CPU).
+<p>I almost forgot to mention this one! You can use XPostFacto to install Mac OS X, Mac OS X Server, or Darwin. But you do need the Install CD. XPostFacto should work with Mac OS X 10.0, 10.1, and 10.2, as well as their Mac OS X Server and Darwin equivalents.
 
 </dl>
 
@@ -284,7 +309,7 @@ This release allows you to throttle (i.e. slow down) a G3 or G4 processor upgrad
 <p><dt><b><a name="cpus">CPUs</a></b>
 <p><dd>Mac OS X does not work with a 601 CPU. Therefore, if you have a 7500 with the original 601 processor, you will need to install a CPU upgrade before installing Mac OS X. 
 
-<P>Mac OS X 10.2 does not work with a 603 or 604 CPU either. It is possible that this may be fixed in time, but it is unlikely to be working for August 24th.
+<P>Mac OS X 10.2 does not work with a 603 or 604 CPU either. It is possible that this may be fixed in time, once Apple makes the latest kernel sources available.
 
 <p>If you install a G3 or a G4 upgrade, you will need some software to enable the L2 cache in Mac OS X. You can use my <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=L2CacheConfig.html">L2CacheConfig</a> software, or the PowerLogix <a href="http://www.powerlogix.com/downloads/index.html">cache control</a> software, which is also free. Your computer will work without enabling the L2 cache--it will just be slower. L2CacheConfig required some changes to work with Mac OS X 10.2, so you should upgrade to version 3.3 of L2CacheConfig before installing Mac OS 10.2.
 
@@ -306,6 +331,8 @@ This release allows you to throttle (i.e. slow down) a G3 or G4 processor upgrad
 <p><dt><b><a name="SCSI">Internal and External SCSI</a></b>
 <p><dd>The internal and external SCSI bus both work. However, there are some users who have trouble with the internal SCSI bus. One thing that you need to double-check is that your SCSI termination is correct, because Mac OS X is picky about that. In general, Mac OS X is sensitive to timing issues on the SCSI bus. Sometimes removing unnecessary devices helps. Also, you will sometimes need to adjust the jumper settings on drives connected to the internal bus, to make sure that they spin up automatically at boot time (the "Disable Unit Attention" jumper is one that sometimes needs to be changed).
 
+<p>As of about Mac OS X 10.1.3 or so, external SCSI is no longer working on the original Powerbook G3, the 3400 or the 2400. I am currently trying to track down the cause of this problem, and hope to have it solved soon.
+
 <p><dt><b><a name="SerialPorts">Serial Ports</a></b>
 <p><dd>The serial ports generally work, though not all serial devices are supported. Some modems work, but serial printers are not supported. Localtalk does not work in Mac OS X (i.e. Appletalk over the printer port). However, you can get localtalk-to-ethernet adapters.
 
@@ -318,7 +345,7 @@ This release allows you to throttle (i.e. slow down) a G3 or G4 processor upgrad
 <p><dt><b><a name="Sleep">Sleep</a></b>
 <p><dd>Display sleep works, and is safe. Disk sleep works and seems safe in Mac OS X 10.1 and later. In Mac OS X 10.0, there were some reports of data corruption upon waking for sleep.
 
-<p>System sleep is not working yet. On the desktop models, it fails gracefully (or at least reasonably gracefully--I seem to lose my Internet connection sometimes). On the Powerbooks, however, sleep crashes the system. So it is important to turn sleep off in the Energy Saver preference panel in the System Preferences application.
+<p>System sleep is not working yet. On the desktop models, it fails gracefully (or at least reasonably gracefully--I seem to lose my Internet connection sometimes). <b>On the Powerbooks, however, sleep crashes the system.</b> So it is important to turn sleep off in the Energy Saver preference panel in the System Preferences application.
 
 <p><dt><b><a name="PCCards">PCMCIA Cards and Cardbus Cards</a></b>
 <p><dd>PCMCIA cards appear not to work in the Powerbooks. However, some CardBus cards do seem to work.
@@ -337,7 +364,9 @@ To install XPostFacto, just copy it to a convenient location on your hard drive.
 
 <h3><a name="first">Installing Mac OS X</a></h3>
 
-<p>Let me emphasize one last time that you need to be cautious when doing a major installation of this kind. Installing Mac OS X has worked very easily and reliably for some, while others have had significant problems that have not always been readily explained. So you should ask yourself two final questions: 
+<p>Let me emphasize one last time that you need to be cautious when doing a major installation of this kind. Installing Mac OS X has worked very easily and reliably for some, while others have had significant problems that have not always been readily explained. There have been cases in which installing Mac OS X has been unsuccessful, and the computer has failed to boot at all--it appears to be "dead." If you read the tech forum, you will see that there has been some vigorous debate about whether the computer is ever "really" dead--in almost all cases, it has been possible to get it to boot again (until recently, I would have said "all cases"). But there are a handful of users who have either given up or come very close to it. 
+
+<p>So you should ask yourself two final questions: 
 
 <p>
 <ul>
@@ -345,7 +374,7 @@ To install XPostFacto, just copy it to a convenient location on your hard drive.
 <li>If something goes wrong, do I have time to troubleshoot it right now?
 </ul>
 
-<p>But enough caution. Take a deep breath, and follow the following procedure:
+<p>Then take a deep breath, and follow the following procedure:
 
 <ul>
 <li>Insert  the Mac OS X Install CD (or Darwin, or Mac OS X Server, as the case may be)
@@ -410,6 +439,8 @@ If Mac OS X will not boot successfully, you are going to want to reboot into Mac
 <li>If that does not work, reboot with command-option-shift-delete held down.<p>
 
 <li>If that does not work, you can try inserting the Mac OS 9 CD and booting with the "c" key down.<p>
+
+<li>If that does not work, and you are using a G4 upgrade card, you could try booting from the "emergency floppy" that most of the card manufacturers include with the card. (This will help if speculative processing is the issue). Alternatively, you can try reinstalling your original CPU card.<p>
 
 <li>If that does not work, you may need to zap your parameter RAM. The simplest way of doing this is to hold down the command-option-p-r keys while rebooting. The computer will "chime" while it zaps parameter RAM. Allow it to chime several times, and then release the keys. <p>
 
@@ -528,6 +559,9 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <h2>Revision History</h2>
 
 <dl>
+<dt>August 23, 2002
+<dd>Changes for version 2.2.
+
 <dt>August 18, 2002
 <dd>Changes for version 2.2b17.
 
