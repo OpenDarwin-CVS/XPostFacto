@@ -561,7 +561,10 @@ restartWhenSignalled ()
 void
 checkForChangesBetween (XPFBootFile *bf1, XPFBootFile *bf2)
 {
-	if (bf1->mtime.tv_sec != bf2->mtime.tv_sec) setupRestartInMacOS9 ();
+	if (bf1->mtime.tv_sec != bf2->mtime.tv_sec) {
+		syslog (LOG_INFO, "%s mtime %lu differs from %s mtime %lu\n", bf1->path, bf1->mtime.tv_sec, bf2->path, bf2->mtime.tv_sec);
+		setupRestartInMacOS9 ();
+	}
 }
 
 void
