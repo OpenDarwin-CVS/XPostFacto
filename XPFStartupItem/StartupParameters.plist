@@ -1,7 +1,7 @@
 {
   Description     = "XPostFacto Boot Support";
   Provides        = ("XPFBootSupport");
-  Requires        = ("Disks");
+  Requires        = ("Core Services");
   Uses            = ("System Log");
   OrderPreference = "None";
 }
