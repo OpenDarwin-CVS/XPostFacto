@@ -44,6 +44,7 @@
 		};
 		F53C691001B191BA01A80001 = {
 			children = (
+				F541C86C02FEE62201A80001,
 				F5EC95B401B1F16601A80001,
 				F53C691301B1926201A80001,
 				F53C695501B1926201A80001,
@@ -555,6 +556,7 @@
 				F572EEC50254E9E801A80001,
 				F572EEC70254E9E801A80001,
 				F572EEC80254E9E801A80001,
+				F541C87002FEE9E201A80001,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -593,6 +595,7 @@
 				F572EEE60254E9E801A80001,
 				F572EEE70254E9E801A80001,
 				F572EEE80254E9E801A80001,
+				F541C86F02FEE74E01A80001,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -1167,7 +1170,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.AppleMaceEthernet;
-				MODULE_VERSION = 1.0.1;
+				MODULE_VERSION = 1.0.2;
 				OTHER_CFLAGS = "-fpermissive";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -1208,7 +1211,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.1</string>
+	<string>1.0.2</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>AppleMaceEthernet</key>
@@ -1509,6 +1512,7 @@
 				F53C6AFB01B1AD1C01A80001,
 				F56302F701D036EB01A80001,
 				F56302F901D03A8601A80001,
+				F541C87102FEEB8501A80001,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -1517,6 +1521,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F53C6AFC01B1AD1C01A80001,
+				F541C87202FEEB8501A80001,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -2542,6 +2547,75 @@
 			settings = {
 			};
 		};
+		F541C86C02FEE62201A80001 = {
+			children = (
+				F541C86E02FEE74E01A80001,
+				F541C86D02FEE69A01A80001,
+			);
+			isa = PBXGroup;
+			name = "CPU Settings";
+			refType = 4;
+		};
+		F541C86D02FEE69A01A80001 = {
+			isa = PBXFileReference;
+			name = XPFCPUSettings.h;
+			path = CPUSettings/XPFCPUSettings.h;
+			refType = 4;
+		};
+		F541C86E02FEE74E01A80001 = {
+			isa = PBXFileReference;
+			name = XPFCPUSettings.c;
+			path = CPUSettings/XPFCPUSettings.c;
+			refType = 4;
+		};
+		F541C86F02FEE74E01A80001 = {
+			fileRef = F541C86E02FEE74E01A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F541C87002FEE9E201A80001 = {
+			fileRef = F541C86D02FEE69A01A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F541C87102FEEB8501A80001 = {
+			fileRef = F541C86D02FEE69A01A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F541C87202FEEB8501A80001 = {
+			fileRef = F541C86E02FEE74E01A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F541C87302FEECC801A80001 = {
+			fileRef = F541C86D02FEE69A01A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F541C87402FEECC801A80001 = {
+			fileRef = F541C86E02FEE74E01A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F541C87502FEED1501A80001 = {
+			fileRef = F541C86D02FEE69A01A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F541C87602FEED1501A80001 = {
+			fileRef = F541C86E02FEE74E01A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F544950E0260D8C401A80001 = {
 			fileRef = F557F68A0226FDFA01A80001;
 			isa = PBXBuildFile;
@@ -3286,6 +3360,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F54E207D0267327701A80001,
+				F541C87502FEED1501A80001,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -3300,6 +3375,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F54E207F0267327701A80001,
+				F541C87602FEED1501A80001,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -3951,6 +4027,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F557F6AA0226FF1001A80001,
+				F541C87302FEECC801A80001,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -3965,6 +4042,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F557F6AC0226FF1001A80001,
+				F541C87402FEECC801A80001,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
