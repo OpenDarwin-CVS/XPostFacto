@@ -1,44 +1,84 @@
-<body><h2>XPostFacto 3.0a4</h2>
+<body><h2>XPostFacto 3.0a6</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-September 22, 2003
+November 16, 2003
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
 You should also remember to check the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto.html">online version</a> of this documentation from time to time, to see whether there have been any changes.
 
-<p>XPostFacto does not work with Panther (Mac OS X 10.3) yet, but I am working on it.
-
-XPostFacto does with Mac OS X 10.2, aka Jaguar (as well as previous versions of Mac OS X). There are a couple of issues with Jaguar on unsupported systems. The most serious is that Jaguar simply does not work with the 603 or 604 processor--it will only work if you have a G3 or G4 upgrade installed. 
-
 <p>Here's a quick link to download the latest version. 
 
 <blockquote>
-<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a4.sit">Download XPostFacto 3.0a4</a>
+<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a6.sit">Download XPostFacto 3.0a6</a>
 </blockquote>
 
-<p>Previous versions are also available in the <a href="#links">version history</a> below.  Note that the latest version is an alpha version of XPostFacto 3. "Alpha" means it's not finished yet, and there are likely to be some bugs. You can consult the <a href="#links">version history</a> for some notes about what is and isn't working at the moment.
+<p>Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes.  Note that the latest version is an alpha version of XPostFacto 3. "Alpha" means it's not finished yet, and there are likely to be some bugs.
 
-<p><b>If you have tried XPostFacto 3.0a3 already</b>, you can see the changes since then in the <a href="#links">version history</a> below. One important point is that the startup item has been updated in version 3.0a4, but I haven't yet implemented an "automatic" install for it. So you will need to install the new startup item using the "Install" menu of XPostFacto. Another point worth mentioning is the new "Show Debug Options" command in the "Help" menu. It adds several debug options to the Help menu which permit you to disable certain things that XPostFacto would otherwise do. It is mainly useful for debugging purposes--for instance, when you want to test copying files to a helper, but don't want to restart.
+<h3>Significant Changes in 3.0a6</h3>
 
-<p>Here are some notes for those who are familiar with XPostFacto 2, and are trying out XPostFacto 3.
+<p>There are quite a few changes between XPF 3.0a4 and 3.0a6, and I'll describe them here. Eventually, I'll incorporate this into the rest of the document.  <b>Read this! <i>Yes, you! I'll tell you when you can stop!</i></b>
 
-<p><ul>
-<li>XPF 3 allows you to use a "helper" disk in the boot process. The purpose is to permit booting from some volumes that would otherwise not be bootable (for instance, Firewire drives, and CDs). If you don't need a helper, you should select "none." 
+<h4>Panther Support</h4>
 
-I'm looking for a better word for this than "helper"--so far the best idea appears to be "boot proxy".<p>
+<p>XPF now includes limited support for Panther (Mac OS X 10.3) on the 7300 - 9600 (and friends). You will see a new kernel extension which handles sound support -- OpenOWScreamerAudio. It is based on the AppleOWScreamerAudio that used to be included in Mac OS X, but which is no longer included in Mac OS X 10.3. Sound still has the same limitations as in pre-Panther versions (that is, for most people sound input doesn't work). Hopefully it will be possible to fix that eventually.
 
-<li>The "helper" mechanism works by copying the kernel, and kernel extensions, from the target volume to an invisible directory in the helper (an .XPostFacto directory at the root level of the drive). XPostFacto then sets up the boot process so that the earliest part occurs from the helper, but boot process switches to the target volume once the kernel is loaded.<p>
+<p>One thing which is not yet working on the 7300 - 9600 in Panther is the built-in video. I need to do some more work to get this fixed. I'm not entirely sure which video cards work with Panther at this point (aside from my Radeon 7000, which works fine). One option that you may find useful in Panther is the "Use old NDRVs" option, which sets up a boot argument which tells Panther to use the ROM-based drivers on older video cards that it would otherwise ignore.
 
-<li>XPF 3 installs a startup item which keeps the kernel and kernel extensions synchronized between the target volume and the "helper" (if you are using a helper). The idea is that when you upgrade Mac OS X (for instance, from 10.2 to 10.2.1), the Mac OS X installer only knows about the target volume, and won't upgrade the corresponding files on the helper. So the XPFStartupItem watches for changes to the kernel or kernel extensions, and when it sees changes, synchronizes those changes with the helper. It displays a warning when it is in the process of synchronizing, so that you will know not to shut down before it is finished.<p>
+<p>The Ethernet driver (AppleMaceEthernet) may be problematic for some people in Panther -- I've had some reports of kernel panics, but I can't reproduce them myself. So I'd be interested in reports about that. Also, note that the Panther networking preferences will report that the cable is not plugged into the ethernet port, even though it is and it is working fine. It's something I need to fix, but it's just a cosmetic problem.
 
-<li>There are some <b>significant problems booting from Firewire drives</b> in some circumstances. The problems appear to correlate most closely with which PCI card you are using. In general, the "Firewire-only" PCI cards appear to work more reliably than the "multifunction" cards. However, I have had some success with the Sonnet multifunction cards. Sometimes it seems to help to simplify the Firewire bus (i.e. only attach the device you are booting from). The problem does not appear to lie in XPostFacto as such, since the "helper" mechanism works perfectly well for non-Firewire drives. Instead, there seems to be some problem in the Mac OS X firewire drivers, when used on the unsupported machines, that is more apparent when trying to boot than otherwise.<p>
+<p>XPF does not support 10.3 on Kanga or the Wallstreet Powerbooks yet, nor on the Beige G3. The main issues there are also video related, so they will get fixed along with video on the 7300 - 9600.
 
-If you experience the problem, the symptom is that the boot process stalls, and in verbose mode you see a variety of error messages relating to processes that fail. What appears to be going on is that there are difficulties reading from the Firewire drive, especially in reading executable files.
+<h4>Pre-Jaguar Support -- not!</h4>
+
+<p>As a consequence of some of the changes I've made for Panther support, XPF doesn't work with Mac OS X 10.1 or 10.0 anymore. I'll fix this eventually, but for the moment XPF should only be used with 10.2 or 10.3.
+
+<h4>Automatic Cache Detection and Configuration</h4>
+
+<p>XPF will now automatically detect and configure L2 and L3 cache when you boot into Mac OS X, including when you boot from the CD to install. This is courtesy of the newly-included OWCCacheConfig extension. I have not written a user-interface for it yet, but you can control its behaviour in a couple of ways.
+
+<ul>
+<p><li>OWCCacheConfig looks for a boot-argument of "-c", and if it sees that, it disables itself. You can set this via the "Enable Cache Early" preference in XPF. If you turn off "Enable Cache Early", then XPF will add the "-c" argument to your boot-command.
+
+<p><li>OWCCacheConfig also disables itself when you boot in single-user mode (by holding down command-s, or using the "-s" boot argument). The idea is that you might be booting in single-user mode in order to get rid of OWCCacheConfig because it is causing you trouble!
 </ul>
 
+<p>So, if you cannot boot because OWCCacheConfig is causing trouble, then try booting with command-s held down (to get to single-user mode). At that point, you can type "exit" to continue the boot process. Then, use XPostFacto to turn off the "Enable Cache Early" option. And let me know that you're having some trouble, so I can try to fix it.
+
+<h4>Choosing between Mac OS 9 and Mac OS X</h4>
+
+<p>You can now use XPF to choose whether to boot from Mac OS 9 or Mac OS X (via the options in the main XPF window). If you choose Mac OS 9, you'll boot from whichever Mac OS 9 disk you last booted from. I need to add the ability to select a specific Mac OS 9 volume -- I just haven't gotten that far.
+
+<h4>Firewire Booting and Helper Disks</h4>
+
+<p>I have completely redesigned the way that XPF deals with synchronizing files between the root disk and the helper disk. The XPF startup item launches a background process which periodically checks to see whether synchronization is required (for instance, whether you've installed a software update or a new kernel extension). However, the startup item no longer tries to actually perform the synchronization (because it turned out to be tricky to stay out of the installer's way). Instead, it pops up a message telling you that synchronization is required, and that you can use XPostFacto to perform the synchronization, once the installation is complete. When you launch XPostFacto, you'll see that you're now setup to boot in Mac OS 9 instead of Mac OS X. The purposes of this is to make sure that you don't reboot in Mac OS X without synchronizing first. So, all you need to do at this point is use XPF to switch back to booting from Mac OS X, and XPF will take care of the required synchronization.
+
+<p>Depending on what you're installing, there are cases in which you can't launch applications after installing (until you restart). In that case, you'll restart in Mac OS 9, and you can use XPostFacto to get back to Mac OS X (it will do the required synchronization along the way).
+
+<p>The helper mechanism appears to be working well when you don't really need it (for instance, when I test it with two SCSI drives). It is still problematic, though, when booting from Firewire drives. It appears that there is often (but not always) a problem reading from Firewire drives when they are used as the root disk. One user reports that 10.2.8 is better than 10.2 in this respect. I am very curious to see whether 10.3 fixes this problem, since it (infamously) makes some significant changes in the way that Firewire drives are accessed. 
+
+<h4>Running XPF in Mac OS X</h4>
+
+<p>The XPF version of Mac OS X should be working now, and should be able to do everything that it can do in Mac OS 9.
+
+<h4>Behaviour when Quitting</h4>
+
+<p>XPF now behaves very differently when quitting than in previous versions. In previous versions, XPF would automatically save your preferences in its own preference file, but would not write any settings to NVRAM, or make any changes to your drives, unless you clicked on the "Restart" or "Install" buttons.
+
+<p>Now, XPF will do two things when you quit:
+
+<ul>
+<p><li>If you have made any changes to the settings, XPF will offer to apply them. For instance, if you have chosen to change your startup disk, XPF will offer to make the change. You can then choose whether to make the change, cancel, or quit without saving changes.
+
+<p><li>After this is finished, XPF will read your active NVRAM settings and do whatever is required to make them work. For instance, if you have chosen to boot from Mac OS X, XPF will make sure that BootX is installed properly, the current versions of the extensions are installed, etc.
+</ul>
+
+<p>The general idea is to mimic the behaviour of Apple's Startup Disk application. I think you'll find that it mostly makes sense -- let me know if  what XPF is doing feels unexpected to you.
+
 <p><hr>
+
+<p><em>We are now returning the regularly scheduled portion of this document. If you are a seasoned XPF user who has read this stuff many times before, you can pretty much stop now.</em>
 
 <p><ul>
 <li><a href="#preparing">Preparing to use XPostFacto</a>
@@ -113,12 +153,15 @@ If you experience the problem, the symptom is that the boot process stalls, and 
 <p>These are the 7300, 7500, 7600, 8500, 8600, 9500, and 9600, as well as the clones that were based on one of these systems (the Umax S900 and J700, the PowerComputing PowerWave and PowerTower Pro,  and the Daystar Genesis and Millennium, among others).
 
 <p><li><b>The Beige G3s</b>
-<p>XPostFacto will work with the Beige G3s. Of course, these computers are supported by Apple for Mac OS X. However, there are situations in which it is difficult to install or boot Mac OS X on those machines, especially if you have a G4 CPU upgrade installed. In those cases, XPostFacto sometimes helps.
+<p>I am working on supporting Mac OS X 10.3 on the Beige G3's, but it is not working yet.
 
-<p><li><b>Certain Powerbooks</b>
+<p><li><b>The Wallstreet Powerbooks</b>
+<p>Support for the Wallstreet Powerbooks is in progress, mainly for the sake of getting them to boot in Panther. But it isn't working yet.
+
+<p><li><b>Certain Other Powerbooks</b>
 <p>These are the original Powerbook G3, the 2400 and the 3400. However, there are significant limitations in the support for these machines. The most serious limitation is that sleep does not work. On some models, the built-in ethernet connection also does not work. There are additional details below.
 
-<p>I should warn potential users that Mac OS X is pretty slow on the 2400 and 3400. But an XPostFacto user was kind enough to bring his 2400 running Mac OS X to show me at MacWorld NY, and it was pretty cool to see. 
+I should warn potential users that Mac OS X is pretty slow on the 2400 and 3400. But an XPostFacto user was kind enough to bring his 2400 running Mac OS X to show me at MacWorld NY, and it was pretty cool to see. 
 </ul> 
 
 <p>Support for other models is in development. Some users have recently had success with some of the "Catalyst" machines (in particular, the PowerCenter and PowerCenter Pro). At least on some of these machines, the onboard video is not working, so a video card is required. Also, some progress has been made with the Alchemy and Gazelle (the 6400 and 6500), but they are not working reliably yet.  
@@ -131,7 +174,7 @@ If you experience the problem, the symptom is that the boot process stalls, and 
 
 <p>If you do not already have Mac OS 9.x installed, the problem is that Mac OS 9.2 does not ordinarily work on older machines, and it is not so easy to buy Mac OS 9.0 or 9.1 anymore. There are some <a href="http://eshop.macsales.com/OSXCenter/OS9Helper/framework.cfm?topic=32">procedures available for installing 9.2</a> if you need to do that.
 
-<p>Version 3.0 of XPostFacto will also run in Mac OS X, with some limitations (see the <a href="#links">version history</a> below).
+<p>Version 3.0 of XPostFacto will also run in Mac OS X.
 
 <dt><p><b><a name="RAM">You need sufficient RAM to run Mac OS X</a></b>
 <dd>
@@ -192,7 +235,7 @@ If you experience the problem, the symptom is that the boot process stalls, and 
 
 <dt><p><b><a name="CD">You need the Mac OS X Install CD</a></b>
 <dd>
-<p>I almost forgot to mention this one! You can use XPostFacto to install Mac OS X, Mac OS X Server, or Darwin. But you do need the Install CD. XPostFacto should work with Mac OS X 10.0, 10.1, and 10.2, as well as their Mac OS X Server and Darwin equivalents.
+<p>I almost forgot to mention this one! You can use XPostFacto to install Mac OS X, Mac OS X Server, or Darwin. But you do need the Install CD. XPostFacto should work with Mac OS X 10.0, 10.1, and 10.2, as well as their Mac OS X Server and Darwin equivalents. There is also some support for Mac OS X 10.3 now (see above).
 
 </dl>
 
@@ -213,12 +256,12 @@ If you experience the problem, the symptom is that the boot process stalls, and 
 <p>The 9500MP and 9600MP work, but only one processor is active at this time. I have been working on MP support from time to time, but have not made much progress lately.
 
 <dt><p><b><a name="floppy">Floppy Drive</a></b>
-<dd><p>Mac OS X does not come with support for the floppy drive, but you can install a driver from <a href="http://www.darwin-development.org/floppy/">http://www.darwin-development.org/floppy/</a> to add support.
+<dd><p>Mac OS X does not come with support for the floppy drive. Some work has been done (by others) on an open-source driver, but it hasn't been updated for a while and I'm told that it's not working well at this point. Your best bet if you really need a floppy drive is to look at a USB-based drive.
 
 <dt><p><b><a name="sound">Sound and Video</a></b>
 <dd><p>Sound out works. However, it is not possible to change the volume globally (you can change the volume in applications such as iTunes). There are some cases in which users report trouble with sound out after intensive disk access. The exact cause has been difficult to track down, but is probably related to the PCI bus in some way.
 
-<p>Sound in does not work yet.
+<p>Sound in does not work yet (at least, for most people -- there are cases where it does).
 
 <p>Video in and out does not work yet (on those models that have it--the 7600 and 8600, I believe).
 
@@ -275,7 +318,7 @@ To install XPostFacto, just copy it to a convenient location on your hard drive.
 <li>Insert  the Mac OS X Install CD (or Darwin, or Mac OS X Server, as the case may be)
 <li>Launch XPostFacto
 <li>Select the target volume that you want to install Mac OS X to
-<li>Select the Install CD in the "Use CD" popup menu
+<li>Select the Install CD you want to use
 <li>Click on the "Install" button
 <li>Sit back and watch the action
 </ul>
@@ -298,11 +341,11 @@ After you reboot into Mac OS 9, you can use XPostFacto to return to Mac OS X. Si
 
 XPF will only startup Mac OS X. To choose a different Mac OS 9 volume, use the Startup Disk control panel instead. <b>However,  do not use Startup Disk to choose a Mac OS X volume on unsupported machines, as it will not work, and may require you to zap your parameter RAM.</b><p>
 
-Version 3 of XPostFacto also runs in Mac OS X, so you can use it to switch your startup volume as well. But it does not know how to reboot into Mac OS 9. (Though, come to think of it, I could probably add that feature if it was useful).
+Version 3 of XPostFacto also runs in Mac OS X, so you can use it to switch your startup volume as well.
 
 <h3><a name="UpgradingXPostFacto">Upgrading from a Previous Version of XPostFacto</a></h3>
 
-If you are upgrading from a previous version of XPostFacto, you need to make sure that the latest version of the kernel extensions and startup item get installed. You can do this with the "Install" menu of XPostFacto (either the Mac OS 9 or Mac OS X version).<p>
+If you are upgrading from a previous version of XPostFacto, you need to make sure that the latest version of the kernel extensions and startup item get installed. When you launch the new version of XPostFacto, it will take care of it!<p>
 
 <h3><a name="tenpointone">Upgrading Mac OS X</a></h3>
 
@@ -310,7 +353,7 @@ If you are upgrading from a previous version of XPostFacto, you need to make sur
 
 <p>For the minor Mac OS X upgrades (e.g. from 10.1 to 10.1.5), you can use the 'Software Updates' mechanism or the downloadable installers as usual--they have, so far, worked without XPostFacto's help.
 
-<p>XPostFacto does not support Panther (Mac OS X 10.3) yet, but I am working on it.
+<p>XPostFacto now has some support for Panther (Mac OS X 10.3) -- see above for details.
 
 <h3><a name="customCD">Booting from other CDs</a></h3>
 
@@ -409,13 +452,13 @@ XPostFacto has some "Debug" options that allows you to take advantage of certain
 
 <h2><a name="source">Source Code</a></h2>
 
-XPostFacto is an open-source application, and the source code is in the cvs repository at <a href="http://www.opendarwin.org/cgi-bin/cvsweb.cgi/proj/">http://www.opendarwin.org/</a>.
+XPostFacto is an open-source application. For information about the source code, consult the XPostFacto page at <a href="http://www.opendarwin.org/projects/XPostFacto/">opendarwin.org</a>. There is also a Bugzilla database there which can be used to report and track bugs in XPostFacto.
 
 <p><hr>
 
 <h2><a name="credits">Credits</a></h2>
 
-Great credit is due to the Darwin project and all those involved in it. The code in the kernel extensions installed by XPostFacto is derived from Darwin, with a few bug fixes here and there. Josh de Cesare deserves particular credit for his work on platform support. Dan Markarian and Chris Sarcone helped with the CD audio problem. I would also like to thank Markus Hitter for debugging tips (and for being a good sounding board), as well as Marc St-Jean for help with testing, and general encouragement. Finally, I would like to thank Kyle Kost and Will Schoumaker for their work on clone support.<p>
+Great credit is due to the Darwin project and all those involved in it. The code in the kernel extensions installed by XPostFacto is derived from Darwin, with a few bug fixes here and there. Josh de Cesare deserves particular credit for his work on platform support. Dan Markarian and Chris Sarcone helped with the CD audio problem in Mac OS X 10.0. I would also like to thank Markus Hitter for debugging tips (and for being a good sounding board), as well as Marc St-Jean for help with testing, and general encouragement. Finally, I would like to thank Kyle Kost and Will Schoumaker for their work on clone support.<p>
 
 XPF makes use of the zlib compression library, for which I wish to thank Jean-loup Gailly and Mark Adler.<p>
 
@@ -464,6 +507,35 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a6.sit">3.0a6 (November 16, 2003)</a>
+<dd>Here's a list of the bugs fixed since 3.0a4. Version 3.0a6 also has support for Mac OS X 10.3 on the 7300 - 9600 series (and friends), but without support for built-in video (yet). I'm also not entirely sure which video cards will work with 10.3 at this point.
+
+<p>Support for 10.3 on the Beige G3 and Wallstreet is still coming.
+
+<p><ul>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=855">855 - OWCCacheConfig causes kernel panic for G3 and G4 CPUs (but not the 74xx).</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=856">856 - Mac OS X version cannot install BootX.</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=865">865 - Add version information for kernel extensions and startup item.</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=867">867 - Splash screen does not always draw.</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=870">870 - Volume selection improvements.</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=871">871 - Should offer to write NVRAM when closing.</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=873">873 - Check to make sure that &quot;sleep&quot; is disabled.</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=874">874 - Offer reboot into Mac OS 9?.</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=900">900 - Backlight not working on TAM.</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=927">927 - Should warn earlier if NVRAM space insufficient for settings.</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=928">928 - Progress bar should show progress.</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=935">935 - Newly mounted volume not showing up right away in Mac OS X.</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=937">937 - Make OWCCacheConfig respect the &quot;-c&quot; boot argument.</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=956">956 - Mac OS X version not launching if disk image mounted.</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=966">966 - XPF thinks the DiskWarrior CD is an Install CD.</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=983">983 - Add &quot;recopy helper files&quot; command.</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=985">985 - Restart in Mac OS 9 when synchronization necessary.</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=990">990 - Fix interaction between XPostFacto and xpfbootsupportd.</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1066">1066 - Mac OS X version will not launch if non-ASCII character in path.</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1076">1076 - Mac OS X version sometimes launches in background.</a>
+<li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1114">1114 - Add romndrv=1 option (to get Panther to use old NDRVs).</a>
+</ul>
+
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a4.sit">3.0a4 (September 22, 2003)</a>
 <dd>Here's a list of the bugs fixed since 3.0a3. If you have noticed one of these bugs in 3.0a3, I'd be most grateful if you could test 3.0a4 and verify that the bug is actually fixed. In case you're interested, here's a link to the <a href="http://www.opendarwin.org/bugzilla/showdependencytree.cgi?id=951">bugs I'm hoping to fix<a/> before I release a beta version (but I might not get to all of them).
 <p>
