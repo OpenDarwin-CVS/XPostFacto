@@ -1,6 +1,6 @@
 <h3>Unsupported Mac OS X FAQ</h3>
 
-October 8, 2003<br>
+January 20, 2005<br>
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a>
 
@@ -9,10 +9,10 @@ Ryan Rempel<br>
 <dd>The best way to get support for XPostFacto is to <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">become a registered user</a> so that you can access the <a href="/OSXCenter/XPostFacto/forum">tech support forum</a> on this site. I try to answer e-mail, but I get a lot of it and can't always deal with it.
 
 <dt><p>Does XPostFacto work with Jaguar (Mac OS X 10.2)?
-<dd>Yes, the latest versions do (2.2 and beyond).
+<dd>Yes, version 2.2 and later of XPostFacto work with Jaguar.
 
 <dt><p>Does XPostFacto work with Panther (Mac OS X 10.3)?
-<dd><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto3.html">Version 3.0a6</a> has some Panther support for the 7300 - 9600 series. I'm working on support for the Beige G3 and Wallstreet and Kanga Powerbooks as well.
+<dd>Yes, version 3.0 of XPostFacto works with Panther.
 
 <dt><p>Can I use Apple's Startup Disk control panel to boot Mac OS X?
 <dd>The Startup Disk control panel in Mac OS 9 (and later) does not appear to work when trying to boot Mac OS X on unsupported systems. The older System Disk control panel (available with Darwin and Mac OS X Public Beta) does generally work. And, of course, you can use XPostFacto to select a Mac OS X volume to boot from.
@@ -36,8 +36,8 @@ Ryan Rempel<br>
 <dt><p>Will Mac OS X work on the 6100, 7100 or 8100?
 <dd>It would require an enormous amount of work, and I do not expect it to happen.
 
-<dt><p>Does XPostFacto work with the Beige G3?
-<dd>Yes. Although these are machines that Apple supports, there are sometimes problems installing Mac OS X on these machines that XPostFacto can fix.
+<dt><p>Does XPostFacto work with the Beige G3 and Wallstreet Powerbook?
+<dd>Yes. Apple supported those models up to Mac OS X 10.2, but XPostFacto is required to installed Mac OS X 10.3.
 
 <dt><p>When I reboot with the option-key held down, the computer repeatedly reboots itself without getting anywhere.
 <dd>In some cases, when you install Mac OS X on the same partition as an existing Mac OS 9 installation, the Mac OS 9 System Folder becomes "unblessed" during the installation. If this happens, restarting with the option-key down will not return you to Mac OS 9. However, selecting the Mac OS 9 System Folder in the "Startup Disk" panel of the Mac OS X "System Preferences" application will work. If you cannot boot into Mac OS X either, you may be able to boot from the Mac OS 9 CD (with the "c" key held down). You can then move the Finder file out of the System Folder on the affected volume, and then move it back in. This should "re-bless" that System Folder.
@@ -87,14 +87,8 @@ In this case, the Setup Assistant will not run. I haven't tried this from a fres
 <dt><p>Does Localtalk work in Mac OS X (i.e. AppleTalk through the printer port)?
 <dd>No, there are no Localtalk drivers for Mac OS X at this time.
 
-<dt><p>Why won't audio CD's play under Mac OS X?
-<dd>Certain older mechanisms require BCD to Hex conversion, which the Mac OS X CD driver doesn't do. My PatchedIOSCSICDDrive.kext checks for this and does the conversion, so it will fix the problem for some mechanisms. Other mechanisms have a different problem which I don't understand (I have had several reports of problems with Plextor drives).
-
 <dt><p>Can I use my tape drive in Mac OS X?
 <dd>There are no tape drivers available for Mac OS X at this time (as far as I know). But several people have said that they are working on it, so I expect to see some eventually. (And it appears that <a href="http://www.dantz.com">Retrospect</a> will work with tape drives in Mac OS X).
-
-<dt><p>How long does it take to install Mac OS X?
-<dd>You know, I've never really timed it. It does take quite a while--my guess is about 45 minutes (when everything goes well). Installing Mac OS X Server takes significantly longer (at least an hour, I think).
 
 <dt><p>Does sound input work in Mac OS X?
 <dd>It doesn't work for me. I'll want to look into this at some point.
@@ -118,14 +112,8 @@ In this case, the Setup Assistant will not run. I haven't tried this from a fres
 
 (but yours may well be different). You can get the value from some of the Mac OS 9 cache utilities. For instance, the PowerLogix cache profiler shows this value in one of its panes.
 
-<dt><p>Why do I get a Type 2 error when trying to launch XPostFacto?
-<dd>This often happens if you launch XPF on a machine that it doesn't work with. I really should deal with this situation more gracefully!
-
 <dt><p>When I boot in verbose mode, I see error messages related to PatchedIOSCSICDDrive
 <dd>There are two versions of PatchedIOSCSICDDrive installed by XPostFacto. One of them loads in 10.0.x, and the other in 10.1.x. So you will always see some errors related to the one that doesn't load. This is perfectly normal and nothing to be worried about.
-
-<dt><p>When I boot in verbose mode, I see messages about duplicate extensions.
-<dd>This is a consequence of the way that version 2.0 of XPF installed extensions both in /Library/Extensions and /System/Library/Extensions. It doesn't appear to cause any problems. However, I have fixed it for version 2.1 of XPF.
 
 <dt><p>When I try to install with XPF, I get an error saying "Could not complete your request because there was an error finding
 BootX in the catalog file"
