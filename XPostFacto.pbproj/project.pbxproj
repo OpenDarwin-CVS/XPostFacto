@@ -425,7 +425,6 @@
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.OpenG3AIODisplay;
 				MODULE_VERSION = 1.0.0d1;
-				OPTIMIZATION_CFLAGS = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -546,6 +545,14 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		948C7E2B06186AA500493511 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = Kernel.framework;
+			path = /System/Library/Frameworks/Kernel.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		948CD0E905FBEECE003103DB = {
 			containerPortal = F53C690F01B191BA01A80001;
@@ -8726,6 +8733,7 @@
 		};
 		F5BF318403F020C101A80002 = {
 			children = (
+				948C7E2B06186AA500493511,
 				F5BF318503F020F601A80002,
 				F5BF347003F0213301A80002,
 				F52AC80E03F21A8F01A80002,
