@@ -93,7 +93,7 @@ ToolboxNVRAM::readFromNVRAM ()
 				break;
 				
 			case kBooleanValue:
-				current->setBooleanValue ((fBuffer.flags && (1 << (31 - current->getOffset ()))) != 0);
+				current->setBooleanValue ((fBuffer.flags & (1 << (31 - current->getOffset ()))) != 0);
 				break;
 				
 			case kNumericValue:
@@ -141,7 +141,7 @@ ToolboxNVRAM::writeToNVRAM ()
 				break;
 				
 			case kBooleanValue:
-				fBuffer.flags &= 1 << (31 - current->getOffset ());
+				if (current->getBooleanValue ()) fBuffer.flags |= 1 << (31 - current->getOffset ());
 				break;
 				
 			case kNumericValue:
