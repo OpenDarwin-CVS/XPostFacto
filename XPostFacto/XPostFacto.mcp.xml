@@ -205,8 +205,8 @@
                 <SETTING><NAME>PostLinker</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>Targetname</NAME><VALUE>Mach-O Debug</VALUE></SETTING>
                 <SETTING><NAME>OutputDirectory</NAME>
-                    <SETTING><NAME>Path</NAME><VALUE>build</VALUE></SETTING>
-                    <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                    <SETTING><NAME>Path</NAME><VALUE>::build:</VALUE></SETTING>
+                    <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
                     <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
                 </SETTING>
                 <SETTING><NAME>SaveEntriesUsingRelativePaths</NAME><VALUE>false</VALUE></SETTING>
@@ -813,7 +813,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@GD&#144;"&#168;T</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@m&#241;&#208;&#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -3146,8 +3146,8 @@
                 <SETTING><NAME>PostLinker</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>Targetname</NAME><VALUE>Mach-O Application</VALUE></SETTING>
                 <SETTING><NAME>OutputDirectory</NAME>
-                    <SETTING><NAME>Path</NAME><VALUE>build</VALUE></SETTING>
-                    <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                    <SETTING><NAME>Path</NAME><VALUE>::build:</VALUE></SETTING>
+                    <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
                     <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
                 </SETTING>
                 <SETTING><NAME>SaveEntriesUsingRelativePaths</NAME><VALUE>false</VALUE></SETTING>
@@ -3754,7 +3754,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@GD&#144;"&#168;T</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@m&#241;&#208;&#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -6069,8 +6069,8 @@
                 <SETTING><NAME>PostLinker</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>Targetname</NAME><VALUE>CFM Application</VALUE></SETTING>
                 <SETTING><NAME>OutputDirectory</NAME>
-                    <SETTING><NAME>Path</NAME><VALUE>build</VALUE></SETTING>
-                    <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                    <SETTING><NAME>Path</NAME><VALUE>::build:</VALUE></SETTING>
+                    <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
                     <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
                 </SETTING>
                 <SETTING><NAME>SaveEntriesUsingRelativePaths</NAME><VALUE>false</VALUE></SETTING>
@@ -6510,7 +6510,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@GD&#144;"&#168;T</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@m&#241;&#208;&#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -9251,8 +9251,8 @@
                 <SETTING><NAME>PostLinker</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>Targetname</NAME><VALUE>CFM Debug</VALUE></SETTING>
                 <SETTING><NAME>OutputDirectory</NAME>
-                    <SETTING><NAME>Path</NAME><VALUE>build</VALUE></SETTING>
-                    <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                    <SETTING><NAME>Path</NAME><VALUE>::build:</VALUE></SETTING>
+                    <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
                     <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
                 </SETTING>
                 <SETTING><NAME>SaveEntriesUsingRelativePaths</NAME><VALUE>false</VALUE></SETTING>
@@ -9692,7 +9692,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@GD&#144;"&#168;T</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@m&#241;&#208;&#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -12746,7 +12746,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@GD&#144;"&#168;T</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@m&#241;&#208;&#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -13713,7 +13713,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@GD&#144;"&#168;T</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@m&#241;&#208;&#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>0</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -14460,7 +14460,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@GD&#144;"&#168;T</VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@m&#241;&#208;&#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
