@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2002, 2003
+Copyright (c) 2002 - 2004
 Other World Computing
 All rights reserved
 
@@ -32,4 +32,4 @@ advised of the possibility of such damage.
 */
 
 
-#define kXPFVersion "3.0b8"
+#define kXPFVersion "3.0b9"

@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2002, 2003
+Copyright (c) 2002 - 2004
 Other World Computing
 All rights reserved
 
@@ -51,10 +51,10 @@ RESOURCE 'vers' (1,
 	0x03,
 	0x00,
 	beta,
-	0x8,
+	0x9,
 	verUs,
-	"3.0b8",
-	"3.0b8, © 2001 - 2004 Other World Computing"
+	"3.0b9",
+	"3.0b9, © 2001 - 2004 Other World Computing"
 };
 
 RESOURCE 'vers' (3,
