@@ -89,6 +89,7 @@ Logical Address
 
 // Default Output Level
 #define kOutputLevelOff  (0)
+#define kOutputLevelDisabled (1)
 #define kOutputLevelFull (16)
 
 // OF versions

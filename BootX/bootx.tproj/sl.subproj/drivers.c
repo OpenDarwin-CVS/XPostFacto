@@ -239,7 +239,7 @@ static long FileLoadDrivers(char *dirSpec, long plugin)
     
     ret = LoadDriverPList(dirSpec, gFileName, bundleType);
     if (ret != 0) {
-      printf("LoadDrivers: failed\n");
+      printf("LoadDrivers: plist not eligible\n");
     }
     
     if (!plugin) {
@@ -286,16 +286,26 @@ static long LoadDriverMKext(char *fileSpec)
   
   // Load the MKext.
   length = LoadFile(fileSpec);
-  if (length == -1) return -1;
+  if (length == -1) {
+    printf ("Error loading extensions cache\n");
+    return -1;
+  }
   
   ThinFatBinary((void **)&package, &length);
   
   // Verify the MKext.
-  if ((package->signature1 != kDriverPackageSignature1) ||
-      (package->signature2 != kDriverPackageSignature2)) return -1;
-  if (package->length > kLoadSize) return -1;
-  if (package->alder32 != Alder32((char *)&package->version,
-				  package->length - 0x10)) return -1;
+  if ((package->signature1 != kDriverPackageSignature1) || (package->signature2 != kDriverPackageSignature2)) {
+    printf ("Extensions cache had wrong signature\n");
+    return -1;
+  }
+  if (package->length > kLoadSize) {
+    printf ("Extensions cache too large\n");
+    return -1;
+  }
+  if (package->alder32 != Alder32 ((char *) &package->version, package->length - 0x10)) {
+    printf ("Extensions cache checksum failed\n");
+    return -1;
+  }
   
   // Make space for the MKext.
   driversLength = package->length;

@@ -467,11 +467,17 @@ long CallMethod(long args, long rets, CICell iHandle, const char *method, ...)
 // Memory
 
 // Claim takes a virt address, a size, and an alignment.
-// It return baseaddr or -1 for claim failed.
+// It return baseaddr or 0 for claim failed.
+
+// Note that I've changed the error return from -1 to 0, because
+// it seems more natural for the caller to check for 0. Otherwise,
+// the caller would have to check for 0 and for -1 (i.e. there would
+// be two error values. ryan.rempel@utoronto.ca 
+
 CICell Claim(CICell virt, CICell size, CICell align)
 {
   CIArgs ciArgs;
-  CICell baseaddr;
+  CICell baseaddr = 0;
   long ret;
 
   if (gOFVersion >= kOFVersion2x) {
@@ -484,29 +490,29 @@ CICell Claim(CICell virt, CICell size, CICell align)
     ciArgs.args.claim.align = align;
     
     ret = CallCI(&ciArgs);
-    if (ret != 0) return kCIError;
+    if (ret != 0) return 0;
     
     baseaddr = ciArgs.args.claim.baseaddr;
   } else {
     // Claim does not work.  Do it by hand.
-    if ((gMMUIH == 0) || (gMemoryIH == 0)) return kCIError;
+    if ((gMMUIH == 0) || (gMemoryIH == 0)) return 0;
     
     // Get the physical memory
     ret = CallMethod(3, 1, gMemoryIH, "claim", virt, size, 0, &baseaddr);
-    if ((ret != kCINoError) || (virt != baseaddr)) return kCIError;
+    if ((ret != kCINoError) || (virt != baseaddr)) return 0;
     
     // Get the logical memory
     ret = CallMethod(3, 1, gMMUIH, "claim", virt, size, 0, &baseaddr);
-    if ((ret != kCINoError) || (virt != baseaddr)) return kCIError;
+    if ((ret != kCINoError) || (virt != baseaddr)) return 0;
     
     // Map them together.
     ret = CallMethod(4, 0, gMMUIH, "map", virt, virt, size, 0);
-    if (ret != kCINoError) return kCIError;
+    if (ret != kCINoError) return 0;
   }
 
   // Now test it.
   // Added by ryan.rempel@utoronto.ca
-  bzero ((void *) virt, size);
+  if (baseaddr) bzero ((void *) virt, size);
   
   return baseaddr;
 }

@@ -40,7 +40,7 @@ static long InitEverything(ClientInterfacePtr ciPtr);
 static long DecodeKernel(void);
 static long SetUpBootArgs(void);
 static long CallKernel(void);
-static void FailToBoot(long num);
+static void FailToBoot(char *reason);
 static long InitMemoryMap(void);
 static long GetOFVersion(void);
 static long TestForKey(long key);
@@ -66,16 +66,16 @@ long gBootSourceNumberMax;
 long gBootMode = kBootModeNormal;
 long gBootDeviceType;
 long gBootFileType;
-char gBootDevice[256];
-char gBootFile[256];
-char gApparentBootFile[256];
-char gRootDir[256];
+char gBootDevice[256] = {0};
+char gBootFile[256] = {0};
+char gApparentBootFile[256] = {0};
+char gRootDir[256] = {0};
 
-char gTempStr[4096];
+char gTempStr[4096] = {0};
 
 // make this a global, since used by SetProp
 // pointed out by Joe van Tunen
-char ofBootArgs[128];   
+char ofBootArgs[128] = {0};
 
 long *gDeviceTreeMMTmp = 0;
 
@@ -123,11 +123,11 @@ static void Main(ClientInterfacePtr ciPtr)
   long ret;
   
   ret = InitEverything(ciPtr);
-  if (ret != 0) Exit();
+  if (ret != 0) FailToBoot ("BootX::InitEverything () failed");
   
   // Get or infer the boot paths.
   ret = GetBootPaths();
-  if (ret != 0) FailToBoot(1);
+  if (ret != 0) FailToBoot ("BootX::GetBootPaths () failed");
   
   DrawSplashScreen(0);
   
@@ -136,14 +136,14 @@ static void Main(ClientInterfacePtr ciPtr)
     if (ret != -1) break;
     
     ret = GetBootPaths();
-    if (ret != 0) FailToBoot(2);
+    if (ret != 0) FailToBoot ("BootX::GetBootPaths () failed following LoadFile");
   }
   
   ret = DecodeKernel();
-  if (ret != 0) FailToBoot(3);
+  if (ret != 0) FailToBoot ("BootX::DecodeKernel () failed");
   
   ret = LoadDrivers(gRootDir);
-  if (ret != 0) FailToBoot(4);
+  if (ret != 0) FailToBoot ("BootX::LoadDrivers () failed");
   
   DrawSplashScreen(1);
 
@@ -151,11 +151,11 @@ static void Main(ClientInterfacePtr ciPtr)
   XPFfixProcessorSettings ();
   
   ret = SetUpBootArgs();
-  if (ret != 0) FailToBoot(5);
+  if (ret != 0) FailToBoot ("BootX::SetUpBootArgs () failed");
   
   ret = CallKernel();
   
-  FailToBoot(6);
+  FailToBoot ("BootX::CallKernel () returned unexpectedly");
 }
 
 
@@ -245,7 +245,7 @@ static long InitEverything(ClientInterfacePtr ciPtr)
       (TestForKey('s') || TestForKey('v'))) {
     SetOutputLevel(kOutputLevelFull);
   } else {
-    SetOutputLevel(kOutputLevelOff);
+    SetOutputLevel(kOutputLevelDisabled);
   }
 #else
   SetOutputLevel(kOutputLevelFull);
@@ -253,7 +253,7 @@ static long InitEverything(ClientInterfacePtr ciPtr)
   
   // printf now works.
   printf("\n\nMac OS X Loader\n");
-  printf("XPostFacto %s, based on BootX %s\n", kBootXVersionXPF, kBootXVersion);
+  printf("Custom BootX %s, based on BootX %s\n", kBootXVersionXPF, kBootXVersion);
 
   // Added by ryan.rempel@utoronto.ca
   // On Kanga, we sometimes get MMU errors that are cured by a reset-all
@@ -347,6 +347,8 @@ long ThinFatBinary(void **binary, unsigned long *length)
   
   ret = ThinFatBinaryMachO(binary, length);
   if (ret == -1) ret = ThinFatBinaryElf(binary, length);
+  
+  if (ret == -1) printf ("BootX::ThinFatBinary error %ld\n", ret);
   
   return ret;
 }
@@ -628,25 +630,41 @@ static long CallKernel(void)
   return -1;
 }
 
+// I've changed FailToBoot to take a reason, rather than a number.
+// More analogous to a panic, and easier for users to understand.
+// I've also made it reset the output level if not already verbose
+// and added some additional diagnostic info.
+// ryan.rempel@utoronto.ca
 
-static void FailToBoot(long num)
+static void FailToBoot (char *reason)
 {
-#if kFailToBoot
-	//  if clause added by ryan.rempel@utoronto.ca
-	if (TestForKey(kCommandKey) && (TestForKey('s') || TestForKey('v'))) {
-		printf ("FailToBoot: %ld\n", num);
-		Enter();
-	} else {
-		DrawFailedBootPicture();
-		while (1);
-		num = 0;
+	int verbose = TestForKey (kCommandKey) && (TestForKey ('s') || TestForKey ('v'));
+	if (!verbose) {
+		DrawFailedBootPicture ();
+		SetOutputLevel (kOutputLevelFull);
 	}
-#else
-  printf("FailToBoot: %d\n", num);
-  Enter(); // For debugging
-#endif
-}
+	
+	printf ("\n");
+	printf ("FailToBoot: %s\n", reason);
+    printf ("Custom BootX %s, based on BootX %s\n", kBootXVersionXPF, kBootXVersion);
+	printf ("gBootSourceNumber = %ld\n", gBootSourceNumber);
+	printf ("gBootDevice = %s\n", gBootDevice);
+	printf ("gBootFile = %s\n", gBootFile);
+	printf ("gRootDir = %s\n", gRootDir);
+	printf ("ofBootArgs = %s\n", ofBootArgs);
 
+	printf ("\n");
+	printf ("To reboot into Mac OS 9, use command-control-powerkey to force reboot,\n");
+	printf ("and then hold down the option key.\n");
+	printf ("\n");
+
+	if (verbose) {
+		Enter ();
+	} else {
+		printf ("For additional diagnostic information, reboot with command-v held down\n");
+		while (1) reason = 0;
+	}
+}
 
 static long InitMemoryMap(void)
 {
@@ -659,7 +677,7 @@ static long InitMemoryMap(void)
 		     " active-package"
 		     " device-end"
 		     , &gMemoryMapPH);
-  
+    
   return result;
 }
 
@@ -931,7 +949,10 @@ static long GetBootPaths(void)
       // Find the first ':'.
       cnt = 0;
       while ((gBootDevice[cnt] != '\0') && (gBootDevice[cnt] != ':')) cnt++;
-      if (gBootDevice[cnt] == '\0') return -1;
+      if (gBootDevice[cnt] == '\0') {
+	    printf ("BootX::GetBootPaths gBootDevice has no colon: %s\n", gBootDevice);
+        return -1;
+	  }
       
       // Find the comma after the ':'.
       cnt2 = cnt + 1;
@@ -960,7 +981,10 @@ static long GetBootPaths(void)
   
   // Figure out the root dir.
   ret = ConvertFileSpec(gBootFile, gRootDir, &filePath);
-  if (ret == -1) return -1;
+  if (ret == -1) {
+	printf ("BootX::GetBootPaths error from ConvertFileSpec for gBootFile: %s gRootDir: %s\n", gBootFile, gRootDir);
+	return -1;
+  }
   
   strcat(gRootDir, ",");
   
@@ -1017,7 +1041,10 @@ long ConvertFileSpec(char *fileSpec, char *devSpec, char **filePath)
   // Find the first ':' in the fileSpec.
   cnt = 0;
   while ((fileSpec[cnt] != '\0') && (fileSpec[cnt] != ':')) cnt++;
-  if (fileSpec[cnt] == '\0') return -1;
+  if (fileSpec[cnt] == '\0') {
+    printf ("BootX::ConvertFileSpec could not find colon in: %s\n", fileSpec);
+    return -1;
+  }
   
   // Find the next ',' in the fileSpec.
   while ((fileSpec[cnt] != '\0') && (fileSpec[cnt] != ',')) cnt++;
@@ -1072,10 +1099,7 @@ void *AllocateBootXMemory(long size)
 {
 	long addr = gImageFirstBootXAddr - size;
 
-	if (addr < gImageLastKernelAddr) {
-		printf ("Failure to AllocateBootXMemory size %ld\n", size);
-		return 0;
-	}
+	if (addr < gImageLastKernelAddr) FailToBoot ("BootX::AllocateBootXMemory () ran out of space");
 	
 	gImageFirstBootXAddr = addr;
 
@@ -1089,8 +1113,7 @@ long AllocateKernelMemory(long size)
   
   gImageLastKernelAddr += (size + 0xFFF) & ~0xFFF;
   
-  if (gImageLastKernelAddr > gImageFirstBootXAddr)
-    FailToBoot(-1);
+  if (gImageLastKernelAddr > gImageFirstBootXAddr) FailToBoot ("BootX::AllocateKernelMemory () ran out of space");
   
   return addr;
 }
@@ -1107,7 +1130,10 @@ long AllocateMemoryRange(char *rangeName, long start, long length)
   buffer[1] = length;
   
   result = SetProp(gMemoryMapPH, rangeName, (char *)buffer, 2 * sizeof(long));
-  if (result == -1) return -1;
+  if (result == -1) {
+    printf ("BootX::AllocateMemoryRange error from SetProp\n");
+    return -1;
+  }
   
   return 0;
 }
