@@ -191,6 +191,8 @@ OFAliases::aliasFor (const RegEntryID* regEntry, char *outAlias, char *shortAlia
 	while (!finished) {
  		ThrowIfOSErr_AC (RegistryCStrEntryToName (&iterEntry, &parentEntry, nameComponent, &finished));
 		if (finished) break;
+		workString[0] = 0;
+		
 		if (RegistryEntryIDCompare (&parentEntry, &deviceTreeEntry)) {
 			// If the parent is the device-tree, then this is the last go round
 			finished = true;
@@ -208,7 +210,9 @@ OFAliases::aliasFor (const RegEntryID* regEntry, char *outAlias, char *shortAlia
 			}
 			RegistryEntryIDDispose (&iterEntry);
 			RegistryEntryIDDispose (&parentEntry);
+			
 		} else {
+		
 			// We want to special-case where the parent is a pci bus or vci bus
 			// So that we can include the device number and function number	
 			err = RegistryPropertyGetSize (&parentEntry, "device_type", &propSize);
@@ -233,13 +237,34 @@ OFAliases::aliasFor (const RegEntryID* regEntry, char *outAlias, char *shortAlia
 					} else {
 						strcpy (workString, nameComponent);
 					}
-				} else {
-					strcpy (workString, nameComponent);
 				}
 				DisposePtr (prop);
-			} else {			
-				strcpy (workString, nameComponent);
 			}
+			
+			if (workString[0] == 0) {
+				err = RegistryPropertyGetSize (&iterEntry, "fw-mao", &propSize);
+				if (err == noErr) {
+					unsigned fwmao, fwlun;
+					ThrowIfOSErr_AC (RegistryPropertyGet (&iterEntry, "fw-mao", &fwmao, &propSize));
+					err = RegistryPropertyGetSize (&iterEntry, "fw-lun", &propSize);
+					if (err == noErr) {
+						ThrowIfOSErr_AC (RegistryPropertyGet (&iterEntry, "fw-lun", &fwlun, &propSize));
+						sprintf (workString, "@%X/@%X", fwmao, fwlun);	
+					}
+				}			
+			}
+			
+			if (workString[0] == 0) {
+				err = RegistryPropertyGetSize (&iterEntry, "fw-guid", &propSize);
+				if (err == noErr) {
+					unsigned fwguid[2];
+					ThrowIfOSErr_AC (RegistryPropertyGet (&iterEntry, "fw-guid", fwguid, &propSize));
+					sprintf (workString, "@%X%.8X", fwguid[0], fwguid[1]);
+				}			
+			}
+						
+			if (workString[0] == 0) strcpy (workString, nameComponent);
+			
 			RegistryEntryIDDispose (&iterEntry);
 			ThrowIfOSErr_AC (RegistryEntryIDCopy (&parentEntry, &iterEntry));
 			RegistryEntryIDDispose (&parentEntry);
