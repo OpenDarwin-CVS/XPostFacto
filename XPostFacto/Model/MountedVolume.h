@@ -133,6 +133,7 @@ class MountedVolume : public MDependable_AC
 		
 		static MountedVolume* WithCreationDate (unsigned int date);
 		static MountedVolume* WithInfo (FSVolumeInfo *info);
+		static MountedVolume* WithRootDirectory (FSRef *rootDirectory);
 		
 		MountedVolume* getDefaultHelperDisk ();
 		static MountedVolume* GetDefaultInstallerDisk ();

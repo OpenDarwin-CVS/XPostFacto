@@ -103,7 +103,7 @@ MountedVolume::Initialize ()
 			FSCatalogInfo rootInfo;
 			FSGetCatalogInfo (&rootDirectory, kFSCatInfoCreateDate, &rootInfo, NULL, NULL, NULL);
 			info.createDate.lowSeconds = rootInfo.createDate.lowSeconds;
-			MountedVolume *volume = MountedVolume::WithInfo (&info);
+			MountedVolume *volume = MountedVolume::WithRootDirectory (&rootDirectory);
 			if (volume) {
 				volume->fStillThere = true;
 				// catch name changes for the UI
@@ -149,6 +149,18 @@ MountedVolume::WithCreationDate (unsigned int date)
 {
 	for (MountedVolumeIterator iter (GetVolumeList ()); iter.Current(); iter.Next()) {
 		if (iter->fCreationDate == date) {
+			return iter.Current ();
+		}		
+	}
+	return NULL;
+}
+
+MountedVolume*
+MountedVolume::WithRootDirectory (FSRef *rootDirectory)
+{
+	if (!rootDirectory) return NULL;
+	for (MountedVolumeIterator iter (GetVolumeList ()); iter.Current(); iter.Next()) {
+		if (FSCompareFSRefs (iter->getRootDirectory (), rootDirectory) == noErr) {
 			return iter.Current ();
 		}		
 	}
