@@ -1278,7 +1278,7 @@ MountedVolume::getWillRunOnCurrentCPU ()
 			case gestaltCPU603ev:
 			case gestaltCPU604e:
 			case gestaltCPU604ev:
-				retVal = fMacOSXMajorVersion < 6; 
+				retVal = fMacOSXMajorVersion < 7; 
 				break;
 		}
 	}
