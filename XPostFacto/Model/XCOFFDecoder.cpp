@@ -33,7 +33,6 @@ advised of the possibility of such damage.
 
 #include "XCOFFDecoder.h"
 #include <iostream.h>
-#include <Threads.h>
 
 XCOFFDecoder::XCOFFDecoder (CRandomAccessStream_AC *stream)
 {

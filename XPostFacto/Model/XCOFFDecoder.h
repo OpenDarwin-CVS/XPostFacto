@@ -31,10 +31,8 @@ advised of the possibility of such damage.
 
 */
 
-#ifndef XCOFFDECODER_H
-#define XCOFFDECODER_H
-
-#include "Files.h"
+#ifndef __XCOFFDECODER_H__
+#define __XCOFFDECODER_H__
 
 struct XFileHeader {
 	/* File header */
