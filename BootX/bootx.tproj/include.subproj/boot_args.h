@@ -33,6 +33,8 @@
 #ifndef _BOOTX_BOOT_ARGS_H_
 #define _BOOTX_BOOT_ARGS_H_
 
+#include <machine/types.h>
+
 // Video information..
 
 struct Boot_Video {
@@ -76,5 +78,18 @@ struct boot_args {
   unsigned long  topOfKernelData;         /* Last address of kernel data area*/
 };
 typedef struct boot_args boot_args, *boot_args_ptr;
+
+struct compressed_kernel_header {
+  u_int32_t signature;
+  u_int32_t compress_type;
+  u_int32_t adler32;
+  u_int32_t uncompressed_size;
+  u_int32_t compressed_size;
+  u_int32_t reserved[11];
+  char      platform_name[64];
+  char      root_path[256];
+  u_int8_t  data[0];
+};
+typedef struct compressed_kernel_header compressed_kernel_header;
 
 #endif /* ! _BOOTX_BOOT_ARGS_H_ */

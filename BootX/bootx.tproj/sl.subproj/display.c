@@ -374,7 +374,8 @@ static long OpenDisplays(void)
     for (cnt = 0; cnt < gNumDisplays; cnt++) {
       OpenDisplay(cnt);
     }
-  }  
+  }
+  
   return 0;
 }
 

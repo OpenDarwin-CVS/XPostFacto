@@ -25,6 +25,20 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		944AD928067424E500FC3507 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = lzss.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		944AD929067424E500FC3507 = {
+			fileRef = 944AD928067424E500FC3507;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		94606078057BA4A300FE8769 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -4246,15 +4260,16 @@
 			);
 			buildSettings = {
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = "BootX/bootx.tproj/include.subproj \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/usr/include/gcc/darwin/2.95.2\" \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/usr/include\"";
+				HEADER_SEARCH_PATHS = BootX/bootx.tproj/include.subproj;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
-				OTHER_CFLAGS = "-static";
+				OTHER_CFLAGS = "-static -D_ANSI_SOURCE";
 				OTHER_LDFLAGS = "-nostdlib -e _StartTVector -seg1addr 05600000";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = bootx;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
+				USE_GCC3_PFE_SUPPORT = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 			};
 			dependencies = (
@@ -4328,6 +4343,7 @@
 				F5BFE4210304D49701A80001,
 				F5BFE4220304D49801A80001,
 				9460607B057BA4A300FE8769,
+				944AD929067424E500FC3507,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8231,6 +8247,7 @@
 		};
 		F572EEA70254E9E801A80001 = {
 			children = (
+				944AD928067424E500FC3507,
 				F572EEA90254E9E801A80001,
 				F572EEAA0254E9E801A80001,
 				F572EEAB0254E9E801A80001,

@@ -33,7 +33,7 @@
 #ifndef _BOOTX_SL_H_
 #define _BOOTX_SL_H_
 
-#define kBootXVersion "55.1"
+#define kBootXVersion "59.1.1"
 #define kBootXVersionXPF "3.0"
 
 #define kFailToBoot (1)
@@ -163,10 +163,10 @@ extern long gSymbolTableSize;
 extern long gBootMode;
 extern long gBootDeviceType;
 extern long gBootFileType;
+extern char gHaveKernelCache;
 extern char gBootDevice[256];
 extern char gBootFile[256];
 extern char gApparentBootFile[256];
-extern char gRootDir[256];
 
 extern char gTempStr[4096];
 
@@ -225,6 +225,9 @@ extern long LoadDrivers(char *dirPath);
 // Externs for config.c
 extern long InitConfig(void);
 extern long ParseConfigFile(char *addr);
+
+// Externs for lzss.c
+extern int decompress_lzss(u_int8_t *dst, u_int8_t *src, u_int32_t srclen);
 
 // Externs for bootargs.c
 // added by ryan.rempel@utoronto.ca
