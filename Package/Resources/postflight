@@ -1,3 +1,0 @@
-#! /bin/sh
-
-"$3/usr/bin/touch" -c "$3/System/Library/Extensions/"
