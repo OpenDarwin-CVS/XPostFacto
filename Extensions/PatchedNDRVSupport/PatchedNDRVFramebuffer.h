@@ -30,12 +30,10 @@ class PatchedNDRVFramebuffer : public IONDRVFramebuffer
 
 public:
 
-    virtual IOService * probe(	IOService * 	provider,
-							   SInt32 	  *	score );
+    virtual IOService *probe (IOService *provider, SInt32 *score);
 
-	virtual IOReturn setCursorImage( void * cursorImage );
-    virtual IOReturn setCursorState( SInt32 x, SInt32 y, bool visible );
-	
+	virtual bool convertCursorImage (void *cursorImage, IOHardwareCursorDescriptor *hwDesc, IOHardwareCursorInfo *hwCursorInfo);
+		
 };
 
 #endif

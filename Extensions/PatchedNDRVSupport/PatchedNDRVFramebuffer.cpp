@@ -25,22 +25,18 @@
 OSDefineMetaClassAndStructors(PatchedNDRVFramebuffer, IONDRVFramebuffer);
 
 IOService *
-PatchedNDRVFramebuffer::probe(	IOService * 	provider,
-						   SInt32 	  *	score )
+PatchedNDRVFramebuffer::probe (IOService *provider, SInt32  *score)
 {
 	if (strcmp (provider->getName (), "control")) return NULL;
 	return super::probe (provider, score);
 }
 
-IOReturn
-PatchedNDRVFramebuffer::setCursorImage( void * cursorImage )
-{
-	return kIOReturnUnsupported;
-}
+// Joe van Tunen figured out how to get this to work
 
-
-IOReturn
-PatchedNDRVFramebuffer::setCursorState( SInt32 x, SInt32 y, bool visible )
-{
-	return kIOReturnUnsupported;
+bool 
+PatchedNDRVFramebuffer::convertCursorImage (void *cursorImage, IOHardwareCursorDescriptor *hwDesc, IOHardwareCursorInfo *hwCursorInfo)
+{ 
+	hwDesc->width = 16;
+	hwDesc->height = 16;
+	return super::convertCursorImage (cursorImage, hwDesc, hwCursorInfo);
 }
