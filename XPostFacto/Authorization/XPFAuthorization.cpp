@@ -33,71 +33,37 @@ advised of the possibility of such damage.
 
 
 #include "XPFAuthorization.h"
+#include "XPFErrors.h"
 
-#include "CCFBundle_AC.h"
-#include "CCFURL_AC.h"
-#include "CCFString_AC.h"
-#include <Files.h>
-
-#include <Sound.h>
 #include <StdArg.h>
+
+XPFAuthorization XPFAuthorization::gXPFAuthorization;
 
 XPFAuthorization::XPFAuthorization ()
 {	
-	FSRef systemLibraryFrameworksFolder, securityRef, systemRef;
-	UniChar securityName[] = {'S', 'e', 'c', 'u', 'r', 'i', 't', 'y', '.', 'f', 'r', 'a', 'm', 'e', 'w', 'o', 'r', 'k'};
-	UniChar systemFramework[] = {'S', 'y', 's', 't', 'e', 'm', '.', 'f', 'r', 'a', 'm', 'e', 'w', 'o', 'r', 'k'};
-
-	ThrowIfOSErr_AC (FSFindFolder(kOnAppropriateDisk, kFrameworksFolderType, true, &systemLibraryFrameworksFolder));
-	ThrowIfOSErr_AC (FSMakeFSRefUnicode (&systemLibraryFrameworksFolder,
-			sizeof (securityName) / sizeof (UniChar), securityName, kTextEncodingUnknown, &securityRef));
-	ThrowIfOSErr_AC (FSMakeFSRefUnicode (&systemLibraryFrameworksFolder,
-			sizeof (systemFramework) / sizeof (UniChar), systemFramework, kTextEncodingUnknown, &systemRef));
-
-	CAutoCFURL_AC securityURL (&securityRef);	
-	fSecurityFramework = __CFBundle::Create(NULL, securityURL);
-	if (!fSecurityFramework->LoadExecutable()) throw false;
-	
-	CAutoCFURL_AC systemURL (&systemRef);	
-	fSystemFramework = __CFBundle::Create(NULL, systemURL);
-	if (!fSystemFramework->LoadExecutable()) throw false;
-	
-	fCreate = (CreatePtr) fSecurityFramework->GetFunctionPointerForName (CFSTR ("AuthorizationCreate"));
-	fFree = (FreePtr) fSecurityFramework->GetFunctionPointerForName (CFSTR ("AuthorizationFree"));
-	fCopyRights = (CopyRightsPtr) fSecurityFramework->GetFunctionPointerForName (CFSTR ("AuthorizationCopyRights"));
-	fExecute = (ExecuteWithPrivilegesPtr) fSecurityFramework->GetFunctionPointerForName (CFSTR ("AuthorizationExecuteWithPrivileges"));
-
-	fvfprintf = (VFPrintFPtr) fSystemFramework->GetFunctionPointerForName (CFSTR ("vfprintf"));
-	ffclose = (FClosePtr) fSystemFramework->GetFunctionPointerForName (CFSTR ("fclose"));
-
-	ThrowIfNULL_AC (fCreate);
-	ThrowIfNULL_AC (fFree);
-	ThrowIfNULL_AC (fCopyRights);
-	ThrowIfNULL_AC (fExecute);
-	ThrowIfNULL_AC (fvfprintf);
-	ThrowIfNULL_AC (ffclose);
+	fAuthorization = NULL;
 }
 
 XPFAuthorization::~XPFAuthorization ()
 {
-	(*fFree)(fAuthorization, kAuthorizationFlagDestroyRights);
-	fSecurityFramework->UnloadExecutable ();
-	fSystemFramework->UnloadExecutable ();
+	if (fAuthorization) AuthorizationFree (fAuthorization, kAuthorizationFlagDestroyRights);
 }
 
 OSStatus
-XPFAuthorization::Authenticate ()
+XPFAuthorization::authenticate ()
 {
 	const char *path = "";	
 
 	AuthorizationRights rights;
 	rights.count = 0;
 	rights.items = NULL;
+		
+	static bool first = true;
+	if (first) {
+		AuthorizationCreate (&rights, kAuthorizationEmptyEnvironment, kAuthorizationFlagDefaults, &fAuthorization);
+		first = false;
+	}
 	
-	fAuthorization = NULL;
-	
-	(*fCreate)(&rights, kAuthorizationEmptyEnvironment, kAuthorizationFlagDefaults, &fAuthorization);
-
 	AuthorizationItem items[1];
     items[0].name = kAuthorizationRightExecute;
     items[0].value = (char *) path;
@@ -107,7 +73,7 @@ XPFAuthorization::Authenticate ()
     rights.count = 1;
     rights.items = items;
 	    
-	return (*fCopyRights)(fAuthorization, &rights, kAuthorizationEmptyEnvironment, kAuthorizationFlagExtendRights | kAuthorizationFlagInteractionAllowed, NULL);
+	return AuthorizationCopyRights (fAuthorization, &rights, kAuthorizationEmptyEnvironment, kAuthorizationFlagExtendRights | kAuthorizationFlagInteractionAllowed, NULL);
 }
 
 OSStatus
@@ -115,21 +81,8 @@ XPFAuthorization::ExecuteWithPrivileges (const char *pathToTool,
 						char * const *arguments,
 						FILE **communicationsPipe)
 {
-	return (*fExecute)(fAuthorization, pathToTool, 0, arguments, communicationsPipe);
-}
- 
-int 
-XPFAuthorization::fprintf(FILE *stream, const char *format, ...)
-{
-	va_list varargs;
-	va_start (varargs, format);
-	int retVal = (*fvfprintf) (stream, format, varargs);	
-	va_end (varargs);
-	return retVal;
-}
+	OSErr err = gXPFAuthorization.authenticate ();
+	if (err != errAuthorizationSuccess) ThrowException_AC (kCouldNotObtainAuthorization, 0);
 
-int 
-XPFAuthorization::fclose(FILE *stream)
-{	
-	return (*ffclose)(stream);
+	return AuthorizationExecuteWithPrivileges (gXPFAuthorization.fAuthorization, pathToTool, 0, arguments, communicationsPipe);
 }

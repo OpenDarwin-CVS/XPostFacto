@@ -35,63 +35,30 @@ advised of the possibility of such damage.
 #ifndef __XPFAUTHORIZATION_H__
 #define __XPFAUTHORIZATION_H__
 
-#include "Authorization.h"
-#include "AuthorizationTags.h"
+#ifdef __MACH__
+
+#include <Security/Security.h>
 
 class XPFAuthorization {
-
-	typedef OSStatus (*CreatePtr)(const AuthorizationRights *rights,
-					const AuthorizationEnvironment *environment,
-					AuthorizationFlags flags,
-					AuthorizationRef *authorization);
-
-	typedef OSStatus (*FreePtr)(AuthorizationRef authorization, AuthorizationFlags flags);
-
-	typedef OSStatus (*CopyRightsPtr)(AuthorizationRef authorization, 
-					const AuthorizationRights *rights,
-					const AuthorizationEnvironment *environment,
-					AuthorizationFlags flags,
-					AuthorizationRights **authorizedRights);
-	
-	typedef OSStatus (*ExecuteWithPrivilegesPtr)(AuthorizationRef authorization,
-					const char *pathToTool,
-					AuthorizationFlags options,
-					char * const *arguments,
-					FILE **communicationsPipe);
-					
-	typedef int (*VFPrintFPtr)(FILE *stream, const char *format, va_list ap);
- 
-    typedef int (*FClosePtr)(FILE *stream);
-
 					
 public:
+
+	static OSStatus ExecuteWithPrivileges (const char *pathToTool,
+					char * const *arguments = NULL,
+					FILE **communicationsPipe = NULL);
+					
+private:
 
 	XPFAuthorization ();
 	~XPFAuthorization ();
 	
-	OSStatus Authenticate ();
+	OSStatus authenticate ();
 	
-	OSStatus ExecuteWithPrivileges (const char *pathToTool,
-					char * const *arguments = NULL,
-					FILE **communicationsPipe = NULL);
-					
-	int fprintf(FILE *stream, const char *format, ...);
-    int fclose(FILE *stream);
-
-private:
-
 	AuthorizationRef fAuthorization;
-	
-	CFBundleRef fSecurityFramework;
-	CFBundleRef fSystemFramework;
-
-	CreatePtr fCreate;
-	FreePtr fFree;
-	CopyRightsPtr fCopyRights;
-	ExecuteWithPrivilegesPtr fExecute;
-	VFPrintFPtr fvfprintf;
-	FClosePtr ffclose;
+	static XPFAuthorization gXPFAuthorization;
 	
 };
 
-#endif
+#endif  // __MACH__
+
+#endif // __XPFAUTHORIZATION_H__
