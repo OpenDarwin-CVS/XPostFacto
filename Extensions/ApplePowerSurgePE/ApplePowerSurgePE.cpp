@@ -78,7 +78,14 @@ ApplePowerSurgePE::processTopLevel (IORegistryEntry *root)
 	// This is required because Classic looks for it there
 	// Added by ryan.rempel@utoronto.ca
 
-	IORegistryEntry *cpus = new IORegistryEntry;
+	IORegistryEntry *cpus = root->childFromPath ("cpus", gIODTPlane);
+	if (cpus) {
+		cpus->release ();
+        super::processTopLevel (root);
+		return;
+	}
+
+	cpus = new IORegistryEntry;
 	if (cpus) {
         if (!cpus->init ()) {
 			cpus->release();
