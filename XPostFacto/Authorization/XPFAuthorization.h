@@ -47,6 +47,8 @@ public:
 					char * const *arguments = NULL,
 					FILE **communicationsPipe = NULL);
 					
+	static OSStatus Authenticate () {return gXPFAuthorization.authenticate ();}
+					
 private:
 
 	XPFAuthorization ();
