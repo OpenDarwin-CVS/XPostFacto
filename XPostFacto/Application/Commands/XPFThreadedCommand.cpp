@@ -199,6 +199,7 @@ XPFThreadedCommand::getFSRef (FSRef *rootDirectory, char *path, FSRef *result)
 void
 XPFThreadedCommand::turnOffIgnorePermissionsForVolume (MountedVolume *volume)
 {
+#ifdef __MACH__
 	if (!volume) return;
 	char path[256];
 	ThrowIfOSErr_AC (FSRefMakePath (volume->getRootDirectory (), (UInt8 *) path, 255));
@@ -214,6 +215,7 @@ XPFThreadedCommand::turnOffIgnorePermissionsForVolume (MountedVolume *volume)
 		execl ("/usr/sbin/vsdbutil", "vsdbutil", "-a", path, NULL);
 		ThrowException_AC (kInternalError, 0);	// the execl shouldn't return
 	}
+#endif
 }
 
 OSErr
