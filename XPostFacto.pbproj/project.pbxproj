@@ -49,7 +49,6 @@
 				F5EC95B401B1F16601A80001,
 				F53C691301B1926201A80001,
 				F53C695501B1926201A80001,
-				F53C69A201B1926201A80001,
 				F514D82002B3C94D01A80001,
 				F58FB3FA02B3D06B01A80001,
 				F58FB3FB02B3D0BE01A80001,
@@ -430,26 +429,6 @@
 		F53C699E01B1926201A80001 = {
 			isa = PBXFileReference;
 			path = PatchedSCSIDeviceType05.h;
-			refType = 4;
-		};
-		F53C69A201B1926201A80001 = {
-			children = (
-				F59D628601B1D09901A80001,
-				F53C69A701B1926201A80001,
-			);
-			isa = PBXGroup;
-			path = Package;
-			refType = 4;
-		};
-		F53C69A501B1926201A80001 = {
-			isa = PBXFileReference;
-			path = OldWorldSupport.info;
-			refType = 4;
-		};
-		F53C69A701B1926201A80001 = {
-			isa = PBXFileReference;
-			name = Welcome.rtf;
-			path = Resources/Welcome.rtf;
 			refType = 4;
 		};
 		F53C6A1401B1941801A80001 = {
@@ -2618,12 +2597,6 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
-		};
-		F545535102BD41AB01A80001 = {
-			isa = PBXFileReference;
-			name = postflight;
-			path = Resources/postflight;
-			refType = 4;
 		};
 		F547F715028EFEEC01A80001 = {
 			children = (
@@ -4824,15 +4797,6 @@
 			path = FixTypesAndCreators.sh;
 			refType = 4;
 		};
-		F59D628601B1D09901A80001 = {
-			children = (
-				F53C69A501B1926201A80001,
-				F545535102BD41AB01A80001,
-			);
-			isa = PBXGroup;
-			name = Resources;
-			refType = 4;
-		};
 		F59D628701B1D0D601A80001 = {
 			isa = PBXBundleReference;
 			path = OldWorldSupport.pkg;
@@ -4843,6 +4807,7 @@
 				F59D629601B1D1A501A80001,
 			);
 			buildSettings = {
+				INSTALL_PATH = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-bundle -undefined suppress";
 				OTHER_REZFLAGS = "";
@@ -4872,7 +4837,7 @@
 			);
 			isa = PBXBundleTarget;
 			name = Package;
-			productInstallPath = "$(USER_LIBRARY_DIR)/Bundles";
+			productInstallPath = "";
 			productName = Package;
 			productReference = F59D628701B1D0D601A80001;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -4926,7 +4891,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "chown root:admin \"${DSTROOT}\"\nchmod 0775 \"${DSTROOT}\"\nchmod a+t \"${DSTROOT}\"\nchown -R root:wheel \"${DSTROOT}/System/Library/Extensions\"\nchmod -R u+w \"${DSTROOT}/System/Library/Extensions\"\n\n# Construct the installer package\n# We need to copy the \"resources\" directory to remove the\n# CVS directory from inside it.\n\nmkdir -p \"${SYMROOT}/Package\"\nrm -rf \"${SYMROOT}/Package/Resources\"\ncp -Rp \"${SRCROOT}/Package/Resources\" \"${SYMROOT}/Package\"\nrm -rf \"${SYMROOT}/Package/Resources/CVS\"\n\npackage \"${DSTROOT}\" \"${SRCROOT}/Package/OldWorldSupport.info\" \\\n\t-r \"${SYMROOT}/Package/Resources\" -d \"${SYMROOT}\"\n\nchmod a+x \"${SYMROOT}/OldWorldSupport.pkg/postflight\"\n\n# Now copy the extensions\n\nmkdir -p \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n\nfor FILE in \"${SRCROOT}\"/XPostFacto/Derived/Extensions/*.hfs\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in \"${DSTROOT}\"/System/Library/Extensions/*.kext\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n}\n\nfor FILE in \"${SRCROOT}/XPostFacto/Derived/OldWorldSupport.hfs\"\n{\n\trm \"${FILE}\"\n}\n\n\"${SYMROOT}/hfsplusarchive\" \"${SYMROOT}/OldWorldSupport.pkg\" \"${SRCROOT}/XPostFacto/Derived\"\n\nif test ${SUDO_USER}; then\n\tchown -R ${SUDO_USER} \"${SYMROOT}\"\n\tchown -R ${SUDO_USER} \"${SRCROOT}/XPostFacto/Derived\"\nfi";
+			shellScript = "chown root:admin \"${DSTROOT}\"\nchmod 0775 \"${DSTROOT}\"\nchmod a+t \"${DSTROOT}\"\nchown -R root:wheel \"${DSTROOT}/System/Library/Extensions\"\nchmod -R u+w \"${DSTROOT}/System/Library/Extensions\"\n\n# Now copy the extensions\n\nmkdir -p \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n\nfor FILE in \"${SRCROOT}\"/XPostFacto/Derived/Extensions/*.hfs\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in \"${DSTROOT}\"/System/Library/Extensions/*.kext\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n}\n\nif test ${SUDO_USER}; then\n\tchown -R ${SUDO_USER} \"${SYMROOT}\"\n\tchown -R ${SUDO_USER} \"${SRCROOT}/XPostFacto/Derived\"\nfi";
 		};
 		F5BFE40F0304CD5E01A80001 = {
 			fileRef = F53C6A1501B1943D01A80001;
