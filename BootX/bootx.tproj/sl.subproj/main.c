@@ -49,7 +49,7 @@ char gStackBaseAddr[0x8000];
 
 char *gVectorSaveAddr;
 long gImageLastKernelAddr = 0;
-long gImageFirstBootXAddr = kLoadAddr;
+long gImageFirstBootXAddr = kImageAddr + kImageSize;
 long gKernelEntryPoint;
 long gDeviceTreeAddr;
 long gDeviceTreeSize;
@@ -923,13 +923,16 @@ long MatchThis(CICell phandle, char *string)
 
 void *AllocateBootXMemory(long size)
 {
-  long addr = gImageFirstBootXAddr - size;
-  
-  if (addr < gImageLastKernelAddr) return 0;
-  
-  gImageFirstBootXAddr = addr;
-  
-  return (void *)addr;
+	long addr = gImageFirstBootXAddr - size;
+
+	if (addr < gImageLastKernelAddr) {
+		printf ("Failure to AllocateBootXMemory size %d\n", size);
+		return 0;
+	}
+	
+	gImageFirstBootXAddr = addr;
+
+	return (void *)addr;
 }
 
 

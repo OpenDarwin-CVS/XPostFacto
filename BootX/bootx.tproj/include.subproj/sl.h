@@ -65,12 +65,18 @@ just before the kernel is loaded.
 
 /*
 
-I've changed the memory map so that there is a little more room for
-the kernel image, boot struct and drivers, at the expense of the file
-load area. This appears to be required to boot Darwin 6 on older
-machines. This results in adjustments to kImageSize, kImageSize2,
-kLoadAddr and kLoadSize
+I've changed the memory map to move the file load area above 32 MB.
+This gives it more space, and also leaves more space for the drivers area.
+That appears to be required when booting the Darwin 6 Install CD.
+This does mean that BootX now assumes 48 MB memory, rather than 32.
 
+ 00000000 - 00003FFF  : Exception Vectors
+ 00004000 - 01BFFFFF  : Kernel Image, Boot Struct and Drivers
+ 01C00000 - 01CFFFFF  : Secondary Loader Image
+ 01D00000 - 01DFFFFF  : Malloc Area
+ 01E00000 - 01FFFFFF  : Unused
+ 02000000 - 02FFFFFF  : File Load Area
+ 
 ryan.rempel@utoronto.ca
 
 */
@@ -80,7 +86,7 @@ ryan.rempel@utoronto.ca
 
 // OF 3.x
 #define kImageAddr      (0x00004000)
-#define kImageSize      (0x014FC000)
+#define kImageSize      (0x01BFC000)
 
 // OF 1.x 2.x
 #define kImageAddr0     (0x00004000)
@@ -89,10 +95,10 @@ ryan.rempel@utoronto.ca
 #define kImageSize1     (0x00200000)
 #define kImageAddr1Phys (0x01E00000)
 #define kImageAddr2     (0x00500000)
-#define kImageSize2     (0x01000000)
+#define kImageSize2     (0x01700000)
 
-#define kLoadAddr       (0x01500000)
-#define kLoadSize       (0x00700000)
+#define kLoadAddr       (0x02000000)
+#define kLoadSize       (0x01000000)
 
 #define kMallocAddr     (0x01D00000)
 #define kMallocSize     (0x00100000)
