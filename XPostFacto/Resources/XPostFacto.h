@@ -82,6 +82,17 @@ advised of the possibility of such damage.
 #define cShowOptionsWindow				1436
 
 #define cSetHelperDiskForTarget			1437
+#define cShowDebugOptions				1438
+
+#define cDisableRestart					1439
+#define cVisibleHelperFiles				1440
+#define	cDisableNVRAMWriting			1441
+#define cDisableCopyToHelper			1442
+#define cDisableBootX					1443
+#define cDisableExtensions				1444
+#define cDisableExtensionsCache			1445
+#define cDisableStartupItem				1446
+#define cDisableCoreServices			1447
 
 // Views and Windows
 // -----------------
@@ -97,6 +108,10 @@ advised of the possibility of such damage.
 // -----
 
 #define mInstall 70
+#define mDebugOptions 71
+
+#define kDebugOptionsMBar		1007
+#define kDebugOptionsMBarAqua	1008
 	
 // Finder Information
 // ------------------

@@ -111,7 +111,8 @@ advised of the possibility of such damage.
 #else
 //	include kDefaultRsrcName  'CMNU' (mApple);			// Grab the default Apple menus
 //	include kDefaultRsrcName  'CMNU' (mFile);			// Grab the default File menus
-//	include kDefaultRsrcName  'CMNU' (mEdit);			// Grab the default Edit menu
+	include kDefaultRsrcName  'CMNU' (mEdit);			// Grab the default Edit menu
+	include kDefaultRsrcName  'CMNU' (mEditAqua);		// Grab the default Edit menu for aqua
 //	include kDefaultRsrcName  'ALRT' (phAboutApp);		// Grab the default about box
 	include kDefaultRsrcName  'aete' (0);				// Grab the default AppleEvent terminology
 //	include kDefaultRsrcName  'STR#' (kDefaultCredits);	// Grab the default credits
@@ -151,6 +152,7 @@ resource 'MBAR' (kMBarDisplayed,
 	{ 
 		mApple;
 		mFile;
+		mEdit;
 		mInstall;
 	}
 };
@@ -164,10 +166,38 @@ purgeable)
 {
 	{
 		mApple;
+		mEditAqua;
 		mInstall;
 	}
 };
 #endif
+
+resource 'MBAR' (kDebugOptionsMBar,
+#if qNames
+"XPostFacto Debug",
+#endif
+	purgeable) {
+	{ 
+		mApple;
+		mFile;
+		mEdit;
+		mInstall;
+		mDebugOptions;
+	}
+};
+
+resource 'MBAR' (kDebugOptionsMBarAqua,
+#if qNames
+"XPostFacto Debug Aqua",
+#endif
+	purgeable) {
+	{ 
+		mApple;
+		mEditAqua;
+		mInstall;
+		mDebugOptions;
+	}
+};
 
 //--------------------------------------------------------------------------------------------------
 // Menus 
@@ -220,6 +250,31 @@ purgeable) {
 	"BootX",		noIcon, noKey, noMark, plain, cInstallBootX;
 	"Extensions",	noIcon, noKey, noMark, plain, cInstallExtensions;
 	"Startup Item", noIcon, noKey, noMark, plain, cInstallStartupItem;
+	}
+};
+
+resource 'CMNU' (mDebugOptions,
+#if qNames
+"mDebugOptions",
+#endif
+purgeable) {
+	mDebugOptions,
+	textMenuProc,
+	EnablingManagedByMacApp,
+	enabled,
+	"Debug",
+	{
+	"Disable Restart",					noIcon, noKey, noMark, plain, cDisableRestart;
+	"Disable NVRAM Writing",			noIcon, noKey, noMark, plain, cDisableNVRAMWriting;
+	"Disable BootX Install",			noIcon, noKey, noMark, plain, cDisableBootX;
+	"Disable StartupItem Install",		noIcon, noKey, noMark, plain, cDisableStartupItem;
+	"Disable Extensions Install",		noIcon, noKey, noMark, plain, cDisableExtensions;
+	"Disable Extensions.mkext Update",	noIcon, noKey, noMark, plain, cDisableExtensionsCache;
+	"Disable CoreServices Copy",		noIcon, noKey, noMark, plain, cDisableCoreServices;	
+	"Disable Helper Copy",				noIcon, noKey, noMark, plain, cDisableCopyToHelper;
+	"Keep Helper Visible",				noIcon, noKey, noMark, plain, cVisibleHelperFiles;
+	"-",								noIcon, noKey, noMark, plain, nocommand;
+	"Hide Debug Menu",					noIcon, noKey, noMark, plain, cShowDebugOptions;
 	}
 };
 
@@ -285,17 +340,3 @@ resource 'kind' (kBundleID)
 		'apnm', 	"XPostFacto",
 	}
 };
-
-resource 'tab#' (3000, "Tab Labels", purgeable)
-{
-	versionZero
-	{{
-		0, "Boot",
-		0, "Install",
-		0, "Debug",
-		0, "Open Firmware",
-		0, "Log",
-	}}
-};
-
-
