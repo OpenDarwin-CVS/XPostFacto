@@ -1,10 +1,3 @@
-resource 'STR#' (1100, "Log Window", purgeable) {
-	{	/* array StringArray: 1 elements */
-		/* [1] */
-		"XPostFacto Log"
-	}
-};
-
 resource 'View' (1100, "Log Window", purgeable) {
 	MAThreeOhView {
 
@@ -198,7 +191,7 @@ resource 'View' (1100, "Log Window", purgeable) {
 			"TTEView",
 			'LogV',
 			enabled,
-			noIdle,
+			0,
 			{	/* array BehaviorArray: 0 elements */
 			},
 			MARelease13View {
@@ -252,7 +245,7 @@ resource 'View' (1100, "Log Window", purgeable) {
 					3
 				},
 				justSystem,
-				-1,
+				129,
 				dontPreferOutline
 			},
 			NoSubviews
@@ -391,6 +384,13 @@ resource 'View' (1100, "Log Window", purgeable) {
 			},
 			NoSubviews
 		}
+	}
+};
+
+resource 'STR#' (1100, "Log Window", purgeable) {
+	{	/* array StringArray: 1 elements */
+		/* [1] */
+		"XPostFacto Log"
 	}
 };
 
