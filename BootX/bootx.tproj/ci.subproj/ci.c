@@ -486,7 +486,7 @@ CICell Claim(CICell virt, CICell size, CICell align)
     baseaddr = ciArgs.args.claim.baseaddr;
   } else {
     // Claim does not work.  Do it by hand.
-    if ((gMMUIH == 0) || (gMMUIH == 0)) return kCIError;
+    if ((gMMUIH == 0) || (gMemoryIH == 0)) return kCIError;
     
     // Get the physical memory
     ret = CallMethod(3, 1, gMemoryIH, "claim", virt, size, 0, &baseaddr);
