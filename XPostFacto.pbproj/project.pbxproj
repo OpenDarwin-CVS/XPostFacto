@@ -3,15 +3,17 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 38;
+	objectVersion = 39;
 	objects = {
 		9406C1EA058E057B00A80003 = {
 			isa = PBXTargetDependency;
 			target = 94D432AB05583C1100A80003;
+			targetProxy = 948CD10605FBEECE003103DB;
 		};
 		9406C1EB058E059200A80003 = {
 			isa = PBXTargetDependency;
 			target = F5812B810315F14401A80001;
+			targetProxy = 948CD10705FBEECE003103DB;
 		};
 		9407316705312E5900A80003 = {
 			children = (
@@ -21,18 +23,23 @@
 			isa = PBXGroup;
 			name = Resources;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94606078057BA4A300FE8769 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = GetSymbolFromPEF.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94606079057BA4A300FE8769 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = PEFSupport.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		9460607A057BA4A300FE8769 = {
 			fileRef = 94606078057BA4A300FE8769;
@@ -47,38 +54,302 @@
 			};
 		};
 		946A5D250525104400A80003 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = Cocoa.framework;
 			path = /System/Library/Frameworks/Cocoa.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		946A5D270525115000A80003 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.icns;
 			name = XPFIcons.icns;
 			path = XPostFacto/Resources/XPFIcons.icns;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		946B436B04FC0E3500A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = FSRefCopying.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		946B436C04FC0E3500A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = FSRefCopying.h;
 			refType = 4;
+			sourceTree = "<group>";
+		};
+		948CD0E905FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F53C6AC301B1A29901A80001;
+			remoteInfo = AppleGrandCentral;
+		};
+		948CD0EA05FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F5887527030D66FA01A80001;
+			remoteInfo = PatchedNDRVSupport;
+		};
+		948CD0EB05FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F547F71B028EFEEC01A80001;
+			remoteInfo = PowerStarCPU;
+		};
+		948CD0EC05FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 94E26630054E02A400A80003;
+			remoteInfo = OpenDBDMAAudioFloatLib;
+		};
+		948CD0ED05FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F548C0D90289790D01A80001;
+			remoteInfo = OpenPMU;
+		};
+		948CD0EE05FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F557F68D0226FDFA01A80001;
+			remoteInfo = AppleOHare;
+		};
+		948CD0EF05FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F5BF317E03F01EA201A80002;
+			remoteInfo = xpfbootsupportd;
+		};
+		948CD0F005FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F557F6A70226FF1001A80001;
+			remoteInfo = ApplePowerStarPE;
+		};
+		948CD0F105FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F53C6A1F01B194DC01A80001;
+			remoteInfo = "macho-to-xcoff";
+		};
+		948CD0F205FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 94C7506A05F8EA3600A80003;
+			remoteInfo = PatchedBlockStorageDriver;
+		};
+		948CD0F305FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 94C3604B0597CB4E00A80003;
+			remoteInfo = OpenControlFramebuffer;
+		};
+		948CD0F405FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 94F427650543145400A80003;
+			remoteInfo = XPFPartitionInfo;
+		};
+		948CD0F505FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F53C6B2701B1B4A101A80001;
+			remoteInfo = PatchedSCSIDeviceType05;
+		};
+		948CD0F605FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F53C6AF401B1ACE201A80001;
+			remoteInfo = PowerSurgeCPU;
+		};
+		948CD0F705FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 94E53E070561CA9D00A80003;
+			remoteInfo = XPFStartupItem;
+		};
+		948CD0F805FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F5FB800A03C7A0AD01A80002;
+			remoteInfo = "OWCCacheConfig Extension";
+		};
+		948CD0F905FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F53C6B0A01B1B30F01A80001;
+			remoteInfo = PatchedAppleNVRAM;
+		};
+		948CD0FA05FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F53C6B1901B1B4A101A80001;
+			remoteInfo = PatchedIOSCSICDDrive;
+		};
+		948CD0FB05FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 94FC07D3056AE12D00A80003;
+			remoteInfo = GossamerDeviceTreeUpdater;
+		};
+		948CD0FC05FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F5EC95B601B1F16601A80001;
+			remoteInfo = hfsplusarchive;
+		};
+		948CD0FD05FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 94CC89DB0508E1BC00A80003;
+			remoteInfo = OWCDumpIORegistry;
+		};
+		948CD0FE05FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 94B3FB9B05866E9F00A80003;
+			remoteInfo = OpenPMUPCCardEject;
+		};
+		948CD0FF05FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F53C6AED01B1ACE201A80001;
+			remoteInfo = ApplePowerSurgePE;
+		};
+		948CD10005FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 94CC88EF054C817100A80003;
+			remoteInfo = OpenOWScreamerAudio;
+		};
+		948CD10105FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F53C6AB501B19FD401A80001;
+			remoteInfo = AppleCurio;
+		};
+		948CD10205FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F53C6AD401B1A6D301A80001;
+			remoteInfo = AppleMaceEthernet;
+		};
+		948CD10305FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F557F6810226FD2201A80001;
+			remoteInfo = OHareATA;
+		};
+		948CD10405FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F54E207A0267327701A80001;
+			remoteInfo = ApplePowerExpressPE;
+		};
+		948CD10505FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F53C6A1A01B194DC01A80001;
+			remoteInfo = BootX;
+		};
+		948CD10605FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 94D432AB05583C1100A80003;
+			remoteInfo = AppleMaceEthernetPreJag;
+		};
+		948CD10705FBEECE003103DB = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = F5812B810315F14401A80001;
+			remoteInfo = AppleCurio4K78;
+		};
+		9496FED60600C88D00EEA628 = {
+			fileRef = F53C696801B1926201A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9496FED70600C89000EEA628 = {
+			fileRef = F53C696901B1926201A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9496FED80600C89300EEA628 = {
+			fileRef = F53C696E01B1926201A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9496FED90600C89600EEA628 = {
+			fileRef = F53C696F01B1926201A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9496FEEC0600C8CD00EEA628 = {
+			fileRef = F53C697001B1926201A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9496FEED0600C8D000EEA628 = {
+			fileRef = F53C697101B1926201A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9496FEEF0600C8F000EEA628 = {
+			fileRef = F53C697201B1926201A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		94B3FB9505866E9F00A80003 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -117,11 +388,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -242,9 +509,12 @@
 ";
 		};
 		94B3FB9C05866E9F00A80003 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = OpenPMUPCCardEject.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		94B3FB9D05866EAA00A80003 = {
 			children = (
@@ -254,20 +524,25 @@
 			isa = PBXGroup;
 			name = OpenPMUPCCardEject;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94B3FB9E0586735000A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			name = OpenPMUPCCardEject.cpp;
 			path = OpenPMUPCCardEject/OpenPMUPCCardEject.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94B3FB9F0586735000A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = OpenPMUPCCardEject.h;
 			path = OpenPMUPCCardEject/OpenPMUPCCardEject.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94B3FBA00586735000A80003 = {
 			fileRef = 94B3FB9E0586735000A80003;
@@ -284,34 +559,36 @@
 		94B3FBA205867A1C00A80003 = {
 			isa = PBXTargetDependency;
 			target = 94B3FB9B05866E9F00A80003;
+			targetProxy = 948CD0FE05FBEECE003103DB;
 		};
 		94B8172F047A7ABF00A80003 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = text.script.sh;
 			name = XPFStartupItem;
 			path = XPFStartupItem/XPFStartupItem;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94B81732047A7F5100A80003 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist;
 			name = StartupParameters.plist;
 			path = XPFStartupItem/StartupParameters.plist;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94C18CC10509155800A80003 = {
 			isa = PBXTargetDependency;
 			target = 94CC89DB0508E1BC00A80003;
+			targetProxy = 948CD0FD05FBEECE003103DB;
 		};
 		94C360450597CB4E00A80003 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -350,11 +627,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -453,9 +726,12 @@
 ";
 		};
 		94C3604C0597CB4E00A80003 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = OpenControlFramebuffer.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		94C3604D0597CD5C00A80003 = {
 			children = (
@@ -465,20 +741,25 @@
 			isa = PBXGroup;
 			name = OpenControlFramebuffer;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94C3604E0597CD8900A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			name = OpenControlFramebuffer.cpp;
 			path = OpenControlFramebuffer/OpenControlFramebuffer.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94C3604F0597CD8900A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = OpenControlFramebuffer.h;
 			path = OpenControlFramebuffer/OpenControlFramebuffer.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94C360500597CD8900A80003 = {
 			fileRef = 94C3604E0597CD8900A80003;
@@ -495,6 +776,7 @@
 		94C63B6D054EDDA500A80003 = {
 			isa = PBXTargetDependency;
 			target = 94CC88EF054C817100A80003;
+			targetProxy = 948CD10005FBEECE003103DB;
 		};
 		94C7506105F8E8ED00A80003 = {
 			children = (
@@ -505,30 +787,31 @@
 			isa = PBXGroup;
 			name = PatchedBlockStorageDriver;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94C7506205F8E91A00A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			name = PatchedBlockStorageDriver.cpp;
 			path = PatchedBlockStorageDriver/PatchedBlockStorageDriver.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94C7506305F8E91A00A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = PatchedBlockStorageDriver.h;
 			path = PatchedBlockStorageDriver/PatchedBlockStorageDriver.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94C7506405F8EA3600A80003 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -568,11 +851,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -588,7 +867,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = "";
@@ -693,13 +972,17 @@
 ";
 		};
 		94C7506B05F8EA3600A80003 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = PatchedBlockStorageDriver.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		94C7506C05F8EA7E00A80003 = {
 			isa = PBXTargetDependency;
 			target = 94C7506A05F8EA3600A80003;
+			targetProxy = 948CD0F205FBEECE003103DB;
 		};
 		94C7507305F8EDB800A80003 = {
 			fileRef = 94C7506205F8E91A00A80003;
@@ -716,9 +999,11 @@
 		94C75BF005F915EF00A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = IOBlockStorageDriver.h;
 			path = PatchedBlockStorageDriver/IOBlockStorageDriver.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94C75BF105F915EF00A80003 = {
 			fileRef = 94C75BF005F915EF00A80003;
@@ -735,6 +1020,7 @@
 			isa = PBXGroup;
 			name = splitPEF;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94C954A3057CFA4D00A80003 = {
 			buildActionMask = 2147483647;
@@ -794,16 +1080,21 @@
 			productReference = 94C954A8057CFA4D00A80003;
 		};
 		94C954A8057CFA4D00A80003 = {
+			explicitFileType = "compiled.mach-o.executable";
+			fallbackIsa = PBXFileReference;
 			isa = PBXExecutableFileReference;
 			path = splitPEF;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		94C954AC057CFB2600A80003 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			name = splitPEF.c;
 			path = Tools/splitPEF/splitPEF.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94C954AD057CFB2600A80003 = {
 			fileRef = 94C954AC057CFB2600A80003;
@@ -826,16 +1117,20 @@
 		94C954B0057D0DE400A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			name = vers_rsrc.c;
 			path = XPostFacto/Model/vers_rsrc.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94C954B1057D0DE400A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = vers_rsrc.h;
 			path = XPostFacto/Model/vers_rsrc.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94C954B2057D0DE400A80003 = {
 			fileRef = 94C954B0057D0DE400A80003;
@@ -852,6 +1147,7 @@
 		94CB5C4404FBB49500A80003 = {
 			isa = PBXTargetDependency;
 			target = F53C6AF401B1ACE201A80001;
+			targetProxy = 948CD0F605FBEECE003103DB;
 		};
 		94CC8146054C189400A80003 = {
 			children = (
@@ -870,79 +1166,94 @@
 			isa = PBXGroup;
 			name = OpenOWScreamerAudio;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94CC8147054C18C800A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = OpenDBDMAAudioDMAEngine.h;
 			path = OpenOWScreamerAudio/OpenDBDMAAudioDMAEngine.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94CC8148054C18C800A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = AppleiSubEngine.h;
 			path = OpenOWScreamerAudio/AppleiSubEngine.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94CC8149054C18C800A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = AudioHardwareCommon.h;
 			path = OpenOWScreamerAudio/AudioHardwareCommon.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94CC814A054C18C800A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = AudioHardwareConstants.h;
 			path = OpenOWScreamerAudio/AudioHardwareConstants.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94CC814B054C18C800A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = AudioHardwareUtilities.h;
 			path = OpenOWScreamerAudio/AudioHardwareUtilities.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94CC814C054C18C800A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = awacs_OWhw.h;
 			path = OpenOWScreamerAudio/awacs_OWhw.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94CC814D054C18C800A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = iSubTypes.h;
 			path = OpenOWScreamerAudio/iSubTypes.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94CC814E054C18C800A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			name = OpenOWScreamerAudio.cpp;
 			path = OpenOWScreamerAudio/OpenOWScreamerAudio.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94CC814F054C18C800A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = OpenOWScreamerAudio.h;
 			path = OpenOWScreamerAudio/OpenOWScreamerAudio.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94CC88E9054C817100A80003 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -990,11 +1301,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -1010,7 +1317,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = "";
@@ -1088,9 +1395,12 @@
 ";
 		};
 		94CC88F0054C817100A80003 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = OpenOWScreamerAudio.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		94CC88F1054C82CC00A80003 = {
 			fileRef = 94CC8147054C18C800A80003;
@@ -1154,30 +1464,31 @@
 			isa = PBXGroup;
 			name = OWCDumpIORegistry;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94CC89D30508E19600A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			name = OWCDumpIORegistry.cpp;
 			path = OWCDumpIORegistry/OWCDumpIORegistry.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94CC89D40508E19600A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = OWCDumpIORegistry.h;
 			path = OWCDumpIORegistry/OWCDumpIORegistry.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94CC89D50508E1BC00A80003 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -1216,11 +1527,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -1313,9 +1620,12 @@
 ";
 		};
 		94CC89DC0508E1BC00A80003 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = OWCDumpIORegistry.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		94CC89DD0508E5A400A80003 = {
 			fileRef = 94CC89D30508E19600A80003;
@@ -1345,11 +1655,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -1357,6 +1663,9 @@
 		94D432A605583C1100A80003 = {
 			buildActionMask = 2147483647;
 			files = (
+				9496FED70600C89000EEA628,
+				9496FEEC0600C8CD00EEA628,
+				9496FEED0600C8D000EEA628,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1364,6 +1673,9 @@
 		94D432A705583C1100A80003 = {
 			buildActionMask = 2147483647;
 			files = (
+				9496FED60600C88D00EEA628,
+				9496FED80600C89300EEA628,
+				9496FED90600C89600EEA628,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1371,6 +1683,7 @@
 		94D432A805583C1100A80003 = {
 			buildActionMask = 2147483647;
 			files = (
+				9496FEEF0600C8F000EEA628,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1386,11 +1699,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -1407,7 +1716,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = /System/Library/Extensions;
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
@@ -1487,9 +1796,12 @@
 ";
 		};
 		94D432AC05583C1100A80003 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = AppleMaceEthernetPreJag.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		94D432AF05583EF500A80003 = {
 			buildActionMask = 12;
@@ -1508,6 +1820,7 @@
 			isa = PBXGroup;
 			name = Tools;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94D732850525FBA100A80003 = {
 			children = (
@@ -1517,6 +1830,7 @@
 			isa = PBXGroup;
 			name = Documentation;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94D732860525FBEF00A80003 = {
 			children = (
@@ -1531,6 +1845,7 @@
 			isa = PBXGroup;
 			name = OWC;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94D732870525FBF600A80003 = {
 			children = (
@@ -1540,69 +1855,88 @@
 			isa = PBXGroup;
 			name = OpenDarwin;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94D732880525FC1D00A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.html;
 			name = DeveloperNotes.html;
 			path = www/DeveloperNotes.html;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94D732890525FC1D00A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.html;
 			name = index.html;
 			path = www/index.html;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94D7328A0525FC3800A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.html;
 			name = Compatibility.html;
 			path = owc/Compatibility.html;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94D7328B0525FC3800A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.html;
 			name = FAQ.html;
 			path = owc/FAQ.html;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94D7328C0525FC3800A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.html;
 			name = index.html;
 			path = owc/index.html;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94D7328D0525FC3800A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.html;
 			name = L2CacheConfig.html;
 			path = owc/L2CacheConfig.html;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94D7328E0525FC3800A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.make;
 			name = Makefile;
 			path = owc/Makefile;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94D7328F0525FC3800A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.html;
 			name = XPostFacto.html;
 			path = owc/XPostFacto.html;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94D732900525FC3800A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.html;
 			name = XPostFacto3.html;
 			path = owc/XPostFacto3.html;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94D732910525FCAD00A80003 = {
 			children = (
@@ -1613,13 +1947,16 @@
 			isa = PBXGroup;
 			name = "Shared Code";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94E25C67054DF40600A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			name = OpenDBDMAAudioDMAEngine.cpp;
 			path = OpenOWScreamerAudio/OpenDBDMAAudioDMAEngine.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94E25C68054DF40600A80003 = {
 			fileRef = 94E25C67054DF40600A80003;
@@ -1630,9 +1967,11 @@
 		94E25C6A054DF8FC00A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			name = OpenDBDMAAudioClip.c;
 			path = OpenOWScreamerAudio/OpenDBDMAAudioClip.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94E25C6C054DF93500A80003 = {
 			children = (
@@ -1641,6 +1980,7 @@
 			isa = PBXGroup;
 			name = OpenDBDMAAudioFloatLib;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94E2662C054E02A400A80003 = {
 			buildActionMask = 2147483647;
@@ -1681,7 +2021,7 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				HEADER_SEARCH_PATHS = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				LIBRARY_STYLE = STATIC;
 				OTHER_CFLAGS = "-nostdinc -finline -fno-keep-inline-functions -force_cpusubtype_ALL -mlong-branch -fno-rtti -fno-exceptions -fcheck-new -static -DKERNEL -DKERNEL_PRIVATE -DDRIVER_PRIVATE -DAPPLE -DNeXT";
 				OTHER_LDFLAGS = "-static";
@@ -1701,9 +2041,12 @@
 			productReference = 94E26631054E02A400A80003;
 		};
 		94E26631054E02A400A80003 = {
+			explicitFileType = "compiled.mach-o.dylib";
+			fallbackIsa = PBXFileReference;
 			isa = PBXLibraryReference;
 			path = libAppleDBDMAAudioFloatLib.a;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		94E26632054E03A700A80003 = {
 			fileRef = 94E25C6A054DF8FC00A80003;
@@ -1714,6 +2057,7 @@
 		94E26633054E049700A80003 = {
 			isa = PBXTargetDependency;
 			target = 94E26630054E02A400A80003;
+			targetProxy = 948CD0EC05FBEECE003103DB;
 		};
 		94E26634054E04B700A80003 = {
 			fileRef = 94E26631054E02A400A80003;
@@ -1724,6 +2068,7 @@
 		94E46BCF05F4D7D700A80003 = {
 			isa = PBXTargetDependency;
 			target = 94C3604B0597CB4E00A80003;
+			targetProxy = 948CD0F305FBEECE003103DB;
 		};
 		94E53E020561CA9D00A80003 = {
 			buildActionMask = 2147483647;
@@ -1811,27 +2156,32 @@
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>3.0a11</string>
+	<string>3.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>3.0a11</string>
+	<string>3.0</string>
 </dict>
 </plist>
 ";
 		};
 		94E53E080561CA9D00A80003 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = XPFStartupItem.;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		94E53E090561CAB700A80003 = {
 			isa = PBXTargetDependency;
 			target = F5BF317E03F01EA201A80002;
+			targetProxy = 948CD0EF05FBEECE003103DB;
 		};
 		94E53E0A0561CAD100A80003 = {
 			isa = PBXTargetDependency;
 			target = 94E53E070561CA9D00A80003;
+			targetProxy = 948CD0F705FBEECE003103DB;
 		};
 		94E53E0B0561CC1400A80003 = {
 			fileRef = F5BF317F03F01EA201A80002;
@@ -1853,13 +2203,16 @@
 			name = Localizable.strings;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94E53E160561CCCD00A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = XPFStartupItem/Resources/English.lproj/Localizable.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94E53E170561CCCD00A80003 = {
 			fileRef = 94E53E150561CCCD00A80003;
@@ -1895,11 +2248,7 @@
 			buildActionMask = 12;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "chmod a+x ${SRCROOT}/XPFStartupItem/XPFStartupItem";
@@ -1908,11 +2257,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -1952,11 +2297,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -1973,7 +2314,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "/Library/Application Support/XPostFacto";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
@@ -2047,13 +2388,17 @@
 ";
 		};
 		94F427660543145400A80003 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = XPFPartitionInfo.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		94F427670543146000A80003 = {
 			isa = PBXTargetDependency;
 			target = 94F427650543145400A80003;
+			targetProxy = 948CD0F405FBEECE003103DB;
 		};
 		94F42768054315D700A80003 = {
 			children = (
@@ -2064,20 +2409,25 @@
 			isa = PBXGroup;
 			name = XPFPartitionInfo;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94F427690543161A00A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			name = XPFPartitionInfo.cpp;
 			path = XPFPartitionInfo/XPFPartitionInfo.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94F4276A0543161A00A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = XPFPartitionInfo.h;
 			path = XPFPartitionInfo/XPFPartitionInfo.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94F4276B0543161A00A80003 = {
 			fileRef = 94F427690543161A00A80003;
@@ -2099,13 +2449,16 @@
 			name = InfoPlist.strings;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94F4276E0543163F00A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = XPFPartitionInfo/English.lproj/InfoPlist.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94F4276F0543163F00A80003 = {
 			fileRef = 94F4276D0543163F00A80003;
@@ -2121,16 +2474,13 @@
 			isa = PBXGroup;
 			name = GossamerDeviceTreeUpdater;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94FC07CD056AE12D00A80003 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -2169,11 +2519,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -2271,27 +2617,35 @@
 ";
 		};
 		94FC07D4056AE12D00A80003 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = GossamerDeviceTreeUpdater.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		94FC07D5056AE14200A80003 = {
 			isa = PBXTargetDependency;
 			target = 94FC07D3056AE12D00A80003;
+			targetProxy = 948CD0FB05FBEECE003103DB;
 		};
 		94FC07D6056AE24D00A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			name = GossamerDeviceTreeUpdater.cpp;
 			path = GossamerDeviceTreeUpdater/GossamerDeviceTreeUpdater.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94FC07D7056AE24D00A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = GossamerDeviceTreeUpdater.h;
 			path = GossamerDeviceTreeUpdater/GossamerDeviceTreeUpdater.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		94FC07DA056AE24D00A80003 = {
 			fileRef = 94FC07D6056AE24D00A80003;
@@ -2327,20 +2681,26 @@
 		F513163C0322F90801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = appleboot.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F513163D0322F90801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = failedboot.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F513163E0322F90801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = netboot.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F513163F0322F90801A80001 = {
 			fileRef = F513163C0322F90801A80001;
@@ -2361,18 +2721,26 @@
 			};
 		};
 		F52AC80E03F21A8F01A80002 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = ApplicationServices.framework;
 			path = /System/Library/Frameworks/ApplicationServices.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F52AC80F03F21A8F01A80002 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = CoreServices.framework;
 			path = /System/Library/Frameworks/CoreServices.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F53C690F01B191BA01A80001 = {
+			buildSettings = {
+			};
 			buildStyles = (
 				F53C691101B191BA01A80001,
 				F53C691201B191BA01A80001,
@@ -2433,12 +2801,18 @@
 			);
 			isa = PBXGroup;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C691101B191BA01A80001 = {
 			buildRules = (
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ZERO_LINK = YES;
 			};
 			isa = PBXBuildStyle;
 			name = Development;
@@ -2448,6 +2822,8 @@
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;
 			name = Deployment;
@@ -2462,6 +2838,7 @@
 			isa = PBXGroup;
 			path = BootX;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C695501B1926201A80001 = {
 			children = (
@@ -2492,6 +2869,7 @@
 			isa = PBXGroup;
 			path = Extensions;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C695601B1926201A80001 = {
 			children = (
@@ -2502,18 +2880,23 @@
 			isa = PBXGroup;
 			path = AppleCurio;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C695701B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = AppleCurio.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C695801B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AppleCurio.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C695C01B1926201A80001 = {
 			children = (
@@ -2523,13 +2906,16 @@
 			name = InfoPlist.strings;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C695D01B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C695E01B1926201A80001 = {
 			children = (
@@ -2540,18 +2926,23 @@
 			isa = PBXGroup;
 			path = AppleGrandCentral;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C695F01B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = AppleGrandCentral.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C696001B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AppleGrandCentral.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C696401B1926201A80001 = {
 			children = (
@@ -2561,13 +2952,16 @@
 			name = InfoPlist.strings;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C696501B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C696601B1926201A80001 = {
 			children = (
@@ -2582,42 +2976,55 @@
 			isa = PBXGroup;
 			path = AppleMaceEthernet;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C696801B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = AppleMaceEthernet.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C696901B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AppleMaceEthernet.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C696E01B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = AppleMaceEthernetHW.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C696F01B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = AppleMaceEthernetPrivate.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C697001B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AppleMaceEthernetPrivate.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C697101B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AppleMaceEthernetRegisters.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C697201B1926201A80001 = {
 			children = (
@@ -2627,13 +3034,16 @@
 			name = InfoPlist.strings;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C697301B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C697401B1926201A80001 = {
 			children = (
@@ -2644,18 +3054,23 @@
 			isa = PBXGroup;
 			path = ApplePowerSurgePE;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C697601B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = ApplePowerSurgePE.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C697701B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = ApplePowerSurgePE.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C697C01B1926201A80001 = {
 			children = (
@@ -2665,13 +3080,16 @@
 			name = InfoPlist.strings;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C697D01B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C698101B1926201A80001 = {
 			children = (
@@ -2682,6 +3100,7 @@
 			isa = PBXGroup;
 			path = PatchedAppleNVRAM;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C698201B1926201A80001 = {
 			children = (
@@ -2691,25 +3110,32 @@
 			name = InfoPlist.strings;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C698301B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C698401B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = PatchedAppleNVRAM.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C698501B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = PatchedAppleNVRAM.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C698901B1926201A80001 = {
 			children = (
@@ -2724,6 +3150,7 @@
 			isa = PBXGroup;
 			path = PatchedIOSCSICDDrive;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C698A01B1926201A80001 = {
 			children = (
@@ -2733,49 +3160,64 @@
 			name = InfoPlist.strings;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C698B01B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C698C01B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = IOBasicSCSI.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C698D01B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = IOSCSICDDrive.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C698E01B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = IOSCSICDDriveNub.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C698F01B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = IOSCSIHDDrive.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C699001B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = PatchedIOSCSICDDrive.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C699101B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = PatchedIOSCSICDDrive.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C699601B1926201A80001 = {
 			children = (
@@ -2790,6 +3232,7 @@
 			isa = PBXGroup;
 			path = PatchedSCSIDeviceType05;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C699701B1926201A80001 = {
 			children = (
@@ -2799,49 +3242,64 @@
 			name = InfoPlist.strings;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C699801B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C699901B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = ObsoleteSCSIDeviceType05.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C699A01B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = ObsoleteSCSIMultimediaCommands.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C699B01B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = ObsoleteSCSIMultimediaCommands.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C699C01B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = ObsoloteSCSIDeviceType05.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C699D01B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = PatchedSCSIDeviceType05.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C699E01B1926201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = PatchedSCSIDeviceType05.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C6A1401B1941801A80001 = {
 			children = (
@@ -2850,12 +3308,15 @@
 			isa = PBXGroup;
 			name = Frameworks;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C6A1501B1943D01A80001 = {
 			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
 			name = libcc_kext.a;
 			path = /usr/lib/gcc/darwin/2.95.2/libcc_kext.a;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F53C6A1601B194DC01A80001 = {
 			children = (
@@ -2898,21 +3359,31 @@
 			isa = PBXGroup;
 			name = Products;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C6A1701B194DC01A80001 = {
+			explicitFileType = "compiled.mach-o.executable";
+			fallbackIsa = PBXFileReference;
 			isa = PBXExecutableFileReference;
 			path = bootx;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F53C6A1801B194DC01A80001 = {
+			explicitFileType = "compiled.mach-o.executable";
+			fallbackIsa = PBXFileReference;
 			isa = PBXExecutableFileReference;
 			path = "macho-to-xcoff";
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F53C6A1901B194DC01A80001 = {
+			explicitFileType = "compiled.mach-o.executable";
+			fallbackIsa = PBXFileReference;
 			isa = PBXExecutableFileReference;
 			path = "fcode-to-c";
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F53C6A1A01B194DC01A80001 = {
 			buildPhases = (
@@ -2924,7 +3395,7 @@
 			);
 			buildSettings = {
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = BootX/bootx.tproj/include.subproj;
+				HEADER_SEARCH_PATHS = "BootX/bootx.tproj/include.subproj \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/usr/include/gcc/darwin/2.95.2\" \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/usr/include\"";
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				OTHER_CFLAGS = "-static";
 				OTHER_LDFLAGS = "-nostdlib -e _StartTVector -seg1addr 01C00000";
@@ -3144,12 +3615,15 @@
 			isa = PBXGroup;
 			path = bootx.tproj;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C6A2B01B1968701A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text;
 			path = bootinfo.hdr;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C6A6301B1968701A80001 = {
 			children = (
@@ -3158,12 +3632,15 @@
 			isa = PBXGroup;
 			path = "fcode-to-c.tproj";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C6A6401B1968701A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = "fcode-to-c.c";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C6A6501B1968701A80001 = {
 			children = (
@@ -3172,12 +3649,15 @@
 			isa = PBXGroup;
 			path = "macho-to-xcoff.tproj";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C6A6601B1968701A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = "macho-to-xcoff.c";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C6A9901B1968701A80001 = {
 			fileRef = F53C6A6601B1968701A80001;
@@ -3194,24 +3674,24 @@
 		F53C6AA901B19CA601A80001 = {
 			isa = PBXTargetDependency;
 			target = F53C6A1F01B194DC01A80001;
+			targetProxy = 948CD0F105FBEECE003103DB;
 		};
 		F53C6AAA01B19CA601A80001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "mkdir -p \"${SRCROOT}/XPostFacto/Derived\"\n\"${SYMROOT}/macho-to-xcoff\" \"${SYMROOT}/bootx\" \"${SRCROOT}/XPostFacto/Derived/bootx.xcoff\"";
 		};
 		F53C6AB401B19FD401A80001 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = AppleCurio.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F53C6AB501B19FD401A80001 = {
 			buildPhases = (
@@ -3226,7 +3706,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
@@ -3313,11 +3793,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -3357,11 +3833,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -3385,9 +3857,12 @@
 			};
 		};
 		F53C6AC201B1A29901A80001 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = AppleGrandCentral.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F53C6AC301B1A29901A80001 = {
 			buildPhases = (
@@ -3401,7 +3876,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
@@ -3484,11 +3959,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -3528,11 +3999,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -3556,9 +4023,12 @@
 			};
 		};
 		F53C6AD301B1A6D301A80001 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = AppleMaceEthernet.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F53C6AD401B1A6D301A80001 = {
 			buildPhases = (
@@ -3572,7 +4042,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = "";
@@ -3653,11 +4123,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -3743,11 +4209,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -3762,6 +4224,7 @@
 			name = PowerSurgeCPU;
 			path = Extensions/PowerSurgeCPU;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F53C6AE601B1AC0501A80001 = {
 			children = (
@@ -3771,35 +4234,48 @@
 			name = InfoPlist.strings;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C6AE701B1AC0501A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C6AE901B1AC0501A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = PowerSurgeCPU.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C6AEA01B1AC0501A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = PowerSurgeCPU.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53C6AEB01B1ACE201A80001 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = ApplePowerSurgePE.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F53C6AEC01B1ACE201A80001 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = PowerSurgeCPU.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F53C6AED01B1ACE201A80001 = {
 			buildPhases = (
@@ -3813,7 +4289,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
@@ -3903,11 +4379,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -3949,11 +4421,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -3970,7 +4438,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
@@ -4053,11 +4521,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -4097,11 +4561,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -4143,9 +4603,12 @@
 			};
 		};
 		F53C6B0901B1B30F01A80001 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = PatchedAppleNVRAM.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F53C6B0A01B1B30F01A80001 = {
 			buildPhases = (
@@ -4159,7 +4622,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
@@ -4242,11 +4705,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -4304,24 +4763,26 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
 		};
 		F53C6B1701B1B4A001A80001 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = PatchedIOSCSICDDrive.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F53C6B1801B1B4A001A80001 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = PatchedSCSIDeviceType05.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F53C6B1901B1B4A101A80001 = {
 			buildPhases = (
@@ -4335,7 +4796,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
@@ -4414,11 +4875,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -4504,11 +4961,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -4525,7 +4978,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
@@ -4633,11 +5086,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -4723,11 +5172,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -4735,16 +5180,20 @@
 		F53F988901E7448D01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			name = archive.cpp;
 			path = HFSPlusArchive/archive.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53F988A01E7448D01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			name = extract.cpp;
 			path = HFSPlusArchive/extract.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F53F988B01E7448E01A80001 = {
 			fileRef = F53F988901E7448D01A80001;
@@ -4753,9 +5202,12 @@
 			};
 		};
 		F53F988C01E7451A01A80001 = {
+			explicitFileType = "compiled.mach-o.executable";
+			fallbackIsa = PBXFileReference;
 			isa = PBXExecutableFileReference;
 			path = hfsplusextract;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F53F988D01E7451B01A80001 = {
 			buildPhases = (
@@ -4953,20 +5405,25 @@
 			name = "CPU Settings";
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F541C86D02FEE69A01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = XPFCPUSettings.h;
 			path = CPUSettings/XPFCPUSettings.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F541C86E02FEE74E01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			name = XPFCPUSettings.c;
 			path = CPUSettings/XPFCPUSettings.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F541C86F02FEE74E01A80001 = {
 			fileRef = F541C86E02FEE74E01A80001;
@@ -5031,20 +5488,25 @@
 			isa = PBXGroup;
 			name = PowerStarCPU;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F547F716028EFEEC01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			name = PowerStarCPU.cpp;
 			path = PowerStarCPU/PowerStarCPU.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F547F717028EFEEC01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = PowerStarCPU.h;
 			path = PowerStarCPU/PowerStarCPU.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F547F718028EFEEC01A80001 = {
 			children = (
@@ -5054,18 +5516,24 @@
 			name = InfoPlist.strings;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F547F719028EFEEC01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = PowerStarCPU/English.lproj/InfoPlist.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F547F71A028EFEEC01A80001 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = PowerStarCPU.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F547F71B028EFEEC01A80001 = {
 			buildPhases = (
@@ -5079,7 +5547,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
@@ -5160,11 +5628,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -5222,11 +5686,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -5234,15 +5694,20 @@
 		F547F725028F0E5501A80001 = {
 			isa = PBXTargetDependency;
 			target = F547F71B028EFEEC01A80001;
+			targetProxy = 948CD0EB05FBEECE003103DB;
 		};
 		F548C0D70289790D01A80001 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = OpenPMU.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F548C0D80289790D01A80001 = {
 			isa = PBXTargetDependency;
 			target = F548C0D90289790D01A80001;
+			targetProxy = 948CD0ED05FBEECE003103DB;
 		};
 		F548C0D90289790D01A80001 = {
 			buildPhases = (
@@ -5256,7 +5721,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
@@ -5339,11 +5804,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -5395,11 +5856,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -5425,96 +5882,127 @@
 			isa = PBXGroup;
 			path = OpenPMU;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F548C0E102897DDC01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = OpenPMU.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F548C0E202897DDC01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = OpenPMU.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F548C0E302897DDC01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = OpenViaInterface.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F548C0E402897DDC01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = OpenViaInterface.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F548C0E702897DDC01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = OpenPMUNVRAMController.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F548C0E802897DDC01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = OpenPMUNVRAMController.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F548C0E902897DDC01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = OpenPMUPowerSource.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F548C0EA02897DDC01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = OpenPMUPowerSource.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F548C0EB02897DDC01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = OpenPMUPwrController.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F548C0EC02897DDC01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = OpenPMUPwrController.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F548C0ED02897DDC01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = OpenPMURTCController.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F548C0EE02897DDC01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = OpenPMURTCController.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F548C0EF02897DDC01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = OpenPMUTables.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F548C0F002897DDC01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = OpenPMUUserClient.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F548C0F102897DDC01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = OpenPMUUserClient.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F548C0F302897DDC01A80001 = {
 			fileRef = F548C0E202897DDC01A80001;
@@ -5609,6 +6097,7 @@
 		F54DBA8602B139A701A80001 = {
 			isa = PBXTargetDependency;
 			target = F53C6A1A01B194DC01A80001;
+			targetProxy = 948CD10505FBEECE003103DB;
 		};
 		F54E20730267327701A80001 = {
 			children = (
@@ -5619,18 +6108,23 @@
 			isa = PBXGroup;
 			path = ApplePowerExpressPE;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54E20740267327701A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = ApplePowerExpressPE.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54E20750267327701A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = ApplePowerExpressPE.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54E20760267327701A80001 = {
 			children = (
@@ -5640,22 +6134,29 @@
 			name = InfoPlist.strings;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54E20770267327701A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F54E20780267327701A80001 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = ApplePowerExpressPE.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F54E20790267327701A80001 = {
 			isa = PBXTargetDependency;
 			target = F54E207A0267327701A80001;
+			targetProxy = 948CD10405FBEECE003103DB;
 		};
 		F54E207A0267327701A80001 = {
 			buildPhases = (
@@ -5669,7 +6170,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
@@ -5761,11 +6262,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -5825,11 +6322,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -5843,6 +6336,7 @@
 			isa = PBXGroup;
 			name = OHareATA;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F557F67F0226FBCB01A80001 = {
 			children = (
@@ -5853,11 +6347,15 @@
 			isa = PBXGroup;
 			name = AppleOHare;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F557F6800226FD2201A80001 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = OHareATA.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F557F6810226FD2201A80001 = {
 			buildPhases = (
@@ -5871,7 +6369,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
@@ -5948,11 +6446,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -5992,11 +6486,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -6004,16 +6494,20 @@
 		F557F6880226FDFA01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			name = AppleOHare.cpp;
 			path = AppleOHare/AppleOHare.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F557F6890226FDFA01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = AppleOHare.h;
 			path = AppleOHare/AppleOHare.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F557F68A0226FDFA01A80001 = {
 			children = (
@@ -6023,18 +6517,24 @@
 			name = InfoPlist.strings;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F557F68B0226FDFA01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = AppleOHare/English.lproj/InfoPlist.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F557F68C0226FDFA01A80001 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = AppleOHare.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F557F68D0226FDFA01A80001 = {
 			buildPhases = (
@@ -6048,7 +6548,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
@@ -6172,11 +6672,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -6228,11 +6724,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -6240,16 +6732,20 @@
 		F557F6970226FE6701A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			name = OHareATA.cpp;
 			path = OHareATA/OHareATA.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F557F6980226FE6701A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = OHareATA.h;
 			path = OHareATA/OHareATA.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F557F6990226FE6701A80001 = {
 			children = (
@@ -6259,13 +6755,16 @@
 			name = InfoPlist.strings;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F557F69A0226FE6701A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = OHareATA/English.lproj/InfoPlist.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F557F69B0226FE6701A80001 = {
 			fileRef = F557F6980226FE6701A80001;
@@ -6295,20 +6794,25 @@
 			name = ApplePowerStarPE;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F557F69F0226FF1001A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			name = ApplePowerStarPE.cpp;
 			path = ApplePowerStarPE/ApplePowerStarPE.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F557F6A00226FF1001A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = ApplePowerStarPE.h;
 			path = ApplePowerStarPE/ApplePowerStarPE.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F557F6A10226FF1001A80001 = {
 			children = (
@@ -6318,26 +6822,34 @@
 			name = InfoPlist.strings;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F557F6A20226FF1001A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = ApplePowerStarPE/English.lproj/InfoPlist.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F557F6A30226FF1001A80001 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = ApplePowerStarPE.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F557F6A40226FF1001A80001 = {
 			isa = PBXTargetDependency;
 			target = F557F6810226FD2201A80001;
+			targetProxy = 948CD10305FBEECE003103DB;
 		};
 		F557F6A60226FF1001A80001 = {
 			isa = PBXTargetDependency;
 			target = F557F6A70226FF1001A80001;
+			targetProxy = 948CD0F005FBEECE003103DB;
 		};
 		F557F6A70226FF1001A80001 = {
 			buildPhases = (
@@ -6351,7 +6863,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
@@ -6438,11 +6950,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -6502,11 +7010,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -6514,6 +7018,7 @@
 		F564382A01C2B3E601A80001 = {
 			isa = PBXTargetDependency;
 			target = F5EC95B601B1F16601A80001;
+			targetProxy = 948CD0FC05FBEECE003103DB;
 		};
 		F572EE7F0254E9E801A80001 = {
 			children = (
@@ -6527,36 +7032,47 @@
 			name = "Client Interface";
 			path = ci.subproj;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE800254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = ci.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE810254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = ci_io.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE820254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = Control2.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE830254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = "MAC-PARTS.c";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE840254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = sl_words.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE850254E9E801A80001 = {
 			children = (
@@ -6579,90 +7095,119 @@
 			name = Filesystems;
 			path = fs.subproj;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE860254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = cache.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE870254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = CaseTables.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE880254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = ext2fs.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE890254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = ext2fs.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE8A0254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = ext2fs_bswap.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE8B0254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = ext2fs_dinode.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE8C0254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = ext2fs_dir.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE8D0254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = fs.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE8E0254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = hfs.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE8F0254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = HFSCompare.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE900254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = net.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE910254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = ufs.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE920254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = ufs_byteorder.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE930254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = ufs_byteorder.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE940254E9E801A80001 = {
 			children = (
@@ -6678,48 +7223,63 @@
 			name = include;
 			path = include.subproj;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE950254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = boot_args.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE960254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = ci.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE970254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = device_tree.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE980254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = fs.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE990254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = libclite.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE9A0254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = sl.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE9B0254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = sl_words.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE9C0254E9E801A80001 = {
 			children = (
@@ -6738,66 +7298,87 @@
 			name = libclite;
 			path = libclite.subproj;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE9D0254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = bsearch.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE9E0254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = bswap.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EE9F0254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = mem.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EEA00254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = prf.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EEA10254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = printf.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EEA20254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = sprintf.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EEA30254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = string.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EEA40254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = strstr.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EEA50254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = strtol.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EEA60254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = zalloc.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EEA70254E9E801A80001 = {
 			children = (
@@ -6820,60 +7401,79 @@
 			name = "Secondary Loader";
 			path = sl.subproj;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EEA90254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = bootargs.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EEAA0254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = clut.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EEAB0254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = device_tree.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EEAC0254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = display.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EEAD0254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = drivers.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EEAE0254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = elf.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EEAF0254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = elf.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EEB40254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = macho.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EEB50254E9E801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = main.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F572EEB70254E9E801A80001 = {
 			fileRef = F572EE870254E9E801A80001;
@@ -7059,11 +7659,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -7103,11 +7699,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -7125,7 +7717,7 @@
 				DEBUGGING_SYMBOLS = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = /System/Library/Extensions;
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
@@ -7196,9 +7788,12 @@
 ";
 		};
 		F5812B820315F14401A80001 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = AppleCurio4K78.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F5812B840315F15C01A80001 = {
 			fileRef = F53C695701B1926201A80001;
@@ -7227,6 +7822,7 @@
 			isa = PBXGroup;
 			path = PatchedNDRVSupport;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F588751D030D66DB01A80001 = {
 			children = (
@@ -7236,35 +7832,38 @@
 			name = InfoPlist.strings;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F588751E030D66DB01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F588751F030D66DB01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = PatchedNDRVFramebuffer.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5887520030D66DB01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = PatchedNDRVFramebuffer.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5887521030D66FA01A80001 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -7304,11 +7903,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -7325,7 +7920,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
@@ -7407,9 +8002,12 @@
 ";
 		};
 		F5887528030D66FA01A80001 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = PatchedNDRVSupport.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F588752B030D69CA01A80001 = {
 			fileRef = F588751D030D66DB01A80001;
@@ -7432,21 +8030,28 @@
 		F588752E030D69F001A80001 = {
 			isa = PBXTargetDependency;
 			target = F5887527030D66FA01A80001;
+			targetProxy = 948CD0EA05FBEECE003103DB;
 		};
 		F58C73360238599301A80001 = {
 			isa = PBXTargetDependency;
 			target = F557F68D0226FDFA01A80001;
+			targetProxy = 948CD0EE05FBEECE003103DB;
 		};
 		F58FB3FB02B3D0BE01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = text.script.sh;
 			path = FixTypesAndCreators.sh;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F59D628701B1D0D601A80001 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = OldWorldSupport.pkg;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F59D628801B1D0D601A80001 = {
 			buildPhases = (
@@ -7507,40 +8112,43 @@
 		F59D628E01B1D12901A80001 = {
 			isa = PBXTargetDependency;
 			target = F53C6B2701B1B4A101A80001;
+			targetProxy = 948CD0F505FBEECE003103DB;
 		};
 		F59D628F01B1D12901A80001 = {
 			isa = PBXTargetDependency;
 			target = F53C6B1901B1B4A101A80001;
+			targetProxy = 948CD0FA05FBEECE003103DB;
 		};
 		F59D629101B1D12901A80001 = {
 			isa = PBXTargetDependency;
 			target = F53C6B0A01B1B30F01A80001;
+			targetProxy = 948CD0F905FBEECE003103DB;
 		};
 		F59D629201B1D12901A80001 = {
 			isa = PBXTargetDependency;
 			target = F53C6AED01B1ACE201A80001;
+			targetProxy = 948CD0FF05FBEECE003103DB;
 		};
 		F59D629301B1D12901A80001 = {
 			isa = PBXTargetDependency;
 			target = F53C6AD401B1A6D301A80001;
+			targetProxy = 948CD10205FBEECE003103DB;
 		};
 		F59D629401B1D12901A80001 = {
 			isa = PBXTargetDependency;
 			target = F53C6AB501B19FD401A80001;
+			targetProxy = 948CD10105FBEECE003103DB;
 		};
 		F59D629501B1D12901A80001 = {
 			isa = PBXTargetDependency;
 			target = F53C6AC301B1A29901A80001;
+			targetProxy = 948CD0E905FBEECE003103DB;
 		};
 		F59D629601B1D1A501A80001 = {
 			buildActionMask = 8;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "chown -R root:wheel \"${DSTROOT}\"\n\ncd \"${SRCROOT}\"\n\nmkdir -p XPostFacto/Derived/Extensions/plist\nmkdir -p XPostFacto/Derived/StartupItems/plist\nmkdir -p XPostFacto/Derived/ApplicationSupport/plist\n\nrm XPostFacto/Derived/Extensions/*.hfs\nrm XPostFacto/Derived/Extensions/plist/*.plist\nrm XPostFacto/Derived/StartupItems/*.hfs\nrm XPostFacto/Derived/StartupItems/plist/*.plist\nrm XPostFacto/Derived/ApplicationSupport/*.hfs\nrm XPostFacto/Derived/ApplicationSupport/plist/*.plist\n\ncd \"${DSTROOT}\"/System/Library/Extensions\n\nfor FILE in *.kext\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n\tcp \"${FILE}/Contents/Info.plist\" \"${SRCROOT}/XPostFacto/Derived/Extensions/plist/${FILE%.kext}.plist\"\n}\n\ncd \"${DSTROOT}\"/Library/\"Application Support\"/XPostFacto\nfor FILE in *.kext\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/ApplicationSupport\"\n\tcp \"${FILE}/Contents/Info.plist\" \"${SRCROOT}/XPostFacto/Derived/ApplicationSupport/plist/${FILE%.kext}.plist\"\n}\n\ncd \"${DSTROOT}\"/Library/StartupItems\n\"${SYMROOT}/hfsplusarchive\" XPFStartupItem \"${SRCROOT}/XPostFacto/Derived/StartupItems\"\ncp XPFStartupItem/Contents/Info.plist \"${SRCROOT}/XPostFacto/Derived/StartupItems/plist/XPFStartupItem.plist\"\n\nif test ${SUDO_USER}; then\n\tchown -R ${SUDO_USER} \"${SYMROOT}\"\n\tchown -R ${SUDO_USER} \"${SRCROOT}/XPostFacto/Derived\"\nfi";
@@ -7548,8 +8156,10 @@
 		F5B85D2103F5E91001A80002 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.asm;
 			path = OWCL2FXCacheInit.s;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5B85D2203F5E91001A80002 = {
 			fileRef = F5B85D2103F5E91001A80002;
@@ -7613,9 +8223,12 @@
 			productReference = F5BF317F03F01EA201A80002;
 		};
 		F5BF317F03F01EA201A80002 = {
+			explicitFileType = "compiled.mach-o.executable";
+			fallbackIsa = PBXFileReference;
 			isa = PBXExecutableFileReference;
 			path = xpfbootsupportd;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F5BF318103F01F0501A80002 = {
 			children = (
@@ -7627,13 +8240,16 @@
 			isa = PBXGroup;
 			name = "XPF Startup Item";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5BF318203F01F8C01A80002 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			name = xpfbootsupportd.c;
 			path = XPFStartupItem/xpfbootsupportd.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5BF318303F01F8C01A80002 = {
 			fileRef = F5BF318203F01F8C01A80002;
@@ -7655,18 +8271,25 @@
 			isa = PBXGroup;
 			name = Frameworks;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5BF318503F020F601A80002 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = CoreFoundation.framework;
 			path = /System/Library/Frameworks/CoreFoundation.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5BF347003F0213301A80002 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = IOKit.framework;
 			path = /System/Library/Frameworks/IOKit.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5BFE40F0304CD5E01A80001 = {
 			fileRef = F53C6A1501B1943D01A80001;
@@ -7897,11 +8520,15 @@
 			name = HFSPlusArchive;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95B501B1F16601A80001 = {
+			explicitFileType = "compiled.mach-o.executable";
+			fallbackIsa = PBXFileReference;
 			isa = PBXExecutableFileReference;
 			path = hfsplusarchive;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F5EC95B601B1F16601A80001 = {
 			buildPhases = (
@@ -7990,30 +8617,38 @@
 		F5EC95BC01B1F19201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			name = HFSPlusArchive.cpp;
 			path = XPostFacto/HFSPlusArchive/HFSPlusArchive.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95BD01B1F19201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = HFSPlusArchive.h;
 			path = XPostFacto/HFSPlusArchive/HFSPlusArchive.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95BE01B1F19201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			name = ZStream.cpp;
 			path = XPostFacto/HFSPlusArchive/ZStream.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95BF01B1F19201A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = ZStream.h;
 			path = XPostFacto/HFSPlusArchive/ZStream.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95C001B1F19201A80001 = {
 			fileRef = F5EC95BD01B1F19201A80001;
@@ -8040,22 +8675,29 @@
 			};
 		};
 		F5EC95CC01B1F40001A80001 = {
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = Carbon.framework;
 			path = /System/Library/Frameworks/Carbon.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5EC95CD01B1F40001A80001 = {
 			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
 			name = "libstdc++.a";
 			path = "/usr/lib/gcc/darwin/2.95.2/libstdc++.a";
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5EC95D801B1FEF301A80001 = {
 			isa = PBXFileReference;
+			lastKnownFileType = "compiled.mach-o.dylib";
 			name = libz.dylib;
 			path = /usr/lib/libz.1.1.3.dylib;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		F5EC95D901B1FEF301A80001 = {
 			fileRef = F5EC95D801B1FEF301A80001;
@@ -8074,6 +8716,7 @@
 			name = MoreFiles;
 			path = XPostFacto/MoreFiles;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F5EC95DE01B204D901A80001 = {
 			children = (
@@ -8090,60 +8733,79 @@
 			isa = PBXGroup;
 			path = CHeaders;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95DF01B204D901A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = DirectoryCopy.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95E001B204D901A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = FileCopy.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95E101B204D901A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = FSpCompat.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95E201B204D901A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = FullPath.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95E301B204D901A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = IterateDirectory.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95E401B204D901A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = MoreDesktopMgr.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95E501B204D901A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = MoreFiles.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95E601B204D901A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = MoreFilesExtras.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95E701B204D901A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = Search.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95E901B204D901A80001 = {
 			children = (
@@ -8162,72 +8824,95 @@
 			isa = PBXGroup;
 			path = Sources;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95EA01B204D901A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = DirectoryCopy.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95EB01B204D901A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = FileCopy.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95EC01B204D901A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = FSpCompat.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95ED01B204D901A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = FullPath.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95EE01B204D901A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = IterateDirectory.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95EF01B204D901A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = MoreDesktopMgr.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95F001B204D901A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = MoreFiles.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95F101B204D901A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = MoreFilesExtras.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95F201B204D901A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = Optimization.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95F301B204D901A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = OptimizationEnd.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC95F401B204D901A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
 			path = Search.c;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5EC961601B2194601A80001 = {
 			fileRef = F5EC95CC01B1F40001A80001;
@@ -8245,11 +8930,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -8292,11 +8973,7 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			generatedFileNames = (
-			);
 			isa = PBXShellScriptBuildPhase;
-			neededFileNames = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
@@ -8313,7 +8990,7 @@
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
@@ -8389,9 +9066,12 @@
 ";
 		};
 		F5FB800B03C7A0AD01A80002 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
 			path = OWCCacheConfig.kext;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F5FB800D03C7A0DD01A80002 = {
 			children = (
@@ -8406,36 +9086,47 @@
 			name = OWCCacheConfig;
 			path = Extensions/OWCCacheConfig;
 			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F5FB800E03C7A10D01A80002 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
 			path = OWCCacheConfig.cpp;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5FB800F03C7A10D01A80002 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = OWCCacheConfig.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5FB801003C7A10D01A80002 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = OWCCacheInit.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5FB801103C7A10D01A80002 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.asm;
 			path = OWCL2CacheInit.s;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5FB801203C7A10D01A80002 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.asm;
 			path = OWCL3CacheInit.s;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		F5FB801303C7A10D01A80002 = {
 			fileRef = F5FB800E03C7A10D01A80002;
@@ -8470,6 +9161,7 @@
 		F5FCE85C03C7AA0C01A80002 = {
 			isa = PBXTargetDependency;
 			target = F5FB800A03C7A0AD01A80002;
+			targetProxy = 948CD0F805FBEECE003103DB;
 		};
 	};
 	rootObject = F53C690F01B191BA01A80001;
