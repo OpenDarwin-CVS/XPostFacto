@@ -20,8 +20,7 @@
  * @APPLE_LICENSE_HEADER_END@
  */
 
-// This is a patched subclass for IOCDBlockStorageDriver, to work
-// around a bug in build 4K78.
+// This is a replacement for AppleNVRAM, to work around a bug on Old World machines.
 // Ryan Rempel (ryan.rempel@utoronto.ca)
 
 #include <IOKit/IOLib.h>
