@@ -254,19 +254,33 @@ reblessMacOS9SystemFolder ()
 	
 	syslog (LOG_INFO, "FinderInfo [0]: %lu [3]: %lu [5]: %lu", vinfo.finderinfo[0], vinfo.finderinfo[3], vinfo.finderinfo[5]);
 
+	// Documentation of the meaning of the finderinfo values is here:
+	// http://developer.apple.com/technotes/tn/tn1150.html
+
 	// We only want to deal with cases where Mac OS X has deblessed the Mac OS 9 system folder
 	// In those cases, Mac OS X sets finderinfo[5] equal to finderinfo[0]
 	if (vinfo.finderinfo[0] != vinfo.finderinfo[5]) return;
 	
+	// We look for a system folder. Theoretically, we could trust finderinfo[3], or at least
+	// use it if it seems to point to a real system folder. Could use searchfs to figure out
+	// what path finderinfo[3] is pointint to.
+	
 	UInt32 systemFolder = getMacOS9SystemFolderNodeID ();
 	
-	if (systemFolder) {
-		syslog (LOG_INFO, "Reblessing Mac OS 9 System Folder: %lu", systemFolder);
-		vinfo.finderinfo[0] = systemFolder;
-		vinfo.finderinfo[3] = systemFolder;
-		err = setattrlist ("/", &alist, &vinfo.finderinfo, sizeof (vinfo.finderinfo), 0);
-		if (err) syslog (LOG_INFO, "Error setting finder info");
- 	}
+	// If we can't find a system folder, then we should set finderinfo[0] equal to
+	// finderinfo[3]. That way, we do no harm if our routine for detecting system folders
+	// misses one for some reason (since the previous system folder setting should still be
+	// in finderinfo[3]). This is probably better than leaving finderinfo[0] with
+	// the CoreServices directory id, because that won't ever do any good on Old World machines,
+	// and can be problematic in some cases if you try to reboot after zapping PRAM.
+		
+	if (!systemFolder) systemFolder = vinfo.finderinfo[3];
+
+	syslog (LOG_INFO, "Reblessing Mac OS 9 System Folder: %lu", systemFolder);
+	vinfo.finderinfo[0] = systemFolder;
+	vinfo.finderinfo[3] = systemFolder;
+	err = setattrlist ("/", &alist, &vinfo.finderinfo, sizeof (vinfo.finderinfo), 0);
+	if (err) syslog (LOG_INFO, "Error setting finder info");
 }
 
 int 
