@@ -1994,6 +1994,8 @@
 	</dict>
 	<key>OSBundleLibraries</key>
 	<dict>
+		<key>com.apple.kernel</key>
+		<string>1.0.0b1</string>
 		<key>com.apple.kernel.iokit</key>
 		<string>1.0b1</string>
 	</dict>
@@ -2209,6 +2211,8 @@
 		<string>1.1.0</string>
 		<key>com.apple.iokit.IOStorageFamily</key>
 		<string>1.0.0</string>
+		<key>com.apple.kernel</key>
+		<string>1.4</string>
 	</dict>
 	<key>OSBundleRequired</key>
 	<string>Local-Root</string>
