@@ -33,7 +33,6 @@ advised of the possibility of such damage.
 
 #include "XPFApplication.h"
 #include "XPFVersion.h"
-#include "XPFWindow.h"
 #include "XPFAboutBox.h"
 #include "XPFFatalErrorWindow.h"
 #include "XPFSettingsWindow.h"
