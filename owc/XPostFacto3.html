@@ -1,8 +1,8 @@
-<body><h2>XPostFacto 3.0a11</h2>
+<body><h2>XPostFacto 3.0a12</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-January 14, 2004
+March 3, 2004
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -11,44 +11,25 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <p>Here's a quick link to download the latest version. 
 
 <blockquote>
-<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a11.sit">Download XPostFacto 3.0a11</a>
+<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a12.sit">Download XPostFacto 3.0a12</a>
 </blockquote>
 
-<p>Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes.  Note that the latest version is an alpha version of XPostFacto 3. There are two main outstanding issues not yet addressed in version 3.0a11:
+<p>Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes.  Note that the latest version is an alpha version of XPostFacto 3. There are two main outstanding issues not yet addressed in version 3.0a12:
 
 <ul>
 <li>SCSI devices are sometimes not showing up in Panther -- it appears that revisions to the SCSI drivers for Panther are required. Further information is available in the <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1161">bug report</a>.<p>
 
-<li>Built-in video is not yet working in Panther on the 7300 - 9600 series and the Beige G3. I am working on video drivers to correct this problem.<p>
+<li>Built-in video is not yet working in Panther on the Beige G3. But version 3.0a12 now has a video driver for the built-in video on the 7300 - 9600 series.<p>
 </ul>
 
-<h4>What's new in 3.0a11</h4>
+<h4>What's new in 3.0a12</h4>
 
-<p>Here's a summary of what's different in 3.0a11.
+<p>Here's a summary of what's different in 3.0a12.
 
 <ul>
-<p><li>XPostFacto now deals with the fact that the Mac OS X Installer blesses the /System/Library/CoreServices folder on the Mac OS X volume (which is problematic if you want to reboot from Mac OS 9 on that volume, and is unnecessary on Old World machines). The XPFStartupItem now automatically re-blesses the Mac OS 9 System Folder on the root volume if it detects that the CoreServices folder has been blessed. Also, there is a "Bless Mac OS 9 System" command in the "Install" menu.
+<p><li>A video driver for the built-in video on the 7300 - 9600 series (at least, those which have built-in video). This is the OpenControlFramebuffer.kext, which will be installed by XPF 3.0a12.
 
-<p><li>There is now a "Window" menu in XPostFacto which gives access to the Log Window and the Options Window. This helps deal with 640 x 480 resolution, where the "Options..." button is off-screen.
-
-<p><li>OWCCacheConfig was not detecting the correct cache values with a G4/700 on a cold boot (a warm boot worked fine). So I changed the strategy for detecting cache values for the L3 cache -- I'm now assuming a 200 MHz cache speed. Also delayed the cache testing until an accurate CPU speed is determined. There are still some problems with L2 cache testing in Panther -- it seems to work OK in Jaguar, though.
-
-<p><li>Fixed a performance problem introduced in the AppleMaceEthernet driver in 3.0a10. 
-
-<p><li>Fixed a problem loading the OpenPMUPCCardEject kernel extension in 10.3.2.
-
-<p><li>XPostFacto is now using a slightly different strategy for finding the Open Firmware name of a volume -- this fixes some cases where the Mac OS X version was unable to find an Open Firmware name.
-
-<p><li>XPostFacto now deletes the extensions cache when installing extensions in Mac OS 9, to make sure that the extensions cache gets updated.
-
-<p><li>When installing BootX, XPostFacto now makes sure that the partition entry indicates that the partition is bootable, and that the boot-blocks are installed on the volume.
-
-<p><li>XPostFacto had been taking some preferences from NVRAM, rather than the preferences file. However, the Mac OS X Installer makes changes to NVRAM, so XPostFacto now favours the prefs file, except with respect to the boot-device.
-
-<p><li>XPF now forces auto-boot? to be on, unless you have the input-device and output-device set.
-
-<p><li>XPostFacto used to use an optimized copy routine to synchronize extensions with the helper every time you quit. Now, it checks the relevant modification dates and only synchronizes when necessary. And, when synchronizing, it does a full copy rather than an optimized copy (since the optimization didn't save that much time and was a potential source of problems).
-
+<p><li>Fixed an issue with the installation procedure -- version 3.0a11 had inadvertently failed to install BootX when doing a fresh Mac OS X installation, which led to several difficulties.
 </ul>
 
 <h4>Panther Support</h4>
@@ -59,7 +40,9 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 
 <p>You will also see a new kernel extension called GossamerDeviceTreeUpdater, which makes some ... adjustments ... to the device tree on the Wallstreet Powerbooks and Beige G3, in order to make the Panther Installer feel more at home with its surroundings and willing to perform its duties without complaint. (In case you are thrown by my needlessly sinister tone, I should quickly inform you that these adjustments are entirely temporary and last only until you reboot).
 
-<p>One thing which is not yet working in Panther on the 7300 - 9600 or the Beige G3 is the built-in video. I need to do some more work to get this fixed. The Radeon 7000 works in Panther, as does the original Radeon Mac Edition, as well as some others. One option that you may find useful in Panther is the "Use old NDRVs" option, which sets up a boot argument which tells Panther to use the ROM-based drivers on older video cards that it would otherwise ignore.
+<p>There is also an OpenControlFramebuffer kernel extension which provides video support for the built-in video on the 7300 - 9600 series (for those models that have built-in video).
+
+<p>Built-in video is still not working on the Beige G3 in Panther. I need to do some more work to get this fixed. The Radeon 7000 works in Panther, as does the original Radeon Mac Edition, as well as some others. One option that you may find useful in Panther is the "Use old NDRVs" option, which sets up a boot argument which tells Panther to use the ROM-based drivers on older video cards that it would otherwise ignore.
 
 <h4>Pre-Jaguar Support -- not!</h4>
 
@@ -533,10 +516,19 @@ This software is provided by Other World Computing ``as is'' and any express or 
 
 <h2><a name="links">Download Links and Version History</a></h2>
 
-<dl>
+<dl><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a12.sit">3.0a12 (March 3, 2004)</a>
+
+<dd>Here's a list of what's new in version 3.0a12.
+
+<ul>
+<p><li>A video driver for the built-in video on the 7300 - 9600 series (at least, those which have built-in video). This is the OpenControlFramebuffer.kext, which will be installed by XPF 3.0a12.
+
+<p><li>Fixed an issue with the installation procedure -- version 3.0a11 had inadvertently failed to install BootX when doing a fresh Mac OS X installation, which led to several difficulties.
+</ul>
+
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a11.sit">3.0a11 (January 14, 2004)</a>
 
-<dd>Here's a list of changes since version 3.0a10.
+<dd>Here's a list of what's new in version 3.0a11.
 
 <ul>
 <p><li><a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1009">1009 - Bless Mac OS 9 System Folders.</a>
