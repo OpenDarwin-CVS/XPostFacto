@@ -60,6 +60,8 @@ class XPFApplication : public TApplication {
 			// Destructor
 			
 		virtual void DoAboutBox();
+		
+		void reportFatalError (CStr255_AC error);
 			
 		virtual void HandleDiskEvent(TToolboxEvent* event);
 		virtual void RegainControl(bool checkClipboard);

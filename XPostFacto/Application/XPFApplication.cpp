@@ -36,6 +36,7 @@ advised of the possibility of such damage.
 #include "XPFApplication.h"
 #include "XPFWindow.h"
 #include "XPFAboutBox.h"
+#include "XPFFatalErrorWindow.h"
 
 #include "UMenuMgr.h"
 
@@ -53,6 +54,7 @@ advised of the possibility of such damage.
 #include "OFAliases.h"
 #include "L2Cache.h"
 #include "XPFPrefs.h"
+#include "XPFStrings.h"
 
 #include "XPFNameRegistry.h"
 
@@ -104,9 +106,7 @@ TApplication('usu1', kSignature)
 	fMainWindow = NULL;
 	fAboutBox = NULL;
 	fWantsNavigationServices = true;
-						
-	fPrefs = NULL;
-	
+							
 	fCopyInProgress = false;
 	
 	long cpu;
@@ -117,10 +117,12 @@ TApplication('usu1', kSignature)
 		fHasL2Cache = false;
 	}
 	
-	fPrefs = new XPFPrefs;
-	
 	REGISTER_CLASS_AC (XPFWindow);
 	REGISTER_CLASS_AC (XPFAboutBox);
+	REGISTER_CLASS_AC (XPFFatalErrorWindow);
+
+	fPrefs = new XPFPrefs;
+	
 }
 
 //----------------------------------------------------------------------------------------
@@ -152,6 +154,13 @@ XPFApplication::DoAboutBox()
 	}
 }
 
+void 
+XPFApplication::reportFatalError (CStr255_AC error)
+{
+	XPFFatalErrorWindow *window = (XPFFatalErrorWindow *) TViewServer::fgViewServer->NewTemplateWindow(1006, NULL);
+	window->Open ();
+	window->SetText (error);
+}
 
 void
 XPFApplication::initializeThrottleMenu ()
@@ -176,11 +185,33 @@ XPFApplication::OpenNew(CommandNumber itsCommandNumber)
 		gLogFile << "XPostFacto Version " << kXPFVersion << endl_AC;
 	#endif
 	
-	fHasHFSPlusAPIs = GestaltAttribute_AC (gestaltFSAttr, gestaltHasHFSPlusAPIs);
+	CStr255_AC message;
 	
-	if (!fHasHFSPlusAPIs) ThrowException_AC (kRequiresOS9, NULL);
-	if (!NVRAMVariables::GetVariables()->getCanWritePatches()) ThrowException_AC (kNoNVRAMPatches, NULL);
-				
+	UInt32 version = 0;
+	
+	Gestalt (gestaltSystemVersion, (SInt32 *) &version);
+	
+	if (version < 0x0900) {
+		GetIndString (message, kXPFStringsResource, kRequiresOS9);
+		reportFatalError (message);
+		return NULL;	
+	}
+	
+	if (version >= 0x01000) {
+		GetIndString (message, kXPFStringsResource, kNoMacOSXYet);
+		reportFatalError (message);
+		return NULL;	
+	}
+	
+	if (!NVRAMVariables::GetVariables()->getCanWritePatches()) {
+		GetIndString (message, kXPFStringsResource, kNoNVRAMPatches);
+		message += NVRAMVariables::GetVariables()->getCompatible();
+		reportFatalError (message);
+		return NULL;
+	}
+								
+	fPrefs->Initialize ();
+	
 	fMainWindow = (XPFWindow *) TViewServer::fgViewServer->NewTemplateWindow(1004, NULL);		
 	fMainWindow->Open();
 			

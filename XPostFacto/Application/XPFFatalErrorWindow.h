@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001, 2002
+Copyright (c) 2002
 Other World Computing
 All rights reserved
 
@@ -32,47 +32,23 @@ advised of the possibility of such damage.
 */
 
 
-#include "XPFAboutBox.h"
-#include <iostream.h>
-#include <InternetConfig.h>
-#include <Sound.h>
+#ifndef __XPFFATALERRORWINDOW_H__
+#define __XPFFATALERRORWINDOW_H__
 
-MA_DEFINE_CLASS (XPFAboutBox);
+#include "UWindow.h"
 
-XPFAboutBox::~XPFAboutBox()
+class XPFFatalErrorWindow : public TWindow
 {
-	DisposeIfHandle_AC (fCopyrightText);
-}
+	MA_DECLARE_CLONE;
 
-void 
-XPFAboutBox::DoPostCreate (TDocument* itsDocument)
-{
-	TWindow::DoPostCreate (itsDocument);
-	fURL = (TStaticText *) this->FindSubView ('urlT');
-	fCopyrightNotice = (TTEView *) this->FindSubView ('Copy');
-	
-	fCopyrightText = GetResource ('TEXT', 1005);
-	if (fCopyrightText) {
-		DetachResource (fCopyrightText);
-		fCopyrightNotice->StuffText (fCopyrightText);
-	}
-}
+public:
 
-void 
-XPFAboutBox::DoEvent(EventNumber eventNumber,
+	virtual void Close();
+	virtual void DoEvent(EventNumber eventNumber,
 						TEventHandler* source,
-						TEvent* event)
-{
-	TWindow::DoEvent (eventNumber, source, event);
-	if ((eventNumber == mStaticTextHit) && (source == fURL)) {
-		CStr255_AC theURL = fURL->GetText ();
-		long start = 0, end = theURL[0];
-		ICInstance inst;
-		ThrowIfOSErr_AC (ICStart (&inst, 'usuX'));
-		#ifndef qCarbon
-			ThrowIfOSErr_AC (ICFindConfigFile (inst, 0, NULL));
-		#endif
-		ThrowIfOSErr_AC (ICLaunchURL (inst, "\p", &theURL[1], theURL[0], &start, &end));
-		ICStop (inst);
-	} 
-}
+						TEvent* event);
+						
+	void SetText (CStr255_AC text);
+};
+
+#endif

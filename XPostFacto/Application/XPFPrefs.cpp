@@ -63,6 +63,7 @@ XPFPrefs::XPFPrefs ()
 
 	fBootDisk = NULL;
 	fInstallDisk = NULL;
+	fCachedCreationDate = 0;
 	
 	fDirty = false;
 	
@@ -74,13 +75,6 @@ XPFPrefs::XPFPrefs ()
 	fDebug.syslog = false;
 	fDebug.arp = false;
 	fDebug.oldgdb = false;
-	
-	MountedVolume::Initialize ();
-		
-	fBootDisk = MountedVolume::WithCreationDate (fCachedCreationDate);
-	if (fBootDisk == NULL) fBootDisk = MountedVolume::GetVolumeList()->First ();
-
-	fInstallDisk = MountedVolume::GetVolumeList()->First ();
 }
 
 void
@@ -171,10 +165,12 @@ XPFPrefs::getPrefsFromFile ()
 
 	}
 	catch (...) {
-		fBootDisk = MountedVolume::GetVolumeList()->First ();
-		fCachedCreationDate = 0;
 	}
 
+	fBootDisk = MountedVolume::WithCreationDate (fCachedCreationDate);
+	if (fBootDisk == NULL) fBootDisk = MountedVolume::GetVolumeList()->First ();
+
+	fInstallDisk = MountedVolume::GetVolumeList()->First ();
 }
 
 void
@@ -240,12 +236,14 @@ XPFPrefs::Initialize ()
 	#endif
 	
 	initializeInputAndOutputDevices ();
+	
+	MountedVolume::Initialize ();
+	
 	getPrefsFromFile ();
 
 	unsigned int bootCreationDate = fBootDisk->getCreationDate ();
 	unsigned int installCreationDate = fInstallDisk->getCreationDate ();
 	
-	MountedVolume::Initialize ();
 	setBootDisk (MountedVolume::WithCreationDate (bootCreationDate));
 	setInstallDisk (MountedVolume::WithCreationDate (installCreationDate));
 	if (fBootDisk == NULL) setBootDisk (MountedVolume::GetVolumeList()->First ());
