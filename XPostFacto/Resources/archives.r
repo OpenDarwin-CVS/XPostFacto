@@ -87,8 +87,11 @@ Read 'plst' (139, "ApplePowerExpressPE") ":Derived:Extensions:plist:ApplePowerEx
 Read 'hfsA' (142, "PatchedNDRVSupport") ":Derived:Extensions:PatchedNDRVSupport.hfs";
 Read 'plst' (142, "PatchedNDRVSupport") ":Derived:Extensions:plist:PatchedNDRVSupport.plist";
 
-// Read 'hfsA' (143, "OWCCacheConfig") ":Derived:Extensions:OWCCacheConfig.hfs";
-// Read 'plst' (143, "OWCCacheConfig") ":Derived:Extensions:plist:OWCCacheConfig.plist";
+Read 'hfsA' (143, "OWCCacheConfig") ":Derived:Extensions:OWCCacheConfig.hfs";
+Read 'plst' (143, "OWCCacheConfig") ":Derived:Extensions:plist:OWCCacheConfig.plist";
+
+Read 'hfsA' (144, "OpenOWScreamerAudio") ":Derived:Extensions:OpenOWScreamerAudio.hfs";
+Read 'plst' (144, "OpenOWScreamerAudio") ":Derived:Extensions:plist:OpenOWScreamerAudio.plist";
 
 // Startup Item
 
