@@ -69,32 +69,6 @@
 			path = XPostFacto/Resources/XPFIcons.icns;
 			refType = 4;
 		};
-		946A5D29052514FE00A80003 = {
-			fileEncoding = 4;
-			isa = PBXFileReference;
-			name = XPFSyncPaths.h;
-			path = XPFStartupItem/XPFSync/XPFSyncPaths.h;
-			refType = 4;
-		};
-		946A5D2B052514FE00A80003 = {
-			fileRef = 946A5D29052514FE00A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		946A5D2C0525152200A80003 = {
-			fileEncoding = 4;
-			isa = PBXFileReference;
-			name = XPFSyncPaths.c;
-			path = XPFStartupItem/XPFSync/XPFSyncPaths.c;
-			refType = 4;
-		};
-		946A5D2E0525152200A80003 = {
-			fileRef = 946A5D2C0525152200A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		946B436B04FC0E3500A80003 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -5739,7 +5713,6 @@
 		F5BF317A03F01EA201A80002 = {
 			buildActionMask = 2147483647;
 			files = (
-				946A5D2B052514FE00A80003,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5749,7 +5722,6 @@
 			files = (
 				F5BF318303F01F8C01A80002,
 				946B436D04FC0E3500A80003,
-				946A5D2E0525152200A80003,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5812,8 +5784,6 @@
 				941C8E6E0528BB2A00A80003,
 				94B8172F047A7ABF00A80003,
 				94B81732047A7F5100A80003,
-				946A5D29052514FE00A80003,
-				946A5D2C0525152200A80003,
 				9407316705312E5900A80003,
 			);
 			isa = PBXGroup;

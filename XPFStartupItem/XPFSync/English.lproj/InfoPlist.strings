@@ -1,6 +1,0 @@
-/* Localized versions of Info.plist keys */
-
-CFBundleName = "XPFSync";
-CFBundleShortVersionString = "XPFSync version 0.1";
-CFBundleGetInfoString = "XPFSync version 0.1, Copyright 2003 Other World Computing.";
-NSHumanReadableCopyright = "Copyright 2003 Other World Computing.";
