@@ -108,8 +108,7 @@ resource 'STR#' (kHelpStringsResource, purgeable) {
 		 "Set the output-device if you turn auto-boot off. Otherwise, you can leave it at \"None\".";
 
 		 "Speeds up the boot process by enabling the L2 or L3 cache early. "
-		 "Turn it off if it seems to be causing problems."
-		 "Not implemented yet.";
+		 "Turn it off if it seems to be causing problems.";
 		 
 		 "Helps boot from some SCSI drives by slowing down the CPU during the boot process. "
 		 "Higher settings mean a slower CPU. "
