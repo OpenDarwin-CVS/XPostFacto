@@ -1,8 +1,8 @@
-<body><h2>XPostFacto 2.2b16</h2>
+<body><h2>XPostFacto 2.2b17</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-August 10, 2002
+August 18, 2002
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. The only difference from a supported installation is 3 extra clicks of your mouse! When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -10,7 +10,7 @@ August 10, 2002
 
 <p>You should also remember to check the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto.html">online version</a> of this documentation from time to time, to see whether there have been any changes.
 
-<p>As of version 2.2b15, it looks as though XPostFacto will be working with Mac OS X 10.2 (aka Jaguar), which is scheduled to be released on August 24. There are a couple of issues with Jaguar on unsupported systems at the moment. Jaguar does not work with the 603 or 604 processor--it is limited to the G3 and G4. It may be possible to fix this, but it will not happen before August 24. There is also a problem with the appearance of the "pointer cursor" when using onboard video. I am trying to figure out why, and may be able to fix it. Finally, I am having some trouble starting Classic, and am trying to figure out why.
+<p>It looks as though the latest version of XPostFacto will be working with Mac OS X 10.2 (aka Jaguar), which is scheduled to be released on August 24. There are a couple of issues with Jaguar on unsupported systems. The most serious is that Jaguar simply does not work with the 603 or 604 processor--it is limited to the G3 and G4. It may be possible to fix this, but it will not happen before August 24. Some people (including me) are also having trouble getting Classic to work, but others report that it works fine. So it is not clear whether that problem has any relationship with unsupported systems.
 
 <p><hr>
 
@@ -76,8 +76,20 @@ August 10, 2002
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
-<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Download/XPostFacto.img.sit">2.2b16 (August 10, 2002)</a>
+<dt><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Download/XPostFacto.img.sit">2.2b17 (August 18, 2002)</a>
 <dd>
+<ul>
+<li>Fixes the "file not found" error when trying to install Mac OS X 10.0 (the error was introduced in version 2.2b15).
+<li>Fixes the "squished cursor" problem when using Jaguar with onboard video.
+<li>Extensions built with the Jaguar development tools and headers.
+<li>Minor updates to BootX to synchronize with Apple's changes.
+<li>Uses slightly less NVRAM when setting up the install.
+<li>Is now able to install the current version of the extensions while running in Mac OS X.
+This takes the place of the "package" file which was formerly included.
+</ul>
+
+<dt><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto.img.sit">2.2b16 (August 10, 2002)</a>
+<dd><p>
 Fixes a problem which prevented some of the kernel extensions from loading properly in 2.2b15, which could cause a kernel panic early in the boot process. 
 
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2b15.img.sit">2.2b15 (August 8, 2002)</a>
@@ -362,7 +374,7 @@ XPF will only startup Mac OS X. To choose a different Mac OS 9 volume, use the S
 
 <h3><a name="UpgradingXPostFacto">Upgrading from a Previous Version of XPostFacto</a></h3>
 
-If you are upgrading from a previous version of XPostFacto, you need to make sure that the latest version of the kernel extensions get installed. You can do this in one of two ways. You can choose the 'Reinstall Extensions' option in the 'Advanced' menu of XPostFacto. Alternatively, you can use the 'OldWorld Support' package to install the current extensions from within Mac OS X itself.<p>
+If you are upgrading from a previous version of XPostFacto, you need to make sure that the latest version of the kernel extensions get installed. You can do this with the "Install Extensions" command in the "File" menu of XPostFacto. This command works when XPostFacto is running in Mac OS X as well as Mac OS 9. (Eventually, I would like XPostFacto to be fully functional in Mac OS X. At the moment, the "Install Extensions" command is the only thing that actually works when you use XPostFacto in Mac OS X).<p>
 
 <h3><a name="tenpointone">Upgrading Mac OS X</a></h3>
 
@@ -516,6 +528,9 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <h2>Revision History</h2>
 
 <dl>
+<dt>August 18, 2002
+<dd>Changes for version 2.2b17.
+
 <dt>August 10, 2002
 <dd>Changes for version 2.2b16.
 
