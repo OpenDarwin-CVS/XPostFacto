@@ -91,7 +91,7 @@ const UInt32 kDebugPanicText	= 1 << 8;
 
 XPFPrefs::XPFPrefs (TFile* itsFile)
 	: TFileBasedDocument (itsFile),
-		fEnableCacheEarly (false),
+		fEnableCacheEarly (true),
 		fAutoBoot (true),
 		fBootInSingleUserMode (false),
 		fBootInVerboseMode (false),
@@ -270,7 +270,9 @@ XPFPrefs::getPrefsFromNVRAM ()
 	setAutoBoot (nvram->getBooleanValue ("auto-boot?"));	
 	setBootInSingleUserMode ((strstr (bootCommand, " -s")) != 0);
 //	setBootInVerboseMode ((strstr (bootCommand, " -v")) != 0);
-	setEnableCacheEarly ((strstr (bootCommand, " -c")) != 0);
+
+	// we set -c if the user does *not* want to enable the cache early
+	setEnableCacheEarly ((strstr (bootCommand, " -c")) == 0);
 	
 	char *debugString = strstr (bootCommand, "debug=");
 	UInt32 debug = 0;
@@ -805,7 +807,9 @@ XPFPrefs::getBootCommandBase ()
 			
 	if (fBootInVerboseMode) bootCommand += (" -v");
 	if (fBootInSingleUserMode) bootCommand += (" -s");
-	if (fEnableCacheEarly) bootCommand += (" -c");
+	
+	// We set -c if the user does *not* want to enable the cache early
+	if (!fEnableCacheEarly) bootCommand += (" -c");
 	if (fUseROMNDRV) bootCommand += (" romndrv=1");
 	
 	return bootCommand;
