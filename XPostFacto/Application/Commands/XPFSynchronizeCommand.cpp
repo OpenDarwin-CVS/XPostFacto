@@ -68,7 +68,7 @@ XPFSynchronizeCommand::DoItInProgressWindow ()
 	fProgressMax = progbase + scale * 50;
 	
 	if (fRootDisk->getIsWriteable ()) {
-		if (!fRootDisk->hasCurrentExtensions ()) {
+		if (!fRootDisk->hasCurrentExtensions (fPrefs->getEnableCacheEarly ())) {
 			installExtensionsWithRootDirectory (fRootDisk->getRootDirectory ());
 		}
 				

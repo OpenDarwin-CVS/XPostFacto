@@ -322,7 +322,7 @@ MountedVolume::installBootXIfNecessary (bool forceInstall)
 }
 
 bool
-MountedVolume::hasCurrentExtensions ()
+MountedVolume::hasCurrentExtensions (bool useCacheConfig)
 {
 	FSRef extensionsDir;
 	OSErr err = XPFFSRef::getOrCreateSystemLibraryExtensionsDirectory (&fRootDirectory, &extensionsDir, false);
@@ -366,7 +366,22 @@ MountedVolume::hasCurrentExtensions ()
 		err = XPFFSRef::getFSRef (&extensionsDir, (CChar255_AC) resourceName, &extension);
 		if (err == noErr) err = XPFFSRef::getFSRef (&extension, "Contents", &contents);
 		if (err == noErr) err = XPFFSRef::getFSRef (&contents, "Info.plist", &infoplist);
-		if (err != noErr) return false;
+		if (err != noErr) {
+			// The file is not there. If it's not OWCCacheConfig, we just return false.
+			if (resourceName != "OWCCacheConfig.kext") {
+				return false;
+			} else {
+				if (useCacheConfig) {
+					return false;
+				} else {
+					continue; // we don't need to check version numbers :-)
+				}
+			}
+		} else {
+			// The file is there. So just keep going, unless it's OWCCacheConfig and it's not
+			// supposed to be there.
+			if ((resourceName == "OWCCacheConfig.kext") && !useCacheConfig) return false;
+		}
 		
 		CFSSpec_AC infospec;
 		err = FSGetCatalogInfo (&infoplist, kFSCatInfoNone, NULL, NULL, &infospec, NULL);

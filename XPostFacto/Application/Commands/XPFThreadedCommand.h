@@ -44,7 +44,7 @@ class XPFThreadedCommand : public TCommand {
 
 	public:
 		
-		XPFThreadedCommand (MountedVolume *rootDisk, MountedVolume *bootDisk = NULL);
+		XPFThreadedCommand (MountedVolume *rootDisk, MountedVolume *bootDisk);
 		
 		void DoIt ();											
 		virtual void DoItInProgressWindow () = 0;

@@ -102,6 +102,8 @@ XPFInstallButton::DoUpdate (ChangeID_AC theChange,
 								void* changeData,
 								CDependencySpace_AC* dependencySpace)
 {
+	#pragma unused (theChange, changedObject, changeData, dependencySpace)
+
 	// basically, any update from fPrefs might change our state
 	SetActiveState (determineActiveState (), true);
 }
@@ -166,6 +168,8 @@ XPFRestartButton::DoUpdate (ChangeID_AC theChange,
 								void* changeData,
 								CDependencySpace_AC* dependencySpace)
 {
+	#pragma unused (theChange, changedObject, changeData, dependencySpace)
+
 	// Basically, any update from fPrefs could change our active state
 	SetActiveState (determineActiveState (), true);
 }

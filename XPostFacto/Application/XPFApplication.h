@@ -92,6 +92,7 @@ class XPFApplication : public TApplication {
 		
 		XPFPlatform* getPlatform () {return fPlatform;}
 		UInt32 getDebugOptions () {return fDebugOptions;}
+		XPFPrefs *getPrefs () {return fPrefs;}
 		
 		// Commands
 		void CloseSplashWindow ();

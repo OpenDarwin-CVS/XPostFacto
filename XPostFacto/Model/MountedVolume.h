@@ -96,7 +96,7 @@ class MountedVolume : public MDependable_AC
 		FSRef* getRootDirectory () {return &fRootDirectory;}
 		const UInt64* getFreeBytes () {return &fInfo.freeBytes;}
 		
-		bool hasCurrentExtensions ();
+		bool hasCurrentExtensions (bool useCacheConfig);
 		bool hasCurrentStartupItems ();
 				
 		void installBootXIfNecessary (bool forceInstall = false);

@@ -69,6 +69,8 @@ XPFThreadedCommand::XPFThreadedCommand (MountedVolume *rootDisk, MountedVolume *
 
 	fDebugOptions = ((XPFApplication *) gApplication)->getDebugOptions ();		
 	fCopyWord.CopyFrom (kXPFStringsResource, kTheWordCopy, 63);
+	
+	fPrefs = ((XPFApplication *) gApplication)->getPrefs ();
 }	
 
 // Methods to run things in a progress window
@@ -190,6 +192,15 @@ XPFThreadedCommand::installExtensionsWithRootDirectory (FSRef *rootDirectory)
 	ThrowIfOSErr_AC (XPFFSRef::getOrCreateSystemLibraryExtensionsDirectory (rootDirectory, &systemLibraryExtensionsFolder));
 	copyHFSArchivesTo ('hfsA', &systemLibraryExtensionsFolder);
 	
+	if (!fPrefs->getEnableCacheEarly ()) {
+		FSRef cacheRef;
+		OSErr err = XPFFSRef::getFSRef (&systemLibraryExtensionsFolder, "OWCCacheConfig.kext", &cacheRef);
+		if (err == noErr) {
+			XPFSetUID myUID (0);
+			FSRefDeleteDirectory (&cacheRef);
+		}
+	} 
+	
 	updateExtensionsCacheForRootDirectory (rootDirectory);
 }
 
@@ -201,6 +212,15 @@ XPFThreadedCommand::installSecondaryExtensionsWithRootDirectory (FSRef *rootDire
 	
 	ThrowIfOSErr_AC (XPFFSRef::getOrCreateLibraryExtensionsDirectory (rootDirectory, &libraryExtensionsFolder));
 	copyHFSArchivesTo ('hfsA', &libraryExtensionsFolder);
+
+	if (!fPrefs->getEnableCacheEarly ()) {
+		FSRef cacheRef;
+		OSErr err = XPFFSRef::getFSRef (&libraryExtensionsFolder, "OWCCacheConfig.kext", &cacheRef);
+		if (err == noErr) {
+			XPFSetUID myUID (0);
+			FSRefDeleteDirectory (&cacheRef);
+		}
+	} 	
 }
 
 void
