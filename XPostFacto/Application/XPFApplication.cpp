@@ -61,6 +61,8 @@ advised of the possibility of such damage.
 #include "XPFOpenURLBehavior.h"
 #include "XPFProgressWindow.h"
 #include "XPFVolumePopups.h"
+#include "XPFButtons.h"
+#include "XPFSettingsText.h"
 
 #include <InternetConfig.h>
 #include <UnicodeConverter.h>
@@ -136,6 +138,9 @@ XPFApplication::XPFApplication() :
 	REGISTER_CLASS_AC (XPFProgressWindow);
 	REGISTER_CLASS_AC (XPFHelperPopup);
 	REGISTER_CLASS_AC (XPFInstallCDPopup);
+	REGISTER_CLASS_AC (XPFInstallButton);
+	REGISTER_CLASS_AC (XPFRestartButton);
+	REGISTER_CLASS_AC (XPFSettingsText);
 	
 	ProcessInfoRec info;
 	FSSpec appSpec, resourceSpec;
