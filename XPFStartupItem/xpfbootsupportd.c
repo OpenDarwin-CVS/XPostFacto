@@ -82,6 +82,7 @@ void initialize_everything ();
 void writePID ();
 void deletePID ();
 void handle_SIGHUP (int sig);
+void handle_SIGUSR1 (int sig);
 void restartProcess ();
 
 void pollForChanges ();
@@ -243,6 +244,12 @@ handle_SIGHUP (int sig)
 	reinitializeNow = 1;
 }
 
+void 
+handle_SIGUSR1 (int sig)
+{
+	noSyncRequired = true;
+}
+
 void
 restartProcess ()
 {
@@ -298,6 +305,7 @@ main (int argc, char **argv)
 	initialize_everything ();
 	
 	signal (SIGHUP, &handle_SIGHUP);
+	signal (SIGUSR1, &handle_SIGUSR1);
 	
 	pollForChanges ();
 	

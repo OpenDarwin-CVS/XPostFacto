@@ -61,6 +61,7 @@ RunService ()
       start  ) StartService   ;;
       stop   ) StopService    ;;
       restart) RestartService ;;
+	  suspend) SuspendService ;;
       *      ) echo "$0: unknown argument: $1";;
     esac
 }
@@ -94,6 +95,14 @@ RestartService ()
         kill -HUP "${pid}"
     else
         StartService
+    fi
+}
+
+SuspendService ()
+{
+    if pid=$(GetPID xpfbootsupportd); then
+        ConsoleMessage "Suspending XPostFacto Boot Support"
+        kill -USR1 "${pid}"
     fi
 }
 
