@@ -43,7 +43,7 @@ class MountedVolume;
 class HFSPlusVolumeHeader;
 class HFSPlusVolume;
 
-class XPFPartition
+class XPFPartition : public MDependable_AC
 {
 	private:
 
@@ -57,11 +57,13 @@ class XPFPartition
 		
 		bool fExtendsPastEightGB;
 		XPFBootableDevice *fBootableDevice;
-		CStr255_AC fOpenFirmwareName;
-		CStr255_AC fShortOpenFirmwareName;
+		char fOpenFirmwareName[256];
+		char fShortOpenFirmwareName[256];
 		unsigned long fOffsetToHFSPlusVolume;
 		
 		HFSPlusVolume *fHFSPlusVolume;
+		
+		void checkOpenFirmwareName ();
 	
 	public:
 	
@@ -75,8 +77,7 @@ class XPFPartition
 		unsigned int getCreationDate () {return fCreationDate;}
 		bool getExtendsPastEightGB () {return fExtendsPastEightGB;}
 		bool getHasHFSWrapper () {return fOffsetToHFSPlusVolume;}
-		const CStr255_AC& getOpenFirmwareName (bool useShortName) {return useShortName ? fShortOpenFirmwareName : fOpenFirmwareName;}
-		bool getValidOpenFirmwareName ();
+		const char* getOpenFirmwareName (bool useShortName) {return useShortName ? fShortOpenFirmwareName : fOpenFirmwareName;}
 		bool getIsHFSPlusVolume () {return fHFSPlusVolume;}
 
 		bool getClaimsBootXInstalled ();
@@ -98,6 +99,8 @@ class XPFPartition
 		void writePartition ();
 		OSErr writeBootBlocks (void *buffer);
 		OSErr readBootBlocks (void **buffer);
+		
+		void DoUpdate (ChangeID_AC theChange, MDependable_AC* changedObject, void* changeData, CDependencySpace_AC* dependencySpace);
 		
 		void dump ();
 };

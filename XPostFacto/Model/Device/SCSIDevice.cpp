@@ -43,6 +43,7 @@ advised of the possibility of such damage.
 
 #include "XPFLog.h"
 #include "XPFErrors.h"
+#include "XPostFacto.h"
 
 void
 SCSIDevice::Initialize ()
@@ -83,8 +84,6 @@ SCSIDevice::Initialize ()
 SCSIDevice::SCSIDevice (DeviceIdent scsiDevice, SInt16 driverRefNum)
 	: XPFBootableDevice (driverRefNum)
 {
-	fValidOpenFirmwareName = false;
-	
 	fDeviceIdent = scsiDevice;
 	
 	fPB = NULL;
@@ -111,7 +110,7 @@ SCSIDevice::SCSIDevice (DeviceIdent scsiDevice, SInt16 driverRefNum)
 	
 	// Now we try various ways to figure out which SCSIBus we're on
 		
-	fSCSIBus = NULL;
+	fBus = NULL;
 		
 // None of these methods seem to actually work, and they sometimes
 // cause crashes. So I'm just removing them for the moment.
@@ -188,41 +187,53 @@ SCSIDevice::SCSIDevice (DeviceIdent scsiDevice, SInt16 driverRefNum)
 */
 
 	// OK, just use the bus number
-	if (!fSCSIBus) {
-		fSCSIBus = SCSIBus::BusWithNumber (scsiDevice.bus);
+	if (!fBus) {
+		fBus = SCSIBus::BusWithNumber (scsiDevice.bus);
+	}
+
+	// If we have it, we record the default. If not, we just pick one	
+	if (fBus) {
+		fDefaultBus = fBus;
+	} else {
+		fBus = SCSIBus::GetDefaultBus ();
 	}
 	
-	// Now, we should really have it.
-	if (fSCSIBus) {
-		fValidOpenFirmwareName = true;
-		if (fSCSIBus->getIsActuallyATABus ()) {
-			if (scsiDevice.targetID < 2) {
-				fOpenFirmwareName.CopyFrom (fSCSIBus->getATAOpenFirmwareName0 ());
-				fShortOpenFirmwareName.CopyFrom (fSCSIBus->getATAShortOpenFirmwareName0 ());
-			} else {
-				fOpenFirmwareName.CopyFrom (fSCSIBus->getATAOpenFirmwareName1 ());
-				fShortOpenFirmwareName.CopyFrom (fSCSIBus->getATAShortOpenFirmwareName1 ());
-			}
-			scsiDevice.targetID %= 2;
-		} else {
-			fOpenFirmwareName.CopyFrom (fSCSIBus->getOpenFirmwareName ());
-			fShortOpenFirmwareName.CopyFrom (fSCSIBus->getShortOpenFirmwareName ());
-		}
-		char buffer[16];
-		snprintf (buffer, 16, "/@%X", scsiDevice.targetID); 
-		fOpenFirmwareName += buffer;
-		fShortOpenFirmwareName += buffer;
+	checkOpenFirmwareName ();
+}
+
+void
+SCSIDevice::checkOpenFirmwareName () 
+{
+	int targetID = fDeviceIdent.targetID;
+	
+	char *format = "%s/@%u";
+	char *lunformat = "%s/@%u,%u";
+
+	if (fBus->getIsActuallyATABus ()) {
+		SCSIBus *bus = (SCSIBus *) fBus;
+		int channel = targetID < 2 ? 0 : 1;
+		int masterOrSlave = targetID % 2;
+		sprintf (fOpenFirmwareName, format, bus->getATAOpenFirmwareName (channel, false), masterOrSlave);
+		sprintf (fShortOpenFirmwareName, format, bus->getATAOpenFirmwareName (channel, true), masterOrSlave);
 	} else {
-		fValidOpenFirmwareName = false;
+		if (fDeviceIdent.LUN) {
+			sprintf (fOpenFirmwareName, lunformat, fBus->getOpenFirmwareName (false), targetID, fDeviceIdent.LUN);
+			sprintf (fShortOpenFirmwareName, lunformat, fBus->getOpenFirmwareName (true), targetID, fDeviceIdent.LUN);
+		} else {
+			sprintf (fOpenFirmwareName, format, fBus->getOpenFirmwareName (false), targetID);
+			sprintf (fShortOpenFirmwareName, format, fBus->getOpenFirmwareName (true), targetID);		
+		}
 	}
 	
 	#if qLogging
-		if (fSCSIBus) {
-			gLogFile << "OpenFirmwareName for SCSI Bus: " << scsiDevice.bus << ": " << (CChar255_AC) fShortOpenFirmwareName << endl_AC;
+		if (fBus) {
+			gLogFile << "OpenFirmwareName for SCSI Bus: " << fDeviceIdent.bus << ": " << fShortOpenFirmwareName << endl_AC;
 		} else {
-			gLogFile << "Could not find Open Firmware name for SCSI bus: " << scsiDevice.bus << endl_AC;
+			gLogFile << "Could not find Open Firmware name for SCSI bus: " << fDeviceIdent.bus << endl_AC;
 		}
 	#endif;
+	
+	Changed (cSetOpenFirmwareName, this);
 }
 
 SCSIDevice::~SCSIDevice ()

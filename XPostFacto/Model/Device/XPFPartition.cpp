@@ -39,6 +39,7 @@ advised of the possibility of such damage.
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <stdio.h>
 
 #include "HFSPlusCatalog.h"
 #include "HFSPlusVolume.h"
@@ -88,19 +89,41 @@ XPFPartition::XPFPartition (XPFBootableDevice *device, Partition *part, int part
 	}
 
 	fExtendsPastEightGB = (part->pmPyPartStart + part->pmPartBlkCnt) > (8UL * 1024 / 512 * 1024 * 1024 );
-
-	fOpenFirmwareName.CopyFrom (device->getOpenFirmwareName (false));
-	fShortOpenFirmwareName.CopyFrom (device->getOpenFirmwareName (true));
-	char buffer[8];
-	snprintf (buffer, 8, ":%d", fPartitionNumber);
-	fOpenFirmwareName += buffer;
-	fShortOpenFirmwareName += buffer;
+	
+	checkOpenFirmwareName ();
 	
 	if (fCreationDate) fHFSPlusVolume = new HFSPlusVolume (this, fOffsetToHFSPlusVolume);
+	
+	fBootableDevice->AddDependent (this);
 
 	#if qLogging
 		if (fCreationDate) gLogFile << "Partition: " << partNumber << " CreationDate: " << fCreationDate << endl_AC;
 	#endif
+}
+
+void
+XPFPartition::checkOpenFirmwareName ()
+{
+	sprintf (fOpenFirmwareName, "%s:%d", fBootableDevice->getOpenFirmwareName (false), fPartitionNumber);
+	sprintf (fShortOpenFirmwareName, "%s:%d", fBootableDevice->getOpenFirmwareName (true), fPartitionNumber);
+
+	Changed (cSetOpenFirmwareName, this);
+}
+	
+void 
+XPFPartition::DoUpdate (ChangeID_AC theChange, MDependable_AC* changedObject, void* changeData, CDependencySpace_AC* dependencySpace)
+{
+	#pragma unused (changedObject, changeData, dependencySpace)
+	
+	switch (theChange) {			
+		case cSetBus:
+			Changed (cSetBus, this);
+			break;
+			
+		case cSetOpenFirmwareName:
+			checkOpenFirmwareName ();
+			break;
+	}
 }
 
 XPFPartition::~XPFPartition ()
@@ -158,11 +181,6 @@ XPFPartition::setBootXValues (unsigned loadAddress, unsigned entryPoint, unsigne
 		gLogFile << "pmBootSize: " << size << " pmBootAddr: " << loadAddress
 			<< " pmBootEntry: " << entryPoint << endl_AC;
 	#endif
-}
-
-bool 
-XPFPartition::getValidOpenFirmwareName () {
-	return fBootableDevice->getValidOpenFirmwareName ();
 }
 
 void

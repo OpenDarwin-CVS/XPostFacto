@@ -45,6 +45,7 @@ advised of the possibility of such damage.
 #define __ATADEVICE_H__
 
 #include "XPFBootableDevice.h"
+#include "ATABus.h"
 
 class ATADevice : public XPFBootableDevice
 {
@@ -52,13 +53,17 @@ class ATADevice : public XPFBootableDevice
 		static void Initialize ();
 		static bool ATAHardwarePresent ();
 		
-		virtual ~ATADevice ();
-				
 		OSErr readBlocks (unsigned int start, unsigned int count, UInt8 **buffer);
 		OSErr writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer);
 		
 		bool isReallyATADevice () {return true;}
 		
+		virtual CVoidList_AC* getBusList () {return ATABus::GetBusList ();}
+
+	protected:
+	
+		void checkOpenFirmwareName ();
+
 	private:	
 
 		ATADevice (UInt32 ataDevice, SInt16 driverRefNum);

@@ -119,11 +119,7 @@ XPFVolumeInspectorWindow::updateFields ()
 {
 	fVolumeName->SetText (fVolume->getVolumeName (), true);
 
-	if (fVolume->getValidOpenFirmwareName ()) {
-		fOpenFirmwareName->SetText (fVolume->getOpenFirmwareName (true), true);
-	} else {
-		fOpenFirmwareName->SetTextWithStrListID (kXPFStringsResource, kNoOFName, true);
-	}
+	fOpenFirmwareName->SetText (fVolume->getOpenFirmwareName (true), true);
 
 	if (fVolume->getMacOSXMajorVersion ()) {
 		fMacOSXVersion->SetText (fVolume->getMacOSXVersion (), true);

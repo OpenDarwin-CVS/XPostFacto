@@ -65,6 +65,7 @@ advised of the possibility of such damage.
 #include "XPFWarnings.h"
 #include "XPFUpdateWindow.h"
 #include "XPFVolumeInspectorWindow.h"
+#include "XPFBusPopup.h"
 
 #include <InternetConfig.h>
 #include <UnicodeConverter.h>
@@ -154,6 +155,7 @@ XPFApplication::XPFApplication() :
 	REGISTER_CLASS_AC (XPFVolumeInspectorPopup);
 	REGISTER_CLASS_AC (XPFVolumeInspectorWindow);
 	REGISTER_CLASS_AC (XPFWarningIcon);
+	REGISTER_CLASS_AC (XPFBusPopup);
 	
 	ProcessInfoRec info;
 	FSSpec appSpec, resourceSpec;

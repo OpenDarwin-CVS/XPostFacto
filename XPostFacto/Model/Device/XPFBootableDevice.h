@@ -49,8 +49,9 @@ advised of the possibility of such damage.
 
 class MountedVolume;
 class HFSPlusVolumeHeader;
+class XPFBus;
 
-class XPFBootableDevice
+class XPFBootableDevice : public MDependable_AC
 {
 	public:
 		
@@ -97,11 +98,14 @@ class XPFBootableDevice
 		virtual	void readCapacity () = 0;
 #endif
 
-		bool getValidOpenFirmwareName () {return fValidOpenFirmwareName;}
-		
-		const CStr255_AC& getOpenFirmwareName (bool useShortName) {return useShortName ? fShortOpenFirmwareName : fOpenFirmwareName;}
+		char* getOpenFirmwareName (bool useShortName) {return useShortName ? fShortOpenFirmwareName : fOpenFirmwareName;}
 		
 		virtual bool getNeedsHelper () {return fNeedsHelper;}
+		
+		virtual XPFBus* getBus () {return fBus;}
+		virtual XPFBus* getDefaultBus () {return fDefaultBus;}
+		virtual void setBus (XPFBus *bus);
+		virtual CVoidList_AC* getBusList () {return NULL;}
 		
 		virtual bool isFirewireDevice ();
 		virtual bool isReallyATADevice ();
@@ -116,6 +120,8 @@ class XPFBootableDevice
 #else
 		XPFBootableDevice (SInt16 driverRefNum);
 #endif
+
+		virtual void checkOpenFirmwareName () {}	// meant to be overridden
 	
 		static TemplateAutoList_AC <XPFBootableDevice> gDeviceList;
 		static bool fInitialized;	
@@ -126,9 +132,12 @@ class XPFBootableDevice
 		static void PrintPartitionMapEntry (Partition *part);
 #endif
 
-		CStr255_AC fOpenFirmwareName;
-		CStr255_AC fShortOpenFirmwareName;
-		bool fValidOpenFirmwareName;
+		XPFBus *fBus;
+		XPFBus *fDefaultBus;
+
+		char fOpenFirmwareName[256];
+		char fShortOpenFirmwareName[256];
+
 		unsigned int fBlockCount;
 		unsigned int fBlockSize;
 		bool fInvalid;

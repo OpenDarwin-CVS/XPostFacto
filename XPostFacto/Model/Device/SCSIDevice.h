@@ -59,7 +59,13 @@ class SCSIDevice : public XPFBootableDevice
 		OSErr readBlocks (unsigned int start, unsigned int count, UInt8 **buffer);
 		OSErr writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer);
 		
-		bool isReallyATADevice () {return fSCSIBus && fSCSIBus->getIsActuallyATABus ();} 
+		bool isReallyATADevice () {return fBus && fBus->getIsActuallyATABus ();} 
+		
+		virtual CVoidList_AC* getBusList () {return SCSIBus::GetBusList ();}
+		
+	protected:
+	
+		void checkOpenFirmwareName ();
 		
 	private:	
 
@@ -71,8 +77,6 @@ class SCSIDevice : public XPFBootableDevice
 		SCSIExecIOPB *fPB;
 		long fPBLength;
 		
-		SCSIBus *fSCSIBus;
-
 };
 
 #endif

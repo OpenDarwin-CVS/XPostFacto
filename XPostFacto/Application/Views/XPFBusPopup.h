@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2002 - 2004
+Copyright (c) 2004
 Other World Computing
 All rights reserved
 
@@ -31,51 +31,35 @@ advised of the possibility of such damage.
 
 */
 
-/*
+#ifndef __XPFBUSPOPUP_H__
+#define __XPFBUSPOPUP_H__
 
-ATABus
-=======
+#include "UPopup.h"
 
-The function of this class is to maintain a list of all the name registry
-entries that might be ATA buses.
+#ifndef __MACH__
+	#include "SCSIBus.h"
+	#include "ATABus.h"
+#endif
 
-*/
+class MountedVolume;
 
-#ifndef __ATABUS_H__
-#define __ATABUS_H__
+class XPFBusPopup : public TPopup
+{
 
-#include "XPFBus.h"
+	MA_DECLARE_CLONE;
 
-class ATABus;
+public:
 
-typedef TemplateAutoList_AC <ATABus> ATABusList;
-typedef TemplateAutoList_AC <ATABus>::Iterator ATABusIterator;
-
-class ATABus : public XPFBus {
-
-	public:
-				
-		static void Initialize ();
-		
-		static ATABus* BusWithNumber (int number);
-		static ATABus* BusWithRegEntryID (RegEntryID *regEntry);
-		static ATABus* GetDefaultBus () {return gATABusList.Last ();}
-		
-		static int getBusCount () {return gBusCount;}
-		static CVoidList_AC* GetBusList () {return &gATABusList;}
-		
-		virtual bool getIsActuallyATABus () {return true;}
-		
-		~ATABus ();
-
-	private:
+	virtual void DoPostCreate (TDocument* itsDocument);
 	
-		ATABus (RegEntryID *regEntry);
-			
-		static ATABusList gATABusList;
-		static int gBusCount;
-		static bool gHasBeenInitialized;
-		
+	virtual void DoEvent (EventNumber eventNumber, TEventHandler* source, TEvent* event);
+						
+	virtual void DoUpdate (ChangeID_AC theChange, MDependable_AC* changedObject, void* changeData, CDependencySpace_AC* dependencySpace);
+	
+private:
+
+	MountedVolume *fVolume;	
+									
 };
 
 #endif

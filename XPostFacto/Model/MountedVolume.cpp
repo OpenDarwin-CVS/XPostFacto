@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2000 - 2003
+Copyright (c) 2000 - 2004
 Other World Computing
 All rights reserved
 
@@ -277,8 +277,7 @@ MountedVolume::WithOpenFirmwarePath (char *path)
 	}
 #else
 	for (MountedVolumeIterator iter (GetVolumeList ()); iter.Current(); iter.Next()) {
-		CChar255_AC volPath = (CChar255_AC) iter->getOpenFirmwareName (false);
-		if (OFAliases::MatchAliases (volPath, path)) {
+		if (OFAliases::MatchAliases (iter->getOpenFirmwareName (false), path)) {
 			retVal = iter.Current ();
 			break;
 		}
@@ -892,7 +891,6 @@ MountedVolume::checkBlessedFolder ()
 
 MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *rootDirectory)
 {
-	fValidOpenFirmwareName = false;
 	fPartition = NULL;
 	fBootableDevice = NULL;
 	fHelperDisk = NULL;
@@ -903,6 +901,9 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	fSymlinkStatus = kSymlinkStatusOK;
 	fIsAttachedToPCICard = false;
 	fBootXVersion = 0;
+	fPartitionNumber = 0;
+	fOpenFirmwareName[0] = 0;
+	fShortOpenFirmwareName[0] = 0;
 	
 #ifdef BUILDING_XPF
 	gApplication->AddDependent (this); // for listening for volume deletions
@@ -1021,26 +1022,12 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	
 	// Now get the Device and Partition
 	// We do this a little differently in Mac OS X
-
-	fValidOpenFirmwareName = false;
 	
 #ifdef __MACH__
 	io_object_t regEntry = getRegEntry ();
 	if (regEntry) {
 		fBootableDevice = XPFBootableDevice::DeviceForRegEntry (regEntry);
-		if (fBootableDevice) {
-			fPartition = fBootableDevice->partitionWithInfoAndName (info, name);
-			if (fPartition) {
-				fPartition->setMountedVolume (this);
-				
-				char alias[256], shortAlias[256];
-				OFAliases::AliasFor (regEntry, alias, shortAlias);
-				fOpenFirmwareName.CopyFrom (alias);
-				fShortOpenFirmwareName.CopyFrom (shortAlias);
-				
-				fValidOpenFirmwareName = (alias[0] != 0);
-			}
-		}
+		if (fBootableDevice) fPartition = fBootableDevice->partitionWithInfoAndName (info, name);
 		IOObjectRelease (regEntry);
 	}
 #else
@@ -1094,52 +1081,47 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 				}
 			}
 			
-			if (err == noErr) {
-				fValidOpenFirmwareName = fBootableDevice->getValidOpenFirmwareName ();
-				fOpenFirmwareName.CopyFrom (fBootableDevice->getOpenFirmwareName (false));
-				fShortOpenFirmwareName.CopyFrom (fBootableDevice->getOpenFirmwareName (true));
-				char buffer[16];
-				sprintf (buffer, ":%d", partInfo.partitionNumber);
-				fOpenFirmwareName += buffer;
-				fShortOpenFirmwareName += buffer;
-			}
+			if (err == noErr) fPartitionNumber = partInfo.partitionNumber;
 		} else {
 			fPartition = fBootableDevice->partitionWithInfoAndName (info, name);
-			if (fPartition) {
-				fValidOpenFirmwareName = fPartition->getValidOpenFirmwareName ();
-				fOpenFirmwareName.CopyFrom (fPartition->getOpenFirmwareName (false));
-				fShortOpenFirmwareName.CopyFrom (fPartition->getOpenFirmwareName (true));
-				fPartition->setMountedVolume (this);
-			}
 		}
 	}
 #endif
 
-	// Figure out whether there is a problem with the symlinks
-	checkSymlinks ();
+	if (fPartition) {
+		fPartition->setMountedVolume (this);
+		fPartitionNumber = fPartition->getPartitionNumber ();
+		fPartition->AddDependent (this);
+	}
 
 	if (getRequiresBootHelper ()) fHelperDisk = getDefaultHelperDisk ();
 	
-	if (fValidOpenFirmwareName) {
-		// There are more robust ways to figure this out, but this will probably do
-		CChar255_AC ofName (fOpenFirmwareName);
-		fIsAttachedToPCICard = !strncmp (ofName, "pci", 3); 
-	}
-	
-	// See if there is a Mac OS 9 System Folder
+	checkSymlinks ();
 	checkBlessedFolder ();
-	
 	checkBootXVersion ();
+	checkOpenFirmwareName ();
 		
 	#if qLogging
-		if (fValidOpenFirmwareName) {
-			gLogFile << "OpenFirmwareName: ";
-			gLogFile << (CChar255_AC) fShortOpenFirmwareName;
-			gLogFile << endl_AC;
-		} else {
-			gLogFile << "Could not find Open Firmware name." << endl_AC;
-		}
+		gLogFile << "OpenFirmwareName: " << fShortOpenFirmwareName << endl_AC;
 	#endif	
+}
+
+void
+MountedVolume::checkOpenFirmwareName ()
+{
+#ifdef __MACH__
+	OFAliases::AliasFor (getRegEntry (), fOpenFirmwareName, fShortOpenFirmwareName);
+#else
+	if (fBootableDevice) {
+		sprintf (fOpenFirmwareName, "%s:%d", fBootableDevice->getOpenFirmwareName (false), fPartitionNumber);
+		sprintf (fShortOpenFirmwareName, "%s:%d", fBootableDevice->getOpenFirmwareName (true), fPartitionNumber);
+	}
+#endif
+
+	// There are more robust ways to figure this out, but this will probably do
+	fIsAttachedToPCICard = !strncmp (fOpenFirmwareName, "pci", 3); 
+
+	Changed (cSetOpenFirmwareName, this);
 }
 
 bool
@@ -1172,10 +1154,10 @@ MountedVolume::getWillRunOnCurrentCPU ()
 unsigned
 MountedVolume::getHelperStatus ()
 {
-	if (!getIsHFSPlus ()) return kNotHFSPlus;
 	if (!getBootableDevice ()) return kNotBootable;
-	if (!getValidOpenFirmwareName ()) return kNoOFName;
 	if (!getIsWriteable ()) return kNotWriteable;
+	if (!getIsHFSPlus ()) return kNotHFSPlus;
+	if (!fPartitionNumber) return kNoPartitionNumber;
 	if (fBootableDevice->getNeedsHelper ()) return kNeedsHelper;
 
 	return kStatusOK;
@@ -1184,10 +1166,10 @@ MountedVolume::getHelperStatus ()
 unsigned
 MountedVolume::getBootStatus ()
 {
+	if (!getBootableDevice ()) return kNotBootable;
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
 	if (!getHasMachKernel ()) return kNoMachKernel;
-	if (!getBootableDevice ()) return kNotBootable;
-	if (!getValidOpenFirmwareName ()) return kNoOFName;
+	if (!fPartitionNumber) return kNoPartitionNumber;
 	if (!getWillRunOnCurrentCPU ()) return kCPUNotSupported;
 
 	return kStatusOK;
@@ -1220,16 +1202,18 @@ MountedVolume::getBootWarning (bool forInstall)
 		}
 	}
 	
+	if (getBus () != getDefaultBus ()) return kUsingNonDefaultBus;
+	
 	return kStatusOK;
 }
 
 unsigned
 MountedVolume::getInstallTargetStatus ()
 {
-	if (!getIsHFSPlus ()) return kNotHFSPlus;
 	if (!getBootableDevice ()) return kNotBootable;
-	if (!getValidOpenFirmwareName ()) return kNoOFName;
+	if (!getIsHFSPlus ()) return kNotHFSPlus;
 	if (!getIsWriteable ()) return kNotWriteable;
+	if (!fPartitionNumber) return kNoPartitionNumber;
 
 	return kStatusOK;
 }
@@ -1239,10 +1223,10 @@ MountedVolume::getInstallerStatus ()
 {
 	if (!getHasInstaller ()) return kNotInstaller;
 
+	if (!getBootableDevice ()) return kNotBootable;
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
 	if (!getHasMachKernel ()) return kNoMachKernel;
-	if (!getBootableDevice ()) return kNotBootable;
-	if (!getValidOpenFirmwareName ()) return kNoOFName;
+	if (!fPartitionNumber) return kNoPartitionNumber;
 	if (!getWillRunOnCurrentCPU ()) return kCPUNotSupported;
 	
 	return kStatusOK;
@@ -1255,6 +1239,30 @@ MountedVolume::setHelperDisk (MountedVolume *disk, bool callChanged)
 		fHelperDisk = disk;
 		if (callChanged) Changed (cSetHelperDisk, this);
 	}
+}
+
+XPFBus*
+MountedVolume::getBus ()
+{
+	return fBootableDevice ? fBootableDevice->getBus () : NULL;
+}
+
+XPFBus*
+MountedVolume::getDefaultBus ()
+{
+	return fBootableDevice ? fBootableDevice->getDefaultBus () : NULL;
+}
+
+void 
+MountedVolume::setBus (XPFBus *bus)
+{
+	if (fBootableDevice) fBootableDevice->setBus (bus);
+}
+
+CVoidList_AC*
+MountedVolume::getBusList ()
+{
+	return fBootableDevice ? fBootableDevice->getBusList () : NULL;
 }
 
 void 
@@ -1271,6 +1279,14 @@ MountedVolume::DoUpdate (ChangeID_AC theChange, MDependable_AC* changedObject, v
 			
 		case cSetBootXVersion:
 			Changed (cSetBootXVersion, this);
+			break;
+			
+		case cSetBus:
+			Changed (cSetBus, this);
+			break;
+			
+		case cSetOpenFirmwareName:
+			checkOpenFirmwareName ();
 			break;
 	}
 }

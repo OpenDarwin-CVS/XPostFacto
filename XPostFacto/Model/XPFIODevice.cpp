@@ -100,7 +100,7 @@ XPFIODevice::InputDeviceWithShortOpenFirmwareName (char *ofName)
 {
 	XPFIODevice *retVal = NULL;
 	for (XPFIODeviceIterator iter (GetInputDeviceList ()); iter.Current(); iter.Next()) {
-		if (OFAliases::MatchAliases ((CChar255_AC) iter->getOpenFirmwareName (true), ofName)) {
+		if (OFAliases::MatchAliases (iter->getOpenFirmwareName (true), ofName)) {
 			retVal = iter.Current ();
 			break;
 		}		
@@ -113,7 +113,7 @@ XPFIODevice::OutputDeviceWithShortOpenFirmwareName (char *ofName)
 {
 	XPFIODevice *retVal = NULL;
 	for (XPFIODeviceIterator iter (GetOutputDeviceList ()); iter.Current(); iter.Next()) {
-		if (OFAliases::MatchAliases ((CChar255_AC) iter->getOpenFirmwareName (true), ofName)) {
+		if (OFAliases::MatchAliases (iter->getOpenFirmwareName (true), ofName)) {
 			retVal = iter.Current ();
 			break;
 		}		
@@ -126,7 +126,7 @@ XPFIODevice::InputDeviceWithOpenFirmwareName (char *ofName)
 {
 	XPFIODevice *retVal = NULL;
 	for (XPFIODeviceIterator iter (GetInputDeviceList ()); iter.Current(); iter.Next()) {
-		if (OFAliases::MatchAliases ((CChar255_AC) iter->getOpenFirmwareName (false), ofName)) {
+		if (OFAliases::MatchAliases (iter->getOpenFirmwareName (false), ofName)) {
 			retVal = iter.Current ();
 			break;
 		}		
@@ -139,7 +139,7 @@ XPFIODevice::OutputDeviceWithOpenFirmwareName (char *ofName)
 {
 	XPFIODevice *retVal = NULL;
 	for (XPFIODeviceIterator iter (GetOutputDeviceList ()); iter.Current(); iter.Next()) {
-		if (OFAliases::MatchAliases ((CChar255_AC) iter->getOpenFirmwareName (false), ofName)) {
+		if (OFAliases::MatchAliases (iter->getOpenFirmwareName (false), ofName)) {
 			retVal = iter.Current ();
 			break;
 		}		
@@ -203,8 +203,8 @@ XPFIODevice::EvaluateDevice (REG_ENTRY_TYPE entry)
 
 XPFIODevice::XPFIODevice (char *label, char *alias, char *shortAlias, char* deviceType, bool active) 
 {
-	fOpenFirmwareName.CopyFrom (alias);
-	fShortOpenFirmwareName.CopyFrom (shortAlias);
+	strcpy (fOpenFirmwareName, alias);
+	strcpy (fShortOpenFirmwareName, shortAlias);
 	fLabel.CopyFrom (label);
 	fDeviceType.CopyFrom (deviceType);
 	fActive = active;

@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2002 - 2004
+Copyright (c) 2004
 Other World Computing
 All rights reserved
 
@@ -31,51 +31,28 @@ advised of the possibility of such damage.
 
 */
 
-/*
+// ---------------------------------------------
+// XPFBus is a superclass for SCSIBus and ATABus
+// ---------------------------------------------
 
-ATABus
-=======
+#ifndef __XPFBUS_H__
+#define __XPFBUS_H__
 
-The function of this class is to maintain a list of all the name registry
-entries that might be ATA buses.
+class XPFBus {
 
-*/
+public:
 
-#ifndef __ATABUS_H__
-#define __ATABUS_H__
+	const char* getOpenFirmwareName (bool useShortName) {return useShortName ? fShortOpenFirmwareName : fOpenFirmwareName;}
 
-#include "XPFBus.h"
+	virtual bool getIsActuallyATABus () = 0;
 
-class ATABus;
+protected:
 
-typedef TemplateAutoList_AC <ATABus> ATABusList;
-typedef TemplateAutoList_AC <ATABus>::Iterator ATABusIterator;
+	RegEntryID fRegEntryID;
+	char fOpenFirmwareName[256];
+	char fShortOpenFirmwareName[256];
+	int fBusNumber;
 
-class ATABus : public XPFBus {
-
-	public:
-				
-		static void Initialize ();
-		
-		static ATABus* BusWithNumber (int number);
-		static ATABus* BusWithRegEntryID (RegEntryID *regEntry);
-		static ATABus* GetDefaultBus () {return gATABusList.Last ();}
-		
-		static int getBusCount () {return gBusCount;}
-		static CVoidList_AC* GetBusList () {return &gATABusList;}
-		
-		virtual bool getIsActuallyATABus () {return true;}
-		
-		~ATABus ();
-
-	private:
-	
-		ATABus (RegEntryID *regEntry);
-			
-		static ATABusList gATABusList;
-		static int gBusCount;
-		static bool gHasBeenInitialized;
-		
 };
 
 #endif

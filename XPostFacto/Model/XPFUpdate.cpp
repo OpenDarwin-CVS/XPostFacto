@@ -92,7 +92,7 @@ XPFUpdate::getOrCreateExtensionsDirectory (FSRef *directory, bool create)
 		FSRef helperDir;
 		err = XPFFSRef::getOrCreateHelperDirectory (
 			bootDisk->getRootDirectory (), 
-			(CChar255_AC) rootDisk->getOpenFirmwareName (true),
+			rootDisk->getOpenFirmwareName (true),
 			&helperDir,
 			create
 		);			
@@ -137,7 +137,7 @@ XPFUpdate::getRequiresSynchronization ()
 	FSRef helperDir;
 	OSErr err = XPFFSRef::getOrCreateHelperDirectory (
 		fHelper->getRootDirectory (),
-		(CChar255_AC) fTarget->getOpenFirmwareName (true),
+		fTarget->getOpenFirmwareName (true),
 		&helperDir,
 		false
 	);

@@ -96,6 +96,8 @@ enum {
 	kBogus8GBWarning,
 	k8GBWarning,
 	kRequiresInstallation,
+	kNoPartitionNumber,
+	kUsingNonDefaultBus,
 };
 
 

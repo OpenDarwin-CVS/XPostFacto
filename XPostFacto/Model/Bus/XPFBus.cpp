@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2002 - 2004
+Copyright (c) 2004
 Other World Computing
 All rights reserved
 
@@ -31,51 +31,4 @@ advised of the possibility of such damage.
 
 */
 
-/*
-
-ATABus
-=======
-
-The function of this class is to maintain a list of all the name registry
-entries that might be ATA buses.
-
-*/
-
-#ifndef __ATABUS_H__
-#define __ATABUS_H__
-
 #include "XPFBus.h"
-
-class ATABus;
-
-typedef TemplateAutoList_AC <ATABus> ATABusList;
-typedef TemplateAutoList_AC <ATABus>::Iterator ATABusIterator;
-
-class ATABus : public XPFBus {
-
-	public:
-				
-		static void Initialize ();
-		
-		static ATABus* BusWithNumber (int number);
-		static ATABus* BusWithRegEntryID (RegEntryID *regEntry);
-		static ATABus* GetDefaultBus () {return gATABusList.Last ();}
-		
-		static int getBusCount () {return gBusCount;}
-		static CVoidList_AC* GetBusList () {return &gATABusList;}
-		
-		virtual bool getIsActuallyATABus () {return true;}
-		
-		~ATABus ();
-
-	private:
-	
-		ATABus (RegEntryID *regEntry);
-			
-		static ATABusList gATABusList;
-		static int gBusCount;
-		static bool gHasBeenInitialized;
-		
-};
-
-#endif

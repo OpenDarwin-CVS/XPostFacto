@@ -41,6 +41,7 @@ advised of the possibility of such damage.
 #include "XPFLog.h"
 #include "XPFErrors.h"
 #include "OFAliases.h"
+#include "XPostFacto.h"
 
 #include "MoreDisks.h"
 
@@ -86,28 +87,24 @@ FirewireDevice::Initialize ()
     RegistryEntryIterateDispose (&cookie);
 }
 
+void
+FirewireDevice::checkOpenFirmwareName ()
+{
+}
+
 FirewireDevice::FirewireDevice (RegEntryID *regEntry, SInt16 driverRefNum)
 	: XPFBootableDevice (driverRefNum)
 {
-	#if qLogging
-		gLogFile << "Creating Firewire Device" << endl_AC;
-	#endif
-	
-	char alias[256];
-	char shortAlias[256];
-	
-	OFAliases::AliasFor (regEntry, alias, shortAlias);
-
-	fValidOpenFirmwareName = true;
-	fOpenFirmwareName.CopyFrom (alias);
-	fShortOpenFirmwareName.CopyFrom (shortAlias);
-	
 	fNeedsHelper = true;
-		
+
+	OFAliases::AliasFor (regEntry, fOpenFirmwareName, fShortOpenFirmwareName);
+
 	#if qLogging
-		gLogFile << "OpenFirmwareName: " << (CChar255_AC) fOpenFirmwarName << endl_AC;
-		gLogFile << "ShortOpenFirmwareName: " << (CChar255_AC) fShortOpenFirmwareName << endl_AC;
+		gLogFile << "OpenFirmwareName: " << fOpenFirmwareName << endl_AC;
+		gLogFile << "ShortOpenFirmwareName: " << fShortOpenFirmwareName << endl_AC;
 	#endif;
+	
+	Changed (cSetOpenFirmwareName, this);
 }
 
 bool

@@ -62,6 +62,7 @@ advised of the possibility of such damage.
 
 #include "XPFLog.h"
 #include "XPFErrors.h"
+#include "XPostFacto.h"
 
 #include <stdio.h>
 #include <ATA.h>
@@ -228,7 +229,6 @@ ATADevice::readCapacity ()
 ATADevice::ATADevice (UInt32 ataDevice, SInt16 driverRefNum)
 	: XPFBootableDevice (driverRefNum)
 {
-	fValidOpenFirmwareName = false;
 	fInvalid = false;
 	
 	fDeviceIdent = ataDevice;
@@ -264,7 +264,7 @@ ATADevice::ATADevice (UInt32 ataDevice, SInt16 driverRefNum)
 		
 	// Now we try various ways to figure out which ATABus we're on
 		
-	ATABus *bus = NULL;
+	fBus = NULL;
 		
 // None of these methods seem to actually work, and they sometimes
 // cause crashes. So I'm just removing them for the moment.
@@ -343,42 +343,39 @@ ATADevice::ATADevice (UInt32 ataDevice, SInt16 driverRefNum)
 	ataDeviceID *deviceID = (ataDeviceID *) &ataDevice;
 
 	// OK, just use the bus number
-	if (!bus) {
-		#if qLogging
-			gLogFile << "Getting BusWithNumber: " << deviceID->busNum << endl_AC;
-		#endif
-		bus = ATABus::BusWithNumber (deviceID->busNum);
+	if (!fBus) {
+		fBus = ATABus::BusWithNumber (deviceID->busNum);
 	}
 	
 	// Now, we should really have it.
-	if (bus) {
-		fValidOpenFirmwareName = true;
-		fOpenFirmwareName.CopyFrom (bus->getOpenFirmwareName ());
-		fShortOpenFirmwareName.CopyFrom (bus->getShortOpenFirmwareName ());
-		char buffer[16];
-		snprintf (buffer, 16, "/@%d", deviceID->devNum); 
-		fOpenFirmwareName += buffer;
-		fShortOpenFirmwareName += buffer;
+	if (fBus) {
+		fDefaultBus = fBus;
 	} else {
-		fValidOpenFirmwareName = false;
+		fBus = ATABus::GetDefaultBus ();
 	}
 	
+	checkOpenFirmwareName ();
+	
 	#if qLogging
-		if (bus) {
-			gLogFile << "OpenFirmwareName: " << (CChar255_AC) fOpenFirmwarName << endl_AC;
-			gLogFile << "ShortOpenFirmwareName: " << (CChar255_AC) fShortOpenFirmwareName << endl_AC;
+		if (fBus) {
+			gLogFile << "OpenFirmwareName: " << fOpenFirmwareName << endl_AC;
+			gLogFile << "ShortOpenFirmwareName: " << fShortOpenFirmwareName << endl_AC;
 		} else {
 			gLogFile << "Could not find Open Firmware name for ATA bus: " << deviceID->busNum << endl_AC;
 		}
 	#endif;
-	
 }
 
-ATADevice::~ATADevice ()
+void
+ATADevice::checkOpenFirmwareName ()
 {
-
+	ataDeviceID *deviceID = (ataDeviceID *) &fDeviceIdent;
+	
+	sprintf (fOpenFirmwareName, "%s/@%d", fBus->getOpenFirmwareName (false), deviceID->devNum);
+	sprintf (fShortOpenFirmwareName, "%/@%d", fBus->getOpenFirmwareName (true), deviceID->devNum);
+	
+	Changed (cSetOpenFirmwareName, this);
 }
-
 
 OSErr
 ATADevice::writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer)

@@ -6,11 +6,11 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 	MAThreeOhView {
 
 	},
-	{	/* array ViewArray: 19 elements */
+	{	/* array ViewArray: 21 elements */
 		/* [1] */
 		ViewSignatureAndClassname {
 			'wind',
-			2156,
+			2418,
 			"XPFVolumeInspectorWindow",
 			'WIND',
 			enabled,
@@ -92,7 +92,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 				1110,
 				1
 			},
-			18
+			20
 		},
 		/* [2] */
 		ViewSignatureAndClassname {
@@ -317,7 +317,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				76,
+				108,
 				/* [2] */
 				20
 			},
@@ -385,7 +385,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				76,
+				108,
 				/* [2] */
 				190
 			},
@@ -453,7 +453,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				116,
+				148,
 				/* [2] */
 				20
 			},
@@ -521,7 +521,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				116,
+				148,
 				/* [2] */
 				190
 			},
@@ -589,7 +589,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				140,
+				172,
 				/* [2] */
 				20
 			},
@@ -657,7 +657,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				140,
+				172,
 				/* [2] */
 				190
 			},
@@ -725,7 +725,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				164,
+				196,
 				/* [2] */
 				20
 			},
@@ -793,7 +793,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				164,
+				196,
 				/* [2] */
 				190
 			},
@@ -861,7 +861,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				188,
+				220,
 				/* [2] */
 				20
 			},
@@ -929,7 +929,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				188,
+				220,
 				/* [2] */
 				190
 			},
@@ -1006,7 +1006,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				216,
+				248,
 				/* [2] */
 				20
 			},
@@ -1083,7 +1083,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				214,
+				246,
 				/* [2] */
 				190
 			},
@@ -1155,7 +1155,7 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				246,
+				278,
 				/* [2] */
 				150
 			},
@@ -1220,13 +1220,13 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				246,
+				278,
 				/* [2] */
 				190
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				184,
+				152,
 				/* [2] */
 				200
 			},
@@ -1320,12 +1320,161 @@ resource 'View' (1110, "Volume Inspector", purgeable) {
 
 			},
 			NoSubviews
+		},
+		/* [20] */
+		ViewSignatureAndClassname {
+			'stat',
+			129,
+			"",
+			'hlp0',
+			notEnabled,
+			noIdle,
+			{	/* array BehaviorArray: 1 elements */
+				/* [1] */
+				BehaviorSignatureAndClassname {
+					noID,
+					"TBehavior",
+					Behavior {
+						enabled,
+						noIdle
+					}
+				}
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				80,
+				/* [2] */
+				20
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				16,
+				/* [2] */
+				162
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			doesntHandleCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			StaticText {
+				mStaticTextHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				130,
+				dontPreferOutline,
+				autoWrap,
+				dontEraseFirst,
+				justRight,
+				1110,
+				18
+			},
+			NoSubviews
+		},
+		/* [21] */
+		ViewSignatureAndClassname {
+			'popp',
+			121,
+			"XPFBusPopup",
+			'busp',
+			enabled,
+			noIdle,
+			{	/* array BehaviorArray: 0 elements */
+			},
+			MARelease13View {
+
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				78,
+				/* [2] */
+				189
+			},
+			{	/* array: 2 elements */
+				/* [1] */
+				20,
+				/* [2] */
+				200
+			},
+			sizeVariable,
+			sizeVariable,
+			shown,
+			doesntWantToBeTarget,
+			handlesCursor,
+			letsSubViewsHandleCursor,
+			noCursorID,
+			doesntHandleHelp,
+			letsSubViewsHandleHelp,
+			noHelpID,
+			1,
+			NoDrawingEnvironment {
+
+			},
+			NoAdorners {
+
+			},
+			emptyUserArea,
+			Popup {
+				mPopupHit,
+				notHilited,
+				notDimmed,
+				sizeable,
+				{	/* array: 4 elements */
+					/* [1] */
+					0,
+					/* [2] */
+					0,
+					/* [3] */
+					0,
+					/* [4] */
+					0
+				},
+				130,
+				dontPreferOutline,
+				0,
+				1,
+				0,
+				plain,
+				justSystem,
+				dontUseAddResMenu,
+				noID,
+				-1,
+				1
+			},
+			NoSubviews
 		}
 	}
 };
 
 resource 'STR#' (1110, "Volume Inspector", purgeable) {
-	{	/* array StringArray: 17 elements */
+	{	/* array StringArray: 18 elements */
 		/* [1] */
 		"Volume Inspector",
 		/* [2] */
@@ -1359,7 +1508,9 @@ resource 'STR#' (1110, "Volume Inspector", purgeable) {
 		/* [16] */
 		"Helper:",
 		/* [17] */
-		"Warning Text"
+		"Warning Text",
+		/* [18] */
+		"Bus:"
 	}
 };
 

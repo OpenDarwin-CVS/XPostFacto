@@ -138,7 +138,7 @@ SCSIBus::BusWithRegEntryID (RegEntryID *otherRegEntry)
 {
 	SCSIBus *retVal = NULL;
 	for (SCSIBusIterator iter (&gSCSIBusList); iter.Current(); iter.Next()) {
-		if (RegistryEntryIDCompare (&iter->fRegEntry, otherRegEntry)) {
+		if (RegistryEntryIDCompare (&iter->fRegEntryID, otherRegEntry)) {
 			retVal = iter.Current ();
 			break;
 		}
@@ -157,11 +157,11 @@ SCSIBus::BusWithRegEntryID (RegEntryID *otherRegEntry)
 }
 
 SCSIBus*
-SCSIBus::BusWithOpenFirmwareName (CStr255_AC *ofName)
+SCSIBus::BusWithOpenFirmwareName (char *ofName)
 {
 	SCSIBus *retVal = NULL;
 	for (SCSIBusIterator iter (&gSCSIBusList); iter.Current(); iter.Next()) {
-		if (iter->fOpenFirmwareName == *ofName) {
+		if (!strcmp (iter->fOpenFirmwareName, ofName)) {
 			retVal = iter.Current ();
 			break;
 		}
@@ -171,7 +171,7 @@ SCSIBus::BusWithOpenFirmwareName (CStr255_AC *ofName)
 
 SCSIBus::~SCSIBus ()
 {
-	RegistryEntryIDDispose (&fRegEntry);
+	RegistryEntryIDDispose (&fRegEntryID);
 }
 
 SCSIBus::SCSIBus (RegEntryID *scsiEntry)
@@ -180,22 +180,18 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 	fIsActuallyATABus = false;
 
 	ThrowIfNULL_AC (scsiEntry);
-	RegistryEntryIDCopy (scsiEntry, &fRegEntry);
+	RegistryEntryIDCopy (scsiEntry, &fRegEntryID);
 
-	char alias [256];
-	char shortAlias [256];
-	OFAliases::AliasFor (&fRegEntry, alias, shortAlias);
-	fOpenFirmwareName.CopyFrom (alias);
-	fShortOpenFirmwareName.CopyFrom (shortAlias);
+	OFAliases::AliasFor (&fRegEntryID, fOpenFirmwareName, fShortOpenFirmwareName);
 				
 	// Now, we assign the next available bus number. I am making the assumption that the
 	// iteration order here is the same as the iteration order when the SCSI Manager is
 	// handing out bus numbers. I can think of a couple of reasons why this might actually
 	// be true, but I'll just have to test it. It does seem to be true, in my limited testing.
 
-	if (fOpenFirmwareName == "scsi") {
+	if (!strcmp (fOpenFirmwareName, "scsi")) {
 		fBusNumber = 1;
-	} else if (fOpenFirmwareName == "scsi-int") {
+	} else if (!strcmp (fOpenFirmwareName, "scsi-int")) {
 		fBusNumber = 0;
 	} else {
 		static int nextPCIBusNumber = 2;
@@ -205,10 +201,12 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 	// Now, as an inelegant workaround, if this bus has a function number, then swap bus numbers
 	// with the one that has function number 0
 	
-	char test = fOpenFirmwareName[fOpenFirmwareName.Length() - 1];
+	char test = fOpenFirmwareName[strlen(fOpenFirmwareName) - 2];
 	if (test == ',') {
-		CStr255_AC otherName = fOpenFirmwareName.Copy (1, fOpenFirmwareName.Length() - 2);
-		SCSIBus *otherBus = BusWithOpenFirmwareName (&otherName);
+		char otherName[256];
+		strcpy (otherName, fOpenFirmwareName);
+		otherName[strlen (otherName) - 2] = 0;
+		SCSIBus *otherBus = SCSIBus::BusWithOpenFirmwareName (otherName);
 		if (otherBus) {
 			int otherBusNumber = otherBus->fBusNumber;
 			otherBus->fBusNumber = fBusNumber;
@@ -240,16 +238,11 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 
 				unsigned channel;
 				ThrowIfOSErr_AC (RegistryPropertyGet (&foundEntry, "ATA-Channel", &channel, &propSize));
-				OFAliases::AliasFor (&foundEntry, alias, shortAlias);
-
 				if (channel == 0) {
-					fATAOpenFirmwareName0.CopyFrom (alias);
-					fATAShortOpenFirmwareName0.CopyFrom (shortAlias);
+					OFAliases::AliasFor (&foundEntry, fATAOpenFirmwareName0, fATAShortOpenFirmwareName0);
 				} else if (channel == 1) {
-					fATAOpenFirmwareName1.CopyFrom (alias);
-					fATAShortOpenFirmwareName1.CopyFrom (shortAlias);				
-				}	
-				
+					OFAliases::AliasFor (&foundEntry, fATAOpenFirmwareName1, fATAShortOpenFirmwareName1);
+				}
 			}
 	        RegistryEntryIDDispose (&foundEntry);
         } else {
@@ -260,12 +253,23 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
     RegistryEntryIterateDispose (&cookie);
 
 	#if qLogging
-		gLogFile << "SCSI Bus OpenFirmwareName: " << (CChar255_AC) fShortOpenFirmwareName << endl_AC;
+		gLogFile << "SCSI Bus OpenFirmwareName: " << fShortOpenFirmwareName << endl_AC;
 		gLogFile << "Bus Number: " << fBusNumber << endl_AC;
 		if (fIsActuallyATABus) {
-			gLogFile << "ATA Channel 0 Name: " << (CChar255_AC) fATAShortOpenFirmwareName0 << endl_AC;
-			gLogFile << "ATA Channel 1 Name: " << (CChar255_AC) fATAShortOpenFirmwareName1 << endl_AC;
+			gLogFile << "ATA Channel 0 Name: " << fATAShortOpenFirmwareName0 << endl_AC;
+			gLogFile << "ATA Channel 1 Name: " << fATAShortOpenFirmwareName1 << endl_AC;
 		}
 	#endif
+}
 
+const char*
+SCSIBus::getATAOpenFirmwareName (int channel, bool useShortName)
+{
+	if (channel == 0) {
+		return useShortName ? fATAShortOpenFirmwareName0 : fATAOpenFirmwareName0;
+	} else if (channel == 1) {
+		return useShortName ? fATAShortOpenFirmwareName1 : fATAOpenFirmwareName1;	
+	} else {
+		return NULL;
+	}
 }

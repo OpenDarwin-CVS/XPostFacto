@@ -119,6 +119,9 @@ advised of the possibility of such damage.
 #define cSetBootXVersion				1465
 #define cSetBlessedFolderID				1466
 
+#define cSetBus							1467
+#define cSetOpenFirmwareName			1468
+
 // Views and Windows
 // -----------------
 

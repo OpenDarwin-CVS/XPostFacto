@@ -121,5 +121,10 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			"This volume cannot be used to boot Mac OS X, because it extends past the 8 GB mark on the disk."; 
 			
 			"Requires installation";
+			
+			"Could not determine partition number";
+			
+			"You have specified a non-default bus for this volume. This is only necessary in cases where "
+			"XPostFacto would otherwise assign the volume to the wrong bus."; 
 	}
 };

@@ -49,6 +49,7 @@ advised of the possibility of such damage.
 #include "XPFUpdate.h"
 #include "XPFUpdateWindow.h"
 #include "vers_rsrc.h"
+#include "XPFBus.h"
 
 #include <string.h>
 
@@ -550,6 +551,11 @@ XPFPrefs::DoUpdate (ChangeID_AC theChange,
 			
 			break;
 			
+		case cSetBus:
+			// Just bump the change count
+			SetChangeCount (GetChangeCount () + 1);
+			break;
+			
 		default:
 			Inherited::DoUpdate (theChange, changedObject, changeData, dependencySpace);
 			break;
@@ -638,6 +644,34 @@ XPFPrefs::DoRead (TFile* aFile, bool forPrinting)
 		fileStream >> fRegisteredVersion;
 		fileStream >> fUsePatchedRagePro;
 		fileStream >> fRebootInMacOS9;
+		
+		// Restore non-default bus selections
+		UInt32 num;
+		fileStream >> num;
+		
+		for (UInt32 x = 0; x < num; x++) {
+			FSVolumeInfo info;
+			CStr255_AC ofName;
+			
+			fileStream.ReadBytes (&info, sizeof (info));
+			ofName = fileStream.ReadString (255);
+			
+			MountedVolume *vol = MountedVolume::WithInfo (&info);
+			if (vol) {
+				CVoidList_AC *busList = vol->getBusList ();
+				if (busList) {
+					CChar255_AC ofNameChar (ofName);
+					for (int y = 1; y < busList->GetSize(); y++) {
+						XPFBus *bus = (XPFBus *) busList->At(y);
+						if (OFAliases::MatchAliases (bus->getOpenFirmwareName (false), ofNameChar)) {
+							vol->setBus (bus);
+							break;
+						}
+					}
+				}
+			}
+		}
+		
 	}
 	
 	catch (...) {
@@ -762,6 +796,24 @@ XPFPrefs::DoWrite (TFile* aFile, bool makingCopy)
 	fileStream << fRegisteredVersion;
 	fileStream << fUsePatchedRagePro;
 	fileStream << fRebootInMacOS9;
+	
+	// Now, we store the non-default bus selections (if any)
+	
+	UInt32 x = 0;
+	for (MountedVolumeIterator iter (MountedVolume::GetVolumeList()); iter.Current(); iter.Next()) {
+		if (iter->getBus () && iter->getBus () != iter->getDefaultBus ()) x++;
+	}
+	
+	fileStream << x;
+
+	for (MountedVolumeIterator iter (MountedVolume::GetVolumeList()); iter.Current(); iter.Next()) {
+		if (iter->getBus () && iter->getBus () != iter->getDefaultBus ()) {
+			FSVolumeInfo info = iter->getVolumeInfo ();
+			fileStream.WriteBytes (&info, sizeof (info));
+			CStr255_AC ofName (iter->getBus()->getOpenFirmwareName (false));
+			fileStream.WriteString (ofName);
+		}
+	}	
 }
 
 void 

@@ -199,7 +199,7 @@ XPFFSRef::isCatalogInfoTheSame (FSRef *f1, FSRef *f2)
 }
 
 OSErr
-XPFFSRef::getOrCreateHelperDirectory (FSRef *rootDirectory, char *ofName, FSRef *result, bool create)
+XPFFSRef::getOrCreateHelperDirectory (FSRef *rootDirectory, const char *ofName, FSRef *result, bool create)
 {
 	OSErr err;
 

@@ -335,7 +335,7 @@ OFAliases::RegistryEntryIDCompare (const io_registry_entry_t *id1, const io_regi
 #endif
 
 void
-OFAliases::expandAlias (char *original, char *expanded)
+OFAliases::expandAlias (const char *original, char *expanded)
 {
 	char first[128];
 	char *slash = strchr (original, '/');
@@ -354,7 +354,7 @@ OFAliases::expandAlias (char *original, char *expanded)
 }
 
 bool
-OFAliases::matchAliases (char *alias1, char *alias2)
+OFAliases::matchAliases (const char *alias1, const char *alias2)
 {
 	// First, we expand any aliases so that we don't get confused by having
 	// used different aliases to construct things.
@@ -392,7 +392,7 @@ OFAliases::matchAliases (char *alias1, char *alias2)
 }
 
 bool 
-OFAliases::MatchAliases (char *alias1, char *alias2)
+OFAliases::MatchAliases (const char *alias1, const char *alias2)
 {
 	Initialize ();
 	return sOFAliases->matchAliases (alias1, alias2);

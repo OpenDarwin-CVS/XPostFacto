@@ -293,7 +293,7 @@ XPFThreadedCommand::synchronizeWithHelper (bool deleteFirst)
 		FSRef helperDir;
 		ThrowIfOSErr_AC (XPFFSRef::getOrCreateHelperDirectory (
 			fBootDisk->getRootDirectory (), 
-			(CChar255_AC) fRootDisk->getOpenFirmwareName (true),
+			fRootDisk->getOpenFirmwareName (true),
 			&helperDir,
 			true)
 		);

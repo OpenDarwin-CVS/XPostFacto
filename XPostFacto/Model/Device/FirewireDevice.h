@@ -58,10 +58,13 @@ class FirewireDevice : public XPFBootableDevice
 		OSErr writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer);
 		
 		virtual bool isFirewireDevice ();
+		
+		virtual CVoidList_AC* getBusList () {return NULL;}
 				
 	protected:
 	
 		virtual void extractPartitionInfo ();
+		virtual void checkOpenFirmwareName ();
 		
 	private:	
 

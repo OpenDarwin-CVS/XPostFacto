@@ -36,6 +36,7 @@ advised of the possibility of such damage.
 #include "XPFPartition.h"
 #include "MoreFilesExtras.h"
 #include "MountedVolume.h"
+#include "XPostFacto.h"
 
 #ifndef __MACH__
 	#include "ATADevice.h"
@@ -332,6 +333,16 @@ XPFBootableDevice::getActiveBootXVersion ()
 	return retVal;
 }
 
+void 
+XPFBootableDevice::setBus (XPFBus *bus)
+{
+	if (fBus != bus) {
+		fBus = bus;
+		checkOpenFirmwareName ();
+		Changed (cSetBus, bus);
+	}
+}
+
 XPFBootableDevice::XPFBootableDevice 
 #ifdef __MACH__
 (io_registry_entry_t entry)
@@ -339,9 +350,10 @@ XPFBootableDevice::XPFBootableDevice
 (SInt16 driverRefNum)
 #endif
 {
-	fValidOpenFirmwareName = false;
 	fInvalid = false;
 	fNeedsHelper = false;
+	fBus = NULL;
+	fDefaultBus = NULL;
 	
 #ifdef __MACH__
 	fBSDName[0] = 0;
@@ -504,7 +516,7 @@ XPFBootableDevice*
 XPFBootableDevice::DeviceWithOpenFirmwareName (char *ofName)
 {
 	for (DeviceIterator iter (&gDeviceList); iter.Current (); iter.Next ()) {
-		if (OFAliases::MatchAliases (ofName, (CChar255_AC) iter->getOpenFirmwareName (false))) {
+		if (OFAliases::MatchAliases (ofName, iter->getOpenFirmwareName (false))) {
 			return iter.Current ();
 		}
 	}

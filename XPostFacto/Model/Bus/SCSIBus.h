@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001, 2002
+Copyright (c) 2001 - 2004
 Other World Computing
 All rights reserved
 
@@ -45,51 +45,46 @@ turns out to be a lot harder than you might think.
 #ifndef __SCSIBUS_H__
 #define __SCSIBUS_H__
 
+#include "XPFBus.h"
+
 class SCSIBus;
 
 typedef TemplateAutoList_AC <SCSIBus> SCSIBusList;
 typedef TemplateAutoList_AC <SCSIBus>::Iterator SCSIBusIterator;
 
-class SCSIBus {
+class SCSIBus : public XPFBus {
 
 	public:
 				
 		static SCSIBus* BusWithNumber (int number);
 		static SCSIBus* BusWithRegEntryID (RegEntryID *regEntry);
-		static SCSIBus* BusWithOpenFirmwareName (CStr255_AC *ofName);
+		static SCSIBus* BusWithOpenFirmwareName (char *ofName);
+		static SCSIBus* GetDefaultBus () {return gSCSIBusList.Last ();}
 
 		static void Initialize ();
 		static int getBusCount () {return gBusCount;}
+		static CVoidList_AC* GetBusList () {return &gSCSIBusList;}
 		
-		const CStr255_AC& getOpenFirmwareName () {return fOpenFirmwareName;}
-		const CStr255_AC& getShortOpenFirmwareName () {return fShortOpenFirmwareName;}
-		const CStr255_AC& getATAOpenFirmwareName0 () {return fATAOpenFirmwareName0;}
-		const CStr255_AC& getATAShortOpenFirmwareName0 () {return fATAShortOpenFirmwareName0;}
-		const CStr255_AC& getATAOpenFirmwareName1 () {return fATAOpenFirmwareName1;}
-		const CStr255_AC& getATAShortOpenFirmwareName1 () {return fATAShortOpenFirmwareName1;}
+		const char* getATAOpenFirmwareName (int channel, bool useShortName);
 		
-		bool getIsActuallyATABus () {return fIsActuallyATABus;}
+		virtual bool getIsActuallyATABus () {return fIsActuallyATABus;}
 		
 		~SCSIBus ();
 
 	private:
 	
 		SCSIBus (RegEntryID *scsiEntry);
-			
-		RegEntryID fRegEntry;
-		int fBusNumber;
-		CStr255_AC fOpenFirmwareName;
-		CStr255_AC fShortOpenFirmwareName;
-		
+					
 		bool fIsActuallyATABus;
-		CStr255_AC fATAOpenFirmwareName0;
-		CStr255_AC fATAShortOpenFirmwareName0;
-		CStr255_AC fATAOpenFirmwareName1;
-		CStr255_AC fATAShortOpenFirmwareName1;
+		char fATAOpenFirmwareName0[256];
+		char fATAShortOpenFirmwareName0[256];
+		char fATAOpenFirmwareName1[256];
+		char fATAShortOpenFirmwareName1[256];
 		
 		static int gBusCount;
 		static SCSIBusList gSCSIBusList;
 		static bool gHasBeenInitialized;
+		
 };
 
 #endif

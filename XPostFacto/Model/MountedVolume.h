@@ -57,6 +57,7 @@ It can focus on MountedVolume.
 class MountedVolume;
 class XPFBootableDevice;
 class XPFPartition;
+class XPFBus;
 
 typedef TemplateAutoList_AC <MountedVolume> MountedVolumeList;
 typedef TemplateAutoList_AC <MountedVolume>::Iterator MountedVolumeIterator;
@@ -78,7 +79,7 @@ class MountedVolume : public MDependable_AC
 		
 		void turnOffIgnorePermissions ();
 		
-		const CStr255_AC& getOpenFirmwareName (bool useShortName) {return useShortName ? fShortOpenFirmwareName : fOpenFirmwareName;}
+		const char* getOpenFirmwareName (bool useShortName) {return useShortName ? fShortOpenFirmwareName : fOpenFirmwareName;}
 		const CStr255_AC& getVolumeName () {return fVolumeName;}
 		const CStr255_AC& getMacOSXVersion () {return fMacOSXVersion;}
 		UInt32 getMacOSXMajorVersion () {return fMacOSXMajorVersion;}
@@ -91,7 +92,6 @@ class MountedVolume : public MDependable_AC
 		bool getHasMachKernel () {return fHasMachKernel;}
 		bool getHasInstaller () {return fHasInstaller;}
 		bool getIsWriteable () {return fIsWriteable;}
-		bool getValidOpenFirmwareName () {return fValidOpenFirmwareName;}
 		bool getHasFinder () {return fHasFinder;}
 		FSRef* getRootDirectory () {return &fRootDirectory;}
 		const UInt64* getFreeBytes () {return &fInfo.freeBytes;}
@@ -124,6 +124,11 @@ class MountedVolume : public MDependable_AC
 		MountedVolume *getHelperDisk () {return fHelperDisk;}
 		void setHelperDisk (MountedVolume *disk, bool callChanged = true);
 		
+		XPFBus* getBus ();
+		XPFBus* getDefaultBus ();
+		void setBus (XPFBus *bus);
+		CVoidList_AC* getBusList ();
+		
 		static const MountedVolumeList* GetVolumeList () {return &gVolumeList;}
 		
 		static MountedVolume* WithCreationDate (unsigned int date);
@@ -154,14 +159,16 @@ class MountedVolume : public MDependable_AC
 		
 		OSErr writeBootBlocksIfNecessary (bool forceInstall = false);
 		
+		void checkOpenFirmwareName ();
+		
 	private:	
 		
 		FSRef fRootDirectory;
 		CStr255_AC fVolumeName;
 		HFSUniStr255 fHFSName;
 		FSVolumeInfo fInfo;
-		CStr255_AC fOpenFirmwareName;
-		CStr255_AC fShortOpenFirmwareName;
+		char fOpenFirmwareName[256];
+		char fShortOpenFirmwareName[256];
 		CStr255_AC fMacOSXVersion;
 		UInt32 fMacOSXMajorVersion;
 		
@@ -175,7 +182,6 @@ class MountedVolume : public MDependable_AC
 		bool fHasMachKernel;
 		bool fIsHFSPlus;
 		bool fHasInstaller;
-		bool fValidOpenFirmwareName;
 		bool fStillThere;
 		bool fHasFinder;
 		bool fTurnedOffIgnorePermissions;
@@ -185,6 +191,7 @@ class MountedVolume : public MDependable_AC
 		
 		XPFBootableDevice *fBootableDevice;
 		XPFPartition *fPartition;
+		unsigned fPartitionNumber;
 		
 		MountedVolume *fHelperDisk;
 		
