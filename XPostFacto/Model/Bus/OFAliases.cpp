@@ -254,6 +254,12 @@ void
 OFAliases::aliasFor (const REG_ENTRY_TYPE regEntry, char *outAlias, char *shortAlias) 
 {			
 #ifdef __MACH__
+	if (!IORegistryEntryInPlane (regEntry, kIODeviceTreePlane)) {
+		outAlias[0] = 0;
+		shortAlias[0] = 0;
+		return;
+	}
+
 	mach_port_t iokitPort;
 	IOMasterPort (MACH_PORT_NULL, &iokitPort);
 	io_registry_entry_t deviceTreeEntry = IORegistryEntryFromPath (iokitPort, "IODeviceTree:/"); 
