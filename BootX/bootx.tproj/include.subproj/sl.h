@@ -63,12 +63,24 @@ just before the kernel is loaded.
 
 */
 
+/*
+
+I've changed the memory map so that there is a little more room for
+the kernel image, boot struct and drivers, at the expense of the file
+load area. This appears to be required to boot Darwin 6 on older
+machines. This results in adjustments to kImageSize, kImageSize2,
+kLoadAddr and kLoadSize
+
+ryan.rempel@utoronto.ca
+
+*/
+
 #define kVectorAddr     (0x00000000)
 #define kVectorSize     (0x00004000)
 
 // OF 3.x
 #define kImageAddr      (0x00004000)
-#define kImageSize      (0x013FC000)
+#define kImageSize      (0x014FC000)
 
 // OF 1.x 2.x
 #define kImageAddr0     (0x00004000)
@@ -77,10 +89,10 @@ just before the kernel is loaded.
 #define kImageSize1     (0x00200000)
 #define kImageAddr1Phys (0x01E00000)
 #define kImageAddr2     (0x00500000)
-#define kImageSize2     (0x00F00000)
+#define kImageSize2     (0x01000000)
 
-#define kLoadAddr       (0x01400000)
-#define kLoadSize       (0x00800000)
+#define kLoadAddr       (0x01500000)
+#define kLoadSize       (0x00700000)
 
 #define kMallocAddr     (0x01D00000)
 #define kMallocSize     (0x00100000)
