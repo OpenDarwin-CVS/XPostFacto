@@ -55,6 +55,7 @@ XPFOpenURLBehavior::DoEvent (EventNumber eventNumber, TEventHandler* source, TEv
 	Inherited::DoEvent (eventNumber, source, event);
 	if (eventNumber == mStaticTextHit) {
 		if (fURL != "") {
+			if ((Ptr) ICStart == (Ptr) kUnresolvedCFragSymbolAddress) return;
 			long start = 0, end = fURL[0];
 			ICInstance inst;
 			ThrowIfOSErr_AC (ICStart (&inst, 'usuX'));

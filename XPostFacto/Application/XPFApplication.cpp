@@ -196,6 +196,7 @@ XPFApplication::DoAEClose(TAppleEvent* message, TAppleEvent* reply)
 void
 XPFApplication::launchURL (CStr255_AC theURL)
 {
+	if ((Ptr) ICStart == (Ptr) kUnresolvedCFragSymbolAddress) return;
 	long start = 0, end = theURL[0];
 	ICInstance inst;
 	ThrowIfOSErr_AC (ICStart (&inst, 'usuX'));
