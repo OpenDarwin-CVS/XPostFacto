@@ -546,6 +546,33 @@
 			settings = {
 			};
 		};
+		948200100620912F0097B077 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = OpenChips65550Registers.h;
+			path = OpenChips65550Framebuffer/OpenChips65550Registers.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		948200110620912F0097B077 = {
+			fileRef = 948200100620912F0097B077;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		948201C40620C6A00097B077 = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 9490D52C061C8AE700D8F22E;
+			remoteInfo = OpenChips65550Framebuffer;
+		};
+		948201C50620C6A00097B077 = {
+			isa = PBXTargetDependency;
+			target = 9490D52C061C8AE700D8F22E;
+			targetProxy = 948201C40620C6A00097B077;
+		};
 		948C7E2B06186AA500493511 = {
 			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
@@ -770,6 +797,204 @@
 			proxyType = 1;
 			remoteGlobalIDString = F5812B810315F14401A80001;
 			remoteInfo = AppleCurio4K78;
+		};
+		9490D526061C8AE700D8F22E = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		9490D527061C8AE700D8F22E = {
+			buildActionMask = 2147483647;
+			files = (
+				9490D55C061C8E1900D8F22E,
+				948200110620912F0097B077,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9490D528061C8AE700D8F22E = {
+			buildActionMask = 2147483647;
+			files = (
+				9490D55B061C8E1900D8F22E,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9490D529061C8AE700D8F22E = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9490D52A061C8AE700D8F22E = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9490D52B061C8AE700D8F22E = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		9490D52C061C8AE700D8F22E = {
+			buildPhases = (
+				9490D526061C8AE700D8F22E,
+				9490D527061C8AE700D8F22E,
+				9490D528061C8AE700D8F22E,
+				9490D529061C8AE700D8F22E,
+				9490D52A061C8AE700D8F22E,
+				9490D52B061C8AE700D8F22E,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+				KERNEL_MODULE = YES;
+				LIBRARY_SEARCH_PATHS = "";
+				MODULE_IOKIT = YES;
+				MODULE_NAME = com.macsales.iokit.OpenChips65550Framebuffer;
+				MODULE_VERSION = 1.0.0d1;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = OpenChips65550Framebuffer;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = kext;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = OpenChips65550Framebuffer;
+			productInstallPath = "$(USER_LIBRARY_DIR)/Bundles";
+			productName = OpenChips65550Framebuffer;
+			productReference = 9490D52D061C8AE700D8F22E;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>OpenChips65550Framebuffer</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.macsales.iokit.OpenChips65550Framebuffer</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.0d1</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>OpenChips65550Framebuffer</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.macsales.iokit.OpenChips65550Framebuffer</string>
+			<key>IOClass</key>
+			<string>OpenChips65550Framebuffer</string>
+			<key>IOMatchCategory</key>
+			<string>IOFramebuffer</string>
+			<key>IONameMatch</key>
+			<string>chips65550</string>
+			<key>IOProbeScore</key>
+			<integer>20200</integer>
+			<key>IOProviderClass</key>
+			<string>IOPCIDevice</string>
+		</dict>
+	</dict>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.iokit.IOGraphicsFamily</key>
+		<string>1.2</string>
+		<key>com.apple.iokit.IOPCIFamily</key>
+		<string>1.1</string>
+	</dict>
+	<key>OSBundleRequired</key>
+	<string>Root</string>
+	<key>OWCInstallMinBuild</key>
+	<string>6</string>
+</dict>
+</plist>
+";
+		};
+		9490D52D061C8AE700D8F22E = {
+			explicitFileType = wrapper.cfbundle;
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = OpenChips65550Framebuffer.kext;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		9490D555061C8DDC00D8F22E = {
+			children = (
+				9490D559061C8E1900D8F22E,
+				9490D55A061C8E1900D8F22E,
+				948200100620912F0097B077,
+			);
+			isa = PBXGroup;
+			name = OpenChips65550Framebuffer;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		9490D559061C8E1900D8F22E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = OpenChips65550Framebuffer.cpp;
+			path = OpenChips65550Framebuffer/OpenChips65550Framebuffer.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		9490D55A061C8E1900D8F22E = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = OpenChips65550Framebuffer.h;
+			path = OpenChips65550Framebuffer/OpenChips65550Framebuffer.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		9490D55B061C8E1900D8F22E = {
+			fileRef = 9490D559061C8E1900D8F22E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9490D55C061C8E1900D8F22E = {
+			fileRef = 9490D55A061C8E1900D8F22E;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		9496FED60600C88D00EEA628 = {
 			fileRef = F53C696801B1926201A80001;
@@ -3255,6 +3480,7 @@
 				94C954A7057CFA4D00A80003,
 				94B3FB9B05866E9F00A80003,
 				94C3604B0597CB4E00A80003,
+				9490D52C061C8AE700D8F22E,
 				947DFF930617B5230087D76A,
 			);
 		};
@@ -3313,6 +3539,7 @@
 		F53C695501B1926201A80001 = {
 			children = (
 				947DFF800617B4E90087D76A,
+				9490D555061C8DDC00D8F22E,
 				94C3604D0597CD5C00A80003,
 				94CC8146054C189400A80003,
 				94CC89D20508E13B00A80003,
@@ -3829,6 +4056,7 @@
 				94C7506B05F8EA3600A80003,
 				947DFBF8061763170087D76A,
 				947DFF940617B5230087D76A,
+				9490D52D061C8AE700D8F22E,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -8570,6 +8798,7 @@
 				F564382A01C2B3E601A80001,
 				947DFC43061766120087D76A,
 				947D00330617C03B0087D76A,
+				948201C50620C6A00097B077,
 			);
 			isa = PBXBundleTarget;
 			name = Package;
