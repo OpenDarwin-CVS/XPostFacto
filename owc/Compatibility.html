@@ -1,0 +1,355 @@
+<h3>XPostFacto Compatibility</h3>
+
+<p>February 26, 2002<br>
+Ryan Rempel<br>
+<a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a>
+
+<p>Here is some information about compatibility. If you spot any errors or omissions, feel free to let me know!
+
+<p><ul>
+<li><a href="#Common">Common Features</a>
+<p><li><a href="#Desktops">Apple Desktops</a>
+<li><a href="#Powerbooks">PowerBooks</a>
+<li><a href="#Clones">Clones</a>
+<p><li><a href="#Video">Video Cards</a>
+<li><a href="#SCSI">SCSI Cards</a>
+<li><a href="#ATA">ATA Cards</a>
+<li><a href="#FirewireUSB">Firewire/USB Cards</a>
+</ul>
+<p>
+
+<table border="0" cellspacing="0" cellpadding="0">
+
+<tr>
+<th bgcolor="#CCCCCC">Common Features</th>
+<td>
+<table border="0" cellspacing="2" cellpadding="2">
+<tr bgcolor="#CCCCCC">
+<th><a name="Common">Feature</a></th>
+<th>Comments</th>
+</tr>
+
+<tr bgcolor="#CCFFCC">
+<td>ADB</td>
+<td>Supported for mice and keyboards. I am not sure how well other ADB devices work.</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>CD-ROM</td>
+<td>Generally supported, but there are difficulties with certain models</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>CPU</td>
+<td><ul>
+<li>G3 and G4 upgrades work with Mac OS X 10.0 through 10.2. You will need software to enable the L2 and/or L3 cache. (This will be integrated into XPostFacto 3.0).
+<li>The 603 and 604 processors work with Mac OS X 10.0 through 10.1 (i.e. not 10.2). It may be possible to fix this.
+<li>The 601 processor does not work with Mac OS X. It is unlikely that this will be fixed.
+</ul></td></tr>
+
+<tr bgcolor="#CCFFCC">
+<td>Ethernet</td>
+<td>Generally supported, but see notes on specific models below.</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>Floppy Drive</td>
+<td>Not supported by Mac OS X itself, though there is an <a href="http://www.darwin-development.org/floppy/">open-source driver available</a>.</td>
+</tr>
+
+<tr bgcolor="#FFCCCC">
+<td>Localtalk (that is, Appletalk over serial ports)</td>
+<td>Not supported--unlikely to ever be supported</td>
+</tr>
+
+<tr bgcolor="#CCFFCC">
+<td>RAM</td>
+<td>Supported :-) But it is worth noting that Mac OS X is pickier about RAM than Mac OS 9, so if you have marginal RAM, it may pass tests in Mac OS 9 and still cause problems in Mac OS X.</td>
+</tr>
+
+<tr bgcolor="#CCFFCC">
+<td>SCSI</td>
+<td>Supported. However, Mac OS X is very picky about SCSI cables and termination issues.</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>Serial ports</td>
+<td>Supported, but not for serial printers. It is possible that serial printer support could be added to the CUPS system.</td>
+</tr>
+
+<tr bgcolor="#FFCCCC">
+<td>Sound-in</td>
+<td>Not supported. This probably could be fixed.</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>Sound-out</td>
+<td>Supported, but volume adjustment is not working properly</td>
+</tr>
+
+</table></td></tr>
+</table>
+
+<p>
+
+<table border="0" cellspacing="0" cellpadding="0">
+
+<tr>
+<th bgcolor="#CCCCCC">Apple Desktops</th>
+<td>
+<table border="0" cellspacing="2" cellpadding="2">
+<tr bgcolor="#CCCCCC">
+<th><a name="Desktops">Model</a></th>
+<th>Comments</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>4400</td>
+<td>Unsupported. But may work with XPostFacto 3.0--see Starmax notes below.</td>
+</tr>
+
+<tr bgcolor="#FFCCCC">
+<td>5200, 5260, 6200, 6300, 6320</td>
+<td>Unsupported. I have not investigated these models--it might not be impossible.</td>
+</tr> 
+
+<tr bgcolor="#FFCCCC">
+<td>6100, 7100, 8100</td>
+<td>Unsupported, due to Nubus architecture and 601 CPU. Unlikely to be fixed.</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>5400, 5500, 6300, 6360, 6400, 6500</td>
+<td>Unsupported, but in progress. The main problem is that SCSI and Ethernet are not working, which makes installation difficult. Also, will not work with Mac OS X 10.2, because of 603 CPU.</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>Twentieth-Anniversay (TAM)</td>
+<td>Unsupported. Some chance it might work once the 6500 works.</td>
+</tr>
+
+<tr bgcolor="#FFCCCC">
+<td>7200</td>
+<td>Unsupported, due to the 601 CPU. Unlikely to be fixed.</td>
+</tr>
+
+<tr bgcolor="#CCFFCC">
+<td>7300, 9500, 8600, 9600</td>
+<td>Supported. See comments on specific features above.</td>
+</tr>
+
+<tr bgcolor="#CCFFCC">
+<td>7500</td>
+<td>Supported. But requires CPU upgrade (i.e. does not work with original 601 CPU. And video in/out does not work.</td>
+</tr>
+
+<tr bgcolor="#CCFFCC">
+<td>7600, 8500</td>
+<td>Supported. But video in/out does not work.</td>
+</tr>
+
+<tr bgcolor="#CCFFCC">
+<td>9500MP, 9600MP</td>
+<td>Supported. But only one processor is active.</td>
+</tr>
+
+</table></td></tr>
+</table>
+
+<p>
+
+<table border="0" cellspacing="0" cellpadding="0">
+
+<tr>
+<th bgcolor="#CCCCCC">Apple PowerBooks</th>
+<td>
+<table border="0" cellspacing="2" cellpadding="2">
+<tr bgcolor="#CCCCCC">
+<th><a name="Powerbooks">Model</a></th>
+<th>Comments</th>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>2400, 3400</td>
+<td>Semi-supported. Will not work with Mac OS X 10.2, because of 603 CPU. Sleep and battery-monitoring is not supported. PC Card support limited.</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>Original Powerbook G3</td>
+<td>Semi-supported. Sleep and battery-monitoring is not supported. PC Card support limited, but better in Mac OS X 10.2</td>
+</tr>
+
+</table></td></tr>
+</table>
+
+<p>
+
+<table border="0" cellspacing="0" cellpadding="0">
+
+<tr>
+<th bgcolor="#CCCCCC">Clones</th>
+<td>
+<table border="0" cellspacing="2" cellpadding="2">
+<tr bgcolor="#CCCCCC">
+<th><a name="Clones">Model</a></th>
+<th>Comments</th>
+</tr>
+
+<tr bgcolor="#CCFFCC">
+<td>Daystar Genesis, Millenium</td>
+<td>Supported. But only one processor is active.</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>Starmax 3000, 4000, 5000</td>
+<td>Unsupported. But will likely work with XPostFacto 3.0. (The main problem at the moment is the CD-ROM</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>PowerBase</td>
+<td>Unsupported. See comments on 6400, above.</td>
+</tr>
+
+<tr bgcolor="#CCFFCC">
+<td>PowerCenter, PowerCenter Pro, PowerCurve, PowerTower</td>
+<td>Supported. But built-in video does not work, so requires a video card.</td>
+</tr>
+
+<tr bgcolor="#CCFFCC">
+<td>PowerWave, PowerTower Pro</td>
+<td>Supported. See comments on common features above.</td>
+</tr>
+
+<tr bgcolor="#CCFFCC">
+<td>Umax J700, S900</td>
+<td>Supported. See comments on common features above.</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>Umax Apus 2000, 3000, C500, C600</td>
+<td>Unsupported. See comments on 6400 above.</td>
+</tr>
+
+</table></td></tr>
+</table>
+
+<p>
+
+<table border="0" cellspacing="0" cellpadding="0">
+
+<tr>
+<th bgcolor="#CCCCCC">Video Cards</th>
+<td>
+<table border="0" cellspacing="2" cellpadding="2">
+<tr bgcolor="#CCCCCC">
+<th><a name="Video">Model</a></th>
+<th>Comments</th>
+</tr>
+
+<tr bgcolor="#CCFFCC">
+<td>ATI Radeon 7000</td>
+<td>
+Basically the only new card currently sold. It works with Mac OS X 10.1.5 and later. For best results, select the card as the "output-device" in the "Open Firmware" menu of XPostFacto.
+</td></tr>
+
+<tr bgcolor="#CCFFCC">
+<td>Other ATI cards</td> 
+<td>Also generally work. Depending on the card, and your version of Mac OS X, you may need to apply a firmware update or install a new driver.</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>ixMicro ix3D UltimateRez</td> 
+<td>Works, but no acceleration.</td>
+</tr>
+
+</table></td></tr>
+</table>
+
+<p>
+
+<table border="0" cellspacing="0" cellpadding="0">
+
+<tr>
+<th bgcolor="#CCCCCC">SCSI Cards</th>
+<td>
+<table border="0" cellspacing="2" cellpadding="2">
+<tr bgcolor="#CCCCCC">
+<th><a name="SCSI">Model</a></th>
+<th>Comments</th>
+</tr>
+
+<tr bgcolor="#CCFFCC">
+<td>Adaptec</td>
+<td>
+[To be filled in].
+</td></tr>
+
+<tr bgcolor="#CCFFCC">
+<td>ATTO</td> 
+<td>[To be filled in].</td>
+</tr>
+
+</table></td></tr>
+</table>
+
+<p>
+
+<table border="0" cellspacing="0" cellpadding="0">
+
+<tr>
+<th bgcolor="#CCCCCC">ATA Cards</th>
+<td>
+<table border="0" cellspacing="2" cellpadding="2">
+<tr bgcolor="#CCCCCC">
+<th><a name="ATA">Model</a></th>
+<th>Comments</th>
+</tr>
+
+<tr bgcolor="#CCFFCC">
+<td>Acard</td>
+<td>[To be filled in].</td>
+</tr>
+
+<tr bgcolor="#CCFFCC">
+<td>Sonnet</td>
+<td>[To be filled in].</td>
+</tr>
+
+<tr bgcolor="#CCFFCC">
+<td>VST</td>
+<td>[To be filled in].</td>
+</tr>
+
+</table></td></tr>
+</table>
+
+<p>
+
+<table border="0" cellspacing="0" cellpadding="0">
+
+<tr>
+<th bgcolor="#CCCCCC">Firewire/USB Cards</th>
+<td>
+<table border="0" cellspacing="2" cellpadding="2">
+<tr bgcolor="#CCCCCC">
+<th><a name="FirewireUSB">Model</a></th>
+<th>Comments</th>
+</tr>
+
+<tr bgcolor="#CCFFCC">
+<td>MacAlly</td>
+<td>[To be filled in].</td>
+</tr>
+
+<tr bgcolor="#CCFFCC">
+<td>Ratoc</td>
+<td>[To be filled in].</td>
+</tr>
+
+<tr bgcolor="#CCFFCC">
+<td>Sonnet</td>
+<td>[To be filled in].</td>
+</tr>
+
+</table></td></tr>
+</table>

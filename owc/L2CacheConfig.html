@@ -1,0 +1,146 @@
+<body>
+
+<H3>L2CacheConfig 3.3</H3>
+
+August 8, 2002<BR>
+Ryan Rempel<br>
+<A HREF="mailto:osxguru@macsales.com">osxguru@macsales.com</A>
+
+<H4><A NAME=introduction>Introduction</A></H4>
+
+<p>The purpose of this software is to provide a means with which to enable and configure the backside L2 cache using Mac OS X for computers with G3 or G4 upgrade cards. Installation and configuration of this software requires several steps, so read these release notes carefully.
+
+<p>L2CacheConfig 3.3 works with Mac OS X 10.1 and 10.2. I think it probably works with Mac OS X 10.0 as well, but I have not tested it. Let me know if you try. (If version 3.3 does not work, then you could use version 3.2 with Mac OS X 10.0 instead).
+
+<p>The GrabL2CacheSetting does not work with Mac OS 9.2, but there is a workaround (see below).<p>
+
+<H4><A NAME=version>Version History</A></H4>
+
+<dl>
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Download/L2CacheConfig.img.sit">3.3 (August 8, 2002)</a>
+<dd><p>Several changes for compatibility with Mac OS X 10.2.
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/L2CacheConfig3.2.img.sit">3.2 (August 22, 2001)</a>
+<dd><p>Several changes for compatibility with Mac OS X 10.1. I have also tried to fix a bug which prevented the L2 cache from being enabled on certain systems.
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/L2CacheConfig3.1.img.sit">3.1 (June 18, 2001)</a>
+ <dd><p>Removed features related to speculative processing and Altivec, which turned out to be unecessary.
+</dl>
+
+<H4><A NAME=hardware>Supported Hardware</A></H4>
+
+L2CacheConfig should work with any G3 or G4 processor. (I'm not sure how it would fare with the very latest G4's that have an L3 cache in addition to the L2 cache. It may work with them, but it would not enable the L3 cache). Of course, if you are using the processor which originally shipped with your computer, you don't need this software, as Mac OS X (or, more accurately, your computer's firmware) will enable and configure your cache automatically. So this software is of most interest to those with upgraded processors.<p>
+
+If you need assistance in installing OS X on your OldWorld machine (e.g. the 7300 - 9600 series), see the instructions available at <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/">http://eshop.macsales.com/OSXCenter/</a>.
+
+<h4><A NAME=download>Download and Installation</A></h4>
+
+<P>The software is available for download at:
+
+<blockquote><A HREF="http://eshop.macsales.com/OSXCenter/XPostFacto/Download/L2CacheConfig.img.sit">http://eshop.macsales.com/OSXCenter/Download/L2CacheConfig.img.sit </A></blockquote>
+
+<p>It comes in the form of a disk image file. You should be able to double click on it and have the virtual disk mount in Mac OS X. On the disk, you will find the L2CacheConfig application, the GrabL2CacheSetting application, these release notes, and a folder with source code (which you can ignore if you like).
+
+<p>To install L2CacheConfig, simply drag the application icon to the desired location on your hard drive (the conventional location would be /Applications/Utilities/ but you can put it elsewhere if you like). That's it! The first time you run L2CacheConfig, it will install a startup item for you.
+
+<h4><A NAME=configuration>Configuration</A></h4>
+
+<p>If you are upgrading from a previous version of L2CacheConfig, then you need to launch the new version and authenticate yourself. The updated startup item will then be installed automatically. The format of the preferences file has remained unchanged.
+
+<p>If you are a new user of L2CacheConfig, or if your former preferences file is no longer available, you will need to do a little preparation before using L2CacheConfig. In order for L2CacheConfig to configure the L2 cache properly, you need to create a configuration file which stores the correct configuration for your processor card. This configuration depends on such details as the speed of the cache, the type of RAM used, the size of the cache, etc.<p>
+
+To create the configuration file, follow these steps:<p>
+
+<ol>
+<li>Boot into Mac OS 9
+<li>Use the software that came with your upgrade card to enable and configure the L2 cache. Alternatively, you can use the G3/G4 Cache Profiler software from <a href="http://www.powerlogix.com/downloads/">PowerLogix</a>, which will enable and configure a broad range of upgrade cards, and can be freely downloaded from their web site. 
+<li>Still in Mac OS 9, launch the GrabL2CacheSetting program (included in this distribution). This program reads the current configuration of the L2 cache, and saves it on your desktop, in a file called L2Cache.config. Leave that file there.
+<li>Reboot into Mac OS X.
+<li>Launch the L2CacheConfig program. Click on the lock and authenticate yourself. L2CacheConfig will find the L2Cache.config file, and import its settings.
+</ol>
+
+<p>Once this process is finished, you no longer need the L2Cache.config file, and you may delete it.
+
+<p>The GrabL2CacheSetting does not work properly in Mac OS 9.2. You can create the L2Cache.config file manually in that case. It is a text file, and its contents are the value of your L2CR register, in hexadecimal format, e.g.:<p>
+
+0xB9000000<p>
+
+(but yours may well be different). You can get the value from some of the Mac OS 9 cache utilities. For instance, the PowerLogix cache profiler shows this value in one of its panes.
+
+<h4>Authentication</h4>
+
+In order to do its work, L2CacheConfig must load a kernel extension. This requires that you authenticate yourself, and L2CacheConfig will prompt you to do so when launched.
+
+<h4>Startup Item</h4>
+
+L2CacheConfig automatically installs a startup item the first time you launch it. This startup item is located at /Library/StartupItems/L2CacheStart. Even if you delete the L2CacheConfig application, the startup item will continue to work. So to entirely remove L2CacheConfig from your system (should you wish to do so), you must delete the L2CacheStart folder as well.<p>
+
+There are situations in which you may wish to temporarily disable the startup item. You will need to do this, for instance, if you install a new processor upgrade card, since the cache settings for the new card may well be different than the old card. To disable the startup item, you can run the L2CacheConfig application and uncheck the "Enable L2 Cache" button. Alternatively, you can move or rename the preferences file, which is located at /Library/Preferences/rempel.ryan.L2CacheConfig.plist. Then follow the instructions above for configuring L2CacheConfig to work with your new processor card.<p>
+
+<h4><a name=trouble>Troubleshooting</a></h4>
+
+If your computer freezes when you enable the cache, or if you have random freezes later, there are several steps you can take that may improve matters. You can increase the clock ratio for the cache (i.e. slow the cache down). It can also help to de-interleave your memory, if it is interleaved. Removing the original motherboard cache can help (if it is removable).<p> 
+
+<h4><A NAME=risks>Risks</A></h4>
+
+If you use the wrong value to configure the L2 cache, you would almost surely freeze the system and require a cold reboot. Like all other crashes, this is capable of causing damage to your filesystem. However, once you establish a known good configuration, there is no particular reason why it should not keep working.<p>
+
+The software will notice if you crash immediately upon configuring the L2 cache. In that case, it will not try to configure the L2 cache when you reboot. In some circumstances, you may have to disable L2 cache configuration manually. To do so, you can use the application itself (if you get that far). Alternatively, you can move or rename the preferences file, which is located at /Library/Preferences/rempel.ryan.L2CacheConfig.plist. To reboot into MacOS 9 after a crash, hold down the &quot;option&quot; key while restarting.<p>
+
+<h4>Known Problems</h4>
+
+Some users have found that L2CacheConfig reports that the L2 cache is not enabled even when the "Enable L2 Cache" checkbox is checked. This is a bug in L2CacheConfig that I have not been able to reproduce or fix at this time. If you should be affected by this bug, you will need to try the PowerLogix or XLR8 cache software instead.<p>
+
+In version 3.2, I have made an attempt to fix this bug. If it should still affect you, the symptom would now be that the "Enable L2 Cache" checkbox will not stay checked when you click on it. I would be interested to learn whether this problem affects anyone.<p>
+
+<h4><A NAME=credits>Credits</A></h4>
+
+I would like to thank Apple for the Darwin project. This software would not have been possible without being able to read source code. I would also like to thank Terry Greeniaus for the GrabL2CacheSetting program, which he graciously updated in several ways to work better with L2CacheConfig. I would like to thank Charlie Wright for designing an icon for L2CacheConfig. Finally, I would like to thank <a href="http://www.powerlogix.com">PowerLogix</a> for generously providing a G4 upgrade card for testing this software.<p>
+
+<h4><A NAME=licence>License</A></h4>
+
+The <B>GrabL2CacheSetting</B> software is based on the GrabG3CacheSetting program by Terry Greeniaus, and is subject to the GNU Public License, which can be consulted at <a href="http://www.gnu.org/copyleft/gpl.html">http://www.gnu.org/copyleft/gpl.html</a>.<p>
+
+The following licence applies to the <B>L2CacheConfig</B> software.<P>
+
+Copyright (c) 2000 - 2002.<br>
+Other World Computing.<br>
+All rights reserved.<P>
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:<p>
+
+<OL>
+<LI>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer as the first lines of each file.
+
+<LI>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+<LI>Redistributions in binary form must retain the link to Other World Computing's web site in the application's "About Box."
+</OL>
+
+<P>This software is provided by Other World Computing ``as is'' and any express or implied warranties, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose are disclaimed. In no event shall Ryan Rempel or Other World Computing be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, procurement of substitute goods or services; loss of use, data, or profits; or business interruption) however caused and on any theory of liability, whether in contract, strict liability, or tort (including negligence or otherwise) arising in any way out of the use of this software, even if advised of the possibility of such damage.
+
+
+<h4>Revision History</h4>
+
+<dl>
+<dt>August 8, 2002
+<dd>Updated to version 3.3, for Mac OS X 10.2 compatibility
+<dt>July 27, 2002
+<dd>Added note that L2CacheConfig will require changes in order to work with Mac OS X 10.2.
+<dt>September 30, 2001
+<dd>Added note that L2CacheConfig 3.2 works with Mac OS X 10.1.
+<dt>August 23, 2001
+<dd>Added note that GrabL2CacheSetting appears not to work properly in Mac OS 9.2.
+<dt>August 22, 2001
+<dd>Version 3.2. 
+<dt>August 12, 2001
+<dd>Added note that new version will be required for Mac OS X 10.1.
+<dt>July 4, 2001
+<dd>Added "Known Problems" section.
+<dt>June 20, 2001
+<dd>Added note about authentication.
+<dt>June 18, 2001
+<dd>Moved to Other World Computing! Updated to version 3.1.
+</dl>
+
+</body>

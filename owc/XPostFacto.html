@@ -1,0 +1,714 @@
+<body><h2>XPostFacto 2.2.5</h2>
+
+Ryan Rempel<br>
+<a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
+July 6, 2003
+
+<p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. All it requires is 3 extra clicks of your mouse! When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
+
+<p>XPostFacto is a free, open-source application. However, I would encourage you to <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">register for XPostFacto support</a>, which costs $10. This will give you access to the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/forum">tech support forum</a> on this site. I do also answer e-mail, but I will catch up on the tech support forum before I catch up on e-mail.
+
+<p>You should also remember to check the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto.html">online version</a> of this documentation from time to time, to see whether there have been any changes.
+
+<p>XPostFacto 2.2 works with Mac OS X 10.2, aka Jaguar (as well as previous versions of Mac OS X). There are a couple of issues with Jaguar on unsupported systems. The most serious is that Jaguar simply does not work with the 603 or 604 processor--it will only work if you have a G3 or G4 upgrade installed. It may be possible to fix this eventually.
+
+<p>XPostFacto does not work with Panther yet, but I am working on it.
+
+<p><hr>
+
+<p><ul>
+<li><a href="#links">Download Links and Version History</a>
+<li><a href="#preparing">Preparing to use XPostFacto</a>
+	<ul>
+	<li><a href="#machine">You need a machine that XPostFacto works with</a>
+	<li><a href="#macos9">You need to have at least Mac OS 9.0 installed</a>
+	<li><a href="#RAM">You need sufficient RAM to run Mac OS X</a>
+	<li><a href="#space">You need sufficient disk space to install Mac OS X</a>
+	<li><a href="#format">You need a disk that was formatted with Apple's Drive Setup or Intech's Hard Disk SpeedTools</a>
+	<li><a href="#partition">You need to choose a partition strategy</a>
+	<li><a href="#backup">You need to think about your backup strategy</a>
+	<li><a href="#peripherals">You need to review your PCI cards and other peripherals for compatibility</a>
+	<li><a href="#CD">You need the Mac OS X Install CD</a>
+	</ul>
+<li><a href="#whatworks">What Works and What Doesn't Work</a>
+	<ul>
+	<li><a href="#cpus">CPUs</a>
+	<li><a href="#floppy">Floppy Drive</a>
+	<li><a href="#sound">Sound and Video</a>
+	<li><a href="#adb">ADB Keyboard and Mouse</a>
+	<li><a href="#SCSI">Internal and External SCSI</a>
+	<li><a href="#SerialPorts">Serial Ports</a>
+	<li><a href="#Ethernet">Ethernet</a>
+	<li><a href="#InternalModem">Internal Modem</a>
+	<li><a href="#Sleep">Sleep</a>
+	<li><a href="#PCCards">PCMCIA Cards and Cardbus Cards</a>
+	</ul>
+<li><a href="#enough">Enough, already! How do I use XPostFacto?</a>
+	<ul>
+	<li><a href="#install">Installing XPostFacto</a>
+	<li><a href="#first">Installing Mac OS X</a>
+	<li><a href="#switching">Switching between Mac OS 9 and Mac OS X</a>
+	<li><a href="#UpgradingXPostFacto">Upgrading from a Previous Version of XPostFacto</a>
+	<li><a href="#tenpointone">Upgrading Mac OS X</a>
+	<li><a href="#customCD">Creating a Custom Install CD</a>
+	<li><a href="#advanced">Advanced Options</a>
+	</ul>
+<li><a href="#troubleshooting">Troubleshooting</a>
+	<ul>
+	<li><a href="#nostartup">If Mac OS X will not boot successfully ...</a>
+	<li><a href="#diagnosis">Diagnosing the problem</a>
+		<ul>
+		<li><a href="#noboot">If you cannot successfully boot</a>
+		<li><a href="#early">If you do not get any text in verbose mode</a>
+		<li><a href="#stillblank">If you still get no text in verbose mode</a>
+		<li><a href="#text">If you do get text in verbose mode</a>
+		<li><a href="#panic">If you get a kernel panic</a>
+		<li><a href="#Installer">If you get as far as the Mac OS X Installer and then have problems</a>
+		</ul>
+	<li><a href="#Log">The XPostFacto Log</a>
+	<li><a href="#Debug">The "Debug" Menu</a>
+	</ul>
+<li><a href="#source">Source Code</a>
+<li><a href="#credits">Credits</a>
+<li><a href="#licence">Licence</a>
+</ul>
+
+<p><hr>
+
+<h2><a name="links">Download Links and Version History</a></h2>
+
+<dl>
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Download/XPostFacto.sit">2.2.5 (January 4, 2003)</a>
+<dd>
+<ul>
+<li>Fixes a problem with certain SCSI cards which use multiple busses (in particular, some of the ATTO cards).
+<li>Works better in situations where the settings had previously required too much space in NVRAM
+</ul>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2.4.sit">2.2.4 (October 21, 2002)</a>
+<dd>Fixes a problem with version 2.2.3 that could cause a kernel panic when installing Mac OS X 10.2.
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2.3.sit">2.2.3 (October 7, 2002)</a>
+<dd>
+<ul>
+<li>Fixes a couple of problems with Darwin 6. 
+Will now recognize the Darwin 6 Install CD as an installer. Also, will automatically boot in verbose mode when booting Darwin.
+<li>Will now find the correct Open Firmware name for the Sonnet ATA/100 card with the 2.3.5 firmware applied. 
+Users report that the boot process still fails, though, so further investigation is required. 
+</ul>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2.2.sit">2.2.2 (September 12, 2002)</a>
+<dd>
+<ul>
+<li>Fixes the problem starting Classic in Mac OS X 10.2. Remember to reinstall the extensions in order to apply the fix. (You can do this from within Mac OS X now by launching XPostFacto). 
+<li>Uses a little less NVRAM when installing.
+</ul>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2.1.sit">2.2.1 (September 2, 2002)</a>
+<dd>
+<ul>
+<li>Updated the custom BootX to use the new boot graphic from Mac OS X 10.2. This looks a little odd when used with Mac OS X 10.0 or 10.1, but it works OK.
+<li>Added a "debug" preference to show panic text, rather than the new panic dialog.
+<li>Fixed the problem with the SCSI bus on unsupported Powerbooks.
+</ul>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2.sit">2.2 (August 23, 2002)</a>
+<dd>
+<p>The changes since version 2.2b17 are as follows:<p>
+
+<ul>
+<li>Fixes problem with booting from external SCSI drives in Mac OS X 10.0.
+<li>Only allows the "install" button to be used with the Install CD (not "restart").
+</ul>
+
+<p>And here is a summary of the changes since version 2.11 (the last non-beta version):<p>
+
+<ul>
+<li>Support for Mac OS X 10.2 (aka Jaguar).
+<li>Partial support for the original Powerbook G3, the 2400, and the 3400. (There are still some significant limitations).
+<li>Support for the Beige G3s.
+<li>Support for some additional PowerComputing models.
+<li>Support for leaving onboard video disconnected when using a video card.
+<li>Support for UltraTek IDE cards (along with OWC's firmware update).
+<li>The "throttle" feature, which slows down the CPU in the earliest part of the boot process, and helps booting some SCSI devices when using a CPU upgrade card.
+<li>No longer panics on first reboot after clean install.
+<li>Better documentation.
+</ul>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2b17.img.sit">2.2b17 (August 18, 2002)</a>
+<dd>
+<ul>
+<li>Fixes the "file not found" error when trying to install Mac OS X 10.0 (the error was introduced in version 2.2b15).
+<li>Fixes the "squished cursor" problem when using Jaguar with onboard video.
+<li>Extensions built with the Jaguar development tools and headers.
+<li>Minor updates to BootX to synchronize with Apple's changes.
+<li>Uses slightly less NVRAM when setting up the install.
+<li>Is now able to install the current version of the extensions while running in Mac OS X.
+This takes the place of the "package" file which was formerly included.
+</ul>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2b16.img.sit">2.2b16 (August 10, 2002)</a>
+<dd><p>
+Fixes a problem which prevented some of the kernel extensions from loading properly in 2.2b15, which could cause a kernel panic early in the boot process. 
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2b15.img.sit">2.2b15 (August 8, 2002)</a>
+<dd>
+<ul>
+<li>Fixes the "kernel panic on first reboot after clean install" problem. 
+<li>Better compatibility with Mac OS X 10.2.
+<li>On the Beige G3s, saves some space in the NVRAM patches (at the expense of net-booting).
+</ul>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2b14.sit">2.2b14 (July 10, 2002)</a>
+<dd>
+<ul>
+<li>Fixes several problems which affected the Beige G3s.  
+<li>May work with additional PowerCenter models, if they have video cards installed. 
+<li>Integrates this documentation into the application itself (see the 'Help' menu). This makes it possible to distribute XPostFacto as a single application file.
+</ul>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2b9.img.sit">2.2b9 (June 29, 2002)</a>
+<dd>
+<ul>
+<li>Permits unsupported Powerbooks to use Mac OS X 10.1.1 and later. However, sleep now crashes the system (in previous versions, sleep did not work, but at least it failed gracefully). So you will need to avoid sleep for the time being.
+<li>May now work with the Beige G3. Ordinarily, Mac OS X should just work with the Beige G3, but there are some cases in which the Beige G3 has problems that XPostFacto may be able to help with. XPostFacto is untested on Beige G3s, so if you try it, let me know how it works.
+<li>Has some limited support for the 6400 and 6500. My 6500 still has problems with the SCSI bus, so booting from a CD does not work. So the 6400 and 6500 support is mostly for people who want to work on the problems, rather than the ordinary user.
+<li>A great deal of restructuring in the source code of the XPostFacto application. Some things may have been broken in the process--let me know.
+<li>A "debug" menu, for accessing certain debugging features in the Mac OS X kernel. If you do not know what the options mean, just leave them unselected.
+<li>Better error messages if you launch XPostFacto in Mac OS X or in Mac OS 8.x.
+<li>The "prepare a custom CD" feature is gone for the moment. It did not work with recent versions of the install CD. I should be able to fix this, but have not gotten around to it yet.
+<li>Source code now in the cvs repository at <a href="http://www.opendarwin.org/cgi-bin/cvsweb.cgi/proj/">http://www.opendarwin.org/</a>
+</ul>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2b7.img.sit">2.2b7 (April 20, 2002)</a>
+<dd>Restores the "throttle" menu, so that you can adjust the processor throttling. Really, truly avoids persistent processor throttling when rebooting in Mac OS 9. 
+Should add support for the later 8600 and 9600 models (i.e. the 8600/250, 8600/300, 9600/300, 9600/350), but is not well tested on those machines.
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2b4.img.sit">2.2b4 (April 16, 2002)</a>
+<dd>Fixes a problem with the "throttle" feature of version 2.2b3. On some machines, it was possible for the processor throttling to persist when you reboot into Mac OS 9 (which is undesirable). Version 2.2b4 fixes that. (Well, I thought it did. It turns out that a few more changes were needed--and they are in version 2.2b7).
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2b3.img.sit">2.2b3 (April 13, 2002)</a>
+<dd>
+This release allows you to throttle (i.e. slow down) a G3 or G4 processor upgrade during the earliest part of the boot process. This sometimes solves problems that some users have experienced when booting with G3 and G4 upgrade cards. If you have been stuck with a blank screen on reboot with earlier versions of XPostFacto, it is possible that this version will work better for you (assuming you have a processor upgrade).
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2b1.img.sit">2.2b1 (April 7, 2002)</a>
+<dd><ul><li>Beta-level support for the original Powerbook G3, the 3400 and (possibly) the 2400. 
+<li>Fixes for the "kernel panic if nothing connected to onboard video" problem. (The ATI driver update will still be needed for some ATI cards, however). 
+<li>Will permit installation onto drives connected to the UltraTek IDE card (with the OWC/FirmTek upgrade applied). 
+<li>Fixes a problem installing Darwin 1.4.1. 
+<li>Fixes a problem with Mac OS 9.2.x.
+</ul>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.11.img.sit">2.11 (January 21, 2002)</a>
+<dd>Fixes a problem reading the catalog of highly fragmented drives. Partially fixes an incompatibility with NoFinderZoom9. Provides some feedback when preparing custom install CDs.
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.1.img.sit">2.1 (January 13, 2002)</a>
+<dd>Adds support for additional SCSI CD-ROM devices, including some CD-R and CD-RW devices (courtesy of <a href="http://www.elgato.com/">El-Gato Software</a>). Adds the ability to create a custom install CD for older machines. Various bug fixes.
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Download/UnsupportedUtilityX.img.sit">2.0 (October 29, 2001)</a>
+<dd>Better error logging.
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/UUX2.0b4.img.sit">2.0b4 (October 13, 2001)</a>
+<dd>Fixes a problem booting from a SCSI card or IDE card installed in the lower three slots of six-slot systems. Fixes a problem running out of NVRAM space in some configurations.
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/UUX2.0b3.img.sit">2.0b3 (October 2, 2001)</a>
+<dd>Restores support for some CD-ROM mechanisms that were not bootable in version 2.0b1 and 2.0b2. Changes the installation strategy to access the CD-ROM later in the boot process.
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/UUX2.0b2.img.sit">2.0b2 (September 30, 2001)</a>
+<dd>Fixes a bug that had created problems in some situations when installing BootX (the Mac OS X bootloader). Also keeps track of the version of BootX that is installed, so that it can be updated when necessary. Adds an 'Open Firmware' menu which can be used to interact with Open Firmware (and BootX) at boot time (see documentation below).
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/UUX2.0b1.img.sit">2.0b1 (September 23, 2001)</a>
+<dd>More changes meant to improve compatibility with future versions of Mac OS X. The installation strategy has changed significantly in this version. UUX now installs a modified version of BootX which loads kernel extensions from more than one source.
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/UnsupportedUtilityX1.1.img.sit">1.1 (August 22, 2001)</a>
+<dd>A variety of changes meant to improve compatibility with future versions of Mac OS X. It may turn out that further changes are required.
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/UnsupportedUtilityX1.0.img.sit">1.0 (August 3, 2001)</a>
+<dd>Verified that Mac OS X Server can be installed successfully.
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/UnsupportedUtilityX1.0b10.img.sit">1.0b10 (July 27, 2001)</a>
+<dd>Fixed a problem booting Darwin 1.3.1 (the "file not found" error).
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/UnsupportedUtilityX1.0b9.img.sit">1.0b9 (July 26, 2001)</a>
+<dd>Now pre-installs BootX in the manner required for older machines. This should allow installation to work with a broader range of CD-ROM models. It also helps to install Mac OS X Server and Darwin 1.3.1. Also added options for booting in verbose mode and single user mode.
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/UnsupportedUtilityX1.0b8.img.sit">1.0b8 (June 18, 2001)</a>
+<dd>Original release
+</dl>
+
+<hr>
+
+<h2><a name="preparing">Preparing to use XPostFacto</a></h2>
+
+<p>Here is a checklist of things to consider before attempting to install Mac OS X with XPostFacto.
+
+<dl>
+<dt><p><b><a name="machine">You need a machine that XPostFacto works with</a></b>
+<dd>
+<p>XPostFacto works with some unsupported machines, but not all of them. Here are the machines that XPostFacto can work with:
+
+<ul>
+<p><li><b>The PowerSurge models</b>
+<p>These are the 7300, 7500, 7600, 8500, 8600, 9500, and 9600, as well as the clones that were based on one of these systems (the Umax S900 and J700, the PowerComputing PowerWave and PowerTower Pro,  and the Daystar Genesis and Millennium, among others).
+
+<p><li><b>The Beige G3s</b>
+<p>XPostFacto will work with the Beige G3s. Of course, these computers are supported by Apple for Mac OS X. However, there are situations in which it is difficult to install or boot Mac OS X on those machines, especially if you have a G4 CPU upgrade installed. In those cases, XPostFacto sometimes helps.
+
+<p><li><b>Certain Powerbooks</b>
+<p>These are the original Powerbook G3, the 2400 and the 3400. However, there are significant limitations in the support for these machines at this time. The most serious limitation is that sleep does not work. On some models, the built-in ethernet connection also does not work. There are additional details below.
+
+<p>I should warn potential users that Mac OS X is pretty slow on the 2400 and 3400. But an XPostFacto user was kind enough to bring his 2400 running Mac OS X to show me at MacWorld NY, and it was pretty cool to see. 
+</ul> 
+
+<p>Support for other models is in development. Some users have recently had success with some of the "Catalyst" machines (in particular, the PowerCenter and PowerCenter Pro). At least on some of these machines, the onboard video is not working, so a video card is required. Also, some progress has been made with the Alchemy and Gazelle (the 6400 and 6500), but they are not working reliably yet.  
+
+<p>The basic requirement for Mac OS X to ever work on a machine is that it have a PowerPC processor, a PCI bus, and Open Firmware. So the earliest PowerPC computers from Apple (e.g. the 6100, 7100, and 8100) are not likely to ever work with Mac OS X.
+
+<dt><p><b><a name="macos9">You need to have at least Mac OS 9.0 installed</a></b>
+
+<dd><p>XPostFacto does not run in Mac OS 8, so you need to have at least Mac OS 9.0 installed to use it. XPostFacto will run in Mac OS 9.0, 9.1 or 9.2. (It requires Mac OS 9.x in order to be able to copy files with long filenames from the Mac OS X Install CD to your hard drive).
+
+<p>If you do not already have Mac OS 9.x installed, the problem is that Mac OS 9.2 does not ordinarily work on older machines, and it is not so easy to buy Mac OS 9.0 or 9.1 anymore. There are some procedures out there for installing 9.2, but I have not tried them myself. Further information is available at <a href="http://www.xlr8yourmac.com/OS9/os_9_2_1_install_mods.html">http://www.xlr8yourmac.com/OS9/os_9_2_1_install_mods.html</a> and <a href="http://www.os9forever.com">http://www.os9forever.com</a>.
+
+<dt><p><b><a name="RAM">You need sufficient RAM to run Mac OS X</a></b>
+<dd>
+<p>Apple recommends a minimum of 128 MB of RAM to run Mac OS X. But more is better, especially if you are planning to make use of the Classic environment to run Mac OS 9. I would suggest at least 256 MB.
+
+<p>If RAM is tight, and you still want to install Mac OS X, I have heard of cases where people have done so in as little as 64 MB. But that is not recommended.
+ 
+<dt><p><b><a name="space">You need sufficient disk space to install Mac OS X</a></b>
+<dd>
+<p>The bare minimum space required for installing Mac OS X is about 1.5 GB. However, a more realistic minimum is 2 GB. And more is better, depending on how much space your applications and data are likely to need.
+
+<dt><p><b><a name="format">You need a disk that was formatted with Apple's Drive Setup or Intech's Hard Disk SpeedTools</a></b>
+<dd>
+<p>In order to boot Mac OS X on older machines, the disk you are using to boot from must have been formatted with Apple's Drive Setup or Intech's <a href="http://www.IntechUSA.com/">Hard Disk SpeedTools</a>. Disks formatted with other formatting utilities generally are not bootable on older machines with Mac OS X. (The symptom is that when you try to reboot, you will end up back in Mac OS 9 instead of Mac OS X). If you are using Intech's Hard Disk SpeedTools, make sure that you have upgraded to the most recent version, as previous versions had some difficulty with the Mac OS X Installer. 
+
+<p>Once you have Mac OS X installed, it is possible to use the Mac OS X Disk Utility to format disks. However, those disks do not appear to be bootable on older machines, even if you check the "Install Mac OS 9 Drivers" checkbox. So it seems best to use the Mac OS 9.x version of Drive Setup to format drives instead.
+
+<dt><p><b><a name="partition">You need to choose a partition strategy</a></b>
+<dd>
+<p>The ideal strategy for installing Mac OS X is to have three separate partitions: one for Mac OS X, one for Mac OS 9.1, and one for Classic. These partitions can be on the same disk or on separate disks--it does not matter.
+
+<p>The advantage of having Mac OS X on a separate partition from Mac OS 9.1 is that you can install Mac OS X without touching your current installation. This provides some peace of mind, in case anything should go wrong when installing Mac OS X.
+
+<p>It is possible to install Mac OS X on the same partition as Mac OS 9. However, the Mac OS X Installer will "bless" the Mac OS X installation, which "de-blesses" the Mac OS 9 System Folder. The Mac OS 9 System Folder can be re-blessed (most easily with the Startup Disk preference panel in the Mac OS X System Preferences application), but that process can become tricky in situations where Mac OS X does not boot correctly after the first install. (There are some troubleshooting suggestions below if you find yourself in this situation).
+
+<p>The advantage of having Mac OS 9.1 on a separate partition from Classic is that certain extensions and control panels are problematic in Classic (or simply not needed). Having a separate partition permits you to do a bare-bones install with only the things actually needed for Classic, and still have another partition to use when you want to reboot into Mac OS 9.x. The other advantage is that it is possible to install and use Mac OS 9.2 for Classic, even though it will not be bootable apart from Classic.
+
+<p>It is possible to use the same partition for your bootable Mac OS 9.1 and for Classic. If you do that, then you will need to remove any problematic extensions or control panels. Alternatively, you can use the Classic preferences in Mac OS X to disable some extensions or control panels when using Classic.
+
+<p>So if you have three partitions available, it is ideal to use one for Mac OS X, one for Mac OS 9.x, and one for Classic. If you have two partitions, then Classic and Mac OS X can coexist on the same partition. And if you have only one partition, then everything can coexist together, with some disadvantages. (Of course, the size of the partitions available to you will also influence your strategy).
+
+<p>If you are installing onto an ATA drive, there are some cases in which you must install onto a partition that is entirely within the first 8 GB of the drive. The Mac OS X Installer enforces this limit, so if you are unable to select your desired partition, that may be the reason.
+
+<dt><p><b><a name="backup">You need to think about your backup strategy</a></b>
+<dd>
+<p>It is a good idea to backup your data before attempting a major installation, and doubly so before attempting something that Apple does not support! So you should consider whether you have a good backup system in place at the moment. (You could also consider what backup system you will use once Mac OS X is installed. One option is to copy drives with a utility such as Carbon Copy Cloner--using a Firewire drive for this purpose can be handy. And Retrospect now has a Mac OS X compatible version, for more sophisticated backups).
+
+<dt><p><b><a name="peripherals">You need to review your PCI cards and other peripherals for compatibility</a></b>
+<dd>
+<p>Compatibility is a large subject--you can consult my <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=Compatibility.html">compatibility page</a> for a longer (though still incomplete) discussion. Here I will briefly discuss a few issues that sometimes prevent a successful install.
+
+<ul>
+<p><li><b>Firewire/USB cards in Mac OS X 10.0</b>
+<p>If you are installing Mac OS X 10.0, then you may need to remove Firewire/USB cards, until you have completed the install and upgraded to Mac OS X 10.1. Mac OS X 10.0 had some trouble with Firewire and USB, but Mac OS X 10.1 is much improved.
+
+<p><li><b>Video cards</b>
+<p>Some video cards are problematic in Mac OS X. Check the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=Compatibility.html">compatibility page</a> for details.
+
+<p><li><b>SCSI cards and ATA cards</b>
+<p>The Mac OS X 10.1 Install CD has a more complete set of drivers for SCSI and ATA cards than does the Mac OS X 10.0 CD (and, presumably, the 10.2 CD will be even better). Check the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=Compatibility.html">compatibility page</a> for details.
+
+<p><li><b>CD-ROM devices</b>
+<p>Some older CD-ROM devices do not work with Mac OS X. The symptom that you will get in this case is the message "still waiting for root device" when booting in verbose mode (with command-v held down at startup).
+
+</ul>
+
+<dt><p><b><a name="CD">You need the Mac OS X Install CD</a></b>
+<dd>
+<p>I almost forgot to mention this one! You can use XPostFacto to install Mac OS X, Mac OS X Server, or Darwin. But you do need the Install CD. XPostFacto should work with Mac OS X 10.0, 10.1, and 10.2, as well as their Mac OS X Server and Darwin equivalents.
+
+</dl>
+
+<hr>
+
+<h2><a name="whatworks">What Works and What Doesn't Work</a></h2>
+
+<p>Here is a quick survey of what works and what doesn't work on the machines that XPostFacto supports. For information about the compatibility of peripheral devices, check the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=Compatibility.html">compatibility page</a>. 
+
+<dl>
+<dt><p><b><a name="cpus">CPUs</a></b>
+<dd><p>Mac OS X does not work with a 601 CPU. Therefore, if you have a 7500 with the original 601 processor, you will need to install a CPU upgrade before installing Mac OS X. 
+
+<P>Mac OS X 10.2 does not work with a 603 or 604 CPU either. It is possible that this may be fixed in time, once Apple makes the latest kernel sources available.
+
+<p>If you install a G3 or a G4 upgrade, you will need some software to enable the L2 cache in Mac OS X. You can use my <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=L2CacheConfig.html">L2CacheConfig</a> software, or the PowerLogix <a href="http://www.powerlogix.com/downloads/index.html">cache control</a> software, which is also free. Your computer will work without enabling the L2 cache--it will just be slower. L2CacheConfig required some changes to work with Mac OS X 10.2, so you should upgrade to version 3.3 of L2CacheConfig before installing Mac OS 10.2.
+
+<p>The 9500MP and 9600MP work, but only one processor is active at this time. I have been working on MP support from time to time, but have not made much progress lately.
+
+<dt><p><b><a name="floppy">Floppy Drive</a></b>
+<dd><p>Mac OS X does not come with support for the floppy drive, but you can install a driver from <a href="http://www.darwin-development.org/floppy/">http://www.darwin-development.org/floppy/</a> to add support.
+
+<dt><p><b><a name="sound">Sound and Video</a></b>
+<dd><p>Sound out works. However, it is not possible to change the volume globally (you can change the volume in applications such as iTunes).
+
+<p>Sound in does not work yet.
+
+<p>Video in and out does not work yet (on those models that have it--the 7600 and 8600, I believe).
+
+<dt><p><b><a name="adb">ADB Keyboard and Mouse</a></b>
+<dd><p>ADB keyboards and mice generally work. If you are tempted to replace them with a USB keyboard and mouse, it is useful to keep your ADB keyboard and mouse around. This is because the boot-time key combinations only work on ADB keyboards, and the built-in support for ADB comes in handy sometimes if you run into trouble.
+
+<dt><p><b><a name="SCSI">Internal and External SCSI</a></b>
+<dd><p>The internal and external SCSI bus both work. However, there are some users who have trouble with the internal SCSI bus. One thing that you need to double-check is that your SCSI termination is correct, because Mac OS X is picky about that. In general, Mac OS X is sensitive to timing issues on the SCSI bus. Sometimes removing unnecessary devices helps. Also, you will sometimes need to adjust the jumper settings on drives connected to the internal bus, to make sure that they spin up automatically at boot time (the "Disable Unit Attention" jumper is one that sometimes needs to be changed).
+
+<dt><p><b><a name="SerialPorts">Serial Ports</a></b>
+<dd><p>The serial ports generally work, though not all serial devices are supported. Some modems work, but serial printers are not supported. Localtalk does not work in Mac OS X (i.e. Appletalk over the printer port). However, you can get localtalk-to-ethernet adapters.
+
+<dt><p><b><a name="Ethernet">Ethernet</a></b>
+<dd><p>The built-in ethernet connection works, with the exception of the Powerbooks that have an Ethernet-only connection. Those do not work, but the combo Ethernet-Modem connections do work (at least for ethernet).
+
+<dt><p><b><a name="InternalModem">Internal Modem</a></b>
+<dd><p>I have not tested the internal modem in the Powerbooks--I suppose I should!
+
+<dt><p><b><a name="Sleep">Sleep</a></b>
+<dd><p>Display sleep works, and is safe. Disk sleep works and seems safe in Mac OS X 10.1 and later. In Mac OS X 10.0, there were some reports of data corruption upon waking for sleep.
+
+<p>System sleep is not working yet. On the desktop models, it fails gracefully (or at least reasonably gracefully--I seem to lose my Internet connection sometimes). <b>On the Powerbooks, however, sleep crashes the system.</b> So it is important to turn sleep off in the Energy Saver preference panel in the System Preferences application.
+
+<dt><p><b><a name="PCCards">PCMCIA Cards and Cardbus Cards</a></b>
+<dd><p>PCMCIA cards appear not to work in the Powerbooks. However, some CardBus cards do seem to work.
+
+</dl>
+
+<hr>
+
+<h2><a name="enough">Enough, already! How do I use XPostFacto?</a></h2>
+
+<p>So, you have reviewed the checklist of things you need before using XPostFacto, and you have some idea of what works and what doesn't. Now, you ask, how do I actually go about using XPostFacto?
+
+<h3><a name="install">Installing XPostFacto</a></h3>
+
+To install XPostFacto, just copy it to a convenient location on your hard drive. You do not need to put it in a special location.
+
+<h3><a name="first">Installing Mac OS X</a></h3>
+
+<p>Let me emphasize one last time that you need to be cautious when doing a major installation of this kind. Installing Mac OS X has worked very easily and reliably for some, while others have had significant problems that have not always been readily explained. There have been cases in which installing Mac OS X has been unsuccessful, and the computer has failed to boot at all--it appears to be "dead." If you read the tech forum, you will see that there has been some vigorous debate about whether the computer is ever "really" dead--in almost all cases, it has been possible to get it to boot again (until recently, I would have said "all cases"). But there are a handful of users who have either given up or come very close to it. 
+
+<p>So you should ask yourself two final questions: 
+
+<p>
+<ul>
+<li>Is my data backed up?
+<li>If something goes wrong, do I have time to troubleshoot it right now?
+</ul>
+
+<p>Then take a deep breath, and follow the following procedure:
+
+<ul>
+<li>Insert  the Mac OS X Install CD (or Darwin, or Mac OS X Server, as the case may be)
+<li>Launch XPostFacto
+<li>Select the Install CD as the volume to start up from
+<li>Select the target volume that you want to install Mac OS X to
+<li>Click on the "Install" button
+<li>Sit back and watch the action
+</ul>
+
+<p>XPostFacto will copy some kernel extensions to the target volume. Then it installs a modified version of BootX that will use these kernel extensions (along with the standard extensions on the CD). Then it will restart the computer. 
+
+<p>The Mac OS X Installer runs in Mac OS X, so you will be booting into Mac OS X at this stage. It can take a few minutes, so you need to be a little patient. It is possible for the installation to fail at this point, either with an explicit error message, or a rainbow cursor that spins forever, or by rebooting into Mac OS 9, or just a blank screen. See the troubleshooting tips below if this happens to you.
+
+<p>When you reach the Mac OS X Installer, select the target volume again (make sure to select the same one). Do not reformat the target volume at this point, as we need to keep the files that we have already copied there. Follow the rest of the Installer's instructions as usual. 
+
+<p>Once you have finished installing Mac OS X, the installer will reboot your system. Once you have successfully rebooted, remember to go to the "Energy Savers" panel in "System Preferences" and set your computer and hard drive to <b>never</b> sleep. System sleep does not work well on unsupported systems. However, display sleep is OK, and drive sleep is OK in Mac OS X 10.1.
+
+<h3><a name="switching">Switching between Mac OS 9 and Mac OS X</a></h3>
+
+Once you have installed Mac OS X, you may want to reboot into Mac OS 9 at some point. One way to do this is to hold down the option-key while restarting. However, it sometimes happens that when you install Mac OS X, your Mac OS 9 System Folder becomes "unblessed." In this case, you can use the "Startup Disk" panel in the Mac OS X "System Preferences" application. This will re-bless the System Folder and permit you to reboot into Mac OS 9.<p>
+
+After you reboot into Mac OS 9, you can use XPostFacto to return to Mac OS X. Simply select the desired startup volume and press the restart button. XPF will write the required settings to non-volatile RAM (NVRAM), and restart the computer. (Restarting from the Finder is not affected by your selection here.<p>
+
+XPF will only startup Mac OS X. To choose a different Mac OS 9 volume, use the Startup Disk control panel instead. <b>However,  do not use Startup Disk to choose a Mac OS X volume on unsupported machines, as it will not work, and may require you to zap your parameter RAM.</b><p>
+
+<h3><a name="UpgradingXPostFacto">Upgrading from a Previous Version of XPostFacto</a></h3>
+
+If you are upgrading from a previous version of XPostFacto, you need to make sure that the latest version of the kernel extensions get installed. You can do this with the "Install Extensions" command in the "File" menu of XPostFacto. This command works when XPostFacto is running in Mac OS X as well as Mac OS 9. (Eventually, I would like XPostFacto to be fully functional in Mac OS X. At the moment, the "Install Extensions" command is the only thing that actually works when you use XPostFacto in Mac OS X).<p>
+
+<h3><a name="tenpointone">Upgrading Mac OS X</a></h3>
+
+<p>Version 2.0 of XPostFacto will install Mac OS X 10.1, and version 2.2b15 will install Mac OS X 10.2. To do the install, you follow the same steps listed above. The procedure is the same whether you are upgrading or doing a fresh install--in both cases, you need to boot from the Mac OS X Install CD, so you need to use XPostFacto's special install procedure.
+
+<p>For the minor Mac OS X upgrades (e.g. from 10.1 to 10.1.5), you can use the 'Software Updates' mechanism or the downloadable installers as usual--they have, so far, worked without XPostFacto's help.
+
+<h3><a name="customCD">Creating a Custom Install CD</a></h3>
+
+XPostFacto used to be able to help with the creation of custom install CDs. However, recent versions of the install CD have changed in ways that make this more difficult, and I have not yet caught up. Also, I want to create a better user interface for this feature. So for the moment the feature is gone, but I do hope that it will return in future versions. 
+
+<h3><a name="advanced">Advanced Options</a></h3>
+
+The "Advanced" menu in XPostFacto allows you to choose to boot in verbose mode and/or single-user mode. Verbose mode can be useful if you have problems booting, as it will print messages to the screen that can help isolate the problem. Single user mode is useful if you understand what it does--if not, don't choose it!<p>
+
+It is sometimes more convenient to use the command-v and command-s keys at startup to choose verbose mode or single-user mode. The command keys affect only one session, whereas the settings you make in XPF last until you change them.<p>
+
+If you check the "Reinstall Kernel Extensions" menu item in the "Advanced" menu, the extensions required for older systems will be reinstalled when you restart. You can also use the 'OldWorld Support' package included in this distribution to install those extensions from within Mac OS X.
+
+<p><hr>
+
+<h2><a name="troubleshooting">Troubleshooting</a></h2>
+
+<p>Here are some tips you can use if you run into trouble.
+
+<h3><a name="nostartup">If Mac OS X will not boot successfully ...</a></h3>
+
+If Mac OS X will not boot successfully, you are going to want to reboot into Mac OS 9. Here are some ways to do that. None of these will solve your primary problem (i.e. they won't make Mac OS X boot any more successfully), but at least they will get you back to Mac OS 9 again.
+
+<p><ul>
+<li>Reboot with the option-key down. This should return you to Mac OS 9.<p>
+
+<li>If that does not work, reboot with command-option-shift-delete held down.<p>
+
+<li>If that does not work, you can try inserting the Mac OS 9 CD and booting with the "c" key down.<p>
+
+<li>If that does not work, and you are using a G4 upgrade card, you could try booting from the "emergency floppy" that most of the card manufacturers include with the card. (This will help if speculative processing is the issue). Alternatively, you can try reinstalling your original CPU card.<p>
+
+<li>If that does not work, you may need to zap your parameter RAM. The simplest way of doing this is to hold down the command-option-p-r keys while rebooting. The computer will "chime" while it zaps parameter RAM. Allow it to chime several times, and then release the keys. <p>
+
+<li>If this does not work, then you may need to press the CUDA reset button on the motherboard for 30 seconds. The CUDA reset button is a small red button usually located near the processor card. <p>
+
+<li>If that does not work, you may need to unplug the computer, remove the motherboard battery, and leave it out for about an hour. Then reinstall the battery (and make sure to orient it correctly).<p>
+</ul>
+
+<p>If you have installed Mac OS X on the same partition as Mac OS 9, rebooting with the option-key down may not work, because the Mac OS X installation process "de-blesses" the Mac OS 9 System Folder. In those cases, you can reboot from the Mac OS 9 CD with the "c" key held down, and take steps to "re-bless" the Mac OS 9 System Folder. The simplest method is to drag the System or Finder file to the desktop and then back into the System Folder. If that doesn't work, one user suggests command-option-double-clicking on the Finder file (I have not tried that yet). Also, you could check to see whether the /System/Library/CoreServices folder has been blessed by the Mac OS X Installer. In that case, you could de-bless that folder by dragging out the fake System file located there. You should then be able to re-bless your Mac OS 9 System Folder.
+
+<h3><a name="diagnosis">Diagnosing the problem</a></h3>
+
+<p>Here are some steps you can take to diagnose problems.
+
+<p><b><a name="noboot">If you cannot successfully boot</a></b>, then the most important thing is to try booting in verbose mode. Hold down command-v as the computer restarts, and note any error messages which appear.
+
+<p><b><a name="early">If you do not get any text in verbose mode</a></b>, you can use the  'Open Firmware' menu to diagnose the earliest part of the boot process. The items in that menu have the following meanings:
+
+<blockquote>
+<dl>
+<dt><p>auto-boot?
+<dd>When this is selected (the default setting), your computer will boot in the ordinary way. When it is unselected, the computer will stop at the Open Firmware prompt when you boot. If you have no idea what the Open Firmware prompt is, you should leave this checked. If you do uncheck it, make sure that you set up the input-device and output-device.
+
+<dt><p>input-device
+<dd>This is the device that will provide input at the Open Firmware prompt (should you stop there). Generally, you will want this to be the keyboard, but you can choose the modem or printer port as well.
+
+<dt><p>output-device
+<dd>This is the device that will receive output at the Open Firmware prompt. Generally, you will want this to be the built-in monitor, or a video card. You can also choose the modem or printer port.
+</dl>
+</blockquote>
+
+<p>By selecting an input-device and output-device, and then holding down command-v as the computer restarts, you will get additional diagnostic messages earlier in the boot process.
+
+<p><b><a name="stillblank">If you still get no text in verbose mode</a></b>, then there are a couple of things you can try. 
+
+<p>If you have a G3 or G4 upgrade card, you can try adjusting the setting in the "Throttle" menu of XPostFacto. The "throttle" menu allows you to adjust the speed of your G3 or G4 upgrade card during the earliest part of the boot process. For some users, this solves a problem booting from certain SCSI devices. Once the earliest part of the boot process is complete, the processor will be reset to its full speed.
+
+<p>The higher the throttle setting, the slower the processor is during the early boot process. Several users have reported that a setting of 4 or higher allows them to boot on certain problematic drives, while 3 or less fails. I have set the default to 8, but would be interested in any reports if you should experiment with this.
+
+<p>You can also try adjusting the clock speed or bus speed of your CPU upgrade.
+
+<p>Sometimes, problems booting have to do with RAM. It is sometimes best to de-interleave RAM, especially with CPU upgrades. You do this by making sure that matching DIMM slots do not have matching memory modules. Also, there are occasions where a particular DIMM which works in Mac OS 9 is problematic in Mac OS X. So you can try swapping out DIMMs to see if you can isolate a problematic one.
+
+<p><b><a name="text">If you do get text in verbose mode</a></b>, then note any error messages, and note what the last messages are before the process grinds to a halt. If the last messages are a repeated "Still waiting for root device", then it means that Mac OS X is having some trouble with your CD-ROM device.
+
+<p><b><a name="panic">If you get a kernel panic</a></b>, then the best thing is to take a picture of your screen with a digital camera, post the picture on the web somewhere, and then post a link the tech forum (or send me an e-mail, but the tech forum is faster). If you don't have a digital camera, then copy down all the information and type it up. (It is tedious, but there is no better way).
+
+<p>One useful troubleshooting measure, especially for kernel panics, is to remove any unnecessary PCI cards and try again. If that works, you can add cards back in until you have figured out which one is causing trouble.
+
+<p><b><a name="Installer">If you get as far as the Mac OS X Installer and then have problems</a></b>, there are a couple of possibilities. 
+
+<p>If you get random freezes (that is, the cursor stops moving and you get no error message of any kind), then the most common reason is trouble with your RAM. You can try swapping out DIMMs and see whether you can isolate a problematic one. (There are cases where DIMMs which are fine in Mac OS 9 are problematic in Mac OS X).
+
+<p>If you get an error message about not being able to write a file, or read a file, then I am not entirely sure what the problem is. In some cases, using a different install CD helps. In some cases, reformatting the target volume helps. But there are cases where this problem goes unsolved.
+
+<h3><a name="Log">The XPostFacto Log</a></h3>
+
+XPF generates a log file that sometimes helps me figure out what is going wrong. If you have any difficulties, feel free to e-mail the log file to me, and describe the nature of the problem. The file is called "XPostFacto Log" and it is located in the Preferences folder, inside your System Folder.<p>
+
+<h3><a name="Debug">The "Debug" Menu</a></h3>
+
+XPostFacto has a "Debug" menu that allows you to take advantage of certain debugging features present in the Mac OS X kernel. This is only useful if you know what these options mean. So if you do not understand what they are, simply leave them unselected.
+
+<p>If you are getting kernel panics with the multilingual text screen that tells you that you need to reboot, you might want to turn on the "See panic text" option. This will show you the traditional panic text instead, which can be helpful for figuring out what is causing the panic.
+
+<p><hr>
+
+<h2><a name="source">Source Code</a></h2>
+
+XPostFacto is an open-source application, and the source code is in the cvs repository at <a href="http://www.opendarwin.org/cgi-bin/cvsweb.cgi/proj/">http://www.opendarwin.org/</a>.
+
+<p><hr>
+
+<h2><a name="credits">Credits</a></h2>
+
+Great credit is due to the Darwin project and all those involved in it. The code in the kernel extensions installed by XPostFacto is derived from Darwin, with a few bug fixes here and there. Josh de Cesare deserves particular credit for his work on platform support. Dan Markarian and Chris Sarcone helped with the CD audio problem. I would also like to thank Markus Hitter for debugging tips (and for being a good sounding board), as well as Marc St-Jean for help with testing, and general encouragement. Finally, I would like to thank Kyle Kost and Will Schoumaker for their work on clone support.<p>
+
+XPF makes use of the zlib compression library, for which I wish to thank Jean-loup Gailly and Mark Adler.<p>
+
+<a href="http://www.elgato.com">El-Gato Software</a> contributed a bug fix that helps support additional SCSI CD-ROM, CD-R and CD-RW devices.<p>
+
+Joshua Thorpe suggested the new name.<p>
+
+Michel Lanners wrote the Forth code to permit processor throttling in Open Firmware, and Matt Schechtman passed it along to me.<p>
+
+Pierre d'Herbemont has done some terrific work on 6400 support.<p>
+
+I would also like to thank Other World Computing (Larry O'Connor in particular) for their generous support.
+
+<p><hr>
+
+<h2><a name="licence">Licence</a></h2>
+
+BootX and the kernel extensions which are installed by XPostFacto are subject to the <a href="http://www.opensource.apple.com/apsl/">Apple Public Source Licence</a>.<p>
+
+XPostFacto itself is subject to the following licence:
+
+<blockquote>
+
+Copyright (c) 2001, 2002, Other World Computing. All rights reserved.<p>
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+<ol>
+<li>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer as the first lines of each file.<p>
+
+<li>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.<p>
+
+<li>Redistributions in binary form must retain the link to Other World Computing's web site in the application's "About Box."
+</ol><p>
+
+This software is provided by Other World Computing ``as is'' and any express or implied warranties, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose are disclaimed. In no event shall Ryan Rempel or Other World Computing be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, procurement of substitute goods or services; loss of use, data, or profits; or business interruption) however caused and on any theory of liability, whether in contract, strict liability, or tort (including negligence or otherwise) arising in any way out of the use of this software, even if advised of the possibility of such damage.
+
+</blockquote>
+
+<p><hr>
+
+<h2>Revision History</h2>
+
+<dl>
+<dt>July 6, 2003
+<dd>Added note that Panther support is in progress.
+
+<dt>January 4, 2003
+<dd>Changes for version 2.2.5.
+
+<dt>October 21, 2002
+<dd>Changes for version 2.2.4.
+
+<dt>October 7, 2002
+<dd>Changes for version 2.2.3.
+
+<dt>September 12, 2002
+<dd>Changes for version 2.2.2.
+
+<dt>September 2, 2002
+<dd>Changes for version 2.2.1.
+
+<dt>August 23, 2002
+<dd>Changes for version 2.2.
+
+<dt>August 18, 2002
+<dd>Changes for version 2.2b17.
+
+<dt>August 10, 2002
+<dd>Changes for version 2.2b16.
+
+<dt>August 9, 2002
+<dd>Fixed os9forever link. Added note about "pointer cursor" appearance in 10.2.
+
+<dt>August 8, 2002
+<dd>Extensively rewritten, and updated for version 2.2b15.
+
+<dt>July 10, 2002
+<dd>Various changes for version 2.2b14.
+
+<dt>June 29, 2002
+<dd>Various changes for version 2.2b9.
+
+<dt>May 24, 2002
+<dd>Added paragraph describing the option to register for the tech support forum.
+
+<dt>April 20, 2002
+<dd>Changes for version 2.2b7.
+
+<dt>April 16, 2002
+<dd>Changes for version 2.2b4.
+
+<dt>April 13, 2002
+<dd>Changes for version 2.2b3. Also mentioned that the "prepare custom CD" procedure does not work with the 10.1.3 CD.
+
+<dt>April 8, 2002
+<dd>Drew additional attention to the fact that the kernel panic after installing Mac OS X 10.1 is normal, and can be worked around.
+
+<dt>April 7, 2002
+<dd>Additional changes for version 2.2b1.
+
+<dt>April 6, 2002
+<dd>Added section on upgrading from previous versions.
+
+<dt>March 29, 2002
+<dd>Changes to describe version 2.2, which is coming soon.
+
+<dt>January 21, 2002
+<dd>Minor changes for version 2.11. Also added link to information about patches for installing Mac OS 9.2.
+
+<dt>January 13, 2002
+<dd>Various changes for version 2.1 (including changing the name from Unsupported UtilityX to XPostFacto).
+
+<dt>October 29, 2001
+<dd>Various changes for version 2.0.
+
+<dt>October 13, 2001
+<dd>Described bug fixes in 2.0b4. Added section on installing Darwin 1.4.1.
+
+<dt>October 8, 2001
+<dd>Added more info about Mac OS 9.2.1.
+
+<dt>October 2, 2001
+<dd>Various changes for v. 2.0b3.
+
+<dt>October 1, 2001
+<dd>Added the "Installing Mac OS X 10.1" section.
+
+<dt>September 30, 2001
+<dd>Various changes for v. 2.0b2, including the "Advanced Troubleshooting" section.
+
+<dt>September 23, 2001
+<dd>Various changes for v. 2.0b1.
+
+<dt>August 24, 2001
+<dd>Added user report that disks formatted with LaCie's SilverLining will not boot successfully.
+
+<dt>August 22, 2001
+<dd>Various changes for version 1.1.
+
+<dt>August 12, 2001
+<dd>Added note that drives formatted with FWB's Hard Disk ToolKit are (often) not bootable in Mac OS X. However, drives formatted with Intech's Hard Disk SpeedTools appear to work well. Also added links to older versions.
+
+<dt>August 9, 2001
+<dd>Made it more clear that the installation process is meant to reboot into Mac OS X, not Mac OS 9 (which sometimes happens if there is a problem).
+
+<dt>August 3, 2001
+<dd>A variety of changes for version 1.0.
+
+<dt>July 30, 2001
+<dd>Added reference to new page on video issues.
+
+<dt>July 27, 2001
+<dd>Version 1.0b10.
+
+<dt>July 26, 2001
+<dd>Many additions for version 1.0b9.
+
+<dt>June 29, 2001
+<dd>Added "Will it Work" section.
+
+<dt>June 18, 2001
+<dd>First public release, v. 1.0b8
+
+</dl></body>

@@ -1,0 +1,143 @@
+<h3>Unsupported Mac OS X FAQ</h3>
+
+July 6, 2003<br>
+Ryan Rempel<br>
+<a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a>
+
+<dl>
+<dt><p>Where can I go for XPostFacto support?
+<dd>The best way to get support for XPostFacto is to <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">register for support</a> so that you can access the <a href="/OSXCenter/XPostFacto/forum">tech support forum</a> on this site. The cost for this is $10. I will also answer e-mail, but I will catch up on the tech forum first before trying to catch up on e-mail.
+
+<dt><p>Does XPostFacto work with Jaguar (Mac OS X 10.2)?
+<dd>Yes, the latest versions do (2.2 and beyond).
+
+<dt><p>Does XPostFacto work with Panther (Mac OS X 10.3)?
+<dd>Not yet--there are some changes required, and I am working on them.
+
+<dt><p>Can I use Apple's Startup Disk control panel to boot Mac OS X?
+<dd>The Startup Disk control panel in Mac OS 9 (and later) does not appear to work when trying to boot Mac OS X on unsupported systems. The older System Disk control panel (available with Darwin and Mac OS X Public Beta) does generally work. And, of course, you can use XPostFacto to select a Mac OS X volume to boot from.
+
+<dt><p>Can I install Mac OS X Server or Darwin on unsupported systems?
+<dd>Yes, this should work with recent versions of XPostFacto.
+
+<dt><p>Will Mac OS X 10.1 work on unsupported Macs?
+<dd>Version 2.0 (and later) of XPF is able to install Mac OS X 10.1.
+
+<dt><p>Can I install Mac OS 9.2 on an unsupported machine?
+<dd>You can install Mac OS 9.2 while running in Classic mode, and it will work in Classic mode. However, it will not work to boot the machine outside of Classic. So the ideal setup is to have a separate partition for Mac OS 9.1 and 9.2. Then you can use 9.1 to reboot the machine (when necessary), and use 9.2 for Classic. There are some patches which permit installation of Mac OS 9.2 on unsupported machines--see <a href="http://www.os9forever.com/">http://www.os9forever.com/</a>
+
+<dt><p>Can I use my floppy drive in Mac OS X?
+<dd>Yes! There is now a floppy driver, courtesy of the mkLinux project. You can get it from <a href="http://www.darwin-development.org/floppy/">http://www.darwin-development.org/floppy/</a>.
+
+<dt><p>Can I install Mac OS X on unsupported Powerbooks?
+<dd>Version 2.2 of XPostFacto (and up) works with the original Powerbook G3, the 3400, and the 2400, but the support is weak. See the compatibility page for details.
+
+<dt><p>Will Mac OS X work on the 7200? PowerCenter? 4400? 6500? Tanzania? Alchemy? Catalyst? StarMax?
+
+<dd>I have had some reports of success on many of the PowerCenter clones (the Catalyst machines), but I am not sure exactly which configurations are supported. Some progress has been made on the 6400 and 6500, but XPostFacto isn't quite working with them yet. I have some hopes for the StarMax models, but have not gotten very far yet. The 7200 will be tricky because Mac OS X does not support the 601 processor.
+
+<dt><p>Will Mac OS X work on the 6100, 7100 or 8100?
+<dd>It would require an enormous amount of work, and I do not expect it to happen.
+
+<dt><p>Does XPostFacto work with the Beige G3?
+<dd>Yes. Although these are machines that Apple supports, there are sometimes problems installing Mac OS X on these machines that XPostFacto can fix.
+
+<dt><p>When I reboot with the option-key held down, the computer repeatedly reboots itself without getting anywhere.
+<dd>In some cases, when you install Mac OS X on the same partition as an existing Mac OS 9 installation, the Mac OS 9 System Folder becomes "unblessed" during the installation. If this happens, restarting with the option-key down will not return you to Mac OS 9. However, selecting the Mac OS 9 System Folder in the "Startup Disk" panel of the Mac OS X "System Preferences" application will work. If you cannot boot into Mac OS X either, you may be able to boot from the Mac OS 9 CD (with the "c" key held down). You can then move the Finder file out of the System Folder on the affected volume, and then move it back in. This should "re-bless" that System Folder.
+
+<p>If that doesn't work, you can try creating a new folder, and then copying the entire contents of the System Folder to the new folder. You can then trash the now-empty System Folder, and rename the new folder to 'System Folder'. This should work, but you may be missing invisible files in your old System Folder, if there were any.
+
+<p>A user suggests that command-option-double-clicking on a Finder file is a way to re-bless a System Folder. I haven't tried that one yet.
+
+<dt><p>I get a broken folder icon when I try to restart.
+<dd>This most often means one of two things. Either you are using a non-Apple CD-ROM drive to perform the install, or you are installing on a drive that was formatted with a utility whose drivers do not work with Mac OS X. Apple's Drive Setup installs drivers compatible with Mac OS X, as does Intech's <a href="http://www.intechusa.com/">Hard Disk SpeedTools</a>. In fact, one user reported success with Intech's utility but not with Apple's. Many users have reported problems with drives formatted with FWB's Hard Disk ToolKit, as well as with LaCie's tools.<p>Version 2.0 of XPostFacto adds some features which permit better debugging of these problems--see the XPF documentation for more details.
+
+<dt><p>When I boot Mac OS X the first time after installing it, my monitor resolution is 640 x 480.  This means that I cannot complete the Setup Assistant, because the "Continue" button is offscreen.
+<dd>Try installing Mac OS X 10.1. I have had one report that 10.1 detects this problem, and offers a workaround.<p>
+
+Alternatively, you can create an empty file at this path:<p>
+
+/private/var/db/.AppleSetupDone<p>
+
+In this case, the Setup Assistant will not run. I haven't tried this from a fresh installation myself, so I'm not sure how you would log in at this point--perhaps as root with no password. In this case, you will want to quickly create additional users and either disable root login or give root a password. If anyone gets this to work, I'd be interested to hear about the procedure.
+
+<dt><p>The Installer launches and gets part-way through the installation, and then crashes or freezes.
+<dd>In some cases, this is caused by physical problems with the Mac OS X Install CD. Check for scratches, and try to borrow another copy of the CD if possible. Also, double-check your SCSI termination. Finally, you can open the Installer Log (under the "File" menu). This may provide some useful error messages.
+
+<dt><p>I can install with my original 604e processor, but booting with a G3 or G4 upgrade card fails.
+<dd>First, try version 2.2b3 of XPostFacto (or later). It introduces the ability to "throttle" (i.e. slow down) upgrade cards for the boot process, which can help with this problem. If that doesn't help, there are a couple of other things you can try:
+<ul>
+<li>De-interleave your DIMMs (i.e. arrange them so that the DIMMs in matching slots are not the same size).
+<li>Remove the original L2 cache from the motherboard (if it is removeable--on some models, it is soldered on).
+<li>Lower the clock speed or bus speed a little.
+<li>Swap out some DIMMs. There are cases in which DIMMs which work fine with a 604e fail with an upgrade card, especially in Mac OS X.
+</ul>
+
+<dt><p>What are some other things to check for when installation fails?
+<dd>Mac OS X is very picky about proper SCSI termination, much more so than is Mac OS 9. Double-check that your drives are terminated. One user reports that his Power Tower Pro had both CD-ROM and hard drive terminated from the factory, so don't assume that others have set it up correctly!
+
+<p>You can also check whether you have any corrupted fonts in your Mac OS 9 System Folder. Apparently, Mac OS X checks your Mac OS 9 System Folder for fonts, and it does not respond gracefully if it finds corrupted fonts.
+
+<p>Zapping the parameter RAM can sometimes help, especially if you have made changes to the hardware (like removing video cards).
+
+<p>In some cases, reformatting the target volume helps, but this can be inconvenient to do.
+
+<p>There are occasions on which RAM which is fine in Mac OS 9 has problems in Mac OS X. So you can try removing RAM DIMMs to see whether that helps.
+
+<dt><p>I can install Mac OS X on external SCSI drives but not internal drives.
+<dd>If you have a G3 or G4 upgrade card, try using version 2.2b3 or later of XPostFacto. It permits you to "throttle" (i.e. slow down) the processor for the early part of the boot process, which sometimes helps with this problem. If that doesn't work, here are a few other things you can try. On some machines, you can connect the internal drives to an extra SCSI connector on the motherboard that uses the external bus. Of course, this is not ideal because the external bus is slower on these machines. Another solution that has worked for some users is to change the "Disable Unit Attention" jumper on the drives. This affects the way that the computer "wakes up" drives on the internal bus at boot time. Another thing to double-check would be termination issues, which can vary depending on the other devices attached to each bus (e.g. the internal CD-ROM). Finally, one user reports success installing on a SCSI drive at ID 0, when installing on a driver at ID 1 had failed.
+
+<dt><p>Does Localtalk work in Mac OS X (i.e. AppleTalk through the printer port)?
+<dd>No, there are no Localtalk drivers for Mac OS X at this time.
+
+<dt><p>Why won't audio CD's play under Mac OS X?
+<dd>Certain older mechanisms require BCD to Hex conversion, which the Mac OS X CD driver doesn't do. My PatchedIOSCSICDDrive.kext checks for this and does the conversion, so it will fix the problem for some mechanisms. Other mechanisms have a different problem which I don't understand (I have had several reports of problems with Plextor drives).
+
+<dt><p>Can I use my tape drive in Mac OS X?
+<dd>There are no tape drivers available for Mac OS X at this time (as far as I know). But several people have said that they are working on it, so I expect to see some eventually. (And it appears that <a href="http://www.dantz.com">Retrospect</a> will work with tape drives in Mac OS X).
+
+<dt><p>How long does it take to install Mac OS X?
+<dd>You know, I've never really timed it. It does take quite a while--my guess is about 45 minutes (when everything goes well). Installing Mac OS X Server takes significantly longer (at least an hour, I think).
+
+<dt><p>Does sound input work in Mac OS X?
+<dd>It doesn't work for me. I'll want to look into this at some point.
+
+<dt><p>Sound output is fixed at maximum (or minimum) and can't be changed.
+<dd>This is a known problem. The easiest workaround is to use a pair of powered speakers, and mute the internal speaker. This permits you to set the volume externally.
+
+<dt><p>What is needed in order to make Mac OS X work on additional machines?
+<dd>Basically, here are the things that need to be done to support a new model.
+<ol>
+<li>Figure out how to write to its NVRAM.
+<li>Figure out what patches are needed to its Open Firmware drivers.
+<li>Figure out how to write to the partition table of its drives.
+<li>Figure out whether it has any devices that need drivers in Mac OS X (and write the drivers--well, preferably port them from somewhere).
+</ol>
+
+<dt><p>When I try to use the GrabL2CacheSetting program, I get an Error Type 7.
+<dd>It seems that the GrabL2CacheSetting program is not compatible with Mac OS 9.2. The workaround is to create the settings file manually. It is called L2Cache.config, and you should put it on your desktop. The file is a text file, and its contents are the value of your L2CR register, in hexadecimal format, e.g.:<p>
+
+0xB9000000<p>
+
+(but yours may well be different). You can get the value from some of the Mac OS 9 cache utilities. For instance, the PowerLogix cache profiler shows this value in one of its panes.
+
+<dt><p>How can a create a custom Mac OS X Install CD?
+<dd>Version 2.1 of XPostFact will help you with this--see the documentation for instructions.
+
+<dt><p>Why do I get a Type 2 error when trying to launch XPostFacto?
+<dd>This often happens if you launch XPF on a machine that it doesn't work with. I really should deal with this situation more gracefully!
+
+<dt><p>When I boot in verbose mode, I see error messages related to PatchedIOSCSICDDrive
+<dd>There are two versions of PatchedIOSCSICDDrive installed by XPostFacto. One of them loads in 10.0.x, and the other in 10.1.x. So you will always see some errors related to the one that doesn't load. This is perfectly normal and nothing to be worried about.
+
+<dt><p>When I boot in verbose mode, I see messages about duplicate extensions.
+<dd>This is a consequence of the way that version 2.0 of XPF installed extensions both in /Library/Extensions and /System/Library/Extensions. It doesn't appear to cause any problems. However, I have fixed it for version 2.1 of XPF.
+
+<dt><p>When I try to install with XPF, I get an error saying "Could not complete your request because there was an error finding
+BootX in the catalog file"
+<dd>This probably means that there is a problem in the structure of your catalog file. If you repair your disk with a current version of Disk First Aid, DiskWarrior, Norton Utilities or the like, then this problem should go away.
+
+<dt><p>When I launch XPF, I get an error message that "InterfaceLib--FSCloseFork" could not be found.
+<dd>This is because XPF requires Mac OS 9.0 (or later). The APIs for copying files with long file names were introduced in 9.0, and XPF requires them in order to copy extensions from the install CD.
+
+</dl>
