@@ -1,0 +1,100 @@
+#!/bin/sh
+
+##
+# XPFStartupItem
+#
+# Synchronizes system software between the "root" disk and the "helper" disk used
+# in the boot process (if there is one).
+##
+
+#######################
+# Configure the shell #
+#######################
+
+##
+# Be strict
+##
+#set -e
+set -u
+
+##
+# Set command search path
+##
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/libexec:/System/Library/CoreServices; export PATH
+
+####################
+# Useful functions #
+####################
+
+##
+# Process management
+##
+GetPID ()
+{
+    local program="$1"
+    local pidfile="${PIDFILE:=/var/run/${program}.pid}"
+    local     pid=""
+
+    if [ -f "${pidfile}" ]; then
+	pid=$(head -1 "${pidfile}")
+	if ! kill -0 "${pid}" 2> /dev/null; then
+	    echo "Bad pid file $pidfile; deleting."
+	    pid=""
+	    rm -f "${pidfile}"
+	fi
+    fi
+
+    if [ -n "${pid}" ]; then
+	echo "${pid}"
+	return 0
+    else
+	return 1
+    fi
+}
+
+##
+# Generic action handler
+##
+RunService ()
+{
+    case $1 in 
+      start  ) StartService   ;;
+      stop   ) StopService    ;;
+      restart) RestartService ;;
+      *      ) echo "$0: unknown argument: $1";;
+    esac
+}
+
+##
+# XPFStartupItem Handlers
+##
+
+StartService ()
+{
+	if ! pid=$(GetPID xpfbootsupportd); then
+		ConsoleMessage "Starting XPostFacto Boot Support"
+		/Library/StartupItems/XPFStartupItem/xpfbootsupportd
+    fi
+}
+
+StopService ()
+{
+    if pid=$(GetPID xpfbootsupportd); then
+        ConsoleMessage "Stopping XPostFacto Boot Support"
+        kill -TERM "${pid}"
+    else
+        echo "XPostFacto Boot Support is not running."
+    fi
+}
+
+RestartService ()
+{
+    if pid=$(GetPID xpfbootsupportd); then
+        ConsoleMessage "Restarting XPostFacto Boot Support"
+        kill -HUP "${pid}"
+    else
+        StartService
+    fi
+}
+
+RunService "$1"

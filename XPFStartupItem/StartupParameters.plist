@@ -1,0 +1,7 @@
+{
+  Description     = "XPostFacto Boot Support";
+  Provides        = ("XPFBootSupport");
+  Requires        = ("Disks");
+  Uses            = ("System Log");
+  OrderPreference = "None";
+}
