@@ -36,7 +36,7 @@
 
 #define kIOFBGammaWidthKey			"IOFBGammaWidth"
 #define kIOFBGammaCountKey			"IOFBGammaCount"
-#define kIOFBGammaHeaderSizeKey		"IOFBGammaHeaderSize"
+#define kIOPMIsPowerManagedKey		"IOPMIsPowerManaged"
 
 #define COLOR_MAP_ADDRESS 	0xF301B000
 #define COLOR_MAP_LENGTH	0x1000
@@ -163,7 +163,6 @@ OpenControlFramebuffer::enableController (void)
 {
 	setProperty (kIOFBGammaWidthKey, 8, 32);
     setProperty (kIOFBGammaCountKey, 256, 32);
-    setProperty (kIOFBGammaHeaderSizeKey, 12, 32);
 
 	fRegisterMap = getProvider()->mapDeviceMemoryWithIndex (1);	
 	if (fRegisterMap) fRegister = (OCFRegister *) fRegisterMap->getVirtualAddress ();
@@ -206,13 +205,16 @@ OpenControlFramebuffer::enableController (void)
 	fPowerState = kOCFWakeState;
 	
 	IOPMPowerState powerStates [] = {
-		{kIOPMPowerStateVersion1, kIOPMPreventSystemSleep, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-		{kIOPMPowerStateVersion1, kIOPMPreventSystemSleep, 0, IOPMPowerOn, 0, 0, 0, 0, 0, 0, 0, 0 },
-		{kIOPMPowerStateVersion1, kIOPMPreventSystemSleep | IOPMDeviceUsable, IOPMPowerOn, IOPMPowerOn, 0, 0, 0, 0, 0, 0, 0, 0 }
+		{kIOPMPowerStateVersion1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+		{kIOPMPowerStateVersion1, 0, 0, IOPMPowerOn, 0, 0, 0, 0, 0, 0, 0, 0 },
+		{kIOPMPowerStateVersion1, IOPMDeviceUsable, IOPMPowerOn, IOPMPowerOn, 0, 0, 0, 0, 0, 0, 0, 0 }
     };
 
     registerPowerDriver (this, powerStates, 3);
-
+    temporaryPowerClampOn ();
+    changePowerStateTo (kOCFDozeState);
+	getProvider()->setProperty (kIOPMIsPowerManagedKey, true);
+	
 	return kIOReturnSuccess;
 }
 
@@ -256,24 +258,6 @@ OpenControlFramebuffer::locateVRAMBanks ()
 	if (fVRAMBank2 && !fVRAMBank1) fApertureOffset += 0x600000;
 	
 	return kIOReturnSuccess;
-}
-
-unsigned long 
-OpenControlFramebuffer::maxCapabilityForDomainState (IOPMPowerFlags domainState)
-{
-	return (domainState & IOPMPowerOn) ? kOCFWakeState : kOCFSleepState;
-}
-
-unsigned long 
-OpenControlFramebuffer::initialPowerStateForDomainState (IOPMPowerFlags domainState)
-{
-	return (domainState & IOPMPowerOn) ? kOCFWakeState : kOCFSleepState;
-}
-
-unsigned long 
-OpenControlFramebuffer::powerStateForDomainState (IOPMPowerFlags domainState)
-{
-    return (domainState & IOPMPowerOn) ? pm_vars->myCurrentState : kOCFSleepState;
 }
 
 IOReturn 
@@ -469,49 +453,26 @@ OpenControlFramebuffer::setAttribute (IOSelect attribute, UInt32 value)
 	if (attribute == kIOPowerAttribute) {
 		UInt32 reg18;
 
-		IOLog ("OpenControlFramebuffer power state from %lu to %lu\n", fPowerState, value);
+		handleEvent ((value >= kOCFWakeState) ? kIOFBNotifyWillPowerOn : kIOFBNotifyWillPowerOff);
 		
 		if (fPowerState < kOCFWakeState) {
 			if (value >= kOCFWakeState) {
-				handleEvent (kIOFBNotifyWillPowerOn);
-
-#if 0
-// For some reason, actually turning the signal back on isn't working. Needs further investigation.
 				reg18 = OSSwapLittleToHostInt32 (fRegister[18].reg); eieio ();
 				reg18 &= ~0x400;
 				reg18 |= 0x33;
 				fRegister[18].reg = OSSwapHostToLittleInt32 (reg18); eieio ();
-#else
-// So, in the meantime, just reimplement the gamma / clut
-				implementGammaAndCLUT ();
-#endif
-
-				handleEvent (kIOFBNotifyDidPowerOn);			
 			}
 		} else {
 			if (value < kOCFWakeState) {
-				handleEvent (kIOFBNotifyWillPowerOff);
-
-#if 0
-// This actually works, but I can't turn the signal back on again, so ...
 				reg18 = OSSwapLittleToHostInt32 (fRegister[18].reg); eieio ();
 				reg18 |= 0x400;
 				reg18 &= ~0x33;
 				fRegister[18].reg = OSSwapHostToLittleInt32 (reg18); eieio ();
-#else
-// So, in the meantime, just fade to black ...
-				for (int x = 0; x < 256; x++) {
-					fColorRegister[0].reg = x; eieio ();
-					fColorRegister[3].reg = 0; eieio ();
-					fColorRegister[3].reg = 0; eieio ();
-					fColorRegister[3].reg = 0; eieio ();
-				}
-#endif
-
-				handleEvent (kIOFBNotifyDidPowerOff);			
 			}
 		}
 
+		handleEvent ((value >= kOCFWakeState) ? kIOFBNotifyDidPowerOn : kIOFBNotifyDidPowerOff);
+		
 		fPowerState = value;		
 		return kIOReturnSuccess;
 	}
@@ -638,7 +599,6 @@ OpenControlFramebuffer::setGammaTable (UInt32 channelCount, UInt32 dataCount, UI
 	};
 
 	UInt8 *gammaData = (UInt8 *) data;
-	gammaData += 12;
 	
 	if (channelCount == 3) {
 		bcopy (gammaData, &fGammaTable, 256 * 3);
@@ -724,8 +684,6 @@ OpenControlFramebuffer::setDisplayMode (IODisplayModeID displayMode, IOIndex dep
 		if ((x == 18) || (x == 21)) continue;
 		fRegister[x].reg = OSSwapHostToLittleInt32 (regVal[x]); eieio ();
 	}
-	
-	if (depth != fCurrentDepth) implementGammaAndCLUT ();
 	
 	fRegister[18].reg = OSSwapHostToLittleInt32 (regVal[18]); eieio ();
 	
