@@ -445,9 +445,10 @@ MountedVolume::hasCurrentStartupItems ()
 		
 		// Get the file version
 		
-		FSRef startup, infoplist;
+		FSRef startup, contents, infoplist;
 		err = XPFFSRef::getFSRef (&startupDir, (CChar255_AC) resourceName, &startup);
-		if (err == noErr) err = XPFFSRef::getFSRef (&startup, "version.plist", &infoplist);
+		if (err == noErr) err = XPFFSRef::getFSRef (&startup, "Contents", &contents);
+		if (err == noErr) err = XPFFSRef::getFSRef (&contents, "Info.plist", &infoplist);
 		if (err != noErr) return false;
 		
 		CFSSpec_AC infospec;
