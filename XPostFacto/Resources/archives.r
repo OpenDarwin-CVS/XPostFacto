@@ -38,9 +38,7 @@ advised of the possibility of such damage.
 
 */
 
-#ifndef __MacAppTypes__
-#include "MacAppTypes.r"
-#endif
+#include "XPostFacto.h"
 
 // Load archives into resource fork
 
@@ -53,7 +51,7 @@ Read 'hfsA' (131, "AppleCurio") 	   ":Derived:Extensions:AppleCurio.hfs";
 Read 'hfsA' (132, "PatchedIOSCSICDDrive") ":Derived:Extensions:PatchedIOSCSICDDrive.hfs";
 Read 'hfsA' (133, "PatchedAppleNVRAM") ":Derived:Extensions:PatchedAppleNVRAM.hfs";
 Read 'hfsA' (134, "PatchedSCSIDeviceType05") ":Derived:Extensions:PatchedSCSIDeviceType05.hfs";
-Read 'hfsA' (135, "PowerSurgeCPU") ":Derived:Extensions:PowerSurgeCPU.hfs";
+// Read 'hfsA' (135, "PowerSurgeCPU") ":Derived:Extensions:PowerSurgeCPU.hfs";
 Read 'hfsA' (136, "AppleOHare.kext") ":Derived:Extensions:AppleOHare.hfs";
 Read 'hfsA' (137, "OHareATA.kext") ":Derived:Extensions:OHareATA.hfs";
 Read 'hfsA' (138, "ApplePowerStarPE") ":Derived:Extensions:ApplePowerStarPE.hfs";
@@ -61,6 +59,16 @@ Read 'hfsA' (139, "ApplePowerExpressPE") ":Derived:Extensions:ApplePowerExpressP
 Read 'hfsA' (142, "PatchedNDRVSupport") ":Derived:Extensions:PatchedNDRVSupport.hfs";
 Read 'hfsA' (143, "OWCCacheConfig") ":Derived:Extensions:OWCCacheConfig.hfs";
 
+// Startup Item
+
+Read 'hfsS' (128, "XPFBootSupport") ":Derived:StartupItems:XPFStartupItem.hfs";
+
 // Set up the BootX file for extraction
 
 Read 'BooX' (128, "bootX.xcoff") ":Derived:bootx.xcoff";
+
+// Other shared stuff
+
+Read 'TEXT' (kCopyrightID, "Copyright") "copyright.h";
+Read 'TEXT' (kHelpID, "Help") "::XPostFacto.html";
+
