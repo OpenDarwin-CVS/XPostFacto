@@ -68,10 +68,8 @@ directory, then we need to poll every sub-directory and every file to wait until
 things are "stable" (i.e. to wait until the installer is finished). Then we can
 do the copy.
 
-The actually copying is being done via calls to ditto at the moment. This is kind of 
-lazy, but I can write my own copying code later if it seems to matter. Also, I'm deleting
-and recopying the entire Extensions directory at the moment. I really should change this,
-as it could be done 
+The actual copying is being done by some routines I wrote, based on MoreFiles, which
+do a synchronized copy (that is, they only copy things that have changed).
 
 */
 
@@ -93,6 +91,8 @@ as it could be done
 #include <CoreFoundation/CoreFoundation.h>
 #include <IOKit/IOKitLib.h>
 #include <IOKit/IOMessage.h>
+
+#include "FSRefCopying.h"
 
 #define XPF_SECONDS_TO_SLEEP 5
 
@@ -326,10 +326,14 @@ handle_mkext_change (int hasChanged)
 		if (sb.st_mtimespec.tv_sec == 0) {
 			unlink ("System/Library/Extensions.mkext");
 		} else {
-			char *command;
-			asprintf (&command, "/usr/bin/ditto \"%s/System/Library/Extensions.mkext\" System/Library", rootDevicePath);
-			system (command);
-			free (command);
+			FSRef src, dst;
+			OSStatus status = FSPathMakeRef ("System/Library", &dst, NULL);
+			if (status) exit (status);
+			if (chdir (rootDevicePath)) exit (12);
+			status = FSPathMakeRef ("System/Library/Extensions.mkext", &src, NULL);
+			if (status) exit (status);
+			status = FSRefFileCopy (&src, &dst, NULL, NULL, 0, false);
+			if (status) exit (status);
 		}
 		mkextChanging = 0;
 		cancel_warning ();
@@ -349,10 +353,14 @@ handle_kernel_change (int hasChanged)
 		if (sb.st_mtimespec.tv_sec == 0) {
 			unlink ("mach_kernel");
 		} else {
-			char *command;
-			asprintf (&command, "/usr/bin/ditto \"%s/mach_kernel\" .", rootDevicePath);
-			system (command);
-			free (command);
+			FSRef src, dst;
+			OSStatus status = FSPathMakeRef ("bootDevicePath", &dst, NULL);
+			if (status) exit (status);
+			if (chdir (rootDevicePath)) exit (12);
+			status = FSPathMakeRef ("mach_kernel", &src, NULL);
+			if (status) exit (status);
+			status = FSRefFileCopy (&src, &dst, NULL, NULL, 0, false);
+			if (status) exit (status);
 		}
 		kernelChanging = 0;
 		cancel_warning ();
@@ -457,12 +465,15 @@ handle_extensions_folder_change (int hasChanged)
 		if (chdir (rootDevicePath)) exit (9);
 		if (!anything_changed_in_directory_since_time ("System/Library/Extensions", &extfolderMod)) {
 			if (chdir (bootDevicePath)) exit (10);
-			system ("/bin/rm -rf System/Library/Extensions");
 
-			char *command;
-			asprintf (&command, "/usr/bin/ditto -rsrcFork \"%s/System/Library/Extensions\" System/Library/Extensions", rootDevicePath);
-			system (command);
-			free (command);
+			FSRef src, dst;
+			OSStatus status = FSPathMakeRef ("System/Library", &dst, NULL);
+			if (status) exit (status);
+			if (chdir (rootDevicePath)) exit (12);
+			status = FSPathMakeRef ("System/Library/Extensions", &src, NULL);
+			if (status) exit (status);
+			status = FSRefDirectoryCopy (&src, &dst, NULL, NULL, 0, false, NULL);
+			if (status) exit (status);
 
 			extfolderMod.tv_sec = sb.st_mtimespec.tv_sec; 
 			extfolderMod.tv_nsec = sb.st_mtimespec.tv_nsec;

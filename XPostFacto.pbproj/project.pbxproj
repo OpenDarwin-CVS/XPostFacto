@@ -5,6 +5,30 @@
 	};
 	objectVersion = 38;
 	objects = {
+		946B436B04FC0E3500A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = FSRefCopying.c;
+			refType = 4;
+		};
+		946B436C04FC0E3500A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = FSRefCopying.h;
+			refType = 4;
+		};
+		946B436D04FC0E3500A80003 = {
+			fileRef = 946B436B04FC0E3500A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		946B436F04FC0E6100A80003 = {
+			fileRef = F52AC80F03F21A8F01A80002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		94B8172F047A7ABF00A80003 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -5348,6 +5372,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F5BF318303F01F8C01A80002,
+				946B436D04FC0E3500A80003,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5357,6 +5382,7 @@
 			files = (
 				94BA4E81046FE32600A80003,
 				94BA4EE40470009300A80003,
+				946B436F04FC0E6100A80003,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5378,6 +5404,7 @@
 				94B81736047A834200A80003,
 			);
 			buildSettings = {
+				HEADER_SEARCH_PATHS = /Developer/Headers/FlatCarbon;
 				INSTALL_PATH = /Library/StartupItems/XPFStartupItem;
 				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
@@ -5866,6 +5893,8 @@
 				F5EC95DE01B204D901A80001,
 				F5EC95E801B204D901A80001,
 				F5EC95E901B204D901A80001,
+				946B436C04FC0E3500A80003,
+				946B436B04FC0E3500A80003,
 			);
 			isa = PBXGroup;
 			name = MoreFiles;
