@@ -75,7 +75,7 @@ class XPFCatalogInfo : public FSCatalogInfo {
 		XPFCatalogInfo (UInt32 mode, bool isDirectory = true, UInt32 uid = 0, UInt32 gid = 0) {
 			permissions[0] = uid;
 			permissions[1] = gid;
-			permissions[2] = mode |= (isDirectory ? 0x40000 : 0x100000);
+			permissions[2] = mode | (isDirectory ? 040000 : 0100000);
 			permissions[3] = 0;
 		}
 };
