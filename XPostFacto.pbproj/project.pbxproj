@@ -25,20 +25,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		944AD928067424E500FC3507 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.c;
-			path = lzss.c;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		944AD929067424E500FC3507 = {
-			fileRef = 944AD928067424E500FC3507;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		94606078057BA4A300FE8769 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -1267,153 +1253,6 @@
 			isa = PBXTargetDependency;
 			target = 94B3FB9B05866E9F00A80003;
 			targetProxy = 948CD0FE05FBEECE003103DB;
-		};
-		94B4B90D066C02DD00C3EE18 = {
-			buildActionMask = 2147483647;
-			files = (
-			);
-			isa = PBXHeadersBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94B4B90E066C02DD00C3EE18 = {
-			buildActionMask = 2147483647;
-			files = (
-			);
-			isa = PBXResourcesBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94B4B90F066C02DD00C3EE18 = {
-			buildActionMask = 2147483647;
-			files = (
-			);
-			isa = PBXSourcesBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94B4B910066C02DD00C3EE18 = {
-			buildActionMask = 2147483647;
-			files = (
-			);
-			isa = PBXFrameworksBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94B4B911066C02DD00C3EE18 = {
-			buildActionMask = 2147483647;
-			files = (
-			);
-			isa = PBXRezBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94B4B912066C02DD00C3EE18 = {
-			buildPhases = (
-				94B4B90D066C02DD00C3EE18,
-				94B4B90E066C02DD00C3EE18,
-				94B4B90F066C02DD00C3EE18,
-				94B4B910066C02DD00C3EE18,
-				94B4B911066C02DD00C3EE18,
-			);
-			buildSettings = {
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = PatchedRagePro;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
-				WRAPPER_EXTENSION = kext;
-			};
-			dependencies = (
-			);
-			isa = PBXBundleTarget;
-			name = PatchedRagePro;
-			productInstallPath = "$(SYSTEM_LIBRARY_DIR)/Extensions";
-			productName = OpenRagePro;
-			productReference = 94B4B913066C02DD00C3EE18;
-			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
-<plist version=\"1.0\">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<key>CFBundleIdentifier</key>
-	<string>com.macsales.iokit.PatchedRagePro</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundlePackageType</key>
-	<string>KEXT</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string>1.0</string>
-	<key>IOKitPersonalities</key>
-	<dict>
-		<key>0x4c471002</key>
-		<dict>
-			<key>CFBundleIdentifier</key>
-			<string>com.apple.ATIRagePro</string>
-			<key>IOClass</key>
-			<string>ATIRagePro</string>
-			<key>IOGLBundleName</key>
-			<string>ATIRageProGLDriver</string>
-			<key>IOMatchCategory</key>
-			<string>IOAccelerator</string>
-			<key>IOPCIMatch</key>
-			<string>0x4c471002</string>
-			<key>IOProbeScore</key>
-			<integer>500</integer>
-			<key>IOProviderClass</key>
-			<string>IOPCIDevice</string>
-		</dict>
-		<key>0x4c501002</key>
-		<dict>
-			<key>CFBundleIdentifier</key>
-			<string>com.apple.ATIRagePro</string>
-			<key>IOCFPlugInTypes</key>
-			<dict>
-				<key>ACCF0000-0000-0000-0000-000a2789904e</key>
-				<string>ATIRageProGA.plugin</string>
-			</dict>
-			<key>IOClass</key>
-			<string>ATIRagePro</string>
-			<key>IOGLBundleName</key>
-			<string>ATIRageProGLDriver</string>
-			<key>IOMatchCategory</key>
-			<string>IOAccelerator</string>
-			<key>IOPCIMatch</key>
-			<string>0x4c501002</string>
-			<key>IOProviderClass</key>
-			<string>IOPCIDevice</string>
-		</dict>
-	</dict>
-	<key>OSBundleLibraries</key>
-	<dict>
-		<key>com.apple.kernel.iokit</key>
-		<string>1.0b1</string>
-	</dict>
-	<key>OSBundleRequired</key>
-	<string>Root</string>
-</dict>
-</plist>
-";
-		};
-		94B4B913066C02DD00C3EE18 = {
-			explicitFileType = wrapper.cfbundle;
-			includeInIndex = 0;
-			isa = PBXFileReference;
-			path = PatchedRagePro.kext;
-			refType = 3;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		94B4B943066C0A3900C3EE18 = {
-			containerPortal = F53C690F01B191BA01A80001;
-			isa = PBXContainerItemProxy;
-			proxyType = 1;
-			remoteGlobalIDString = 94B4B912066C02DD00C3EE18;
-			remoteInfo = PatchedRagePro;
-		};
-		94B4B944066C0A3900C3EE18 = {
-			isa = PBXTargetDependency;
-			target = 94B4B912066C02DD00C3EE18;
-			targetProxy = 94B4B943066C0A3900C3EE18;
 		};
 		94B8172F047A7ABF00A80003 = {
 			fileEncoding = 4;
@@ -3010,11 +2849,11 @@
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>3.0.1</string>
+	<string>3.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>3.0.1</string>
+	<string>3.0</string>
 </dict>
 </plist>
 ";
@@ -3395,7 +3234,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.GossamerDeviceTreeUpdater;
-				MODULE_VERSION = 1.0.3;
+				MODULE_VERSION = 1.0.2;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -3436,7 +3275,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.3</string>
+	<string>1.0.2</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>GossamerDeviceTreeUpdater</key>
@@ -3643,7 +3482,6 @@
 				94C3604B0597CB4E00A80003,
 				9490D52C061C8AE700D8F22E,
 				947DFF930617B5230087D76A,
-				94B4B912066C02DD00C3EE18,
 			);
 		};
 		F53C691001B191BA01A80001 = {
@@ -4219,7 +4057,6 @@
 				947DFBF8061763170087D76A,
 				947DFF940617B5230087D76A,
 				9490D52D061C8AE700D8F22E,
-				94B4B913066C02DD00C3EE18,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -4260,16 +4097,15 @@
 			);
 			buildSettings = {
 				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = BootX/bootx.tproj/include.subproj;
+				HEADER_SEARCH_PATHS = "BootX/bootx.tproj/include.subproj \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/usr/include/gcc/darwin/2.95.2\" \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/usr/include\"";
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
-				OTHER_CFLAGS = "-static -D_ANSI_SOURCE";
+				OTHER_CFLAGS = "-static";
 				OTHER_LDFLAGS = "-nostdlib -e _StartTVector -seg1addr 05600000";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = bootx;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
-				USE_GCC3_PFE_SUPPORT = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 			};
 			dependencies = (
@@ -4343,7 +4179,6 @@
 				F5BFE4210304D49701A80001,
 				F5BFE4220304D49801A80001,
 				9460607B057BA4A300FE8769,
-				944AD929067424E500FC3507,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4749,7 +4584,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.AppleGrandCentral;
-				MODULE_VERSION = 1.2;
+				MODULE_VERSION = 1.1.1;
 				OTHER_CFLAGS = "-fpermissive -D_BIG_ENDIAN=__BIG_ENDIAN__";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -4790,7 +4625,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.2</string>
+	<string>1.1.1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>AppleGrandCentral</key>
@@ -8247,7 +8082,6 @@
 		};
 		F572EEA70254E9E801A80001 = {
 			children = (
-				944AD928067424E500FC3507,
 				F572EEA90254E9E801A80001,
 				F572EEAA0254E9E801A80001,
 				F572EEAB0254E9E801A80001,
@@ -8792,7 +8626,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.PatchedNDRVSupport;
-				MODULE_VERSION = 1.0.1;
+				MODULE_VERSION = 1.0.0d1;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -8833,7 +8667,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.1</string>
+	<string>1.0.0d1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>1</key>
@@ -8965,7 +8799,6 @@
 				947DFC43061766120087D76A,
 				947D00330617C03B0087D76A,
 				948201C50620C6A00097B077,
-				94B4B944066C0A3900C3EE18,
 			);
 			isa = PBXBundleTarget;
 			name = Package;
@@ -9880,7 +9713,7 @@
 			);
 			isa = PBXBundleTarget;
 			name = "OWCCacheConfig Extension";
-			productInstallPath = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+			productInstallPath = "$(USER_LIBRARY_DIR)/Bundles";
 			productName = "OWCCacheConfig Extension";
 			productReference = F5FB800B03C7A0AD01A80002;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>

@@ -51,11 +51,9 @@ OWCCacheConfig::start (IOService *provider)
 	
 	// If we started up in single-user mode, then we refuse to start. The logic is that one of the
 	// reasons we might be in single-user mode is because we're causing trouble, and the user wants
-	// to delete us. We also refuse to start if "-c" is specified, which allows the user to turn us
-	// off without booting in single-user mode.
+	// to delete us.
 	
 	char buffer[16];
-	if (PE_parse_boot_arg ("-c", buffer)) return false;
 	if (PE_parse_boot_arg ("-s", buffer)) return false;
 	
 	// Wait a little for AppleVIA to show up, because that's what gets us an accurate CPU speed
