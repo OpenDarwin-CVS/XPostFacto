@@ -113,6 +113,7 @@ XPFVolumeDisplay::setVolume (MountedVolume* newVolume)
 	IconSuiteRef iconSuite;
 	
 	fVolume = newVolume;
+	fVolume->AddDependent (this);
 	fVolumeName->SetText (fVolume->getVolumeName (), true);
 	
 	err = FSGetCatalogInfo (fVolume->getRootDirectory (), kFSCatInfoNone, NULL, NULL, &volSpec, NULL);
@@ -145,6 +146,10 @@ XPFVolumeDisplay::DoEvent(EventNumber eventNumber,
 		case mListItemHit:
 			fPrefs->setTargetDisk (fVolume);
 			break;
+
+		default:
+			Inherited::DoEvent (eventNumber, source, event);
+			break;
 	}
 }
 
@@ -155,11 +160,12 @@ XPFVolumeDisplay::DoUpdate	(ChangeID_AC theChange,
 							void* changeData,
 							CDependencySpace_AC* dependencySpace)
 {
+	MountedVolume *vol = (MountedVolume *) changeData;
+
 	switch (theChange) {
 	
 		case cSetTargetDisk:
-			MountedVolume *rootDisk = (MountedVolume *) changeData;
-			if (fVolume == rootDisk) {
+			if (fVolume == vol) {
 				fSelected = true;
 				AddAdorner (&TAdorner::fgSelectionAdorner, kAdornLast, true);
 				ScrollSelectionIntoView (kRedraw);
@@ -167,6 +173,26 @@ XPFVolumeDisplay::DoUpdate	(ChangeID_AC theChange,
 				fSelected = false;
 				DeleteAdorner (&TAdorner::fgSelectionAdorner, true);
 			}
+			break;
+			
+		case cSetVolumeName:
+			fVolumeName->SetText (fVolume->getVolumeName (), true);
+			break;
+			
+		case cDeleteMountedVolume:
+			if (fVolume == vol) {
+				TView *nextView = this;
+				while (nextView = nextView->GetNextView ()) {
+					CViewPoint newLoc (nextView->GetLocation ());
+					newLoc.v -= GetSize().v;
+					nextView->Locate (newLoc, true);
+				}
+				delete this;
+			}
+			break;
+			
+		default:
+			Inherited::DoUpdate (theChange, changedObject, changeData, dependencySpace);
 			break;
 	}
 }

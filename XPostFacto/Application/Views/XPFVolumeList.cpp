@@ -61,6 +61,7 @@ void
 XPFVolumeList::DoPostCreate(TDocument* itsDocument)
 {
 	fTrackSelection = NULL;
+	fPrefs = (XPFPrefs *) GetDocument ();
 
 	TScroller::DoPostCreate (itsDocument);
 	
@@ -69,13 +70,10 @@ XPFVolumeList::DoPostCreate(TDocument* itsDocument)
 	// Create the initial views. We'll catch changes through the "update" thingy.
 	
 	for (MountedVolumeIterator iter (MountedVolume::GetVolumeList ()); iter.Current (); iter.Next ()) {
-		CViewPoint offset (0, fScrollLimit.v);
-		XPFVolumeDisplay *display = (XPFVolumeDisplay *) TViewServer::fgViewServer->DoCreateViews (itsDocument, this, 1200, offset);
-		display->setVolume (iter.Current ());
+		DoUpdate (cNewMountedVolume, fPrefs, iter.Current (), NULL);
 	}
 	
 	fApp->AddDependent (this);
-	fPrefs = (XPFPrefs *) GetDocument ();
 }
 
 void 
@@ -83,8 +81,7 @@ XPFVolumeList::DoEvent(EventNumber eventNumber,
 						TEventHandler* source,
 						TEvent* event)
 {
-	TScroller::DoEvent (eventNumber, source, event);
-	
+	TScroller::DoEvent (eventNumber, source, event);	
 }
 
 void 
@@ -165,7 +162,22 @@ XPFVolumeList::DoUpdate (ChangeID_AC theChange,
 								void* changeData,
 								CDependencySpace_AC* dependencySpace)
 {
-
+	MountedVolume *volume = (MountedVolume *) changeData;
+	ArrayIndex_AC index;
+	XPFVolumeDisplay *subview, *subviewToRemove;
+	
+	switch (theChange) {
+				
+		case cNewMountedVolume:
+			CViewPoint offset (0, fScrollLimit.v);
+			XPFVolumeDisplay *display = (XPFVolumeDisplay *) TViewServer::fgViewServer->DoCreateViews (GetDocument (), this, 1200, offset);
+			display->setVolume (volume);
+			break;
+		
+		default:
+			Inherited::DoUpdate (theChange, changedObject, changeData, dependencySpace);
+			break;
+	}
 }
 
 void 
