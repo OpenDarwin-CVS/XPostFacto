@@ -76,7 +76,7 @@ XPFHelpBehavior::DoPostCreate (TDocument* itsDocument)
 		HelpStringResource *r = (HelpStringResource *) *helpStrings;
 		unsigned handleLength = GetHandleSize (helpStrings) / sizeof (HelpStringResource);
 		for (unsigned x = 0; x < handleLength; x++) {
-			if (r[x].idType == fIdentifier) {
+			if (r[x].idType == fOwner->GetIdentifier ()) {
 				fHelpString = CString_AC (kHelpStringsResource, r[x].index);
 				break;
 			}

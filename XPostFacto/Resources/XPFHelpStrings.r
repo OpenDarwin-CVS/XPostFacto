@@ -50,22 +50,29 @@ resource 'hlps' (kHelpStringsResource, purgeable) {
 		'debg', 4;
 		'auto', 5;
 		'inpd', 6;
+		'intx', 6;
 		'outd', 7;
+		'outx', 7;
 		'cach', 8;
 		'thro', 9;
+		'thtx', 9;
+		'thrt', 9;
 		'exdb', 10;
-		'selt', 11;
+		'boli', 11;
+		'voln', 11;
 		'info', 12;
 		'nvrm', 13;
 		'opti', 14;
 		'owcp', 15;
 		'hlpd', 16;
+		'hlps', 16;
 		'rest', 17;
 		'inst', 18;
 		'incd', 19;
+		'incs', 19;
 		'exof', 20;
 		'selu', 21;
-		'selb', 22;
+		'updb', 22;
 	}
 };
 
@@ -124,7 +131,7 @@ resource 'STR#' (kHelpStringsResource, purgeable) {
 		 
 /* 20 */ "Opens a web page which explains Open Firmware settings.";
 
-		 "Where you have already installed Mac OS X on the target volume, select items to update."
+		 "Where you have already installed Mac OS X on the target volume, select items to update. "
 		 "Not implemented yet.";
 		 
 		 "Update the items you have selected. Not implemented yet.";

@@ -75,7 +75,7 @@ XPFOpenURLBehavior::DoPostCreate (TDocument* itsDocument)
 		URLResource *r = (URLResource *) *urls;
 		unsigned handleLength = GetHandleSize (urls) / sizeof (URLResource);
 		for (unsigned x = 0; x < handleLength; x++) {
-			if (r[x].idType == fIdentifier) {
+			if (r[x].idType == fOwner->GetIdentifier ()) {
 				fURL.CopyFrom (kURLResource, r[x].index, 255);
 				break;
 			}

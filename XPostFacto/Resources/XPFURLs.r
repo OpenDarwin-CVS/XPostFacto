@@ -44,7 +44,7 @@ type 'urls' {
 
 resource 'urls' (kURLResource, purgeable) {
 	{
-		'debg', 1;
+		'exdb', 1;
 		'exof', 2;
 	}
 };
