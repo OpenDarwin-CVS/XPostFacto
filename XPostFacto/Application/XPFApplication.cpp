@@ -436,7 +436,7 @@ XPFApplication::OpenNew (CommandNumber itsCommandNumber)
 		return NULL;	
 	}
 	
-/*
+
 	if (!fPlatform->getCanPatchNVRAM()) {
 		if (fSplash) fSplash->Close ();
 		GetIndString (message, kXPFStringsResource, kNoNVRAMPatches);
@@ -444,7 +444,6 @@ XPFApplication::OpenNew (CommandNumber itsCommandNumber)
 		reportFatalError (message);
 		return NULL;
 	}
-*/
 	
 	// Then tell it to open my prefs file, either old or new
 	

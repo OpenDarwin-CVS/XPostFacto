@@ -47,7 +47,7 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			"Not writeable.";
 			"Not an installation disk.";
 /* 10 */	"XPostFacto requires Mac OS 9 or later.";
-			"XPostFacto does not know how to patch NVRAM for ";
+			"XPostFacto does not work with this model: ";
 			
 			"XPostFacto does not work in Mac OS X (yet). "
 			"The one useful thing it can do is install the "
