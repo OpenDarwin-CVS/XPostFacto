@@ -123,15 +123,22 @@ XPFVolumeDisplay::setVolume (MountedVolume* newVolume)
 	
 	fIcon->SetIconSuite (iconSuite, true);
 	
-	if ((fVolume->getBootStatus () != kStatusOK) && (fVolume->getInstallTargetStatus () != kStatusOK)) {
+	CStr255_AC status;
+	unsigned statusCode = fVolume->getBootStatus ();
+	if (statusCode != kStatusOK) statusCode = fVolume->getInstallTargetStatus ();
+	if (statusCode != kStatusOK) statusCode = fVolume->getInstallerStatus ();
+	
+	if (statusCode == kStatusOK) {
+		if (fVolume->getHasMachKernel ()) {
+			status = "Mac OS X ";
+			status += fVolume->getMacOSXVersion ();
+			if (fVolume->getHasInstaller ()) status += " Install CD";
+		}
+	} else {
 		this->SetActiveState (false, true);	
-	}  
-	if (fVolume->getHasMachKernel ()) {
-		CStr255_AC status ("Mac OS X ");
-		status += fVolume->getMacOSXVersion ();
-		if (fVolume->getHasInstaller ()) status += " Install CD";
-		fStatus->SetText (status, true);
+		status.CopyFrom (kXPFStringsResource, statusCode, 255);
 	}
+	fStatus->SetText (status, true);
 	
 	DoUpdate (cSetTargetDisk, fPrefs, fPrefs->getTargetDisk (), NULL);
 }
