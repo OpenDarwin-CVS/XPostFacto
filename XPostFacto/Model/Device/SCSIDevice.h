@@ -56,8 +56,8 @@ class SCSIDevice : public XPFBootableDevice
 		
 		virtual ~SCSIDevice ();
 				
-		OSErr readBlocks (unsigned int start, unsigned int count, UInt8 **buffer);
-		OSErr writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer);
+		OSErr readBlocks (UInt32 start, UInt32 count, UInt8 **buffer);
+		OSErr writeBlocks (UInt32 start, UInt32 count, UInt8 *buffer);
 		
 		bool isReallyATADevice () {return fBus && fBus->getIsActuallyATABus ();} 
 		

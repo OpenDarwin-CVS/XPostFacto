@@ -89,14 +89,14 @@ class XPFBootableDevice : public MDependable_AC
 		XPFPartition* getFirstHFSPartition ();
 		
 #ifdef __MACH__
-		OSErr readBlocks (unsigned int start, unsigned int count, UInt8 **buffer);
-		OSErr writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer);
+		OSErr readBlocks (UInt32 start, UInt32 count, UInt8 **buffer);
+		OSErr writeBlocks (UInt32 start, UInt32 count, UInt8 *buffer);
 		void readCapacity ();
 		void openDeviceFile ();
 		void closeDeviceFile ();
 #else
-		virtual OSErr readBlocks (unsigned int start, unsigned int count, UInt8 **buffer) = 0;
-		virtual OSErr writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer) = 0;
+		virtual OSErr readBlocks (UInt32 start, UInt32 count, UInt8 **buffer) = 0;
+		virtual OSErr writeBlocks (UInt32 start, UInt32 count, UInt8 *buffer) = 0;
 		virtual	void readCapacity () = 0;
 #endif
 

@@ -558,7 +558,7 @@ XPFBootableDevice::closeDeviceFile ()
 }
 
 OSErr 
-XPFBootableDevice::readBlocks (unsigned int start, unsigned int count, UInt8 **buffer)
+XPFBootableDevice::readBlocks (UInt32 start, UInt32 count, UInt8 **buffer)
 {
 	ThrowIfNULL_AC (buffer);
 
@@ -579,7 +579,7 @@ XPFBootableDevice::readBlocks (unsigned int start, unsigned int count, UInt8 **b
     // we will allocate the buffer ourselves with NewPtr
     // the caller must dispose of the buffer with DisposePtr
     
-    unsigned int byteOffset = 0;
+    UInt32 byteOffset = 0;
  
     if (fBlockSize != 512) {
     	long long startBytes = start * 512;
@@ -615,7 +615,7 @@ XPFBootableDevice::readBlocks (unsigned int start, unsigned int count, UInt8 **b
 }
 
 OSErr 
-XPFBootableDevice::writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer)
+XPFBootableDevice::writeBlocks (UInt32 start, UInt32 count, UInt8 *buffer)
 {
 	ThrowIfNULL_AC (buffer);
 	if (fBlockSize != 512) ThrowException_AC (kWrite512ByteBlocksOnly, 0);

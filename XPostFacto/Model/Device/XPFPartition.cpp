@@ -178,14 +178,15 @@ XPFPartition::~XPFPartition ()
 }
 
 OSErr
-XPFPartition::readBlocks (unsigned int start, unsigned int count, void **buffer)
+XPFPartition::readBlocks (UInt32 start, UInt32 count, void **buffer)
 {
+	gLogFile << "XPFPartition::readBlocks start: " << start << " offsets: " << fPartition.pmPyPartStart << " , " << fPartition.pmLgDataStart << endl_AC;
 	return fBootableDevice->readBlocks (start + fPartition.pmPyPartStart + 
 			fPartition.pmLgDataStart, count, (UInt8 **) buffer);
 }
 
-OSErr 
-XPFPartition::writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer)
+OSErr
+XPFPartition::writeBlocks (UInt32 start, UInt32 count, UInt8 *buffer)
 {
 	return fBootableDevice->writeBlocks (start + fPartition.pmPyPartStart +
 			fPartition.pmLgDataStart, count, buffer);

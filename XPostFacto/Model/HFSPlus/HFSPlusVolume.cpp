@@ -108,15 +108,16 @@ HFSPlusVolume::matchInfoAndName (FSVolumeInfo *info, HFSUniStr255 *name)
 }
 
 OSErr
-HFSPlusVolume::readBlocks (unsigned int start, unsigned int count, void **buffer)
+HFSPlusVolume::readBlocks (UInt32 start, UInt32 count, void **buffer)
 {
+	gLogFile << "HFSPlusVolume::readBlocks fOffsetIntoPartition: " << fOffsetIntoPartition << " start: " << start << endl_AC;
 	return fPartition->readBlocks (start + fOffsetIntoPartition, count, buffer);
 }
 
 OSErr 
-HFSPlusVolume::readAllocationBlocks (unsigned int start, unsigned int count, void **buffer)
+HFSPlusVolume::readAllocationBlocks (UInt32 start, UInt32 count, void **buffer)
 {
-	int sectorsInAllocationBlock = fHeader->blockSize / 512;
+	UInt32 sectorsInAllocationBlock = fHeader->blockSize / 512;
 	return readBlocks (start * sectorsInAllocationBlock, count * sectorsInAllocationBlock, buffer);
 }
 

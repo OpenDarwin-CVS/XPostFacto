@@ -47,7 +47,7 @@ class HFSPlusCatalog {
 		UInt32 fNodeSize;
 		UInt32 fFirstLeafNode;
 		
-		OSErr readAllocationBlocks (unsigned int start, unsigned int count, void **buffer);
+		OSErr readAllocationBlocks (UInt32 start, UInt32 count, void **buffer);
 		
 	public:
 

@@ -317,7 +317,7 @@ SCSIDevice::readCapacity ()
 
 
 OSErr
-SCSIDevice::writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer)
+SCSIDevice::writeBlocks (UInt32 start, UInt32 count, UInt8 *buffer)
 {
 	ThrowIfNULL_AC (fPB);
 	if (fBlockSize != 512) ThrowException_AC (kWrite512ByteBlocksOnly, 0);
@@ -362,7 +362,7 @@ SCSIDevice::writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer)
 }
 
 OSErr
-SCSIDevice::readBlocks (unsigned int start, unsigned int count, UInt8 **buffer)
+SCSIDevice::readBlocks (UInt32 start, UInt32 count, UInt8 **buffer)
 {
 	ThrowIfNULL_AC (fPB);
 	ThrowIfNULL_AC (buffer);
@@ -376,7 +376,7 @@ SCSIDevice::readBlocks (unsigned int start, unsigned int count, UInt8 **buffer)
     // we will allocate the buffer ourselves with NewPtr
     // the caller must dispose of the buffer with DisposePtr
     
-    unsigned int byteOffset = 0;
+    UInt32 byteOffset = 0;
  
     if (fBlockSize != 512) {
     	long long startBytes = start * 512;

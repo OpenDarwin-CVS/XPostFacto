@@ -84,7 +84,7 @@ HFSPlusCatalog::HFSPlusCatalog (HFSPlusVolume *volume)
 }
 
 OSErr 
-HFSPlusCatalog::readAllocationBlocks (unsigned int start, unsigned int count, void **buffer)
+HFSPlusCatalog::readAllocationBlocks (UInt32 start, UInt32 count, void **buffer)
 {
 	for (int x = 0; x < fExtents.GetSize (); x++) {
 		if (start < fExtents[x].blockCount) {

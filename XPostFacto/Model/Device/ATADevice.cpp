@@ -378,13 +378,13 @@ ATADevice::checkOpenFirmwareName ()
 }
 
 OSErr
-ATADevice::writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer)
+ATADevice::writeBlocks (UInt32 start, UInt32 count, UInt8 *buffer)
 {
 	OSErr status;
 	ataIOPB pb;
 	if (fBlockSize != 512) ThrowException_AC (kWrite512ByteBlocksOnly, 0);
 
-	for (unsigned x = 0; x < count; x++) {
+	for (UInt32 x = 0; x < count; x++) {
 		Erase_AC (&pb);
 		
 		pb.ataPBFunctionCode    =   kATAMgrExecIO;
@@ -619,11 +619,11 @@ ATADevice::readATABlocks (unsigned int start, unsigned int count, UInt8 *buffer)
 }
 
 OSErr
-ATADevice::readBlocks (unsigned int start, unsigned int count, UInt8 **buffer)
+ATADevice::readBlocks (UInt32 start, UInt32 count, UInt8 **buffer)
 {
 	ThrowIfNULL_AC (buffer);
 
-    unsigned int byteOffset = 0;
+    UInt32 byteOffset = 0;
 
     // the start and count will be in terms of 512 byte blocks
     // we will allocate the buffer ourselves with NewPtr

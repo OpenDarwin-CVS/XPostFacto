@@ -53,8 +53,8 @@ class ATADevice : public XPFBootableDevice
 		static void Initialize ();
 		static bool ATAHardwarePresent ();
 		
-		OSErr readBlocks (unsigned int start, unsigned int count, UInt8 **buffer);
-		OSErr writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer);
+		OSErr readBlocks (UInt32 start, UInt32 count, UInt8 **buffer);
+		OSErr writeBlocks (UInt32 start, UInt32 count, UInt8 *buffer);
 		
 		bool isReallyATADevice () {return true;}
 		

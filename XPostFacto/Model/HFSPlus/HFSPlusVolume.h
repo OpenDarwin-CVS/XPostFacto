@@ -59,8 +59,8 @@ class HFSPlusVolume {
 		HFSPlusVolumeHeader* getHeader () {return fHeader;}
 		UInt32 getBlockSize () {return fHeader->blockSize;}
 		
-		OSErr readBlocks (unsigned int start, unsigned int count, void **buffer);
-		OSErr readAllocationBlocks (unsigned int start, unsigned int count, void **buffer);
+		OSErr readBlocks (UInt32 start, UInt32 count, void **buffer);
+		OSErr readAllocationBlocks (UInt32 start, UInt32 count, void **buffer);
 		
 		bool matchInfo (FSVolumeInfo *info);
 		bool matchInfoAndName (FSVolumeInfo *info, HFSUniStr255 *name);

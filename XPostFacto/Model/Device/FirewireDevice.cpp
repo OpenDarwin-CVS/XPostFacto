@@ -132,7 +132,7 @@ FirewireDevice::readCapacity ()
 
 
 OSErr
-FirewireDevice::writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer)
+FirewireDevice::writeBlocks (UInt32 start, UInt32 count, UInt8 *buffer)
 {
 	#pragma unused (start, count, buffer)
 	// not supported
@@ -140,7 +140,7 @@ FirewireDevice::writeBlocks (unsigned int start, unsigned int count, UInt8 *buff
 }
 
 OSErr
-FirewireDevice::readBlocks (unsigned int start, unsigned int count, UInt8 **buffer)
+FirewireDevice::readBlocks (UInt32 start, UInt32 count, UInt8 **buffer)
 {
 	#pragma unused (start, count, buffer)
 	// not supported

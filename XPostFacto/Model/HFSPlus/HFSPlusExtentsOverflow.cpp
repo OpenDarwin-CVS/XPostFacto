@@ -102,7 +102,7 @@ HFSPlusExtentsOverflow::addExtentsFor (HFSCatalogNodeID nodeID, TemplateArray_AC
 }
 
 OSErr 
-HFSPlusExtentsOverflow::readAllocationBlocks (unsigned int start, unsigned int count, void **buffer)
+HFSPlusExtentsOverflow::readAllocationBlocks (UInt32 start, UInt32 count, void **buffer)
 {
 	for (int x = 0; x < fExtents.GetSize (); x++) {
 		if (start < fExtents[x].blockCount) {

@@ -94,8 +94,8 @@ class XPFPartition : public MDependable_AC
 		bool matchInfo (FSVolumeInfo *info);
 		bool matchInfoAndName (FSVolumeInfo *info, HFSUniStr255 *name);
 				
-		OSErr readBlocks (unsigned int start, unsigned int count, void **buffer);
-		OSErr writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer);
+		OSErr readBlocks (UInt32 start, UInt32 count, void **buffer);
+		OSErr writeBlocks (UInt32 start, UInt32 count, UInt8 *buffer);
 		void writePartition ();
 		OSErr writeBootBlocks (void *buffer);
 		OSErr readBootBlocks (void **buffer);
