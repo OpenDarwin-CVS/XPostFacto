@@ -40,6 +40,8 @@ advised of the possibility of such damage.
 #include "XPFNameRegistry.h"
 #include "OFAliases.h"
 #include "XPostFacto.h"
+#include "PCI.h"
+#include "NVRAM.h"
 
 #include <stdio.h>
 
@@ -57,6 +59,7 @@ XPFPrefs::XPFPrefs ()
 	fInputDeviceIndex = 0;
 	fOutputDeviceIndex = 0;
 	fThrottle = 8;
+	fForceShortStrings = false;
 	
 	fNextInputDevice = cFirstInputDevice;
 	fNextOutputDevice = cFirstOutputDevice;
@@ -187,6 +190,8 @@ XPFPrefs::writePrefsToFile ()
 	fPrefs->WriteData (&fAutoBoot, size);
 	fPrefs->WriteData (&fSetupL2Cache, size);
 			
+	bool save = fUseShortStrings;
+	fUseShortStrings = false;
 	CStr255_AC device;
 	device = getInputDevice ();
 	size = device.Length () + 1;
@@ -194,6 +199,7 @@ XPFPrefs::writePrefsToFile ()
 	device = getOutputDevice ();
 	size = device.Length () + 1;
 	fPrefs->WriteData (device, size);
+	fUseShortStrings = save;
 	
 	size = sizeof (fThrottle);
 	fPrefs->WriteData (&fThrottle, size);
@@ -201,7 +207,6 @@ XPFPrefs::writePrefsToFile ()
 	size = sizeof (fDebug);
 	fPrefs->WriteData (&fDebug, size);
 }
-
 
 XPFPrefs::~XPFPrefs ()
 {
@@ -220,12 +225,49 @@ XPFPrefs::~XPFPrefs ()
 	for (int x = 1; x <= fOutputDevices.GetSize (); x++) {
 		DisposePtr (fOutputDevices.At (x));
 	}
+
+	for (int x = 1; x <= fShortInputDevices.GetSize (); x++) {
+		DisposePtr (fShortInputDevices.At (x));
+	} 
+
+	for (int x = 1; x <= fShortOutputDevices.GetSize (); x++) {
+		DisposePtr (fShortOutputDevices.At (x));
+	}
+}
+
+void
+XPFPrefs::checkStringLength ()
+{
+	if (fForceShortStrings) {
+		fUseShortStrings = true;
+		fUseShortStringsForInstall = true;
+	} else {
+		unsigned nvramPatchLength = strlen (NVRAMVariables::GetVariables ()->getNVRAMRC ());
+		unsigned len = 	getBootCommand ().Length () + 
+						getBootFile ().Length () +
+						getBootDevice ().Length () +
+						getInputDevice ().Length () +
+						getOutputDevice ().Length () +
+						nvramPatchLength;
+		fUseShortStrings = (len >= 1948);
+				
+		len =  	getBootCommandForInstall ().Length () + 
+				getBootFileForInstall ().Length () +
+				getBootDeviceForInstall ().Length () +
+				getInputDevice ().Length () +
+				getOutputDevice ().Length () +
+				nvramPatchLength;
+		fUseShortStringsForInstall = (len >= 1948);
+	}
 }
 
 void 
 XPFPrefs::Changed(ChangeID_AC theChange, void* changeData)
 {
 	fDirty = true;
+	
+	checkStringLength ();
+	
 	MDependable_AC::Changed (theChange, changeData);
 }
 
@@ -249,22 +291,64 @@ XPFPrefs::Initialize ()
 	setInstallDisk (MountedVolume::WithCreationDate (installCreationDate));
 	if (fBootDisk == NULL) setBootDisk (MountedVolume::GetVolumeList()->First ());
 	if (fInstallDisk == NULL) setInstallDisk (MountedVolume::GetVolumeList()->First ());
-}
+	
+	UInt32 version = 0;	
+	Gestalt (gestaltSystemVersion, (SInt32 *) &version);
 
+	if (version < 0x01000) Changed (cSetBootDisk, NULL);
+}
 
 void 
 XPFPrefs::addInputOutputDevice (RegEntryID *entry, TemplateList_AC <char> *list)
 {
 	char alias[256];
+	char shortAlias[256];
+
 	OFAliases::AliasFor (entry, alias);
+	strcpy (shortAlias, alias);
 	if (list == &fOutputDevices) {
 		if (!strcmp (alias, "kbd")) return;
 		if (!strcmp (alias, "/offscreen-display")) return;
 	}
+		
+	// Now get the device and funtion number for the short alias
+	char location [32];
+	location[0] = 0;
+	RegPropertyValueSize aaSize;
+	OSErr err = RegistryPropertyGetSize (entry, kPCIAssignedAddressProperty, &aaSize);
+	if (err == noErr) {
+		// We want the open firmware name of our parent instead
+		RegEntryID parentEntry;
+		ThrowIfOSErr_AC (RegistryEntryIDInit (&parentEntry));
+		ThrowIfOSErr_AC (RegistryCStrEntryToName (entry, &parentEntry, NULL, NULL));
+		OFAliases::AliasFor (&parentEntry, shortAlias);
+		strcat (shortAlias, "/");
+		RegistryEntryIDDispose (&parentEntry);
+
+		Ptr aa = NewPtr (aaSize);
+		ThrowIfNULL_AC (aa);
+		ThrowIfOSErr_AC (RegistryPropertyGet (entry, kPCIAssignedAddressProperty, aa, &aaSize));
+		int deviceNumber = GetPCIDeviceNumber ((PCIAssignedAddress *) aa);
+		int functionNumber = GetPCIFunctionNumber ((PCIAssignedAddress *) aa);
+		if (functionNumber) {
+			sprintf (location, "@%X,%X", deviceNumber, functionNumber);
+		} else {
+			sprintf (location, "@%X", deviceNumber);
+		}
+		DisposePtr (aa);	
+	}
+	
+	strcat (alias, location);
+	strcat (shortAlias, location);
+	
+#if qLogging
+	gLogFile << "IO Device: " << alias << endl_AC;
+	gLogFile << "IO Short Device: " << shortAlias << endl_AC;
+#endif
 	
 	char *label = NULL;
 	RegPropertyValueSize propSize;
-	OSErr err = RegistryPropertyGetSize (entry, "AAPL,connector", &propSize);
+	err = RegistryPropertyGetSize (entry, "AAPL,connector", &propSize);
 	if (err == noErr) {
 		label = NewPtr (propSize + 1);
 		RegistryPropertyGet (entry, "AAPL,connector", label, &propSize);
@@ -280,17 +364,23 @@ XPFPrefs::addInputOutputDevice (RegEntryID *entry, TemplateList_AC <char> *list)
 			strcpy (label, alias);
 		}
 	}
-	if (strcmp (label, "infrared")) {
-		char *shortAlias = NewPtr (strlen (alias) + 1);
-		strcpy (shortAlias, alias);
-		if (list == &fInputDevices) {
-			fInputDevices.InsertLast (shortAlias);
-			TMenuBarManager::fgMenuBarManager->AddMenuItem (label, mInputDevice, 999, fNextInputDevice++);
-		} else {
-			fOutputDevices.InsertLast (shortAlias);
-			TMenuBarManager::fgMenuBarManager->AddMenuItem (label, mOutputDevice, 999, fNextOutputDevice++);
-		}
+	if (!strcmp (label, "infrared")) return;
+	
+	char *temp = NewPtr (strlen (alias) + 1);
+	strcpy (temp, alias);
+	list->InsertLast (temp);
+	
+	temp = NewPtr (strlen (shortAlias) + 1);
+	strcpy (temp, shortAlias);
+	
+	if (list == &fInputDevices) {
+		fShortInputDevices.InsertLast (temp);
+		TMenuBarManager::fgMenuBarManager->AddMenuItem (label, mInputDevice, 999, fNextInputDevice++);
+	} else {
+		fShortOutputDevices.InsertLast (temp);
+		TMenuBarManager::fgMenuBarManager->AddMenuItem (label, mOutputDevice, 999, fNextOutputDevice++);
 	}
+
 	DisposePtr (label);
 }
 
@@ -347,7 +437,13 @@ CStr255_AC
 XPFPrefs::getInputDevice ()
 {
 	CStr255_AC result;
-	if (fInputDeviceIndex) result.CopyFrom (fInputDevices.At (fInputDeviceIndex));
+	if (fInputDeviceIndex) {
+		if (fUseShortStrings) {
+			result.CopyFrom (fShortInputDevices.At (fInputDeviceIndex));
+		} else {
+			result.CopyFrom (fInputDevices.At (fInputDeviceIndex));
+		}
+	}
 	return result;
 }
 
@@ -355,7 +451,41 @@ CStr255_AC
 XPFPrefs::getOutputDevice ()
 {
 	CStr255_AC result;
-	if (fOutputDeviceIndex) result.CopyFrom (fOutputDevices.At (fOutputDeviceIndex));
+	if (fOutputDeviceIndex) {
+		if (fUseShortStrings) {
+			result.CopyFrom (fShortOutputDevices.At (fOutputDeviceIndex));
+		} else {
+			result.CopyFrom (fOutputDevices.At (fOutputDeviceIndex));		
+		}
+	}
+	return result;
+}
+
+CStr255_AC
+XPFPrefs::getInputDeviceForInstall ()
+{
+	CStr255_AC result;
+	if (fInputDeviceIndex) {
+		if (fUseShortStringsForInstall) {
+			result.CopyFrom (fShortInputDevices.At (fInputDeviceIndex));
+		} else {
+			result.CopyFrom (fInputDevices.At (fInputDeviceIndex));
+		}
+	}
+	return result;
+}
+
+CStr255_AC
+XPFPrefs::getOutputDeviceForInstall ()
+{
+	CStr255_AC result;
+	if (fOutputDeviceIndex) {
+		if (fUseShortStringsForInstall) {
+			result.CopyFrom (fShortOutputDevices.At (fOutputDeviceIndex));
+		} else {
+			result.CopyFrom (fOutputDevices.At (fOutputDeviceIndex));		
+		}
+	}
 	return result;
 }
 
@@ -465,13 +595,21 @@ XPFPrefs::setThrottle (unsigned throttle)
 CStr255_AC
 XPFPrefs::getBootDevice ()
 {
-	return getBootDisk()->getOpenFirmwareName();
+	if (fUseShortStrings) {
+		return getBootDisk()->getShortOpenFirmwareName();
+	} else {
+		return getBootDisk()->getOpenFirmwareName();
+	}
 }
 
 CStr255_AC
 XPFPrefs::getBootDeviceForInstall ()
 {
-	return fInstallDisk->getOpenFirmwareName ();
+	if (fUseShortStringsForInstall) {
+		return fInstallDisk->getShortOpenFirmwareName ();
+	} else {
+		return fInstallDisk->getOpenFirmwareName ();
+	}
 }
 
 CStr255_AC
@@ -479,7 +617,11 @@ XPFPrefs::getBootCommandForInstall ()
 {
 	CStr255_AC bootCommand = getBootCommand ();
 	bootCommand += " rd=*";
-	bootCommand += fBootDisk->getOpenFirmwareName();	
+	if (fUseShortStringsForInstall) {
+		bootCommand += fBootDisk->getShortOpenFirmwareName ();
+	} else {
+		bootCommand += fBootDisk->getOpenFirmwareName();	
+	}
 	return bootCommand;
 }
 

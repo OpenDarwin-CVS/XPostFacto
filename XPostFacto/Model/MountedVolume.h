@@ -79,6 +79,7 @@ class MountedVolume : public MDependable_AC
 #endif
 		
 		const CStr255_AC& getOpenFirmwareName () {if (fPartInfo) return fPartInfo->getOpenFirmwareName (); else return "";}
+		const CStr255_AC& getShortOpenFirmwareName () {if (fPartInfo) return fPartInfo->getShortOpenFirmwareName (); else return "";}
 		const CStr255_AC& getVolumeName () {return fVolumeName;}
 		unsigned int getCreationDate () {return fCreationDate;}
 		bool getIsHFSPlus () {return fIsHFSPlus;}

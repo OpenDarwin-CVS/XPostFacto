@@ -65,7 +65,8 @@ class SCSIBus {
 		static int getBusCount () {return gBusCount;}
 		
 		const CStr255_AC& getOpenFirmwareName () {return fOpenFirmwareName;}
-
+		const CStr255_AC& getShortOpenFirmwareName () {return fShortOpenFirmwareName;}
+		
 		~SCSIBus ();
 
 	private:
@@ -75,6 +76,7 @@ class SCSIBus {
 		RegEntryID fRegEntry;
 		int fBusNumber;
 		CStr255_AC fOpenFirmwareName;
+		CStr255_AC fShortOpenFirmwareName;
 		unsigned fDeviceNumber;
 		unsigned fFunctionNumber;
 		

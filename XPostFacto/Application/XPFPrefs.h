@@ -92,7 +92,9 @@ class XPFPrefs : public MDependable_AC {
 		
 		CStr255_AC getInputDevice ();
 		CStr255_AC getOutputDevice ();
-		
+		CStr255_AC getInputDeviceForInstall ();
+		CStr255_AC getOutputDeviceForInstall ();
+				
 		unsigned int getNextInputDevice () {return fNextInputDevice;}
 		unsigned int getNextOutputDevice () {return fNextOutputDevice;}
 		
@@ -106,6 +108,7 @@ class XPFPrefs : public MDependable_AC {
 		unsigned getThrottle () {return fThrottle;}
 		
 		void Changed(ChangeID_AC theChange, void* changeData);
+		void checkStringLength ();
 		
 		void setDebugBreakpoint (bool val);
 		void setDebugPrintf (bool val);
@@ -148,12 +151,17 @@ class XPFPrefs : public MDependable_AC {
 		bool fSetupL2Cache;
 
 		bool fDirty;
+		bool fUseShortStrings;
+		bool fUseShortStringsForInstall;
+		bool fForceShortStrings;
 
 		MountedVolume *fBootDisk;
 		MountedVolume *fInstallDisk;
 
 		TemplateList_AC <char> fInputDevices;
 		TemplateList_AC <char> fOutputDevices;
+		TemplateList_AC <char> fShortInputDevices;
+		TemplateList_AC <char> fShortOutputDevices;
 		unsigned int fInputDeviceIndex;
 		unsigned int fOutputDeviceIndex;
 		

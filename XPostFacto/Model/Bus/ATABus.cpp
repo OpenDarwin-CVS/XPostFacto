@@ -43,6 +43,7 @@ advised of the possibility of such damage.
 #include "XPFLog.h"
 #include "OFAliases.h"
 #include "XPFApplication.h"
+#include "PCI.h"
 
 ATABusList ATABus::gATABusList;
 bool ATABus::gHasBeenInitialized = false;
@@ -124,9 +125,41 @@ ATABus::ATABus (RegEntryID *regEntry)
 	char alias [256];
 	OFAliases::AliasFor (regEntry, alias);
 	fOpenFirmwareName.CopyFrom (alias);
+	fShortOpenFirmwareName.CopyFrom (alias);
 	
+	// Now get the device and funtion number
+	char location [32];
+	location[0] = 0;
+	RegPropertyValueSize aaSize;
+	OSErr err = RegistryPropertyGetSize (&fRegEntryID, kPCIAssignedAddressProperty, &aaSize);
+	if (err == noErr) {
+		// We want the open firmware name of our parent instead
+		RegEntryID parentEntry;
+		ThrowIfOSErr_AC (RegistryEntryIDInit (&parentEntry));
+		ThrowIfOSErr_AC (RegistryCStrEntryToName (&fRegEntryID, &parentEntry, NULL, NULL));
+		OFAliases::AliasFor (&parentEntry, alias);
+		fShortOpenFirmwareName.CopyFrom (alias);
+		fShortOpenFirmwareName += "/";
+		RegistryEntryIDDispose (&parentEntry);
+	
+		Ptr aa = NewPtr (aaSize);
+		ThrowIfNULL_AC (aa);
+		ThrowIfOSErr_AC (RegistryPropertyGet (&fRegEntryID, kPCIAssignedAddressProperty, aa, &aaSize));
+		int deviceNumber = GetPCIDeviceNumber ((PCIAssignedAddress *) aa);
+		int functionNumber = GetPCIFunctionNumber ((PCIAssignedAddress *) aa);
+		if (functionNumber) {
+			sprintf (location, "@%X,%X", deviceNumber, functionNumber);
+		} else {
+			sprintf (location, "@%X", deviceNumber);
+		}
+		DisposePtr (aa);	
+	}
+	
+	fOpenFirmwareName += location;
+	fShortOpenFirmwareName += location;
+
 	RegPropertyValueSize propSize;
-	OSStatus err = RegistryPropertyGetSize (regEntry, kBusIDPropName, &propSize);
+	err = RegistryPropertyGetSize (regEntry, kBusIDPropName, &propSize);
   	if ((err == noErr) && (propSize == sizeof (fBusNumber))) {
 		ThrowIfOSErr_AC (RegistryPropertyGet (regEntry, kBusIDPropName, &fBusNumber, &propSize));
 	} else {
@@ -136,6 +169,9 @@ ATABus::ATABus (RegEntryID *regEntry)
 	#if qLogging
 		gLogFile << "OpenFirmwareName: ";
 		gLogFile.WriteCharBytes ((char *) &fOpenFirmwareName[1], fOpenFirmwareName[0]);
+		gLogFile << endl_AC;
+		gLogFile << "ShortOpenFirmwareName: ";
+		gLogFile.WriteCharBytes ((char *) &fShortOpenFirmwareName[1], fShortOpenFirmwareName[0]);
 		gLogFile << endl_AC;
 	#endif
 	

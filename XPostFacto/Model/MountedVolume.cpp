@@ -372,6 +372,10 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 			CStr255_AC openFirmwareName = getOpenFirmwareName ();
 			gLogFile.WriteCharBytes ((char *) &openFirmwareName[1], openFirmwareName[0]);
 			gLogFile << endl_AC;
+			gLogFile << "ShortOpenFirmwareName: ";
+			CStr255_AC shortOpenFirmwareName = getShortOpenFirmwareName ();
+			gLogFile.WriteCharBytes ((char *) &shortOpenFirmwareName[1], shortOpenFirmwareName[0]);
+			gLogFile << endl_AC;
 		} else {
 			gLogFile << "Could not find Open Firmware name." << endl_AC;
 		}

@@ -64,6 +64,7 @@ class ATABus {
 		static int getBusCount () {return gBusCount;}
 		
 		const CStr255_AC& getOpenFirmwareName () {return fOpenFirmwareName;}
+		const CStr255_AC& getShortOpenFirmwareName () {return fShortOpenFirmwareName;}
 
 		~ATABus ();
 
@@ -73,6 +74,7 @@ class ATABus {
 			
 		RegEntryID fRegEntryID;
 		CStr255_AC fOpenFirmwareName;
+		CStr255_AC fShortOpenFirmwareName;
 		int fBusNumber;
 
 		static ATABusList gATABusList;

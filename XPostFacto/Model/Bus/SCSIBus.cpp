@@ -204,6 +204,7 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 	char alias [256];
 	OFAliases::AliasFor (&fRegEntry, alias);
 	fOpenFirmwareName.CopyFrom (alias);
+	fShortOpenFirmwareName.CopyFrom (alias);
 				
 	// Now, we assign the next available bus number. I am making the assumption that the
 	// iteration order here is the same as the iteration order when the SCSI Manager is
@@ -225,6 +226,15 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 	RegPropertyValueSize aaSize;
 	OSErr err = RegistryPropertyGetSize (scsiEntry, kPCIAssignedAddressProperty, &aaSize);
 	if (err == noErr) {
+		// We want the open firmware name of our parent instead
+		RegEntryID parentEntry;
+		ThrowIfOSErr_AC (RegistryEntryIDInit (&parentEntry));
+		ThrowIfOSErr_AC (RegistryCStrEntryToName (&fRegEntry, &parentEntry, NULL, NULL));
+		OFAliases::AliasFor (&parentEntry, alias);
+		fShortOpenFirmwareName.CopyFrom (alias);
+		fShortOpenFirmwareName += "/";
+		RegistryEntryIDDispose (&parentEntry);
+	
 		Ptr aa = NewPtr (aaSize);
 		ThrowIfNULL_AC (aa);
 		ThrowIfOSErr_AC (RegistryPropertyGet (scsiEntry, kPCIAssignedAddressProperty, aa, &aaSize));
@@ -239,25 +249,26 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 	}
 	
 	fOpenFirmwareName += location;
+	fShortOpenFirmwareName += location;
 	
 	// Now, as an inelegant workaround, if we already have a bus with this device number,
-	// swap the open firmware names and function numbers
+	// swap the bus numbers
 	
 	if (fDeviceNumber) {
 		SCSIBus *otherBus = BusWithDeviceNumber (fDeviceNumber);
 		if (otherBus) {
-			CStr255_AC otherName = otherBus->fOpenFirmwareName;
-			unsigned otherFunctionNumber = otherBus->fFunctionNumber;
-			otherBus->fOpenFirmwareName = fOpenFirmwareName;
-			otherBus->fFunctionNumber = fFunctionNumber;
-			fOpenFirmwareName = otherName;
-			fFunctionNumber = otherFunctionNumber;
+			int otherBusNumber = otherBus->fBusNumber;
+			otherBus->fBusNumber = fBusNumber;
+			fBusNumber = otherBusNumber;
 		}	
 	}
 	
 	#if qLogging
 		gLogFile << "OpenFirmwareName: ";
 		gLogFile.WriteCharBytes ((char *) &fOpenFirmwareName[1], fOpenFirmwareName[0]);
+		gLogFile << endl_AC;
+		gLogFile << "ShortOpenFirmwareName: ";
+		gLogFile.WriteCharBytes ((char *) &fShortOpenFirmwareName[1], fShortOpenFirmwareName[0]);
 		gLogFile << endl_AC;
 		gLogFile << "Bus Number: " << fBusNumber << endl_AC;
 		gLogFile << "Device Number: " << fDeviceNumber << endl_AC;

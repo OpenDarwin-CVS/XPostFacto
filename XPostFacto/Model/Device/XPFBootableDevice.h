@@ -81,6 +81,7 @@ class XPFBootableDevice
 		bool getValidOpenFirmwareName () {return fValidOpenFirmwareName;}
 		
 		const CStr255_AC& getOpenFirmwareName () {return fOpenFirmwareName;}
+		const CStr255_AC& getShortOpenFirmwareName () {return fShortOpenFirmwareName;}
 		
 	protected:	
 
@@ -98,6 +99,7 @@ class XPFBootableDevice
 #endif
 
 		CStr255_AC fOpenFirmwareName;
+		CStr255_AC fShortOpenFirmwareName;
 		bool fValidOpenFirmwareName;
 		unsigned int fBlockCount;
 		unsigned int fBlockSize;

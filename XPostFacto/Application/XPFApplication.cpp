@@ -237,7 +237,7 @@ TDocument*
 XPFApplication::OpenNew(CommandNumber itsCommandNumber)
 {
 	#pragma unused (itsCommandNumber)
-
+	
 	initializeThrottleMenu ();
 		
 	// Check for a few things
@@ -666,9 +666,9 @@ XPFApplication::install ()
 		nvram->setBootCommand (bootCommand);
 		nvram->setBootFile (bootFile);
 		nvram->setAutoBoot (fPrefs->getAutoBoot ());
-		CChar255_AC inputDevice (fPrefs->getInputDevice ());
+		CChar255_AC inputDevice (fPrefs->getInputDeviceForInstall ());
 		nvram->setInputDevice (inputDevice);
-		CChar255_AC outputDevice (fPrefs->getOutputDevice ());
+		CChar255_AC outputDevice (fPrefs->getOutputDeviceForInstall ());
 		nvram->setOutputDevice (outputDevice);
 		
 		adjustThrottle (nvram);

@@ -58,6 +58,7 @@ class XPFPartition
 		bool fExtendsPastEightGB;
 		XPFBootableDevice *fSCSIDevice;
 		CStr255_AC fOpenFirmwareName;
+		CStr255_AC fShortOpenFirmwareName;
 		unsigned long fOffsetToHFSPlusVolume;
 		bool fBootXInstallationComplete;
 		bool fIsHFSPlusVolume;
@@ -77,6 +78,7 @@ class XPFPartition
 		unsigned int getCreationDate () {return fCreationDate;}
 		bool getExtendsPastEightGB () {return fExtendsPastEightGB;}
 		const CStr255_AC& getOpenFirmwareName () {return fOpenFirmwareName;}
+		const CStr255_AC& getShortOpenFirmwareName () {return fShortOpenFirmwareName;}
 
 		void updateBootXIfInstalled (bool forceInstall = false);
 		void installBootXIfNecessary (bool forceInstall = false);

@@ -393,9 +393,11 @@ ATADevice::ATADevice (UInt32 ataDevice, SInt16 driverRefNum)
 	if (bus) {
 		fValidOpenFirmwareName = true;
 		fOpenFirmwareName.CopyFrom (bus->getOpenFirmwareName ());
+		fShortOpenFirmwareName.CopyFrom (bus->getShortOpenFirmwareName ());
 		char buffer[16];
 		snprintf (buffer, 16, "/@%d", deviceID->devNum); 
 		fOpenFirmwareName += buffer;
+		fShortOpenFirmwareName += buffer;
 	} else {
 		fValidOpenFirmwareName = false;
 	}
@@ -404,6 +406,9 @@ ATADevice::ATADevice (UInt32 ataDevice, SInt16 driverRefNum)
 		if (bus) {
 			gLogFile << "OpenFirmwareName: ";
 			gLogFile.WriteCharBytes ((char *) &fOpenFirmwareName[1], fOpenFirmwareName[0]);
+			gLogFile << endl_AC;
+			gLogFile << "ShortOpenFirmwareName: ";
+			gLogFile.WriteCharBytes ((char *) &fShortOpenFirmwareName[1], fShortOpenFirmwareName[0]);
 			gLogFile << endl_AC;
 		} else {
 			gLogFile << "Could not find Open Firmware name for ATA bus: " << deviceID->busNum << endl_AC;
