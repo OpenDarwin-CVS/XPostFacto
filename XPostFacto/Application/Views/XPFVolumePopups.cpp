@@ -205,8 +205,7 @@ XPFHelperPopup::DoPostCreate (TDocument* itsDocument)
 {
 	fUseNoneItem = true;
 	Inherited::DoPostCreate (itsDocument);	
-	MountedVolume *vol = fPrefs->getTargetDisk ();
-	if (vol) DoUpdate (cSetHelperDisk, vol, vol, NULL);
+	DoUpdate (cSetTargetDisk, fPrefs, fPrefs->getTargetDisk (), NULL);
 }
 
 bool 
@@ -233,12 +232,24 @@ XPFHelperPopup::DoUpdate (ChangeID_AC theChange,
 	
 	switch (theChange) {
 		case cSetHelperDisk:
-		case cSetTargetDisk:
 			if (volume == fPrefs->getTargetDisk ()) {
 				if (volume) index = fVolumeList.GetIdentityItemNo (volume->getHelperDisk ());
 				if (index) index += 2;
 				SetCurrentItem (index, true);
 			}
+			break;
+		
+		case cSetTargetDisk:
+			if (volume) {
+				SetActiveState (true, true);
+				EnableItem (1, !volume->getRequiresBootHelper ());
+				for (short x = 3; x <= GetNumberOfItems (); x++) EnableItem (x, true);
+				index = fVolumeList.GetIdentityItemNo (volume);
+				if (index) EnableItem (index + 2, false);
+			} else {
+				SetActiveState (false, true);
+			}
+			DoUpdate (cSetHelperDisk, changedObject, changeData, NULL);
 			break;
 
 		default:
