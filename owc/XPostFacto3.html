@@ -1,8 +1,8 @@
-<body><h2>XPostFacto 3.0a12</h2>
+<body><h2>XPostFacto 3.0a13</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-March 3, 2004
+March 5, 2004
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -11,25 +11,19 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <p>Here's a quick link to download the latest version. 
 
 <blockquote>
-<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a12.sit">Download XPostFacto 3.0a12</a>
+<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a13.sit">Download XPostFacto 3.0a13</a>
 </blockquote>
 
-<p>Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes.  Note that the latest version is an alpha version of XPostFacto 3. There are two main outstanding issues not yet addressed in version 3.0a12:
+<p>Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes. The main outstanding issue in 3.0a13 is that built-in video is not working in Panther on the Beige G3. Also, Panther is not yet working on Kanga (the original Powerbook G3).
+
+<h4>What's new in 3.0a13</h4>
+
+<p>Here's a summary of what's new in 3.0a13.
 
 <ul>
-<li>SCSI devices are sometimes not showing up in Panther -- it appears that revisions to the SCSI drivers for Panther are required. Further information is available in the <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1161">bug report</a>.<p>
+<p><li>Hopefully, the "Panther SCSI bug" is now fixed (volumes not always appearing in Panther, especially SCSI volumes). This is by way of the PatchedBlockStorageDriver installed by XPF 3.0a13.
 
-<li>Built-in video is not yet working in Panther on the Beige G3. But version 3.0a12 now has a video driver for the built-in video on the 7300 - 9600 series.<p>
-</ul>
-
-<h4>What's new in 3.0a12</h4>
-
-<p>Here's a summary of what's different in 3.0a12.
-
-<ul>
-<p><li>A video driver for the built-in video on the 7300 - 9600 series (at least, those which have built-in video). This is the OpenControlFramebuffer.kext, which will be installed by XPF 3.0a12.
-
-<p><li>Fixed an issue with the installation procedure -- version 3.0a11 had inadvertently failed to install BootX when doing a fresh Mac OS X installation, which led to several difficulties.
+<p><li>Reverted the nvram patch for some of the Beige G3's to match Apple's version -- I had previously made some changes which appear to have caused problems for some people.
 </ul>
 
 <h4>Panther Support</h4>
@@ -39,6 +33,8 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <p>You will see a new kernel extension which handles sound support on the 7300 - 9600 -- OpenOWScreamerAudio. It is based on the AppleOWScreamerAudio that used to be included in Mac OS X, but which is no longer included in Mac OS X 10.3. Sound still has the same limitations as in pre-Panther versions (that is, for most people sound input doesn't work). Hopefully it will be possible to fix that eventually.
 
 <p>You will also see a new kernel extension called GossamerDeviceTreeUpdater, which makes some ... adjustments ... to the device tree on the Wallstreet Powerbooks and Beige G3, in order to make the Panther Installer feel more at home with its surroundings and willing to perform its duties without complaint. (In case you are thrown by my needlessly sinister tone, I should quickly inform you that these adjustments are entirely temporary and last only until you reboot).
+
+<p>There is a PatchedBlockStorageDriver.kext which (hopefully) solves the problem of SCSI volumes not always appearing in Panther.
 
 <p>There is also an OpenControlFramebuffer kernel extension which provides video support for the built-in video on the 7300 - 9600 series (for those models that have built-in video).
 
@@ -516,7 +512,19 @@ This software is provided by Other World Computing ``as is'' and any express or 
 
 <h2><a name="links">Download Links and Version History</a></h2>
 
-<dl><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a12.sit">3.0a12 (March 3, 2004)</a>
+<dl>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a13.sit">3.0a13 (March 5, 2004)</a>
+
+<dd>Here's a summary of what's new in 3.0a13.
+
+<ul>
+<p><li>Hopefully, the "<a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1161">Panther SCSI bug</a>" is now fixed (volumes not always appearing in Panther, especially SCSI volumes). This is by way of the PatchedBlockStorageDriver installed by XPF 3.0a13.
+
+<p><li>Reverted the nvram patch for some of the Beige G3's to match Apple's version -- I had previously made some changes which appear to have caused problems for some people.
+</ul>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a12.sit">3.0a12 (March 3, 2004)</a>
 
 <dd>Here's a list of what's new in version 3.0a12.
 

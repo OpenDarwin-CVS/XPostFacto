@@ -108,6 +108,9 @@ Read 'plst' (148, "AppleCurio4K78") ":Derived:Extensions:plist:AppleCurio4K78.pl
 Read 'hfsA' (149, "OpenControlFramebuffer") ":Derived:Extensions:OpenControlFramebuffer.hfs";
 Read 'plst' (149, "OpenControlFramebuffer") ":Derived:Extensions:plist:OpenControlFramebuffer.plist";
 
+Read 'hfsA' (150, "PatchedBlockStorageDriver") ":Derived:Extensions:PatchedBlockStorageDriver.hfs";
+Read 'plst' (150, "PatchedBlockStorageDriver") ":Derived:Extensions:plist:PatchedBlockStorageDriver.plist";
+
 // Startup Item
 
 Read 'hfsS' (200, "XPFStartupItem") ":Derived:StartupItems:XPFStartupItem.hfs";
