@@ -486,7 +486,7 @@ XPFPrefs::getBootCommandForInstall ()
 CStr255_AC
 XPFPrefs::getBootFileForInstall ()
 {
-	CStr255_AC bootFile (",\\tmp\\mach_kernel");
+	CStr255_AC bootFile ("-i");
 	return bootFile;
 }
 
