@@ -89,30 +89,16 @@ doSetup:
 
 			mfspr	r9,hid0							; Get the current power-saving mode
 			mfmsr	r7								; Get the current MSR
-
-			lis		r10,hi16(dozem|napm|sleepm|dpmm)	; Mask of power management bits
-			andc	r4,r9,r10						; Clean up the old power bits
 			
+			rlwinm	r4,r9,0,dpm+1,doze-1			; Clear all possible power-saving modes (also disable DPM)	
 			rlwinm	r7,r7,0,MSR_FP_BIT+1,MSR_FP_BIT-1	; Force floating point off
 			rlwinm	r7,r7,0,MSR_VEC_BIT+1,MSR_VEC_BIT-1	; Force vectors off
 			rlwinm	r5,r7,0,MSR_DR_BIT+1,MSR_DR_BIT-1	; Turn off translation		
 			rlwinm	r5,r5,0,MSR_EE_BIT+1,MSR_EE_BIT-1	; Turn off interruptions
 			
 			mtspr	hid0,r4							; Set up the HID
-			mfspr	r4,hid0							; Yes, this is silly, keep it here
-			mfspr	r4,hid0							; Yes, this is a duplicate, keep it here
-			mfspr	r4,hid0							; Yes, this is a duplicate, keep it here
-			mfspr	r4,hid0							; Yes, this is a duplicate, keep it here
-			mfspr	r4,hid0							; Yes, this is a duplicate, keep it here
-			mfspr	r4,hid0							; Yes, this is a duplicate, keep it here
+			isync
 			
-			mtmsr	r5								; Translation and all off
-			isync									; Toss prefetch
-
-			mfspr	r8,l2cr							; Get the L2CR
-			rlwinm.	r2,r8,0,l2e,l2e					; see if it is enabled
-			beq		ciinvdl2						; if not, no reason to flush
-	
 			cmplwi	r11,PROCESSOR_VERSION_750		; only do dssall if appropriate
 			beq		cinoDSS
 			cmplwi	r11,PROCESSOR_VERSION_750FX
@@ -122,8 +108,13 @@ doSetup:
 			sync
 			
 cinoDSS:
+
+			mtmsr	r5								; Translation and all off
+			sync
+			isync									; Toss prefetch
+
+			mfspr	r8,l2cr							; Get the L2CR
 			
-							
 ;
 ; flush the L2 Cache
 ;
@@ -161,7 +152,7 @@ ciswfl2dob:
 			
 ciswfl2dod:
 			rlwinm	r0,r0,27,5,31					; Get the number of lines
-			lis		r10,0xFF80						; Dead recon ROM for now
+			lis		r10,0xFFE0						; Dead recon ROM for now
 			mtctr	r0								; Set the number of lines
 			
 ciswfldl2a:	lwz		r0,0(r10)						; Load something to flush something
@@ -210,7 +201,7 @@ ciinvdl2a:	mfspr	r2,l2cr							; Get the L2CR
 											
 			sync
 			mtspr	l2cr,r8							; Turn off the invalidate request
-						
+			
 cinol2:				
 			cmplwi	r3,0							; Should the L2 be all the way off?
 			beq		cinoexit						; Yes, done with L2
@@ -235,25 +226,23 @@ cinol2:
 			rlwinm	r10,r10,4,30,31						 
 			slw		r0,r0,r10						; Set 256KB, 512KB, 1MB, or 2MB
 			rlwinm	r0,r0,27,5,31					; Get the number of lines
-			lis		r10,0xFF80						; Dead recon ROM for now
+			lis		r10,0xFFE0						; Dead recon ROM for now
 			mtctr	r0								; Set the number of lines
 			
 citestwrl2:	
 			dcbz	0,r10							; write zero to the cache line
-			sync
 			stw		r10,0(r10)						; write the address to the cache line
-			sync
 			dcbf	0,r10							; flush the write to the L2 cache
-			sync
 			addi	r10,r10,32						; Next line
 			bdnz	citestwrl2						; Do the lot...
+			sync
 			
 ;
 ;	Read the test values back from the cache.
 ;
 			
 			li		r4,0							; counter for the "successful" lines
-			lis		r10,0xFF80						; Dead recon ROM for now
+			lis		r10,0xFFE0						; Dead recon ROM for now
 			mtctr	r0								; set the number of lines
 			
 citestrdl2:
@@ -262,13 +251,12 @@ citestrdl2:
 			bne		citestfail						; branch around the increment
 			addi	r4,r4,1							; increment the "success" line counter
 citestfail:	
-			sync
 			dcbi	0,r10							; invalidate as we go
-			sync
 			addi	r10,r10,32						; next line
 			bdnz	citestrdl2						; do the lot
 
 			slwi	r3,r4,5							; return how much SRAM tested OK (multiply by 32)
+			sync									; make sure all memory stuff complete
 		
 ;
 ;	Clean up from the test. Basically, just turn off the cache. 
