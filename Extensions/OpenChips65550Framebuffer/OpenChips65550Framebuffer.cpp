@@ -181,7 +181,7 @@ OpenChips65550Framebuffer::getInformationForDisplayMode (IODisplayModeID display
 
     bzero (info, sizeof (*info));
 
-    info->maxDepthIndex	= kDepth16Bit;
+    info->maxDepthIndex	= kDepth8Bit; // until I get 16 bit working properly
     info->nominalWidth = 800;
     info->nominalHeight	= 600;
     info->refreshRate = 0x0;
