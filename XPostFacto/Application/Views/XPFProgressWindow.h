@@ -61,7 +61,8 @@ public:
 	void setProgressMin (ViewCoordinate min);
 	void setProgressMax (ViewCoordinate max);
 	void setProgressValue (ViewCoordinate value);
-	
+
+	void displayException (CException_AC& ex);	
 	void setFinished ();
 	
 private:
@@ -75,9 +76,11 @@ private:
 	CStr255_AC fDescriptionText;
 	CStr255_AC fStatusText;
 	ViewCoordinate fMin, fMax, fValue;
+	CException_AC fException;
 	
 	bool fSetDescription, fSetStatus, fSetMin, fSetMax, fSetValue;
 	bool fFinished;
+	bool fHasException;
 	
 	CCooperativeThread_AC *fThread;
 };

@@ -41,6 +41,7 @@ advised of the possibility of such damage.
 #include "HFSPlusArchive.h"
 #include "XPostFacto.h"
 #include "XPFProgressWindow.h"
+#include "UThreads.h"
 
 // String constants
 
@@ -83,7 +84,12 @@ XPFCommandThread::XPFCommandThread (XPFThreadedCommand *theCommand)
 void
 XPFCommandThread::Run ()
 {
-	fCommand->DoItThreaded ();
+	try {
+		fCommand->DoItThreaded ();
+	}
+	catch (CException_AC& ex) {
+		fCommand->getProgressWindow ()->displayException (ex);
+	}
 }
 
 // ------------------
@@ -116,7 +122,7 @@ void
 XPFThreadedCommand::DoIt ()
 {
 	fProgressWindow = (XPFProgressWindow *) TViewServer::fgViewServer->NewTemplateWindow (kProgressWindow, NULL);
-	CCooperativeThread_AC *thread = TH_new XPFCommandThread (this);
+	XPFCommandThread *thread = TH_new XPFCommandThread (this);
 	fRunner = thread;
 	fProgressWindow->setThread (thread);
 	fProgressWindow->PoseModally ();
@@ -303,6 +309,15 @@ XPFThreadedCommand::installExtensionsWithRootDirectory (FSRef *rootDirectory)
 	
 	ThrowIfOSErr_AC (getOrCreateSystemLibraryExtensionsDirectory (rootDirectory, &systemLibraryExtensionsFolder));
 	copyHFSArchivesTo ('hfsA', &systemLibraryExtensionsFolder);
+}
+
+void
+XPFThreadedCommand::installSecondaryExtensionsWithRootDirectory (FSRef *rootDirectory)
+{
+	FSRef libraryExtensionsFolder;
+	
+	ThrowIfOSErr_AC (getOrCreateLibraryExtensionsDirectory (rootDirectory, &libraryExtensionsFolder));
+	copyHFSArchivesTo ('hfsA', &libraryExtensionsFolder);
 }
 
 void

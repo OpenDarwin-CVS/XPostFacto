@@ -47,6 +47,7 @@ XPFProgressWindow::XPFProgressWindow (WindowRef itsWMgrWindow, bool canResize, b
 	fSetMax = false;
 	fSetValue = false;
 	fFinished = false;
+	fHasException = false;
 	fThread = NULL;
 	
 	gLogFile << "XPFProgressWindow::XPFProgressWindow called\n" << endl_AC;
@@ -116,6 +117,13 @@ XPFProgressWindow::setFinished ()
 	fThread = NULL;
 }
 
+void 
+XPFProgressWindow::displayException (CException_AC& ex)
+{
+	fException = ex;
+	fHasException = true;
+}
+
 bool 
 XPFProgressWindow::DoIdle (IdlePhase phase)
 {
@@ -125,6 +133,13 @@ XPFProgressWindow::DoIdle (IdlePhase phase)
 		fOkay->SetActiveState (true, true);
 		fCancel->SetActiveState (false, true);
 		fFinished = false;
+	}
+	
+	if (fHasException) {
+		fHasException = false;
+		ErrorAlert (fException.GetError (), fException.GetExceptionMessage ());
+		TDialogBehavior *itsDialog = GetDialogBehavior ();
+		if (itsDialog) itsDialog->Dismiss ('cncl', false);
 	}
 	
 	if (fSetDescription) {

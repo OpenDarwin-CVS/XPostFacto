@@ -68,6 +68,8 @@ class XPFThreadedCommand : public TCommand {
 		
 		void DoIt ();											
 		virtual void DoItThreaded () = 0;
+
+		XPFProgressWindow* getProgressWindow () {return fProgressWindow;}
 			
 		static pascal Boolean CopyFilterGlue (void *refCon, const FSRef *src);
 	
@@ -90,6 +92,7 @@ class XPFThreadedCommand : public TCommand {
 		OSErr getBootXFSRef (FSRef *rootDirectory, FSRef *result);
 		
 		void installExtensionsWithRootDirectory (FSRef *rootDirectory);
+		void installSecondaryExtensionsWithRootDirectory (FSRef *rootDirectory);
 		void installStartupItemWithRootDirectory (FSRef *rootDirectory);
 
 		void copyHFSArchivesTo (ResType type, FSRef *directory);
