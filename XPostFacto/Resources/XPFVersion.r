@@ -64,11 +64,11 @@ RESOURCE 'vers' (3,
 	purgeable) {
 	0x03,
 	0x00,
-	beta,
-	0x02,
+	final,
+	0x00,
 	verUs,
-	"3.0b2",
-	"3.0b2, © 2001 - 2004 Other World Computing"
+	"3.0",
+	"3.0, © 2001 - 2004 Other World Computing"
 };
 
 RESOURCE 'vers' (4,

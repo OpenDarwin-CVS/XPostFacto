@@ -800,15 +800,8 @@ static long GetBootPaths(void)
     gBootFile[size] = '\0';
 
 	// Added by ryan.rempel@utoronto.ca
-	// See if it starts with a comma. In that case, prepend the boot-device
-	// This saves me a little NVRAM space (well, in some cases, a fair bit)
-	// And if it starts with \tmp, add the \private as well (again, to save NVRAM space)
-	// And first see if it is the special "-i", which saves even more NVRAM.
-	if (!strcmp (gBootFile, "-i")) {
-		strcpy (gBootFile, ",\\private\\tmp\\mach_kernel");
-	}
-	// And see if it is the special -h, for the use of a helper disk
-	if (!strcmp (gBootFile, "-h")) {
+	// Look for the -h, to see if we're using a helper
+	if (strstr (gBootFile, "-h")) {
 		char ofBootArgs[128];
 		char *pos, *end;
 		
@@ -839,12 +832,19 @@ static long GetBootPaths(void)
 			}
 			sprintf (gBootFile, ",\\.XPostFacto\\%s\\mach_kernel", pos);
 		}
+	} else {
+		// If not using a helper, then check for the old -i scheme
+		if (strstr (gBootFile, "-i")) strcpy (gBootFile, ",\\private\\tmp\\mach_kernel");
 	}
+	
+	// If it starts with /tmp, then add /private
 	if (!strncmp (gBootFile, tmp, strlen (tmp))) {
 		int privSize = strlen (priv);
 		memcpy (&gBootFile[privSize + 1], &gBootFile[1], strlen (gBootFile));
 		memcpy (&gBootFile[1], priv, privSize);
 	}
+	
+	// If it starts with a comma, add the bootdevice
 	if (gBootFile[0] == ',') {
 		int bootDeviceSize = strlen (gBootDevice);
 		memcpy (&gBootFile[bootDeviceSize], gBootFile, strlen (gBootFile) + 1);

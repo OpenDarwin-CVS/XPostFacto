@@ -1029,7 +1029,7 @@ CStr255_AC
 XPFPrefs::getBootFile (bool forInstall)
 {
 	if (fRebootInMacOS9) return CStr255_AC ("");
-	if (forInstall) return CStr255_AC ("-h");
+	if (forInstall) return CStr255_AC ("-h -i");
 	if (!getTargetDisk ()) return CStr255_AC ("");
 	if (getTargetDisk ()->getHelperDisk ()) return CStr255_AC ("-h");
 	return CStr255_AC ("");

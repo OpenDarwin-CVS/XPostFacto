@@ -43,63 +43,56 @@ bool
 GossamerDeviceTreeUpdater::start (IOService *provider)
 {
 	if (!super::start (provider)) return false;
-	
-	IOCreateThread (&updateDeviceTree, provider);
-	
-	// This is temporary, until I get it working
-//	if (!IODTMatchNubWithKeys (provider, "'AAPL,PowerBook1998'")) disableBuiltInVideo ();
-	
+	IOCreateThread (&updateDeviceTree, this);
 	return true;
-}
-
-#define kDisplayDisabled "display,disabled"
-
-void
-GossamerDeviceTreeUpdater::disableBuiltInVideo ()
-{
-	IORegistryIterator *iter = IORegistryIterator::iterateOver (gIODTPlane, kIORegistryIterateRecursively);
-	if (iter == NULL) return;
-		
-	IORegistryEntry *entry = iter->getCurrentEntry ();
-	while (entry) {
-		OSData *deviceType = OSDynamicCast (OSData, entry->getProperty ("device_type"));
-		if (deviceType && !strcmp ((const char *) deviceType->getBytesNoCopy (), "display")) {
-			OSData *driver = OSDynamicCast (OSData, entry->getProperty ("driver,AAPL,MacOS,PowerPC"));
-			if (!driver) {
-				OSData *disableDeviceType = OSData::withBytes (kDisplayDisabled, strlen (kDisplayDisabled) + 1);
-				entry->setProperty ("device_type", disableDeviceType);
-				disableDeviceType->release ();
-			}
-		}
-		entry = iter->getNextObject ();
-	} 
-	iter->release ();
 }
 
 void
 GossamerDeviceTreeUpdater::updateDeviceTree (void *argument)
 {
-	IOSleep (45 * 1000);
+	IOService *self = (IOService *) argument;
+	IOService *provider = self->getProvider ();
+	provider->waitQuiet ();
 	
-	IOLog ("GosssamerDeviceTreeUpdater::updateDeviceTree\n");
+	IORegistryEntry *options = provider->childFromPath (("options"), gIODTPlane);
+	if (!options) {
+		IOLog ("GossamerDeviceTreeUpdater: Could not find /options\n");
+		return;
+	}
 	
-	IOService *provider = (IOService *) argument;
-
-	char buffer [36];
-	buffer[0] = 0;
-		
-	if (IODTMatchNubWithKeys (provider, "'AAPL,Gossamer'"))
-		strcpy (buffer, "OPEN,Gossamer");
-	else if (IODTMatchNubWithKeys (provider, "'AAPL,PowerMac G3'"))
-		strcpy (buffer, "OPEN,PowerMac G3");
-	else if (IODTMatchNubWithKeys (provider, "'AAPL,PowerBook1998'"))
-		strcpy (buffer, "OPEN,PowerBook1998");
-		
-	if (buffer[0]) {
-		provider->setName (buffer);
-		strcpy (buffer + strlen (buffer) + 1, "MacRISC");
-		OSData *data = OSData::withBytes (buffer, strlen (buffer) + strlen ("MacRISC") + 2);
-		provider->setProperty ("compatible", data);
-		data->release ();
+	bool update = false;
+	OSString *bootfile = OSDynamicCast (OSString, options->getProperty ("boot-file"));
+	if (bootfile) {
+		const char *c = bootfile->getCStringNoCopy ();
+		while (*c) {
+			if ((c[0] == '-') && (c[1] == 'i')) {
+				update = true;
+				break;
+			}
+			c++;
+		}
+	} else {
+		IOLog ("GossamerDeviceTreeUpdater: Could not find boot-file\n");
+		return;
+	}
+	
+	if (update) {
+		char buffer [36];
+		buffer[0] = 0;
+			
+		if (IODTMatchNubWithKeys (provider, "'AAPL,Gossamer'"))
+			strcpy (buffer, "OPEN,Gossamer");
+		else if (IODTMatchNubWithKeys (provider, "'AAPL,PowerMac G3'"))
+			strcpy (buffer, "OPEN,PowerMac G3");
+		else if (IODTMatchNubWithKeys (provider, "'AAPL,PowerBook1998'"))
+			strcpy (buffer, "OPEN,PowerBook1998");
+			
+		if (buffer[0]) {
+			provider->setName (buffer);
+			strcpy (buffer + strlen (buffer) + 1, "MacRISC");
+			OSData *data = OSData::withBytes (buffer, strlen (buffer) + strlen ("MacRISC") + 2);
+			provider->setProperty ("compatible", data);
+			data->release ();
+		}
 	}
 }
