@@ -47,14 +47,17 @@ XPFLog::XPFLog (ConstStr255Param fileName)
 {
 	fViewStream = NULL;
 	fActive = false;
-	SInt16 logVRefNum;
-	SInt32 logDirID;
-	
+
 #ifdef __MACH__
+	#pragma unused (fileName)
+	
 	fBuffer[0] = 0;
 	openlog ("XPostFacto", 0, LOG_USER);
 #else	
 	try {
+		SInt16 logVRefNum;
+		SInt32 logDirID;
+	
 		ThrowIfOSErr_AC (FindFolder (kOnSystemDisk, kPreferencesFolderType, true, &logVRefNum, &logDirID));
 		
 		ThrowIfOSErr_AC (fLogFile.SpecifyWithTrio (logVRefNum, logDirID, "\p:Unsupported UtilityX Log"));
