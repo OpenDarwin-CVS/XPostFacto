@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2003
+Copyright (c) 2003 - 2004
 Other World Computing
 All rights reserved
 
@@ -33,6 +33,7 @@ advised of the possibility of such damage.
 
 #include "XPFIODevice.h"
 #include "XPFLog.h"
+#include "OFAliases.h"
 
 XPFIODeviceList XPFIODevice::gInputDeviceList;
 XPFIODeviceList XPFIODevice::gOutputDeviceList;
@@ -99,7 +100,7 @@ XPFIODevice::InputDeviceWithShortOpenFirmwareName (char *ofName)
 {
 	XPFIODevice *retVal = NULL;
 	for (XPFIODeviceIterator iter (GetInputDeviceList ()); iter.Current(); iter.Next()) {
-		if (iter->getOpenFirmwareName (true) == ofName) {
+		if (OFAliases::MatchAliases ((CChar255_AC) iter->getOpenFirmwareName (true), ofName)) {
 			retVal = iter.Current ();
 			break;
 		}		
@@ -112,7 +113,7 @@ XPFIODevice::OutputDeviceWithShortOpenFirmwareName (char *ofName)
 {
 	XPFIODevice *retVal = NULL;
 	for (XPFIODeviceIterator iter (GetOutputDeviceList ()); iter.Current(); iter.Next()) {
-		if (iter->getOpenFirmwareName (true) == ofName) {
+		if (OFAliases::MatchAliases ((CChar255_AC) iter->getOpenFirmwareName (true), ofName)) {
 			retVal = iter.Current ();
 			break;
 		}		
@@ -125,7 +126,7 @@ XPFIODevice::InputDeviceWithOpenFirmwareName (char *ofName)
 {
 	XPFIODevice *retVal = NULL;
 	for (XPFIODeviceIterator iter (GetInputDeviceList ()); iter.Current(); iter.Next()) {
-		if (iter->getOpenFirmwareName (false) == ofName) {
+		if (OFAliases::MatchAliases ((CChar255_AC) iter->getOpenFirmwareName (false), ofName)) {
 			retVal = iter.Current ();
 			break;
 		}		
@@ -138,7 +139,7 @@ XPFIODevice::OutputDeviceWithOpenFirmwareName (char *ofName)
 {
 	XPFIODevice *retVal = NULL;
 	for (XPFIODeviceIterator iter (GetOutputDeviceList ()); iter.Current(); iter.Next()) {
-		if (iter->getOpenFirmwareName (false) == ofName) {
+		if (OFAliases::MatchAliases ((CChar255_AC) iter->getOpenFirmwareName (false), ofName)) {
 			retVal = iter.Current ();
 			break;
 		}		

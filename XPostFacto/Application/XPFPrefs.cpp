@@ -299,28 +299,41 @@ XPFPrefs::getPrefsFromNVRAM ()
 		return;	
 	}
 	
-	// For most settings, we use what is in our preferences rather than what is in NVRAM.
-	// But, we ask about saving those preferences if NVRAM is different 
+	// For most settings, we use what is in our preferences rather than what is in NVRAM,
+	// unless there is a setting in NVRAM that is likely meant to override our file setting.
+	// For any mismatch, we force the app to ask about saving. 
 	
 	if (fAutoBoot != nvram->getBooleanValue ("auto-boot?")) fForceAskSave = true;;	
 	if (fBootInSingleUserMode != (strstr (bootCommand, " -s") != 0)) fForceAskSave = true;
 	if (fBootInVerboseMode != (strstr (bootCommand, " -v") != 0)) fForceAskSave = true;
 		
 	char *debugString = strstr (bootCommand, "debug=");
-	UInt32 debug = 0;
 	if (debugString) {
 		debugString += strlen ("debug=");
-		debug = strtoul (debugString, NULL, 0);
+		UInt32 debug = strtoul (debugString, NULL, 0);
+		// If there is an actual debug string in NVRAM, assume we want to use it.
+		if (fDebug != debug) {
+			fDebug = debug;
+			fForceAskSave = true;
+		}
+	} else {
+		// If no debug string, then force save if we have a debug value
+		if (fDebug) fForceAskSave = true;
 	}
-	if (fDebug != debug) fForceAskSave = true;
 	
 	char *romndrvstring = strstr (bootCommand, "romndrv=");
-	UInt32 romndrv = 0;
 	if (romndrvstring) {
 		romndrvstring += strlen ("romndrv=");
-		romndrv = strtoul (romndrvstring, NULL, 0);
+		UInt32 romndrv = strtoul (romndrvstring, NULL, 0);
+		// If there is a romndrv= string, assume we want to use it
+		if (fUseROMNDRV != romndrv) {
+			fUseROMNDRV = romndrv;
+			fForceAskSave = true;
+		}
+	} else {
+		// If no romndrv= string, then force save if we have a romndrv value
+		if (fUseROMNDRV) fForceAskSave = true;
 	}
-	if (fUseROMNDRV != romndrv) fForceAskSave = true;
 	
 	// For the target disk and helper disk, we use what is in NVRAM rather than preferences file
 	// But, once again, we ask to save preferences if they are different
@@ -330,7 +343,7 @@ XPFPrefs::getPrefsFromNVRAM ()
 	
 	char *rdString = strstr (bootCommand, "rd=*");
 	if (rdString) {
-		char rootPath[256];
+		char rootPath[1024];
 		strcpy (rootPath, rdString + strlen ("rd=*"));
 		char *pos = strchr (rootPath, ' ');
 		if (pos) *pos = 0;
@@ -359,9 +372,38 @@ XPFPrefs::getPrefsFromNVRAM ()
 		fForceAskSave = true;
 	}
 	
-	// input device and output device
-	if (getInputDevice (false) != inputDevice) fForceAskSave = true;
-	if (getOutputDevice (false) != outputDevice) fForceAskSave = true;
+	// For input and output devices, we'll use the NVRAM setting if there is no pref setting
+	XPFIODevice *input = XPFIODevice::InputDeviceWithOpenFirmwareName (inputDevice);
+	XPFIODevice *output = XPFIODevice::OutputDeviceWithOpenFirmwareName (outputDevice);
+	
+	if (input) {
+		gLogFile << "Got Input device from NVRAM" << endl_AC;
+		// If we don't have an input-device in prefs, use the one from NVRAM
+		if (!fInputDevice) {
+			gLogFile << "No input device, so setting" << endl_AC;
+			fInputDevice = input;
+			fForceAskSave = true;
+		} else {
+			if (fInputDevice != input) fForceAskSave = true;
+		}
+	} else {
+		// If we have an input device that is not in NVRAM, then force save
+		if (fInputDevice) fForceAskSave = true;
+	}
+	
+	if (output) {
+		gLogFile << "Got Output device from NVRAM" << endl_AC;
+		// If we don't have an output-device in prefs, use the one from NVRAM
+		if (!fOutputDevice) {
+			fOutputDevice = output;
+			fForceAskSave = true;
+		} else {
+			if (fOutputDevice != output) fForceAskSave = true;
+		}
+	} else {
+		// If we have an output device that is not in NVRAM, then force save
+		if (fOutputDevice) fForceAskSave = true;
+	}
 	
 	// throttle
 	UInt32 throttleVal = 0;
@@ -379,8 +421,15 @@ XPFPrefs::getPrefsFromNVRAM ()
 	} else {
 		throttleVal = 0;
 	}
-	gLogFile << fThrottle << " " << throttleVal << endl_AC;
-	if (fThrottle != throttleVal) fForceAskSave = true;
+	
+	if (throttleVal) {
+		if (fThrottle != throttleVal) {
+			fThrottle = throttleVal;
+			fForceAskSave = true;
+		}
+	} else {
+		if (fThrottle) fForceAskSave = true;
+	}
 }
 
 void 
