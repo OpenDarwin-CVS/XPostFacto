@@ -112,31 +112,40 @@ OSXNVRAM::writeToNVRAM ()
 			return -1;
 		}
 			
-		char *arguments[32];
-		BlockZero_AC (arguments, sizeof (char *) * 32);
+		XPFSetUID myUID (0);
 		
-		unsigned argNumber = 0;
+		mach_port_t iokitPort;
+		kern_return_t status = IOMasterPort (MACH_PORT_NULL, &iokitPort);
+		io_registry_entry_t options = IORegistryEntryFromPath (iokitPort, "IODeviceTree:/options");
+		ThrowIfNULL_AC ((void *) options);
+			
 		for (TemplateAutoList_AC <NVRAMValue>::Iterator iter (&fNVRAMValues); (current = iter.Current ()); iter.Next ()) {
-			arguments[argNumber] = new char [strlen (current->getName ()) + strlen (current->getStringValue ()) + 2];
-			sprintf (arguments[argNumber], "%s=%s", current->getName (), current->getStringValue ());
-			argNumber++;
-		}
-		
-		FILE *pipe;
-		XPFAuthorization::ExecuteWithPrivileges ("/usr/sbin/nvram", arguments, &pipe);		
-		char buffer[256];
-		while (fread (buffer, 256, 1, pipe)) {
-			gLogFile << buffer;
-		}	
-		fclose (pipe);
-		
-		for (argNumber = 0; argNumber < 32; argNumber++) {
-			if (arguments[argNumber]) {
-				delete [] arguments[argNumber];
-			} else {
-				break;
+			CFStringRef nameRef = CFStringCreateWithCString (kCFAllocatorDefault, current->getName (), kCFStringEncodingMacRoman); 
+			CFTypeRef valueRef;
+
+			switch (current->getValueType ()) {
+				case kBooleanValue:
+					valueRef = current->getBooleanValue () ? kCFBooleanTrue : kCFBooleanFalse;
+					break;
+					
+				case kNumericValue:
+					long number = current->getNumericValue ();
+					valueRef = CFNumberCreate (kCFAllocatorDefault, kCFNumberSInt32Type, &number); 
+					break;
+					
+				case kStringValue:
+					valueRef = CFStringCreateWithCString (kCFAllocatorDefault, current->getStringValue (), kCFStringEncodingMacRoman); 
+					break;
 			}
+			
+			IORegistryEntrySetCFProperty (options, nameRef, valueRef); 
+			
+			CFRelease (nameRef);
+			CFRelease (valueRef);
 		}
+		
+		IOObjectRelease (options);
 	}
+	
 	return 0;
 }
