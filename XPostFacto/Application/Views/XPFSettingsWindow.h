@@ -49,7 +49,6 @@ class XPFSettingsWindow : public TWindow
 
 public:
 
-	virtual~ XPFSettingsWindow();		
 	virtual void DoPostCreate(TDocument* itsDocument);
 	virtual void DoEvent(EventNumber eventNumber,
 						TEventHandler* source,

@@ -82,7 +82,6 @@ XPFVolumeInspectorWindow::XPFVolumeInspectorWindow (WindowRef itsWMgrWindow, boo
 XPFVolumeInspectorWindow::~XPFVolumeInspectorWindow()
 {
 	gInstance = NULL;
-	RemoveAllDependencies();
 }
 
 void 

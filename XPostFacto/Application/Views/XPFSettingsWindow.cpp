@@ -53,11 +53,6 @@ advised of the possibility of such damage.
 
 MA_DEFINE_CLASS(XPFSettingsWindow);
 
-XPFSettingsWindow::~XPFSettingsWindow()
-{
-	RemoveAllDependencies();
-}
-
 void
 XPFSettingsWindow::constructIODeviceMenu (TPopup *menu, const XPFIODeviceList *list)
 {

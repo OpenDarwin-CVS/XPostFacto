@@ -51,11 +51,6 @@ advised of the possibility of such damage.
 
 #define Inherited TScroller
 
-XPFVolumeList::~XPFVolumeList()
-{
-	RemoveAllDependencies();
-}
-
 void 
 XPFVolumeList::DoPostCreate(TDocument* itsDocument)
 {

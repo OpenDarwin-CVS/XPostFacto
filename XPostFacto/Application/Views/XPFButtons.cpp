@@ -48,11 +48,6 @@ advised of the possibility of such damage.
 
 MA_DEFINE_CLASS (XPFInstallButton);
 
-XPFInstallButton::~XPFInstallButton ()
-{
-	RemoveAllDependencies ();
-}
-
 void 
 XPFInstallButton::DoPostCreate (TDocument* itsDocument)
 {
@@ -117,11 +112,6 @@ XPFInstallButton::DoUpdate (ChangeID_AC theChange,
 
 MA_DEFINE_CLASS (XPFRestartButton);
 
-XPFRestartButton::~XPFRestartButton ()
-{
-	RemoveAllDependencies ();
-}
-
 void 
 XPFRestartButton::DoPostCreate (TDocument* itsDocument)
 {
@@ -183,11 +173,6 @@ XPFRestartButton::DoUpdate (ChangeID_AC theChange,
 
 MA_DEFINE_CLASS (XPFMacOS9Button);
 
-XPFMacOS9Button::~XPFMacOS9Button ()
-{
-	RemoveAllDependencies ();
-}
-
 void 
 XPFMacOS9Button::DoPostCreate (TDocument* itsDocument)
 {
@@ -234,11 +219,6 @@ XPFMacOS9Button::DoUpdate (ChangeID_AC theChange,
 #define Inherited TRadio
 
 MA_DEFINE_CLASS (XPFMacOSXButton);
-
-XPFMacOSXButton::~XPFMacOSXButton ()
-{
-	RemoveAllDependencies ();
-}
 
 void 
 XPFMacOSXButton::DoPostCreate (TDocument* itsDocument)

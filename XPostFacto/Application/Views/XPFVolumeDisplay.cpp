@@ -59,7 +59,6 @@ MA_DEFINE_CLASS(XPFVolumeDisplay);
 XPFVolumeDisplay::~XPFVolumeDisplay()
 {
 	ReleaseIconRef (fIconRef);
-	RemoveAllDependencies();
 }
 
 TDrawingEnvironment* 

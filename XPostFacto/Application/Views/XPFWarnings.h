@@ -42,7 +42,6 @@ class XPFInstallWarning : public TStaticText {
 
 public:
 
-	virtual	~XPFInstallWarning ();		
 	virtual void DoPostCreate (TDocument* itsDocument);
 	virtual void DoUpdate	(ChangeID_AC theChange, 
 					MDependable_AC* changedObject,
@@ -62,7 +61,6 @@ class XPFRestartWarning : public TStaticText {
 
 public:
 
-	virtual	~XPFRestartWarning ();		
 	virtual void DoPostCreate (TDocument* itsDocument);
 	virtual void DoUpdate	(ChangeID_AC theChange, 
 					MDependable_AC* changedObject,

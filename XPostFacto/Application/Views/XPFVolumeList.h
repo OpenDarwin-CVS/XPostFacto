@@ -47,7 +47,6 @@ class XPFVolumeList : public TScroller
 
 public:
 
-	virtual	~XPFVolumeList();		
 	virtual void DoPostCreate(TDocument* itsDocument);
 	
 	void DoUpdate	(ChangeID_AC theChange, 

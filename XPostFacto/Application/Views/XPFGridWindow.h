@@ -44,7 +44,7 @@ class XPFGridWindow : public TWindow
 public:
 
 	virtual void DoPostCreate(TDocument* itsDocument);
-		
+			
 };
 
 #endif

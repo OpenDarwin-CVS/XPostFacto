@@ -42,7 +42,6 @@ class XPFSettingsText : public TStaticText {
 
 public:
 
-	virtual	~XPFSettingsText ();		
 	virtual void DoPostCreate (TDocument* itsDocument);
 	virtual void DoUpdate	(ChangeID_AC theChange, 
 					MDependable_AC* changedObject,

@@ -42,7 +42,6 @@ class XPFInstallButton : public TButton {
 
 public:
 
-	virtual	~XPFInstallButton ();		
 	virtual void DoPostCreate(TDocument* itsDocument);
 	
 	virtual void DoEvent	(EventNumber eventNumber,
@@ -65,7 +64,6 @@ class XPFRestartButton : public TButton {
 
 public:
 
-	virtual	~XPFRestartButton ();		
 	virtual void DoPostCreate(TDocument* itsDocument);
 	
 	virtual void DoEvent	(EventNumber eventNumber,
@@ -88,7 +86,6 @@ class XPFMacOS9Button : public TRadio {
 
 public:
 
-	virtual	~XPFMacOS9Button ();		
 	virtual void DoPostCreate(TDocument* itsDocument);
 	
 	virtual void DoEvent	(EventNumber eventNumber,
@@ -108,7 +105,6 @@ class XPFMacOSXButton : public TRadio {
 
 public:
 
-	virtual	~XPFMacOSXButton ();		
 	virtual void DoPostCreate(TDocument* itsDocument);
 	
 	virtual void DoEvent	(EventNumber eventNumber,

@@ -47,11 +47,6 @@ advised of the possibility of such damage.
 
 MA_DEFINE_CLASS (XPFInstallWarning);
 
-XPFInstallWarning::~XPFInstallWarning ()
-{
-	RemoveAllDependencies ();
-}
-
 void 
 XPFInstallWarning::DoPostCreate (TDocument* itsDocument)
 {
@@ -87,11 +82,6 @@ XPFInstallWarning::DoUpdate (ChangeID_AC theChange,
 #define Inherited TStaticText
 
 MA_DEFINE_CLASS (XPFRestartWarning);
-
-XPFRestartWarning::~XPFRestartWarning ()
-{
-	RemoveAllDependencies ();
-}
 
 void 
 XPFRestartWarning::DoPostCreate (TDocument* itsDocument)

@@ -46,11 +46,6 @@ advised of the possibility of such damage.
 
 MA_DEFINE_CLASS (XPFSettingsText);
 
-XPFSettingsText::~XPFSettingsText ()
-{
-	RemoveAllDependencies ();
-}
-
 void 
 XPFSettingsText::DoPostCreate (TDocument* itsDocument)
 {

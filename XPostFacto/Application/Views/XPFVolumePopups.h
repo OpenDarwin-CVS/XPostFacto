@@ -45,7 +45,6 @@ class XPFVolumePopup : public TPopup
 
 public:
 
-	virtual	~XPFVolumePopup ();		
 	virtual void DoPostCreate(TDocument* itsDocument);
 	
 	virtual void DoEvent	(EventNumber eventNumber,

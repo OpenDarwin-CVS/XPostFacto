@@ -49,11 +49,6 @@ advised of the possibility of such damage.
 #undef Inherited
 #define Inherited TPopup
 
-XPFVolumePopup::~XPFVolumePopup()
-{
-	RemoveAllDependencies();
-}
-
 void 
 XPFVolumePopup::DoPostCreate(TDocument* itsDocument)
 {
