@@ -62,6 +62,7 @@ typedef struct XPFDeviceFiles {
 	XPFBootFile kernel;
 	XPFBootFile extensions;
 	XPFBootFile extensionsCache;
+	XPFBootFile mountPoint;
 } XPFDeviceFiles;
 
 XPFDeviceFiles rootDeviceFiles;
@@ -468,10 +469,12 @@ initialize_everything ()
 		asprintfcompat (&rootDeviceFiles.kernel.path, "%s/mach_kernel", rootDevicePath);
 		asprintfcompat (&rootDeviceFiles.extensions.path, "%s/System/Library/Extensions", rootDevicePath);
 		asprintfcompat (&rootDeviceFiles.extensionsCache.path, "%s/System/Library/Extensions.mkext", rootDevicePath);
+		asprintfcompat (&rootDeviceFiles.mountPoint.path, "%s", rootDevicePath);
 		
 		asprintfcompat (&bootDeviceFiles.kernel.path, "%s/mach_kernel", bootDevicePath);
 		asprintfcompat (&bootDeviceFiles.extensions.path, "%s/System/Library/Extensions", bootDevicePath);
 		asprintfcompat (&bootDeviceFiles.extensionsCache.path, "%s/System/Library/Extensions.mkext", bootDevicePath);
+		asprintfcompat (&bootDeviceFiles.mountPoint.path, "%s", bootDevicePath);
 		
 		// Fill in the "helper" stat stuff. When someone writes to the helper, it's their 
 		// responsiblity to restart us.		
@@ -484,6 +487,7 @@ initialize_everything ()
 void
 statDeviceFiles (XPFDeviceFiles *deviceFiles)
 {
+	statBootFile (&deviceFiles->mountPoint);
 	statBootFile (&deviceFiles->kernel);
 	statBootFile (&deviceFiles->extensionsCache);
 	statBootFile (&deviceFiles->extensions);
@@ -577,9 +581,13 @@ pollForChanges ()
 		
 		statDeviceFiles (&rootDeviceFiles);
 		
-		checkForChangesBetween (&rootDeviceFiles.kernel, &bootDeviceFiles.kernel);
-		checkForChangesBetween (&rootDeviceFiles.extensions, &bootDeviceFiles.extensions);
-		checkForChangesBetween (&rootDeviceFiles.extensionsCache, &bootDeviceFiles.extensionsCache);
+		// If the (proposed) root device is not mounted, then we skip the rest of the changes
+		// We keep checking, though, in case it is remounted 
+		if (rootDeviceFiles.mountPoint.mtime.tv_sec != 0) {
+			checkForChangesBetween (&rootDeviceFiles.kernel, &bootDeviceFiles.kernel);
+			checkForChangesBetween (&rootDeviceFiles.extensions, &bootDeviceFiles.extensions);
+			checkForChangesBetween (&rootDeviceFiles.extensionsCache, &bootDeviceFiles.extensionsCache);
+		}
 	}
 }
 
