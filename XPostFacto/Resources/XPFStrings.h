@@ -103,6 +103,7 @@ enum {
 	kXPostFactoLog,
 	kNotInitialized,
 	kExtensionsCacheInvalid,
+	kNotSufficientRAM,
 };
 
 

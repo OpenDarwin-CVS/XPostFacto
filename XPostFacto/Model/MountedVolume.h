@@ -196,6 +196,7 @@ class MountedVolume : public MDependable_AC
 		bool fIsAttachedToPCICard;
 		bool fIsDarwin;
 		bool fFullyInitialized;
+		bool fMachineHasSufficientRAM;
 
 		bool fExtensionCachesOK;
 

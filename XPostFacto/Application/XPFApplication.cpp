@@ -133,6 +133,7 @@ XPFApplication::XPFApplication() :
 	fWantsNavigationServices = true;
 							
 	Gestalt (gestaltSystemVersion, (SInt32 *) &gSystemVersion);
+	Gestalt (gestaltPhysicalRAMSize, (SInt32 *) &fPhysicalRAMSize);
 
 	REGISTER_CLASS_AC (XPFAboutBox);
 	REGISTER_CLASS_AC (XPFFatalErrorWindow);

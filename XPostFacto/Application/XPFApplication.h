@@ -106,6 +106,7 @@ class XPFApplication : public TApplication {
 		XPFPlatform* getPlatform () {return fPlatform;}
 		UInt32 getDebugOptions () {return fDebugOptions;}
 		XPFPrefs *getPrefs () {return fPrefs;}
+		UInt32 getPhysicalRAMSize () {return fPhysicalRAMSize;}
 		
 		// Commands
 		void CloseSplashWindow ();
@@ -144,6 +145,8 @@ class XPFApplication : public TApplication {
 		UInt32 fDebugOptions;
 		
 		bool fSystemShowHelpTags;
+		
+		UInt32 fPhysicalRAMSize;
 		
 };	
 

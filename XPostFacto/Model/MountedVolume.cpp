@@ -74,6 +74,7 @@ advised of the possibility of such damage.
 #include "MoreDisks.h"
 
 #define kExpectedFirstHFSPartition 6
+#define kBootXRAMRequired (96 * 1024 * 1024)
 
 MountedVolumeList MountedVolume::gVolumeList;
 
@@ -1154,6 +1155,8 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	fHasFinder = false;
 	fIsDarwin = false;
 	
+	fMachineHasSufficientRAM = ((XPFApplication *) gApplication)->getPhysicalRAMSize () >= kBootXRAMRequired;
+	
 	// Wrap entire method in try block, to catch exceptions
 	// The idea is to show all devices, even if there is an error initializing them
 	try {
@@ -1298,6 +1301,7 @@ MountedVolume::getHelperStatus ()
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
 	if (!fPartitionNumber) return kNoPartitionNumber;
 	if (fBootableDevice->getNeedsHelper ()) return kNeedsHelper;
+	if (!fMachineHasSufficientRAM) return kNotSufficientRAM;
 
 	return kStatusOK;
 }
@@ -1312,6 +1316,7 @@ MountedVolume::getBootStatus ()
 	if (!getHasMachKernel ()) return kNoMachKernel;
 	if (!fPartitionNumber) return kNoPartitionNumber;
 //	if (!getWillRunOnCurrentCPU ()) return kCPUNotSupported;
+	if (!fMachineHasSufficientRAM) return kNotSufficientRAM;
 
 	return kStatusOK;
 }
@@ -1361,6 +1366,7 @@ MountedVolume::getInstallTargetStatus ()
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
 	if (!getIsWriteable ()) return kNotWriteable;
 	if (!fPartitionNumber) return kNoPartitionNumber;
+	if (!fMachineHasSufficientRAM) return kNotSufficientRAM;
 
 	return kStatusOK;
 }
@@ -1377,6 +1383,7 @@ MountedVolume::getInstallerStatus ()
 	if (!getHasMachKernel ()) return kNoMachKernel;
 	if (!fPartitionNumber) return kNoPartitionNumber;
 //	if (!getWillRunOnCurrentCPU ()) return kCPUNotSupported;
+	if (!fMachineHasSufficientRAM) return kNotSufficientRAM;
 	
 	return kStatusOK;
 }

@@ -135,5 +135,7 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			
 			"One of the extension cache files appears to be invalid (see log for details). You may be "
 			"able to fix this problem with the 'Install Extensions' command.";
+			
+			"Mac OS X requires 96 MB of RAM."
 	}
 };
