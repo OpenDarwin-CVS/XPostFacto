@@ -39,6 +39,7 @@ advised of the possibility of such damage.
 #include <HFSVolumes.h>
 #include <DriverGestalt.h>
 #include <stdio.h>
+#include <PCI.h>
 
 #include "XPFLog.h"
 #include "OFAliases.h"
@@ -169,6 +170,19 @@ SCSIBus::BusWithRegEntryID (RegEntryID *otherRegEntry)
 	return retVal;
 }
 
+SCSIBus*
+SCSIBus::BusWithDeviceNumber (unsigned val)
+{
+	SCSIBus *retVal = NULL;
+	for (SCSIBusIterator iter (&gSCSIBusList); iter.Current(); iter.Next()) {
+		if (iter->fDeviceNumber == val) {
+			retVal = iter.Current ();
+			break;
+		}
+	}
+	return retVal;
+}
+
 SCSIBus::~SCSIBus ()
 {
 	RegistryEntryIDDispose (&fRegEntry);
@@ -177,6 +191,8 @@ SCSIBus::~SCSIBus ()
 SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 {
 	fBusNumber = kSCSIBusNumberUnknown;
+	fDeviceNumber = 0;
+	fFunctionNumber = 0;
 
 	ThrowIfNULL_AC (scsiEntry);
 	RegistryEntryIDCopy (scsiEntry, &fRegEntry);
@@ -203,11 +219,49 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 		fBusNumber = nextPCIBusNumber++;
 	}
 	
+	// Now get the device and funtion number
+	char location [32];
+	location[0] = 0;
+	RegPropertyValueSize aaSize;
+	OSErr err = RegistryPropertyGetSize (scsiEntry, kPCIAssignedAddressProperty, &aaSize);
+	if (err == noErr) {
+		Ptr aa = NewPtr (aaSize);
+		ThrowIfNULL_AC (aa);
+		ThrowIfOSErr_AC (RegistryPropertyGet (scsiEntry, kPCIAssignedAddressProperty, aa, &aaSize));
+		fDeviceNumber = GetPCIDeviceNumber ((PCIAssignedAddress *) aa);
+		fFunctionNumber = GetPCIFunctionNumber ((PCIAssignedAddress *) aa);
+		if (fFunctionNumber) {
+			sprintf (location, "@%X,%X", fDeviceNumber, fFunctionNumber);
+		} else {
+			sprintf (location, "@%X", fDeviceNumber);
+		}
+		DisposePtr (aa);	
+	}
+	
+	fOpenFirmwareName += location;
+	
+	// Now, as an inelegant workaround, if we already have a bus with this device number,
+	// swap the open firmware names and function numbers
+	
+	if (fDeviceNumber) {
+		SCSIBus *otherBus = BusWithDeviceNumber (fDeviceNumber);
+		if (otherBus) {
+			CStr255_AC otherName = otherBus->fOpenFirmwareName;
+			unsigned otherFunctionNumber = otherBus->fFunctionNumber;
+			otherBus->fOpenFirmwareName = fOpenFirmwareName;
+			otherBus->fFunctionNumber = fFunctionNumber;
+			fOpenFirmwareName = otherName;
+			fFunctionNumber = otherFunctionNumber;
+		}	
+	}
+	
 	#if qLogging
 		gLogFile << "OpenFirmwareName: ";
 		gLogFile.WriteCharBytes ((char *) &fOpenFirmwareName[1], fOpenFirmwareName[0]);
 		gLogFile << endl_AC;
 		gLogFile << "Bus Number: " << fBusNumber << endl_AC;
+		gLogFile << "Device Number: " << fDeviceNumber << endl_AC;
+		gLogFile << "Function Number: " << fFunctionNumber << endl_AC;
 	#endif
 	
 }
