@@ -87,14 +87,14 @@ long DrawSplashScreen(void)
   
   switch (display->depth) {
   case 16 :
-    happyMac16 = malloc(kHappyMacWidth * kHappyMacHeight * 2);
+    happyMac16 = AllocateBootXMemory(kHappyMacWidth * kHappyMacHeight * 2);
     for (cnt = 0; cnt < (kHappyMacWidth * kHappyMacHeight); cnt++)
       happyMac16[cnt] = LookUpCLUTIndex(gHappyMacIcon[cnt], 16);
     happyMac = (char *)happyMac16;
     break;
     
   case 32 :
-    happyMac32 = malloc(kHappyMacWidth * kHappyMacHeight * 4);
+    happyMac32 = AllocateBootXMemory(kHappyMacWidth * kHappyMacHeight * 4);
     for (cnt = 0; cnt < (kHappyMacWidth * kHappyMacHeight); cnt++)
       happyMac32[cnt] = LookUpCLUTIndex(gHappyMacIcon[cnt], 32);
     happyMac = (char *)happyMac32;
@@ -119,7 +119,7 @@ long DrawSplashScreen(void)
     switch (display->depth) {
     case 16 :
       pixelSize = 2;
-      happyFoot16 = malloc(kHappyFootWidth * kHappyFootHeight * 2);
+      happyFoot16 = AllocateBootXMemory(kHappyFootWidth * kHappyFootHeight * 2);
       for (cnt = 0; cnt < (kHappyFootWidth * kHappyFootHeight); cnt++)
 	happyFoot16[cnt] = LookUpCLUTIndex(gHappyFootPict[cnt], 16);
       happyFoot = (char *)happyFoot16;
@@ -127,7 +127,7 @@ long DrawSplashScreen(void)
       
     case 32 :
       pixelSize = 4;
-      happyFoot32 = malloc(kHappyFootWidth * kHappyFootHeight * 4);
+      happyFoot32 = AllocateBootXMemory(kHappyFootWidth * kHappyFootHeight * 4);
       for (cnt = 0; cnt < (kHappyFootWidth * kHappyFootHeight); cnt++)
 	happyFoot32[cnt] = LookUpCLUTIndex(gHappyFootPict[cnt], 32);
       happyFoot = (char *)happyFoot32;
@@ -191,14 +191,14 @@ long DrawBrokenSystemFolder(void)
   
   switch (display->depth) {
   case 16 :
-    icon16 = malloc(32 * 32 * 2);
+    icon16 = AllocateBootXMemory(32 * 32 * 2);
     for (cnt = 0; cnt < (32 * 32); cnt++)
       icon16[cnt] = LookUpCLUTIndex(iconPtr[cnt], 16);
     iconPtr = (char *)icon16;
     break;
     
   case 32 :
-    icon32 = malloc(32 * 32 * 4);
+    icon32 = AllocateBootXMemory(32 * 32 * 4);
     for (cnt = 0; cnt < (32 * 32); cnt++)
       icon32[cnt] = LookUpCLUTIndex(iconPtr[cnt], 32);
     iconPtr = (char *)icon32;

@@ -42,7 +42,7 @@ CICell NetInitPartition(char *devSpec)
 {
   NetPartInfoPtr net;
   
-  net = (NetPartInfoPtr)malloc(sizeof(NetPartInfo));
+  net = (NetPartInfoPtr)AllocateBootXMemory(sizeof(NetPartInfo));
   if (net == 0) return 0;
   
   strcpy(net->devSpec, devSpec);

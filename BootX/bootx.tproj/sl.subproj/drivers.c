@@ -302,6 +302,9 @@ static long LoadDriverPList(char *dirSpec, char *name, long bundleType)
   TagPtr    personalities;
   char      *tmpDriverPath;
   
+  // Reset the malloc zone.
+  malloc_init((char *)kMallocAddr, kMallocSize);
+  
   // Save the driver path.
   sprintf(gFileSpec, "%s\\%s\\%s", dirSpec, name,
 	  (bundleType == kCFBundleType2) ? "Contents\\MacOS\\" : "");

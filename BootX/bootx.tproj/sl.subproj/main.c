@@ -245,12 +245,11 @@ static long InitEverything(ClientInterfacePtr ciPtr)
     gBootMode |= kBootModeSafe;
   }
   
-  mem_base = Claim(kMallocAddr, kMallocSize, 0);
-  if (mem_base == 0) {
+  if (Claim(kMallocAddr, kMallocSize, 0) == 0) {
     printf("Claim for malloc failed.\n");
     return -1;
   }
-  malloc_init((char *)mem_base, kMallocSize);
+  malloc_init((char *)kMallocAddr, kMallocSize);
   
   // malloc now works.
   
@@ -294,13 +293,13 @@ static long InitEverything(ClientInterfacePtr ciPtr)
     CallMethod(4, 0, gMMUIH, "map",
 	       kImageAddr1Phys, kImageAddr1, kImageSize1, 0);
   }
-
+  
   bzero((char *)kImageAddr, kImageSize);
   
-  // Malloc some space for the Vector Save area.
-  gVectorSaveAddr = malloc(kVectorSize);
+  // Allocate some space for the Vector Save area.
+  gVectorSaveAddr = AllocateBootXMemory(kVectorSize);
   if (gVectorSaveAddr == 0) {
-    printf("Malloc for Vector Save Area failed.\n");
+    printf("Allocation for the Vector Save Area failed.\n");
     return -1;
   }
   
