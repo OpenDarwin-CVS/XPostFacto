@@ -51,10 +51,10 @@ RESOURCE 'vers' (1,
 	0x03,
 	0x00,
 	alpha,
-	0x4,
+	0x5,
 	verUs,
-	"3.0.0a4",
-	"3.0.0a4, © 2001 - 2003 Other World Computing"
+	"3.0a5",
+	"3.0a5, © 2001 - 2003 Other World Computing"
 };
 
 RESOURCE 'vers' (3,
@@ -69,18 +69,4 @@ RESOURCE 'vers' (3,
 	verUs,
 	"3.0.0a2",
 	"3.0.0a2, © 2001 - 2003 Other World Computing"
-};
-
-RESOURCE 'vers' (4,
-#if qNames
-"Extensions Version",
-#endif
-	purgeable) {
-	0x03,
-	0x00,
-	alpha,
-	0x2,
-	verUS,
-	"3.0a2",
-	"3.0a2"
 };
