@@ -25,7 +25,7 @@
 
 <h2>XPostFacto Developer Notes</h2>
 
-August 31, 2003<br> 
+March 11, 2004<br> 
 Ryan Rempel<br> 
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a>
 
@@ -33,7 +33,7 @@ Ryan Rempel<br>
 
 <h4>Overview</h4>
 
-<p>Building XPostFacto involves both a ProjectBuilder project and a CodeWarrior project. The Project Builder project has targets for building the following items:
+<p>Building XPostFacto involves both a XCode project and a CodeWarrior project. The XCode project has targets for building the following items:
 
 <ol>
 <p><li>Each kernel extension which XPostFacto installs.
@@ -51,7 +51,7 @@ Ryan Rempel<br>
 
 <p>The CodeWarrior project is checked into the repository as an XML export. So you will need to import the XML file into CodeWarrior in order to get a working project. What I do is save the resulting project file as XPostFacto.mcp, in the same folder as the XML file.
 
-<p>As of XPF 3, XPostFacto runs in both Mac OS 9 and Mac OS X. The Mac OS 9 version builds as a non-Carbon application (because that makes certain parts of the code easier--some things I need aren't in Carbon). The Mac OS X version builds as mach-o, for the same reason (I need to link to some frameworks that are mach-o frameworks). I'm using the latest version of CodeWarrior (at press time), i.e. CodeWarrior 8.3, because it has better mach-o support than what I used to be using (which was CodeWarrior 6).
+<p>As of XPF 3, XPostFacto runs in both Mac OS 9 and Mac OS X. The Mac OS 9 version builds as a non-Carbon application (because that makes certain parts of the code easier--some things I need aren't in Carbon). The Mac OS X version builds as mach-o, for the same reason (I need to link to some frameworks that are mach-o frameworks). I'm using CodeWarrior 8.3.
 
 <p>The main dependency that is not included in the XPostFacto sources is MacApp. The XPostFacto application is based on MacApp. So you will need to download MacApp, and build its libraries, both in Mac OS 9 and in Mac OS X. Also, you'll need to define a "source tree" in CodeWarrior to point to the MacApp sources. The easiest way to do this is to do it in the general CodeWarrior preferences, rather than in a specific project. So you would define a source tree with the name "MacApp", and, in my case, it points to:
 
@@ -76,18 +76,24 @@ Ryan Rempel<br>
 
 <p><li>Build BootX and all the kernel extensions, so the CodeWarrior project can use them. The easiest way to do that is with this command (executed in this directory):
 
-<p>sudo pbxbuild install
+<p>sudo xcodebuild install
 
 <p>You need to use sudo, because we want the kernel extensions to be owned by root. The kernel extensions will initially be "installed" under /tmp somewhere, but the "Package" target has a shell script that archives them for the CodeWarrior project to use. (The shell script in the "Package" target also resets the ownership of some files back to you, rather than root--this makes it easier to build things as yourself later, or just to delete the built files).
 
 <p><li>Open the XPostFacto.mcp CodeWarrior project, and make the "Application" target. This builds both the Mac OS 9 and Mac OS X versions. Or you can build individual targets if you like.
 
-<p>You can build individual kernel extensions within Project Builder for testing purposes. But once you want to incorporate them into XPostFacto, you will need to repeat the "sudo pbxbuild install" step (and then rebuild XPostFacto). (For BootX, you need not perform the "sudo pbxbuild install"--building it within ProjectBuilder is sufficient).
+<p>You can build individual kernel extensions within XCode for testing purposes. But once you want to incorporate them into XPostFacto, you will need to repeat the "sudo pbxbuild install" step (and then rebuild XPostFacto). (For BootX, you need not perform the "sudo pbxbuild install"--building it within XCode is sufficient).
 </ol>
 
 <h4>Quirks</h4>
 
 <p>Here are some random quirks that you may want to know about.
+
+<h4>Panther</h4>
+
+<p>I'm building in Mac OS X 10.3 with XCode now. To do this, you need to install the 10.1.5 SDK, along with the gcc 2.95. This is in order to build kernel extensions that will function back to 10.1 (and 10.0 in fact).
+
+<p>Also, if you are using CodeWarrior 8.3, you need to set your "Mac OS X Volume" source tree to point at the 10.2 SDK.
 
 <h4>Mac OS X 10.0 and 10.1 Headers</h4>
 
