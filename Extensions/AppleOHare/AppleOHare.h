@@ -156,7 +156,7 @@ public:
 	virtual void powerMediaBay(bool powerOn, UInt8 powerDevice);
 	virtual void enableMBATA(void);
 	virtual void processNub(IOService *nub);
-
+	virtual IOService* createNub (IORegistryEntry *from);
 
 	// PM MEthods:
 	void initForPM (IOService *provider);
@@ -202,5 +202,15 @@ public:
 	virtual void causeVector(long vectorNumber, IOInterruptVector *vector);
 };
 
+class AppleOHareDevice : public AppleMacIODevice
+{
+
+	OSDeclareDefaultStructors (AppleOHareDevice);
+
+public:
+
+	virtual IOReturn getResources (void);
+    
+};
 
 #endif /* ! _APPLE_OHARE_H */

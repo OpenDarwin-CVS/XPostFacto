@@ -575,6 +575,19 @@ void AppleOHare::restoreVIAState(void)
     eieio();
 }
 
+IOService* 
+AppleOHare::createNub (IORegistryEntry *from)
+{
+    IOService *nub = new AppleOHareDevice;
+
+    if (nub && !nub->init (from, gIODTPlane)) {
+		nub->release ();
+		nub = 0;
+    }
+
+    return (nub);
+}
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #undef  super
@@ -747,5 +760,16 @@ void AppleOHareInterruptController::causeVector(long vectorNumber,
 	pendingEvents |= 1 << vectorNumber;
 	parentNub->causeInterrupt(0);
 }
-										   
+			
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+#undef super
+#define super AppleMacIODevice
+
+OSDefineMetaClassAndStructors(AppleOHareDevice, AppleMacIODevice);
+
+IOReturn 
+AppleOHareDevice::getResources (void)
+{
+    return (((AppleOHare *) getProvider())->getNubResources (this));
+}

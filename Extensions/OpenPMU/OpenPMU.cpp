@@ -134,7 +134,7 @@ OpenPMUInterface::start(IOService *nub)
         }
 
         // starts the via inteface (and attach it as a child):
-        if (!(theHWInterface->start(this) && theHWInterface->hwInit((UInt8*)viaMap->getPhysicalSegment(0,0)))) {
+        if (!(theHWInterface->start (this) && theHWInterface->hwInit ((UInt8*) viaMap->getVirtualAddress ()))) {
 #ifdef VERBOSE_LOGS_ON_PMU_INT
             IOLog("OpenPMUInterface::start theHWInterface failed to start or to init the hardware\n");
 #endif // VERBOSE_LOGS_ON_PMU_INT
