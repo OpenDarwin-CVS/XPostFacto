@@ -35,6 +35,7 @@
 #include <IOKit/assert.h>
 #include <IOKit/system.h>
 #include <IOKit/IOLib.h>
+#include <net/ethernet.h>
 #include "AppleMaceEthernetPrivate.h"
 
 
@@ -919,7 +920,7 @@ void MaceEnet::_sendPacket(void *pkt, unsigned int pkt_len)
     ns_time_t		currentTime;
     u_int32_t		elapsedTimeMS;
 
-    if ( !ready || !pkt || (pkt_len > ETHERMAXPACKET))
+    if ( !ready || !pkt || (pkt_len > ETHER_MAX_LEN))
 		return; 
 
     /*
@@ -1066,8 +1067,8 @@ bool MaceEnet::_receivePackets(bool fDebugger)
 		/*
 		 * Reject packets that are runts or that have other mutations.
 		 */
-		if ( receivedFrameSize < (ETHERMINPACKET - ETHERCRC) || 
-             receivedFrameSize > (ETHERMAXPACKET + ETHERCRC) || 
+		if ( receivedFrameSize < (ETHER_MIN_LEN - ETHER_CRC_LEN) || 
+             receivedFrameSize > (ETHER_MAX_LEN + ETHER_CRC_LEN) || 
              (rxFS[1] & (kRcvFS1OFlo | kRcvFS1Clsn | kRcvFS1Fram | kRcvFS1FCS)) 
 			 )
 		{
@@ -1296,7 +1297,7 @@ bool MaceEnet::_receivePackets(bool fDebugger)
  *
  *-------------------------------------------------------------------------*/
 
-bool MaceEnet::_transmitInterruptOccurred(bool fDebugger = false)
+bool MaceEnet::_transmitInterruptOccurred(bool fDebugger)
 {
     u_int32_t			dmaStatus;
     u_int32_t           xmtFS;

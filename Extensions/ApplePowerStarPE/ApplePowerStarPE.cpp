@@ -113,12 +113,12 @@ bool ApplePowerStarPE::platformAdjustService(IOService *service)
     IOService	*battery;
     
     if (!strcmp(service->getName(), "chips65550")) {
-        service->setProperty("Ignore VBL", "", 0);
+        service->setProperty("Ignore VBL", (void *) "", 0);
         return true;
     }
     
     if (_hasPMU && !strcmp(service->getName(), "adb")) {
-        service->setProperty("compatible", "pmu", 3);
+        service->setProperty("compatible", (void *) "pmu", 3);
         return true;
 	}
     
@@ -170,7 +170,7 @@ void ApplePowerStarPE::configureEthernet(IOService *provider)
     enet->setProperty("Network Connection", "10BaseT");
     
     // Add a 'built-in' property so IONetworkStack will treat it as built in.
-    enet->setProperty("built-in", "", 0);
+    enet->setProperty("built-in", (void *) "", 0);
     
     // If it is there, find the node for the second ohare.
     nodeList = IODTFindMatchingEntries(provider, kIODTRecursive,

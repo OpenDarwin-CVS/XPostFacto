@@ -33,6 +33,7 @@
 
 #include <IOKit/assert.h>
 #include <IOKit/platform/AppleMacIODevice.h>
+#include <net/ethernet.h>
 #include "AppleMaceEthernetPrivate.h"
 
 //------------------------------------------------------------------------
@@ -93,7 +94,7 @@ bool MaceEnet::start(IOService * provider)
 	if (!nub || !super::start(provider))
 		return false;
 
-	nub->setProperty ("built-in", "", 0);
+	nub->setProperty ("built-in", (void *) "", 0);
 
 	transmitQueue = OSDynamicCast(IOGatedOutputQueue, getOutputQueue());
 	if (!transmitQueue)
@@ -677,10 +678,10 @@ void MaceEnet::_sendTestPacket()
 
 	buf = mtod(m, unsigned char *);
 
-	bcopy(&myAddress, buf, NUM_EN_ADDR_BYTES);
-	buf += NUM_EN_ADDR_BYTES;
-    bcopy(&myAddress, buf, NUM_EN_ADDR_BYTES);
-	buf += NUM_EN_ADDR_BYTES;
+	bcopy(&myAddress, buf, ETHER_ADDR_LEN);
+	buf += ETHER_ADDR_LEN;
+    bcopy(&myAddress, buf, ETHER_ADDR_LEN);
+	buf += ETHER_ADDR_LEN;
 	*buf++ = 0;
 	*buf++ = 0;
 

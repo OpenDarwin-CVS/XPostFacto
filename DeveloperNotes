@@ -1,7 +1,7 @@
 XPostFacto Developer Notes
 ==========================
 
-June 9, 2002
+August 14, 2002
 Ryan Rempel
 osxguru@macsales.com
 
@@ -107,17 +107,19 @@ Quirks
 
 Here are some random quirks that you may want to know about.
 
-Mac OS X 10.0 Headers
+Mac OS X 10.0 and 10.1 Headers
 =====================
 
-You will notice that the IOService.h and IORegistryEntry.h headers are included in 
-Extensions/IOKit. Each of the kernel extension targets is set up to use those 
-headers (by having Extensions included in the header search paths). The reason is that 
-these are the Mac OS X 10.0 version of these headers, and using them permits the kernel
-extensions to load in both Mac OS X 10.0 and 10.1.
+You will notice that a variety of headers are included in the CompatibleKernelHeaders
+directory. Each of the kernel extension targets is set up to use those 
+headers (by having CompatibleKernelHeaders included in the header search paths). 
+The reason is that these are the Mac OS X 10.0 version (or in some cases, 10.1) of these 
+headers, and using them permits the kernel extensions to load in both Mac OS X 10.0, 10.1,
+and 10.2.
 
 Another 10.0 vs. 10.1 issue worth noting is that PatchedIOSCSICDDrive only loads in 10.0,
-while PatchedSCSIDeviceType05 only loads in 10.1.
+while PatchedSCSIDeviceType05 only loads in 10.1. In Mac OS X 10.2, neither of them loads,
+and they do not appear to be needed.
 
 Kernel Extension Status
 =======================
