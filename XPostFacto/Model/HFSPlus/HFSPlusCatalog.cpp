@@ -47,15 +47,14 @@ HFSPlusCatalog::HFSPlusCatalog (HFSPlusVolume *volume)
 	HFSPlusForkData *catalogFile = &header->catalogFile;
 	UInt32 totalBlocksSeen = 0;
 
-	gLogFile << "Catalog total blocks: " << catalogFile->totalBlocks << endl_AC;
-	gLogFile << "Catalog extents" << endl_AC;
+//	gLogFile << "Catalog total blocks: " << catalogFile->totalBlocks << endl_AC;
+//	gLogFile << "Catalog extents" << endl_AC;
 
 	for (int x = 0; x < 8; x++) {
 		if (catalogFile->extents[x].startBlock == 0) break;
 		totalBlocksSeen += catalogFile->extents[x].blockCount;
 		fExtents.InsertLast (catalogFile->extents[x]);
-		gLogFile << "startBlock: " << catalogFile->extents[x].startBlock 
-				<< " blockCount: " << catalogFile->extents[x].blockCount << endl_AC;
+//		gLogFile << "startBlock: " << catalogFile->extents[x].startBlock << " blockCount: " << catalogFile->extents[x].blockCount << endl_AC;
 	}
 
 	if (totalBlocksSeen < catalogFile->totalBlocks) {
@@ -69,7 +68,8 @@ HFSPlusCatalog::HFSPlusCatalog (HFSPlusVolume *volume)
 	if (totalBlocksSeen != catalogFile->totalBlocks) {
 		gLogFile << "Catalog file inconsistent: expected " 
 			<< catalogFile->totalBlocks << " blocks and found "
-			<< totalBlocksSeen << endl_AC;		
+			<< totalBlocksSeen << endl_AC;
+		ThrowException_AC (kCatalogFileInconsistent, 0);
 	} 
 	
 	BTHeaderRec headerNode;

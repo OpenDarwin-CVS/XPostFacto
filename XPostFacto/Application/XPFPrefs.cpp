@@ -387,7 +387,6 @@ XPFPrefs::getPrefsFromNVRAM ()
 	XPFIODevice *output = XPFIODevice::OutputDeviceWithOpenFirmwareName (outputDevice);
 	
 	if (input) {
-		gLogFile << "Got Input device from NVRAM" << endl_AC;
 		// If we don't have an input-device in prefs, use the one from NVRAM
 		if (!fInputDevice) {
 			gLogFile << "No input device, so setting" << endl_AC;
@@ -402,7 +401,6 @@ XPFPrefs::getPrefsFromNVRAM ()
 	}
 	
 	if (output) {
-		gLogFile << "Got Output device from NVRAM" << endl_AC;
 		// If we don't have an output-device in prefs, use the one from NVRAM
 		if (!fOutputDevice) {
 			fOutputDevice = output;

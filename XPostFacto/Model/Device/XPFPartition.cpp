@@ -101,14 +101,14 @@ XPFPartition::XPFPartition (XPFBootableDevice *device, Partition *part, int part
 	gLogFile << "Partition: " << partNumber << " pmParType: " << (char *) part->pmParType << endl_AC;
 	
 	if (!strcmp ((char *) fPartition.pmParType, "Apple_HFS")) {
-		gLogFile << "pmPyPartStart: " << fPartition.pmPyPartStart << " pmLgDataStart: " << fPartition.pmLgDataStart << endl_AC;
+//		gLogFile << "pmPyPartStart: " << fPartition.pmPyPartStart << " pmLgDataStart: " << fPartition.pmLgDataStart << endl_AC;
 	
 		VolumeHeader *header = NULL;
 		ThrowIfOSErr_AC (readBlocks (2, 1, (void **) &header));
 		ThrowIfNULL_AC (header);
 		
 		if (header->hfs.drSigWord == kHFSSigWord) {
-			XPFDumpMasterDirectoryBlock ((HFSMasterDirectoryBlock *) header);
+//			XPFDumpMasterDirectoryBlock ((HFSMasterDirectoryBlock *) header);
 		
 			fCreationDate = header->hfs.drCrDate;
 			if (header->hfs.drEmbedSigWord == kHFSPlusSigWord) {
@@ -138,11 +138,7 @@ XPFPartition::XPFPartition (XPFBootableDevice *device, Partition *part, int part
 	
 	checkOpenFirmwareName ();
 
-	gLogFile << "fOffsetToHFSPlusVolume: " << fOffsetToHFSPlusVolume << endl_AC;
-	
 	if (fCreationDate) fHFSPlusVolume = new HFSPlusVolume (this, fOffsetToHFSPlusVolume);
-	
-	gLogFile << "fOffsetToHFSPlusVolume: " << fOffsetToHFSPlusVolume << endl_AC;
 	
 	fBootableDevice->AddDependent (this);
 }
@@ -180,7 +176,6 @@ XPFPartition::~XPFPartition ()
 OSErr
 XPFPartition::readBlocks (UInt32 start, UInt32 count, void **buffer)
 {
-	gLogFile << "XPFPartition::readBlocks start: " << start << " offsets: " << fPartition.pmPyPartStart << " , " << fPartition.pmLgDataStart << endl_AC;
 	return fBootableDevice->readBlocks (start + fPartition.pmPyPartStart + 
 			fPartition.pmLgDataStart, count, (UInt8 **) buffer);
 }

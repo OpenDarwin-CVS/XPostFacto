@@ -576,7 +576,7 @@ XPFBootableDevice::readBlocks (UInt32 start, UInt32 count, UInt8 **buffer)
 		return -1;
     }
 
-	gLogFile << "XPFBootableDevice::readBlocks start: " << start << " count: " << count << endl_AC;
+//	gLogFile << "XPFBootableDevice::readBlocks start: " << start << " count: " << count << endl_AC;
     
     // the start and count will be in terms of 512 byte blocks
     // we will allocate the buffer ourselves with NewPtr
