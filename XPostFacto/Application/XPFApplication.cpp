@@ -57,7 +57,7 @@ advised of the possibility of such damage.
 #include "XPFStrings.h"
 
 #include "XPFNameRegistry.h"
-#include "XPFAuthorization.h"
+// #include "XPFAuthorization.h"
 
 // Toolbox
 
@@ -104,6 +104,7 @@ UniChar kernelName[] = {'m', 'a', 'c', 'h', '_', 'k', 'e', 'r', 'n', 'e', 'l'};
 UniChar coreServicesName[] = {'C', 'o', 'r', 'e', 'S', 'e', 'r', 'v', 'i', 'c', 'e', 's'};
 UniChar bootXName[] = {'B', 'o', 'o', 't', 'X'};
 UniChar installName[] = {'X', 'P', 'F', 'I', 'n', 's', 't', 'a', 'l', 'l'};
+UniChar XPFName[] = {'.', 'X', 'P', 'o', 's', 't', 'F', 'a', 'c', 't', 'o'};
 
 //========================================================================================
 // CLASS XPFApplication
@@ -202,6 +203,7 @@ XPFApplication::DoShowHelpFile ()
 		ThrowIfOSErr_AC (helpFile.CloseFile ());
 		DisposeIfHandle_AC (helpText);
 		
+#if qCarbonMach0
 		// Now, we open the file with a browser
 		FSRef helpFileRef;
 		ThrowIfOSErr_AC (FSpMakeFSRef (&helpSpec, &helpFileRef));
@@ -211,7 +213,8 @@ XPFApplication::DoShowHelpFile ()
 		CFStringGetPascalString (urlStringRef, urlString, 255, CFStringGetSystemEncoding());
 		CFRelease (urlRef);
 
-		launchURL (urlString);		
+		launchURL (urlString);	
+#endif	
 	}
 }
 
@@ -434,6 +437,8 @@ XPFApplication::DoMenuCommand(CommandNumber aCommandNumber) // Override
 				fPrefs->setInputDeviceIndex (aCommandNumber - cFirstInputDevice + 1);
 			} else if ((aCommandNumber >= cFirstOutputDevice) && (aCommandNumber < fPrefs->getNextOutputDevice ())) {
 				fPrefs->setOutputDeviceIndex (aCommandNumber - cFirstOutputDevice + 1);
+			} else if ((aCommandNumber >= cFirstHelperDisk) && (aCommandNumber < fPrefs->getNextHelperVolume ())) {
+				fPrefs->setHelperVolumeIndex (aCommandNumber - cFirstHelperDisk + 1);
 			} else if ((aCommandNumber > cThrottleBase) && (aCommandNumber <= cThrottleBase + kNumThrottleOptions)) {
 				fPrefs->setThrottle (aCommandNumber - cThrottleBase);
 			} else {
@@ -468,9 +473,16 @@ XPFApplication::DoSetupMenus()
 		int index = x - cFirstInputDevice + 1;
 		EnableCheck (x, notCopying, fPrefs->getInputDeviceIndex () == index);
 	}
+	
 	for (unsigned x = cFirstOutputDevice; x < fPrefs->getNextOutputDevice (); x++) {
 		int index = x - cFirstOutputDevice + 1;
 		EnableCheck (x, notCopying, fPrefs->getOutputDeviceIndex () == index);
+	}
+	
+	unsigned helperVolumeIndex = fPrefs->getHelperVolumeIndex ();
+	for (unsigned x = cFirstHelperDisk; x < fPrefs->getNextHelperVolume (); x++) {
+		int index = x - cFirstHelperDisk + 1;
+		EnableCheck (x, notCopying, index == helperVolumeIndex);
 	}
 	
 	EnableCheck (cSetThrottleNone, notCopying, fPrefs->getThrottle () == 0);
@@ -526,16 +538,21 @@ void
 XPFApplication::install ()
 {	
 	try {		
+		MountedVolume *rootDisk = fPrefs->getBootDisk ();
+		MountedVolume *installDisk = fPrefs->getInstallDisk ();
+		MountedVolume *bootDisk = installDisk;
+		if (bootDisk->getRequiresBootHelper ()) bootDisk = fPrefs->getHelperDisk ();
+	
 		setCopyingFile ("BootX");
 		
 		// See if we have to install BootX
 		// I was forcing the install, but it shouldn't be necessary anymore with my
 		// versioning system in place now.
-		fPrefs->getInstallDisk ()->installBootXIfNecessary (fPrefs->getReinstallBootX ());
+		bootDisk->installBootXIfNecessary (fPrefs->getReinstallBootX ());
 								
 		// Install the extensions
 		
-		installExtensionsWithRootDirectory (fPrefs->getInstallDisk ()->getRootDirectory ());
+		installExtensionsWithRootDirectory (installDisk->getRootDirectory ());
 						
 		// Now, get or create the /private/tmp directories, for the copies from the CD
 
@@ -548,7 +565,7 @@ XPFApplication::install ()
 				
 		FSRef privateFolder, privateTmpFolder;
 		
-		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (fPrefs->getInstallDisk()->getRootDirectory (),
+		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (bootDisk->getRootDirectory (),
 			sizeof (privateName) / sizeof (UniChar), privateName, kFSCatInfoPermissions, &catInfo,
 			&privateFolder, NULL, NULL));
 
@@ -563,7 +580,7 @@ XPFApplication::install ()
 		setCopyingFile ("mach_kernel");
 		
 		FSRef kernelOnCD;
-		ThrowIfOSErr_AC (FSMakeFSRefUnicode (fPrefs->getBootDisk()->getRootDirectory (),
+		ThrowIfOSErr_AC (FSMakeFSRefUnicode (rootDisk->getRootDirectory (),
 			sizeof (kernelName) / sizeof (UniChar), kernelName, kTextEncodingUnknown, &kernelOnCD));
 			
 		OSErr err = FSRefFileCopy (&kernelOnCD, &privateTmpFolder, NULL, NULL, 0, false);
@@ -597,7 +614,7 @@ XPFApplication::install ()
 
 		FSRef cdSystemFolder, cdSystemLibraryFolder, cdSystemLibraryExtensionsFolder, cdExtensionsCache;
 		
-		ThrowIfOSErr_AC (FSMakeFSRefUnicode (fPrefs->getBootDisk()->getRootDirectory (),
+		ThrowIfOSErr_AC (FSMakeFSRefUnicode (rootDisk->getRootDirectory (),
 			sizeof (systemName) / sizeof (UniChar), systemName, kTextEncodingUnknown, &cdSystemFolder));
 		ThrowIfOSErr_AC (FSMakeFSRefUnicode (&cdSystemFolder,
 			sizeof (libraryName) / sizeof (UniChar), libraryName, kTextEncodingUnknown, &cdSystemLibraryFolder));
@@ -622,7 +639,7 @@ XPFApplication::install ()
 						
 		catInfo.permissions[2] = 0x41ED;
 
-		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (fPrefs->getInstallDisk()->getRootDirectory (), 
+		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (installDisk->getRootDirectory (), 
 			sizeof (systemName) / sizeof (UniChar), systemName, kFSCatInfoPermissions, &catInfo, 
 			&systemFolder, NULL, NULL));
 		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&systemFolder, 
@@ -738,6 +755,7 @@ XPFApplication::tellFinderToRestart ()
 void
 XPFApplication::installExtensionsInMacOSX ()
 {
+#if qCarbonMach0
 	// Get the authorization--no point proceeding if we can't
 		
 	XPFAuthorization auth;
@@ -776,6 +794,7 @@ XPFApplication::installExtensionsInMacOSX ()
 	auth.fprintf (pipe, "/usr/bin/touch /System/Library/Extensions\012");
 
 	auth.fclose (pipe);
+#endif
 }
 
 void
@@ -826,10 +845,6 @@ XPFApplication::prepare ()
 
 	FSRef systemFolder, systemLibraryFolder, systemLibraryExtensionsFolder;
 
-	UniChar systemName[] = {'S', 'y', 's', 't', 'e', 'm'};
-	UniChar libraryName[] = {'L', 'i', 'b', 'r', 'a', 'r', 'y'};
-	UniChar extensionsName[] = {'E', 'x', 't', 'e', 'n', 's', 'i', 'o', 'n', 's'};
-
 	ThrowIfOSErr_AC (FSMakeFSRefUnicode (fPrefs->getBootDisk()->getRootDirectory(), 
 		sizeof (systemName) / sizeof (UniChar), systemName, kTextEncodingUnknown, &systemFolder));
 	ThrowIfOSErr_AC (FSMakeFSRefUnicode (&systemFolder, 
@@ -842,7 +857,6 @@ XPFApplication::prepare ()
 	// If there is an existing extensions cache, we'd best delete it
 
 	FSRef existingCache;
-	UniChar extensionsCacheName[] = {'E', 'x', 't', 'e', 'n', 's', 'i', 'o', 'n', 's', '.', 'm', 'k', 'e', 'x', 't'};
 	OSErr err = FSMakeFSRefUnicode (&systemLibraryFolder, 
 		sizeof (extensionsCacheName) / sizeof (UniChar), extensionsCacheName, kTextEncodingUnknown,
 		&existingCache);
@@ -931,35 +945,179 @@ XPFApplication::adjustThrottle (NVRAMVariables *nvram) {
 void 
 XPFApplication::restart ()
 {
-	MountedVolume *bootDisk = fPrefs->getBootDisk ();
+	UTCDateTime rootModDate;
+
+	MountedVolume *rootDisk = fPrefs->getBootDisk ();
+	MountedVolume *bootDisk;
+	if (rootDisk->getRequiresBootHelper ()) {
+		bootDisk = fPrefs->getHelperDisk ();
+	} else {
+		bootDisk = rootDisk;
+	}
 
 	if (!bootDisk->getIsOnBootableDevice ()) {
 //		prepare ();
 		return;
 	}
 	
-	if (bootDisk->getIsWriteable ()) {
-	
-		setCopyInProgress (true);
-			
-		setCopyingFile ("BootX");
-
-		// Check to see whether we need to install BootX
-		bootDisk->installBootXIfNecessary (fPrefs->getReinstallBootX ());
-
-		// Check whether we need to install Old World Support
-		if (fPrefs->getReinstallExtensions () || !bootDisk->getHasOldWorldSupport ()) {
-			installExtensionsWithRootDirectory (bootDisk->getRootDirectory ());
+	try {
+		if (rootDisk->getIsWriteable ()) {
+			if (fPrefs->getReinstallExtensions () || !rootDisk->getHasOldWorldSupport ()) {
+				installExtensionsWithRootDirectory (rootDisk->getRootDirectory ());
+			}
 		}
 
-		setCopyInProgress (false);
+		if (bootDisk->getIsWriteable ()) {
+			setCopyingFile ("BootX");
+			bootDisk->installBootXIfNecessary (fPrefs->getReinstallBootX ());
+			setCopyInProgress (false);
+		}
+
+		// Now, see if we need to copy stuff from the root-disk to the boot-disk
+		if (rootDisk != bootDisk) {	
+			FSCatalogInfo catInfo;
+			
+			catInfo.permissions[0] = 0;
+			catInfo.permissions[1] = 0;
+			catInfo.permissions[2] = 0x41ED;
+			catInfo.permissions[3] = 0;
+
+			// Get the .XPostFacto directory
+			FSRef helperDir;
+			ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (bootDisk->getRootDirectory (), 
+				sizeof (XPFName) / sizeof (UniChar), XPFName, kFSCatInfoPermissions, &catInfo, 
+				&helperDir, NULL, NULL));
+
+			// Now, get the directory which corresponds to the root disk
+			OSStatus status;
+			UniChar rootUnicode[255];
+			unsigned long rootLength;
+			CStr255_AC rootName;
+			if (fPrefs->getUseShortStrings ()) {
+				rootName = rootDisk->getShortOpenFirmwareName ();
+			} else {
+				rootName = rootDisk->getOpenFirmwareName ();
+			}
+			TextToUnicodeInfo converter;		
+			status = CreateTextToUnicodeInfoByEncoding (
+				CreateTextEncoding (kTextEncodingMacHFS, kTextEncodingDefaultVariant, kTextEncodingDefaultFormat),
+				&converter);
+			if (status == noErr) {
+				ConvertFromPStringToUnicode (converter, rootName, sizeof (rootUnicode), &rootLength, rootUnicode);
+				DisposeTextToUnicodeInfo (&converter);
+			}
+			rootUnicode[rootLength / sizeof (UniChar)] = 0;
+			
+			// And write out each directory
+			UniChar *end;
+			UniChar *pos = rootUnicode;
+			while (*pos) {
+				while (*pos == '/') pos++;
+				end = pos;		
+				while ((*end != 0) && (*end != '/')) {
+					if (*end == ':') *end = ';';
+					end++;
+				}
+				ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&helperDir,
+					end - pos, pos, kFSCatInfoPermissions, &catInfo,
+					&helperDir, NULL, NULL));	
+				pos = end;
+			}
+				
+			// Now, copy the mach_kernel file if the modification date is different
+			FSRef kernelOnRoot, kernelOnBoot;
+			ThrowIfOSErr_AC (FSMakeFSRefUnicode (rootDisk->getRootDirectory (),
+				sizeof (kernelName) / sizeof (UniChar), kernelName, kTextEncodingUnknown, &kernelOnRoot));
+			OSErr err = FSMakeFSRefUnicode (&helperDir, 
+				sizeof (kernelName) / sizeof (UniChar), kernelName, kTextEncodingUnknown, &kernelOnBoot);
+			if (err == noErr) {
+				ThrowIfOSErr_AC (FSGetCatalogInfo (&kernelOnRoot, kFSCatInfoContentMod, &catInfo, NULL, NULL, NULL));
+				BlockMoveData (&catInfo.contentModDate, &rootModDate, sizeof (rootModDate));
+				ThrowIfOSErr_AC (FSGetCatalogInfo (&kernelOnBoot, kFSCatInfoContentMod, &catInfo, NULL, NULL, NULL));
+				if (memcmp (&rootModDate, &catInfo.contentModDate, sizeof (rootModDate))) {
+					setCopyingFile ("mach_kernel");
+					FSDeleteObject (&kernelOnBoot);
+					ThrowIfOSErr_AC (FSRefFileCopy (&kernelOnRoot, &helperDir, NULL, NULL, 0, false));			
+				}
+			} else {
+				setCopyingFile ("mach_kernel");
+				ThrowIfOSErr_AC (FSRefFileCopy (&kernelOnRoot, &helperDir, NULL, NULL, 0, false));
+			}
+			
+			// Now, see if we need to copy the Extensions or Extensions.mkext
+			FSRef helperSystemRef, helperSystemLibraryRef, helperSystemLibraryExtensionsRef, helperSystemLibraryExtensionsCacheRef;
+			ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&helperDir, 
+				sizeof (systemName) / sizeof (UniChar), systemName, kFSCatInfoPermissions, &catInfo, 
+				&helperSystemRef, NULL, NULL));
+			ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&helperSystemRef, 
+				sizeof (libraryName) / sizeof (UniChar), libraryName, kFSCatInfoPermissions, &catInfo, 
+				&helperSystemLibraryRef, NULL, NULL));
+			ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&helperSystemLibraryRef, 
+				sizeof (extensionsName) / sizeof (UniChar), extensionsName, kFSCatInfoPermissions, &catInfo, 
+				&helperSystemLibraryExtensionsRef, NULL, NULL));
+				
+			FSRef rootSystemRef, rootSystemLibraryRef, rootSystemLibraryExtensionsRef, rootSystemLibraryExtensionsCacheRef;
+			ThrowIfOSErr_AC (FSMakeFSRefUnicode (rootDisk->getRootDirectory (), 
+				sizeof (systemName) / sizeof (UniChar), systemName, kTextEncodingUnknown, &rootSystemRef));
+			ThrowIfOSErr_AC (FSMakeFSRefUnicode (&rootSystemRef, 
+				sizeof (libraryName) / sizeof (UniChar), libraryName, kTextEncodingUnknown, &rootSystemLibraryRef));
+			ThrowIfOSErr_AC (FSMakeFSRefUnicode (&rootSystemLibraryRef, 
+				sizeof (extensionsName) / sizeof (UniChar), extensionsName, kTextEncodingUnknown, &rootSystemLibraryExtensionsRef));
+		
+			// Check for the Extensions.mkext
+			OSErr rootErr = FSMakeFSRefUnicode (&rootSystemLibraryRef,
+				sizeof (extensionsCacheName) / sizeof (UniChar), extensionsCacheName, kTextEncodingUnknown, &rootSystemLibraryExtensionsCacheRef);
+			OSErr helperErr = FSMakeFSRefUnicode (&helperSystemLibraryRef,
+				sizeof (extensionsCacheName) / sizeof (UniChar), extensionsCacheName, kTextEncodingUnknown, &helperSystemLibraryExtensionsCacheRef);
+
+			if (rootErr == noErr) {
+				if (helperErr == noErr) {
+					ThrowIfOSErr_AC (FSGetCatalogInfo (&rootSystemLibraryExtensionsCacheRef, kFSCatInfoContentMod, &catInfo, NULL, NULL, NULL));
+					BlockMoveData (&catInfo.contentModDate, &rootModDate, sizeof (rootModDate));
+					ThrowIfOSErr_AC (FSGetCatalogInfo (&helperSystemLibraryExtensionsCacheRef, kFSCatInfoContentMod, &catInfo, NULL, NULL, NULL));
+					if (memcmp (&rootModDate, &catInfo.contentModDate, sizeof (rootModDate))) {
+						setCopyingFile ("Extensions.mkext");
+						FSDeleteObject (&helperSystemLibraryExtensionsCacheRef);
+						ThrowIfOSErr_AC (FSRefFileCopy (&rootSystemLibraryExtensionsCacheRef, &helperSystemLibraryRef, NULL, NULL, 0, false));			
+					}	
+				} else {
+					setCopyingFile ("Extensions.mkext");
+					FSRefFileCopy (&rootSystemLibraryExtensionsCacheRef, &helperSystemLibraryRef, NULL, NULL, 0, false);
+				}
+			} else {
+				if (helperErr == noErr) FSDeleteObject (&helperSystemLibraryExtensionsCacheRef);
+			}
+			
+			// Now, see if we need to copy the Extensions folder
+			ThrowIfOSErr_AC (FSGetCatalogInfo (&rootSystemLibraryExtensionsRef, kFSCatInfoContentMod, &catInfo, NULL, NULL, NULL));
+			BlockMoveData (&catInfo.contentModDate, &rootModDate, sizeof (rootModDate));
+			ThrowIfOSErr_AC (FSGetCatalogInfo (&helperSystemLibraryExtensionsRef, kFSCatInfoContentMod, &catInfo, NULL, NULL, NULL));
+			if (memcmp (&rootModDate, &catInfo.contentModDate, sizeof (rootModDate))) {
+				FSRefDeleteDirectory (&helperSystemLibraryExtensionsRef);
+				ThrowIfOSErr_AC (FSRefFilteredDirectoryCopy (&rootSystemLibraryExtensionsRef, &helperSystemLibraryRef, NULL, NULL, 0, false, 
+									NULL, copyFilterGlue));
+			}	
+			
+			// If the root disk was not writeable, then perhaps we need to install the extensions on the helper
+			if (!rootDisk->getIsWriteable ()) {
+				installExtensionsWithRootDirectory (&helperDir);
+			}
+		}		
 	}
+	catch (...) {
+		setCopyInProgress (false);
+		throw;
+	}
+	
+	setCopyInProgress (false);
 
 	NVRAMVariables *nvram = NVRAMVariables::GetVariables ();
 	CChar255_AC bootDevice (fPrefs->getBootDevice ());
 	nvram->setBootDevice (bootDevice);
 	CChar255_AC bootCommand (fPrefs->getBootCommand ());
 	nvram->setBootCommand (bootCommand);
+	CChar255_AC bootFile (fPrefs->getBootFile ());
+	nvram->setBootFile (bootFile);
 	nvram->setAutoBoot (fPrefs->getAutoBoot ());	
 	CChar255_AC inputDevice (fPrefs->getInputDevice ());
 	nvram->setInputDevice (inputDevice);

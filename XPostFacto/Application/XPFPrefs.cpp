@@ -63,10 +63,12 @@ XPFPrefs::XPFPrefs ()
 	
 	fNextInputDevice = cFirstInputDevice;
 	fNextOutputDevice = cFirstOutputDevice;
+	fNextHelperVolume = cFirstHelperDisk;
 
 	fBootDisk = NULL;
 	fInstallDisk = NULL;
 	fCachedCreationDate = 0;
+	fHelperCreationDate = 0;
 	
 	fDirty = false;
 	
@@ -166,6 +168,10 @@ XPFPrefs::getPrefsFromFile ()
 			fDebug.arp = false;
 			fDebug.oldgdb = false;
 		}
+		
+		size = sizeof (fHelperCreationDate);
+		err = fPrefs->ReadData (&fHelperCreationDate, size);
+		if (err != noErr) fHelperCreationDate = 0;
 
 	}
 	catch (...) {
@@ -173,6 +179,21 @@ XPFPrefs::getPrefsFromFile ()
 
 	fBootDisk = MountedVolume::WithCreationDate (fCachedCreationDate);
 	if (fBootDisk == NULL) fBootDisk = MountedVolume::GetVolumeList()->First ();
+	
+	fHelperDisk = MountedVolume::WithCreationDate (fHelperCreationDate);
+	if (fHelperDisk == NULL) {
+		for (MountedVolumeIterator iter (MountedVolume::GetVolumeList ()); iter.Current(); iter.Next()) {
+			if (iter->getIsOnBootableDevice () && !iter->getRequiresBootHelper ()) {
+				if (fHelperDisk) {
+					if (iter->getFreeBytes () > fHelperDisk->getFreeBytes ()) {
+						fHelperDisk = iter.Current ();
+					} 
+				} else {
+					fHelperDisk = iter.Current ();
+				}
+			}
+		}
+	}
 
 	fInstallDisk = MountedVolume::GetVolumeList()->First ();
 }
@@ -181,7 +202,7 @@ void
 XPFPrefs::writePrefsToFile ()
 {
 	fPrefs->SetPosition (0);
-	const unsigned int creationDate = fBootDisk->getCreationDate ();
+	unsigned int creationDate = fBootDisk->getCreationDate ();
 	long size = sizeof (creationDate);
 	fPrefs->WriteData (&creationDate, size);
 	size = sizeof (fBootInSingleUserMode);
@@ -206,6 +227,10 @@ XPFPrefs::writePrefsToFile ()
 	
 	size = sizeof (fDebug);
 	fPrefs->WriteData (&fDebug, size);
+	
+	size = sizeof (creationDate);
+	creationDate = fHelperDisk->getCreationDate ();
+	fPrefs->WriteData (&creationDate, size);
 }
 
 XPFPrefs::~XPFPrefs ()
@@ -282,6 +307,8 @@ XPFPrefs::Initialize ()
 	initializeInputAndOutputDevices ();
 	
 	MountedVolume::Initialize ();
+	
+	initializeHelperMenu ();
 	
 	getPrefsFromFile ();
 
@@ -360,6 +387,44 @@ XPFPrefs::addInputOutputDevice (RegEntryID *entry, TemplateList_AC <char> *list)
 	} else {
 		fShortOutputDevices.InsertLast (temp);
 		TMenuBarManager::fgMenuBarManager->AddMenuItem (label, mOutputDevice, 999, fNextOutputDevice++);
+	}
+}
+
+void
+XPFPrefs::initializeHelperMenu ()
+{
+	static bool doneOnce = false;
+	if (doneOnce) return;
+	doneOnce = true;
+
+	for (MountedVolumeIterator iter (MountedVolume::GetVolumeList ()); iter.Current(); iter.Next()) {
+		if (iter->getIsOnBootableDevice () && !iter->getRequiresBootHelper ()) {
+			TMenuBarManager::fgMenuBarManager->AddMenuItem (iter->getVolumeName (), mHelper, 999, fNextHelperVolume++);
+		}		
+	}
+}
+
+unsigned int 
+XPFPrefs::getHelperVolumeIndex ()
+{
+	unsigned index = 0;
+	for (MountedVolumeIterator iter (MountedVolume::GetVolumeList ()); iter.Current(); iter.Next()) {
+		if (iter->getIsOnBootableDevice () && !iter->getRequiresBootHelper ()) {
+			index++;
+			if (iter.Current () == fHelperDisk) return index;
+		}		
+	}
+	return 0;
+}
+
+void
+XPFPrefs::setHelperVolumeIndex (unsigned index)
+{
+	for (MountedVolumeIterator iter (MountedVolume::GetVolumeList ()); iter.Current(); iter.Next()) {
+		if (iter->getIsOnBootableDevice () && !iter->getRequiresBootHelper ()) {
+			index--;
+			if (index == 0) setHelperDisk (iter.Current ());
+		}		
 	}
 }
 
@@ -487,6 +552,15 @@ XPFPrefs::setInstallDisk (MountedVolume *theDisk)
 	}
 }
 
+void
+XPFPrefs::setHelperDisk (MountedVolume *theDisk)
+{
+	if (fHelperDisk != theDisk) {
+		fHelperDisk = theDisk;
+		Changed (cSetHelperDisk, NULL);
+	}
+}
+
 void 
 XPFPrefs::setBootInVerboseMode (bool val)
 {
@@ -574,33 +648,97 @@ XPFPrefs::setThrottle (unsigned throttle)
 CStr255_AC
 XPFPrefs::getBootDevice ()
 {
+	MountedVolume *bootDevice = getBootDisk ();
+	if (bootDevice->getRequiresBootHelper ()) {
+		bootDevice = getHelperDisk ();		
+	}
+	
 	if (fUseShortStrings) {
-		return getBootDisk()->getShortOpenFirmwareName();
+		return bootDevice->getShortOpenFirmwareName();
 	} else {
-		return getBootDisk()->getOpenFirmwareName();
+		return bootDevice->getOpenFirmwareName();
 	}
 }
 
 CStr255_AC
 XPFPrefs::getBootDeviceForInstall ()
 {
-	if (fUseShortStringsForInstall) {
-		return fInstallDisk->getShortOpenFirmwareName ();
-	} else {
-		return fInstallDisk->getOpenFirmwareName ();
+	MountedVolume *bootDevice = getInstallDisk ();
+	if (bootDevice->getRequiresBootHelper ()) {
+		bootDevice = getHelperDisk ();		
 	}
+	
+	if (fUseShortStringsForInstall) {
+		return bootDevice->getShortOpenFirmwareName ();
+	} else {
+		return bootDevice->getOpenFirmwareName ();
+	}
+}
+
+CStr255_AC 
+XPFPrefs::getBootCommandBase ()
+{
+	CStr255_AC bootCommand ("0 bootr");
+	if (fBootInVerboseMode || !getBootDisk ()->getHasFinder ()) bootCommand += (" -v");
+	if (fBootInSingleUserMode) bootCommand += (" -s");
+	
+	unsigned debug = 0;
+	if (fDebug.breakpoint)	debug |= 1 << 0;
+	if (fDebug.printf) 		debug |= 1 << 1;
+	if (fDebug.nmi)			debug |= 1 << 2;
+	if (fDebug.kprintf)		debug |= 1 << 3;
+	if (fDebug.ddb)			debug |= 1 << 4;
+	if (fDebug.syslog) 		debug |= 1 << 5;
+	if (fDebug.arp)			debug |= 1 << 6;
+	if (fDebug.oldgdb)		debug |= 1 << 7;
+	if (fDebug.panicText)	debug |= 1 << 8;
+	
+	if (debug) {
+		char debugValue [32];
+		sprintf (debugValue, " debug=0x%X", debug);
+		bootCommand += debugValue;
+	}
+			
+#if 0
+	if (fSetupL2Cache) {
+		char str [128];
+		sprintf (str, " L2CR=0x%X", fL2CRValue);
+		bootCommand += str;
+	}
+#endif
+	return bootCommand;
+
+}
+
+CStr255_AC 
+XPFPrefs::getBootCommand ()
+{
+	CStr255_AC bootCommand = getBootCommandBase ();
+	
+	if (getBootDisk ()->getRequiresBootHelper ()) {
+		bootCommand += " rd=*";
+		if (fUseShortStrings) {
+			bootCommand += fBootDisk->getShortOpenFirmwareName ();
+		} else {
+			bootCommand += fBootDisk->getOpenFirmwareName ();
+		}
+	}
+		
+	return bootCommand;
 }
 
 CStr255_AC
 XPFPrefs::getBootCommandForInstall ()
 {
-	CStr255_AC bootCommand = getBootCommand ();
+	CStr255_AC bootCommand = getBootCommandBase ();
+	
 	bootCommand += " rd=*";
 	if (fUseShortStringsForInstall) {
 		bootCommand += fBootDisk->getShortOpenFirmwareName ();
 	} else {
 		bootCommand += fBootDisk->getOpenFirmwareName();	
 	}
+
 	return bootCommand;
 }
 
@@ -614,7 +752,11 @@ XPFPrefs::getBootFileForInstall ()
 CStr255_AC
 XPFPrefs::getBootFile ()
 {
-	return CStr255_AC ("");
+	if (getBootDisk ()->getRequiresBootHelper ()) {
+		return CStr255_AC ("-h");
+	} else {
+		return CStr255_AC ("");
+	}
 }
 
 void
@@ -696,40 +838,6 @@ XPFPrefs::setDebugPanicText (bool val)
 		fDebug.panicText = val;
 		Changed (cToggleDebugPanicText, NULL);
 	}
-}
-
-CStr255_AC 
-XPFPrefs::getBootCommand ()
-{
-	CStr255_AC bootCommand ("0 bootr");
-	if (fBootInVerboseMode || !getBootDisk ()->getHasFinder ()) bootCommand += (" -v");
-	if (fBootInSingleUserMode) bootCommand += (" -s");
-	
-	unsigned debug = 0;
-	if (fDebug.breakpoint)	debug |= 1 << 0;
-	if (fDebug.printf) 		debug |= 1 << 1;
-	if (fDebug.nmi)			debug |= 1 << 2;
-	if (fDebug.kprintf)		debug |= 1 << 3;
-	if (fDebug.ddb)			debug |= 1 << 4;
-	if (fDebug.syslog) 		debug |= 1 << 5;
-	if (fDebug.arp)			debug |= 1 << 6;
-	if (fDebug.oldgdb)		debug |= 1 << 7;
-	if (fDebug.panicText)	debug |= 1 << 8;
-	
-	if (debug) {
-		char debugValue [32];
-		sprintf (debugValue, " debug=0x%X", debug);
-		bootCommand += debugValue;
-	}
-		
-#if 0
-	if (fSetupL2Cache) {
-		char str [128];
-		sprintf (str, " L2CR=0x%X", fL2CRValue);
-		bootCommand += str;
-	}
-#endif
-	return bootCommand;
 }
 
 

@@ -164,6 +164,8 @@ XPFWindow::updateBootMessage ()
 		case kStatusOK:
 			message = "boot-device: ";
 			message += fPrefs->getBootDevice ();
+			message += "\nboot-file: ";
+			message += fPrefs->getBootFile ();
 			message += "\nboot-command: ";
 			message += fPrefs->getBootCommand ();
 			message += "\nauto-boot?: ";

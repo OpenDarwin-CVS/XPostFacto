@@ -65,6 +65,9 @@ class XPFPrefs : public MDependable_AC {
 		void setInstallDisk (MountedVolume *theDisk);
 		MountedVolume* getInstallDisk () {return fInstallDisk;}
 		
+		void setHelperDisk (MountedVolume *theDisk);
+		MountedVolume* getHelperDisk () {return fHelperDisk;}
+		
 		bool getBootInVerboseMode () {return fBootInVerboseMode;}
 		bool getBootInSingleUserMode () {return fBootInSingleUserMode;}
 		
@@ -81,6 +84,7 @@ class XPFPrefs : public MDependable_AC {
 		bool getSetupL2Cache () {return fSetupL2Cache;}
 		void setSetupL2Cache (bool val);
 		unsigned int getL2CRValue () {return fL2CRValue;}
+		bool getUseShortStrings () {return fUseShortStrings;}
 
 		CStr255_AC getBootDevice ();
 		CStr255_AC getBootFile ();
@@ -100,7 +104,11 @@ class XPFPrefs : public MDependable_AC {
 		
 		unsigned int getInputDeviceIndex () {return fInputDeviceIndex;}
 		unsigned int getOutputDeviceIndex () {return fOutputDeviceIndex;}
+		
+		unsigned int getNextHelperVolume () {return fNextHelperVolume;}
+		unsigned int getHelperVolumeIndex ();
 
+		void setHelperVolumeIndex (unsigned index);
 		void setOutputDeviceIndex (unsigned index);
 		void setInputDeviceIndex (unsigned index);
 		
@@ -136,11 +144,15 @@ class XPFPrefs : public MDependable_AC {
 		void writePrefsToFile ();
 		
 		void initializeInputAndOutputDevices ();
+		void initializeHelperMenu ();
 		void addInputOutputDevice (RegEntryID *entry, TemplateList_AC <char> *list);
+		
+		CStr255_AC getBootCommandBase ();
 
 		CFile_AC *fPrefs;
 
 		unsigned int fCachedCreationDate;
+		unsigned int fHelperCreationDate;
 		unsigned int fL2CRValue;
 		unsigned int fThrottle;
 		bool fBootInVerboseMode;
@@ -157,6 +169,7 @@ class XPFPrefs : public MDependable_AC {
 
 		MountedVolume *fBootDisk;
 		MountedVolume *fInstallDisk;
+		MountedVolume *fHelperDisk;
 
 		TemplateList_AC <char> fInputDevices;
 		TemplateList_AC <char> fOutputDevices;
@@ -167,6 +180,7 @@ class XPFPrefs : public MDependable_AC {
 		
 		unsigned int fNextInputDevice;
 		unsigned int fNextOutputDevice;		
+		unsigned int fNextHelperVolume;
 		
 		XPFDebug fDebug;
 
