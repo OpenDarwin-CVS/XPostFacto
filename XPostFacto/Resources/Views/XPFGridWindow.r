@@ -1,9 +1,5 @@
-data 'TxSt' (16903, "System 10, plain") {
-	$"007F 000A 0000 0000 0000 00"                                                                        /* ...Â....... */
-};
-
-data 'TxSt' (17832, "System 12, bold") {
-	$"0182 000C 0000 0000 0000 00"                                                                        /* .‚......... */
+data 'TxSt' (5312, "Application 12, bold") {
+	$"019C 000C 0000 0000 0000 0161"                                                                      /* .œ.........a */
 };
 
 data 'TxSt' (27392, "Application 10, plain") {
@@ -1961,7 +1957,7 @@ resource 'View' (1200, "VolumeDisplay", purgeable) {
 		/* [1] */
 		ViewSignatureAndClassname {
 			'view',
-			435,
+			400,
 			"XPFVolumeDisplay",
 			'view',
 			notEnabled,
@@ -2009,21 +2005,12 @@ resource 'View' (1200, "VolumeDisplay", purgeable) {
 		/* [2] */
 		ViewSignatureAndClassname {
 			'stat',
-			135,
+			100,
 			"",
 			'voln',
 			notEnabled,
 			noIdle,
-			{	/* array BehaviorArray: 1 elements */
-				/* [1] */
-				BehaviorSignatureAndClassname {
-					noID,
-					"XPFHelpBehavior",
-					Behavior {
-						enabled,
-						noIdle
-					}
-				}
+			{	/* array BehaviorArray: 0 elements */
 			},
 			MARelease13View {
 
@@ -2044,7 +2031,7 @@ resource 'View' (1200, "VolumeDisplay", purgeable) {
 			sizeVariable,
 			shown,
 			doesntWantToBeTarget,
-			handlesCursor,
+			doesntHandleCursor,
 			letsSubViewsHandleCursor,
 			noCursorID,
 			doesntHandleHelp,
@@ -2073,7 +2060,7 @@ resource 'View' (1200, "VolumeDisplay", purgeable) {
 					/* [4] */
 					0
 				},
-				17832,
+				5312,
 				dontPreferOutline,
 				autoWrap,
 				dontEraseFirst,
@@ -2206,7 +2193,7 @@ resource 'View' (1200, "VolumeDisplay", purgeable) {
 					/* [4] */
 					0
 				},
-				16903,
+				27392,
 				dontPreferOutline,
 				autoWrap,
 				dontEraseFirst,

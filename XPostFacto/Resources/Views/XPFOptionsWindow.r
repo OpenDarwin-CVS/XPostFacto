@@ -1324,7 +1324,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				19,
+				20,
 				/* [2] */
 				144
 			},
@@ -1405,7 +1405,7 @@ resource 'View' (1010, "Additional Settings", purgeable) {
 			},
 			{	/* array: 2 elements */
 				/* [1] */
-				19,
+				20,
 				/* [2] */
 				143
 			},
