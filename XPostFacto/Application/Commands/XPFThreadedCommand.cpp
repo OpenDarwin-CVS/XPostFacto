@@ -184,7 +184,9 @@ XPFThreadedCommand::updateExtensionsCacheForRootDirectory (FSRef *rootDirectory)
 		}
 	}
 #else
-	#pragma unused (rootDirectory)
+	FSRef extensionsCache;
+	OSErr err = XPFFSRef::getExtensionsCacheFSRef (rootDirectory, &extensionsCache, false);
+	if (err == noErr) FSDeleteObject (&extensionsCache);
 #endif
 }
 
