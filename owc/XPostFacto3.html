@@ -1,4 +1,4 @@
-<body><h2>XPostFacto 3.0a6</h2>
+<body><h2>XPostFacto 3.0a7</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
@@ -6,21 +6,29 @@ November 17, 2003
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
-You should also remember to check the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto.html">online version</a> of this documentation from time to time, to see whether there have been any changes.
+You should also remember to check the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto3.html">online version</a> of this documentation from time to time, to see whether there have been any changes.
 
 <p>Here's a quick link to download the latest version. 
 
 <blockquote>
-<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a6.sit">Download XPostFacto 3.0a6</a>
+<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a7.sit">Download XPostFacto 3.0a7</a>
 </blockquote>
 
 <p>Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes.  Note that the latest version is an alpha version of XPostFacto 3. "Alpha" means it's not finished yet, and there are likely to be some bugs.
 
-<h3>Significant Changes in 3.0a6</h3>
+<h3>Significant Changes in 3.0a7</h3>
 
-<p>There are quite a few changes between XPF 3.0a4 and 3.0a6, and I'll describe them here. Eventually, I'll incorporate this into the rest of the document.  <b>Read this! <i>Yes, you! I'll tell you when you can stop!</i></b>
+<p>There are quite a few changes between XPF 3.0a4 and 3.0a7, and I'll describe them here. Eventually, I'll incorporate this into the rest of the document.  <b>Read this! <i>Yes, you! I'll tell you when you can stop!</i></b>
 
-<p><b>The most important thing to note is that users testing XPF 3.0a6 are mostly reporting problems. So you really should not use XPF 3.0a6 unless you have good backups and some time for testing. And consult the tech forum for user reports</b>
+<p><b>The most important thing to note is that users testing XPF 3.0a6 were mostly reporting problems. So you should expect that you may encounter some difficulties testing 3.0a7 as well.</b>
+
+<h4>Changes since 3.0a6</h4>
+
+<p>I've made some minor changes to OWCCacheConfig since 3.0a6. Some users are reporting problems with OWCCacheConfig -- and, worse, reporting that they are unable to disable it using the techniques listed below. Unfortunately, I can't reproduce the problem yet.
+
+<p>I've also removed the AppleMaceEthernetPreJaguar kernel extension. One user reported that removing it solves a kernel panic which several users had reported.
+
+<p>These are the two major issues being reported with 3.0a6 initially -- though there are other issues as well.
 
 <h4>Panther Support</h4>
 
@@ -509,6 +517,11 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a7.sit">3.0a7 (November 17, 2003)</a>
+<dd>I've made some minor changes to OWCCacheConfig since 3.0a6. Some users are reporting problems with OWCCacheConfig -- and, worse, reporting that they are unable to disable it using the techniques below. Unfortunately, I can't reproduce the problem yet.
+
+<p>I've also removed the AppleMaceEthernetPreJaguar kernel extension. One user reported that removing it solves a kernel panic which several users had reported.
+
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a6.sit">3.0a6 (November 16, 2003)</a>
 <dd>Here's a list of the bugs fixed since 3.0a4. Version 3.0a6 also has support for Mac OS X 10.3 on the 7300 - 9600 series (and friends), but without support for built-in video (yet). I'm also not entirely sure which video cards will work with 10.3 at this point.
 
