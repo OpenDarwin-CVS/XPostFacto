@@ -275,6 +275,8 @@ XPFPrefs::PoseSaveDialog ()
 void
 XPFPrefs::getPrefsFromNVRAM ()
 {		
+	bool nvramBootsInto9 = false;
+
 	XPFNVRAMSettings *nvram = XPFNVRAMSettings::GetSettings ();
 
 	char *bootCommand = nvram->getStringValue ("boot-command");
@@ -286,91 +288,90 @@ XPFPrefs::getPrefsFromNVRAM ()
 
 	// Check to see whether NVRAM is set to boot back into Mac OS 9
 	if (strstr (bootDevice, "/AAPL,ROM")) {
-#ifdef __MACH__
-		// If we're in Mac OS X now, we set the prefs to reboot in 9. We don't need to update the change
-		// count because we don't need to rewrite NVRAM if the user just quits.
-		setRebootInMacOS9 (true, false);
-#else
-		// If we're in Mac OS 9, we leave the pref to reboot in X, since that is probably what the user
-		// wants. But we force asking save if we have a target disk already
-		if (fTargetDisk) fForceAskSave = true;
-#endif
-		// In either case, we bail out here, since the rest of the NVRAM settings won't be interesting
-		// if we're booting in 9.
-		return;	
+		// We use the pref to reboot into Mac OS X even if the NVRAM says to boot in 9
+		// But we need to force save in that case
+		nvramBootsInto9 = true;
+		if (!fRebootInMacOS9) fForceAskSave = true;
+	} else {
+		if (fRebootInMacOS9) fForceAskSave = true;
 	}
-	
+
 	// For most settings, we use what is in our preferences rather than what is in NVRAM,
 	// unless there is a setting in NVRAM that is likely meant to override our file setting.
 	// For any mismatch, we force the app to ask about saving. 
 	
-	if (fAutoBoot != nvram->getBooleanValue ("auto-boot?")) fForceAskSave = true;;	
-	if (fBootInSingleUserMode != (strstr (bootCommand, " -s") != 0)) fForceAskSave = true;
-	if (fBootInVerboseMode != (strstr (bootCommand, " -v") != 0)) fForceAskSave = true;
+	if (fAutoBoot != nvram->getBooleanValue ("auto-boot?")) fForceAskSave = true;
+	
+	if (!nvramBootsInto9) {
+		// None of these will be interesting if nvram was set to boot into 9
 		
-	char *debugString = strstr (bootCommand, "debug=");
-	if (debugString) {
-		debugString += strlen ("debug=");
-		UInt32 debug = strtoul (debugString, NULL, 0);
-		// If there is an actual debug string in NVRAM, assume we want to use it.
-		if (fDebug != debug) {
-			fDebug = debug;
-			fForceAskSave = true;
-		}
-	} else {
-		// If no debug string, then force save if we have a debug value
-		if (fDebug) fForceAskSave = true;
-	}
-	
-	char *romndrvstring = strstr (bootCommand, "romndrv=");
-	if (romndrvstring) {
-		romndrvstring += strlen ("romndrv=");
-		UInt32 romndrv = strtoul (romndrvstring, NULL, 0);
-		// If there is a romndrv= string, assume we want to use it
-		if (fUseROMNDRV != romndrv) {
-			fUseROMNDRV = romndrv;
-			fForceAskSave = true;
-		}
-	} else {
-		// If no romndrv= string, then force save if we have a romndrv value
-		if (fUseROMNDRV) fForceAskSave = true;
-	}
-	
-	// For the target disk and helper disk, we use what is in NVRAM rather than preferences file
-	// But, once again, we ask to save preferences if they are different
-	
-	MountedVolume *bootDisk = MountedVolume::WithOpenFirmwarePath (bootDevice);
-	MountedVolume *rootDisk = bootDisk;
-	
-	char *rdString = strstr (bootCommand, "rd=*");
-	if (rdString) {
-		char rootPath[1024];
-		strcpy (rootPath, rdString + strlen ("rd=*"));
-		char *pos = strchr (rootPath, ' ');
-		if (pos) *pos = 0;
-		
-		rootDisk = MountedVolume::WithOpenFirmwarePath (rootPath);
-		if (!rootDisk) rootDisk = bootDisk;
-	}	
-	
-	if (rootDisk && (rootDisk->getBootStatus () == kStatusOK)) {
-		if (rootDisk != fTargetDisk) fForceAskSave = true;
-		setTargetDisk (rootDisk);
-		if (bootDisk && (bootDisk != rootDisk)) {
-			if (bootDisk->getHelperStatus() == kStatusOK) {
-				if (bootDisk != fTargetDisk->getHelperDisk ()) fForceAskSave = true;
-				fTargetDisk->setHelperDisk (bootDisk);
-			} else {
+		if (fBootInSingleUserMode != (strstr (bootCommand, " -s") != 0)) fForceAskSave = true;
+		if (fBootInVerboseMode != (strstr (bootCommand, " -v") != 0)) fForceAskSave = true;
+			
+		char *debugString = strstr (bootCommand, "debug=");
+		if (debugString) {
+			debugString += strlen ("debug=");
+			UInt32 debug = strtoul (debugString, NULL, 0);
+			// If there is an actual debug string in NVRAM, assume we want to use it.
+			if (fDebug != debug) {
+				fDebug = debug;
 				fForceAskSave = true;
 			}
+		} else {
+			// If no debug string, then force save if we have a debug value
+			if (fDebug) fForceAskSave = true;
 		}
-		// We check at launch for available updates to the current configuration
-		// We do it here because we get here where we have a MountedVolume for the current root
-		checkForUpdates (false);
-	} else {
-		// If we can't set the target disk to the current root, then we'd ask
-		// user about saving (since our pref won't match what's in NVRAM).
-		fForceAskSave = true;
+		
+		char *romndrvstring = strstr (bootCommand, "romndrv=");
+		if (romndrvstring) {
+			romndrvstring += strlen ("romndrv=");
+			UInt32 romndrv = strtoul (romndrvstring, NULL, 0);
+			// If there is a romndrv= string, assume we want to use it
+			if (fUseROMNDRV != romndrv) {
+				fUseROMNDRV = romndrv;
+				fForceAskSave = true;
+			}
+		} else {
+			// If no romndrv= string, then force save if we have a romndrv value
+			if (fUseROMNDRV) fForceAskSave = true;
+		}
+		
+		// For the target disk and helper disk, we use what is in NVRAM rather than preferences file
+		// But, once again, we ask to save preferences if they are different
+		
+		MountedVolume *bootDisk = MountedVolume::WithOpenFirmwarePath (bootDevice);
+		MountedVolume *rootDisk = bootDisk;
+		
+		char *rdString = strstr (bootCommand, "rd=*");
+		if (rdString) {
+			char rootPath[1024];
+			strcpy (rootPath, rdString + strlen ("rd=*"));
+			char *pos = strchr (rootPath, ' ');
+			if (pos) *pos = 0;
+			
+			rootDisk = MountedVolume::WithOpenFirmwarePath (rootPath);
+			if (!rootDisk) rootDisk = bootDisk;
+		}	
+		
+		if (rootDisk && (rootDisk->getBootStatus () == kStatusOK)) {
+			if (rootDisk != fTargetDisk) fForceAskSave = true;
+			setTargetDisk (rootDisk);
+			if (bootDisk && (bootDisk != rootDisk)) {
+				if (bootDisk->getHelperStatus() == kStatusOK) {
+					if (bootDisk != fTargetDisk->getHelperDisk ()) fForceAskSave = true;
+					fTargetDisk->setHelperDisk (bootDisk);
+				} else {
+					fForceAskSave = true;
+				}
+			}
+			// We check at launch for available updates to the current configuration
+			// We do it here because we get here where we have a MountedVolume for the current root
+			checkForUpdates (false);
+		} else {
+			// If we can't set the target disk to the current root, then we'd ask
+			// user about saving (since our pref won't match what's in NVRAM).
+			fForceAskSave = true;
+		}
 	}
 	
 	// For input and output devices, we'll use the NVRAM setting if there is no pref setting
@@ -636,6 +637,7 @@ XPFPrefs::DoRead (TFile* aFile, bool forPrinting)
 		fileStream >> fUseROMNDRV;
 		fileStream >> fRegisteredVersion;
 		fileStream >> fUsePatchedRagePro;
+		fileStream >> fRebootInMacOS9;
 	}
 	
 	catch (...) {
@@ -759,6 +761,7 @@ XPFPrefs::DoWrite (TFile* aFile, bool makingCopy)
 	fileStream << fUseROMNDRV;
 	fileStream << fRegisteredVersion;
 	fileStream << fUsePatchedRagePro;
+	fileStream << fRebootInMacOS9;
 }
 
 void 

@@ -167,7 +167,6 @@ DECLARE_DEBUG_ACCESSORS (DebugPanicText)
 
 		bool fUseShortStrings;
 		bool fUseShortStringsForInstall;
-		bool fRebootInMacOS9;
 		bool fRestartOnClose;
 		bool fTooBigForNVRAM;
 		bool fTooBigForNVRAMForInstall;
@@ -195,6 +194,7 @@ DECLARE_DEBUG_ACCESSORS (DebugPanicText)
 		UInt32	fDebug;
 		UInt8	fUseROMNDRV;
 		UInt32	fRegisteredVersion;
+		UInt8 fRebootInMacOS9;
 };
 
 #endif
