@@ -85,6 +85,7 @@ class MountedVolume : public MDependable_AC
 		UInt32 getBootXVersion () {if (fPartInfo) return fPartInfo->getBootXVersion (); else return 0;}
 		bool getExtendsPastEightGB () {if (fPartInfo) return fPartInfo->getExtendsPastEightGB (); else return false;}
 		bool getIsOnBootableDevice () {return fIsOnBootableDevice;}
+		bool getWillRunOnCurrentCPU ();
 		bool getRequiresBootHelper ();
 		bool getHasMachKernel () {return fHasMachKernel;}
 		bool getHasInstaller () {return fHasInstaller;}

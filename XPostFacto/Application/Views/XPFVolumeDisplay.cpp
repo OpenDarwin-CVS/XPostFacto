@@ -132,8 +132,7 @@ XPFVolumeDisplay::setVolume (MountedVolume* newVolume)
 	fIcon->SetIconSuite (iconSuite, true);
 	
 	CStr255_AC status;
-	unsigned statusCode = fVolume->getInstallerStatus ();
-	if (statusCode != kStatusOK) statusCode = fVolume->getBootStatus ();
+	unsigned statusCode = fVolume->getHasInstaller () ? fVolume->getInstallerStatus () : fVolume->getBootStatus ();
 	
 	if (statusCode == kStatusOK) {
 		if (fVolume->getHasMachKernel ()) {

@@ -939,12 +939,35 @@ MountedVolume::getRequiresBootHelper ()
 	return false;
 }
 
+bool
+MountedVolume::getWillRunOnCurrentCPU ()
+{
+	if (!fMacOSXMajorVersion) return true;
+
+	long cpuFamily;
+	if (Gestalt (gestaltNativeCPUfamily, &cpuFamily) == noErr) {
+		switch (cpuFamily) {
+			case gestaltCPU601:
+				return false;
+				
+			case gestaltCPU603:
+			case gestaltCPU604:
+				return fMacOSXMajorVersion < 6;
+		}
+	}
+	
+	return true;
+}
+
 unsigned
 MountedVolume::getHelperStatus ()
 {
-	unsigned installTargetStatus = getInstallTargetStatus ();
-	if (installTargetStatus != kStatusOK) return installTargetStatus;
+	if (!getIsHFSPlus ()) return kNotHFSPlus;
+	if (!getIsOnBootableDevice ()) return kNotBootable;
+	if (!getValidOpenFirmwareName ()) return kNoOFName;
+	if (!getIsWriteable ()) return kNotWriteable;
 	if (fBootableDevice->getNeedsHelper ()) return kNeedsHelper;
+
 	return kStatusOK;
 }
 
@@ -956,6 +979,7 @@ MountedVolume::getBootStatus ()
 	if (!getIsOnBootableDevice ()) return kNotBootable;
 	if (!getValidOpenFirmwareName ()) return kNoOFName;
 	if (!getIsWriteable() && getHasInstaller ()) return kInstallOnly;
+	if (!getWillRunOnCurrentCPU ()) return kCPUNotSupported;
 
 	return kStatusOK;
 }
@@ -980,6 +1004,7 @@ MountedVolume::getInstallerStatus ()
 	if (!getHasMachKernel ()) return kNoMachKernel;
 	if (!getIsOnBootableDevice ()) return kNotBootable;
 	if (!getValidOpenFirmwareName ()) return kNoOFName;
+	if (!getWillRunOnCurrentCPU ()) return kCPUNotSupported;
 	
 	return kStatusOK;
 }

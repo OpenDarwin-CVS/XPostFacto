@@ -86,6 +86,7 @@ enum {
 	kDeletingXPFCache,
 	kCheckingPermissions,
 	kXPostFactoRegisterMenu,
+	kCPUNotSupported,
 };
 
 

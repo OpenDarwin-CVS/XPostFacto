@@ -95,5 +95,7 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			"Checking Permissions";
 			
 			"Register XPostFacto";
+			
+			"G3/G4 CPU upgrade required";
 	}
 };
