@@ -111,7 +111,7 @@ static void Main(ClientInterfacePtr ciPtr)
   ret = GetBootPaths();
   if (ret != 0) FailToBoot(1);
   
-  DrawSplashScreen();
+  DrawSplashScreen(0);
   
   while (ret == 0) {
     ret = LoadFile(gBootFile);
@@ -126,6 +126,8 @@ static void Main(ClientInterfacePtr ciPtr)
   
   ret = LoadDrivers(gRootDir);
   if (ret != 0) FailToBoot(4);
+  
+  DrawSplashScreen(1);
 
   // added by ryan.rempel@utoronto.ca
   XPFfixProcessorSettings ();
@@ -530,7 +532,7 @@ static void FailToBoot(long num)
 		printf ("FailToBoot: %d\n", num);
 		Enter();
 	} else {
-		DrawBrokenSystemFolder();
+		DrawFailedBootPicture();
 		while (1);
 		num = 0;
 	}

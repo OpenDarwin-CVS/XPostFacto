@@ -94,13 +94,13 @@ long InitSLWords(void)
      " ;"
      
      // Set up the spin cursor stuff.
-     " 0 value spinType"
      " 0 value screenIH"
      " 0 value cursorAddr"
      " 0 value cursorX"
      " 0 value cursorY"
      " 0 value cursorW"
      " 0 value cursorH"
+     " 0 value cursorFrames"
      " 0 value cursorPixelSize"
      " 0 value cursorStage"
      " 0 value cursorTime"
@@ -112,40 +112,23 @@ long InitSLWords(void)
      "     get-msecs dup cursorTime - cursorDelay >= if"
      "       to cursorTime"
      "       slw_update_keymap"
-     "       spinType 0= if"
-     "         cursorStage 1+ 3 mod dup to cursorStage"
-     "         cursorW * cursorH * cursorAddr +"
-     "         cursorX cursorY cursorW cursorH"
-     "         \" draw-rectangle\" screenIH $call-method"
-     "       else"
-     "         cursorStage 1+ 6 mod dup to cursorStage"
-     "         dup 3 > if 6 swap - then dup >r"
-     "         1+ cursorW * cursorPixelSize * cursorAddr +"
-     "         cursorX cursorY cursorW cursorH r> 1+ -"
-     "         \" draw-rectangle\" screenIH $call-method"
-     "       then"
+     "       cursorStage 1+ cursorFrames mod dup to cursorStage"
+     "       cursorW cursorH * cursorPixelSize * * cursorAddr +"
+     "       cursorX cursorY cursorW cursorH"
+     "       \" draw-rectangle\" screenIH $call-method"
      "     else"
      "       drop"
      "     then"
      "   then"
      " ;"
      
-     // slw_spin_init ( screenIH cursorAddr cursorX cursorY cursorW cursorH --)
+     // slw_spin_init ( screenIH cursorAddr cursorX cursorY cursorW cursorH--)
      " : slw_spin_init"
-     "   to cursorH to cursorW"
-     "   to cursorY to cursorX"
+     "   dup FFFF and to cursorH 10 >> drop"
+     "   dup FFFF and to cursorW 10 >> to cursorPixelSize"
+     "   dup FFFF and to cursorY 10 >> d# 1000 swap / to cursorDelay"
+     "   dup FFFF and to cursorX 10 >> to cursorFrames"
      "   to cursorAddr to screenIH"
-     "   d# 111 to cursorDelay"
-     "   ['] slw_spin to spin" 
-     " ;"
-     
-     // slw_spin_init2 ( screenIH cursorAddr cursorX cursorY cursorW cursorH--)
-     " : slw_spin_init2"
-     "   1 to spinType"
-     "   to cursorH dup FFFF and to cursorW 10 >> to cursorPixelSize"
-     "   to cursorY to cursorX"
-     "   to cursorAddr to screenIH"
-     "   d# 50 to cursorDelay"
      "   ['] slw_spin to spin" 
      " ;"
      
@@ -241,25 +224,25 @@ void UpdateKeyMap(void)
 }
 
 
-void SpinInit(long spinType, CICell screenIH, char *cursorAddr,
-	      long cursorX, long cursorY, long cursorW, long cursorH,
-	      long pixelSize)
+void SpinInit(CICell screenIH, char *cursorAddr,
+	      long cursorX, long cursorY,
+	      long cursorW, long cursorH,
+	      long frames,  long fps,
+	      long pixelSize, long spare)
 {
-  if (spinType == 0) {
-    CallMethod(6, 0, SLWordsIH, "slw_spin_init",
-	       screenIH, (long)cursorAddr,
-	       cursorX, cursorY, cursorW, cursorH);
-  } else {
-    CallMethod(6, 0, SLWordsIH, "slw_spin_init2",
-	       screenIH, (long)cursorAddr,
-	       cursorX, cursorY, cursorW | pixelSize << 16, cursorH);
-  }
+  CallMethod(6, 0, SLWordsIH, "slw_spin_init",
+	     screenIH, (long)cursorAddr,
+	     cursorX | (frames << 16),
+	     cursorY | (fps << 16),
+	     cursorW | (pixelSize << 16),
+	     cursorH | (spare << 16));
 }
 
 void Spin(void)
 {
   CallMethod(0, 0, SLWordsIH, "slw_spin");
 }
+
 
 long GetPackageProperty(CICell phandle, char *propName,
 			char **propAddr, long *propLen)

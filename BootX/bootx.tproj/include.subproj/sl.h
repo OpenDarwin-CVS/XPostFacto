@@ -203,8 +203,8 @@ extern CICell SearchForNodeMatching(CICell ph, long top, char *value);
 
 // Externs for display.c
 extern long InitDisplays(void);
-extern long DrawSplashScreen(void);
-extern long DrawBrokenSystemFolder(void);
+extern long DrawSplashScreen(long stage);
+extern long DrawFailedBootPicture(void);
 extern void GetMainScreenPH(Boot_Video_Ptr video);
 
 // Externs for drivers.c

@@ -15,6 +15,39 @@
 			isa = PBXCopyFilesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F513163C0322F90801A80001 = {
+			isa = PBXFileReference;
+			path = appleboot.h;
+			refType = 4;
+		};
+		F513163D0322F90801A80001 = {
+			isa = PBXFileReference;
+			path = failedboot.h;
+			refType = 4;
+		};
+		F513163E0322F90801A80001 = {
+			isa = PBXFileReference;
+			path = netboot.h;
+			refType = 4;
+		};
+		F513163F0322F90801A80001 = {
+			fileRef = F513163C0322F90801A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F51316400322F90801A80001 = {
+			fileRef = F513163D0322F90801A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F51316410322F90801A80001 = {
+			fileRef = F513163E0322F90801A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F514D82002B3C94D01A80001 = {
 			isa = PBXFileReference;
 			path = XPostFacto.html;
@@ -548,11 +581,11 @@
 				F572EEC10254E9E801A80001,
 				F572EEC20254E9E801A80001,
 				F541C87002FEE9E201A80001,
-				F5BFE4160304D3B801A80001,
 				F5BFE4170304D3BA01A80001,
-				F5BFE4180304D3BC01A80001,
-				F5BFE4190304D3BD01A80001,
 				F5BFE4200304D49601A80001,
+				F513163F0322F90801A80001,
+				F51316400322F90801A80001,
+				F51316410322F90801A80001,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4330,7 +4363,6 @@
 		};
 		F572EEA70254E9E801A80001 = {
 			children = (
-				F572EEA80254E9E801A80001,
 				F572EEA90254E9E801A80001,
 				F572EEAA0254E9E801A80001,
 				F572EEAB0254E9E801A80001,
@@ -4338,19 +4370,15 @@
 				F572EEAD0254E9E801A80001,
 				F572EEAE0254E9E801A80001,
 				F572EEAF0254E9E801A80001,
-				F572EEB10254E9E801A80001,
-				F572EEB20254E9E801A80001,
 				F572EEB40254E9E801A80001,
 				F572EEB50254E9E801A80001,
+				F513163C0322F90801A80001,
+				F513163D0322F90801A80001,
+				F513163E0322F90801A80001,
 			);
 			isa = PBXGroup;
 			name = "Secondary Loader";
 			path = sl.subproj;
-			refType = 4;
-		};
-		F572EEA80254E9E801A80001 = {
-			isa = PBXFileReference;
-			path = bad_system.h;
 			refType = 4;
 		};
 		F572EEA90254E9E801A80001 = {
@@ -4386,16 +4414,6 @@
 		F572EEAF0254E9E801A80001 = {
 			isa = PBXFileReference;
 			path = elf.h;
-			refType = 4;
-		};
-		F572EEB10254E9E801A80001 = {
-			isa = PBXFileReference;
-			path = happy_foot.h;
-			refType = 4;
-		};
-		F572EEB20254E9E801A80001 = {
-			isa = PBXFileReference;
-			path = happy_mac.h;
 			refType = 4;
 		};
 		F572EEB40254E9E801A80001 = {
@@ -5119,26 +5137,8 @@
 			settings = {
 			};
 		};
-		F5BFE4160304D3B801A80001 = {
-			fileRef = F572EEA80254E9E801A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		F5BFE4170304D3BA01A80001 = {
 			fileRef = F572EEAA0254E9E801A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5BFE4180304D3BC01A80001 = {
-			fileRef = F572EEB10254E9E801A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F5BFE4190304D3BD01A80001 = {
-			fileRef = F572EEB20254E9E801A80001;
 			isa = PBXBuildFile;
 			settings = {
 			};
