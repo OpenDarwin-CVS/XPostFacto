@@ -60,10 +60,6 @@ Read 'hfsA' (138, "ApplePowerStarPE") ":Derived:Extensions:ApplePowerStarPE.hfs"
 Read 'hfsA' (139, "ApplePowerExpressPE") ":Derived:Extensions:ApplePowerExpressPE.hfs";
 Read 'hfsA' (142, "PatchedNDRVSupport") ":Derived:Extensions:PatchedNDRVSupport.hfs";
 
-// Load the package
-
-Read 'pkgA' (128, "OldWorldSupport.pkg") ":Derived:OldWorldSupport.hfs";
-
 // Set up the BootX file for extraction
 
 Read 'BooX' (128, "bootX.xcoff") ":Derived:bootx.xcoff";
