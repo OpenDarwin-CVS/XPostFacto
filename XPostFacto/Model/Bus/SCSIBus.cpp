@@ -217,6 +217,10 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 	}	
 	
 	// Now, see if this is actually an ATA bus
+	// This doesn't work for all ATA cards in Mac OS 9, because I can't always tell whether
+	// Mac OS X is going to treat them as ATA or SCSI. It depends on the card's firmware.
+	// There probably is still a clue in the name registry, but I may have to special case 
+	// each card, since the clues may be different.
 	
 	RegEntryIter cookie;
     RegEntryID foundEntry;

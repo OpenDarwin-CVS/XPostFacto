@@ -114,5 +114,10 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 /* 55 */	"This HFS+ volume has no HFS wrapper, so the boot process may complain that "
 			"there is no bootable HFS volume. Erasing or reformatting the volume in Mac OS 9.x "
 			"can help. Alternatively, you may be able to use a 'Helper Drive' to boot from this volume.";
+			
+			"The Mac OS X Installer will complain that this volume extends past 8 GB, and refuse to install. "
+			"One workaround is to copy an installation from another drive, using Carbon Copy Cloner.";
+			
+			"This volume cannot be used to boot Mac OS X, because it extends past the 8 GB mark on the disk."; 
 	}
 };

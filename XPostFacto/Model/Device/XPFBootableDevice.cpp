@@ -211,15 +211,25 @@ XPFBootableDevice::getFirstHFSPartition ()
 	return retVal;
 }
 
-#ifndef __MACH__
-
 bool
 XPFBootableDevice::isFirewireDevice ()
 {
+#ifdef __MACH__
+	return fIsFireWireDevice;
+#else
 	return false;
+#endif
 }
 
+bool
+XPFBootableDevice::isReallyATADevice ()
+{
+#ifdef __MACH__
+	return fIsATADevice;
+#else
+	return false;
 #endif
+}
 
 void
 XPFBootableDevice::extractPartitionInfo ()
@@ -332,6 +342,8 @@ XPFBootableDevice::XPFBootableDevice
 #ifdef __MACH__
 	fBSDName[0] = 0;
 	fDeviceFile = NULL;
+	fIsFireWireDevice = false;
+	fIsATADevice = false;
 #else
 	fDriverRefNum = driverRefNum;
 #endif
@@ -351,6 +363,12 @@ XPFBootableDevice::XPFBootableDevice
 	while ((parent = IOIteratorNext (iterator)) != NULL) {
 		if (IOObjectConformsTo (parent, "IOFireWireDevice")) {
 			fNeedsHelper = true;
+			fIsFireWireDevice = true;
+			IOObjectRelease (parent);
+			break;
+		}
+		if (IOObjectConformsTo (parent, "IOATABlockStorageDevice")) {
+			fIsATADevice = true;
 			IOObjectRelease (parent);
 			break;
 		}

@@ -45,6 +45,7 @@ advised of the possibility of such damage.
 #define __SCSIDEVICE_H__
 
 #include "XPFBootableDevice.h"
+#include "SCSIBus.h"
 #include <SCSI.h>
 
 class SCSIDevice : public XPFBootableDevice
@@ -58,6 +59,8 @@ class SCSIDevice : public XPFBootableDevice
 		OSErr readBlocks (unsigned int start, unsigned int count, UInt8 **buffer);
 		OSErr writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer);
 		
+		bool isReallyATADevice () {return fSCSIBus && fSCSIBus->getIsActuallyATABus ();} 
+		
 	private:	
 
 		SCSIDevice (DeviceIdent scsiDevice, SInt16 driverRefNum);
@@ -67,6 +70,8 @@ class SCSIDevice : public XPFBootableDevice
 		DeviceIdent	fDeviceIdent;
 		SCSIExecIOPB *fPB;
 		long fPBLength;
+		
+		SCSIBus *fSCSIBus;
 
 };
 

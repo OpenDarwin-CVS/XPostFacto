@@ -57,6 +57,8 @@ class ATADevice : public XPFBootableDevice
 		OSErr readBlocks (unsigned int start, unsigned int count, UInt8 **buffer);
 		OSErr writeBlocks (unsigned int start, unsigned int count, UInt8 *buffer);
 		
+		bool isReallyATADevice () {return true;}
+		
 	private:	
 
 		ATADevice (UInt32 ataDevice, SInt16 driverRefNum);

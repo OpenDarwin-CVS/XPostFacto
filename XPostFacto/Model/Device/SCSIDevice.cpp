@@ -111,7 +111,7 @@ SCSIDevice::SCSIDevice (DeviceIdent scsiDevice, SInt16 driverRefNum)
 	
 	// Now we try various ways to figure out which SCSIBus we're on
 		
-	SCSIBus *bus = NULL;
+	fSCSIBus = NULL;
 		
 // None of these methods seem to actually work, and they sometimes
 // cause crashes. So I'm just removing them for the moment.
@@ -188,25 +188,25 @@ SCSIDevice::SCSIDevice (DeviceIdent scsiDevice, SInt16 driverRefNum)
 */
 
 	// OK, just use the bus number
-	if (!bus) {
-		bus = SCSIBus::BusWithNumber (scsiDevice.bus);
+	if (!fSCSIBus) {
+		fSCSIBus = SCSIBus::BusWithNumber (scsiDevice.bus);
 	}
 	
 	// Now, we should really have it.
-	if (bus) {
+	if (fSCSIBus) {
 		fValidOpenFirmwareName = true;
-		if (bus->getIsActuallyATABus ()) {
+		if (fSCSIBus->getIsActuallyATABus ()) {
 			if (scsiDevice.targetID < 2) {
-				fOpenFirmwareName.CopyFrom (bus->getATAOpenFirmwareName0 ());
-				fShortOpenFirmwareName.CopyFrom (bus->getATAShortOpenFirmwareName0 ());
+				fOpenFirmwareName.CopyFrom (fSCSIBus->getATAOpenFirmwareName0 ());
+				fShortOpenFirmwareName.CopyFrom (fSCSIBus->getATAShortOpenFirmwareName0 ());
 			} else {
-				fOpenFirmwareName.CopyFrom (bus->getATAOpenFirmwareName1 ());
-				fShortOpenFirmwareName.CopyFrom (bus->getATAShortOpenFirmwareName1 ());
+				fOpenFirmwareName.CopyFrom (fSCSIBus->getATAOpenFirmwareName1 ());
+				fShortOpenFirmwareName.CopyFrom (fSCSIBus->getATAShortOpenFirmwareName1 ());
 			}
 			scsiDevice.targetID %= 2;
 		} else {
-			fOpenFirmwareName.CopyFrom (bus->getOpenFirmwareName ());
-			fShortOpenFirmwareName.CopyFrom (bus->getShortOpenFirmwareName ());
+			fOpenFirmwareName.CopyFrom (fSCSIBus->getOpenFirmwareName ());
+			fShortOpenFirmwareName.CopyFrom (fSCSIBus->getShortOpenFirmwareName ());
 		}
 		char buffer[16];
 		snprintf (buffer, 16, "/@%X", scsiDevice.targetID); 
@@ -217,7 +217,7 @@ SCSIDevice::SCSIDevice (DeviceIdent scsiDevice, SInt16 driverRefNum)
 	}
 	
 	#if qLogging
-		if (bus) {
+		if (fSCSIBus) {
 			gLogFile << "OpenFirmwareName for SCSI Bus: " << scsiDevice.bus << ": " ;
 			gLogFile.WriteCharBytes ((char *) &fShortOpenFirmwareName[1], fShortOpenFirmwareName[0]);
 			gLogFile << endl_AC;

@@ -629,6 +629,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	fMacOSXMajorVersion = 0;
 	fTurnedOffIgnorePermissions = false;
 	fSymlinkStatus = kSymlinkStatusOK;
+	fIsAttachedToPCICard = false;
 	
 #ifdef BUILDING_XPF
 	gApplication->AddDependent (this); // for listening for volume deletions
@@ -850,6 +851,12 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 
 	if (getRequiresBootHelper ()) fHelperDisk = getDefaultHelperDisk ();
 	
+	if (fValidOpenFirmwareName) {
+		// There are more robust ways to figure this out, but this will probably do
+		CChar255_AC ofName (fOpenFirmwareName);
+		fIsAttachedToPCICard = !strncmp (ofName, "pci", 3); 
+	}
+	
 	// See if there is a Mac OS 9 System Folder
 	fMacOS9SystemFolderNodeID = 0;
 	fBlessedFolderID = 0;
@@ -961,6 +968,10 @@ MountedVolume::getBootWarning ()
 		if (firstPart && firstPart->getPartitionNumber () < kExpectedFirstHFSPartition) return kFewerPartitionsThanExpected;
 
 		if (fPartInfo && !fPartInfo->getHasHFSWrapper ()) return kNoHFSWrapper;
+
+		if (fBootableDevice->isReallyATADevice () && getExtendsPastEightGB ()) {
+			return fIsAttachedToPCICard ? kBogus8GBWarning : k8GBWarning;
+		}
 	}
 	
 	return kStatusOK;

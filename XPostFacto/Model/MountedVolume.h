@@ -180,6 +180,7 @@ class MountedVolume : public MDependable_AC
 		bool fStillThere;
 		bool fHasFinder;
 		bool fTurnedOffIgnorePermissions;
+		bool fIsAttachedToPCICard;
 
 		unsigned fSymlinkStatus;
 		

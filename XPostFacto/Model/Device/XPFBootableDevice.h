@@ -102,9 +102,8 @@ class XPFBootableDevice
 		
 		virtual bool getNeedsHelper () {return fNeedsHelper;}
 		
-#ifndef __MACH__
 		virtual bool isFirewireDevice ();
-#endif
+		virtual bool isReallyATADevice ();
 
 		static void DisableCDDriver ();
 		static void EnableCDDriver ();
@@ -137,6 +136,8 @@ class XPFBootableDevice
 #ifdef __MACH__
 		char fBSDName[32];
 		FILE *fDeviceFile;
+		bool fIsFireWireDevice;
+		bool fIsATADevice;
 #else
 		SInt16 fDriverRefNum;
 #endif
