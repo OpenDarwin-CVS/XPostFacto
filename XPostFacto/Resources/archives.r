@@ -93,6 +93,9 @@ Read 'plst' (143, "OWCCacheConfig") ":Derived:Extensions:plist:OWCCacheConfig.pl
 Read 'hfsA' (144, "OpenOWScreamerAudio") ":Derived:Extensions:OpenOWScreamerAudio.hfs";
 Read 'plst' (144, "OpenOWScreamerAudio") ":Derived:Extensions:plist:OpenOWScreamerAudio.plist";
 
+Read 'hfsA' (145, "GossamerDeviceTreeUpdater") ":Derived:Extensions:GossamerDeviceTreeUpdater.hfs";
+Read 'plst' (145, "GossamerDeviceTreeUpdater") ":Derived:Extensions:plist:GossamerDeviceTreeUpdater.plist";
+
 // Startup Item
 
 Read 'hfsS' (200, "XPFStartupItem") ":Derived:StartupItems:XPFStartupItem.hfs";
