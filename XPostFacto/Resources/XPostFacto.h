@@ -94,6 +94,8 @@ advised of the possibility of such damage.
 #define cDisableStartupItem				1446
 #define cDisableCoreServices			1447
 
+#define cRecopyHelperFiles				1448
+
 // Views and Windows
 // -----------------
 

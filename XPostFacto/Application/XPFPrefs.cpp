@@ -388,6 +388,7 @@ XPFPrefs::DoSetupMenus ()
 	Enable (cInstallExtensions, true);
 	Enable (cInstallStartupItem, true);
 	Enable (cShowOptionsWindow, true);
+	Enable (cRecopyHelperFiles, fTargetDisk->getHelperDisk () != NULL);
 }
 
 void 
@@ -405,6 +406,10 @@ XPFPrefs::DoMenuCommand (CommandNumber aCommandNumber)
 		
 		case cInstallStartupItem:
 			PostCommand (TH_new XPFInstallStartupCommand (this));
+			break;
+			
+		case cRecopyHelperFiles:
+			PostCommand (TH_new XPFRecopyHelperFilesCommand (this));
 			break;
 			
 		default:

@@ -225,6 +225,8 @@ purgeable) {
 	"BootX",		noIcon, noKey, noMark, plain, cInstallBootX;
 	"Extensions",	noIcon, noKey, noMark, plain, cInstallExtensions;
 	"Startup Item", noIcon, noKey, noMark, plain, cInstallStartupItem;
+	"-",			noIcon, noKey, noMark, plain, nocommand;
+	"Recopy Helper Files", noIcon, noKey, noMark, plain, cRecopyHelperFiles;
 	}
 };
 

@@ -84,6 +84,7 @@ class XPFThreadedCommand : public TCommand {
 		void installExtensionsWithRootDirectory (FSRef *rootDirectory);
 		void installSecondaryExtensionsWithRootDirectory (FSRef *rootDirectory);
 		void installStartupItemWithRootDirectory (FSRef *rootDirectory);
+		void synchronizeWithHelper (bool deleteFirst = false);
 
 		void copyHFSArchivesTo (ResType type, FSRef *directory);
 				

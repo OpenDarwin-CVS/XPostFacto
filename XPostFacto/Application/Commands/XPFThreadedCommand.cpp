@@ -302,3 +302,95 @@ XPFThreadedCommand::copyHFSArchivesTo (ResType type, FSRef *directory)
 		fProgressWindow->setProgressValue (fProgressMin + scale * (float) x);
 	}
 }
+
+void
+XPFThreadedCommand::synchronizeWithHelper (bool deleteFirst)
+{
+	MountedVolume *rootDisk = fTargetDisk;
+	MountedVolume *bootDisk;
+	if (fHelperDisk) {
+		bootDisk = fHelperDisk;
+	} else {
+		bootDisk = fTargetDisk;
+	}
+	
+	float scale = (float) (fProgressMax - fProgressMin) / (float) fProgressMax;
+	unsigned progbase = fProgressMin;
+
+	if ((rootDisk != bootDisk) && !(fDebugOptions & kDisableCopyToHelper)) {	
+			
+		// Get the .XPostFacto directory
+		FSRef helperDir;
+		ThrowIfOSErr_AC (XPFFSRef::getOrCreateXPFDirectory (bootDisk->getRootDirectory (), &helperDir));
+
+		// Now, get the directory which corresponds to the root disk
+		char rootName[255];
+		rootDisk->getShortOpenFirmwareName ().CopyTo (rootName);
+		rootName[strlen(rootName) + 1] = 0; // extra termination byte
+				
+		// And write out each directory
+		char *end;
+		char *pos = rootName;
+		while (*pos) {
+			while (*pos == '/') pos++;
+			end = pos;		
+			while ((*end != 0) && (*end != '/')) {
+				if (*end == ':') *end = ';';
+				end++;
+			}
+			*end = 0;
+			ThrowIfOSErr_AC (XPFFSRef::getOrCreateDirectory (&helperDir, pos, 0755, &helperDir));
+			if (deleteFirst) FSRefDeleteDirectoryContents (&helperDir);
+			pos = end + 1;
+		}
+			
+		// Now, copy the mach_kernel file
+		// Note the FSRefFileCopy will skip the copy if the files are the same
+		FSRef kernelOnRoot;
+		ThrowIfOSErr_AC (XPFFSRef::getKernelFSRef (rootDisk->getRootDirectory (), &kernelOnRoot));
+		setCopyingFile ("\pmach_kernel");
+
+		XPFSetUID myUID (0);
+		ThrowIfOSErr_AC (FSRefFileCopy (&kernelOnRoot, &helperDir, NULL, NULL, 0, false));
+
+		fProgressWindow->setProgressValue (progbase + scale * 200);		
+		
+		// Copy the Extensions and Extensions.mkext
+		// Note that the FSRefCopy* routines skip copies that aren't necessary
+		FSRef helperSystemLibraryRef;
+		FSRef rootSystemLibraryExtensionsRef, rootSystemLibraryExtensionsCacheRef;
+
+		ThrowIfOSErr_AC (XPFFSRef::getOrCreateSystemLibraryDirectory (&helperDir, &helperSystemLibraryRef));
+	
+		// Check for the Extensions.mkext.
+		OSErr rootErr = XPFFSRef::getExtensionsCacheFSRef (rootDisk->getRootDirectory (), &rootSystemLibraryExtensionsCacheRef);
+
+		if (rootErr == fnfErr) {
+			// It doesn't exist on the root. So make sure it doesn't exist on the helper.
+			FSRef helperExtensionsCacheRef;
+			OSErr helperErr = XPFFSRef::getExtensionsCacheFSRef (&helperDir, &helperExtensionsCacheRef);
+			if (helperErr == noErr) ThrowIfOSErr_AC (FSDeleteObject (&helperExtensionsCacheRef));
+		} else {
+			ThrowIfOSErr_AC (rootErr);
+			setCopyingFile ("\pExtensions.mkext");
+			ThrowIfOSErr_AC (FSRefFileCopy (&rootSystemLibraryExtensionsCacheRef, &helperSystemLibraryRef, NULL, NULL, 0, false));			
+		}	
+		
+		fProgressMin = progbase + scale * 250;
+		fProgressMax = progbase + scale * 900;		
+
+		// Check for the extensions directory. It should exist :-)
+		ThrowIfOSErr_AC (XPFFSRef::getOrCreateSystemLibraryExtensionsDirectory (rootDisk->getRootDirectory (), &rootSystemLibraryExtensionsRef));
+		ThrowIfOSErr_AC (FSRefFilteredDirectoryCopy (&rootSystemLibraryExtensionsRef, &helperSystemLibraryRef, NULL, NULL, 0, true, 
+								NULL, CopyFilterGlue, this));
+
+		fProgressMin = fProgressMax;
+		fProgressMax = progbase + scale * 950;
+		
+		// If the root disk was not writeable, then we need to install the extensions in the secondary location
+		// on the helper, so that BootX will pick them up
+		if (!rootDisk->getIsWriteable ()) {
+			installSecondaryExtensionsWithRootDirectory (&helperDir);
+		}
+	}		
+}

@@ -73,7 +73,8 @@ enum {
 	kMenuDisableExtensionsCache,
 	kMenuDisableCoreServices,
 	kMenuDisableHelperCopy,		// 35
-	kMenuVisibleHelper
+	kMenuVisibleHelper,
+	kRecopyingHelperFiles
 };
 
 

@@ -66,5 +66,15 @@ class XPFInstallStartupCommand : public XPFThreadedCommand {
 
 };	
 
+class XPFRecopyHelperFilesCommand : public XPFThreadedCommand {
+
+	public:
+
+		XPFRecopyHelperFilesCommand (XPFPrefs *prefs) : XPFThreadedCommand (prefs) {}
+									
+		void DoItThreaded ();
+
+};	
+
 #endif
 

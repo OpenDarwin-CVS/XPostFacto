@@ -72,3 +72,12 @@ XPFInstallStartupCommand::DoItThreaded ()
 	installStartupItemWithRootDirectory (fTargetDisk->getRootDirectory ());
 	fProgressWindow->setFinished ();
 }
+
+void
+XPFRecopyHelperFilesCommand::DoItThreaded ()
+{
+	fProgressMax = 1000;
+	setDescription (CStr255_AC (kXPFStringsResource, kRecopyingHelperFiles));
+	synchronizeWithHelper (true);
+	fProgressWindow->setFinished ();
+}

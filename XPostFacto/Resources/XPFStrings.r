@@ -79,5 +79,6 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			"Disable CoreServices Copy";
 /* 35 */	"Disable Helper Copy";
 			"Keep Helper Visible";
+			"Recopying Helper Files";
 	}
 };
