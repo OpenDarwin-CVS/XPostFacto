@@ -14,6 +14,30 @@
 			name = Resources;
 			refType = 4;
 		};
+		94606078057BA4A300FE8769 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = GetSymbolFromPEF.h;
+			refType = 4;
+		};
+		94606079057BA4A300FE8769 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = PEFSupport.c;
+			refType = 4;
+		};
+		9460607A057BA4A300FE8769 = {
+			fileRef = 94606078057BA4A300FE8769;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		9460607B057BA4A300FE8769 = {
+			fileRef = 94606079057BA4A300FE8769;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		946A5D250525104400A80003 = {
 			isa = PBXFrameworkReference;
 			name = Cocoa.framework;
@@ -59,6 +83,129 @@
 		94C63B6D054EDDA500A80003 = {
 			isa = PBXTargetDependency;
 			target = 94CC88EF054C817100A80003;
+		};
+		94C954A2057CFA1E00A80003 = {
+			children = (
+				94C954AC057CFB2600A80003,
+				94C954B1057D0DE400A80003,
+				94C954B0057D0DE400A80003,
+			);
+			isa = PBXGroup;
+			name = splitPEF;
+			refType = 4;
+		};
+		94C954A3057CFA4D00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+				94C954AF057D046600A80003,
+				94C954B3057D0DE400A80003,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94C954A4057CFA4D00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+				94C954AD057CFB2600A80003,
+				94C954AE057D046600A80003,
+				94C954B2057D0DE400A80003,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94C954A5057CFA4D00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94C954A6057CFA4D00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94C954A7057CFA4D00A80003 = {
+			buildPhases = (
+				94C954A3057CFA4D00A80003,
+				94C954A4057CFA4D00A80003,
+				94C954A5057CFA4D00A80003,
+				94C954A6057CFA4D00A80003,
+			);
+			buildSettings = {
+				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = splitPEF;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			dependencies = (
+			);
+			isa = PBXToolTarget;
+			name = splitPEF;
+			productInstallPath = /usr/local/bin;
+			productName = splitPEF;
+			productReference = 94C954A8057CFA4D00A80003;
+		};
+		94C954A8057CFA4D00A80003 = {
+			isa = PBXExecutableFileReference;
+			path = splitPEF;
+			refType = 3;
+		};
+		94C954AC057CFB2600A80003 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			name = splitPEF.c;
+			path = Tools/splitPEF/splitPEF.c;
+			refType = 4;
+		};
+		94C954AD057CFB2600A80003 = {
+			fileRef = 94C954AC057CFB2600A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C954AE057D046600A80003 = {
+			fileRef = 94606079057BA4A300FE8769;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C954AF057D046600A80003 = {
+			fileRef = 94606078057BA4A300FE8769;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C954B0057D0DE400A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = vers_rsrc.c;
+			path = XPostFacto/Model/vers_rsrc.c;
+			refType = 4;
+		};
+		94C954B1057D0DE400A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = vers_rsrc.h;
+			path = XPostFacto/Model/vers_rsrc.h;
+			refType = 4;
+		};
+		94C954B2057D0DE400A80003 = {
+			fileRef = 94C954B0057D0DE400A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C954B3057D0DE400A80003 = {
+			fileRef = 94C954B1057D0DE400A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		94CB5C4404FBB49500A80003 = {
 			isa = PBXTargetDependency;
@@ -711,10 +858,11 @@
 		};
 		94D732840525FB8F00A80003 = {
 			children = (
+				94C954A2057CFA1E00A80003,
 				F58FB3FB02B3D0BE01A80001,
 			);
 			isa = PBXGroup;
-			name = Utility;
+			name = Tools;
 			refType = 4;
 		};
 		94D732850525FBA100A80003 = {
@@ -1618,6 +1766,7 @@
 				94CC88EF054C817100A80003,
 				94E26630054E02A400A80003,
 				94FC07D3056AE12D00A80003,
+				94C954A7057CFA4D00A80003,
 			);
 		};
 		F53C691001B191BA01A80001 = {
@@ -2087,6 +2236,7 @@
 				94D432AC05583C1100A80003,
 				94E53E080561CA9D00A80003,
 				94FC07D4056AE12D00A80003,
+				94C954A8057CFA4D00A80003,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -2158,6 +2308,7 @@
 				F513163F0322F90801A80001,
 				F51316400322F90801A80001,
 				F51316410322F90801A80001,
+				9460607A057BA4A300FE8769,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2197,6 +2348,7 @@
 				F5BFE41F0304D49601A80001,
 				F5BFE4210304D49701A80001,
 				F5BFE4220304D49801A80001,
+				9460607B057BA4A300FE8769,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5996,6 +6148,8 @@
 				F513163C0322F90801A80001,
 				F513163D0322F90801A80001,
 				F513163E0322F90801A80001,
+				94606078057BA4A300FE8769,
+				94606079057BA4A300FE8769,
 			);
 			isa = PBXGroup;
 			name = "Secondary Loader";

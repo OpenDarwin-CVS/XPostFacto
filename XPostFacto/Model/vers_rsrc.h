@@ -23,6 +23,10 @@ limitations under the License.
 #ifndef __VERSRSRC_H__
 #define __VERSRSRC_H__
 
+typedef unsigned char 	   UInt8;
+typedef unsigned short 	   UInt16;
+typedef unsigned long 	   UInt32;
+
 typedef union {
     UInt32 vnum;
     UInt8  bytes[4];
