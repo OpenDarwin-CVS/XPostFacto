@@ -5,6 +5,16 @@
 	};
 	objectVersion = 38;
 	objects = {
+		F50F59610315EABD01A80001 = {
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				F5812B890315F33D01A80001,
+			);
+			isa = PBXCopyFilesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F514D82002B3C94D01A80001 = {
 			isa = PBXFileReference;
 			path = XPostFacto.html;
@@ -22,6 +32,7 @@
 			targets = (
 				F59D628801B1D0D601A80001,
 				F53C6AB501B19FD401A80001,
+				F5812B810315F14401A80001,
 				F53C6AC301B1A29901A80001,
 				F548C0D90289790D01A80001,
 				F557F68D0226FDFA01A80001,
@@ -468,6 +479,7 @@
 				F548C0D70289790D01A80001,
 				F547F71A028EFEEC01A80001,
 				F5887528030D66FA01A80001,
+				F5812B820315F14401A80001,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -793,6 +805,7 @@
 				F53C6AB801B19FD401A80001,
 				F53C6AB901B19FD401A80001,
 				F53C6ABA01B19FD401A80001,
+				F50F59610315EABD01A80001,
 				F53C6ABB01B19FD401A80001,
 			);
 			buildSettings = {
@@ -814,6 +827,7 @@
 				WRAPPER_EXTENSION = kext;
 			};
 			dependencies = (
+				F5812B830315F14A01A80001,
 			);
 			isa = PBXBundleTarget;
 			name = AppleCurio;
@@ -4570,6 +4584,176 @@
 		};
 		F572EEE10254E9E801A80001 = {
 			fileRef = F572EEA60254E9E801A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5812B7B0315F14401A80001 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		F5812B7C0315F14401A80001 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5812B850315F15D01A80001,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5812B7D0315F14401A80001 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5812B840315F15C01A80001,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5812B7E0315F14401A80001 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5812B860315F15E01A80001,
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5812B7F0315F14401A80001 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5812B800315F14401A80001 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		F5812B810315F14401A80001 = {
+			buildPhases = (
+				F5812B7B0315F14401A80001,
+				F5812B7C0315F14401A80001,
+				F5812B7D0315F14401A80001,
+				F5812B7E0315F14401A80001,
+				F5812B7F0315F14401A80001,
+				F5812B800315F14401A80001,
+			);
+			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				KERNEL_MODULE = YES;
+				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				MODULE_IOKIT = YES;
+				MODULE_NAME = com.macsales.iokit.AppleCurio4K78;
+				MODULE_VERSION = 1.0.0d1;
+				OTHER_CFLAGS = "-fpermissive";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = AppleCurio4K78;
+				SECTORDER_FLAGS = "";
+				USE_GCC3 = NO;
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = kext;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = AppleCurio4K78;
+			productName = AppleCurio4K78;
+			productReference = F5812B820315F14401A80001;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>AppleCurio4K78</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.macsales.iokit.AppleCurio4K78</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.0d1</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>AppleCurio4K78</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.macsales.iokit.AppleCurio4K78</string>
+			<key>IOClass</key>
+			<string>CurioSCSIController</string>
+			<key>IONameMatch</key>
+			<string>53c94</string>
+			<key>IOProviderClass</key>
+			<string>AppleMacIODevice</string>
+		</dict>
+	</dict>
+	<key>OSBundleRequired</key>
+	<string>Local-Root</string>
+</dict>
+</plist>
+";
+			shouldUseHeadermap = 0;
+		};
+		F5812B820315F14401A80001 = {
+			isa = PBXBundleReference;
+			path = AppleCurio4K78.kext;
+			refType = 3;
+		};
+		F5812B830315F14A01A80001 = {
+			isa = PBXTargetDependency;
+			target = F5812B810315F14401A80001;
+		};
+		F5812B840315F15C01A80001 = {
+			fileRef = F53C695701B1926201A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5812B850315F15D01A80001 = {
+			fileRef = F53C695801B1926201A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5812B860315F15E01A80001 = {
+			fileRef = F53C695C01B1926201A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5812B890315F33D01A80001 = {
+			fileRef = F5812B820315F14401A80001;
 			isa = PBXBuildFile;
 			settings = {
 			};
