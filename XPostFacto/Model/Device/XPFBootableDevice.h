@@ -128,6 +128,7 @@ class XPFBootableDevice
 #ifdef __MACH__
 		io_registry_entry_t fRegEntry;
 		char fBSDName[32];
+		FILE *fDeviceFile;
 #else
 		SInt16 fDriverRefNum;
 #endif

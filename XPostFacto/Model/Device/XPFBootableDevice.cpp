@@ -224,6 +224,7 @@ XPFBootableDevice::XPFBootableDevice
 	fRegEntry = entry;
 	if (entry) IOObjectRetain (entry);
 	fBSDName[0] = 0;
+	fDeviceFile = NULL;
 #else
 	fDriverRefNum = driverRefNum;
 #endif
@@ -257,6 +258,7 @@ XPFBootableDevice::~XPFBootableDevice ()
 	if (fPartitionList) delete fPartitionList;
 #ifdef __MACH__
 	if (fRegEntry) IOObjectRelease (fRegEntry);
+	if (fDeviceFile) fclose (fDeviceFile);
 #endif
 }
 
@@ -338,7 +340,7 @@ XPFBootableDevice::readBlocks (unsigned int start, unsigned int count, UInt8 **b
 {
 	ThrowIfNULL_AC (buffer);
 	if (fBlockSize == 0) return;
-	if (fBSDName[0] == 0) return;
+	if (fDeviceFile == NULL) return;
     
     // the start and count will be in terms of 512 byte blocks
     // we will allocate the buffer ourselves with NewPtr
@@ -355,19 +357,11 @@ XPFBootableDevice::readBlocks (unsigned int start, unsigned int count, UInt8 **b
      
  	*buffer = (UInt8 *) NewPtr (count * fBlockSize);
  	ThrowIfNULL_AC (*buffer);
+ 	
+ 	XPFSetUID uid (0);
  
- 	char *arguments[5];
- 	asprintf (&arguments[0], "bs=%lu", fBlockSize);
- 	asprintf (&arguments[1], "if=%s", fBSDName);
- 	asprintf (&arguments[2], "skip=%lu", start);
- 	asprintf (&arguments[3], "count=%lu", count);
- 	arguments[4] = 0;
-
-	FILE *pipe;
-	XPFAuthorization::ExecuteWithPrivileges ("/bin/dd", arguments, &pipe);
-
-	fread (*buffer, fBlockSize, count, pipe);
-	fclose (pipe);
+	fseeko (fDeviceFile, (off_t) start * (off_t) fBlockSize, SEEK_SET);
+	fread (*buffer, fBlockSize, count, fDeviceFile);
 	
 	if (byteOffset != 0) {
 		// need to realign the buffer
@@ -385,19 +379,11 @@ XPFBootableDevice::writeBlocks (unsigned int start, unsigned int count, UInt8 *b
 	ThrowIfNULL_AC (buffer);
 	if (fBlockSize != 512) ThrowException_AC (kWrite512ByteBlocksOnly, 0);
 	if (fBSDName[0] == 0) return;
+	
+	XPFSetUID uid (0);
      
- 	char *arguments[5];
- 	asprintf (&arguments[0], "bs=%lu", fBlockSize);
- 	asprintf (&arguments[1], "of=%s", fBSDName);
- 	asprintf (&arguments[2], "seek=%lu", start);
- 	asprintf (&arguments[3], "count=%lu", count);
- 	arguments[4] = 0;
-
-	FILE *pipe;
-	XPFAuthorization::ExecuteWithPrivileges ("/bin/dd", arguments, &pipe);
-
-	fwrite (buffer, fBlockSize, count, pipe);
-	fclose (pipe);
+	fseeko (fDeviceFile, (off_t) start * (off_t) fBlockSize, SEEK_SET);
+	fwrite (buffer, fBlockSize, count, fDeviceFile);
 	
 	return noErr;
 }
@@ -425,6 +411,9 @@ XPFBootableDevice::readCapacity ()
 		strcpy (fBSDName, "/dev/");
 		CFStringGetCString (bsdName, fBSDName + 5, 27, kCFStringEncodingASCII); 
 		CFRelease (bsdName);
+		
+		XPFSetUID uid (0);
+		fDeviceFile = fopen (fBSDName, "rb");
 	}
 }
 
