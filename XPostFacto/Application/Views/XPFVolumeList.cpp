@@ -74,6 +74,10 @@ XPFVolumeList::DoPostCreate(TDocument* itsDocument)
 	}
 	
 	fApp->AddDependent (this);
+	
+	for (CSubViewIterator iter (this); iter; ++iter) {
+		iter->DoUpdate (cSetTargetDisk, fPrefs, fPrefs->getTargetDisk (), NULL);
+	}
 }
 
 void 
