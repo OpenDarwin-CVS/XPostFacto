@@ -228,7 +228,7 @@ SCSIDevice::SCSIDevice (DeviceIdent scsiDevice, SInt16 driverRefNum)
 		fValidOpenFirmwareName = true;
 		fOpenFirmwareName.CopyFrom (bus->getOpenFirmwareName ());
 		char buffer[16];
-		snprintf (buffer, 16, "/@%d,%d", scsiDevice.targetID, scsiDevice.LUN); 
+		snprintf (buffer, 16, "/@%d", scsiDevice.targetID); 
 		fOpenFirmwareName += buffer;
 	} else {
 		fValidOpenFirmwareName = false;
