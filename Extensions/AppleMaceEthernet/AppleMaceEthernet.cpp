@@ -32,6 +32,8 @@
  */
 
 #include <IOKit/assert.h>
+#include <IOKit/IORegistryEntry.h>
+#include <IOKit/IODeviceTreeSupport.h>
 #include <IOKit/platform/AppleMacIODevice.h>
 #include <net/ethernet.h>
 #include "AppleMaceEthernetPrivate.h"
@@ -272,6 +274,11 @@ bool MaceEnet::start(IOService * provider)
 		return false;
     }
 
+    // Create a table of supported media types.
+    //
+    if ( !createMediumTables() )
+        return false;
+
 	//
 	// Attach a kernel debugger client.
 	//
@@ -327,6 +334,9 @@ void MaceEnet::free()
 	if (txDebuggerPkt)
 		freePacket(txDebuggerPkt);
 
+        if (mediumDict)
+                mediumDict->release();
+                
     for (i = 0; i < rxMaxCommand; i++)
     	if (rxMbuf[i])  freePacket(rxMbuf[i]);
 
@@ -633,6 +643,9 @@ bool MaceEnet::resetAndEnable(bool enable)
 	ready = false;
 
 	_resetChip();
+        
+        phyStatusPrev = 0;
+        setLinkStatus(0, 0);
 
     do {
 		if (!enable) break;
@@ -653,6 +666,8 @@ bool MaceEnet::resetAndEnable(bool enable)
 		
 		if (getWorkLoop()) getWorkLoop()->enableAllInterrupts();
 		_enableAdapterInterrupts();
+                
+                monitorLinkStatus(true);
 
 		return true;
     }
@@ -759,6 +774,10 @@ void MaceEnet::timeoutOccurred(IOTimerEventSource * /*timer*/)
 		txWDInterrupts   = 0;
     }
 
+        // Poll link status periodically.
+        
+        monitorLinkStatus();
+        
 	// Clean-up after the debugger if the debugger was active.
 	//
 	if (debugTxPoll)
@@ -796,6 +815,86 @@ void MaceEnet::timeoutOccurred(IOTimerEventSource * /*timer*/)
      */
 	timerSrc->setTimeoutMS(WATCHDOG_TIMER_MS);
 }
+
+/*-------------------------------------------------------------------------
+ *
+ *
+ *
+ *-------------------------------------------------------------------------*/
+
+void MaceEnet::monitorLinkStatus( bool firstPoll )
+{
+    u_int16_t    phyStatus;
+    // u_int16_t    phyReg;
+    // u_int16_t    phyStatusChange;
+    // bool         fullDuplex;
+    bool         reportLinkStatus = false;
+    UInt32       linkSpeed;
+    UInt32       linkStatus;
+
+    phyStatus = ReadMaceRegister(ioBaseEnet, kPHYCC);
+
+    if ( ( ( phyStatus ^ phyStatusPrev ) & kPHYCCLnkFL ) || firstPoll )
+    {
+        reportLinkStatus = true;
+
+        if (firstPoll)
+        {
+            IOSleep(2000);
+            IOLog("Ethernet(Mace): first-time\n");
+            linkSpeed = 10;
+            linkStatus = kIONetworkLinkValid | kIONetworkLinkActive;
+        }
+        else
+        {
+            if (phyStatus & kPHYCCLnkFL)
+            {
+                linkSpeed = 0;
+                linkStatus = kIONetworkLinkValid;
+            }
+            else
+            {
+                linkSpeed = 10;
+                linkStatus = kIONetworkLinkValid | kIONetworkLinkActive;
+            }
+        }
+
+        phyStatusPrev = phyStatus;
+    }
+    
+    if ( reportLinkStatus )
+    {
+        IONetworkMedium	* medium;
+        IOMediumType      mediumType;
+
+        switch ( linkSpeed )
+        {
+            case 10:
+                mediumType  = kIOMediumEthernet10BaseT;
+                mediumType |= kIOMediumOptionHalfDuplex;
+                break;
+            default:
+                mediumType  = kIOMediumEthernetNone;
+                break;
+        }
+
+        medium = IONetworkMedium::getMediumWithType(mediumDict, mediumType);
+        
+        setLinkStatus( linkStatus, medium, linkSpeed * 1000000 );
+        
+        IOLog("MaceEnet::monitorLinkStatus: Read %04x PLSCC = %02x\n", kPLSCC,
+            ReadMaceRegister(ioBaseEnet, kPLSCC));
+        IOLog("MaceEnet::monitorLinkStatus: Read %04x PHYCC = %02x\n", kPHYCC,
+            ReadMaceRegister(ioBaseEnet, kPHYCC));
+
+        if ( linkStatus & kIONetworkLinkActive )
+            IOLog( "MaceEnet::monitorLinkStatus: Link up at %ld Mbps - Half Duplex\n",
+                   linkSpeed);
+        else
+            IOLog( "MaceEnet::monitorLinkStatus: Link down\n" );
+    }
+} /* monitorLinkStatus() */
+
 
 /*-------------------------------------------------------------------------
  *
@@ -872,6 +971,57 @@ IOReturn MaceEnet::setMulticastList(IOEthernetAddress *addrs, UInt32 count)
 	_updateHashTableMask();
 	releaseDebuggerLock();
 	return kIOReturnSuccess;
+}
+
+/*-------------------------------------------------------------------------
+ *
+ *
+ *
+ *-------------------------------------------------------------------------*/
+
+static struct MediumTable
+{
+    UInt32	type;
+    UInt32	speed;
+    const char *name;
+} 
+mediumTable[] =
+{
+    { kIOMediumEthernetNone                                  ,     0, "None"  },
+    { kIOMediumEthernetAuto                                  ,    10, "Auto"   },
+    { kIOMediumEthernet10BaseT    | kIOMediumOptionHalfDuplex,	  10, "10BaseT Half-Duplex"   },
+};
+
+
+bool MaceEnet::createMediumTables()
+{
+    IONetworkMedium		*medium;
+    UInt32			i;
+
+    mediumDict = OSDictionary::withCapacity( sizeof(mediumTable)/sizeof(mediumTable[0]) );
+    if ( mediumDict == 0 ) return false;
+
+    for ( i=0; i < sizeof(mediumTable)/sizeof(mediumTable[0]); i++ )
+    {
+        medium = IONetworkMedium::medium( mediumTable[i].type, mediumTable[i].speed, 0, 0, mediumTable[i].name );
+        if ( medium != 0 ) 
+        {  
+            IONetworkMedium::addMedium( mediumDict, medium );
+            medium->release();
+        }
+    }
+
+    if ( publishMediumDictionary( mediumDict ) != true ) 
+    {
+        return false;
+    }
+
+    medium = IONetworkMedium::getMediumWithType( mediumDict,
+                                                 kIOMediumEthernet10BaseT | kIOMediumOptionHalfDuplex );
+
+    setCurrentMedium( medium );
+
+    return true;    
 }
 
 /*

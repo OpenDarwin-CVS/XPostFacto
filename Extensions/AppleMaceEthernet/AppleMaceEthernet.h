@@ -107,6 +107,10 @@ private:
 	IOTimerEventSource *	timerSrc;
 	IOMbufBigMemoryCursor *	mbufCursor;
 
+    unsigned short                      phyStatusPrev;
+    
+    OSDictionary *                      mediumDict;
+    
     struct mbuf *			txMbuf[TX_RING_LENGTH];
     struct mbuf *			rxMbuf[RX_RING_LENGTH];
 	struct mbuf *			txDebuggerPkt;
@@ -164,6 +168,8 @@ private:
 	void _addToHashTableMask(u_int8_t *addr);
 	void _removeFromHashTableMask(u_int8_t *addr);
 	void _updateHashTableMask();
+        bool createMediumTables();
+
 #ifdef DEBUG
 	void _dumpRegisters();
 	void _dumpDesc(void * addr, u_int32_t size);
@@ -181,6 +187,7 @@ private:
 	bool resetAndEnable(bool enable);	
 	void interruptOccurredForSource(IOInterruptEventSource *src, int count);
 	void timeoutOccurred(IOTimerEventSource *timer);
+        void monitorLinkStatus( bool firstPoll = false );
 
 public:
 	virtual MaceEnet * MaceEnet::probe(IOService * provider,
