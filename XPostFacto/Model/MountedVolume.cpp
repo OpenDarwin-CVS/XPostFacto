@@ -698,9 +698,8 @@ static bool IsMacOS9SystemFolder (FSRef *directory)
 {
 	bool hasFinder = false;
 	bool hasSystem = false;
-	FSIterator iterator;
-	FSOpenIterator (directory, kFSIterateFlat, &iterator);
-	OSErr err = noErr;
+	FSIterator iterator = NULL;
+	OSErr err = FSOpenIterator (directory, kFSIterateFlat, &iterator);
 	
 	while ((err == noErr) && (!hasFinder || !hasSystem)) {
 		ItemCount actualObjects;
@@ -716,7 +715,7 @@ static bool IsMacOS9SystemFolder (FSRef *directory)
 		}
 	}
 	
-	FSCloseIterator (iterator);
+	if (iterator) FSCloseIterator (iterator);
 	return hasSystem && hasFinder;	
 }
 
@@ -1137,6 +1136,15 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	fIsDarwin = false;
 	fFullyInitialized = false;
 	fExtensionCachesOK = true;
+	fMacOS9SystemFolderNodeID = 0;
+	fBlessedFolderID = 0;
+	fAllocationBlockSize = 0;
+	fIsWriteable = true;
+	fHasMachKernel = false;
+	fIsHFSPlus = false;
+	fHasInstaller = false;
+	fHasFinder = false;
+	fIsDarwin = false;
 	
 	// Wrap entire method in try block, to catch exceptions
 	// The idea is to show all devices, even if there is an error initializing them
@@ -1191,19 +1199,23 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 		
 		gLogFile << "checkDeviceAndPartition()" << endl_AC;
 		checkDeviceAndPartition ();
-		gLogFile << "checkSymlinks()" << endl_AC;
-		checkSymlinks ();
-		gLogFile << "checkBlessedFolder()" << endl_AC;
-		checkBlessedFolder ();
-		gLogFile << "checkBootXVersion()" << endl_AC;
-		checkBootXVersion ();
-		gLogFile << "checkMacOSXVersion()" << endl_AC;
-		checkMacOSXVersion ();
-		gLogFile << "checkOpenFirmwareName()" << endl_AC;
-		checkOpenFirmwareName ();
-		gLogFile << "checkExtensionsCaches()" << endl_AC;
-		checkExtensionsCaches ();
-			
+		
+		// We are only interested in the rest if we have a bootable device
+		if (fBootableDevice) {
+			gLogFile << "checkSymlinks()" << endl_AC;
+			checkSymlinks ();
+			gLogFile << "checkBlessedFolder()" << endl_AC;
+			checkBlessedFolder ();
+			gLogFile << "checkBootXVersion()" << endl_AC;
+			checkBootXVersion ();
+			gLogFile << "checkMacOSXVersion()" << endl_AC;
+			checkMacOSXVersion ();
+			gLogFile << "checkOpenFirmwareName()" << endl_AC;
+			checkOpenFirmwareName ();
+			gLogFile << "checkExtensionsCaches()" << endl_AC;
+			checkExtensionsCaches ();
+		}
+					
 		if (getRequiresBootHelper ()) fHelperDisk = getDefaultHelperDisk ();
 		
 		gLogFile << "MountedVolume::MountedVolume OpenFirmwareName: " << fShortOpenFirmwareName << endl_AC;
