@@ -209,6 +209,7 @@ XPFThreadedCommand::getOrCreateXPFDirectory (FSRef *rootDirectory, FSRef *result
 		err = FSGetCatalogInfo (result, kFSCatInfoFinderInfo, &catInfo, NULL, &spec, NULL);
 		if (err == noErr) {
 			FolderInfo *info = (FolderInfo *) catInfo.finderInfo;
+			XPFSetUID myUID (0);
 			if (!(info->finderFlags & kIsInvisible)) FSpSetIsInvisible (&spec);
 		}
 	}
