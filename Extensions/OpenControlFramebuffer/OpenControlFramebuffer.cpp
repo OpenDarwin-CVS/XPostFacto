@@ -140,6 +140,7 @@ OpenControlFramebuffer::start (IOService *provider)
 	fVRAMBank1 = false;
 	fVRAMBank2 = false;
 	fVRAMSize = 0;
+	fApertureOffset = 0x800000;
 	
 	fGammaValid = false;
 	fCLUTValid = false;
@@ -193,12 +194,9 @@ OpenControlFramebuffer::enableController (void)
 		IOLog ("OpenControlFramebuffer: no display connected\n");
 		return kIOReturnError;
 	}
-
-	fVRAMBank1 = true; // need to actually test
-	fVRAMBank2 = false;
-	
-	fVRAMSize = (fVRAMBank1 ? 0x200000 : 0) + (fVRAMBank2 ? 0x200000 : 0);
-	if (!fVRAMSize) return kIOReturnError;
+		
+	IOReturn kr = locateVRAMBanks ();
+	if (kr != kIOReturnSuccess) return kr;
 
 	IODisplayModeID initialDisplayMode;
 	IOIndex initialDepth;
@@ -215,6 +213,48 @@ OpenControlFramebuffer::enableController (void)
 
     registerPowerDriver (this, powerStates, 3);
 
+	return kIOReturnSuccess;
+}
+
+IOReturn
+OpenControlFramebuffer::locateVRAMBanks ()
+{
+	IOMemoryDescriptor *vramDescriptor = getVRAMRange ();
+	if (!vramDescriptor) {
+		IOLog ("OpenControlFramebuffer: could not get VRAM range\n");
+		return kIOReturnError;
+	}
+
+	IOMemoryMap *vramMap = vramDescriptor->map (kIOMapInhibitCache);
+	if (!vramMap) {
+		IOLog ("OpenControlFramebuffer: could not map VRAM range\n");
+		return kIOReturnError;
+	}
+	
+	char *bank1 = (char *) vramMap->getVirtualAddress () + fApertureOffset;
+	char *bank2 = bank1 + 0x600000;
+	
+	fRegister[22].reg = OSSwapHostToLittleInt32 (0x39); eieio ();
+	strcpy (bank1, "chaos"); eieio ();
+	fVRAMBank1 = !strcmp (bank1, "chaos");
+	
+	fRegister[22].reg = OSSwapHostToLittleInt32 (0x31); eieio ();
+	strcpy (bank2, "control"); eieio ();
+	fVRAMBank2 = !strcmp (bank2, "control");
+
+	IOLog ("OpenControlFramebuffer::locateNVRAM Bank1 %s, Bank2 %s\n", fVRAMBank1 ? "present" : "absent", fVRAMBank2 ? "present" : "absent");
+
+	vramMap->release ();
+	vramDescriptor->release ();
+	
+	fVRAMSize = (fVRAMBank1 ? 0x200000 : 0) + (fVRAMBank2 ? 0x200000 : 0);
+	if (!fVRAMSize) {
+		IOLog ("OpenControlFramebuffer: No VRAM detected\n");
+		return kIOReturnError;
+	}
+	
+	if (fVRAMBank2 && !fVRAMBank1) fApertureOffset += 0x600000;
+	
 	return kIOReturnSuccess;
 }
 
@@ -427,7 +467,7 @@ IOReturn
 OpenControlFramebuffer::setAttribute (IOSelect attribute, UInt32 value)
 {
 	if (attribute == kIOPowerAttribute) {
-		UInt32 reg22;
+		UInt32 reg18;
 
 		IOLog ("OpenControlFramebuffer power state from %lu to %lu\n", fPowerState, value);
 		
@@ -437,9 +477,10 @@ OpenControlFramebuffer::setAttribute (IOSelect attribute, UInt32 value)
 
 #if 0
 // For some reason, actually turning the signal back on isn't working. Needs further investigation.
-				reg22 = OSSwapLittleToHostInt32 (fRegister[22].reg); eieio ();
-				reg22 &= ~0xF00;
-				fRegister[22].reg = OSSwapHostToLittleInt32 (reg22); eieio ();
+				reg18 = OSSwapLittleToHostInt32 (fRegister[18].reg); eieio ();
+				reg18 &= ~0x400;
+				reg18 |= 0x33;
+				fRegister[18].reg = OSSwapHostToLittleInt32 (reg18); eieio ();
 #else
 // So, in the meantime, just reimplement the gamma / clut
 				implementGammaAndCLUT ();
@@ -453,9 +494,10 @@ OpenControlFramebuffer::setAttribute (IOSelect attribute, UInt32 value)
 
 #if 0
 // This actually works, but I can't turn the signal back on again, so ...
-				reg22 = OSSwapLittleToHostInt32 (fRegister[22].reg); eieio ();
-				reg22 |= 0xF00;
-				fRegister[22].reg = OSSwapHostToLittleInt32 (reg22); eieio ();
+				reg18 = OSSwapLittleToHostInt32 (fRegister[18].reg); eieio ();
+				reg18 |= 0x400;
+				reg18 &= ~0x33;
+				fRegister[18].reg = OSSwapHostToLittleInt32 (reg18); eieio ();
 #else
 // So, in the meantime, just fade to black ...
 				for (int x = 0; x < 256; x++) {
@@ -535,10 +577,10 @@ OpenControlFramebuffer::getApertureRange (IOPixelAperture aper)
 {
 	if (!fCurrentDisplayMode) return NULL;
 
-	IODeviceMemory *deviceMemory = getVRAMRange ();
+	IODeviceMemory *deviceMemory = getVRAMRange ();                      
 	if (!deviceMemory) return NULL;
 	
-	IODeviceMemory *apertureRange = IODeviceMemory::withSubRange (deviceMemory, 0xC00010, getApertureSize (fCurrentDisplayMode, fCurrentDepth));
+	IODeviceMemory *apertureRange = IODeviceMemory::withSubRange (deviceMemory, fApertureOffset + CONTROL_FRAMEBUFFER_OFFSET, getApertureSize (fCurrentDisplayMode, fCurrentDepth));
 
 	deviceMemory->release (); // since getNVRAMRange () does a retain ()
 	return apertureRange;
@@ -649,7 +691,7 @@ OpenControlFramebuffer::setDisplayMode (IODisplayModeID displayMode, IOIndex dep
 	bool vram4MB = fVRAMBank1 && fVRAMBank2;		
 	
 	regVal[8] = regVal[11] - OCFUnsignedPower (3, (2 - depth));
-	if (vram4MB) regVal[8] -= OCFUnsignedPower (2, (2 - depth));
+	if (vram4MB) regVal[8] -= (2 * (2 - depth));
 	
 	if (depth == 0) regVal[18] = 59;
 
@@ -672,7 +714,7 @@ OpenControlFramebuffer::setDisplayMode (IODisplayModeID displayMode, IOIndex dep
 	fColorRegister[2].reg = (depth * 4) | (vram4MB ? 0x20 : 0x10); eieio ();
 	
 	fColorRegister[0].reg = 0x21; eieio ();
-	fColorRegister[2].reg = fVRAMBank2 ? 0 : 1; eieio ();
+	fColorRegister[2].reg = (fVRAMBank2 && !fVRAMBank1) ? 0 : 1; eieio ();
 	fColorRegister[0].reg = 0x10; eieio ();
 	fColorRegister[2].reg = 0; eieio ();
 	fColorRegister[0].reg = 0x11; eieio ();

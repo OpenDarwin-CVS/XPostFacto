@@ -128,6 +128,7 @@ private:
 	void interpretAppleSenseExtended (IODisplayModeID displayMode, IOOptionBits *flags, UInt32 *displayType);
 
 	UInt32 getApertureSize (IODisplayModeID displayMode, IOIndex depth);
+	IOReturn locateVRAMBanks ();
 																	
 private:
 
@@ -150,6 +151,7 @@ private:
 	bool fVRAMBank1;
 	bool fVRAMBank2;
 	UInt32 fVRAMSize;
+	UInt32 fApertureOffset;
 	
 	UInt32 fAppleSensePrimary;
 	UInt32 fAppleSenseExtended;
