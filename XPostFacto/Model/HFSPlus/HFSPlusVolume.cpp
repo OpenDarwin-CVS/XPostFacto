@@ -42,6 +42,7 @@ advised of the possibility of such damage.
 #include "MoreFilesExtras.h"
 #include "HFSPlusExtentsOverflow.h"
 #include "FastUnicodeCompare.h"
+#include "XPFAuthorization.h"
 
 HFSPlusVolume::HFSPlusVolume (XPFPartition *thePartition, unsigned long offsetToData)
 {
@@ -139,6 +140,8 @@ HFSPlusVolume::installBootX ()
 		#endif
 		return;
 	}
+	
+	XPFSetUID myUID (0);
 	
 	FSRef bootXRef;
 	FSSpec bootXSpec;
