@@ -57,6 +57,7 @@ advised of the possibility of such damage.
 #include "XPFStrings.h"
 
 #include "XPFNameRegistry.h"
+#include "XPFAuthorization.h"
 
 // Toolbox
 
@@ -90,7 +91,20 @@ copyFilterGlue (const FSRef *src)
 {
 	return ((XPFApplication *) gApplication)->copyFilter (src);
 }
-				
+
+// Simplistic Unicode constructors
+
+UniChar systemName[] = {'S', 'y', 's', 't', 'e', 'm'};
+UniChar libraryName[] = {'L', 'i', 'b', 'r', 'a', 'r', 'y'};
+UniChar extensionsName[] = {'E', 'x', 't', 'e', 'n', 's', 'i', 'o', 'n', 's'};
+UniChar extensionsCacheName[] = {'E', 'x', 't', 'e', 'n', 's', 'i', 'o', 'n', 's', '.', 'm', 'k', 'e', 'x', 't'};
+UniChar privateName[] = {'p', 'r', 'i', 'v', 'a', 't', 'e'};
+UniChar tmpName[] = {'t', 'm', 'p'};
+UniChar kernelName[] = {'m', 'a', 'c', 'h', '_', 'k', 'e', 'r', 'n', 'e', 'l'};
+UniChar coreServicesName[] = {'C', 'o', 'r', 'e', 'S', 'e', 'r', 'v', 'i', 'c', 'e', 's'};
+UniChar bootXName[] = {'B', 'o', 'o', 't', 'X'};
+UniChar installName[] = {'X', 'P', 'F', 'I', 'n', 's', 't', 'a', 'l', 'l'};
+
 //========================================================================================
 // CLASS XPFApplication
 //========================================================================================
@@ -299,6 +313,25 @@ XPFApplication::InstallHelpMenuItems()
 	TMenuBarManager::fgMenuBarManager->AddHelpMenuItem (theMenuName, cShowSourceCode);
 }
 
+void
+XPFApplication::DoInstallExtensions ()
+{
+	UInt32 version = 0;
+	Gestalt (gestaltSystemVersion, (SInt32 *) &version);
+	if (version >= 0x01000) {
+		// running in Mac OS X
+		installExtensionsInMacOSX ();
+	} else {  
+		// running in Mac OS 9
+		CFSSpec_AC installVolume;
+		FSRef rootDirectory;
+		if (ChooseVolumeWithNavSvcs (NULL, installVolume)) {
+			ThrowIfOSErr_AC (FSpMakeFSRef (&installVolume, &rootDirectory));
+			installExtensionsWithRootDirectory (&rootDirectory);
+		}
+	}
+}
+
 void 
 XPFApplication::DoMenuCommand(CommandNumber aCommandNumber) // Override 
 {
@@ -306,6 +339,10 @@ XPFApplication::DoMenuCommand(CommandNumber aCommandNumber) // Override
 	{			
 		case cQuit:
 			TApplication::DoMenuCommand (aCommandNumber);
+			break;
+			
+		case cInstallExtensions:
+			DoInstallExtensions ();
 			break;
 			
 		case cShowHelpFile:
@@ -450,6 +487,8 @@ XPFApplication::DoSetupMenus()
 	Enable (cShowHelpFile, true);
 	Enable (cShowOnlineHelpFile, true);
 	Enable (cShowSourceCode, true);
+	
+	Enable (cInstallExtensions, true);
 }
 
 Boolean 
@@ -473,6 +512,7 @@ XPFApplication::setCopyInProgress (bool val)
 void
 XPFApplication::setCopyingFile (CStr255_AC copyMessage)
 {
+	setCopyInProgress (true);
 	fCopyingFile.CopyFrom (copyMessage);
 	Changed (cSetCopyMessage, NULL);
 }
@@ -480,9 +520,7 @@ XPFApplication::setCopyingFile (CStr255_AC copyMessage)
 void 
 XPFApplication::install ()
 {	
-	try {
-		setCopyInProgress (true);
-		
+	try {		
 		setCopyingFile ("BootX");
 		
 		// See if we have to install BootX
@@ -490,63 +528,29 @@ XPFApplication::install ()
 		// versioning system in place now.
 		fPrefs->getInstallDisk ()->installBootXIfNecessary (fPrefs->getReinstallBootX ());
 								
-		// First, create the System:Library:Extensions directories, if not already in existence
+		// Install the extensions
 		
-		UniChar extensionsCacheName[] = {'E', 'x', 't', 'e', 'n', 's', 'i', 'o', 'n', 's', '.', 'm', 'k', 'e', 'x', 't'};
-				
-		FSRef systemFolder, systemLibraryFolder, systemLibraryExtensionsFolder;
-		
-		UniChar systemName[] = {'S', 'y', 's', 't', 'e', 'm'};
-		UniChar libraryName[] = {'L', 'i', 'b', 'r', 'a', 'r', 'y'};
-		UniChar extensionsName[] = {'E', 'x', 't', 'e', 'n', 's', 'i', 'o', 'n', 's'};
-		
-		FSCatalogInfo catInfo, tmpCatInfo;
+		installExtensionsWithRootDirectory (fPrefs->getInstallDisk ()->getRootDirectory ());
+						
+		// Now, get or create the /private/tmp directories, for the copies from the CD
+
+		FSCatalogInfo catInfo;
 		
 		catInfo.permissions[0] = 0;
 		catInfo.permissions[1] = 0;
 		catInfo.permissions[2] = 0x41ED;
 		catInfo.permissions[3] = 0;
-
-		tmpCatInfo.permissions[0] = 0;
-		tmpCatInfo.permissions[1] = 0;
-		tmpCatInfo.permissions[2] = 0x43FF;
-		tmpCatInfo.permissions[3] = 0;
-
-		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (fPrefs->getInstallDisk()->getRootDirectory(), 
-			sizeof (systemName) / sizeof (UniChar), systemName, kFSCatInfoPermissions, &catInfo, 
-			&systemFolder, NULL, NULL));
-		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&systemFolder, 
-			sizeof (libraryName) / sizeof (UniChar), libraryName, kFSCatInfoPermissions, &catInfo, 
-			&systemLibraryFolder, NULL, NULL));
-		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&systemLibraryFolder,
-			sizeof (extensionsName) / sizeof (UniChar), extensionsName, kFSCatInfoPermissions, &catInfo,
-			&systemLibraryExtensionsFolder, NULL, NULL));	
-						
-		// Now we copy over any of the hfs archives
-
-		copyHFSArchivesTo (&systemLibraryExtensionsFolder);
-	
-		// If there is an existing extensions cache, we'd best delete it
-
-		FSRef existingCache;
-		OSErr err = FSMakeFSRefUnicode (&systemLibraryFolder, 
-			sizeof (extensionsCacheName) / sizeof (UniChar), extensionsCacheName, kTextEncodingUnknown,
-			&existingCache);
-		if (err == noErr) FSDeleteObject (&existingCache);
-			
-		// Now, get or create the /private/tmp directories, for the copies from the CD
-		
-		UniChar privateName[] = {'p', 'r', 'i', 'v', 'a', 't', 'e'};
-		UniChar tmpName[] = {'t', 'm', 'p'};
-		UniChar kernelName[] = {'m', 'a', 'c', 'h', '_', 'k', 'e', 'r', 'n', 'e', 'l'};
-		
+				
 		FSRef privateFolder, privateTmpFolder;
 		
 		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (fPrefs->getInstallDisk()->getRootDirectory (),
 			sizeof (privateName) / sizeof (UniChar), privateName, kFSCatInfoPermissions, &catInfo,
 			&privateFolder, NULL, NULL));
+
+		catInfo.permissions[2] = 0x43FF;
+
 		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&privateFolder, 
-			sizeof (tmpName) / sizeof (UniChar), tmpName, kFSCatInfoPermissions, &tmpCatInfo,
+			sizeof (tmpName) / sizeof (UniChar), tmpName, kFSCatInfoPermissions, &catInfo,
 			&privateTmpFolder, NULL, NULL));
 
 		// Now, copy the kernel from the CD
@@ -557,7 +561,7 @@ XPFApplication::install ()
 		ThrowIfOSErr_AC (FSMakeFSRefUnicode (fPrefs->getBootDisk()->getRootDirectory (),
 			sizeof (kernelName) / sizeof (UniChar), kernelName, kTextEncodingUnknown, &kernelOnCD));
 			
-		err = FSRefFileCopy (&kernelOnCD, &privateTmpFolder, NULL, NULL, 0, false);
+		OSErr err = FSRefFileCopy (&kernelOnCD, &privateTmpFolder, NULL, NULL, 0, false);
 		if (err == dupFNErr) {
 			FSRef kernelOnTarget;
 			ThrowIfOSErr_AC (FSMakeFSRefUnicode (&privateTmpFolder,
@@ -608,10 +612,17 @@ XPFApplication::install ()
 		// Now, we will copy BootX from the CD, to make the Installer think that Mac OS X is already
 		// installed, so that it won't move the extensions we pre-installed
 		
-		FSRef systemLibraryCoreServicesFolder, cdSystemLibraryCoreServicesFolder, cdBootX;
-		UniChar coreServicesName[] = {'C', 'o', 'r', 'e', 'S', 'e', 'r', 'v', 'i', 'c', 'e', 's'};
-		UniChar bootXName[] = {'B', 'o', 'o', 't', 'X'};
-		
+		FSRef systemFolder, systemLibraryFolder, systemLibraryCoreServicesFolder;
+		FSRef cdSystemLibraryCoreServicesFolder, cdBootX;
+						
+		catInfo.permissions[2] = 0x41ED;
+
+		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (fPrefs->getInstallDisk()->getRootDirectory (), 
+			sizeof (systemName) / sizeof (UniChar), systemName, kFSCatInfoPermissions, &catInfo, 
+			&systemFolder, NULL, NULL));
+		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&systemFolder, 
+			sizeof (libraryName) / sizeof (UniChar), libraryName, kFSCatInfoPermissions, &catInfo, 
+			&systemLibraryFolder, NULL, NULL));
 		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&systemLibraryFolder,
 			sizeof (coreServicesName) / sizeof (UniChar), coreServicesName, kFSCatInfoPermissions, &catInfo,
 			&systemLibraryCoreServicesFolder, NULL, NULL));	
@@ -717,6 +728,90 @@ XPFApplication::tellFinderToRestart ()
                   kAENormalPriority, kAEDefaultTimeout, NULL, NULL));
 	AEDisposeDesc (&myRestart);
 	AEDisposeDesc (&finderAddr);
+}
+
+void
+XPFApplication::installExtensionsInMacOSX ()
+{
+	// Get the authorization--no point proceeding if we can't
+		
+	XPFAuthorization auth;
+	OSErr err = auth.Authenticate ();
+	if (err != errAuthorizationSuccess) ThrowException_AC (kCouldNotObtainAuthorization, 0);
+		
+	// Write out the archives to a temp folder
+	
+	FSRef tempFolder, workingFolder;
+	char workingPath [256];
+	
+	ThrowIfOSErr_AC (FSFindFolder (kOnAppropriateDisk, kTemporaryFolderType, kCreateFolder, &tempFolder));
+	err = FSMakeFSRefUnicode (&tempFolder, sizeof (installName) / sizeof (UniChar), installName, 
+											kTextEncodingUnknown, &workingFolder);
+	if (err == noErr) ThrowIfOSErr_AC (FSRefDeleteDirectory (&workingFolder));
+	ThrowIfOSErr_AC (FSCreateDirectoryUnicode (&tempFolder, sizeof (installName) / sizeof (UniChar), installName, 
+			kFSCatInfoNone, NULL, &workingFolder, NULL, NULL));
+			
+	ThrowIfOSErr_AC (FSRefMakePath (&workingFolder, (UInt8*) workingPath, 256));
+		
+	copyHFSArchivesTo (&workingFolder);
+	
+	// Get a root shell and feed the commands	
+
+	FILE *pipe;
+	
+	char *arguments[2];
+	arguments[0] = "-s";
+	arguments[1] = NULL;
+	
+	auth.ExecuteWithPrivileges ("/bin/sh", arguments, &pipe);
+	
+	auth.fprintf (pipe, "/usr/sbin/chown -R root:wheel \"%s\"\012", workingPath);
+	auth.fprintf (pipe, "/usr/bin/ditto \"%s\" /System/Library/Extensions\012", workingPath);
+	auth.fprintf (pipe, "/bin/rm -rf \"%s\"\012", workingPath);
+	auth.fprintf (pipe, "/usr/bin/touch /System/Library/Extensions\012");
+
+	auth.fclose (pipe);
+}
+
+void
+XPFApplication::installExtensionsWithRootDirectory (const FSRef *rootDirectory)
+{
+	try {
+		FSRef systemFolder, systemLibraryFolder, systemLibraryExtensionsFolder;
+		
+		FSCatalogInfo catInfo;
+		
+		catInfo.permissions[0] = 0;
+		catInfo.permissions[1] = 0;
+		catInfo.permissions[2] = 0x41ED;
+		catInfo.permissions[3] = 0;
+
+		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (rootDirectory, 
+			sizeof (systemName) / sizeof (UniChar), systemName, kFSCatInfoPermissions, &catInfo, 
+			&systemFolder, NULL, NULL));
+		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&systemFolder, 
+			sizeof (libraryName) / sizeof (UniChar), libraryName, kFSCatInfoPermissions, &catInfo, 
+			&systemLibraryFolder, NULL, NULL));
+		ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&systemLibraryFolder,
+			sizeof (extensionsName) / sizeof (UniChar), extensionsName, kFSCatInfoPermissions, &catInfo,
+			&systemLibraryExtensionsFolder, NULL, NULL));
+
+		copyHFSArchivesTo (&systemLibraryExtensionsFolder);
+
+		// If there is an existing extensions cache, we'd best delete it
+
+		FSRef existingCache;
+		OSErr err = FSMakeFSRefUnicode (&systemLibraryFolder, 
+			sizeof (extensionsCacheName) / sizeof (UniChar), extensionsCacheName, kTextEncodingUnknown,
+			&existingCache);
+		if (err == noErr) FSDeleteObject (&existingCache);
+	}
+	catch (...) {
+		setCopyInProgress (false);
+		throw;
+	}
+	
+	setCopyInProgress (false);
 }
 
 void
@@ -849,38 +944,7 @@ XPFApplication::restart ()
 
 		// Check whether we need to install Old World Support
 		if (fPrefs->getReinstallExtensions () || !bootDisk->getHasOldWorldSupport ()) {
-			try {
-				FSRef systemFolder, systemLibraryFolder, systemLibraryExtensionsFolder;
-			
-				UniChar systemName[] = {'S', 'y', 's', 't', 'e', 'm'};
-				UniChar libraryName[] = {'L', 'i', 'b', 'r', 'a', 'r', 'y'};
-				UniChar extensionsName[] = {'E', 'x', 't', 'e', 'n', 's', 'i', 'o', 'n', 's'};
-			
-				ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (bootDisk->getRootDirectory(), 
-					sizeof (systemName) / sizeof (UniChar), systemName, kFSCatInfoNone, NULL, 
-					&systemFolder, NULL, NULL));
-				ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&systemFolder, 
-					sizeof (libraryName) / sizeof (UniChar), libraryName, kFSCatInfoNone, NULL, 
-					&systemLibraryFolder, NULL, NULL));
-				ThrowIfOSErr_AC (FSGetOrCreateDirectoryUnicode (&systemLibraryFolder,
-					sizeof (extensionsName) / sizeof (UniChar), extensionsName, kFSCatInfoNone, NULL,
-					&systemLibraryExtensionsFolder, NULL, NULL));
-
-				copyHFSArchivesTo (&systemLibraryExtensionsFolder);
-
-				// If there is an existing extensions cache, we'd best delete it
-		
-				FSRef existingCache;
-				UniChar extensionsCacheName[] = {'E', 'x', 't', 'e', 'n', 's', 'i', 'o', 'n', 's', '.', 'm', 'k', 'e', 'x', 't'};
-				OSErr err = FSMakeFSRefUnicode (&systemLibraryFolder, 
-					sizeof (extensionsCacheName) / sizeof (UniChar), extensionsCacheName, kTextEncodingUnknown,
-					&existingCache);
-				if (err == noErr) FSDeleteObject (&existingCache);
-			}
-			catch (...) {
-				setCopyInProgress (false);
-				throw;
-			}
+			installExtensionsWithRootDirectory (bootDisk->getRootDirectory ());
 		}
 
 		setCopyInProgress (false);

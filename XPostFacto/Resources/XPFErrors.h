@@ -52,7 +52,8 @@ enum {
 	kReadCrossesExtents,
 	kUserCancelledInstall,
 	kExtentsFileTooFragmented,
-	kExtentsFileInconsistent
+	kExtentsFileInconsistent,
+	kCouldNotObtainAuthorization
 };
 
 

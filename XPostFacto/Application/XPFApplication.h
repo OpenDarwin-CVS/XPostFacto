@@ -61,6 +61,7 @@ class XPFApplication : public TApplication {
 			
 		virtual void DoAboutBox();
 		void DoShowHelpFile ();
+		void DoInstallExtensions ();
 		
 		void launchURL (CStr255_AC theURL);
 		
@@ -105,6 +106,9 @@ class XPFApplication : public TApplication {
 				
 		void initializeNVRAM ();
 		void initializeThrottleMenu ();
+		
+		void installExtensionsWithRootDirectory (const FSRef *rootDirectory);
+		void installExtensionsInMacOSX ();
 		
 		XPFWindow *fMainWindow;
 		XPFAboutBox *fAboutBox;

@@ -77,6 +77,7 @@ resource 'errs' (kReasonResourceID, purgeable) {
 		kUserCancelledInstall, kUserCancelledInstall, 17;
 		kExtentsFileTooFragmented, kExtentsFileTooFragmented, 18;
 		kExtentsFileInconsistent, kExtentsFileInconsistent, 19;
+		kCouldNotObtainAuthorization, kCouldNotObtainAuthorization, 20;
 	}
 };
 
@@ -102,6 +103,7 @@ resource 'STR#' (kReasonResourceID, purgeable) {
 					"installation was cancelled by the user";
 					"the extents file was too fragmented";
 					"the extents file was inconsistent";
+		/* 20 */	"could not obtain authorization";
 	}
 };
 

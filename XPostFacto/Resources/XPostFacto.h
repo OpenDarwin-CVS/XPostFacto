@@ -78,6 +78,8 @@ advised of the possibility of such damage.
 #define cShowOnlineHelpFile		1022
 #define cShowSourceCode			1023
 
+#define cInstallExtensions		1024
+
 #define cFirstInputDevice		1100
 #define cFirstOutputDevice		1200
 

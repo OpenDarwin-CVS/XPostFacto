@@ -199,20 +199,8 @@ purgeable) {
 	enabled,
 	"File",
 	{
-//	"New",				noIcon, "N",	noMark, plain, cNew;
-//	"Open…",			noIcon, "O",	noMark, plain, cOpen;
-//	"-",				noIcon, noKey,	noMark, plain, nocommand;
-//	"Close",			noIcon, "W",	noMark, plain, cClose;
-//	"Save",				noIcon, "S",	noMark, plain, cSave;
-//	"Save As…",			noIcon, noKey,	noMark, plain, cSaveAs;
-//	"Revert",			noIcon, noKey,	noMark, plain, cRevert;
-//	"-",				noIcon, noKey,	noMark, plain, nocommand;
-//	"Page Setup…",		noIcon, noKey,	noMark, plain, cPageSetup;
-//	"Print…",			noIcon, "P",	noMark, plain, cPrint;
-//	"Print One Copy",	noIcon, noKey,	noMark, plain, cPrintOne;
-//	"Create Archive…", noIcon, noKey, noMark, plain, cCreateArchive;
-//	"Extract Archive…", noIcon, noKey, noMark, plain, cExtractArchive;
-//	"-",				noIcon, noKey,	noMark, plain, nocommand;
+	"Install Extensions", noIcon, noKey, noMark, plain, cInstallExtensions;
+	"-",				noIcon, noKey,	noMark, plain, nocommand;
 	"Quit",				noIcon, "Q",	noMark, plain, cQuit
 	}
 };

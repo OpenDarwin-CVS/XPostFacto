@@ -43,7 +43,9 @@ resource 'STR#' (1000) {
 		/* [5] */
 		"Install Mac OS X To",
 		/* [6] */
-		"?"
+		"?",
+		/* [7] */
+		"Quit"
 	}
 };
 
@@ -1438,7 +1440,7 @@ resource 'View' (1006, "Fatal Error", purgeable) {
 				1000,
 				dontPreferOutline,
 				1000,
-				1
+				7
 			},
 			NoSubviews
 		},
