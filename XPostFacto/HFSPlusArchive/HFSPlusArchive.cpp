@@ -162,11 +162,6 @@ HFSPlusArchive::archiveCurrentItemAsFile ()
 void 
 HFSPlusArchive::archiveCurrentItem ()
 {
-	#if qDebug
-		for (UInt16 x = 0; x < fItemName.length; x++) cout << (char) fItemName.unicode[x];
-		cout << endl;
-	#endif
-
 	fStream.WriteBytes (&fItemName.length, sizeof (fItemName.length));
 	fStream.WriteBytes (&fItemName.unicode, fItemName.length * sizeof (UniChar));
 	fStream.WriteBytes (&fCatalogInfo, sizeof (fCatalogInfo));
@@ -264,7 +259,7 @@ HFSPlusArchive::addToArchive (const FSRef *ref)
 void
 HFSPlusArchive::extractDirectoryTo (const FSRef *ref)
 {
-	::YieldToAnyThread ();
+//	::YieldToAnyThread ();
 	if (!fSuspendExtraction) {
 		FSRef newRef;
 		fErr = FSCreateDirectoryUnicode (ref, fItemName.length, fItemName.unicode,
@@ -331,7 +326,7 @@ HFSPlusArchive::extractFileTo (const FSRef *ref)
 	if (fCopyFilter) (*fCopyFilter) (&newRef);
 	
 	while (true) {
-		::YieldToAnyThread ();
+//		::YieldToAnyThread ();
 		HFSUniStr255 forkName;
 		SInt64 forkSize;
 		fStream.ReadBytes (&forkSize, sizeof (forkSize));
@@ -355,7 +350,7 @@ HFSPlusArchive::extractFileTo (const FSRef *ref)
 			}
 			
 			while (forkSize > 0) {
-				::YieldToAnyThread ();
+//				::YieldToAnyThread ();
 				fStream.ReadBytes (fCopyBuffer, forkSize < kCopyBufferSize ? forkSize : kCopyBufferSize);
 				if (forkRefNum) ThrowIfOSErr_AC (FSWriteFork (forkRefNum, fsAtMark, 0, 
 									forkSize < kCopyBufferSize ? forkSize : kCopyBufferSize,
@@ -380,7 +375,7 @@ void
 HFSPlusArchive::extractItemsTo (const FSRef *ref)
 {
 	while (true) {
-		::YieldToAnyThread ();
+//		::YieldToAnyThread ();
 		try {
 			fStream.ReadBytes (&fItemName.length, sizeof (fItemName.length));
 			if (fItemName.length == 0) break; // we're done!
