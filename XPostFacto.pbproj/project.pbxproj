@@ -3338,7 +3338,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.AppleMaceEthernet;
-				MODULE_VERSION = 1.1.2;
+				MODULE_VERSION = 1.1.3;
 				OTHER_CFLAGS = "-fpermissive";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -3379,7 +3379,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.1.2</string>
+	<string>1.1.3</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>AppleMaceEthernet</key>
@@ -8077,7 +8077,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.OWCCacheConfig;
-				MODULE_VERSION = 1.0.0b2;
+				MODULE_VERSION = 1.0.1;
 				OTHER_CFLAGS = "-D_BIG_ENDIAN=1";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -8118,7 +8118,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.0b2</string>
+	<string>1.0.1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>OWCCacheConfig</key>
