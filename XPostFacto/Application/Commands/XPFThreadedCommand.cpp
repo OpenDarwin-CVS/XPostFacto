@@ -42,6 +42,7 @@ advised of the possibility of such damage.
 #include "XPostFacto.h"
 #include "XPFProgressWindow.h"
 #include "UThreads.h"
+#include "MoreFilesExtras.h"
 
 // String constants
 
@@ -201,7 +202,17 @@ XPFThreadedCommand::getOrCreateDirectory (FSRef *rootDirectory, char *path, UInt
 OSErr
 XPFThreadedCommand::getOrCreateXPFDirectory (FSRef *rootDirectory, FSRef *result)
 {
-	return getOrCreateDirectory (rootDirectory, XPFName, 0755, result);
+	OSErr err = getOrCreateDirectory (rootDirectory, XPFName, 0755, result);
+	if (err == noErr) {
+		FSSpec spec;
+		FSCatalogInfo catInfo;
+		err = FSGetCatalogInfo (result, kFSCatInfoFinderInfo, &catInfo, NULL, &spec, NULL);
+		if (err == noErr) {
+			FolderInfo *info = (FolderInfo *) catInfo.finderInfo;
+			if (!(info->finderFlags & kIsInvisible)) FSpSetIsInvisible (&spec);
+		}
+	}
+	return err;
 }
 
 OSErr
