@@ -1,6 +1,6 @@
 /*
 
-    Copyright (c) 2001, 2002
+    Copyright (c) 2001 - 2003
     Other World Computing 
     All rights reserved.
     
@@ -19,7 +19,7 @@
     This software is provided by Other World Computing ``as is'' and any express or
     implied warranties, including, but not limited to, the implied warranties
     of merchantability and fitness for a particular purpose are disclaimed.
-    In no event shall Ryan Rempel be liable for any direct, indirect,
+    In no event shall Other World Computing or Ryan Rempel be liable for any direct, indirect,
     incidental, special, exemplary, or consequential damages (including, but
     not limited to, procurement of substitute goods or services; loss of use,
     data, or profits; or business interruption) however caused and on any
@@ -49,6 +49,11 @@
 #include <Math64.h>
 #include <Threads.h>
 
+#ifdef __MACH__
+	#include <sys/types.h>
+	#include <unistd.h>
+#endif
+
 /*****************************************************************************/
 
 /* local constants */
@@ -73,6 +78,8 @@ enum
 /*****************************************************************************/
 
 /* static prototypes */
+
+static OSErr DeleteItemsFromDstThatAreNotInSrc (const FSRef *dstRef, const FSRef *srcRef);
 
 static	OSErr	GetDestinationDirInfo(const FSRef *dstRef,
 									  Boolean *isDirectory,
@@ -153,6 +160,48 @@ static	OSErr	CheckForForks(const FSRef *ref,
 	*hasResourceFork = (info.rsrcLogicalSize != 0);
 		
 	return ( error );
+}
+
+static OSErr DeleteItemsFromDstThatAreNotInSrc (const FSRef *dstRef, const FSRef *srcRef)
+{
+	FSIterator iterator;
+	FSOpenIterator (dstRef, kFSIterateFlat, &iterator);
+	OSErr error;
+
+	while (true) {	
+		/* Get next item in the destination directory */
+		ItemCount actualObjects;
+		FSCatalogInfo dstCatInfo, srcCatInfo;
+		FSRef dstItem;
+		HFSUniStr255 itemName;
+		error = FSGetCatalogInfoBulk (iterator, 1, &actualObjects, NULL, kFSCatInfoNodeFlags | kFSCatInfoTextEncoding,
+						&dstCatInfo, &dstItem, NULL, &itemName);
+							
+		if (error != noErr) break;	
+		if (actualObjects == 1) {
+			// See if there is a corresponding item in the source
+			FSRef srcItem;
+			error = FSMakeFSRefUnicode (srcRef, itemName.length, itemName.unicode, dstCatInfo.textEncodingHint, &srcItem);
+			if (error == noErr) {
+				error = FSGetCatalogInfo (&srcItem, kFSCatInfoNodeFlags, &srcCatInfo, NULL, NULL, NULL);
+				if (error == noErr) {
+					if ((srcCatInfo.nodeFlags & kFSNodeIsDirectoryMask) != (dstCatInfo.nodeFlags & kFSNodeIsDirectoryMask)) {
+						error = fnfErr;
+					}
+				}
+			}
+			if (error != noErr) {
+				if (dstCatInfo.nodeFlags & kFSNodeIsDirectoryMask) {
+					error = FSRefDeleteDirectory (&dstItem);
+				} else {
+					error = FSDeleteObject (&dstItem);
+				}
+			}
+		}
+	}
+	
+	FSCloseIterator (iterator);
+	return noErr;
 }
 
 /*****************************************************************************/
@@ -256,28 +305,41 @@ FSGetOrCreateDirectoryUnicode (
 )
 {
 	OSErr error;
+	FSRef tempRef;
 	
 	// First we try to get the directory (if it exists)
-	error = FSMakeFSRefUnicode (parentRef, nameLength, name, NULL, newRef);
+	error = FSMakeFSRefUnicode (parentRef, nameLength, name, NULL, &tempRef);
 	if (error != noErr) {
 		// It doesn't exist. So we create it!
-		return FSCreateDirectoryUnicode (parentRef, nameLength, name, whichInfo, catalogInfo, newRef, newSpec, newDirID);
+		error = FSCreateDirectoryUnicode (parentRef, nameLength, name, whichInfo, catalogInfo, &tempRef, newSpec, newDirID);
+		if (error != noErr) return error;
 	} else {
 		// It exists. Now, make sure it is a directory . Also, get the FSSpec & dirID
 		FSCatalogInfo catInfo;
-		error = FSGetCatalogInfo (newRef, kFSCatInfoNodeFlags | kFSCatInfoNodeID, &catInfo, NULL, newSpec, NULL);
+		error = FSGetCatalogInfo (&tempRef, kFSCatInfoNodeFlags | kFSCatInfoNodeID, &catInfo, NULL, newSpec, NULL);
 		if (error != noErr) return error;
 		if (catInfo.nodeFlags & kFSNodeIsDirectoryMask) {
 			// it exists and it is a directory. We set the catalog info for consistency sake.
 			if (newDirID) *newDirID = catInfo.nodeID;
 			if (catalogInfo) {
-				error = FSSetCatalogInfo (newRef, whichInfo, catalogInfo);
-				if (error != noErr) return error;
+				error = FSSetCatalogInfo (&tempRef, whichInfo, catalogInfo);
+//				if (error != noErr) return error;    // We'll ignore this error for a moment, as it is expected on the CD
 			}
 		} else {
 			return errFSNotAFolder;
 		}
 	}
+	if (newRef) memcpy (newRef, &tempRef, sizeof (tempRef));
+
+	#ifdef __MACH__
+		if (whichInfo & kFSCatInfoPermissions) {
+			char path[256];
+			error = FSRefMakePath (&tempRef, (UInt8 *) path, 255);
+			if (error != noErr) return error;
+			chown (path, catalogInfo->permissions[0], catalogInfo->permissions[1]);
+		}
+	#endif
+
 	return noErr;
 }
 
@@ -379,6 +441,15 @@ FSRefCopyFileMgrAttributes(	const FSRef *srcRef,
 		info.nodeFlags &= ~kFSNodeLockedMask;
 		
 		error = FSSetCatalogInfo (dstRef, kFSCatInfoSettableInfo, &info);
+		// In Mac OS X, we need to set the UID and GID separately
+		#ifdef __MACH__
+			if (error == noErr) {
+				char path[256];
+				error = FSRefMakePath (dstRef, (UInt8 *) path, 255);
+				if (error != noErr) return error;
+				chown (path, info.permissions[0], info.permissions[1]);
+			}
+		#endif
 
 		if ( (error == noErr) && setLockBit )
 		{
@@ -449,6 +520,8 @@ FSRefFileCopy (
 	Boolean	hasDataFork;
 	Boolean	hasResourceFork;
 	
+	Boolean useExistingForks = false; // whether to skip the copy
+	
 	// Get names
 	
 	FSGetDataForkName (&dataForkName);
@@ -483,10 +556,6 @@ FSRefFileCopy (
 		ourCopyBuffer = true;
 	}
 	
-	/* Open the source data fork. */
-	err = FSOpenFork (srcRef, dataForkName.length, dataForkName.unicode, fsRdPerm /* srcCopyMode */, &srcRefNum);
-	if ( err != noErr ) return ( err );
-
 	/* Once a file is opened, we have to exit via ErrorExit to make sure things are cleaned up */
 	
 	/* See if the copy will be renamed. */
@@ -498,14 +567,30 @@ FSRefFileCopy (
 		if ( err != noErr ) goto ErrorExit;
 	}
 
-	/* Create the destination file. */
+	/* Check for the destination file. */
 	
-	err = FSCreateFileUnicode (dstDirRef, dstName.length, dstName.unicode, 
-								kFSCatInfoNone, NULL, &dstFileRef, NULL);	
-	if ( err != noErr ) goto ErrorExit;
-	dstCreated = true;	/* After creating the destination file, any
-						** error conditions should delete the destination file */
-
+	err = FSMakeFSRefUnicode (dstDirRef, dstName.length, dstName.unicode, kTextEncodingUnknown, &dstFileRef);
+	if (err == noErr) {
+		// It exists already, so we don't need to create the file.
+		// But we do need to check whether we have to copy the forks.
+		FSCatalogInfo srcCatInfo, dstCatInfo;
+		err = FSGetCatalogInfo (&dstFileRef, kFSCatInfoContentMod | kFSCatInfoRsrcSizes | kFSCatInfoDataSizes, 
+				&dstCatInfo, NULL, NULL, NULL);
+		if (err != noErr) goto ErrorExit;
+		err = FSGetCatalogInfo (srcRef, kFSCatInfoContentMod | kFSCatInfoRsrcSizes | kFSCatInfoDataSizes, 
+				&srcCatInfo, NULL, NULL, NULL);
+		if (err != noErr) goto ErrorExit;		
+		useExistingForks = (srcCatInfo.dataLogicalSize == dstCatInfo.dataLogicalSize) &&
+				(srcCatInfo.rsrcLogicalSize == dstCatInfo.rsrcLogicalSize) &&
+				(!memcmp (&srcCatInfo.contentModDate, &dstCatInfo.contentModDate, sizeof (UTCDateTime)));
+	} else {
+		// We need to create the file
+		err = FSCreateFileUnicode (dstDirRef, dstName.length, dstName.unicode, 
+									kFSCatInfoNone, NULL, &dstFileRef, NULL);	
+		if ( err != noErr ) goto ErrorExit;
+		dstCreated = true;	/* After creating the destination file, any
+							** error conditions should delete the destination file */
+	}
 
 	/* An AppleShare dropbox folder is a folder for which the user has the Make Changes
 	** privilege (write access), but not See Files (read access) and See Folders (search access).
@@ -548,67 +633,66 @@ FSRefFileCopy (
 	** for the destination unless it's really needed (some foreign file systems such as
 	** the ProDOS File System and Macintosh PC Exchange have to create additional disk
 	** structures to support resource forks). */
-	err = CheckForForks(srcRef, &hasDataFork, &hasResourceFork);
-	if ( err != noErr ) goto ErrorExit;
+	if (!useExistingForks) {
+		err = CheckForForks(srcRef, &hasDataFork, &hasResourceFork);
+		if ( err != noErr ) goto ErrorExit;
+			
+		if ( hasDataFork )
+		{
+			/* Open the destination data fork. */
+			err = FSOpenFork (&dstFileRef, dataForkName.length, dataForkName.unicode,
+								/* dstCopyMode */ fsRdWrPerm, &dstDataRefNum);
+			if ( err != noErr ) goto ErrorExit;
+		}
+
+		if ( hasResourceFork )
+		{
+			/* Open the destination resource fork. */
+			err = FSOpenFork (&dstFileRef, resourceForkName.length, resourceForkName.unicode,
+								/* dstCopyMode */ fsRdWrPerm, &dstRsrcRefNum);
+			if ( err != noErr ) goto ErrorExit;
+		}
+
+		if ( hasDataFork )
+		{
+			/* Open the source data fork. */
+			err = FSOpenFork (srcRef, dataForkName.length, dataForkName.unicode, fsRdPerm /* srcCopyMode */, &srcRefNum);
+			if ( err != noErr ) return ( err );
+
+			/* Copy the data fork. */
+			err = FSCopyFork (srcRefNum, dstDataRefNum, copyBufferPtr, copyBufferSize);
+			if ( err != noErr ) goto ErrorExit;
 		
-	if ( hasDataFork )
-	{
-		/* Open the destination data fork. */
-		err = FSOpenFork (&dstFileRef, dataForkName.length, dataForkName.unicode,
-							/* dstCopyMode */ fsRdWrPerm, &dstDataRefNum);
-		if ( err != noErr ) goto ErrorExit;
-	}
-
-	if ( hasResourceFork )
-	{
-		/* Open the destination resource fork. */
-		err = FSOpenFork (&dstFileRef, resourceForkName.length, resourceForkName.unicode,
-							/* dstCopyMode */ fsRdWrPerm, &dstRsrcRefNum);
-		if ( err != noErr ) goto ErrorExit;
-	}
-
-	if ( hasDataFork )
-	{
-
-		/* Copy the data fork. */
-		err = FSCopyFork (srcRefNum, dstDataRefNum, copyBufferPtr, copyBufferSize);
-		if ( err != noErr ) goto ErrorExit;
-	
-		/* Close both data forks and clear reference numbers. */
-		(void) FSCloseFork (srcRefNum);
-		(void) FSCloseFork (dstDataRefNum);
-		srcRefNum = dstDataRefNum = 0;
-	}
-	else
-	{
-		/* Close the source data fork since it was opened earlier */
-		(void) FSClose(srcRefNum);
-		srcRefNum = 0;
-	}
-
-	if ( hasResourceFork )
-	{
-		/* Open the source resource fork. */
-		err = FSOpenFork (srcRef, resourceForkName.length, resourceForkName.unicode,
-							/* srcCopyMode */ fsRdPerm, &srcRefNum);
-		if ( err != noErr )
-		{
-			goto ErrorExit;
+			/* Close both data forks and clear reference numbers. */
+			(void) FSCloseFork (srcRefNum);
+			(void) FSCloseFork (dstDataRefNum);
+			srcRefNum = dstDataRefNum = 0;
 		}
-	
-		/* Copy the resource fork. */
-		err = FSCopyFork(srcRefNum, dstRsrcRefNum, copyBufferPtr, copyBufferSize);
-		if ( err != noErr )
+
+		if ( hasResourceFork )
 		{
-			goto ErrorExit;
+			/* Open the source resource fork. */
+			err = FSOpenFork (srcRef, resourceForkName.length, resourceForkName.unicode,
+								/* srcCopyMode */ fsRdPerm, &srcRefNum);
+			if ( err != noErr )
+			{
+				goto ErrorExit;
+			}
+		
+			/* Copy the resource fork. */
+			err = FSCopyFork(srcRefNum, dstRsrcRefNum, copyBufferPtr, copyBufferSize);
+			if ( err != noErr )
+			{
+				goto ErrorExit;
+			}
+		
+			/* Close both resource forks and clear reference numbers. */
+			(void) FSCloseFork (srcRefNum);
+			(void) FSCloseFork (dstRsrcRefNum);
+			srcRefNum = dstRsrcRefNum = 0;
 		}
-	
-		/* Close both resource forks and clear reference numbers. */
-		(void) FSCloseFork (srcRefNum);
-		(void) FSCloseFork (dstRsrcRefNum);
-		srcRefNum = dstRsrcRefNum = 0;
 	}
-	
+		
 	/* Get rid of the copy buffer if we allocated it. */
 	if ( ourCopyBuffer )
 	{
@@ -658,6 +742,7 @@ struct EnumerateGlobals
 	long		bufferSize;			/* the size of the copy buffer */
 	FSCopyErrProcPtr errorHandler;	/* pointer to error handling function */
 	FSCopyFilterProcPtr copyFilterProc; /* pointer to filter function */
+	void *		refCon;				/* a refCon to pass to the filter function */
 	OSErr		error;				/* temporary holder of results - saves 2 bytes of stack each level */
 	Boolean		bailout;			/* set to true to by error handling function if fatal error */
 	HFSUniStr255	itemName;			/* the name of the current item */
@@ -684,6 +769,7 @@ struct PreflightGlobals
 
 	unsigned long	tempBlocks;			/* temporary storage for calculations (save some stack space)  */
 	FSCopyFilterProcPtr copyFilterProc;	/* pointer to filter function */
+	void *			refCon;
 };
 
 typedef struct PreflightGlobals PreflightGlobals;
@@ -699,6 +785,7 @@ static	void	GetLevelSize(long currentDirID,
 static	OSErr	PreflightDirectoryCopySpace(const FSRef *srcRef,
 											const FSRef *dstRef,
 											CopyFilterProcPtr copyFilterProc,
+											void *refCon,
 											Boolean *spaceOK);
 
 static	void	CopyLevel(long sourceDirID,
@@ -723,7 +810,7 @@ GetLevelSize (const FSRef *currentDirRef, PreflightGlobals *theGlobals)
 		{
 			::YieldToAnyThread ();
 			if ( (theGlobals->copyFilterProc == NULL) ||
-				 CallFSCopyFilterProc(theGlobals->copyFilterProc, &theGlobals->item) ) /* filter if filter proc was supplied */
+				 CallFSCopyFilterProc(theGlobals->copyFilterProc, theGlobals->refCon, &theGlobals->item) ) /* filter if filter proc was supplied */
 			{
 				/* Either there's no filter proc OR the filter proc says to use this item */
 				if ( theGlobals->catInfo.nodeFlags & kFSNodeIsDirectoryMask )
@@ -788,6 +875,7 @@ GetLevelSize (const FSRef *currentDirRef, PreflightGlobals *theGlobals)
 static	OSErr	PreflightDirectoryCopySpace(const FSRef *srcRef,
 											const FSRef *dstRef,
 											FSCopyFilterProcPtr copyFilterProc,
+											void *refCon,
 											Boolean *spaceOK)
 {
 	OSErr error;
@@ -815,6 +903,7 @@ static	OSErr	PreflightDirectoryCopySpace(const FSRef *srcRef,
 		theGlobals.allocBlksNeeded = 0;
 				
 		theGlobals.copyFilterProc = copyFilterProc;
+		theGlobals.refCon = refCon;
 		
 		GetLevelSize(srcRef, &theGlobals);
 		
@@ -834,6 +923,8 @@ static	void	CopyLevel(const FSRef *src,
 						  const FSRef *dst,
 						  EnumerateGlobals *theGlobals)
 {
+	DeleteItemsFromDstThatAreNotInSrc (dst, src);
+
 	FSIterator iterator;
 	FSOpenIterator (src, kFSIterateFlat, &iterator);
 
@@ -848,7 +939,7 @@ static	void	CopyLevel(const FSRef *src,
 		{
 			::YieldToAnyThread ();
 			if ( (theGlobals->copyFilterProc == NULL) ||
-				 CallFSCopyFilterProc(theGlobals->copyFilterProc, &theGlobals->item) ) /* filter if filter proc was supplied */
+				 CallFSCopyFilterProc(theGlobals->copyFilterProc, theGlobals->refCon, &theGlobals->item) ) /* filter if filter proc was supplied */
 			{
 				/* Either there's no filter proc OR the filter proc says to use this item */
 
@@ -857,12 +948,13 @@ static	void	CopyLevel(const FSRef *src,
 				{
 					/* We have a directory */
 					
-					/* Create a new directory at the destination. No errors allowed! */
+					/* Check for an existing directory. If it doesn't exist, create one. */
 							
-					FSRef newDestDir;						
-					theGlobals->error = FSCreateDirectoryUnicode (dst, theGlobals->itemName.length, theGlobals->itemName.unicode,
-						kFSCatInfoNone, NULL, &newDestDir, NULL, NULL);
-
+					FSRef newDestDir;	
+					theGlobals->error = FSMakeFSRefUnicode (dst, theGlobals->itemName.length, theGlobals->itemName.unicode, NULL, &newDestDir);
+					if (theGlobals->error != noErr) theGlobals->error = FSCreateDirectoryUnicode (dst, theGlobals->itemName.length, theGlobals->itemName.unicode,
+							kFSCatInfoNone, NULL, &newDestDir, NULL, NULL);
+					
 					if ( theGlobals->error == noErr )
 					{
 						/* Save the current item -- since it will change on recursion. */
@@ -989,7 +1081,8 @@ FSRefFilteredDirectoryCopy(
   long                copyBufferSize,
   Boolean             preflight,
   FSCopyErrProcPtr      copyErrHandler,
-  FSCopyFilterProcPtr   copyFilterProc)
+  FSCopyFilterProcPtr   copyFilterProc,
+  void *				refCon)
 {
 	EnumerateGlobals theGlobals;
 	Boolean	isDirectory;
@@ -1040,7 +1133,7 @@ FSRefFilteredDirectoryCopy(
 		
 	if ( preflight )
 	{
-		error = PreflightDirectoryCopySpace(srcRef, dstRef, copyFilterProc, &spaceOK);
+		error = PreflightDirectoryCopySpace(srcRef, dstRef, copyFilterProc, refCon, &spaceOK);
 		if ( error != noErr ) goto ErrorExit;
 		if ( !spaceOK ) {
 			error = dskFulErr; /* not enough room on destination */
@@ -1056,11 +1149,10 @@ FSRefFilteredDirectoryCopy(
 	/* use the copyName as srcDirName if supplied */
 	if (copyName == NULL) copyName = &srcDirName;
 	FSRef newDstRef;
-	if (error == noErr) {
-		error = FSCreateDirectoryUnicode (dstRef, copyName->length, copyName->unicode,
+	error = FSMakeFSRefUnicode (dstRef, copyName->length, copyName->unicode, NULL, &newDstRef);
+	if  (error != noErr) error = FSCreateDirectoryUnicode (dstRef, copyName->length, copyName->unicode,
 					kFSCatInfoNone, NULL, &newDstRef, NULL, NULL);
-	}
-
+	
 	if ( error != noErr )
 	{
 		/* handle any errors from DirCreate */
@@ -1095,13 +1187,14 @@ FSRefFilteredDirectoryCopy(
 	theGlobals.errorHandler = copyErrHandler;
 	theGlobals.bailout = false;
 	theGlobals.copyFilterProc =  copyFilterProc;
+	theGlobals.refCon = refCon;
 		
 	/* Here we go into recursion land... */
 	CopyLevel(srcRef, &newDstRef, &theGlobals);
 	error = theGlobals.error;	/* get the result */
 	
 	if ( !theGlobals.bailout )
-	{
+	{		
 		/* Copy comment from source to destination directory. */
 		/* Ignore the result because we really don't care if it worked or not. */
 		(void) FSRefDTCopyComment(srcRef, &newDstRef);
@@ -1141,7 +1234,7 @@ FSRefDirectoryCopy(
 {
 	return FSRefFilteredDirectoryCopy (	srcRef, dstDirRef, copyName, 
 										copyBufferPtr, copyBufferSize, preflight, 
-										copyErrHandler, NULL);
+										copyErrHandler, NULL, NULL);
 }
 
 
