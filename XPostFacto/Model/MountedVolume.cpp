@@ -1170,6 +1170,7 @@ unsigned
 MountedVolume::getHelperStatus ()
 {
 	if (!getBootableDevice ()) return kNotBootable;
+	if (!strcmp (getOpenFirmwareName (false), "")) return kNotBootable;
 	if (!getIsWriteable ()) return kNotWriteable;
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
 	if (!fPartitionNumber) return kNoPartitionNumber;
@@ -1182,6 +1183,7 @@ unsigned
 MountedVolume::getBootStatus ()
 {
 	if (!getBootableDevice ()) return kNotBootable;
+	if (!strcmp (getOpenFirmwareName (false), "")) return kNotBootable;
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
 	if (!getHasMachKernel ()) return kNoMachKernel;
 	if (!fPartitionNumber) return kNoPartitionNumber;
@@ -1226,6 +1228,7 @@ unsigned
 MountedVolume::getInstallTargetStatus ()
 {
 	if (!getBootableDevice ()) return kNotBootable;
+	if (!strcmp (getOpenFirmwareName (false), "")) return kNotBootable;
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
 	if (!getIsWriteable ()) return kNotWriteable;
 	if (!fPartitionNumber) return kNoPartitionNumber;
@@ -1239,6 +1242,7 @@ MountedVolume::getInstallerStatus ()
 	if (!getHasInstaller ()) return kNotInstaller;
 
 	if (!getBootableDevice ()) return kNotBootable;
+	if (!strcmp (getOpenFirmwareName (false), "")) return kNotBootable;
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
 	if (!getHasMachKernel ()) return kNoMachKernel;
 	if (!fPartitionNumber) return kNoPartitionNumber;
