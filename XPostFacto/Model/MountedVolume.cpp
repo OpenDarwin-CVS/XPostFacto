@@ -805,8 +805,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	#if qLogging
 		if (fValidOpenFirmwareName) {
 			gLogFile << "OpenFirmwareName: ";
-			CStr255_AC shortOpenFirmwareName = getOpenFirmwareName (true);
-			gLogFile.WriteCharBytes ((char *) &shortOpenFirmwareName[1], shortOpenFirmwareName[0]);
+			gLogFile << (CChar255_AC) fShortOpenFirmwareName;
 			gLogFile << endl_AC;
 		} else {
 			gLogFile << "Could not find Open Firmware name." << endl_AC;
