@@ -483,6 +483,9 @@ FSRefCopyFileMgrAttributes(	const FSRef *srcRef,
 								NULL, NULL, NULL);
 	if ( error == noErr )
 	{
+		// Make sure that we're using the correct user and group
+		info.permissions[0] = info.permissions[1] = 0;
+	
 		objectIsDirectory = ( info.nodeFlags & kFSNodeIsDirectoryMask );
 
 		/* don't copy the hasBeenInited bit */
@@ -501,7 +504,7 @@ FSRefCopyFileMgrAttributes(	const FSRef *srcRef,
 				char path[1024];
 				error = FSRefMakePath (dstRef, (UInt8 *) path, 1023);
 				if (error != noErr) return error;
-				chown (path, info.permissions[0], info.permissions[1]);
+				if (chown (path, info.permissions[0], info.permissions[1])) return wrPermErr;
 			}
 		#endif
 
