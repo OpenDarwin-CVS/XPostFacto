@@ -14,4 +14,4 @@ XPostFacto% :
 	mkdir -p "build/$@"
 	ditto -rsrcFork ../build/app/XPostFacto "build/$@/XPostFacto"
 	ditto -rsrcFork XPostFacto3.html "build/$@/XPostFacto.html"
-	stuff -f sit5 -n "build/$@.sit" -o -D "build/$@"
+	stuff -f sitx -n "build/$@.sitx" -o -D "build/$@"
