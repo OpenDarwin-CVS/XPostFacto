@@ -242,7 +242,7 @@ XPFBootableDevice::XPFBootableDevice
  	io_registry_entry_t parent;
 	
 	while ((parent = IOIteratorNext (iterator)) != NULL) {
-		if (IOObjectConformsTo (parent, "IOFirewireDevice")) {
+		if (IOObjectConformsTo (parent, "IOFireWireDevice")) {
 			fNeedsHelper = true;
 			IOObjectRelease (parent);
 			break;
