@@ -42,6 +42,7 @@ advised of the possibility of such damage.
 #include "XPFErrors.h"
 #include "stdio.h"
 #include "XPFProgressWindow.h"
+#include "XPFStrings.h"
 
 #define Inherited XPFThreadedCommand
 
@@ -91,6 +92,8 @@ XPFRestartCommand::adjustThrottle (XPFNVRAMSettings *nvram) {
 void 
 XPFRestartCommand::DoItThreaded ()
 {
+	setDescription (CStr255_AC (kXPFStringsResource, kRestarting));
+
 	if (!fAutoBoot) {
 		// Make sure that input-device and output-device are specified if not auto-booting
 		if (!fInputDevice.Length () || !fOutputDevice.Length ()) {

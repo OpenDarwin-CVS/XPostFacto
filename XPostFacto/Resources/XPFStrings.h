@@ -56,7 +56,12 @@ enum {
 	kInstallOnly,
 	kNeedsHelper,
 	kShowLogWindowMenu,
-	kTheWordCopy
+	kTheWordCopy,
+	kRestarting,
+	kInstalling,
+	kInstallingBootX,
+	kInstallingExtensions,
+	kInstallingStartupItem
 };
 
 

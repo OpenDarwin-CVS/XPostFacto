@@ -38,6 +38,7 @@ advised of the possibility of such damage.
 #include "FSRefCopying.h"
 #include "XPFLog.h"
 #include "XPFAuthorization.h"
+#include "XPFStrings.h"
 
 #undef Inherited
 #define Inherited XPFRestartCommand
@@ -66,6 +67,8 @@ XPFInstallCommand::DoItThreaded ()
 						
 	// We copy BootX from the CD, to make the Installer think that Mac OS X is already
 	// installed, so that it won't move the extensions we pre-install
+		
+	setDescription (CStr255_AC (kXPFStringsResource, kInstalling));
 		
 	FSRef coreServicesFolder, cdBootX;
 		

@@ -61,5 +61,10 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			"requires a helper disk.";
 			"Show Log Window";
 			"Copying";
+/* 20 */	"Preparing to Restart";
+			"Preparing to Install";
+			"Installing BootX";
+			"Installing Extensions";
+			"Installing Startup Item";
 	}
 };

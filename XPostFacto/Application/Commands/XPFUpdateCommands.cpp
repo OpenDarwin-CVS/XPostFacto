@@ -35,13 +35,14 @@ advised of the possibility of such damage.
 
 #include "MountedVolume.h"
 #include "XPFProgressWindow.h"
+#include "XPFStrings.h"
 
 #define Inherited XPFThreadedCommand
 
 void
 XPFInstallBootXCommand::DoItThreaded ()
 {
-	setDescription ("\pInstalling BootX");
+	setDescription (CStr255_AC (kXPFStringsResource, kInstallingBootX));
 	setCopyingFile ("\pBootX");
 	
 	if (fHelperDisk) {
@@ -56,7 +57,7 @@ XPFInstallBootXCommand::DoItThreaded ()
 void
 XPFInstallExtensionsCommand::DoItThreaded ()
 {
-	setDescription ("\pInstalling Extensions");
+	setDescription (CStr255_AC (kXPFStringsResource, kInstallingExtensions));
 	installExtensionsWithRootDirectory (fTargetDisk->getRootDirectory ());
 	fProgressWindow->setFinished ();
 }
@@ -64,7 +65,7 @@ XPFInstallExtensionsCommand::DoItThreaded ()
 void
 XPFInstallStartupCommand::DoItThreaded ()
 {
-	setDescription ("\pInstalling Startup Item");
+	setDescription (CStr255_AC (kXPFStringsResource, kInstallingStartupItem));
 	installStartupItemWithRootDirectory (fTargetDisk->getRootDirectory ());
 	fProgressWindow->setFinished ();
 }
