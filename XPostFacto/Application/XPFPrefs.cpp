@@ -242,6 +242,7 @@ XPFPrefs::checkStringLength ()
 		fUseShortStrings = true;
 		fUseShortStringsForInstall = true;
 	} else {
+		fUseShortStrings = false;
 		unsigned nvramPatchLength = strlen (NVRAMVariables::GetVariables ()->getNVRAMRC ());
 		unsigned len = 	getBootCommand ().Length () + 
 						getBootFile ().Length () +
