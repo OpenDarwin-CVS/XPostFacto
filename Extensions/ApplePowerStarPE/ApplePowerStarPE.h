@@ -58,6 +58,8 @@ public:
     virtual bool start(IOService *provider);
     virtual bool platformAdjustService(IOService *service);
 
+    virtual void processTopLevel( IORegistryEntry * root );
+	
 	virtual IOReturn callPlatformFunction(const OSSymbol *functionName,
 									   bool waitForFunction,
 									   void *param1, void *param2,

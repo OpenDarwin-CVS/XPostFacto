@@ -107,6 +107,52 @@ bool ApplePowerStarPE::start(IOService *provider)
     return true;
 }
 
+void
+ApplePowerStarPE::processTopLevel (IORegistryEntry *root)
+{
+	// Need to adjust the device tree to put the cpu node under a cpus node
+	// This is required because Classic looks for it there
+	// Added by ryan.rempel@utoronto.ca
+
+	IORegistryEntry *cpus = root->childFromPath ("cpus", gIODTPlane);
+	if (cpus) {
+		cpus->release ();
+        super::processTopLevel (root);
+		return;
+	}
+
+	cpus = new IORegistryEntry;
+	if (cpus) {
+        if (!cpus->init ()) {
+			cpus->release();
+		} else {
+			cpus->attachToParent (root, gIODTPlane);
+
+			unsigned property = 1;
+			cpus->setProperty ("#address-cells", &property, 4);
+			property = 0;
+			cpus->setProperty ("#size-cells", &property, 4);
+			cpus->setName ("cpus");
+			cpus->setLocation ("0");
+
+			OSIterator *children = root->getChildIterator (gIODTPlane);
+			if (children) {
+				IORegistryEntry *next;
+				OSString *cpuMatch = OSString::withCString ("cpu");
+				while ((next = (IORegistryEntry *) children->getNextObject ())) {
+					if (IODTCompareNubName (next, cpuMatch, NULL)) {
+						next->attachToParent (cpus, gIODTPlane);
+						next->detachFromParent (root, gIODTPlane);
+					}
+				}
+				cpuMatch->release ();
+				children->release ();
+			}
+		}
+	}
+    super::processTopLevel (root);
+}
+
 bool ApplePowerStarPE::platformAdjustService(IOService *service)
 {
     OSData	*tmpData;
