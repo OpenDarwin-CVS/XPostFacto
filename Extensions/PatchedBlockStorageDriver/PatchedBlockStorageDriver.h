@@ -28,17 +28,25 @@ class PatchedBlockStorageDriver : public IOBlockStorageDriver
 {
 
 	OSDeclareDefaultStructors(PatchedBlockStorageDriver);
+	
+public:
+
+	virtual IOService *probe (IOService *provider,	SInt32 *score);
 
 protected:
 
     virtual IOReturn checkForMedia (void);
-	
+		
 };
 
 class PatchedCDBlockStorageDriver : public IOCDBlockStorageDriver
 {
 
 	OSDeclareDefaultStructors(PatchedCDBlockStorageDriver);
+
+public:
+
+	virtual IOService *probe (IOService *provider,	SInt32 *score);
 
 protected:
 
