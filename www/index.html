@@ -25,19 +25,33 @@
 
 <h2>XPostFacto</h2>
 
-<p>September 6, 2003
+<p>September 14, 2003
 <br>Ryan Rempel
-<br><a href="osxguru@macsales.com">osxguru@macsales.com</a>
+<br><a href="ryan@opendarwin.org">ryan@opendarwin.org</a>
 
 <p>Welcome to the development site for XPostFacto, the software that permits you to install Mac OS X on certain unsupported systems.
 
 <p>For basic information about XPostFacto (for instance, which systems it supports), head over to <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto.html">Other World Computing's</a> web site. That's where you can <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto.html">download the application</a>. OWC has provided very generous support for the development of XPostFacto.
 
-<p>XPostFacto is an open-source application, and the code is hosted here in the OpenDarwin CVS repository. You can browse the code via the <a href="http://www.opendarwin.org/cgi-bin/cvsweb.cgi/projects/XPostFacto/">CVSWeb interface</a>, but for serious work you will want to set up for <a href="http://www.opendarwin.org/doc/en/articles/opendarwin/cvs_howto/">anonymous CVS access</a>. Once you've got that set up, you can do something like "cvs co projects/XPostFacto" to get the source. As usual, the "top of tree" won't also be completely coherent, but I do tag each release, including the alpha and beta releases. I have written some <a href="DeveloperNotes.html">developer notes</a> to help you figure out how to compile the source.
+The latest <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto.html">stable version</a> of XPostFacto is 2.2.5. The latest <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/XPostFacto3.html">development version</a> is 3.0a3.
 
-<p>You can report bugs in XPostFacto using the <a href="http://www.opendarwin.org/bugzilla/index.php">OpenDarwin Bugzilla</a> (look first to see whether there is already a bug open for your problem). Scroll down in the product list until you hit "XPostFacto".
+<p>XPostFacto is an open-source application, and the code is hosted here in the OpenDarwin CVS repository. You can browse the code via the <a href="http://www.opendarwin.org/cgi-bin/cvsweb.cgi/projects/XPostFacto/">CVSWeb interface</a>, but for serious work you will want to set up for <a href="http://www.opendarwin.org/doc/en/articles/opendarwin/cvs_howto/">anonymous CVS access</a>. Once you've got that set up, you can do something like "cvs co projects/XPostFacto" to get the source. As usual, the "top of tree" won't always be completely coherent, but I do tag each release, including the alpha and beta releases. I have written some <a href="DeveloperNotes.html">developer notes</a> to help you figure out how to compile the source. 
 
-<p>The latest <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto.html">stable version</a> of XPostFacto is 2.2.5. The latest <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto3.html">development version</a> is 3.0a3.
+You can also <a href="http://www.opendarwin.org/mailman/listinfo/cvs-xpostfacto-all">sign up to receive e-mail</a> when XPF source is checked into the CVS repository.
+
+<p>You can report bugs in XPostFacto using the <a href="http://www.opendarwin.org/bugzilla/index.php">OpenDarwin Bugzilla</a> (look first to see whether there is already a bug open for your problem). Scroll down in the product list until you hit "XPostFacto." 
+
+Here are some notes on a typical bug lifecycle:
+
+<p><ul>
+<li>Newly reported bugs start out with a <b>New</b> status.
+<li>The status changes to <b>Assigned</b> when I determine that it really is a bug that should get fixed.
+<li>Once I fix the bug, I change the status to <b>Resolved</b>.
+<li>Once I release an interim release (i.e. alpha or beta) which includes the bug fix, the status gets changed to <b>Verified</b> (assuming that the person reporting the bug can verify that it is fixed).
+<li>Once an "official" release includes the bug fix, the bug is <b>Closed</b>.
+</ul>
+
+<p>You can also sign up to receive e-mail from the Bugzilla about individual bugs, or when new bugs are created etc.
 
 <p>Here is the licensing information for XPostFacto. I'll put it in small print :-)
 
