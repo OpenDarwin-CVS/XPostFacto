@@ -1,8 +1,8 @@
-<body><h2>XPostFacto 2.2</h2>
+<body><h2>XPostFacto 2.2.1</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-August 23, 2002
+September 2, 2002
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. The only difference from a supported installation is 3 extra clicks of your mouse! When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -11,8 +11,6 @@ August 23, 2002
 <p>You should also remember to check the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto.html">online version</a> of this documentation from time to time, to see whether there have been any changes.
 
 <p>XPostFacto 2.2 works with Mac OS X 10.2, aka Jaguar (as well as previous versions of Mac OS X). There are a couple of issues with Jaguar on unsupported systems. The most serious is that Jaguar simply does not work with the 603 or 604 processor--it is limited to the G3 and G4. It may be possible to fix this once Apple pushes the latest source code out. Also, some people (including me) are having trouble getting Classic to work, but others report that it works fine. So it is not clear whether that problem has any relationship with unsupported systems.
-
-<p>A note about version numbers: XPostFacto 2.2 is no longer in beta, because it appears to work with Mac OS X 10.2 at this point. However, that does not mean that it is perfect. There are still a variety of known problems and issues that can come up (as elaborated below).
 
 <p><hr>
 
@@ -78,7 +76,15 @@ August 23, 2002
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
-<dt><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Download/XPostFacto.sit">2.2 (August 23, 2002)</a>
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Download/XPostFacto.sit">2.2.1 (September 2, 2002)</a>
+<dd>
+<ul>
+<li>Updated the custom BootX to use the new boot graphic from Mac OS X 10.2. This looks a little odd when used with Mac OS X 10.0 or 10.1, but it works OK.
+<li>Added a "debug" preference to show panic text, rather than the new panic dialog.
+<li>Fixed the problem with the SCSI bus on unsupported Powerbooks.
+</ul>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2.sit">2.2 (August 23, 2002)</a>
 <dd>
 <p>The changes since version 2.2b17 are as follows:<p>
 
@@ -101,7 +107,7 @@ August 23, 2002
 <li>Better documentation.
 </ul>
 
-<dt><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2b17.img.sit">2.2b17 (August 18, 2002)</a>
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2b17.img.sit">2.2b17 (August 18, 2002)</a>
 <dd>
 <ul>
 <li>Fixes the "file not found" error when trying to install Mac OS X 10.0 (the error was introduced in version 2.2b15).
@@ -113,7 +119,7 @@ August 23, 2002
 This takes the place of the "package" file which was formerly included.
 </ul>
 
-<dt><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2b16.img.sit">2.2b16 (August 10, 2002)</a>
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto2.2b16.img.sit">2.2b16 (August 10, 2002)</a>
 <dd><p>
 Fixes a problem which prevented some of the kernel extensions from loading properly in 2.2b15, which could cause a kernel panic early in the boot process. 
 
@@ -331,8 +337,6 @@ This release allows you to throttle (i.e. slow down) a G3 or G4 processor upgrad
 <p><dt><b><a name="SCSI">Internal and External SCSI</a></b>
 <p><dd>The internal and external SCSI bus both work. However, there are some users who have trouble with the internal SCSI bus. One thing that you need to double-check is that your SCSI termination is correct, because Mac OS X is picky about that. In general, Mac OS X is sensitive to timing issues on the SCSI bus. Sometimes removing unnecessary devices helps. Also, you will sometimes need to adjust the jumper settings on drives connected to the internal bus, to make sure that they spin up automatically at boot time (the "Disable Unit Attention" jumper is one that sometimes needs to be changed).
 
-<p>As of about Mac OS X 10.1.3 or so, external SCSI is no longer working on the original Powerbook G3, the 3400 or the 2400. I am currently trying to track down the cause of this problem, and hope to have it solved soon.
-
 <p><dt><b><a name="SerialPorts">Serial Ports</a></b>
 <p><dd>The serial ports generally work, though not all serial devices are supported. Some modems work, but serial printers are not supported. Localtalk does not work in Mac OS X (i.e. Appletalk over the printer port). However, you can get localtalk-to-ethernet adapters.
 
@@ -504,6 +508,8 @@ XPF generates a log file that sometimes helps me figure out what is going wrong.
 
 XPostFacto has a "Debug" menu that allows you to take advantage of certain debugging features present in the Mac OS X kernel. This is only useful if you know what these options mean. So if you do not understand what they are, simply leave them unselected.
 
+<p>If you are getting kernel panics with the multilingual text screen that tells you that you need to reboot, you might want to turn on the "See panic text" option. This will show you the traditional panic text instead, which can be helpful for figuring out what is causing the panic.
+
 <p><hr>
 
 <h2><a name="source">Source Code</a></h2>
@@ -559,6 +565,9 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <h2>Revision History</h2>
 
 <dl>
+<dt>September 2, 2003
+<dd>Changes for version 2.2.1.
+
 <dt>August 23, 2002
 <dd>Changes for version 2.2.
 
