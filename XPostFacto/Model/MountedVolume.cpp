@@ -769,7 +769,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 				fOpenFirmwareName.CopyFrom (fBootableDevice->getOpenFirmwareName (false));
 				fShortOpenFirmwareName.CopyFrom (fBootableDevice->getOpenFirmwareName (true));
 				char buffer[16];
-				sprintf (buffer, ":%X", partInfo.partitionNumber);
+				sprintf (buffer, ":%d", partInfo.partitionNumber);
 				fOpenFirmwareName += buffer;
 				fShortOpenFirmwareName += buffer;
 			}
