@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001, 2002
+Copyright (c) 2001 - 2003
 Other World Computing
 All rights reserved
 
@@ -61,7 +61,8 @@ enum {
 	kInstalling,
 	kInstallingBootX,
 	kInstallingExtensions,
-	kInstallingStartupItem
+	kInstallingStartupItem,
+	kUpdatingExtensionsCache
 };
 
 

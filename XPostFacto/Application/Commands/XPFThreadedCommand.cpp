@@ -46,6 +46,7 @@ advised of the possibility of such damage.
 
 #ifdef __MACH__
 	#include <sys/types.h>
+	#include <sys/wait.h>
 	#include <sys/stat.h>
 #endif
 
@@ -146,12 +147,14 @@ XPFThreadedCommand::setCopyingFile (unsigned char *fileName)
 {
 	CStr255_AC message = fCopyWord + " " + fileName;
 	setStatusMessage (message);
+	fYielder.YieldNow ();
 }
 
 void 
 XPFThreadedCommand::setDescription (unsigned char* description)
 {
 	fProgressWindow->setDescription (description);
+	fYielder.YieldNow ();
 }
 
 Boolean 
@@ -320,12 +323,35 @@ XPFThreadedCommand::getBootXFSRef (FSRef *rootDirectory, FSRef *result)
 // Install methods
 
 void
+XPFThreadedCommand::updateExtensionsCacheForRootDirectory (FSRef *rootDirectory)
+{
+#ifdef __MACH__
+	setStatusMessage (CStr255_AC ((ResNumber) kXPFStringsResource, kUpdatingExtensionsCache));
+	char rootPath [256];
+	ThrowIfOSErr_AC (FSRefMakePath (rootDirectory, (UInt8 *) rootPath, 256));
+	XPFSetUID myUID (0);
+	if (!chdir (rootPath)) {
+		pid_t pid = fork ();
+		if (pid) {
+			if (pid != -1) {
+				int status;
+				while (!wait4 (pid, &status, WNOHANG, 0)) fYielder.YieldNow ();
+			}
+		} else {
+			execl ("/usr/sbin/kextcache", "kextcache", "-l", "-m", "System/Library/Extensions.mkext", "System/Library/Extensions", NULL);
+		}
+	}
+#endif
+}
+
+void
 XPFThreadedCommand::installExtensionsWithRootDirectory (FSRef *rootDirectory)
 {
 	FSRef systemLibraryExtensionsFolder;
 	
 	ThrowIfOSErr_AC (getOrCreateSystemLibraryExtensionsDirectory (rootDirectory, &systemLibraryExtensionsFolder));
 	copyHFSArchivesTo ('hfsA', &systemLibraryExtensionsFolder);
+	updateExtensionsCacheForRootDirectory (rootDirectory);
 }
 
 void

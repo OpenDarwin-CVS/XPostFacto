@@ -66,5 +66,6 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			"Installing BootX";
 			"Installing Extensions";
 			"Installing Startup Item";
+/* 25 */	"Updating Extensions Cache";
 	}
 };
