@@ -61,7 +61,7 @@ XPFInstallExtensionsCommand::DoItInProgressWindow ()
 {
 	fProgressMax = 1000;
 	setDescription (CStr255_AC (kXPFStringsResource, kInstallingExtensions));
-	installExtensionsWithRootDirectory (fRootDisk->getRootDirectory (), !fUpdate->getInstallCD ());
+	installExtensionsWithRootDirectory (fRootDisk->getRootDirectory ());
 	fProgressWindow->setFinished ();
 }
 
