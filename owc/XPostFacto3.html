@@ -1,8 +1,8 @@
-<body><h2>XPostFacto 3.0a8</h2>
+<body><h2>XPostFacto 3.0a9</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-November 20, 2003
+November 22, 2003
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -11,42 +11,32 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <p>Here's a quick link to download the latest version. 
 
 <blockquote>
-<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a8.sit">Download XPostFacto 3.0a8</a>
+<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a8.sit">Download XPostFacto 3.0a9</a>
 </blockquote>
 
 <p>Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes.  Note that the latest version is an alpha version of XPostFacto 3. "Alpha" means it's not finished yet, and there are likely to be some bugs.
 
-<p><i>Initial user reports on 3.0a8 are more positive than for 3.0a6 or 3.0a7 -- a number of people are getting this to work. You can <a href="http://anybox.owc.net/forum/">check the forums</a> for more details. A fair number of people are finding that the Mac OS X version of XPostFacto crashes upon launch. Also, several people are reporting that the install process fails when initiated from Mac OS X, but works when initiated from Mac OS 9. And a fair number of people need to turn off the "Enable L2/L3 Cache" option to get past the OWCCacheConfig testing process.</i>
+<p><i>User reports on 3.0a8 were more positive than for 3.0a6 or 3.0a7 -- a number of people are getting this to work. You can <a href="http://anybox.owc.net/forum/">check the forums</a> for more details. A fair number of people are finding that the Mac OS X version of XPostFacto crashes upon launch. Also, several people are reporting that the install process fails when initiated from Mac OS X, but works when initiated from Mac OS 9. And a fair number of people need to turn off the "Enable L2/L3 Cache" option to get past the OWCCacheConfig testing process.</i>
 
 <p><i>A fair number of people are reporting that Panther does not always see their SCSI drives. There are several things that seem to help in some cases -- doing a cold boot rather than a warm boot, unplugging USB devices, powering up or down other drives, etc. It seems that anything which affects the timing of the boot process may help. The underlying cause isn't obvious yet -- I will need to look into it.</i>
 
-<h3>Significant Changes in 3.0a8</h3>
+<h4>What's New in 3.0a9</h4>
 
-<p>There are quite a few changes between XPF 3.0a4 and 3.0a8, and I'll describe them here. Eventually, I'll incorporate this into the rest of the document.  <b>Read this! <i>Yes, you! I'll tell you when you can stop!</i></b>
+<p>XPF now has initial support for Panther on the Wallstreet Powerbooks and the Beige G3. With the Beige G3, the main limitation at this time is that the built-in video is not working yet -- you need to use a video card. With the Wallstreet Powerbooks, there is a problem with video in some configurations, which can sometimes be solved by changing colour depth, or (one user reports) by removing the ATIRageProGA.plugin extension. Also, some users report that the Wallstreet Powerbooks aren't ejecting PC Cards properly in Panther.
 
-<h4>Changes since 3.0a7</h4>
-
-<p>I've added a new method of disabling OWCCacheConfig. XPF will now actually install or delete OWCCacheConfig.kext based on the setting you choose for "Enable L2/L3 Cache". I still haven't figured out why my previous method of disabling it isn't working (it works for me), but deleting it should be pretty certain to work :-)
-
-<p>I've also fixed a problem which occured if you launched XPF in Mac OS 9 and there was no Install CD around, and no existing Mac OS X volume. XPF should now do the expected thing when you quit in these circumstances (i.e., nothing).
-
-<h4>Changes since 3.0a6</h4>
-
-<p>I've made some minor changes to OWCCacheConfig since 3.0a6. Some users are reporting problems with OWCCacheConfig -- and, worse, reporting that they are unable to disable it using the techniques listed below. Unfortunately, I can't reproduce the problem yet.
-
-<p>I've also removed the AppleMaceEthernetPreJaguar kernel extension. One user reported that removing it solves a kernel panic which several users had reported.
-
-<p>These are the two major issues being reported with 3.0a6 initially -- though there are other issues as well.
+<p>I have also made a couple of changes to the Mac OS X version of XPostFacto. XPF now writes to the system log in Mac OSX, rather than its own log file. I also fixed one bug which may have contributed to the problem initiating an install from the Mac OS X version. 
 
 <h4>Panther Support</h4>
 
-<p>XPF now includes limited support for Panther (Mac OS X 10.3) on the 7300 - 9600 (and friends). You will see a new kernel extension which handles sound support -- OpenOWScreamerAudio. It is based on the AppleOWScreamerAudio that used to be included in Mac OS X, but which is no longer included in Mac OS X 10.3. Sound still has the same limitations as in pre-Panther versions (that is, for most people sound input doesn't work). Hopefully it will be possible to fix that eventually.
+<p>XPF now includes limited support for Panther (Mac OS X 10.3) on the 7300 - 9600 (and friends), as well as the Wallstreet Powerbooks and Beige G3 (with some limitations related to video). The original Powerbook G3 (Kanga) is not yet supported, but I will be working on it.
 
-<p>One thing which is not yet working on the 7300 - 9600 in Panther is the built-in video. I need to do some more work to get this fixed. I'm not entirely sure which video cards work with Panther at this point (aside from my Radeon 7000, which works fine). One option that you may find useful in Panther is the "Use old NDRVs" option, which sets up a boot argument which tells Panther to use the ROM-based drivers on older video cards that it would otherwise ignore.
+<p>You will see a new kernel extension which handles sound support on the 7300 - 9600 -- OpenOWScreamerAudio. It is based on the AppleOWScreamerAudio that used to be included in Mac OS X, but which is no longer included in Mac OS X 10.3. Sound still has the same limitations as in pre-Panther versions (that is, for most people sound input doesn't work). Hopefully it will be possible to fix that eventually.
 
-<p>The Ethernet driver (AppleMaceEthernet) may be problematic for some people in Panther -- I've had some reports of kernel panics, but I can't reproduce them myself. So I'd be interested in reports about that. Also, note that the Panther networking preferences will report that the cable is not plugged into the ethernet port, even though it is and it is working fine. It's something I need to fix, but it's just a cosmetic problem.
+<p>You will also see a new kernel extension called GossamerDeviceTreeUpdater, which makes some ... adjustments ... to the device tree on the Wallstreet Powerbooks and Beige G3, in order to make the Panther Installer feel more at home with its surroundings and willing to perform its duties without complaint. (In case you are thrown by my needlessly sinister tone, I should quickly inform you that these adjustments are entirely temporary and last only until you reboot).
 
-<p>XPF does not support 10.3 on Kanga or the Wallstreet Powerbooks yet, nor on the Beige G3. The main issues there are also video related, so they will get fixed along with video on the 7300 - 9600.
+<p>One thing which is not yet working in Panther on the 7300 - 9600 or the Beige G3 is the built-in video. I need to do some more work to get this fixed. The Radeon 7000 works in Panther, as does the original Radeon Mac Edition, as well as some others. One option that you may find useful in Panther is the "Use old NDRVs" option, which sets up a boot argument which tells Panther to use the ROM-based drivers on older video cards that it would otherwise ignore.
+
+<p>On the 7300 - 9600, the Panther networking preferences will report that the cable is not plugged into the ethernet port, even though it is and it is working fine. It's something I need to fix, but it's just a cosmetic problem.
 
 <h4>Pre-Jaguar Support -- not!</h4>
 
@@ -54,15 +44,9 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 
 <h4>Automatic Cache Detection and Configuration</h4>
 
-<p>XPF will now automatically detect and configure L2 and L3 cache when you boot into Mac OS X, including when you boot from the CD to install. This is courtesy of the newly-included OWCCacheConfig extension. I have not written a user-interface for it yet, but you can control its behaviour in a couple of ways.
+<p>XPF will now automatically detect and configure L2 and L3 cache when you boot into Mac OS X, including when you boot from the CD to install. This is courtesy of the newly-included OWCCacheConfig extension. I have not written a user-interface for it yet, but you can control its behaviour using the "Enable L2/L3 Cache" option in XPostFacto. If OWCCacheConfig is causing problems for you, you can turn it off by de-selecting this option.
 
-<ul>
-<p><li>OWCCacheConfig looks for a boot-argument of "-c", and if it sees that, it disables itself. You can set this via the "Enable Cache Early" preference in XPF. If you turn off "Enable Cache Early", then XPF will add the "-c" argument to your boot-command.
-
-<p><li>OWCCacheConfig also disables itself when you boot in single-user mode (by holding down command-s, or using the "-s" boot argument). The idea is that you might be booting in single-user mode in order to get rid of OWCCacheConfig because it is causing you trouble!
-</ul>
-
-<p>So, if you cannot boot because OWCCacheConfig is causing trouble, then try booting with command-s held down (to get to single-user mode). At that point, you can type "exit" to continue the boot process. Then, use XPostFacto to turn off the "Enable Cache Early" option. And let me know that you're having some trouble, so I can try to fix it.
+<p>Unfortunately, OWCCacheConfig is causing problems for a fair number of users so far, so it would not be particularly unusual if you need to turn it off.
 
 <h4>Choosing between Mac OS 9 and Mac OS X</h4>
 
@@ -78,7 +62,7 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 
 <h4>Running XPF in Mac OS X</h4>
 
-<p>The XPF version of Mac OS X should be working now, and should be able to do everything that it can do in Mac OS 9.
+<p>The XPF version of Mac OS X should be working now, and should be able to do everything that it can do in Mac OS 9. There are a fair number of people who report that the Mac OS X version of XPF crashes upon launch -- I will be following up on that. Also, some people report that the install process does not work if initiated from Mac OS X, but does work if initiated from Mac OS 9. Again, something I need to follow up on.
 
 <h4>Behaviour when Quitting</h4>
 
@@ -171,10 +155,10 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <p>These are the 7300, 7500, 7600, 8500, 8600, 9500, and 9600, as well as the clones that were based on one of these systems (the Umax S900 and J700, the PowerComputing PowerWave and PowerTower Pro,  and the Daystar Genesis and Millennium, among others).
 
 <p><li><b>The Beige G3s</b>
-<p>I am working on supporting Mac OS X 10.3 on the Beige G3's, but it is not working yet.
+<p>The Beige G3s are working. However, some additional work is required to get the built-in video to work with Panther.
 
 <p><li><b>The Wallstreet Powerbooks</b>
-<p>Support for the Wallstreet Powerbooks is in progress, mainly for the sake of getting them to boot in Panther. But it isn't working yet.
+<p>The Wallstreet Powerbooks are working, with some video-related issues in some configurations.
 
 <p><li><b>Certain Other Powerbooks</b>
 <p>These are the original Powerbook G3, the 2400 and the 3400. However, there are significant limitations in the support for these machines. The most serious limitation is that sleep does not work. On some models, the built-in ethernet connection also does not work. There are additional details below.
@@ -526,10 +510,15 @@ This software is provided by Other World Computing ``as is'' and any express or 
 
 <dl>
 
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a9.sit">3.0a9 (November 22, 2003)</a>
+<dd>Initial support for Panther on the Wallstreet Powerbooks and the Beige G3. The main limitation on the Beige G3 is that the built-in video is not supported yet -- you need a video card. On the Wallstreet Powerbooks, video is problematic in some configurations, but it can be dealt with by changing colour depth or deleting the ATIRagePro.plugin extension. Support for Panther on Kanga is not ready yet.
+
+<p>I have also made a couple of changes to the Mac OS X version of XPostFacto. XPF now writes to the system log in Mac OSX, rather than its own log file. I also fixed one bug which may have contributed to the problem initiating an install from the Mac OS X version. 
+
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a8.sit">3.0a8 (November 17, 2003)</a>
 <dd>I've added a new method of disabling OWCCacheConfig. XPF will now actually install or delete OWCCacheConfig.kext based on the setting you choose for "Enable L2/L3 Cache". I still haven't figured out why my previous method of disabling it isn't working (it works for me), but deleting it should be pretty certain to work :-)
 
-<p>I've also fixed a problem which occured if you launched XPF in Mac OS 9 and there was no Install CD around, and no existing Mac OS X volume. XPF should now do the expected thing when you quit in these circumstances (i.e., nothing).
+<p>I've also fixed a problem which occurred if you launched XPF in Mac OS 9 and there was no Install CD around, and no existing Mac OS X volume. XPF should now do the expected thing when you quit in these circumstances (i.e., nothing).
 
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a7.sit">3.0a7 (November 17, 2003)</a>
 <dd>I've made some minor changes to OWCCacheConfig since 3.0a6. Some users are reporting problems with OWCCacheConfig -- and, worse, reporting that they are unable to disable it using the techniques below. Unfortunately, I can't reproduce the problem yet.
