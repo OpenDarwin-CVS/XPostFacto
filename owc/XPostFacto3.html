@@ -1,8 +1,8 @@
-<body><h2>XPostFacto 3.0a14</h2>
+<body><h2>XPostFacto 3.0a15</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-March 6, 2004
+March 25, 2004
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -11,32 +11,36 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <p>Here's a quick link to download the latest version. 
 
 <blockquote>
-<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a14.sit">Download XPostFacto 3.0a14</a>
+<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a15.sit">Download XPostFacto 3.0a15</a>
 </blockquote>
 
-<p>Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes. The main outstanding issue in 3.0a14 is that built-in video is not working in Panther on the Beige G3. Also, Panther is not yet working on Kanga (the original Powerbook G3).
+<p>Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes. The main outstanding issue in 3.0a15 is that built-in video is not working in Panther on the Beige G3. Also, Panther is not yet working on Kanga (the original Powerbook G3).
 
-<h4>What's new in 3.0a14</h4>
+<h4>What's new in 3.0a15</h4>
 
-<p>Version 3.0a14 fixes a problem with updating the XPF extensions when doing an install -- there were circumstances in which old versions of the XPF extensions from a previous installation attempt weren't being updated. This may fix some install problems. 
+Here's a quick summary of what's new in version 3.0a15.
+
+<ul>
+<p><li>I have (finally) switched to Panther for my day-to-day work, and am now building BootX and the kernel extensions with XCode in Panther. This appears not to have introduced any new problems. See the updated <a href="http://www.opendarwin.org/projects/XPostFacto/DeveloperNotes.html">developer notes</a> if you are building the extensions yourself.
+
+<p><li>BootX has been updated to make use of additional memory in the boot process (it now assumes 96 MB of RAM). I have also modified BootX to provide more useful diagnostic messages when it fails to boot properly.
+
+<p><li>XPF 3 now mostly works with 10.0 and 10.1, as well as 10.2 and 10.3. One remaining limitation is that the XPF application will not launch in 10.0 (but it can install 10.0 if you launch XPF from Mac OS 9). There may be other limitations which apply to 10.0 and 10.1, but it mostly seems to work.
+
+<p><li>Updates the PatchedBlockStorageDriver to deal with a potential issue with Mac OS X 10.3.3.
+</ul>
 
 <h4>Panther Support</h4>
 
-<p>XPF now includes limited support for Panther (Mac OS X 10.3) on the 7300 - 9600 (and friends), as well as the Wallstreet Powerbooks and Beige G3 (with some limitations related to video). The original Powerbook G3 (Kanga) is not yet supported, but I will be working on it.
-
-<p>You will see a new kernel extension which handles sound support on the 7300 - 9600 -- OpenOWScreamerAudio. It is based on the AppleOWScreamerAudio that used to be included in Mac OS X, but which is no longer included in Mac OS X 10.3. Sound still has the same limitations as in pre-Panther versions (that is, for most people sound input doesn't work). Hopefully it will be possible to fix that eventually.
-
-<p>You will also see a new kernel extension called GossamerDeviceTreeUpdater, which makes some ... adjustments ... to the device tree on the Wallstreet Powerbooks and Beige G3, in order to make the Panther Installer feel more at home with its surroundings and willing to perform its duties without complaint. (In case you are thrown by my needlessly sinister tone, I should quickly inform you that these adjustments are entirely temporary and last only until you reboot).
-
-<p>There is a PatchedBlockStorageDriver.kext which (hopefully) solves the problem of SCSI volumes not always appearing in Panther.
-
-<p>There is also an OpenControlFramebuffer kernel extension which provides video support for the built-in video on the 7300 - 9600 series (for those models that have built-in video).
+<p>XPF now includes support for Panther (Mac OS X 10.3) on the 7300 - 9600 (and friends), as well as the Wallstreet Powerbooks and Beige G3 (with some limitations related to video). The original Powerbook G3 (Kanga) is not yet supported in Panther, but I will be working on it.
 
 <p>Built-in video is still not working on the Beige G3 in Panther. I need to do some more work to get this fixed. The Radeon 7000 works in Panther, as does the original Radeon Mac Edition, as well as some others. One option that you may find useful in Panther is the "Use old NDRVs" option, which sets up a boot argument which tells Panther to use the ROM-based drivers on older video cards that it would otherwise ignore.
 
-<h4>Pre-Jaguar Support -- not!</h4>
+<p>There are some cases in which installing Panther on the Wallstreet Powerbooks is not working -- in those cases, the Mac OS X Installer complains that the computer is not supported, despite XPostFacto's efforts. I will need to follow up on the cause for this.
 
-<p>As a consequence of some of the changes I've made for Panther support, XPF doesn't work with Mac OS X 10.1 or 10.0 anymore. I'll fix this eventually, but for the moment XPF should only be used with 10.2 or 10.3.
+<h4>Pre-Jaguar Support</h4>
+
+<p>XPostFacto 3 now mostly works with Mac OS X 10.0 and 10.1, as well as 10.2 and 10.3. There are some limitations -- the main one is that while XPostFacto 3 can be used to install Mac OS X 10.0, the application won't launch in Mac OS X 10.0.  
 
 <h4>Automatic Cache Detection and Configuration</h4>
 
@@ -46,7 +50,7 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 
 <h4>Choosing between Mac OS 9 and Mac OS X</h4>
 
-<p>You can now use XPF to choose whether to boot from Mac OS 9 or Mac OS X (via the options in the main XPF window). If you choose Mac OS 9, you'll boot from whichever Mac OS 9 disk you last booted from. I need to add the ability to select a specific Mac OS 9 volume -- I just haven't gotten that far.
+<p>You can now use XPF to choose whether to boot from Mac OS 9 or Mac OS X (via the options in the main XPF window). If you choose Mac OS 9, you'll boot from whichever Mac OS 9 disk you last booted from. It isn't possible to select a specific Mac OS 9 disk to boot from.
 
 <h4>Firewire Booting and Helper Disks</h4>
 
@@ -54,11 +58,11 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 
 <p>Depending on what you're installing, there are cases in which you can't launch applications after installing (until you restart). In that case, you'll restart in Mac OS 9, and you can use XPostFacto to get back to Mac OS X (it will do the required synchronization along the way).
 
-<p>The helper mechanism appears to be working well when you don't really need it (for instance, when I test it with two SCSI drives). It is still problematic, though, when booting from Firewire drives. It appears that there is often (but not always) a problem reading from Firewire drives when they are used as the root disk. One user reports that 10.2.8 is better than 10.2 in this respect. I am very curious to see whether 10.3 fixes this problem, since it (infamously) makes some significant changes in the way that Firewire drives are accessed. 
+<p>The helper mechanism appears to be working well when you don't really need it (for instance, when I test it with two SCSI drives). It is still problematic, though, when booting from Firewire drives. It appears that there is often (but not always) a problem reading from Firewire drives when they are used as the root disk. This is an area that needs more testing.
 
 <h4>Running XPF in Mac OS X</h4>
 
-<p>The XPF version of Mac OS X should be working now, and should be able to do everything that it can do in Mac OS 9. There are a fair number of people who report that the Mac OS X version of XPF crashes upon launch -- I will be following up on that. Also, some people report that the install process does not work if initiated from Mac OS X, but does work if initiated from Mac OS 9. Again, something I need to follow up on.
+<p>The XPF version of Mac OS X should be working now, and should be able to do everything that it can do in Mac OS 9. Some people report that the install process does not work if initiated from Mac OS X, but does work if initiated from Mac OS 9. Note also that the XPF application will not launch in Mac OS X 10.0.
 
 <h4>Behaviour when Quitting</h4>
 
@@ -151,7 +155,7 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <p>These are the 7300, 7500, 7600, 8500, 8600, 9500, and 9600, as well as the clones that were based on one of these systems (the Umax S900 and J700, the PowerComputing PowerWave and PowerTower Pro,  and the Daystar Genesis and Millennium, among others).
 
 <p><li><b>The Beige G3s</b>
-<p>The Beige G3s are working. However, some additional work is required to get the built-in video to work with Panther.
+<p>The Beige G3s are working. However, the built-in video is not yet working with Panther.
 
 <p><li><b>The Wallstreet Powerbooks</b>
 <p>The Wallstreet Powerbooks are working, with some video-related issues in some configurations.
@@ -159,10 +163,12 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <p><li><b>Certain Other Powerbooks</b>
 <p>These are the original Powerbook G3, the 2400 and the 3400. However, there are significant limitations in the support for these machines. The most serious limitation is that sleep does not work. On some models, the built-in ethernet connection also does not work. There are additional details below.
 
-I should warn potential users that Mac OS X is pretty slow on the 2400 and 3400. But an XPostFacto user was kind enough to bring his 2400 running Mac OS X to show me at MacWorld NY, and it was pretty cool to see. 
+<p>I should warn potential users that Mac OS X is pretty slow on the 2400 and 3400. Also, the original 603e CPU is only supported in Mac OS X 10.0 and 10.1.  
+
+<p>The original Powerbook G3 is not working with Panther yet -- the main remaining problem is that a new video driver needs to be written for it.
 </ul> 
 
-<p>Support for other models is in development. Some users have recently had success with some of the "Catalyst" machines (in particular, the PowerCenter and PowerCenter Pro). At least on some of these machines, the onboard video is not working, so a video card is required. Also, some progress has been made with the Alchemy and Gazelle (the 6400 and 6500), but they are not working reliably yet.  
+<p>Support for other models may be possible in the future. Some users have recently had success with some of the "Catalyst" machines (in particular, the PowerCenter and PowerCenter Pro). At least on some of these machines, the onboard video is not working, so a video card is required. Also, some progress has been made with the Alchemy and Gazelle (the 6400 and 6500), but they are not working reliably yet.  
 
 <p>The basic requirement for Mac OS X to ever work on a machine is that it have a PowerPC processor, a PCI bus, and Open Firmware. So the earliest PowerPC computers from Apple (e.g. the 6100, 7100, and 8100) are not likely to ever work with Mac OS X.
 
@@ -178,7 +184,7 @@ I should warn potential users that Mac OS X is pretty slow on the 2400 and 3400.
 <dd>
 <p>Apple recommends a minimum of 128 MB of RAM to run Mac OS X. But more is better, especially if you are planning to make use of the Classic environment to run Mac OS 9. I would suggest at least 256 MB.
 
-<p>If RAM is tight, and you still want to install Mac OS X, I have heard of cases where people have done so in as little as 64 MB. But that is not recommended.
+<p>If RAM is tight, it is technically possible to install Mac OS X in as little as 96 MB, but it is not a good idea.
  
 <dt><p><b><a name="space">You need sufficient disk space to install Mac OS X</a></b>
 <dd>
@@ -233,7 +239,7 @@ I should warn potential users that Mac OS X is pretty slow on the 2400 and 3400.
 
 <dt><p><b><a name="CD">You need the Mac OS X Install CD</a></b>
 <dd>
-<p>I almost forgot to mention this one! You can use XPostFacto to install Mac OS X, Mac OS X Server, or Darwin. But you do need the Install CD. XPostFacto should work with Mac OS X 10.0, 10.1, and 10.2, as well as their Mac OS X Server and Darwin equivalents. There is also some support for Mac OS X 10.3 now (see above).
+<p>I almost forgot to mention this one! You can use XPostFacto to install Mac OS X, Mac OS X Server, or Darwin. But you do need the Install CD.
 
 </dl>
 
@@ -247,11 +253,11 @@ I should warn potential users that Mac OS X is pretty slow on the 2400 and 3400.
 <dt><p><b><a name="cpus">CPUs</a></b>
 <dd><p>Mac OS X does not work with a 601 CPU. Therefore, if you have a 7500 with the original 601 processor, you will need to install a CPU upgrade before installing Mac OS X. 
 
-<P>Mac OS X 10.2 does not work with a 603 or 604 CPU either. I have done some work to try to fix this, but it seems unlikely that this problem will be solved soon. The workaround is to install a G3 or G4 upgrade card.
+<P>Mac OS X 10.2 (and later) does not work with a 603 or 604 CPU either. I have done some work to try to fix this, but it seems unlikely that this problem will be solved. The workaround is to install a G3 or G4 upgrade card.
 
 <p>If you install a G3 or a G4 upgrade, you will need some software to enable the L2 cache in Mac OS X. You can use my <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=L2CacheConfig.html">L2CacheConfig</a> software, or the PowerLogix <a href="http://www.powerlogix.com/downloads/index.html">cache control</a> software, which is also free. Your computer will work without enabling the L2 cache--it will just be slower. L2CacheConfig required some changes to work with Mac OS X 10.2, so you should upgrade to version 3.3 of L2CacheConfig before installing Mac OS 10.2.
 
-<p>The 9500MP and 9600MP work, but only one processor is active at this time. I have been working on MP support from time to time, but have not made much progress lately.
+<p>The 9500MP and 9600MP work, but only one processor is active.
 
 <dt><p><b><a name="floppy">Floppy Drive</a></b>
 <dd><p>Mac OS X does not come with support for the floppy drive. Some work has been done (by others) on an open-source driver, but it hasn't been updated for a while and I'm told that it's not working well at this point. Your best bet if you really need a floppy drive is to look at a USB-based drive.
@@ -300,7 +306,7 @@ To install XPostFacto, just copy it to a convenient location on your hard drive.
 
 <h3><a name="first">Installing Mac OS X</a></h3>
 
-<p>Let me emphasize one last time that you need to be cautious when doing a major installation of this kind. Installing Mac OS X has worked very easily and reliably for some, while others have had significant problems that have not always been readily explained. There have been cases in which installing Mac OS X has been unsuccessful, and the computer has failed to boot at all--it appears to be "dead." If you read the tech forum, you will see that there has been some vigorous debate about whether the computer is ever "really" dead--in almost all cases, it has been possible to get it to boot again (until recently, I would have said "all cases"). But there are a handful of users who have either given up or come very close to it. 
+<p>Let me emphasize one last time that you need to be cautious when doing a major installation of this kind. Installing Mac OS X has worked very easily and reliably for some, while others have had significant problems that have not always been readily explained. There have been cases in which installing Mac OS X has been unsuccessful, and the computer has failed to boot at all--it appears to be "dead." If you read the tech forum, you will see that there has been some vigorous debate about whether the computer is ever "really" dead--in almost all cases, it has been possible to get it to boot again (in fact, it may be "all cases", but sometimes it takes significant effort). But there are a handful of users who have either given up or come very close to it. 
 
 <p>So you should ask yourself two final questions: 
 
@@ -325,9 +331,11 @@ To install XPostFacto, just copy it to a convenient location on your hard drive.
 
 <p>The Mac OS X Installer runs in Mac OS X, so you will be booting into Mac OS X at this stage. It can take a few minutes, so you need to be a little patient. It is possible for the installation to fail at this point, either with an explicit error message, or a rainbow cursor that spins forever, or by rebooting into Mac OS 9, or just a blank screen. See the troubleshooting tips below if this happens to you.
 
+<p>You will be booting in verbose mode at this point, so you will see a variety of messages on the screen. It may seem to pause for a minute or two at times. If nothing happens for several minutes after that, then there may be a problem. In order to see additional messages from the earliest part of the boot process, you can hold down command-v as the computer reboots.
+
 <p>When you reach the Mac OS X Installer, select the target volume again (make sure to select the same one). Do not reformat the target volume at this point, as we need to keep the files that we have already copied there. Follow the rest of the Installer's instructions as usual. 
 
-<p>Once you have finished installing Mac OS X, the installer will reboot your system. Once you have successfully rebooted, remember to go to the "Energy Savers" panel in "System Preferences" and set your computer and hard drive to <b>never</b> sleep. System sleep does not work well on unsupported systems. However, display sleep is OK, and drive sleep is OK in Mac OS X 10.1.
+<p>Once you have finished installing Mac OS X, the installer will reboot your system. Once you have successfully rebooted, remember to go to the "Energy Savers" panel in "System Preferences" and set your computer and hard drive to <b>never</b> sleep. System sleep does not work well on unsupported systems. However, display sleep is OK, and drive sleep is OK in Mac OS X 10.1 and later.
 
 <p>One thing to note is that if you are using a "helper" disk (for instance, where your target is a Firewire drive), you will probably reboot into Mac OS 9 after the install is completed, rather than Mac OS X. At this point, you simply need to run XPostFacto again, select your target volume, and click on "Restart". That will set up the special boot process correctly again. 
 
@@ -343,15 +351,13 @@ Version 3 of XPostFacto also runs in Mac OS X, so you can use it to switch your 
 
 <h3><a name="UpgradingXPostFacto">Upgrading from a Previous Version of XPostFacto</a></h3>
 
-If you are upgrading from a previous version of XPostFacto, you need to make sure that the latest version of the kernel extensions and startup item get installed. When you launch the new version of XPostFacto, it will take care of it!<p>
+If you are upgrading from a previous version of XPostFacto, you need to make sure that the latest version of BootX, the kernel extensions and startup item get installed. When you launch the new version of XPostFacto, it should let you know what needs to be installed.<p>
 
 <h3><a name="tenpointone">Upgrading Mac OS X</a></h3>
 
-<p>Version 2.0 of XPostFacto will install Mac OS X 10.1, and version 2.2 will install Mac OS X 10.2. To do the install, you follow the same steps listed above. The procedure is the same whether you are upgrading or doing a fresh install--in both cases, you need to boot from the Mac OS X Install CD, so you need to use XPostFacto's special install procedure.
+<p>To upgrade to a new major version of Mac OS X (i.e. 10.1 to 10.2, or 10.2 to 10.3), you follow the same steps listed above. The procedure is the same whether you are upgrading or doing a fresh install--in both cases, you need to boot from the Mac OS X Install CD, so you need to use XPostFacto's special install procedure.
 
 <p>For the minor Mac OS X upgrades (e.g. from 10.1 to 10.1.5), you can use the 'Software Updates' mechanism or the downloadable installers as usual--they have, so far, worked without XPostFacto's help.
-
-<p>XPostFacto now has some support for Panther (Mac OS X 10.3) -- see above for details.
 
 <h3><a name="customCD">Booting from other CDs</a></h3>
 
@@ -440,6 +446,8 @@ If Mac OS X will not boot successfully, you are going to want to reboot into Mac
 
 XPF generates a log file that sometimes helps me figure out what is going wrong. If you have any difficulties, feel free to e-mail the log file to me, and describe the nature of the problem. The file is called "XPostFacto Log" and it is located in the Preferences folder, inside your System Folder.<p>
 
+If you are running XPF in Mac OS X, then it writes its log messages to the system log, located at /var/log/system.log
+
 <h3><a name="Debug">The "Debug" Options</a></h3>
 
 XPostFacto has some "Debug" options that allows you to take advantage of certain debugging features present in the Mac OS X kernel. This is only useful if you know what these options mean. So if you do not understand what they are, simply leave them unselected.
@@ -507,6 +515,20 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a15.sit">3.0a15 (March 25, 2004)</a>
+
+<dd>Here's what's new in version 3.0a15.
+
+<ul>
+<p><li>I have (finally) switched to Panther for my day-to-day work, and am now building BootX and the kernel extensions with XCode in Panther. This appears not to have introduced any new problems. See the updated <a href="http://www.opendarwin.org/projects/XPostFacto/DeveloperNotes.html">developer notes</a> if you are building the extensions yourself.
+
+<p><li>BootX has been updated to make use of additional memory in the boot process (it now assumes 96 MB of RAM). I have also modified BootX to provide more useful diagnostic messages when it fails to boot properly.
+
+<p><li>XPF 3 now mostly works with 10.0 and 10.1, as well as 10.2 and 10.3. One remaining limitation is that the XPF application will not launch in 10.0 (but it can install 10.0 if you launch XPF from Mac OS 9). There may be other limitations which apply to 10.0 and 10.1, but it mostly seems to work.
+
+<p><li>Updates the PatchedBlockStorageDriver to deal with a potential issue with Mac OS X 10.3.3.
+</ul>
 
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.0a14.sit">3.0a14 (March 6, 2004)</a>
 
