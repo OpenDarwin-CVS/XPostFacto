@@ -348,8 +348,6 @@ long ThinFatBinary(void **binary, unsigned long *length)
   ret = ThinFatBinaryMachO(binary, length);
   if (ret == -1) ret = ThinFatBinaryElf(binary, length);
   
-  if (ret == -1) printf ("BootX::ThinFatBinary error %ld\n", ret);
-  
   return ret;
 }
 
