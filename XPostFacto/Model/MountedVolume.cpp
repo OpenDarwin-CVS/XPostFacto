@@ -328,15 +328,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	
 		setVolumeName (&fHFSName);
 		
-		LocalDateTime localTime;
-		OSStatus status = ConvertUTCToLocalDateTime (&info->createDate, &localTime);
-		if (status == noErr) {
-			fCreationDate = localTime.lowSeconds;
-		} else {
-			#if qLogging
-				gLogFile << "Error getting creation date" << endl_AC;
-			#endif
-		}
+		fCreationDate = info->createDate.lowSeconds;
 		fAllocationBlockSize = info->blockSize;
 		
 		BlockMoveData (rootDirectory, &fRootDirectory, sizeof (fRootDirectory));
