@@ -287,6 +287,8 @@ XPFApplication::DoInitialState ()
 
 	fSplash = TViewServer::fgViewServer->NewTemplateWindow (kSplashWindow, NULL);
 	fSplash->Open ();
+	fSplash->Show (true, true);
+	UpdateAllWindows ();
 
 	fLogWindow = TViewServer::fgViewServer->NewTemplateWindow (kLogWindow, NULL);	
 	fViewStream = new TTEViewStream (dynamic_cast_or_throw_AC (TTEView*, fLogWindow->FindSubView ('LogV')));
