@@ -441,10 +441,19 @@ static long DecodeKernel(void)
 // See http://www.opendarwin.org/bugzilla/show_bug.cgi?id=854
 // ryan.rempel@utoronto.ca
 
+#define PROCESSOR_VERSION_604ev		10
+#define PROCESSOR_VERSION_750		8
+
 static void PatchKernelFor60xCPU(void)
 {
+	unsigned long pvr;
 	unsigned long *p = (unsigned long *) gVectorSaveAddr;
 	unsigned long count = kVectorSize / sizeof (*p);
+	
+	__asm__ volatile ("mfpvr %0" : "=r" (pvr));
+	pvr >>= 16;
+	if ((pvr > PROCESSOR_VERSION_604ev) || (pvr == PROCESSOR_VERSION_750)) return;
+	
 	while (count--) {
 		if (
 			(p[0] == 0x7f660120) &&		// mtcrf 0x60,r27 in osfmk/ppc/lowmen_vectors.s
