@@ -110,8 +110,18 @@ XPFNVRAMSettings::getValue (const char *key)
 	for (TemplateAutoList_AC <NVRAMValue>::Iterator iter (&fNVRAMValues); (current = iter.Current ()); iter.Next ()) {
 		if (!strcmp (current->getName (), key)) return current;
 	}
-	ThrowException_AC (kNoSuchNVRAMKey, 0);
 	return NULL;
+}
+
+NVRAMValue*
+XPFNVRAMSettings::getOrCreateValue (const char *key)
+{
+	NVRAMValue *value = getValue (key);
+	if (value == NULL) {
+		value = new NVRAMStringValue (key, 99);
+		fNVRAMValues.InsertLast (value);
+	}
+	return value;
 }
 		
 NVRAMValueType 
@@ -147,7 +157,12 @@ XPFNVRAMSettings::getNumericValue (const char *key)
 bool 
 XPFNVRAMSettings::setStringValue (const char *key, const char *value)
 {
-	bool result = getValue (key)->setStringValue (value);
+	NVRAMValue *nv = getValue (key);
+	if (nv == NULL) {
+		nv = new NVRAMStringValue (key, 99);
+		fNVRAMValues.InsertLast (nv);
+	}
+	bool result = nv->setStringValue (value);
 	if (result) fHasChanged = true;
 	return result;
 }
@@ -155,7 +170,12 @@ XPFNVRAMSettings::setStringValue (const char *key, const char *value)
 bool 
 XPFNVRAMSettings::setBooleanValue (const char *key, const bool value)
 {
-	bool result = getValue (key)->setBooleanValue (value);
+	NVRAMValue *nv = getValue (key);
+	if (nv == NULL) {
+		nv = new NVRAMBooleanValue (key, 99);
+		fNVRAMValues.InsertLast (nv);
+	}
+	bool result = nv->setBooleanValue (value);
 	if (result) fHasChanged = true;
 	return result;
 }
@@ -163,7 +183,12 @@ XPFNVRAMSettings::setBooleanValue (const char *key, const bool value)
 bool 
 XPFNVRAMSettings::setNumericValue (const char *key, const long value)
 {
-	bool result = getValue (key)->setNumericValue (value);
+	NVRAMValue *nv = getValue (key);
+	if (nv == NULL) {
+		nv = new NVRAMNumericValue (key, 99);
+		fNVRAMValues.InsertLast (nv);
+	}
+	bool result = nv->setNumericValue (value);
 	if (result) fHasChanged = true;
 	return result;
 }
