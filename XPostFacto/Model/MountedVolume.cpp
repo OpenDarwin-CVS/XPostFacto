@@ -956,9 +956,11 @@ MountedVolume::getBootWarning ()
 	if (fSymlinkStatus == kSymlinkStatusCannotFix) return kInvalidSymlinksCannotFix;
 	if (fSymlinkStatus != kSymlinkStatusOK) return kInvalidSymlinks;
 
-	if (fBootableDevice && !fBootableDevice->getNeedsHelper ()) {
+	if (fBootableDevice && !getHelperDisk ()) {
 		XPFPartition* firstPart = fBootableDevice->getFirstHFSPartition ();
 		if (firstPart && firstPart->getPartitionNumber () < kExpectedFirstHFSPartition) return kFewerPartitionsThanExpected;
+
+		if (fPartInfo && !fPartInfo->getHasHFSWrapper ()) return kNoHFSWrapper;
 	}
 	
 	return kStatusOK;

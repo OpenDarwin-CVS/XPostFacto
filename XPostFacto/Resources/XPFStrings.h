@@ -92,6 +92,7 @@ enum {
 	kInvalidSymlinks,
 	kInvalidSymlinksCannotFix,
 	kFixingSymbolicLinks,
+	kNoHFSWrapper,				// 55
 };
 
 

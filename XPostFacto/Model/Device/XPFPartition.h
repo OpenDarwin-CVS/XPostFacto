@@ -80,6 +80,7 @@ class XPFPartition
 		UInt32 getMyBootXVersion ();
 		unsigned int getCreationDate () {return fCreationDate;}
 		bool getExtendsPastEightGB () {return fExtendsPastEightGB;}
+		bool getHasHFSWrapper () {return fOffsetToHFSPlusVolume;}
 		const CStr255_AC& getOpenFirmwareName (bool useShortName) {return useShortName ? fShortOpenFirmwareName : fOpenFirmwareName;}
 
 		void updateBootXIfInstalled (bool forceInstall = false);

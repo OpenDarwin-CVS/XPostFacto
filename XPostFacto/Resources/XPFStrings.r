@@ -101,14 +101,18 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 /* 50 */	"Not installed";
 
 			"The partition map has fewer patch partitions than expected. You may need to reformat "
-			"with Apple's Drive Setup or Intech's Hard Disk SpeedTools in Mac OS 9.x., "
-			"or use a 'Helper Drive' in order to boot from this volume.";
+			"the drive in Mac OS 9.x., using Apple's Drive Setup or Intech's Hard Disk SpeedTools. "
+			"Alternatively, you may be able to use a 'Helper Drive' to boot from this volume.";
 			
 			"The symbolic links /etc, /tmp, or /var are either missing or corrupted. "
 			"You can attempt to fix this with the 'Fix Symbolic Links' command in the 'Install' menu.";
 
 			"The symbolic links /etc, /tmp, or /var are either missing or corrupted. ";
 				
-			"Fixing symbolic links";	
+			"Fixing symbolic links";
+			
+/* 55 */	"This HFS+ volume has no HFS wrapper, so the boot process may complain that "
+			"there is no bootable HFS volume. Erasing or reformatting the volume in Mac OS 9.x "
+			"can help. Alternatively, you may be able to use a 'Helper Drive' to boot from this volume.";
 	}
 };
