@@ -240,7 +240,7 @@ SCSIDevice::SCSIDevice (DeviceIdent scsiDevice, SInt16 driverRefNum)
 			fShortOpenFirmwareName.CopyFrom (bus->getShortOpenFirmwareName ());
 		}
 		char buffer[16];
-		snprintf (buffer, 16, "/@%d", scsiDevice.targetID); 
+		snprintf (buffer, 16, "/@%X", scsiDevice.targetID); 
 		fOpenFirmwareName += buffer;
 		fShortOpenFirmwareName += buffer;
 	} else {
