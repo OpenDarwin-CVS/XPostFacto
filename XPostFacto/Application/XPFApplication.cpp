@@ -197,6 +197,9 @@ XPFApplication::launchURL (CStr255_AC theURL)
 	long start = 0, end = theURL[0];
 	ICInstance inst;
 	ThrowIfOSErr_AC (ICStart (&inst, 'usuX'));
+#ifndef __MACH__
+	ThrowIfOSErr_AC (ICFindConfigFile (inst, 0, NULL));
+#endif
 	ThrowIfOSErr_AC (ICLaunchURL (inst, "\p", &theURL[1], theURL[0], &start, &end));
 	ICStop (inst);
 }
