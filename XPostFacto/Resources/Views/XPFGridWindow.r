@@ -1,3 +1,11 @@
+data 'TxSt' (5312, "Application 12, bold") {
+	$"019C 000C 0000 0000 0000 0161"                                                                      /* .œ.........a */
+};
+
+data 'TxSt' (27392, "Application 10, plain") {
+	$"009C 000A 0000 0000 0000 0161"                                                                      /* .œ.Â.......a */
+};
+
 resource 'STR#' (1200, "VolumeDisplay", purgeable) {
 	{	/* array StringArray: 1 elements */
 		/* [1] */
@@ -32,14 +40,6 @@ resource 'STR#' (1001, "Grid Window", purgeable) {
 		/* [12] */
 		"XPostFacto"
 	}
-};
-
-data 'TxSt' (5312, "Application 12, bold") {
-	$"019C 000C 0000 0000 0000 0161"                                                                      /* .œ.........a */
-};
-
-data 'TxSt' (27392, "Application 10, plain") {
-	$"009C 000A 0000 0000 0000 0161"                                                                      /* .œ.Â.......a */
 };
 
 resource 'View' (1200, "VolumeDisplay", purgeable) {
@@ -1305,8 +1305,8 @@ resource 'View' (1001, "Grid Window", purgeable) {
 			noCursorID,
 			doesntHandleHelp,
 			letsSubViewsHandleHelp,
-			2000,
-			13,
+			noHelpID,
+			1,
 			NoDrawingEnvironment {
 
 			},
