@@ -146,7 +146,7 @@ XPFWindow::updateBootMessage ()
 	switch (bootStatus) {
 		case kNotHFSPlus:
 		case kNoMachKernel:
-		case kNotSCSI:
+		case kNotBootable:
 		case kNoOFName:
 		case kNoBootX:
 			if (fPrefs->getBootDisk()->getInstallerStatus() == kStatusOK) break;
@@ -198,7 +198,7 @@ XPFWindow::updateInstallMessage ()
 	switch (installStatus) {			
 		case kNotHFSPlus:
 		case kNoMachKernel:
-		case kNotSCSI:
+		case kNotBootable:
 		case kNoOFName:
 		case kNoBootX:
 		case kNotInstaller:
@@ -215,7 +215,7 @@ XPFWindow::updateInstallMessage ()
 			switch (targetStatus) {
 				case kNotHFSPlus:
 				case kNotWriteable:
-				case kNotSCSI:
+				case kNotBootable:
 				case kNoOFName:
 					GetIndString (reason, kXPFStringsResource, targetStatus);
 					message = "'";

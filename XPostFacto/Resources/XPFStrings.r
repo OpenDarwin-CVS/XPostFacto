@@ -37,7 +37,7 @@ advised of the possibility of such damage.
 
 resource 'STR#' (kXPFStringsResource, purgeable) {
 	{
-/* 1 */		" is not a SCSI device.";
+/* 1 */		" is not a bootable device.";
 			" is not formatted as an HFS Plus disk.";
 			" is not bootable (Mac OS X is not installed).";
 			" is not bootable (unable to find Open Firmware name).";

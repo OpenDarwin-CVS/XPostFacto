@@ -38,7 +38,7 @@ advised of the possibility of such damage.
 #define kStatusOK	0
 
 enum {
-	kNotSCSI = 1,
+	kNotBootable = 1,
 	kNotHFSPlus,
 	kNoMachKernel,
 	kNoOFName,

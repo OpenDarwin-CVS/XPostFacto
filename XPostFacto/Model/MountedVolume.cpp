@@ -375,7 +375,7 @@ MountedVolume::getBootStatus ()
 {
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
 	if (!getHasMachKernel ()) return kNoMachKernel;
-	if (!getIsOnBootableDevice ()) return kNotSCSI;
+	if (!getIsOnBootableDevice ()) return kNotBootable;
 	if (!getValidOpenFirmwareName ()) return kNoOFName;
 	if (!getHasBootX() && !getIsWriteable ()) return kNoBootX;
 
@@ -386,7 +386,7 @@ unsigned
 MountedVolume::getInstallTargetStatus ()
 {
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
-	if (!getIsOnBootableDevice ()) return kNotSCSI;
+	if (!getIsOnBootableDevice ()) return kNotBootable;
 	if (!getValidOpenFirmwareName ()) return kNoOFName;
 	if (!getIsWriteable ()) return kNotWriteable;
 
@@ -400,7 +400,7 @@ MountedVolume::getInstallerStatus ()
 
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
 	if (!getHasMachKernel ()) return kNoMachKernel;
-	if (!getIsOnBootableDevice ()) return kNotSCSI;
+	if (!getIsOnBootableDevice ()) return kNotBootable;
 	if (!getValidOpenFirmwareName ()) return kNoOFName;
 	
 	return kStatusOK;
