@@ -70,6 +70,10 @@ Resource 'OFtc' (128) {
 		"AAPL,Gossamer", 134,
 		"AAPL,PowerMac G3", 133,
 		"AAPL,PowerBook1998,312", 136,
-		"AAPL,PowerBook1998,314", 135
+		"AAPL,PowerBook1998,314", 135,
+		"OPEN,Gossamer", 134,
+		"OPEN,PowerMac G3", 133,
+		"OPEN,PowerBook1998,312", 136,
+		"OPEN,PowerBook1998,314", 135
 	}
 };
