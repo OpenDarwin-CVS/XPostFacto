@@ -48,13 +48,13 @@ RESOURCE 'vers' (1,
 "Application Version",
 #endif
 	purgeable) {
-	0x02,
-	0x25,
-	final,
-	0x0,
+	0x03,
+	0x00,
+	alpha,
+	0x1,
 	verUs,
-	"2.2.5",
-	"2.2.5, © 2001 - 2003 Other World Computing"
+	"3.0.0a1",
+	"3.0.0a1, © 2001, 2002 Other World Computing"
 };
 
 RESOURCE 'vers' (3,
@@ -62,13 +62,13 @@ RESOURCE 'vers' (3,
 "BootX Version",
 #endif
 	purgeable) {
-	0x02,
-	0x24,
-	final,
-	0x0,
+	0x03,
+	0x00,
+	alpha,
+	0x1,
 	verUs,
-	"2.2.4",
-	"2.2.4, © 2001, 2002 Other World Computing"
+	"3.0.0a1",
+	"3.0.0a1, © 2001, 2002 Other World Computing"
 };
 
 RESOURCE 'vers' (4,
