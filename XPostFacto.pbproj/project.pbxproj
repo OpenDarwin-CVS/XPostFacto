@@ -5,6 +5,28 @@
 	};
 	objectVersion = 38;
 	objects = {
+		9407316705312E5900A80003 = {
+			children = (
+				946A5D270525115000A80003,
+				9407317505312EC600A80003,
+			);
+			isa = PBXGroup;
+			name = Resources;
+			refType = 4;
+		};
+		9407317505312EC600A80003 = {
+			includeInIndex = 1;
+			isa = PBXFolderReference;
+			name = English.lproj;
+			path = XPFStartupItem/Resources/English.lproj;
+			refType = 4;
+		};
+		9407317905312EC600A80003 = {
+			fileRef = 9407317505312EC600A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		941C8E6E0528BB2A00A80003 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -18,99 +40,19 @@
 			settings = {
 			};
 		};
-		946A5D070525093200A80003 = {
-			children = (
-				946A5D12052509A900A80003,
-				94D732B2052602DE00A80003,
-				946A5D14052509A900A80003,
-				946A5D1A052509A900A80003,
-				946A5D1B052509A900A80003,
-				946A5D18052509A900A80003,
-				946A5D270525115000A80003,
+		94279A75052FCE2500A80003 = {
+			buildActionMask = 8;
+			dstPath = Library/StartupItems/XPFStartupItem/Resources;
+			dstSubfolderSpec = 0;
+			files = (
+				94279A76052FCF1200A80003,
+				9407317905312EC600A80003,
 			);
-			isa = PBXGroup;
-			name = XPFSync;
-			path = "";
-			refType = 4;
+			isa = PBXCopyFilesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 1;
 		};
-		946A5D12052509A900A80003 = {
-			children = (
-				946A5D13052509A900A80003,
-			);
-			isa = PBXVariantGroup;
-			name = InfoPlist.strings;
-			path = XPFStartupItem/XPFSync/English.lproj;
-			refType = 4;
-		};
-		946A5D13052509A900A80003 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = English;
-			path = InfoPlist.strings;
-			refType = 4;
-		};
-		946A5D14052509A900A80003 = {
-			children = (
-				946A5D15052509A900A80003,
-			);
-			isa = PBXVariantGroup;
-			name = MainMenu.nib;
-			path = XPFStartupItem/XPFSync/English.lproj;
-			refType = 4;
-		};
-		946A5D15052509A900A80003 = {
-			isa = PBXFileReference;
-			name = English;
-			path = MainMenu.nib;
-			refType = 4;
-		};
-		946A5D18052509A900A80003 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = main.m;
-			path = XPFStartupItem/XPFSync/main.m;
-			refType = 4;
-		};
-		946A5D1A052509A900A80003 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = XPFSyncApp.h;
-			path = XPFStartupItem/XPFSync/XPFSyncApp.h;
-			refType = 4;
-		};
-		946A5D1B052509A900A80003 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = XPFSyncApp.m;
-			path = XPFStartupItem/XPFSync/XPFSyncApp.m;
-			refType = 4;
-		};
-		946A5D1C052509A900A80003 = {
-			fileRef = 946A5D12052509A900A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		946A5D1D052509A900A80003 = {
-			fileRef = 946A5D14052509A900A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		946A5D1F052509A900A80003 = {
-			fileRef = 946A5D18052509A900A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		946A5D21052509A900A80003 = {
-			fileRef = 946A5D1A052509A900A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		946A5D22052509A900A80003 = {
-			fileRef = 946A5D1B052509A900A80003;
+		94279A76052FCF1200A80003 = {
+			fileRef = 946A5D270525115000A80003;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -121,23 +63,11 @@
 			path = /System/Library/Frameworks/Cocoa.framework;
 			refType = 0;
 		};
-		946A5D260525104400A80003 = {
-			fileRef = 946A5D250525104400A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		946A5D270525115000A80003 = {
 			isa = PBXFileReference;
 			name = XPFIcons.icns;
 			path = XPostFacto/Resources/XPFIcons.icns;
 			refType = 4;
-		};
-		946A5D280525115000A80003 = {
-			fileRef = 946A5D270525115000A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		946A5D29052514FE00A80003 = {
 			fileEncoding = 4;
@@ -145,12 +75,6 @@
 			name = XPFSyncPaths.h;
 			path = XPFStartupItem/XPFSync/XPFSyncPaths.h;
 			refType = 4;
-		};
-		946A5D2A052514FE00A80003 = {
-			fileRef = 946A5D29052514FE00A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		946A5D2B052514FE00A80003 = {
 			fileRef = 946A5D29052514FE00A80003;
@@ -165,36 +89,8 @@
 			path = XPFStartupItem/XPFSync/XPFSyncPaths.c;
 			refType = 4;
 		};
-		946A5D2D0525152200A80003 = {
-			fileRef = 946A5D2C0525152200A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		946A5D2E0525152200A80003 = {
 			fileRef = 946A5D2C0525152200A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		946A5D2F052518AF00A80003 = {
-			fileRef = F5BF347003F0213301A80002;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		946A5D3105251A6C00A80003 = {
-			isa = PBXTargetDependency;
-			target = 94ED29270524913A00A80003;
-		};
-		946A5D3205251EDF00A80003 = {
-			fileRef = 946B436C04FC0E3500A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		946A5D3305251EDF00A80003 = {
-			fileRef = 946B436B04FC0E3500A80003;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -617,142 +513,6 @@
 			name = "Shared Code";
 			refType = 4;
 		};
-		94D732B2052602DE00A80003 = {
-			children = (
-				94D732B3052602DE00A80003,
-			);
-			isa = PBXVariantGroup;
-			name = Localizable.strings;
-			path = "";
-			refType = 4;
-		};
-		94D732B3052602DE00A80003 = {
-			fileEncoding = 4;
-			isa = PBXFileReference;
-			name = English;
-			path = XPFStartupItem/XPFSync/English.lproj/Localizable.strings;
-			refType = 4;
-		};
-		94D732B4052602DE00A80003 = {
-			fileRef = 94D732B2052602DE00A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		94ED29220524913A00A80003 = {
-			buildActionMask = 2147483647;
-			files = (
-				946A5D21052509A900A80003,
-				946A5D2A052514FE00A80003,
-				946A5D3205251EDF00A80003,
-			);
-			isa = PBXHeadersBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94ED29230524913A00A80003 = {
-			buildActionMask = 2147483647;
-			files = (
-				946A5D1C052509A900A80003,
-				946A5D1D052509A900A80003,
-				946A5D280525115000A80003,
-				94D732B4052602DE00A80003,
-			);
-			isa = PBXResourcesBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94ED29240524913A00A80003 = {
-			buildActionMask = 2147483647;
-			files = (
-				946A5D1F052509A900A80003,
-				946A5D22052509A900A80003,
-				946A5D2D0525152200A80003,
-				946A5D3305251EDF00A80003,
-			);
-			isa = PBXSourcesBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94ED29250524913A00A80003 = {
-			buildActionMask = 2147483647;
-			files = (
-				946A5D260525104400A80003,
-				946A5D2F052518AF00A80003,
-			);
-			isa = PBXFrameworksBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94ED29260524913A00A80003 = {
-			buildActionMask = 2147483647;
-			files = (
-			);
-			isa = PBXRezBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94ED29270524913A00A80003 = {
-			buildPhases = (
-				94ED29220524913A00A80003,
-				94ED29230524913A00A80003,
-				94ED29240524913A00A80003,
-				94ED29250524913A00A80003,
-				94ED29260524913A00A80003,
-			);
-			buildSettings = {
-				HEADER_SEARCH_PATHS = /Developer/Headers/FlatCarbon;
-				INSTALL_PATH = /Library/StartupItems/XPFStartupItem/;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = XPFSync;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
-				WRAPPER_EXTENSION = app;
-			};
-			dependencies = (
-			);
-			isa = PBXApplicationTarget;
-			name = XPFSync;
-			productInstallPath = /Library/StartupItems/XPFStartupItem/;
-			productName = XPFSync;
-			productReference = 94ED29280524913A00A80003;
-			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
-<plist version=\"1.0\">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<key>CFBundleExecutable</key>
-	<string>XPFSync</string>
-	<key>CFBundleGetInfoString</key>
-	<string></string>
-	<key>CFBundleIconFile</key>
-	<string>XPFIcons.icns</string>
-	<key>CFBundleIdentifier</key>
-	<string></string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string></string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string></string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string>1.0a1</string>
-	<key>NSMainNibFile</key>
-	<string>MainMenu</string>
-	<key>NSPrincipalClass</key>
-	<string>NSApplication</string>
-</dict>
-</plist>
-";
-		};
-		94ED29280524913A00A80003 = {
-			isa = PBXApplicationReference;
-			path = XPFSync.app;
-			refType = 3;
-		};
 //940
 //941
 //942
@@ -857,7 +617,6 @@
 				F5FB800A03C7A0AD01A80002,
 				F5BF317E03F01EA201A80002,
 				94CC89DB0508E1BC00A80003,
-				94ED29270524913A00A80003,
 			);
 		};
 		F53C691001B191BA01A80001 = {
@@ -1326,7 +1085,6 @@
 				F5FB800B03C7A0AD01A80002,
 				F5BF317F03F01EA201A80002,
 				94CC89DC0508E1BC00A80003,
-				94ED29280524913A00A80003,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -5971,7 +5729,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "chown root:admin \"${DSTROOT}\"\nchmod 0775 \"${DSTROOT}\"\nchmod a+t \"${DSTROOT}\"\nchown -R root:wheel \"${DSTROOT}/System/Library/Extensions\"\nchmod -R u+w \"${DSTROOT}/System/Library/Extensions\"\nchown -R root:wheel \"${DSTROOT}/Library/StartupItems\"\nchmod u+s \"${DSTROOT}/Library/StartupItems/XPFStartupItem/XPFSync.app/Contents/MacOS/XPFSync\"\n\n# Now copy the extensions and startup items\n\nmkdir -p \"${SRCROOT}/XPostFacto/Derived/Extensions/plist\"\nmkdir -p \"${SRCROOT}/XPostFacto/Derived/StartupItems/plist\"\n\ncd \"${SRCROOT}\"\nfor FILE in XPostFacto/Derived/Extensions/*.hfs\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in XPostFacto/Derived/Extensions/plist/*.plist\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in XPostFacto/Derived/StartupItems/*.hfs\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in XPostFacto/Derived/StartupItems/plist/*.plist\n{\n\trm \"${FILE}\"\n}\n\ncd \"${DSTROOT}\"/System/Library/Extensions\nfor FILE in *.kext\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n\tcp \"${FILE}/Contents/Info.plist\" \"${SRCROOT}/XPostFacto/Derived/Extensions/plist/${FILE%.kext}.plist\"\n}\n\ncd \"${DSTROOT}\"/Library/StartupItems\nfor FILE in XPF*\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/StartupItems\"\n\tcp \"${FILE}/version.plist\" \"${SRCROOT}/XPostFacto/Derived/StartupItems/plist/${FILE}.plist\"\n}\n\nif test ${SUDO_USER}; then\n\tchown -R ${SUDO_USER} \"${SYMROOT}\"\n\tchown -R ${SUDO_USER} \"${SRCROOT}/XPostFacto/Derived\"\nfi";
+			shellScript = "chown root:admin \"${DSTROOT}\"\nchmod 0775 \"${DSTROOT}\"\nchmod a+t \"${DSTROOT}\"\nchown -R root:wheel \"${DSTROOT}/System/Library/Extensions\"\nchmod -R u+w \"${DSTROOT}/System/Library/Extensions\"\nchown -R root:wheel \"${DSTROOT}/Library/StartupItems\"\n\n# Now copy the extensions and startup items\n\nmkdir -p \"${SRCROOT}/XPostFacto/Derived/Extensions/plist\"\nmkdir -p \"${SRCROOT}/XPostFacto/Derived/StartupItems/plist\"\n\ncd \"${SRCROOT}\"\nfor FILE in XPostFacto/Derived/Extensions/*.hfs\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in XPostFacto/Derived/Extensions/plist/*.plist\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in XPostFacto/Derived/StartupItems/*.hfs\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in XPostFacto/Derived/StartupItems/plist/*.plist\n{\n\trm \"${FILE}\"\n}\n\ncd \"${DSTROOT}\"/System/Library/Extensions\nfor FILE in *.kext\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n\tcp \"${FILE}/Contents/Info.plist\" \"${SRCROOT}/XPostFacto/Derived/Extensions/plist/${FILE%.kext}.plist\"\n}\n\ncd \"${DSTROOT}\"/Library/StartupItems\nfor FILE in XPF*\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/StartupItems\"\n\tcp \"${FILE}/version.plist\" \"${SRCROOT}/XPostFacto/Derived/StartupItems/plist/${FILE}.plist\"\n}\n\nif test ${SUDO_USER}; then\n\tchown -R ${SUDO_USER} \"${SYMROOT}\"\n\tchown -R ${SUDO_USER} \"${SRCROOT}/XPostFacto/Derived\"\nfi";
 		};
 		F5B85D2103F5E91001A80002 = {
 			fileEncoding = 30;
@@ -6027,6 +5785,7 @@
 				F5BF317C03F01EA201A80002,
 				F5BF317D03F01EA201A80002,
 				94B81733047A812200A80003,
+				94279A75052FCE2500A80003,
 				94B81736047A834200A80003,
 			);
 			buildSettings = {
@@ -6042,7 +5801,6 @@
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 			};
 			dependencies = (
-				946A5D3105251A6C00A80003,
 			);
 			isa = PBXToolTarget;
 			name = xpfbootsupportd;
@@ -6063,7 +5821,7 @@
 				94B81732047A7F5100A80003,
 				946A5D29052514FE00A80003,
 				946A5D2C0525152200A80003,
-				946A5D070525093200A80003,
+				9407316705312E5900A80003,
 			);
 			isa = PBXGroup;
 			name = "XPF Startup Item";

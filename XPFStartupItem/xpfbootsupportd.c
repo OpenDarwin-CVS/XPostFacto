@@ -86,7 +86,6 @@ void restartProcess ();
 
 void pollForChanges ();
 void restartWhenSignalled ();
-void launchSyncApp ();
 
 void statDeviceFiles (XPFDeviceFiles *deviceFiles);
 void statBootFile (XPFBootFile *bootFile);
@@ -94,6 +93,42 @@ void checkForChangesBetween (XPFBootFile *bf1, XPFBootFile *bf2);
 
 void exitWithError (OSStatus err, int code);
 void turnOffSleepIfUnsupported ();
+void setupRestartInMacOS9 ();
+
+void
+setupRestartInMacOS9 ()
+{
+	if (noSyncRequired) return;
+
+	mach_port_t iokitPort;
+	IOMasterPort (MACH_PORT_NULL, &iokitPort);
+	io_registry_entry_t options = IORegistryEntryFromPath (iokitPort, "IODeviceTree:/options");
+	if (options) {
+		CFTypeRef keys[3] = {CFSTR ("boot-device"), CFSTR ("boot-command"), CFSTR ("boot-file")};
+		CFTypeRef values[3] = {CFSTR ("/AAPL,ROM"), CFSTR ("boot"), CFSTR ("")};
+		CFDictionaryRef dict = CFDictionaryCreate (kCFAllocatorDefault, keys, values, 3, 
+				&kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+		if (dict) {
+			IORegistryEntrySetCFProperties (options, dict);
+			CFRelease (dict);
+			noSyncRequired = true;
+		}
+		IOObjectRelease (options);
+	}
+	
+	CFURLRef bundle = CFURLCreateWithFileSystemPath (kCFAllocatorDefault, CFSTR ("/Library/StartupItems/XPFStartupItem"), kCFURLPOSIXPathStyle, true);
+
+	CFURLRef icon = CFURLCreateWithFileSystemPath (kCFAllocatorDefault, CFSTR ("/Library/StartupItems/XPFStartupItem/Resources/XPFIcons.icns"), kCFURLPOSIXPathStyle, false);
+	
+	CFUserNotificationDisplayNotice (0, kCFUserNotificationCautionAlertLevel, 
+		icon, NULL, bundle, 
+		CFSTR ("XPF Synchronization Required"),
+		CFSTR ("XPFSyncMessage"),
+		NULL);
+		
+	if (bundle) CFRelease (bundle);
+	if (icon) CFRelease (icon);
+}
 
 void
 turnOffSleepIfUnsupported ()
@@ -228,39 +263,9 @@ restartWhenSignalled ()
 }
 
 void
-launchSyncApp ()
-{
-	// If we've launched it successfully once, we don't do it again until we're signalled
-	// to restart ourselves.
-	if (!noSyncRequired) {
-		FSRef syncApp;
-		OSStatus status = FSPathMakeRef ("/Library/StartupItems/XPFStartupItem/XPFSync.app", &syncApp, NULL);
-		if (status == noErr) {
-			LSLaunchFSRefSpec launchSpec;
-			
-			launchSpec.appRef = &syncApp;
-			launchSpec.numDocs = 0;
-			launchSpec.itemRefs = NULL;
-			launchSpec.passThruParams = NULL;
-			launchSpec.asyncRefCon = NULL;
-			launchSpec.launchFlags = kLSLaunchDontAddToRecents | kLSLaunchDontSwitch | kLSLaunchNoParams;
-			
-			status = LSOpenFromRefSpec (&launchSpec, NULL);
-		}
-		
-		if (status == noErr) {
-			noSyncRequired = 1;  // The syncApp needs to restart us when it's done
-		} else {
-			syslog (LOG_ERR, "Error %d launching XPFSync.app", status);
-			return;
-		}
-	}
-}
-
-void
 checkForChangesBetween (XPFBootFile *bf1, XPFBootFile *bf2)
 {
-	if (bf1->mtime.tv_sec != bf2->mtime.tv_sec) launchSyncApp ();
+	if (bf1->mtime.tv_sec != bf2->mtime.tv_sec) setupRestartInMacOS9 ();
 }
 
 void
