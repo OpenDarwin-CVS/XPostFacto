@@ -36,11 +36,26 @@ advised of the possibility of such damage.
 
 #include <NameRegistry.h>
 
+class AliasEntry {
+
+	public:
+		AliasEntry (char *key, char *value);
+		~AliasEntry ();
+		
+		char *abbreviate (TemplateList_AC <char> *wholeName);
+
+	private:
+		char *fKey;
+		char *fValue;
+		TemplateList_AC <char> fComponents;
+
+};
+
 class OFAliases {
 
 	public:
 	
-		static void AliasFor (const RegEntryID* regEntry, char *outAlias);
+		static void AliasFor (const RegEntryID* regEntry, char *outAlias, char *shortAlias);
 
 		~OFAliases ();
 		
@@ -51,11 +66,11 @@ class OFAliases {
 
 		static void Initialize ();
 
-		void aliasFor (const RegEntryID* regEntry, char *outAlias);
-		bool abbreviate (const char *inPath, char *outAlias);
-
+		void aliasFor (const RegEntryID* regEntry, char *outAlias, char *shortAlias);
 
 		RegEntryID fAliasEntry;
+		
+		TemplateList_AC <AliasEntry> fEntries;
 
 		OFAliases ();
 		

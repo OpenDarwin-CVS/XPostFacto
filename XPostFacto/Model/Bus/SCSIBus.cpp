@@ -202,9 +202,10 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 	#endif
 
 	char alias [256];
-	OFAliases::AliasFor (&fRegEntry, alias);
+	char shortAlias [256];
+	OFAliases::AliasFor (&fRegEntry, alias, shortAlias);
 	fOpenFirmwareName.CopyFrom (alias);
-	fShortOpenFirmwareName.CopyFrom (alias);
+	fShortOpenFirmwareName.CopyFrom (shortAlias);
 				
 	// Now, we assign the next available bus number. I am making the assumption that the
 	// iteration order here is the same as the iteration order when the SCSI Manager is
@@ -218,38 +219,7 @@ SCSIBus::SCSIBus (RegEntryID *scsiEntry)
 	} else {
 		static int nextPCIBusNumber = 2;
 		fBusNumber = nextPCIBusNumber++;
-	}
-	
-	// Now get the device and funtion number
-	char location [32];
-	location[0] = 0;
-	RegPropertyValueSize aaSize;
-	OSErr err = RegistryPropertyGetSize (scsiEntry, kPCIAssignedAddressProperty, &aaSize);
-	if (err == noErr) {
-		// We want the open firmware name of our parent instead
-		RegEntryID parentEntry;
-		ThrowIfOSErr_AC (RegistryEntryIDInit (&parentEntry));
-		ThrowIfOSErr_AC (RegistryCStrEntryToName (&fRegEntry, &parentEntry, NULL, NULL));
-		OFAliases::AliasFor (&parentEntry, alias);
-		fShortOpenFirmwareName.CopyFrom (alias);
-		fShortOpenFirmwareName += "/";
-		RegistryEntryIDDispose (&parentEntry);
-	
-		Ptr aa = NewPtr (aaSize);
-		ThrowIfNULL_AC (aa);
-		ThrowIfOSErr_AC (RegistryPropertyGet (scsiEntry, kPCIAssignedAddressProperty, aa, &aaSize));
-		fDeviceNumber = GetPCIDeviceNumber ((PCIAssignedAddress *) aa);
-		fFunctionNumber = GetPCIFunctionNumber ((PCIAssignedAddress *) aa);
-		if (fFunctionNumber) {
-			sprintf (location, "@%X,%X", fDeviceNumber, fFunctionNumber);
-		} else {
-			sprintf (location, "@%X", fDeviceNumber);
-		}
-		DisposePtr (aa);	
-	}
-	
-	fOpenFirmwareName += location;
-	fShortOpenFirmwareName += location;
+	}	
 	
 	// Now, as an inelegant workaround, if we already have a bus with this device number,
 	// swap the bus numbers

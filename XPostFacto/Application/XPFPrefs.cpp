@@ -303,68 +303,40 @@ XPFPrefs::addInputOutputDevice (RegEntryID *entry, TemplateList_AC <char> *list)
 {
 	char alias[256];
 	char shortAlias[256];
+	char label[256];
 
-	OFAliases::AliasFor (entry, alias);
-	strcpy (shortAlias, alias);
+	OFAliases::AliasFor (entry, alias, shortAlias);
 	if (list == &fOutputDevices) {
 		if (!strcmp (alias, "kbd")) return;
 		if (!strcmp (alias, "/offscreen-display")) return;
 	}
-		
-	// Now get the device and funtion number for the short alias
-	char location [32];
-	location[0] = 0;
-	RegPropertyValueSize aaSize;
-	OSErr err = RegistryPropertyGetSize (entry, kPCIAssignedAddressProperty, &aaSize);
-	if (err == noErr) {
-		// We want the open firmware name of our parent instead
-		RegEntryID parentEntry;
-		ThrowIfOSErr_AC (RegistryEntryIDInit (&parentEntry));
-		ThrowIfOSErr_AC (RegistryCStrEntryToName (entry, &parentEntry, NULL, NULL));
-		OFAliases::AliasFor (&parentEntry, shortAlias);
-		strcat (shortAlias, "/");
-		RegistryEntryIDDispose (&parentEntry);
-
-		Ptr aa = NewPtr (aaSize);
-		ThrowIfNULL_AC (aa);
-		ThrowIfOSErr_AC (RegistryPropertyGet (entry, kPCIAssignedAddressProperty, aa, &aaSize));
-		int deviceNumber = GetPCIDeviceNumber ((PCIAssignedAddress *) aa);
-		int functionNumber = GetPCIFunctionNumber ((PCIAssignedAddress *) aa);
-		if (functionNumber) {
-			sprintf (location, "@%X,%X", deviceNumber, functionNumber);
-		} else {
-			sprintf (location, "@%X", deviceNumber);
-		}
-		DisposePtr (aa);	
-	}
-	
-	strcat (alias, location);
-	strcat (shortAlias, location);
-	
+			
 #if qLogging
 	gLogFile << "IO Device: " << alias << endl_AC;
 	gLogFile << "IO Short Device: " << shortAlias << endl_AC;
 #endif
 	
-	char *label = NULL;
 	RegPropertyValueSize propSize;
-	err = RegistryPropertyGetSize (entry, "AAPL,connector", &propSize);
+	OSErr err = RegistryPropertyGetSize (entry, "AAPL,connector", &propSize);
 	if (err == noErr) {
-		label = NewPtr (propSize + 1);
 		RegistryPropertyGet (entry, "AAPL,connector", label, &propSize);
 		label[propSize] = '\0';
 	} else {
 		err = RegistryPropertyGetSize (entry, "name", &propSize);
 		if (err == noErr) {
-			label = NewPtr (propSize + 1);
 			RegistryPropertyGet (entry, "name", label, &propSize);
 			label[propSize] = '\0';
 		} else {
-			label = NewPtr (strlen (alias) + 1);
 			strcpy (label, alias);
 		}
 	}
-	if (!strcmp (label, "infrared")) return;
+	if (!strcmp (label, "infrared")) {
+		return;
+	} else if (!strcmp (label, "ATY,RV100ad_A")) {
+		strcat (label, " (VGA)");
+	} else if (!strcmp (label, "ATY,RV100ad_B")) {
+		strcat (label, " (DVI)");
+	}
 	
 	char *temp = NewPtr (strlen (alias) + 1);
 	strcpy (temp, alias);
@@ -380,8 +352,6 @@ XPFPrefs::addInputOutputDevice (RegEntryID *entry, TemplateList_AC <char> *list)
 		fShortOutputDevices.InsertLast (temp);
 		TMenuBarManager::fgMenuBarManager->AddMenuItem (label, mOutputDevice, 999, fNextOutputDevice++);
 	}
-
-	DisposePtr (label);
 }
 
 void

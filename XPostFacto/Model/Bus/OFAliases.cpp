@@ -37,9 +37,79 @@ advised of the possibility of such damage.
 #include <string.h>
 #include <stdio.h>
 #include <PCI.h>
+#include "XPFLog.h"
 
 CAutoPtr_AC <OFAliases> OFAliases::sOFAliases = NULL;
 bool OFAliases::sHasBeenInitialized = false;
+
+AliasEntry::AliasEntry (char *key, char *value)
+{
+	fKey = NewPtr (strlen (key) + 1);
+	strcpy (fKey, key);
+	
+	fValue = NewPtr (strlen (value) + 1);
+	strcpy (fValue, value);
+	
+	char *start, *end;
+	start = end = fValue + 1;
+	do {
+		end++;
+		if ((*end == 0) || (*end == '/')) {
+			char *comp = NewPtr (end - start + 1);
+			char save = *end;
+			*end = 0;
+			strcpy (comp, start);
+			fComponents.InsertLast (comp);
+			*end = save;
+			start = end + 1;
+		}
+	} while (*end != 0);
+}
+
+AliasEntry::~AliasEntry ()
+{
+	DisposePtr (fKey);
+	DisposePtr (fValue);
+	for (int x = 1; x <= fComponents.GetSize (); x++) {
+		DisposePtr (fComponents.At (x));
+	} 
+}
+
+char *
+AliasEntry::abbreviate (TemplateList_AC <char> *wholeName) 
+{
+	Ptr result = NewPtr (256);
+	*result = 0;
+	
+	if (fComponents.GetSize () > wholeName->GetSize ()) return result;
+	
+	bool match = true;
+	int x;
+	for (x = 1; x <= fComponents.GetSize (); x++) {
+		char *me = fComponents.At (x);
+		char *you = wholeName->At (x);
+		if (strcmp (me, you)) {
+			match = false;
+			char *atSign = strstr (you, "@");
+			if (atSign) {
+				*atSign = 0;
+				if (!strcmp (me, you)) match = true;
+				*atSign = '@';
+			}
+		}
+		if (!match) break;
+	}
+	
+	if (match) {
+		strcpy (result, fKey);
+		for (x = fComponents.GetSize () + 1; x <= wholeName->GetSize (); x++) {
+			strcat (result, "/");
+			strcat (result, wholeName->At (x));
+		}
+	}
+
+	return result;
+}
 
 void
 OFAliases::Initialize ()
@@ -53,148 +123,167 @@ OFAliases::OFAliases ()
 {
 	ThrowIfOSErr_AC (RegistryEntryIDInit (&fAliasEntry));	
 	ThrowIfOSErr_AC (RegistryCStrEntryLookup (NULL, "Devices:device-tree:aliases", &fAliasEntry));
-}
-
-void
-OFAliases::AliasFor (const RegEntryID* regEntry, char *outAlias) {
-	if ((Ptr) RegistryEntryIDInit == (Ptr) kUnresolvedCFragSymbolAddress) return;
-	Initialize ();
-	return sOFAliases->aliasFor (regEntry, outAlias);
-}
-
-void
-OFAliases::aliasFor (const RegEntryID* regEntry, char *outAlias) {
-	// First, we get the path to this RegEntry
-	RegPathNameSize pathSize;
-	ThrowIfOSErr_AC (RegistryEntryToPathSize (regEntry, &pathSize));
-	RegCStrPathName *pathName = (RegCStrPathName *) malloc (pathSize);
-	ThrowIfNULL_AC (pathName);
-		
-	try {
-		ThrowIfOSErr_AC (RegistryCStrEntryToPath (regEntry, pathName, pathSize));
-		
-		// replace all the ':' with '/'
-		char *iter = pathName;
-		while (*iter != 0) {
-			if (*iter == ':') *iter = '/';
-			iter++;
-		}
-		
-		// now, we get rid of the "Devices/device-tree/"
-		iter = pathName;
-		if (!memcmp (iter, "Devices/device-tree", 19)) iter += 19; 
-		
-		// now, we try to abbreviate it as is
-		if (!OFAliases::abbreviate (iter, outAlias)) {
-
-			// it didn't abbreviate as is. So we expand the first node & try again
-			
-			RegEntryID deviceTreeEntry;
-			ThrowIfOSErr_AC (RegistryEntryIDInit (&deviceTreeEntry));
-			ThrowIfOSErr_AC (RegistryCStrEntryLookup (NULL, "Devices:device-tree", &deviceTreeEntry));
-
-			char expandedName[255];
-			expandedName[0] = 0;
-			RegEntryID iterEntry, parentEntry;
-			ThrowIfOSErr_AC (RegistryEntryIDInit (&iterEntry));
-			ThrowIfOSErr_AC (RegistryEntryIDInit (&parentEntry));
-			ThrowIfOSErr_AC (RegistryEntryIDCopy (regEntry, &iterEntry));
-			
-			Boolean finished = false;
-			char nameComponent [255];
-			char workString[255];
-			while (!finished) {
-				ThrowIfOSErr_AC (RegistryCStrEntryToName (&iterEntry, &parentEntry, nameComponent, &finished));
-				if (finished) break;
-				if (RegistryEntryIDCompare (&parentEntry, &deviceTreeEntry)) {
-					finished = true;
-					RegPropertyValueSize propSize;
-					OSErr err = RegistryPropertyGetSize (&iterEntry, "reg", &propSize);
-					if (err == noErr) {
-						Ptr reg = NewPtr (propSize + 1);
-						ThrowIfNULL_AC (reg);
-						ThrowIfOSErr_AC (RegistryPropertyGet (&iterEntry, "reg", reg, &propSize));
-						reg[propSize] = '\0';
-						snprintf (workString, 255, "/%s@%X%s", nameComponent, * (unsigned *) reg, expandedName);
-						strcpy (expandedName, workString);
-						DisposePtr (reg);	
-					} else {			
-						snprintf (workString, 255, "/%s%s", nameComponent, expandedName);
-						strcpy (expandedName, workString);
-					}
-					RegistryEntryIDDispose (&iterEntry);
-					RegistryEntryIDDispose (&parentEntry);
-				} else {
-					RegistryEntryIDDispose (&iterEntry);
-					ThrowIfOSErr_AC (RegistryEntryIDCopy (&parentEntry, &iterEntry));
-					RegistryEntryIDDispose (&parentEntry);
-					snprintf (workString, 255, "/%s%s", nameComponent, expandedName);
-					strcpy (expandedName, workString);
-				}
-			}
-			if (!OFAliases::abbreviate (expandedName, outAlias)) {
-				// OK, that didn't work either. So just return the plain name.
-				strcpy (outAlias, iter);
-			}
-			RegistryEntryIDDispose (&deviceTreeEntry);	
-		}
-	}
-	catch (...) {
-		free (pathName);
-		throw;
-	}
-	free (pathName);
-}
-
-bool
-OFAliases::abbreviate (const char *inPath, char *outAlias)
-{
-	// If I knew what I was doing, I would cache this stuff. But it will
-	// hardly be performance critical. The idea, in general, is to reduce the
-	// amount of NVRAM we need by shortening our device names.
-
+	
+	// OK, the idea is that we need to construct an array of the aliases, in a manner that will be useful
+	// for later.
+	
 	RegPropertyIter cookie;
 	Boolean done = false;
-	int currentLength = 0;
 	
 	ThrowIfOSErr_AC (RegistryPropertyIterateCreate (&fAliasEntry, &cookie));
 	while (!done) {
 		RegPropertyNameBuf property;
 		ThrowIfOSErr_AC (RegistryPropertyIterate (&cookie, property, &done));
-		if (!done) {
+		if (!done && strcmp (property, "name")) {
 			char *value;
 			RegPropertyValueSize size;
 			ThrowIfOSErr_AC (RegistryPropertyGetSize (&fAliasEntry, property, &size));
 			value = NewPtr (size + 1);
-			try {
-				ThrowIfOSErr_AC (RegistryPropertyGet (&fAliasEntry, property, value, &size));
-				value[size] = '\0';
+			ThrowIfOSErr_AC (RegistryPropertyGet (&fAliasEntry, property, value, &size));
+			value[size] = '\0';
+			
+			fEntries.InsertLast (new AliasEntry (property, value));
 				
-				// OK. Now we have an alias name and a value. We need to check whether the
-				// inPath starts with our value, with a '/ at the end. If so, we can substitute our name.
-				// And we want to use the longest property that matches.
-				if (strlen (value) > currentLength) {
-					if (strstr (inPath, value) == inPath) {
-						if ((inPath[strlen (value)] == '/') || (inPath[strlen (value)] == '\0')) {
-							strcpy (outAlias, property);
-							strcat (outAlias, inPath + strlen (value));
-							currentLength = strlen (value);
-						}
-					}
-				}
-			}
-			catch (...) {
-				DisposePtr (value);
-				throw;
-			}
 			DisposePtr (value);
 		}
 	}
-	RegistryPropertyIterateDispose(&cookie);
-	return currentLength != 0;
+	RegistryPropertyIterateDispose(&cookie);	
 }
 
 OFAliases::~OFAliases ()
 {
 	RegistryEntryIDDispose (&fAliasEntry);
+	
+	for (int x = 1; x <= fEntries.GetSize (); x++) {
+		delete (fEntries.At (x));
+	} 
+}
+
+void
+OFAliases::AliasFor (const RegEntryID* regEntry, char *outAlias, char *shortAlias) {
+	if ((Ptr) RegistryEntryIDInit == (Ptr) kUnresolvedCFragSymbolAddress) return;
+	Initialize ();
+	return sOFAliases->aliasFor (regEntry, outAlias, shortAlias);
+}
+
+void
+OFAliases::aliasFor (const RegEntryID* regEntry, char *outAlias, char *shortAlias) 
+{			
+	RegEntryID deviceTreeEntry;
+	ThrowIfOSErr_AC (RegistryEntryIDInit (&deviceTreeEntry));
+	ThrowIfOSErr_AC (RegistryCStrEntryLookup (NULL, "Devices:device-tree", &deviceTreeEntry));
+	
+	RegEntryID iterEntry, parentEntry;
+	ThrowIfOSErr_AC (RegistryEntryIDInit (&iterEntry));
+	ThrowIfOSErr_AC (RegistryEntryIDInit (&parentEntry));
+	ThrowIfOSErr_AC (RegistryEntryIDCopy (regEntry, &iterEntry));
+			
+	RegPropertyValueSize propSize;
+	Ptr prop;
+	OSErr err;
+	char nameComponent[256];
+	char workString[256];
+	char *temp;
+	
+	TemplateList_AC <char> wholeName;
+ 	
+	Boolean finished = false;
+	while (!finished) {
+ 		ThrowIfOSErr_AC (RegistryCStrEntryToName (&iterEntry, &parentEntry, nameComponent, &finished));
+		if (finished) break;
+		if (RegistryEntryIDCompare (&parentEntry, &deviceTreeEntry)) {
+			// If the parent is the device-tree, then this is the last go round
+			finished = true;
+			
+			// Also, if the parent is the device tree, we want to capture the "reg" property
+			err = RegistryPropertyGetSize (&iterEntry, "reg", &propSize);
+			if (err == noErr) {
+				prop = NewPtr (propSize + 1);
+				ThrowIfOSErr_AC (RegistryPropertyGet (&iterEntry, "reg", prop, &propSize));
+				prop[propSize] = '\0';
+				snprintf (workString, 255, "%s@%X", nameComponent, * (unsigned *) prop);
+				DisposePtr (prop);	
+			} else {			
+				strcpy (workString, nameComponent);
+			}
+			RegistryEntryIDDispose (&iterEntry);
+			RegistryEntryIDDispose (&parentEntry);
+		} else {
+			// We want to special-case where the parent is a pci bus or vci bus
+			// So that we can include the device number and function number	
+			err = RegistryPropertyGetSize (&parentEntry, "device_type", &propSize);
+			if (err == noErr) {
+				prop = NewPtr (propSize + 1);
+				ThrowIfOSErr_AC (RegistryPropertyGet (&parentEntry, "device_type", prop, &propSize));
+				prop[propSize] = '\0';
+				if (!strcmp (prop, "pci") || !strcmp (prop, "vci")) {
+					// since the parent is a pci or vci bus, we get device and function number
+					err = RegistryPropertyGetSize (&iterEntry, "reg", &propSize);
+					if (err == noErr) {
+						Ptr reg = NewPtr (propSize);
+						ThrowIfOSErr_AC (RegistryPropertyGet (&iterEntry, "reg", reg, &propSize));
+						int deviceNumber = GetPCIDeviceNumber ((PCIAssignedAddress *) reg);
+						int functionNumber = GetPCIFunctionNumber ((PCIAssignedAddress *) reg);
+						if (functionNumber) {
+							snprintf (workString, 255, "%s@%X,%X", nameComponent, deviceNumber, functionNumber);
+						} else {
+							snprintf (workString, 255, "%s@%X", nameComponent, deviceNumber);
+						}
+						DisposePtr (reg);	
+					} else {
+						strcpy (workString, nameComponent);
+					}
+				} else {
+					strcpy (workString, nameComponent);
+				}
+				DisposePtr (prop);
+			} else {			
+				strcpy (workString, nameComponent);
+			}
+			RegistryEntryIDDispose (&iterEntry);
+			ThrowIfOSErr_AC (RegistryEntryIDCopy (&parentEntry, &iterEntry));
+			RegistryEntryIDDispose (&parentEntry);
+		}
+		temp = NewPtr (strlen (workString) + 1);
+		strcpy (temp, workString);
+		wholeName.InsertFirst (temp);
+	}
+
+	strcpy (outAlias, "");
+	for (int x = 1; x <= wholeName.GetSize (); x++) {
+		strcat (outAlias, "/");
+		strcat (outAlias, wholeName.At (x));
+	}
+	
+	gLogFile << outAlias << endl_AC;
+	
+	// Now, we ask each of the aliases in turn what the name would be if we used their alias
+	// If it is shorter, then we substitute it.
+	
+	for (int x = 1; x <= fEntries.GetSize (); x++) {
+		char *result = fEntries.At (x)->abbreviate (&wholeName);
+		if ((result[0] != 0) && (strlen (result) < strlen (outAlias))) {
+			strcpy (outAlias, result);
+		}
+		DisposePtr (result);
+	}
+	
+	for (int x = 1; x <= wholeName.GetSize (); x++) {
+		DisposePtr (wholeName.At (x));
+	}
+	
+	// Now, we construct the short alias by using the "@" where available
+	
+	strcpy (shortAlias, outAlias);
+	
+	char *at;
+	char *start = shortAlias;
+	while ((at = strstr (start, "@"))) {
+		start = at;
+		while ((*start != '/') && (start >= shortAlias)) start--;
+		BlockMoveData (at, start + 1, strlen (at) + 1);
+		start += 2;
+	}
+
+	RegistryEntryIDDispose (&deviceTreeEntry);	
 }
