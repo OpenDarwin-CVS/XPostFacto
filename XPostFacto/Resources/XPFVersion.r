@@ -49,12 +49,12 @@ RESOURCE 'vers' (1,
 #endif
 	purgeable) {
 	0x02,
-	0x24,
-	final,
-	0x0,
+	0x25,
+	beta,
+	0x1,
 	verUs,
-	"2.2.4",
-	"2.2.4, © 2001, 2002 Other World Computing"
+	"2.2.5b1",
+	"2.2.5b1, © 2001, 2002 Other World Computing"
 };
 
 RESOURCE 'vers' (3,

@@ -36,6 +36,7 @@ advised of the possibility of such damage.
 #include <iostream.h>
 #include <string.h>
 #include <stdio.h>
+#include <PCI.h>
 
 CAutoPtr_AC <OFAliases> OFAliases::sOFAliases = NULL;
 bool OFAliases::sHasBeenInitialized = false;
@@ -68,6 +69,24 @@ OFAliases::aliasFor (const RegEntryID* regEntry, char *outAlias) {
 	ThrowIfOSErr_AC (RegistryEntryToPathSize (regEntry, &pathSize));
 	RegCStrPathName *pathName = (RegCStrPathName *) malloc (pathSize);
 	ThrowIfNULL_AC (pathName);
+	
+	char location [32];
+	location[0] = 0;
+	RegPropertyValueSize aaSize;
+	OSErr err = RegistryPropertyGetSize (regEntry, kPCIAssignedAddressProperty, &aaSize);
+	if (err == noErr) {
+		Ptr aa = NewPtr (aaSize);
+		ThrowIfNULL_AC (aa);
+		ThrowIfOSErr_AC (RegistryPropertyGet (regEntry, kPCIAssignedAddressProperty, aa, &aaSize));
+		unsigned deviceNumber = GetPCIDeviceNumber ((PCIAssignedAddress *) aa);
+		unsigned functionNumber = GetPCIFunctionNumber ((PCIAssignedAddress *) aa);
+		if (functionNumber) {
+			sprintf (location, "@%X,%X", deviceNumber, functionNumber);
+		} else {
+			sprintf (location, "@%X", deviceNumber);
+		}
+		DisposePtr (aa);	
+	}
 	
 	try {
 		ThrowIfOSErr_AC (RegistryCStrEntryToPath (regEntry, pathName, pathSize));
@@ -108,7 +127,7 @@ OFAliases::aliasFor (const RegEntryID* regEntry, char *outAlias) {
 				if (RegistryEntryIDCompare (&parentEntry, &deviceTreeEntry)) {
 					finished = true;
 					RegPropertyValueSize propSize;
-					OSErr err = RegistryPropertyGetSize (&iterEntry, "reg", &propSize);
+					err = RegistryPropertyGetSize (&iterEntry, "reg", &propSize);
 					if (err == noErr) {
 						Ptr reg = NewPtr (propSize + 1);
 						ThrowIfNULL_AC (reg);
@@ -143,6 +162,7 @@ OFAliases::aliasFor (const RegEntryID* regEntry, char *outAlias) {
 		throw;
 	}
 	free (pathName);
+	strcat (outAlias, location);
 }
 
 bool
