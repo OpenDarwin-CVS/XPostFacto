@@ -85,6 +85,7 @@
 				F53C6A1F01B194DC01A80001,
 				F53C6A2401B194DC01A80001,
 				F53C6A1A01B194DC01A80001,
+				F5FB800A03C7A0AD01A80002,
 			);
 		};
 		F53C691001B191BA01A80001 = {
@@ -138,6 +139,7 @@
 		};
 		F53C695501B1926201A80001 = {
 			children = (
+				F5FB800D03C7A0DD01A80002,
 				F547F715028EFEEC01A80001,
 				F557F69E0226FF1001A80001,
 				F53C697401B1926201A80001,
@@ -513,6 +515,7 @@
 				F547F71A028EFEEC01A80001,
 				F5887528030D66FA01A80001,
 				F5812B820315F14401A80001,
+				F5FB800B03C7A0AD01A80002,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -855,6 +858,7 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = AppleCurio;
 				SECTORDER_FLAGS = "";
+				USE_GCC2 = YES;
 				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
@@ -1030,6 +1034,7 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = AppleGrandCentral;
 				SECTORDER_FLAGS = "";
+				USE_GCC2 = YES;
 				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
@@ -1202,6 +1207,7 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = AppleMaceEthernet;
 				SECTORDER_FLAGS = "";
+				USE_GCC2 = YES;
 				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
@@ -1261,7 +1267,7 @@
 		<string>1.0.0b1</string>
 	</dict>
 	<key>OSBundleRequired</key>
-	<string>Network-Root</string>
+	<string>Root</string>
 </dict>
 </plist>
 ";
@@ -1444,6 +1450,7 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = ApplePowerSurgePE;
 				SECTORDER_FLAGS = "";
+				USE_GCC2 = YES;
 				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
@@ -1603,6 +1610,7 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = PowerSurgeCPU;
 				SECTORDER_FLAGS = "";
+				USE_GCC2 = YES;
 				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
@@ -1800,6 +1808,7 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = PatchedAppleNVRAM;
 				SECTORDER_FLAGS = "";
+				USE_GCC2 = YES;
 				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
@@ -1977,6 +1986,7 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = PatchedIOSCSICDDrive;
 				SECTORDER_FLAGS = "";
+				USE_GCC2 = YES;
 				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
@@ -2166,6 +2176,7 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = PatchedSCSIDeviceType05;
 				SECTORDER_FLAGS = "";
+				USE_GCC2 = YES;
 				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
@@ -2710,6 +2721,7 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = PowerStarCPU;
 				SECTORDER_FLAGS = "";
+				USE_GCC2 = YES;
 				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
@@ -2888,6 +2900,7 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = OpenPMU;
 				SECTORDER_FLAGS = "";
+				USE_GCC2 = YES;
 				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
@@ -3284,6 +3297,7 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = ApplePowerExpressPE;
 				SECTORDER_FLAGS = "";
+				USE_GCC2 = YES;
 				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
@@ -3487,6 +3501,7 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = OHareATA;
 				SECTORDER_FLAGS = "";
+				USE_GCC2 = YES;
 				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
@@ -3662,6 +3677,7 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = AppleOHare;
 				SECTORDER_FLAGS = "";
+				USE_GCC2 = YES;
 				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
@@ -3960,6 +3976,7 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = ApplePowerStarPE;
 				SECTORDER_FLAGS = "";
+				USE_GCC2 = YES;
 				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
@@ -4686,6 +4703,7 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = AppleCurio4K78;
 				SECTORDER_FLAGS = "";
+				USE_GCC2 = YES;
 				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
@@ -4891,6 +4909,7 @@
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = PatchedNDRVSupport;
 				SECTORDER_FLAGS = "";
+				USE_GCC2 = YES;
 				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = kext;
@@ -5021,6 +5040,7 @@
 			dependencies = (
 				F54DBA8602B139A701A80001,
 				F59D629201B1D12901A80001,
+				F5FCE85C03C7AA0C01A80002,
 				F547F725028F0E5501A80001,
 				F548C0D80289790D01A80001,
 				F54E20790267327701A80001,
@@ -5335,7 +5355,7 @@
 			);
 			buildSettings = {
 				HEADER_SEARCH_PATHS = "/Developer/Headers/FlatCarbon XPostFacto/MoreFiles/CHeaders XPostFacto/MoreFiles/Sources";
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/default;
+				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "-DwantDebugging=0 -DqCarbon=1 -DqPowerPC=1";
 				OTHER_REZFLAGS = "";
@@ -5343,6 +5363,8 @@
 				PRODUCT_NAME = hfsplusarchive;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
+				USE_GCC2 = YES;
+				USE_GCC3 = NO;
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 			};
 			dependencies = (
@@ -5666,6 +5688,233 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		F5FB800403C7A0AD01A80002 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		F5FB800503C7A0AD01A80002 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5FB801403C7A10D01A80002,
+				F5FB801503C7A10D01A80002,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5FB800603C7A0AD01A80002 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5FB801303C7A10D01A80002,
+				F5FB801603C7A10D01A80002,
+				F5FB801703C7A10D01A80002,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5FB800703C7A0AD01A80002 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5FB800803C7A0AD01A80002 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5FB800903C7A0AD01A80002 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		F5FB800A03C7A0AD01A80002 = {
+			buildPhases = (
+				F5FB800403C7A0AD01A80002,
+				F5FB800503C7A0AD01A80002,
+				F5FB800603C7A0AD01A80002,
+				F5FB800703C7A0AD01A80002,
+				F5FB800803C7A0AD01A80002,
+				F5FB800903C7A0AD01A80002,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+				KERNEL_MODULE = YES;
+				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				MODULE_IOKIT = YES;
+				MODULE_NAME = com.macsales.iokit.OWCCacheConfig;
+				MODULE_VERSION = 1.0.0d1;
+				OTHER_CFLAGS = "-D_BIG_ENDIAN=1";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = OWCCacheConfig;
+				SECTORDER_FLAGS = "";
+				USE_GCC2 = YES;
+				USE_GCC3 = NO;
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = kext;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = "OWCCacheConfig Extension";
+			productInstallPath = "$(USER_LIBRARY_DIR)/Bundles";
+			productName = "OWCCacheConfig Extension";
+			productReference = F5FB800B03C7A0AD01A80002;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>OWCCacheConfig</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.macsales.iokit.OWCCacheConfig</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.0d1</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>OWCCacheConfig</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.macsales.iokit.OWCCacheConfig</string>
+			<key>IOClass</key>
+			<string>OWCCacheConfig</string>
+			<key>IOKitDebug</key>
+			<integer>1</integer>
+			<key>IOMatchCategory</key>
+			<string>OWCCacheConfig</string>
+			<key>IONameMatch</key>
+			<string>cpu</string>
+			<key>IOProviderClass</key>
+			<string>IOPlatformDevice</string>
+		</dict>
+	</dict>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.kernel.iokit</key>
+		<string>1.0b1</string>
+	</dict>
+	<key>OSBundleRequired</key>
+	<string>Root</string>
+</dict>
+</plist>
+";
+			shouldUseHeadermap = 0;
+		};
+		F5FB800B03C7A0AD01A80002 = {
+			isa = PBXBundleReference;
+			path = OWCCacheConfig.kext;
+			refType = 3;
+		};
+		F5FB800D03C7A0DD01A80002 = {
+			children = (
+				F5FB800E03C7A10D01A80002,
+				F5FB800F03C7A10D01A80002,
+				F5FB801003C7A10D01A80002,
+				F5FB801103C7A10D01A80002,
+				F5FB801203C7A10D01A80002,
+			);
+			isa = PBXGroup;
+			name = OWCCacheConfig;
+			path = Extensions/OWCCacheConfig;
+			refType = 2;
+		};
+		F5FB800E03C7A10D01A80002 = {
+			isa = PBXFileReference;
+			path = OWCCacheConfig.cpp;
+			refType = 4;
+		};
+		F5FB800F03C7A10D01A80002 = {
+			isa = PBXFileReference;
+			path = OWCCacheConfig.h;
+			refType = 4;
+		};
+		F5FB801003C7A10D01A80002 = {
+			isa = PBXFileReference;
+			path = OWCCacheInit.h;
+			refType = 4;
+		};
+		F5FB801103C7A10D01A80002 = {
+			isa = PBXFileReference;
+			path = OWCL2CacheInit.s;
+			refType = 4;
+		};
+		F5FB801203C7A10D01A80002 = {
+			isa = PBXFileReference;
+			path = OWCL3CacheInit.s;
+			refType = 4;
+		};
+		F5FB801303C7A10D01A80002 = {
+			fileRef = F5FB800E03C7A10D01A80002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FB801403C7A10D01A80002 = {
+			fileRef = F5FB800F03C7A10D01A80002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FB801503C7A10D01A80002 = {
+			fileRef = F5FB801003C7A10D01A80002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FB801603C7A10D01A80002 = {
+			fileRef = F5FB801103C7A10D01A80002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FB801703C7A10D01A80002 = {
+			fileRef = F5FB801203C7A10D01A80002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FCE85C03C7AA0C01A80002 = {
+			isa = PBXTargetDependency;
+			target = F5FB800A03C7A0AD01A80002;
 		};
 	};
 	rootObject = F53C690F01B191BA01A80001;
