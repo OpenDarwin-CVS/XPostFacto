@@ -111,7 +111,7 @@ int mkextChanging;
 int extfolderChanging;
 
 int warnings = 0;
-CFUserNotificationRef notification;
+CFUserNotificationRef notification = NULL;
 CFDictionaryRef warningDict;
 CFDictionaryRef cancelWarningDict;
 
@@ -199,7 +199,7 @@ exitIfOSErr (OSStatus err, int code)
 void
 warn_the_user ()
 {
-	if (warnings == 0) {
+	if ((warnings == 0) && (notification == NULL)) {
 		SInt32 err;
 		notification = CFUserNotificationCreate (NULL, 0, kCFUserNotificationCautionAlertLevel | kCFUserNotificationNoDefaultButtonFlag, &err, warningDict);
 	}
@@ -215,13 +215,19 @@ cancel_warning ()
 	warnings--;
 
 	if (warnings == 0) {
-		CFUserNotificationCancel (notification);
-		CFRelease (notification);
+		if (notification) {
+			CFUserNotificationCancel (notification);
+			CFRelease (notification);
+			notification = NULL;
+		}
 		
 		notification = CFUserNotificationCreate (NULL, 0, kCFUserNotificationNoteAlertLevel | kCFUserNotificationNoDefaultButtonFlag, &err, cancelWarningDict);
 		sleep (2);
-		CFUserNotificationCancel (notification);
-		CFRelease (notification);
+		if (notification) {
+			CFUserNotificationCancel (notification);
+			CFRelease (notification);
+			notification = NULL;
+		}
 	}
 }
 
