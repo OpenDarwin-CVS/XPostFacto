@@ -76,6 +76,25 @@ typedef union DriverGestaltInfo DriverGestaltInfo;
 
 #endif
 
+// .AppleCD contants 
+
+enum {
+	csSetPowerMode = 70,
+	csQuiescence = 0x437
+};
+
+enum {
+	pmActive  = 0,
+	pmStandby  = 1,
+	pmIdle   = 2,
+	pmSleep   = 3
+};
+
+enum {
+	quiescenceON = 0,
+	quiescenceOFF = 1
+}; 
+
 bool XPFBootableDevice::fInitialized = false;
 
 void
@@ -86,9 +105,71 @@ XPFBootableDevice::Initialize ()
 #ifndef __MACH__
 	FirewireDevice::Initialize ();	// we need to do this each time
 	if (fInitialized) return;
+
 	fInitialized = true;
-	SCSIDevice::Initialize ();
-	ATADevice::Initialize ();
+
+	DisableCDDriver ();
+
+	try {
+		SCSIDevice::Initialize ();
+		ATADevice::Initialize ();
+	}
+	catch (...) {
+		EnableCDDriver ();
+		throw;
+	}
+	
+	EnableCDDriver ();
+#endif
+}
+
+void
+XPFBootableDevice::DisableCDDriver ()
+{
+#ifndef __MACH__
+	CntrlParam pb;
+	SInt16 refNum;
+	OSErr err;
+	
+	err = OpenDriver ("\p.AppleCD", &refNum); 	
+	if (err != noErr) return;
+	
+	BlockZero_AC (pb);
+
+ 	pb.ioCRefNum = refNum;
+ 	pb.csCode = csSetPowerMode;
+ 	*(UInt8 *) &pb.csParam[0] = pmActive;
+ 	err = PBControlImmed ((ParmBlkPtr) &pb);
+	if (err != noErr) return;	
+	
+	BlockZero_AC (pb);
+
+ 	pb.ioCRefNum = refNum;
+ 	pb.csCode = csQuiescence;
+ 	pb.csParam[0] = quiescenceON;
+ 
+	err = PBControlImmed ((ParmBlkPtr) &pb); 
+#endif
+}
+
+void
+XPFBootableDevice::EnableCDDriver ()
+{
+#ifndef __MACH__
+	CntrlParam pb;
+	SInt16 refNum;
+	OSErr err;
+	
+	err = OpenDriver ("\p.AppleCD", &refNum); 	
+	if (err != noErr) return;
+		
+	BlockZero_AC (pb);
+
+ 	pb.ioCRefNum = refNum;
+ 	pb.csCode = csQuiescence;
+ 	pb.csParam[0] = quiescenceOFF;
+ 
+	err = PBControlImmed ((ParmBlkPtr) &pb); 
 #endif
 }
 
@@ -149,59 +230,69 @@ XPFBootableDevice::extractPartitionInfo ()
 {
 	if (fPartitionList) return;
 	fPartitionList = new PartitionList;
+	
+	DisableCDDriver ();
 
-	readCapacity ();
-	
-#ifdef __MACH__
-	openDeviceFile ();
-#endif
-	
-	Partition *pm = NULL;
-	OSErr err = readBlocks (1, 1, (UInt8 **) &pm);
-	if (err != noErr) {
-		#if qLogging
-			gLogFile << "Error reading partition map block 1" << endl_AC;
+	try {
+		readCapacity ();
+
+		#ifdef __MACH__
+		openDeviceFile ();
 		#endif
-		ThrowException_AC (kInvalidPartitionMap, 0);
-	} else {
-		if (pm->pmSig != pMapSIG) {
-			#if qLogging
-				gLogFile << "Invalid partition map" << endl_AC;
-			#endif
-			return;
-		}
-		int pmCount = pm->pmMapBlkCnt;
-		if (pm) DisposePtr ((Ptr) pm);
-		pm = NULL;
-		err = readBlocks (1, pmCount, (UInt8 **) &pm);
+
+		Partition *pm = NULL;
+		OSErr err = readBlocks (1, 1, (UInt8 **) &pm);
 		if (err != noErr) {
 			#if qLogging
-				gLogFile << "Error reading partition map" << endl_AC;
+				gLogFile << "Error reading partition map block 1" << endl_AC;
 			#endif
-			return;;
-		}
-		for (int x = 0; x < pmCount; x++) {
-			#if qLogging
-				gLogFile << "Partition: " << x + 1 << " Type: " << (char *) (pm + x)->pmParType
-					<< " Processor: " << (char *) (pm + x)->pmProcessor << endl_AC;
-			#endif
-		
-			if (!strcmp ((char *) (pm + x)->pmParType, "Apple_HFS")) {
-				try {
-					XPFPartition *info = new XPFPartition (this, pm + x, x + 1);
-					fPartitionList->InsertLast (info);
-				}
-				catch (...) {
-				
+			ThrowException_AC (kInvalidPartitionMap, 0);
+		} else {
+			if (pm->pmSig != pMapSIG) {
+				#if qLogging
+					gLogFile << "Invalid partition map" << endl_AC;
+				#endif
+				return;
+			}
+			int pmCount = pm->pmMapBlkCnt;
+			if (pm) DisposePtr ((Ptr) pm);
+			pm = NULL;
+			err = readBlocks (1, pmCount, (UInt8 **) &pm);
+			if (err != noErr) {
+				#if qLogging
+					gLogFile << "Error reading partition map" << endl_AC;
+				#endif
+				return;;
+			}
+			for (int x = 0; x < pmCount; x++) {
+				#if qLogging
+					gLogFile << "Partition: " << x + 1 << " Type: " << (char *) (pm + x)->pmParType
+						<< " Processor: " << (char *) (pm + x)->pmProcessor << endl_AC;
+				#endif
+			
+				if (!strcmp ((char *) (pm + x)->pmParType, "Apple_HFS")) {
+					try {
+						XPFPartition *info = new XPFPartition (this, pm + x, x + 1);
+						fPartitionList->InsertLast (info);
+					}
+					catch (...) {
+					
+					}
 				}
 			}
-		}
-	}	
-	if (pm) DisposePtr ((Ptr) pm);
+		}	
+		if (pm) DisposePtr ((Ptr) pm);
+
+		#ifdef __MACH__
+		closeDeviceFile ();
+		#endif
+	}
+	catch (...) {
+		EnableCDDriver ();
+		throw;
+	}
 	
-#ifdef __MACH__
-	closeDeviceFile ();
-#endif
+	EnableCDDriver ();
 }
 
 union VolumeHeader {

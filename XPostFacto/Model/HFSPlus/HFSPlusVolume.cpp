@@ -42,6 +42,7 @@ advised of the possibility of such damage.
 #include "HFSPlusExtentsOverflow.h"
 #include "FastUnicodeCompare.h"
 #include "XPFAuthorization.h"
+#include "XPFBootableDevice.h"
 
 #ifdef BUILDING_XPF
 	#include "XPFApplication.h"
@@ -163,6 +164,7 @@ HFSPlusVolume::getBootXStartBlock ()
 			gLogFile << "blockCount: " << file.dataFork.extents[x].blockCount << endl_AC;
 		}
 	#endif
+	
 	if (file.dataFork.extents[0].blockCount == file.dataFork.totalBlocks) {
 		return fOffsetIntoPartition + file.dataFork.extents[0].startBlock * (fHeader->blockSize / 512);
 	} else {
@@ -280,16 +282,24 @@ HFSPlusVolume::installBootX ()
 	CloseResFile (resourceFork);
 	ThrowIfResError_AC ();
 #endif
- 	
-	fPartition->setLgBootStart (getBootXStartBlock ());
-	if (fPartition->getLgBootStart () == 0) {
-		#if qLogging
-			gLogFile << "Error finding start block for BootX" << endl_AC;
-		#endif
-		ThrowException_AC (kErrorExtractingBootX, 0);
-	} else {
-		fPartition->writePartition ();
+
+	XPFBootableDevice::DisableCDDriver (); 	
+ 	try {
+		fPartition->setLgBootStart (getBootXStartBlock ());
+		if (fPartition->getLgBootStart () == 0) {
+			#if qLogging
+				gLogFile << "Error finding start block for BootX" << endl_AC;
+			#endif
+			ThrowException_AC (kErrorExtractingBootX, 0);
+		} else {
+			fPartition->writePartition ();
+		}
 	}
+	catch (...) {
+		XPFBootableDevice::EnableCDDriver ();
+		throw;
+	}
+	XPFBootableDevice::EnableCDDriver ();
 }
 
 void
@@ -320,7 +330,17 @@ HFSPlusVolume::installBootXIfNecessary (bool forceInstall)
 		installBootX ();
 	} else {
 		// We have a BootX.file. So, we'll see whether it has moved.
-		unsigned long firstBootXBlock = getBootXStartBlock ();
+		unsigned long firstBootXBlock;
+		try {
+			XPFBootableDevice::DisableCDDriver ();
+			firstBootXBlock = getBootXStartBlock ();
+			XPFBootableDevice::EnableCDDriver ();
+		}
+		catch (...) {
+			XPFBootableDevice::EnableCDDriver ();
+			throw;
+		}
+		
 		if ((firstBootXBlock == 0) || (firstBootXBlock != fPartition->getLgBootStart ())) {
 			#if qLogging
 				gLogFile << "BootX.image moved. Reinstalling" << endl_AC;

@@ -100,6 +100,9 @@ class XPFBootableDevice
 #ifndef __MACH__
 		virtual bool isFirewireDevice ();
 #endif
+
+		static void DisableCDDriver ();
+		static void EnableCDDriver ();
 		
 	protected:	
 
