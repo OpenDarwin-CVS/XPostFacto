@@ -240,6 +240,39 @@ purgeable) {
 	}
 };
 
+resource 'hmnu' (mInstall,
+#if qNames
+"mInstall",
+#endif
+purgeable) {
+	HelpMgrVersion, hmDefaultOptions, 0, 0,
+	HMSkipItem {},
+	{
+		HMSkipItem {},
+		HMStringItem {"Install XPostFacto's custom BootX in the manner required to boot Mac OS X from \"Old World\" systems.", "", "", ""},
+		HMStringItem {"Install XPostFacto's kernel extensions.", "", "", ""},
+		HMStringItem {"Install XPostFacto's startup item.", "", "", ""},
+		HMSkipItem {},
+		HMStringItem {"Install BootX, the kernel extensions, and the startup item.", "", "", ""},
+		HMSkipItem {},
+		HMStringItem {
+			"Bless the Mac OS 9 System Folder", 
+			"Bless the Mac OS 9 System Folder. Disabled because XPostFacto could not detect a Mac OS 9 System Folder.", 
+			"", 
+			"",
+		},
+		HMSkipItem {},
+		HMStringItem {
+			"Recreate the symbolic links /etc, /tmp and /var, which are required to boot Mac OS X.", 
+			"Recreate the symbolic links /etc, /tmp and /var, which are required to boot Mac OS X. Disabled because XPostFacto cannot repair the links.", 
+			"", 
+			"",
+		},
+		HMSkipItem {},
+		HMStringItem {"Uninstall XPostFacto's kernel extensions and startup item. Note that it is not currently possible to uninstall XPostFacto's BootX.", "", "", ""}
+	}
+};
+
 resource 'CMNU' (mCache,
 #if qNames
 "mCache",
@@ -257,6 +290,26 @@ purgeable) {
 	}
 };
 
+resource 'hmnu' (mCache,
+#if qNames
+"mCache",
+#endif
+purgeable) {
+	HelpMgrVersion, hmDefaultOptions, 0, 0,
+	HMSkipItem {},
+	{
+		HMStringItem {"Adjust the cache files maintained by XPostFacto in the /.XPostFacto directory","","",""},
+		HMStringItem {
+			"Recopy the helper files to the cache directory on the helper volume", 
+			"Recopy helper files to the cache directory on the helper volume. Disabled because you are not using a helper volume.",
+			"", 
+			"",
+		},
+		HMStringItem {"Ensure that the cache files maintained by XPostFacto have the permissions required in order to boot Mac OS X.","","",""},
+		HMStringItem {"Remove the cache files maintained by XPostFacto in the /.XPostFacto directory","","",""},
+	},	
+};
+
 resource 'CMNU' (mWindow,
 #if qNames
 "mWindow",
@@ -272,6 +325,21 @@ purgeable) {
 	"Show Volume Inspector", noIcon, noKey, noMark, plain, cShowVolumeInspectorWindow;
 	"Show Log",				noIcon, noKey, noMark, plain, cShowLogWindow;
 	}
+};
+
+resource 'hmnu' (mWindow,
+#if qNames
+"mWindow",
+#endif
+purgeable) {
+	HelpMgrVersion, hmDefaultOptions, 0, 0,
+	HMSkipItem {},
+	{
+		HMSkipItem {},
+		HMStringItem {"Show the settings window for additional options available in XPostFacto.","","",""},
+		HMStringItem {"Open a window which shows additional information about your volumes","","",""},
+		HMStringItem {"Show the XPostFacto Log Window","","",""},
+	},	
 };
 
 //--------------------------------------------------------------------------------------------------
