@@ -77,8 +77,6 @@ resource 'errs' (kReasonResourceID, purgeable) {
 		kUserCancelledInstall, kUserCancelledInstall, 17;
 		kExtentsFileTooFragmented, kExtentsFileTooFragmented, 18;
 		kExtentsFileInconsistent, kExtentsFileInconsistent, 19;
-		kNoNVRAMPatches, kNoNVRAMPatches, 20;
-		kRequiresOS9, kRequiresOS9, 21;
 	}
 };
 
@@ -104,9 +102,6 @@ resource 'STR#' (kReasonResourceID, purgeable) {
 					"installation was cancelled by the user";
 					"the extents file was too fragmented";
 					"the extents file was inconsistent";
-		/* 20 */	"cannot write NVRAM patches";
-					"requires Mac OS 9 or later.";
-
 	}
 };
 

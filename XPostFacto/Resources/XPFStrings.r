@@ -46,5 +46,8 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			" (May fail because partition extends past 8 GB)";
 			" is not writeable.";
 			"' is not an installation disk.";
+/* 10 */	"XPostFacto requires Mac OS 9 or later.";
+			"XPostFacto does not know how to patch NVRAM for ";
+			"XPostFacto does not work in Mac OS X (yet).";
 	}
 };

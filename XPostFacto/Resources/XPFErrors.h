@@ -52,9 +52,7 @@ enum {
 	kReadCrossesExtents,
 	kUserCancelledInstall,
 	kExtentsFileTooFragmented,
-	kExtentsFileInconsistent,
-	kNoNVRAMPatches,
-	kRequiresOS9
+	kExtentsFileInconsistent
 };
 
 

@@ -46,7 +46,10 @@ enum {
 	kNoBootX,
 	kPast8GB,
 	kNotWriteable,
-	kNotInstaller
+	kNotInstaller,
+	kRequiresOS9,
+	kNoNVRAMPatches,
+	kNoMacOSXYet
 };
 
 
