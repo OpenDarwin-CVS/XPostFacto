@@ -127,9 +127,7 @@ OpenControlFramebuffer::start (IOService *provider)
 	
 	fGammaValid = false;
 	fCLUTValid = false;
-	
-	IOLog ("OpenControlFramebuffer: calling super::start\n");
-	
+		
 	return super::start (provider);
 }
 
@@ -146,11 +144,9 @@ OpenControlFramebuffer::free ()
 IOReturn 
 OpenControlFramebuffer::enableController (void)
 {
-	IOLog ("OpenControlFramebuffer::enableController\n");
-
 	setProperty (kIOFBGammaWidthKey, 8, 32);
     setProperty (kIOFBGammaCountKey, 256, 32);
-    setProperty (kIOFBGammaHeaderSizeKey, 0ULL, 32);
+    setProperty (kIOFBGammaHeaderSizeKey, 12, 32);
 
 	fRegisterMap = getProvider()->mapDeviceMemoryWithIndex (1);	
 	if (fRegisterMap) fRegister = (OCFRegister *) fRegisterMap->getVirtualAddress ();
@@ -181,7 +177,6 @@ OpenControlFramebuffer::enableController (void)
 		IOLog ("OpenControlFramebuffer: no display connected\n");
 		return kIOReturnError;
 	}
-	IOLog ("OpenControlFramebuffer: displayType: %lu\n", displayType);
 
 	fVRAMBank1 = true; // need to actually test
 	fVRAMBank2 = false;
@@ -190,8 +185,6 @@ OpenControlFramebuffer::enableController (void)
 	if (!fVRAMSize) return kIOReturnError;
 
 	setDisplayMode (13, 1);	// we'll want to pick a better default that this!
-
-	IOLog ("OpenControlFramebuffer: display mode: %lu depth: %lu\n", fCurrentDisplayMode, fCurrentDepth);
 
 	return kIOReturnSuccess;
 }
@@ -380,13 +373,21 @@ OpenControlFramebuffer::setAttributeForConnection (IOIndex connectIndex, IOSelec
 IOReturn 
 OpenControlFramebuffer::getAttributeForConnection (IOIndex connectIndex, IOSelect attribute, UInt32 *value)
 {
-	if (!value) return kIOReturnBadArgument;
-
 	switch (attribute) {
 		case kConnectionEnable:
+			if (!value) return kIOReturnBadArgument;
 			*value = 1;
 			break;
 			
+		case kConnectionSupportsAppleSense:
+			return kIOReturnSuccess;
+			break;
+			
+		case kConnectionFlags:
+			if (!value) return kIOReturnBadArgument;
+			*value = 0x84;
+			break;
+		
 		default:
 			return kIOReturnUnsupported;
 			break;
@@ -435,9 +436,9 @@ OpenControlFramebuffer::implementGammaAndCLUT ()
 			if (!fCLUTValid || !fGammaValid) return;
 			for (int x = 0; x < 256; x++) {
 				fColorRegister[0].reg = x; eieio ();
-				fColorRegister[3].reg = fGammaTable[fCLUTEntries[x][0]][0]; eieio ();
-				fColorRegister[3].reg = fGammaTable[fCLUTEntries[x][1]][1]; eieio ();
-				fColorRegister[3].reg = fGammaTable[fCLUTEntries[x][2]][2]; eieio ();
+				fColorRegister[3].reg = fGammaTable.red[fCLUTEntries[x].red]; eieio ();
+				fColorRegister[3].reg = fGammaTable.green[fCLUTEntries[x].green]; eieio ();
+				fColorRegister[3].reg = fGammaTable.blue[fCLUTEntries[x].blue]; eieio ();
 			}
 			break;
 			
@@ -446,9 +447,9 @@ OpenControlFramebuffer::implementGammaAndCLUT ()
 			for (int x = 0; x < 32; x++) {
 				fColorRegister[0].reg = x; eieio ();
 				unsigned offset = x * 8;
-				fColorRegister[3].reg = fGammaTable[offset][0]; eieio ();
-				fColorRegister[3].reg = fGammaTable[offset][1]; eieio ();
-				fColorRegister[3].reg = fGammaTable[offset][2]; eieio ();
+				fColorRegister[3].reg = fGammaTable.red[offset]; eieio ();
+				fColorRegister[3].reg = fGammaTable.green[offset]; eieio ();
+				fColorRegister[3].reg = fGammaTable.blue[offset]; eieio ();
 			}
 			break;
 			
@@ -456,9 +457,9 @@ OpenControlFramebuffer::implementGammaAndCLUT ()
 			if (!fGammaValid) return;
 			for (int x = 0; x < 256; x++) {
 				fColorRegister[0].reg = x; eieio ();
-				fColorRegister[3].reg = fGammaTable[x][0]; eieio ();
-				fColorRegister[3].reg = fGammaTable[x][1]; eieio ();
-				fColorRegister[3].reg = fGammaTable[x][2]; eieio ();
+				fColorRegister[3].reg = fGammaTable.red[x]; eieio ();
+				fColorRegister[3].reg = fGammaTable.green[x]; eieio ();
+				fColorRegister[3].reg = fGammaTable.blue[x]; eieio ();
 			}
 			break;
 	}
@@ -467,14 +468,22 @@ OpenControlFramebuffer::implementGammaAndCLUT ()
 IOReturn 
 OpenControlFramebuffer::setGammaTable (UInt32 channelCount, UInt32 dataCount, UInt32 dataWidth, void *data)
 {
-	if ((dataCount != 256) || (dataWidth != 8)) return kIOReturnUnsupported;
+	if ((dataCount != 256) || (dataWidth != 8)) {
+		IOLog ("OpenControlFramebuffer::setGammaTable dataCount: %lu dataWidth: %lu\n", dataCount, dataWidth);
+		return kIOReturnUnsupported;
+	};
 
 	UInt8 *gammaData = (UInt8 *) data;
+	gammaData += 12;
 	
 	if (channelCount == 3) {
-		bcopy (data, fGammaTable, 256 * 3);
+		bcopy (gammaData, &fGammaTable, 256 * 3);
 	} else if (channelCount == 1) {
-		for (int x = 0; x < 256; x++) memset (fGammaTable[x], gammaData[x], 3);
+		for (int x = 0; x < 256; x++) {
+			fGammaTable.red[x] = gammaData[x];
+			fGammaTable.green[x] = gammaData[x];
+			fGammaTable.blue[x] = gammaData[x];
+		}
 	} else {
 		return kIOReturnUnsupported;
 	}
@@ -495,9 +504,9 @@ OpenControlFramebuffer::setCLUTWithEntries (IOColorEntry *colors, UInt32 index, 
 	for (UInt32 x = 0; x < numEntries; x++) {
 		UInt32 offset = byValue ? colors[x].index : index + x;
 		if (offset > 255) continue;
-		fCLUTEntries[offset][0] = colors[x].red >> 8;
-		fCLUTEntries[offset][1] = colors[x].green >> 8;
-		fCLUTEntries[offset][2] = colors[x].blue >> 8;
+		fCLUTEntries[offset].red = colors[x].red >> 8;
+		fCLUTEntries[offset].green = colors[x].green >> 8;
+		fCLUTEntries[offset].blue = colors[x].blue >> 8;
 	}
 	
 	fCLUTValid = true;
@@ -510,6 +519,8 @@ OpenControlFramebuffer::setCLUTWithEntries (IOColorEntry *colors, UInt32 index, 
 IOReturn 
 OpenControlFramebuffer::setDisplayMode (IODisplayModeID displayMode, IOIndex depth)
 {
+	IOLog ("OpenControlFramebuffer::setDisplayMode %lu, %lu\n", displayMode, depth);
+
 	if ((displayMode == fCurrentDisplayMode) && (depth == fCurrentDepth)) return kIOReturnSuccess;
 
 	UInt32 regVal[26];	
@@ -550,9 +561,9 @@ OpenControlFramebuffer::setDisplayMode (IODisplayModeID displayMode, IOIndex dep
 		fRegister[x].reg = OSSwapHostToLittleInt32 (regVal[x]); eieio ();
 	}
 	
-	fRegister[18].reg = OSSwapHostToLittleInt32 (regVal[18]); eieio ();
-	
 	if (depth != fCurrentDepth) implementGammaAndCLUT ();
+	
+	fRegister[18].reg = OSSwapHostToLittleInt32 (regVal[18]); eieio ();
 	
 	fCurrentDisplayMode = displayMode;
 	fCurrentDepth = depth;
@@ -733,8 +744,6 @@ OpenControlFramebuffer::getAppleSense (IOIndex connectIndex, UInt32 *senseType, 
 
 	fRegister[21].reg = OSSwapHostToLittleInt32 (077); eieio ();	
 	
-	IOLog ("OpenControlFramebuffer: fAppleSensePrimary = 0x%lX; fAppleSenseExtended = 0x%lX\n", fAppleSensePrimary, fAppleSenseExtended);
-
 	if (senseType) *senseType = 0;
 	if (primary) *primary = fAppleSensePrimary;
 	if (extended) *extended = fAppleSenseExtended;

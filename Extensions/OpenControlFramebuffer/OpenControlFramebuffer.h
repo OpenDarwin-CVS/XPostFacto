@@ -44,7 +44,19 @@ struct OCFColorRegister {
 	volatile UInt8 reg;
 	UInt8 padding[15];
 };
-	
+
+struct OCFGammaTable {
+	UInt8 red[256];
+	UInt8 green[256];
+	UInt8 blue[256];
+};	
+
+struct OCFClutEntry {
+	UInt8 red;
+	UInt8 green;
+	UInt8 blue;
+};
+
 class OpenControlFramebuffer : public IOFramebuffer {
 
 	OSDeclareDefaultStructors (OpenControlFramebuffer);
@@ -122,8 +134,9 @@ private:
 	IODisplayModeID fCurrentDisplayMode;
 	IOIndex fCurrentDepth;
 	
-	UInt8 fGammaTable [256][3];
-	UInt8 fCLUTEntries [256][3];
+	OCFGammaTable fGammaTable;
+	OCFClutEntry fCLUTEntries [256];
+
 	bool fGammaValid;
 	bool fCLUTValid;
 	
