@@ -617,12 +617,14 @@ XPFApplication::install ()
 			&systemLibraryCoreServicesFolder, NULL, NULL));	
 		ThrowIfOSErr_AC (FSMakeFSRefUnicode (&cdSystemLibraryFolder,
 				sizeof (coreServicesName) / sizeof (UniChar), coreServicesName, kTextEncodingUnknown, &cdSystemLibraryCoreServicesFolder));
-		ThrowIfOSErr_AC (FSMakeFSRefUnicode (&cdSystemLibraryCoreServicesFolder, 
-			sizeof (bootXName) / sizeof (UniChar), bootXName, kTextEncodingUnknown, &cdBootX));
-
-		setCopyingFile ("BootX");
-		err = FSRefFileCopy (&cdBootX, &systemLibraryCoreServicesFolder, NULL, NULL, 0, false);
-		if (err != dupFNErr) ThrowIfOSErr_AC (err);
+		err = FSMakeFSRefUnicode (&cdSystemLibraryCoreServicesFolder, 
+			sizeof (bootXName) / sizeof (UniChar), bootXName, kTextEncodingUnknown, &cdBootX);
+		if (err != fnfErr) {
+			ThrowIfOSErr_AC (err);
+			setCopyingFile ("BootX");
+			err = FSRefFileCopy (&cdBootX, &systemLibraryCoreServicesFolder, NULL, NULL, 0, false);
+			if (err != dupFNErr) ThrowIfOSErr_AC (err);
+		}
 		
 		// Now, we need to setup the /Library/Extensions folder in tmp with our extra stuff
 
