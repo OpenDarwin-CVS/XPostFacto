@@ -288,6 +288,11 @@ XPFWindow::DoUpdate(ChangeID_AC theChange,
 		case cVolumeListChange:
 			constructVolumeList ();
 			break;
+			
+		case cFirstInputDevice:
+		case cFirstOutputDevice:
+			updateBootMessage ();
+			break;
 
 		case cSetInstallDisk:
 			fInstallMenu->SetCurrentItem (MountedVolume::GetVolumeList()->GetIdentityItemNo (fPrefs->getInstallDisk ()), true); 
