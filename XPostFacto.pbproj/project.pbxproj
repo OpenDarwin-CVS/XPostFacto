@@ -86,6 +86,467 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		947D00320617C03B0087D76A = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 947DFF930617B5230087D76A;
+			remoteInfo = OpenG3AIODisplay;
+		};
+		947D00330617C03B0087D76A = {
+			isa = PBXTargetDependency;
+			target = 947DFF930617B5230087D76A;
+			targetProxy = 947D00320617C03B0087D76A;
+		};
+		947DFBF1061763170087D76A = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		947DFBF2061763170087D76A = {
+			buildActionMask = 2147483647;
+			files = (
+				947DFC1C061765000087D76A,
+				947DFDA6061777DC0087D76A,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		947DFBF3061763170087D76A = {
+			buildActionMask = 2147483647;
+			files = (
+				947DFC1B061765000087D76A,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		947DFBF4061763170087D76A = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		947DFBF5061763170087D76A = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		947DFBF6061763170087D76A = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		947DFBF7061763170087D76A = {
+			buildPhases = (
+				947DFBF1061763170087D76A,
+				947DFBF2061763170087D76A,
+				947DFBF3061763170087D76A,
+				947DFBF4061763170087D76A,
+				947DFBF5061763170087D76A,
+				947DFBF6061763170087D76A,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "";
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+				KERNEL_MODULE = YES;
+				LIBRARY_SEARCH_PATHS = "";
+				MODULE_IOKIT = YES;
+				MODULE_NAME = com.macsales.iokit.GossamerNDRVSupport;
+				MODULE_VERSION = 1.0.0d1;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = GossamerNDRVSupport;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = kext;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = GossamerNDRVSupport;
+			productInstallPath = "$(USER_LIBRARY_DIR)/Bundles";
+			productName = GossamerNDRVSupport;
+			productReference = 947DFBF8061763170087D76A;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>GossamerNDRVSupport</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.macsales.iokit.GossamerNDRVSupport</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.0d1</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>GossamerNDRVSupport</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.macsales.iokit.GossamerNDRVSupport</string>
+			<key>IOClass</key>
+			<string>GossamerNDRVSupport</string>
+			<key>IOMatchCategory</key>
+			<string>GossamerNDRVSupport</string>
+			<key>IONameMatch</key>
+			<string>display</string>
+			<key>IOProviderClass</key>
+			<string>IOPCIDevice</string>
+		</dict>
+	</dict>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.iokit.IONDRVSupport</key>
+		<string>1.3</string>
+		<key>com.apple.kernel.iokit</key>
+		<string>1.0b1</string>
+		<key>com.apple.kernel.libkern</key>
+		<string>1.0b1</string>
+	</dict>
+	<key>OSBundleRequired</key>
+	<string>Root</string>
+	<key>OWCInstallMinBuild</key>
+	<string>7</string>
+</dict>
+</plist>
+";
+		};
+		947DFBF8061763170087D76A = {
+			explicitFileType = wrapper.cfbundle;
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = GossamerNDRVSupport.kext;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		947DFC0E061764C20087D76A = {
+			children = (
+				947DFDA5061777DC0087D76A,
+				947DFC1A061765000087D76A,
+				947DFC19061765000087D76A,
+			);
+			isa = PBXGroup;
+			name = GossamerNDRVSupport;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		947DFC19061765000087D76A = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = GossamerNDRVSupport.cpp;
+			path = GossamerNDRVSupport/GossamerNDRVSupport.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		947DFC1A061765000087D76A = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = GossamerNDRVSupport.h;
+			path = GossamerNDRVSupport/GossamerNDRVSupport.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		947DFC1B061765000087D76A = {
+			fileRef = 947DFC19061765000087D76A;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		947DFC1C061765000087D76A = {
+			fileRef = 947DFC1A061765000087D76A;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		947DFC42061766120087D76A = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 947DFBF7061763170087D76A;
+			remoteInfo = GossamerNDRVSupport;
+		};
+		947DFC43061766120087D76A = {
+			isa = PBXTargetDependency;
+			target = 947DFBF7061763170087D76A;
+			targetProxy = 947DFC42061766120087D76A;
+		};
+		947DFDA5061777DC0087D76A = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = IOPEFLibraries.h;
+			path = GossamerNDRVSupport/IOPEFLibraries.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		947DFDA6061777DC0087D76A = {
+			fileRef = 947DFDA5061777DC0087D76A;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		947DFF800617B4E90087D76A = {
+			children = (
+				947DFF860617B5080087D76A,
+				947DFF870617B5080087D76A,
+			);
+			isa = PBXGroup;
+			name = OpenG3AIODisplay;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		947DFF860617B5080087D76A = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = OpenG3AIODisplay.cpp;
+			path = OpenG3AIODisplay/OpenG3AIODisplay.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		947DFF870617B5080087D76A = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = OpenG3AIODisplay.h;
+			path = OpenG3AIODisplay/OpenG3AIODisplay.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		947DFF8D0617B5230087D76A = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		947DFF8E0617B5230087D76A = {
+			buildActionMask = 2147483647;
+			files = (
+				947DFFA10617B53D0087D76A,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		947DFF8F0617B5230087D76A = {
+			buildActionMask = 2147483647;
+			files = (
+				947DFFA70617B54A0087D76A,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		947DFF900617B5230087D76A = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		947DFF910617B5230087D76A = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		947DFF920617B5230087D76A = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		947DFF930617B5230087D76A = {
+			buildPhases = (
+				947DFF8D0617B5230087D76A,
+				947DFF8E0617B5230087D76A,
+				947DFF8F0617B5230087D76A,
+				947DFF900617B5230087D76A,
+				947DFF910617B5230087D76A,
+				947DFF920617B5230087D76A,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "";
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+				KERNEL_MODULE = YES;
+				LIBRARY_SEARCH_PATHS = "";
+				MODULE_IOKIT = YES;
+				MODULE_NAME = com.macsales.iokit.OpenG3AIODisplay;
+				MODULE_VERSION = 1.0.0d1;
+				OPTIMIZATION_CFLAGS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = OpenG3AIODisplay;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = kext;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = OpenG3AIODisplay;
+			productInstallPath = "$(USER_LIBRARY_DIR)/Bundles";
+			productName = OpenG3AIODisplay;
+			productReference = 947DFF940617B5230087D76A;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>OpenG3AIODisplay</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.macsales.iokit.OpenG3AIODisplay</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.0d1</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>OpenG3AIODisplay</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.macsales.iokit.OpenG3AIODisplay</string>
+			<key>IOClass</key>
+			<string>OpenG3AIODisplay</string>
+			<key>IODisplayParameters</key>
+			<dict>
+				<key>brightness</key>
+				<dict>
+					<key>max</key>
+					<integer>255</integer>
+					<key>min</key>
+					<integer>38</integer>
+				</dict>
+				<key>commit</key>
+				<dict>
+					<key>reg</key>
+					<integer>0</integer>
+				</dict>
+				<key>contrast</key>
+				<dict>
+					<key>max</key>
+					<integer>255</integer>
+					<key>min</key>
+					<integer>86</integer>
+				</dict>
+			</dict>
+			<key>IOMatchCategory</key>
+			<string>IODisplayParameters</string>
+			<key>IONameMatch</key>
+			<array>
+				<string>ATY,mach64_3DUPro</string>
+				<string>ATY,mach64_3DU</string>
+			</array>
+			<key>IOProbeScore</key>
+			<integer>1000</integer>
+			<key>IOProviderClass</key>
+			<string>IOPCIDevice</string>
+		</dict>
+	</dict>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.iokit.IOGraphicsFamily</key>
+		<string>1.3</string>
+		<key>com.apple.iokit.IONDRVSupport</key>
+		<string>1.3</string>
+		<key>com.apple.iokit.IOPCIFamily</key>
+		<string>1.0</string>
+	</dict>
+	<key>OSBundleRequired</key>
+	<string>Root</string>
+	<key>OWCInstallMinBuild</key>
+	<string>7</string>
+</dict>
+</plist>
+";
+		};
+		947DFF940617B5230087D76A = {
+			explicitFileType = wrapper.cfbundle;
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = OpenG3AIODisplay.kext;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		947DFFA10617B53D0087D76A = {
+			fileRef = 947DFF870617B5080087D76A;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		947DFFA70617B54A0087D76A = {
+			fileRef = 947DFF860617B5080087D76A;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		948CD0E905FBEECE003103DB = {
 			containerPortal = F53C690F01B191BA01A80001;
 			isa = PBXContainerItemProxy;
@@ -2541,7 +3002,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.GossamerDeviceTreeUpdater;
-				MODULE_VERSION = 1.0.1;
+				MODULE_VERSION = 1.0.2;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -2582,7 +3043,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.1</string>
+	<string>1.0.2</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>GossamerDeviceTreeUpdater</key>
@@ -2769,6 +3230,7 @@
 				F53C6B1901B1B4A101A80001,
 				F53C6B2701B1B4A101A80001,
 				F5887527030D66FA01A80001,
+				947DFBF7061763170087D76A,
 				94C7506A05F8EA3600A80003,
 				F5EC95B601B1F16601A80001,
 				F53F988D01E7451B01A80001,
@@ -2786,6 +3248,7 @@
 				94C954A7057CFA4D00A80003,
 				94B3FB9B05866E9F00A80003,
 				94C3604B0597CB4E00A80003,
+				947DFF930617B5230087D76A,
 			);
 		};
 		F53C691001B191BA01A80001 = {
@@ -2842,6 +3305,7 @@
 		};
 		F53C695501B1926201A80001 = {
 			children = (
+				947DFF800617B4E90087D76A,
 				94C3604D0597CD5C00A80003,
 				94CC8146054C189400A80003,
 				94CC89D20508E13B00A80003,
@@ -2862,6 +3326,7 @@
 				F53C699601B1926201A80001,
 				94C7506105F8E8ED00A80003,
 				F588751B030D66DB01A80001,
+				947DFC0E061764C20087D76A,
 				F548C0E002897DDC01A80001,
 				94B3FB9D05866EAA00A80003,
 				94F42768054315D700A80003,
@@ -3355,6 +3820,8 @@
 				94B3FB9C05866E9F00A80003,
 				94C3604C0597CB4E00A80003,
 				94C7506B05F8EA3600A80003,
+				947DFBF8061763170087D76A,
+				947DFF940617B5230087D76A,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -8094,6 +8561,8 @@
 				94C63B6D054EDDA500A80003,
 				94E46BCF05F4D7D700A80003,
 				F564382A01C2B3E601A80001,
+				947DFC43061766120087D76A,
+				947D00330617C03B0087D76A,
 			);
 			isa = PBXBundleTarget;
 			name = Package;

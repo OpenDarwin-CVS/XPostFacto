@@ -47,7 +47,7 @@ GossamerDeviceTreeUpdater::start (IOService *provider)
 	IOCreateThread (&updateDeviceTree, provider);
 	
 	// This is temporary, until I get it working
-	if (!IODTMatchNubWithKeys (provider, "'AAPL,PowerBook1998'")) disableBuiltInVideo ();
+//	if (!IODTMatchNubWithKeys (provider, "'AAPL,PowerBook1998'")) disableBuiltInVideo ();
 	
 	return true;
 }
