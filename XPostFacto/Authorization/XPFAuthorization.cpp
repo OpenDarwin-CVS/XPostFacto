@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2002
+Copyright (c) 2002, 2004
 Other World Computing
 All rights reserved
 
@@ -34,6 +34,7 @@ advised of the possibility of such damage.
 
 #include "XPFAuthorization.h"
 #include "XPFErrors.h"
+#include "XPFLog.h"
 
 #include <StdArg.h>
 
@@ -43,6 +44,10 @@ XPFSetUID::XPFSetUID (unsigned newUID, unsigned newGID) {
 	fRestoreGID = getegid ();
 	if (fRestoreUID != newUID) seteuid (newUID);
 	if (fRestoreGID != newGID) setegid (newGID);
+
+	if ((geteuid () != newUID) || (getegid () != newGID)) {
+		gLogFile << "XPFSetUID " << newUID << ":" << newGID << " -> results " << geteuid () << ":" << getegid () << endl_AC;
+	}
 #else
 	#pragma unused (newUID, newGID)
 #endif
@@ -52,6 +57,10 @@ XPFSetUID::~XPFSetUID () {
 #ifdef __MACH__
 	seteuid (fRestoreUID);
 	setegid (fRestoreGID);
+
+	if ((geteuid () != fRestoreUID) || (getegid () != fRestoreGID)) {
+		gLogFile << "XPFSetUID::~XPFSetUID " << fRestoreUID << ":" << fRestoreGID << " -> results " << geteuid () << ":" << getegid () << endl_AC;
+	}
 #endif
 }
 
