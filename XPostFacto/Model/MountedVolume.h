@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001, 2002
+Copyright (c) 2001 - 2003
 Other World Computing
 All rights reserved
 
@@ -46,41 +46,32 @@ The application needs to call the static method Initialize () before using
 the class, and whenever a volume may have been mounted or unmounted.
 
 The MountedVolume class makes internal use of the SCSIDevice and SCSIBus
-classes, but the application need not be aware of that. It can focus on
-MountedVolume.
+classes (among others), but the application need not be aware of that. 
+It can focus on MountedVolume.
 
 */
 
 #ifndef __MOUNTED_VOLUME_H__
 #define __MOUNTED_VOLUME_H__
 
-#include <SCSI.h>
-#include "MDependable_AC.h"
-#include "SCSIDevice.h"
-#include <Devices.h>
-#include <iostream.h>
+#include "XPFPartition.h"
 
 class MountedVolume;
+class XPFBootableDevice;
 
 typedef TemplateAutoList_AC <MountedVolume> MountedVolumeList;
 typedef TemplateAutoList_AC <MountedVolume>::Iterator MountedVolumeIterator;
-
-typedef pascal OSErr (*PBControlImmedProcPtr) (ParmBlkPtr paramBlock);
 
 class MountedVolume : public MDependable_AC
 {
 	public:
 	
 		static void Initialize ();
-
-#if qDebug
-		static void Print (ostream& stream);		
-		friend ostream& operator << (ostream& os, MountedVolume& volume);
-#endif
 		
 		const CStr255_AC& getOpenFirmwareName () {return fOpenFirmwareName;}
 		const CStr255_AC& getShortOpenFirmwareName () {return fShortOpenFirmwareName;}
 		const CStr255_AC& getVolumeName () {return fVolumeName;}
+		const CStr255_AC& getMacOSXVersion () {return fMacOSXVersion;}
 		unsigned int getCreationDate () {return fCreationDate;}
 		bool getIsHFSPlus () {return fIsHFSPlus;}
 		bool getHasBootX () {if (fPartInfo) return fPartInfo->getHasBootX (); else return false;}
@@ -92,38 +83,56 @@ class MountedVolume : public MDependable_AC
 		bool getIsWriteable () {return fIsWriteable;}
 		bool getValidOpenFirmwareName () {return fValidOpenFirmwareName;}
 		bool getHasOldWorldSupport () {return fHasOldWorldSupport;}
+		bool getHasStartupItemInstalled () {return fHasStartupItemInstalled;}
 		bool getHasFinder () {return fHasFinder;}
 		FSRef* getRootDirectory () {return &fRootDirectory;}
 		const UInt64* getFreeBytes () {return &fInfo.freeBytes;}
-		
-		bool getHasBeenPrepared () {return fHasBeenPrepared;}
-		void setHasBeenPrepared (bool val) {fHasBeenPrepared = val;}
-		
+				
 		void installBootXIfNecessary (bool forceInstall = false);
 		
 		short getIOVDrvInfo () {return fInfo.driveNumber;}
 		short getIOVDRefNum () {return fInfo.driverRefNum;}
+		FSVolumeInfo getVolumeInfo () {return fInfo;}
 		
 		unsigned getBootStatus ();
 		unsigned getInstallerStatus ();
 		unsigned getInstallTargetStatus ();
+		unsigned getHelperStatus ();
+		
+		MountedVolume *getHelperDisk () {return fHelperDisk;}
+		void setHelperDisk (MountedVolume *disk);
 		
 		static const MountedVolumeList* GetVolumeList () {return &gVolumeList;}
 		
 		static MountedVolume* WithCreationDate (unsigned int date);
-		static MountedVolume* WithInfoAndName (FSVolumeInfo *info, HFSUniStr255 *name);
 		static MountedVolume* WithInfo (FSVolumeInfo *info);
 		
+		static MountedVolume* GetDefaultHelperDisk ();
+		static MountedVolume* GetDefaultInstallerDisk ();
+		static MountedVolume* GetDefaultInstallTarget ();
+		static MountedVolume* GetDefaultRootDisk ();
+		
+#ifdef __MACH__
+		static MountedVolume* WithOpenFirmwarePath (char *path);
+		static MountedVolume* WithRegistryEntry (io_object_t entry);
+#endif
+
+		~MountedVolume ();
+			
 	private:
 	
 		MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *rootDirectory);
-	
+		
+		void setHFSName (HFSUniStr255 *name);
+		void setVolumeName (HFSUniStr255 *name);
+
 		FSRef fRootDirectory;
 		CStr255_AC fVolumeName;
 		HFSUniStr255 fHFSName;
 		FSVolumeInfo fInfo;
 		CStr255_AC fOpenFirmwareName;
 		CStr255_AC fShortOpenFirmwareName;
+		CStr255_AC fMacOSXVersion;
 
 		UInt32 fAllocationBlockSize;
 
@@ -131,23 +140,26 @@ class MountedVolume : public MDependable_AC
 		bool fIsWriteable;
 		bool fHasMachKernel;
 		bool fHasOldWorldSupport;
+		bool fHasStartupItemInstalled;
 		bool fIsHFSPlus;
 		bool fHasInstaller;
 		bool fValidOpenFirmwareName;
 		bool fStillThere;
-		bool fHasBeenPrepared;
 		bool fHasFinder;
 		
 		XPFBootableDevice *fBootableDevice;
 		XPFPartition *fPartInfo;
+		
+		MountedVolume *fHelperDisk;
+		
+#ifdef __MACH__
+		io_object_t fRegEntry;
+#endif
 
 		unsigned int fCreationDate;
 				
 		static MountedVolumeList gVolumeList;
 		
-		static PBControlImmedProcPtr gPBControlImmed; 
-		static OSErr callPBControlImmed (ParmBlkPtr paramBlock);
-
 };
 
 #endif

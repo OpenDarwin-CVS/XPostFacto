@@ -33,37 +33,34 @@ advised of the possibility of such damage.
 
 #include "MountedVolume.h"
 #include "MoreFilesExtras.h"
-#include "SCSIBus.h"
 #include "FastUnicodeCompare.h"
 
-#include <Devices.h>
-#include <Files.h>
-#include <HFSVolumes.h>
-#include <UnicodeConverter.h>
+#ifdef __MACH__
+	#include <sys/mount.h>
+	#include <IOKit/IOKitLib.h>
+#else
+	#include <Devices.h>
+	#include <Files.h>
+	#include <HFSVolumes.h>
+	#include <UnicodeConverter.h>
+	#include <AppleDiskPartitions.h>
+	#include <Sound.h>
+#endif
+
 #include "XPFLog.h"
 #include "HFSPlusArchive.h"
 #include "XPFErrors.h"
-#include "Sound.h"
+#include "XPFBootableDevice.h"
 
 #include <iostream.h>
 #include "XPostFacto.h"
 #include "XPFStrings.h"
+#include "OFAliases.h"
 #include <stdio.h>
 
 #include "MoreDisks.h"
 
 MountedVolumeList MountedVolume::gVolumeList;
-
-
-PBControlImmedProcPtr MountedVolume::gPBControlImmed = NULL;
-
-OSErr 
-MountedVolume::callPBControlImmed (ParmBlkPtr paramBlock)
-{
-	if (gPBControlImmed == 0) return paramErr;
-	return (*gPBControlImmed) (paramBlock);
-}
-
 
 void
 MountedVolume::Initialize ()
@@ -71,22 +68,7 @@ MountedVolume::Initialize ()
 	#if qLogging
 		gLogFile << "Initializing Mounted Volumes" << endl_AC;
 	#endif
-
-	// First, we set up the calls to ataManager
-	if (!gPBControlImmed) {
-		OSErr err;
-		CFragConnectionID connID = kInvalidID;
-
-		err = GetSharedLibrary( "\pInterfaceLib", kCompiledCFragArch,
-			kReferenceCFrag, &connID, NULL, NULL );
-
-		if ( err == noErr ) {
-			err = FindSymbol (connID, "\pPBControlImmed", (Ptr *) &gPBControlImmed, NULL);
-		} 
-
-		if ( err != noErr ) gPBControlImmed = NULL;
-	}
-
+	
 	// Initialize the devices
 	XPFBootableDevice::Initialize ();
 
@@ -103,11 +85,29 @@ MountedVolume::Initialize ()
 	
 	do {	
 		item++;
+		FSRef rootDirectory;
 		err = FSGetVolumeInfo (kFSInvalidVolumeRefNum, item, NULL, 
-				kFSVolInfoCreateDate | kFSVolInfoBlocks, &info, &volName, NULL);
+				kFSVolInfoCreateDate | kFSVolInfoBlocks | kFSVolInfoSizes | kFSVolInfoFlags | 
+				kFSVolInfoFSInfo | kFSVolInfoDriveInfo , &info, &volName, &rootDirectory);
 		if (err == noErr) {
-			MountedVolume *volume = MountedVolume::WithInfoAndName (&info, &volName);
-			if (volume) volume->fStillThere = true;
+			MountedVolume *volume = MountedVolume::WithInfo (&info);
+			if (volume) {
+				volume->fStillThere = true;
+				// catch name changes for the UI
+				volume->setHFSName (&volName);
+			} else {
+				try {
+					volume = new MountedVolume (&info, &volName, &rootDirectory);
+					gVolumeList.InsertLast (volume);
+					gApplication->Changed (cNewMountedVolume, volume);
+					volume->fStillThere = true;
+				}
+				catch (...) {
+					#if qLogging
+						gLogFile << "Error initializing MountedVolume" << endl_AC;
+					#endif
+				}			
+			}
 		}	
 	} while (err == noErr);
 
@@ -118,85 +118,23 @@ MountedVolume::Initialize ()
 		MountedVolume *current = iter.Current ();
 		if (!current->fStillThere) {
 			if (current->fBootableDevice) current->fBootableDevice->invalidate ();
+			gApplication->Changed (cDeleteMountedVolume, current);
 			gVolumeList.Delete (current);	
 			delete current;
-			gApplication->Changed (cVolumeListChange, NULL);
 		}
 	}
 	
 	XPFBootableDevice::DeleteInvalidDevices ();
-	
-	// Now we cycle through again to get the new ones. This could be simplified, but
-	// it makes other things easier if we delete the old ones first and then do the
-	// new ones.
-	
-	item = 0;
-	err = noErr;
-	
-	do {	
-		item++;
-		FSRef rootDirectory;
-		err = FSGetVolumeInfo (kFSInvalidVolumeRefNum, item, NULL, 
-				kFSVolInfoCreateDate | kFSVolInfoBlocks | kFSVolInfoSizes | kFSVolInfoFlags | 
-				kFSVolInfoFSInfo | kFSVolInfoDriveInfo, &info, &volName, &rootDirectory);
-		if (err == noErr) {
-			MountedVolume *volume = MountedVolume::WithInfoAndName (&info, &volName);
-			if (!volume) {
-				try {
-					volume = new MountedVolume (&info, &volName, &rootDirectory);
-					gVolumeList.InsertLast (volume);
-					gApplication->Changed (cVolumeListChange, NULL);
-					volume->fStillThere = true;
-				}
-				catch (...) {
-					#if qLogging
-						gLogFile << "Error initializing MountedVolume" << endl_AC;
-					#endif
-				}
-			}
-		}	
-	} while (err == noErr);
-
 			
 	#if qLogging
 		gLogFile << "Finished initializing Mounted Volumes" << endl_AC;
 	#endif
 }
 
-/************/
-
-#if qDebug
-
-void 
-MountedVolume::Print (ostream& stream)
-{
-	for (MountedVolumeIterator iter (&gVolumeList); iter.Current(); iter.Next()) {
-		stream << *(iter.Current ());		
-	}
-}	
-
-ostream& operator << (ostream& os, MountedVolume& volume)
-{
-	os << "\"";
-	os.write ((char *) &volume.fVolumeName[1], volume.fVolumeName[0]);
-	os << "\" ";
-	if (volume.getValidOpenFirmwareName ()) {
-		CStr255_AC openFirmwareName = volume.getOpenFirmwareName ();
-		os.write ((char *) openFirmwareName[1], openFirmwareName[0]);
-	} else {
-		os << " -- not SCSI" << endl;
-	}
-	return os;
-}
-
-#endif // qDebug
-
-/***************/
-
 MountedVolume*
 MountedVolume::WithCreationDate (unsigned int date)
 {
-	for (MountedVolumeIterator iter (&gVolumeList); iter.Current(); iter.Next()) {
+	for (MountedVolumeIterator iter (GetVolumeList ()); iter.Current(); iter.Next()) {
 		if (iter->fCreationDate == date) {
 			return iter.Current ();
 		}		
@@ -205,28 +143,10 @@ MountedVolume::WithCreationDate (unsigned int date)
 }
 
 MountedVolume*
-MountedVolume::WithInfoAndName (FSVolumeInfo *info, HFSUniStr255 *name)
-{
-	MountedVolume *retVal = NULL;
-	for (MountedVolumeIterator iter (&gVolumeList); iter.Current(); iter.Next()) {
-		FSVolumeInfo *compareInfo = &iter->fInfo;
-		if (	(compareInfo->createDate.lowSeconds == info->createDate.lowSeconds) && 
-				(compareInfo->blockSize == info->blockSize) &&
-				(compareInfo->totalBlocks == info->totalBlocks) &&
-				(FastUnicodeCompare (name->unicode, name->length, iter->fHFSName.unicode, iter->fHFSName.length) == 0)
-		) {
-			retVal = iter.Current ();
-			break;
-		}		
-	}	
-	return retVal;
-}
-
-MountedVolume*
 MountedVolume::WithInfo (FSVolumeInfo *info)
 {
 	MountedVolume *retVal = NULL;
-	for (MountedVolumeIterator iter (&gVolumeList); iter.Current(); iter.Next()) {
+	for (MountedVolumeIterator iter (GetVolumeList ()); iter.Current(); iter.Next()) {
 		FSVolumeInfo *compareInfo = &iter->fInfo;
 		if (	(compareInfo->createDate.lowSeconds == info->createDate.lowSeconds) && 
 				(compareInfo->blockSize == info->blockSize) &&
@@ -238,6 +158,102 @@ MountedVolume::WithInfo (FSVolumeInfo *info)
 	}	
 	return retVal;
 }
+
+MountedVolume*
+MountedVolume::GetDefaultHelperDisk ()
+{
+	MountedVolume *retVal = NULL;
+	for (MountedVolumeIterator iter (GetVolumeList ()); iter.Current(); iter.Next()) {
+		if (iter->getIsOnBootableDevice () && !iter->getRequiresBootHelper ()) {
+			if (retVal) {
+				if (iter->getFreeBytes () > retVal->getFreeBytes ()) retVal = iter.Current (); 
+			} else {
+				retVal = iter.Current ();
+			}
+		}
+	}
+	return retVal;
+}
+
+MountedVolume *
+MountedVolume::GetDefaultInstallerDisk () 
+{
+	MountedVolume *retVal = NULL;
+	for (MountedVolumeIterator iter (GetVolumeList ()); iter.Current(); iter.Next()) {
+		if (iter->getInstallerStatus () == kStatusOK) {
+			if (retVal) {
+				if (iter->getFreeBytes () > retVal->getFreeBytes ()) retVal = iter.Current (); 
+			} else {
+				retVal = iter.Current ();
+			}
+		}
+	}
+	return retVal;	
+}
+
+MountedVolume *
+MountedVolume::GetDefaultInstallTarget ()
+{
+	MountedVolume *retVal = NULL;
+	for (MountedVolumeIterator iter (GetVolumeList ()); iter.Current(); iter.Next()) {
+		if (iter->getInstallTargetStatus () == kStatusOK) {
+			if (retVal) {
+				if (iter->getFreeBytes () > retVal->getFreeBytes ()) retVal = iter.Current (); 
+			} else {
+				retVal = iter.Current ();
+			}
+		}
+	}
+	return retVal;	
+}
+
+MountedVolume *
+MountedVolume::GetDefaultRootDisk ()
+{
+	MountedVolume *retVal = NULL;
+	for (MountedVolumeIterator iter (GetVolumeList ()); iter.Current(); iter.Next()) {
+		if (iter->getBootStatus () == kStatusOK) {
+			if (retVal) {
+				if (iter->getFreeBytes () > retVal->getFreeBytes ()) retVal = iter.Current (); 
+			} else {
+				retVal = iter.Current ();
+			}
+		}
+	}
+	return retVal;	
+}
+
+#ifdef __MACH__
+
+MountedVolume*
+MountedVolume::WithRegistryEntry (io_object_t entry)
+{
+	MountedVolume *retVal = NULL;
+	for (MountedVolumeIterator iter (GetVolumeList ()); iter.Current(); iter.Next()) {
+		if (IOObjectIsEqualTo (iter->fRegEntry, entry)) {
+			retVal = iter.Current ();
+			break;
+		}		
+	}	
+	return retVal;
+}
+
+MountedVolume*
+MountedVolume::WithOpenFirmwarePath (char *path)
+{
+	MountedVolume *retVal = NULL;
+	mach_port_t iokitPort;
+	IOMasterPort (MACH_PORT_NULL, &iokitPort);
+	io_object_t entry;
+	entry = IOServiceGetMatchingService (iokitPort, IOOpenFirmwarePathMatching (iokitPort, NULL, path));
+	if (entry) {
+		retVal = MountedVolume::WithRegistryEntry (entry);
+		IOObjectRelease (entry);
+	}
+	return retVal;
+}
+
+#endif
 
 void
 MountedVolume::installBootXIfNecessary (bool forceInstall)
@@ -260,6 +276,33 @@ MountedVolume::installBootXIfNecessary (bool forceInstall)
 	}
 }
 
+MountedVolume::~MountedVolume ()
+{
+#ifdef __MACH__
+	if (fRegEntry) IOObjectRelease (fRegEntry);
+#endif
+}
+
+void
+MountedVolume::setHFSName (HFSUniStr255 *name)
+{
+	if (FastUnicodeCompare (name->unicode, name->length, fHFSName.unicode, fHFSName.length)) {
+		BlockMoveData (name, &fHFSName, sizeof (HFSUniStr255));
+		setVolumeName (&fHFSName);
+		Changed (cSetVolumeName, this);
+	}
+}
+
+void
+MountedVolume::setVolumeName (HFSUniStr255 *name)
+{
+	UnicodeToTextInfo converter;		
+	ThrowIfOSErr_AC (CreateUnicodeToTextInfoByEncoding (
+		CreateTextEncoding (kTextEncodingMacHFS, kTextEncodingDefaultVariant, kTextEncodingDefaultFormat),
+		&converter));
+	ConvertFromUnicodeToPString (converter, name->length * sizeof (UniChar), name->unicode, fVolumeName);
+	DisposeUnicodeToTextInfo (&converter);
+}
 
 MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *rootDirectory)
 {
@@ -267,31 +310,26 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	fIsOnBootableDevice = false;
 	fPartInfo = NULL;
 	fBootableDevice = NULL;
+	fHelperDisk = NULL;
 	fCreationDate = 0;
 			
 	// Copy the info
-	{
+	{				
+#ifdef __MACH__
+		// It looks like I'm not getting a useable drive number from the info
+		// So I'll try getting it from the rootDirectory instead
+		FSSpec rootDirSpec;
+		FSGetCatalogInfo (rootDirectory, kFSCatInfoNone, NULL, NULL, &rootDirSpec, NULL);
+		info->driveNumber = rootDirSpec.vRefNum;
+#endif
+ 	
 		BlockMoveData (info, &fInfo, sizeof (FSVolumeInfo));
 		BlockMoveData (name, &fHFSName, sizeof (HFSUniStr255));
 	
-		OSStatus status;
-		UnicodeToTextInfo converter;		
-		status = CreateUnicodeToTextInfoByEncoding (
-			CreateTextEncoding (kTextEncodingMacHFS, kTextEncodingDefaultVariant, kTextEncodingDefaultFormat),
-			&converter);
-		if (status == noErr) {
-			ConvertFromUnicodeToPString (converter, name->length * sizeof (UniChar), name->unicode, fVolumeName);
-			DisposeUnicodeToTextInfo (&converter);
-		} else {
-			HParamBlockRec pb;
-			Erase_AC (&pb);
-			pb.volumeParam.ioNamePtr = fVolumeName;
-			pb.volumeParam.ioVRefNum = info->driveNumber;
-			ThrowIfOSErr_AC (PBHGetVInfoSync (&pb));
-		}
+		setVolumeName (&fHFSName);
 		
 		LocalDateTime localTime;
-		status = ConvertUTCToLocalDateTime (&info->createDate, &localTime);
+		OSStatus status = ConvertUTCToLocalDateTime (&info->createDate, &localTime);
 		if (status == noErr) {
 			fCreationDate = localTime.lowSeconds;
 		} else {
@@ -320,6 +358,40 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 		if (err != noErr) err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Installation:RPMS:", &installer);
 		fHasInstaller = (err == noErr);
 	}
+	
+	// See what version of Mac OS X is installed, if any
+	{
+		CFSSpec_AC versionSpec;
+		OSErr err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Library:CoreServices:SystemVersion.plist", &versionSpec);
+		if (err == noErr) {
+			CFile_AC versionFile;
+			versionFile.Specify (versionSpec);
+			err = versionFile.OpenDataFork ();
+			long dataSize;
+			err = versionFile.GetDataLength (dataSize);
+			if (dataSize && (dataSize < 4096) && (err == noErr)) {
+				Ptr versionData = NewPtr (dataSize + 1);
+				err = versionFile.ReadData (versionData, dataSize);
+				if (err == noErr) {
+					versionData[dataSize] = 0;
+					char *key = strstr (versionData, "<key>ProductUserVisibleVersion</key>");
+					if (!key) key = strstr (versionData, "<key>ProductVersion</key>");
+					if (key) {
+						char *start = strstr (key, "<string>");
+						if (start) {
+							start += strlen ("<string>");
+							char *end = strstr (key, "</string>");
+							if (end) {
+								*end = 0;
+								fMacOSXVersion.CopyFrom (start);
+							}
+						}
+					}
+				}
+				DisposePtr (versionData);	
+			}
+		}
+	}
 		
 	// See if it's writeable
 	{
@@ -336,6 +408,9 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 		CFSSpec_AC supportSpec;
 		OSErr err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:System:Library:Extensions:PatchedAppleNVRAM.kext", &supportSpec);
 		fHasOldWorldSupport = (err == noErr);
+		
+		err = FSMakeFSSpec (info->driveNumber, fsRtDirID, "\p:Library:StartupItems:XPFStartupItem", &supportSpec);
+		fHasStartupItemInstalled = (err == noErr);
 	}
 	
 	// See if it has a Finder (i.e. whether it might be a Darwin disk)
@@ -356,8 +431,54 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	#endif
 	
 	// Now get the Device and Partition
-	fBootableDevice = XPFBootableDevice::DeviceWithInfo (info);
+	// We do this a little differently in Mac OS X
+
 	fValidOpenFirmwareName = false;
+	
+#ifdef __MACH__
+	char mountPoint[256], deviceBSDName[32], *shortBSDName;
+	OSStatus err = FSRefMakePath (&fRootDirectory, (UInt8 *) mountPoint, 255);
+	deviceBSDName[0] = 0;
+	if (err == noErr) {
+		int numFS = getfsstat (NULL, 0, MNT_NOWAIT);
+		struct statfs *fs = (struct statfs *) malloc (numFS * sizeof (struct statfs));
+		getfsstat (fs, numFS * sizeof (struct statfs), MNT_NOWAIT);
+		int x;
+		for (x = 0; x < numFS; x++) {
+			if (!strcmp (fs[x].f_mntonname, mountPoint)) {
+				strcpy (deviceBSDName, fs[x].f_mntfromname);
+				err = 0;
+				break;
+			}
+		}
+		free (fs);
+				
+		shortBSDName = deviceBSDName;
+		if (!strncmp (shortBSDName, "/dev/", 5)) shortBSDName += 5;
+		
+		mach_port_t iokitPort;
+		IOMasterPort (MACH_PORT_NULL, &iokitPort);
+		fRegEntry = IOServiceGetMatchingService (iokitPort, IOBSDNameMatching (iokitPort, NULL, shortBSDName));
+		if (fRegEntry) {
+			fBootableDevice = XPFBootableDevice::DeviceForRegEntry (fRegEntry);
+			if (fBootableDevice) {
+				fIsOnBootableDevice = true;
+				fPartInfo = fBootableDevice->partitionWithInfoAndName (info, name);
+				if (fPartInfo) {
+					fPartInfo->setMountedVolume (this);
+					
+					char alias[256], shortAlias[256];
+					OFAliases::AliasFor (fRegEntry, alias, shortAlias);
+					fOpenFirmwareName.CopyFrom (alias);
+					fShortOpenFirmwareName.CopyFrom (shortAlias);
+					
+					fValidOpenFirmwareName = (alias[0] != 0);
+				}
+			}
+		}
+	}
+#else
+	fBootableDevice = XPFBootableDevice::DeviceWithInfo (info);
 	if (fBootableDevice) {
 		fIsOnBootableDevice = true;
 		if (fBootableDevice->isFirewireDevice ()) {
@@ -382,6 +503,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 			}
 		}
 	}
+#endif
 	
 	#if qLogging
 		if (fValidOpenFirmwareName) {
@@ -400,11 +522,21 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 }
 
 bool
-MountedVolume::getRequiresBootHelper () {
+MountedVolume::getRequiresBootHelper () 
+{
 	if (fIsOnBootableDevice) {
-		return (fBootableDevice->isFirewireDevice () || !getIsWriteable ());
+		return (fBootableDevice->getNeedsHelper () || !getIsWriteable ());
 	}
 	return false;
+}
+
+unsigned
+MountedVolume::getHelperStatus ()
+{
+	unsigned installTargetStatus = getInstallTargetStatus ();
+	if (installTargetStatus != kStatusOK) return installTargetStatus;
+	if (fBootableDevice->getNeedsHelper ()) return kNeedsHelper;
+	return kStatusOK;
 }
 
 unsigned
@@ -414,9 +546,7 @@ MountedVolume::getBootStatus ()
 	if (!getHasMachKernel ()) return kNoMachKernel;
 	if (!getIsOnBootableDevice ()) return kNotBootable;
 	if (!getValidOpenFirmwareName ()) return kNoOFName;
-//	if (!getHasBootX() && !getIsWriteable ()) return kNoBootX;
 	if (!getIsWriteable() && getHasInstaller ()) return kInstallOnly;
-//	if (!getIsWriteable()) return kNotWriteable;
 
 	return kStatusOK;
 }
@@ -443,4 +573,13 @@ MountedVolume::getInstallerStatus ()
 	if (!getValidOpenFirmwareName ()) return kNoOFName;
 	
 	return kStatusOK;
+}
+
+void
+MountedVolume::setHelperDisk (MountedVolume *disk)
+{
+	if (fHelperDisk != disk) {
+		fHelperDisk = disk;
+		
+	}
 }
