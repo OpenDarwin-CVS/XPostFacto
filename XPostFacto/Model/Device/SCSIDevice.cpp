@@ -226,8 +226,19 @@ SCSIDevice::SCSIDevice (DeviceIdent scsiDevice, SInt16 driverRefNum)
 	// Now, we should really have it.
 	if (bus) {
 		fValidOpenFirmwareName = true;
-		fOpenFirmwareName.CopyFrom (bus->getOpenFirmwareName ());
-		fShortOpenFirmwareName.CopyFrom (bus->getShortOpenFirmwareName ());
+		if (bus->getIsActuallyATABus ()) {
+			if (scsiDevice.targetID < 2) {
+				fOpenFirmwareName.CopyFrom (bus->getATAOpenFirmwareName0 ());
+				fShortOpenFirmwareName.CopyFrom (bus->getATAShortOpenFirmwareName0 ());
+			} else {
+				fOpenFirmwareName.CopyFrom (bus->getATAOpenFirmwareName1 ());
+				fShortOpenFirmwareName.CopyFrom (bus->getATAShortOpenFirmwareName1 ());
+			}
+			scsiDevice.targetID %= 2;
+		} else {
+			fOpenFirmwareName.CopyFrom (bus->getOpenFirmwareName ());
+			fShortOpenFirmwareName.CopyFrom (bus->getShortOpenFirmwareName ());
+		}
 		char buffer[16];
 		snprintf (buffer, 16, "/@%d", scsiDevice.targetID); 
 		fOpenFirmwareName += buffer;
