@@ -21,6 +21,9 @@ OSDefineMetaClassAndAbstractStructors(Apple02Audio, IOAudioDevice)
 
 #define LOCALIZABLE 1
 
+// We implement IOAudioControl::setReadOnlyFlag here, so that we don't require the 10.3 headers
+#define kIOAudioControlValueIsReadOnlyKey	"IOAudioControlValueIsReadOnly"
+
 #pragma mark +UNIX LIKE FUNCTIONS
 
 bool Apple02Audio::init(OSDictionary *properties)
@@ -517,7 +520,10 @@ IOReturn Apple02Audio::createDefaultsPorts () {
 		outputSelector->setValueChangeHandler ((IOAudioControl::IntValueChangeHandler)outputControlChangeHandler, this);
 		outputSelector->addAvailableSelection (kIOAudioOutputPortSubTypeInternalSpeaker, "IntSpeakers");
 		outputSelector->addAvailableSelection (kIOAudioOutputPortSubTypeHeadphones, "Headphones");
-		outputSelector->setReadOnlyFlag ();		// 3292105
+
+		// Implement setReadOnlyFlag here, so we don't require the 10.3 headers
+		// outputSelector->setReadOnlyFlag ();		// 3292105
+		outputSelector->setProperty (kIOAudioControlValueIsReadOnlyKey, (bool) true);
 		// Don't release it because we might use it later.
 	}
 	// end [2731278]
@@ -600,7 +606,9 @@ IOReturn Apple02Audio::createDefaultsPorts () {
 
 			if (NULL != headphoneConnection) {
 				driverDMAEngine->addDefaultAudioControl (headphoneConnection);
-				headphoneConnection->setReadOnlyFlag ();		// 3292105
+				// Implement setReadOnlyFlag here, so we don't require the 10.3 headers
+				// headphoneConnection->setReadOnlyFlag ();		// 3292105
+				headphoneConnection->setProperty (kIOAudioControlValueIsReadOnlyKey, (bool) true);
 				// no value change handler because this isn't a settable control
 				// Don't release it because we might reference it later
 			}
@@ -724,7 +732,9 @@ IOReturn Apple02Audio::createDefaultsPorts () {
 	
 							if (NULL != inputConnection) {
 								driverDMAEngine->addDefaultAudioControl (inputConnection);
-								inputConnection->setReadOnlyFlag ();		// 3292105
+								// Implement setReadOnlyFlag here, so we don't require the 10.3 headers
+								// inputConnection->setReadOnlyFlag ();		// 3292105
+								inputConnection->setProperty (kIOAudioControlValueIsReadOnlyKey, (bool) true);
 								// no value change handler because this isn't a settable control
 								// Don't release it because we might reference it later
 							}
