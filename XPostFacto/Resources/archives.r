@@ -120,6 +120,9 @@ Read 'plst' (152, "OpenG3AIODisplay") ":Derived:Extensions:plist:OpenG3AIODispla
 Read 'hfsA' (153, "OpenChips65550Framebuffer") ":Derived:Extensions:OpenChips65550Framebuffer.hfs";
 Read 'plst' (153, "OpenChips65550Framebuffer") ":Derived:Extensions:plist:OpenChips65550Framebuffer.plist";
 
+Read 'hfsA' (154, "PatchedRagePro") ":Derived:Extensions:PatchedRagePro.hfs";
+Read 'plst' (154, "PatchedRagePro") ":Derived:Extensions:plist:PatchedRagePro.plist";
+
 // Startup Item
 
 Read 'hfsS' (200, "XPFStartupItem") ":Derived:StartupItems:XPFStartupItem.hfs";
