@@ -34,80 +34,78 @@ advised of the possibility of such damage.
 #ifndef __XPOSTFACTO_H__
 #define __XPOSTFACTO_H__
 
-// Constants for Menu IDs
-// ----------------------
 
-#define mAdvanced		4
-#define mOpenFirmware 	5
-#define mInputDevice 	6
-#define mOutputDevice	7
-#define mThrottle		8
-#define mDebug			9
-#define mHelper			10
+// Command Numbers
+// ---------------
 
-#define hmInputDevice  "\0x06"
-#define hmOutputDevice "\0x07"
+#define cSetVerboseMode					1402
+#define cSetSingleUserMode				1403
+#define cSetAutoBoot					1404
+#define cSetInputDevice					1405
+#define cSetOutputDevice				1406
 
+#define cSetDebugBreakpoint				1407
+#define cSetDebugPrintf					1408
+#define cSetDebugNMI					1409
+#define cSetDebugKprintf				1410
+#define cSetDebugDDB					1411
+#define cSetDebugSyslog					1412
+#define cSetDebugARP					1413
+#define cSetDebugOldGDB					1414
+#define cSetDebugPanicText				1415
 
-// Command Numbers For Menu Items
-// ------------------------------
+#define cShowHelpFile					1416
+#define cShowOnlineHelpFile				1417
+#define cShowSourceCode					1418
 
-//#define cCreateArchive			1000
-//#define cExtractArchive			1001
-#define cToggleVerboseMode		1002
-#define cToggleSingleUserMode 	1003
-#define cReinstallBootX			1004
-#define cReinstallExtensions 	1005
-#define cToggleAutoBoot			1006
-#define cSetupL2Cache			1007
-#define cSelectInputDevice 		1008
-#define cSelectOutputDevice		1009
-#define cSetInputDeviceNone		1010
-#define cSetOutputDeviceNone	1011
-#define cSetThrottleNone		1012
+#define cInstallExtensions				1419
+#define cInstallBootX					1420
+#define cInstallStartupItem				1421
 
-#define cToggleDebugBreakpoint	1013
-#define cToggleDebugPrint		1014
-#define cToggleDebugNMI			1015
-#define cToggleDebugkprintf		1016
-#define cToggleDebugUseDDB		1017
-#define cToggleDebugSystemLog	1018
-#define cToggleDebugARP			1019
-#define cToggleDebugOldGDB		1020
-#define cToggleDebugPanicText	1025
+#define cSetUseShortStrings				1422
+#define cSetUseShortStringsForInstall	1423
+#define cSetEnableCacheEarly			1424
+#define cSetThrottle					1425
 
-#define cShowHelpFile			1021
-#define cShowOnlineHelpFile		1022
-#define cShowSourceCode			1023
+#define cSetInstallCD					1426
+#define cSetTargetDisk					1427
+#define cSetHelperDisk					1428
 
-#define cInstallExtensions		1024
-#define cSetHelperDisk			1025
+#define cSetCopyMessage					1429
+#define cSetCopyInProgress				1430
 
-#define cFirstInputDevice		1100
-#define cFirstOutputDevice		1200
+#define cNewMountedVolume				1432
+#define cDeleteMountedVolume			1433
+#define cSetVolumeName					1434
 
-#define cThrottleBase			1300
-#define kNumThrottleOptions		24
+#define cShowLogWindow					1435
+#define cShowOptionsWindow				1436
 
-#define cFirstHelperDisk		1400
+#define cSetHelperDiskForTarget			1437
 
+// Views and Windows
+// -----------------
 
-// Command Numbers for identifying changes
-// (I suppose these should be real commands someday)
-// ---------------------------------
+#define kTabbedWindow				1007
+#define kGridWindow					kDefaultWindowID	// 1001
+#define kSplashWindow 				1009
+#define kOptionsWindow				1010
+#define kProgressWindow				1020
+#define kLogWindow					1100
 
-#define cSetInstallDisk			1400
-#define cSetBootDisk			1401
-#define cSetCopyMessage			1402
-#define cSetCopyInProgress		1403
-#define cVolumeListChange		1404
+// Menus
+// -----
 
-
+#define mInstall 70
+	
 // Finder Information
 // ------------------
 
-#define kSignature			'usuX'			// Application signature 
+#define kFileType		'pref'
+#define kSignature		'usuX'			// Application signature 
 
+// Text Resources
+// --------------
 
 #define kCopyrightID	1005
 #define kHelpID			1006

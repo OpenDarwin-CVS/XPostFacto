@@ -70,23 +70,10 @@ advised of the possibility of such damage.
 #define kBundleID						128
 #define kApplicationID					128
 
-// STR# resources
-// --------------
-
-#define kXPFWindowTitles			1001
-
 // Text styles
 // --------------
 
 #define kSystemTextStyle				1000
-
-// 'View' resources
-// --------------
-
-#define kXPFWindowID				kDefaultWindowID
-
-Read 'TEXT' (kCopyrightID, "Copyright") "copyright.h";
-Read 'TEXT' (kHelpID, "Help") "::XPostFacto.html";
 
 // Memory Management Resources
 // ---------------------------
@@ -122,7 +109,7 @@ Read 'TEXT' (kHelpID, "Help") "::XPostFacto.html";
 
 	#define kApplicationName	TARGET_APPLICATION_NAME
 #else
-	include kDefaultRsrcName  'CMNU' (mApple);			// Grab the default Apple menus
+//	include kDefaultRsrcName  'CMNU' (mApple);			// Grab the default Apple menus
 //	include kDefaultRsrcName  'CMNU' (mFile);			// Grab the default File menus
 //	include kDefaultRsrcName  'CMNU' (mEdit);			// Grab the default Edit menu
 //	include kDefaultRsrcName  'ALRT' (phAboutApp);		// Grab the default about box
@@ -162,33 +149,47 @@ resource 'MBAR' (kMBarDisplayed,
 #endif
 	purgeable) {
 	{ 
-		mApple; 
-		mFile; 
-		mAdvanced; 
-		mHelper;
-		mOpenFirmware; 
-		mThrottle;
-		mDebug;
+		mApple;
+		mFile;
+		mInstall;
 	}
 };
 
-resource 'MBAR' (kMBarHierarchical,
+#if qCarbon
+resource 'MBAR' (kMBarAqua, 
 #if qNames
-"kMBarHierarchical",
+"kMBarAqua", 
 #endif
-nonpurgeable) {
+purgeable)
+{
 	{
-		mInputDevice;
-		mOutputDevice;
+		mApple;
+		mInstall;
 	}
 };
-
-
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // Menus 
 //--------------------------------------------------------------------------------------------------
 
+resource 'CMNU' (mApple, 
+#if qNames
+"mApple", 
+#endif
+purgeable) {
+	mApple,
+	textMenuProc,
+	0x7FFFFFFD,
+	enabled,
+	apple,
+	{
+	"About XPostFacto…",	noIcon, noKey, noMark, plain, cAboutApp;
+	"-",					noIcon, noKey, noMark, plain, nocommand;
+	}
+};
+
+#ifndef qCarbonMach0
 resource 'CMNU' (mFile,
 #if qNames
 "mFile",
@@ -200,158 +201,32 @@ purgeable) {
 	enabled,
 	"File",
 	{
-	"Install Extensions", noIcon, noKey, noMark, plain, cInstallExtensions;
-	"-",				noIcon, noKey,	noMark, plain, nocommand;
-	"Quit",				noIcon, "Q",	noMark, plain, cQuit
+	"Quit",				noIcon, "Q",	noMark, plain, cQuit;
 	}
 };
+#endif
 
-resource 'CMNU' (mAdvanced,
+resource 'CMNU' (mInstall,
 #if qNames
-"mAdvanced",
+"mInstall",
 #endif
 purgeable) {
-	mAdvanced,
+	mInstall,
 	textMenuProc,
 	EnablingManagedByMacApp,
 	enabled,
-	"Advanced",
+	"Reinstall",
 	{
-		"Verbose Mode", noIcon, noKey, noMark, plain, cToggleVerboseMode;
-		"Single User Mode", noIcon, noKey, noMark, plain, cToggleSingleUserMode;
-		"-",				noIcon, noKey,	noMark, plain, nocommand;
-		"Reinstall BootX", noIcon, noKey, noMark, plain, cReinstallBootX;
-		"Reinstall Extensions", noIcon, noKey, noMark, plain, cReinstallExtensions;
-#if 0	// this doesn't work yet
-		"-", 				noIcon, noKey,	noMark, plain, nocommand;
-		"Setup L2 Cache", noIcon, noKey, noMark, plain, cSetupL2Cache;
-#endif
+	"BootX",		noIcon, noKey, noMark, plain, cInstallBootX;
+	"Extensions",	noIcon, noKey, noMark, plain, cInstallExtensions;
+	"Startup Item", noIcon, noKey, noMark, plain, cInstallStartupItem;
 	}
 };
-
-resource 'CMNU' (mDebug,
-#if qNames
-"mDebug",
-#endif
-purgeable) {
-	mDebug,
-	textMenuProc,
-	EnablingManagedByMacApp,
-	enabled,
-	"Debug",
-	{
-		"Early Breakpoint", noIcon, noKey, noMark, plain, cToggleDebugBreakpoint;
-		"Debug Print", noIcon, noKey, noMark, plain, cToggleDebugPrint;
-		"Enable NMI", noIcon, noKey, noMark, plain, cToggleDebugNMI;
-		"Enable kprintf", noIcon, noKey, noMark, plain, cToggleDebugkprintf;
-		"Use DDB", noIcon, noKey, noMark, plain, cToggleDebugUseDDB;
-		"Extra Diagnostics", noIcon, noKey, noMark, plain, cToggleDebugSystemLog;
-		"Debugger ARP", noIcon, noKey, noMark, plain, cToggleDebugARP;
-		"Support old GDB", noIcon, noKey, noMark, plain, cToggleDebugOldGDB;
-		"Show Panic Text", noIcon, noKey, noMark, plain, cToggleDebugPanicText;
-	}
-};
-
-resource 'CMNU' (mOpenFirmware,
-#if qNames
-"mOpenFirmware",
-#endif
-purgeable) {
-	mOpenFirmware,
-	textMenuProc,
-	EnablingManagedByMacApp,
-	enabled,
-	"Open Firmware",
-	{
-		"auto-boot?", noIcon, noKey, noMark, plain, cToggleAutoBoot;
-		"input-device", noIcon, kHierarchicalMenu, hmInputDevice, plain, cSelectInputDevice;
-		"output-device", noIcon, kHierarchicalMenu, hmOutputDevice, plain, cSelectOutputDevice;
-	}
-};
-
-resource 'CMNU' (mInputDevice,
-#if qNames
-"mInputDevice",
-#endif
-purgeable) {
-	mInputDevice,
-	textMenuProc,
-	EnablingManagedByMacApp,
-	enabled,
-	"Input Device",
-	{
-		"None", noIcon, noKey, noMark, plain, cSetInputDeviceNone;
-		"-", noIcon, noKey, noMark, plain, noCommand;
-	}
-};
-
-resource 'CMNU' (mOutputDevice,
-#if qNames
-"mOutputDevice",
-#endif
-purgeable) {
-	mOutputDevice,
-	textMenuProc,
-	EnablingManagedByMacApp,
-	enabled,
-	"Output Device",
-	{
-		"None", noIcon, noKey, noMark, plain, cSetOutputDeviceNone;
-		"-", noIcon, noKey, noMark, plain, noCommand;
-	}
-};
-
-resource 'CMNU' (mThrottle,
-#if qNames
-"mThrottle",
-#endif
-purgeable) {
-	mThrottle,
-	textMenuProc,
-	EnablingManagedByMacApp,
-	enabled,
-	"Throttle",
-	{
-		"None", noIcon, noKey, noMark, plain, cSetThrottleNone;
-		"-", noIcon, noKey, noMark, plain, noCommand;
-	}
-};
-
-resource 'CMNU' (mHelper,
-#if qNames
-"mHelper",
-#endif
-purgeable) {
-	mHelper,
-	textMenuProc,
-	EnablingManagedByMacApp,
-	enabled,
-	"Helper",
-	{
-	}
-};
-
-/*
-resource 'CMNU' (mEdit,
-#if qNames
-"mEdit",
-#endif
-purgeable) {
-	mEdit,
-	textMenuProc,
-	EnablingManagedByMacApp,
-	enabled,
-	"Edit",
-	{
-	"Reset Startup Disk", noIcon, noKey, noMark, plain, cResetStartupDisk;
-	"Reset Install Disk", noIcon, noKey, noMark, plain, cResetInstallDisk;
-	}
-};
-*/
 
 //--------------------------------------------------------------------------------------------------
 // RESOURCES FOR VIEWS, DIALOGS, ALERTS etc. 
 //--------------------------------------------------------------------------------------------------
+
 
 //--------------------------------------------------------------------------------------------------
 // Icons, Bundles and FRefs… Oh my! (don't forget the Signature)
@@ -407,7 +282,20 @@ resource 'kind' (kBundleID)
 	kSignature,
 	verUS,
 	{
-		ftApplicationName, 	"XPostFacto",
+		'apnm', 	"XPostFacto",
 	}
 };
+
+resource 'tab#' (3000, "Tab Labels", purgeable)
+{
+	versionZero
+	{{
+		0, "Boot",
+		0, "Install",
+		0, "Debug",
+		0, "Open Firmware",
+		0, "Log",
+	}}
+};
+
 
