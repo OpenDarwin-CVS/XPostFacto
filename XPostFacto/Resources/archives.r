@@ -111,6 +111,12 @@ Read 'plst' (149, "OpenControlFramebuffer") ":Derived:Extensions:plist:OpenContr
 Read 'hfsA' (150, "PatchedBlockStorageDriver") ":Derived:Extensions:PatchedBlockStorageDriver.hfs";
 Read 'plst' (150, "PatchedBlockStorageDriver") ":Derived:Extensions:plist:PatchedBlockStorageDriver.plist";
 
+Read 'hfsA' (151, "GossamerNDRVSupport") ":Derived:Extensions:GossamerNDRVSupport.hfs";
+Read 'plst' (151, "GossamerNDRVSupport") ":Derived:Extensions:plist:GossamerNDRVSupport.plist";
+
+Read 'hfsA' (152, "OpenG3AIODisplay") ":Derived:Extensions:OpenG3AIODisplay.hfs";
+Read 'plst' (152, "OpenG3AIODisplay") ":Derived:Extensions:plist:OpenG3AIODisplay.plist";
+
 // Startup Item
 
 Read 'hfsS' (200, "XPFStartupItem") ":Derived:StartupItems:XPFStartupItem.hfs";
