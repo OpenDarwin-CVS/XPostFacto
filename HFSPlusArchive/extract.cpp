@@ -29,14 +29,12 @@
     
 */  
 
-#include <CFSSpec_AC.h>
-#include <CFile_AC.h>
-#include <CFileStream_AC.h>
-
 #include "HFSPlusArchive.h"
 #include "MoreFilesExtras.h"
 
 #include <Carbon/Carbon.h>
+
+#include <fstream>
 
 int main (int argc, char **argv)
 {
@@ -47,41 +45,26 @@ int main (int argc, char **argv)
 	FSRef theSourceRef;
 	result = FSPathMakeRef ((UInt8 *) argv[1], &theSourceRef, NULL);
 	if (result) return result;
-		
-	CFSSpec_AC theSource;
-	result = FSGetCatalogInfo (&theSourceRef, kFSCatInfoNone, NULL, NULL, &theSource, NULL);
-	if (result) return result;
-	
+			
 	FSRef theTargetDirRef;
 	Boolean isDirectory;
 	result = FSPathMakeRef ((UInt8 *) argv[2], &theTargetDirRef, &isDirectory);
 	if (result) return result;
 	if (!isDirectory) return 1;
-	
-	CFSSpec_AC theTarget;
-	FSCatalogInfo catInfo;
-	result = FSGetCatalogInfo (&theTargetDirRef, kFSCatInfoNodeID, &catInfo, NULL, &theTarget, NULL);
-	if (result) return result;
-	
-	theTarget.parID = catInfo.nodeID;
-	
-	CStr63_AC theName (theSource.name);
-	unsigned char hfsPos = theName.Pos (".hfs");
-	if (hfsPos) theName.Delete (hfsPos, 4);
-	theTarget.SetName (theName);
-			
-	theTarget.FindUniqueSpec ();
-	SInt32 dir;
-	OSErr err = FSpDirCreate (&theTarget, smSystemScript, &dir);
-	if (err) return err;		
-	CFile_AC theFile (kGenericType_AC, kGenericCreator_AC, true);
-	theFile.Specify (theSource);
-	theFile.SetPermissions (fsRdPerm, fsRdPerm);
-	theFile.OpenFile ();
-	CFileStream_AC theStream (&theFile);
-	HFSPlusArchive theArchive (&theStream);
-	err = theArchive.extractArchiveTo (&theTarget);
-	if (err) return err;
+		
+	fstream theStream (argv[1], fstream::in);
 
+	try {
+		HFSPlusArchive theArchive (&theStream);
+		OSErr err = theArchive.extractArchiveTo (&theTargetDirRef);
+		if (err) {
+			fprintf (stderr, "Error %d\n", err);
+			return err;
+		}
+	}
+	catch (...) {
+		fprintf (stderr, "An unknown error occured\n");
+		return 1;
+	}
 	return 0;	
 }

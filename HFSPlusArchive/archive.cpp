@@ -70,10 +70,14 @@ int main (int argc, char **argv)
 	try {
 		HFSPlusArchive theArchive (&theStream);
 		OSErr err = theArchive.addToArchive (&theSource);
-		if (err) return err;
+		if (err) {
+			fprintf (stderr, "hfsplusarchive error: %d\n", err);
+			return err;
+		}
 		theArchive.flushWrites ();
 	}
 	catch (...) {
+		fprintf (stderr, "hfsplusarchive: unknown err\n");
 		return 1;
 	}
 	return 0;

@@ -34,6 +34,8 @@
 #include <Files.h>
 
 #ifdef __GNUC__
+#include <sys/types.h>
+#include <sys/stat.h>
 #define WRITE_BYTES write
 #define READ_BYTES read
 #define FLUSH flush
@@ -41,6 +43,7 @@
 #define WRITE_BYTES WriteBytes
 #define READ_BYTES ReadBytes
 #define FLUSH flush
+
 #endif
 
 ZStreamRep::ZStreamRep (FILE_STREAM_TYPE *stream)
@@ -64,6 +67,9 @@ ZStreamRep::~ZStreamRep ()
 			
 		case kZStreamDeflateInit:
 			deflateEnd (&fZStream);
+			break;
+
+		default:
 			break;
 	}
 }
@@ -115,7 +121,10 @@ ZStreamRep::Flush ()
 void 
 ZStreamRep::WriteBytes(const void* inPtr, long amt)
 {
+	int result;
+
 	if (amt == 0) return;
+
 	switch (fInitState) {
 		case kZStreamInflateInit:
 			throw -1;
@@ -124,16 +133,19 @@ ZStreamRep::WriteBytes(const void* inPtr, long amt)
 			fZStream.next_out = fBuffer;
 			fZStream.avail_out = sizeof (fBuffer);
 			
-			int result = deflateInit (&fZStream, Z_DEFAULT_COMPRESSION);
+			result = deflateInit (&fZStream, Z_DEFAULT_COMPRESSION);
 			if (result != Z_OK) throw result;
 			
 			fInitState = kZStreamDeflateInit;
+			break;
+
+		default:
 			break;
 	}
 
 	fZStream.next_in = (unsigned char *) inPtr;
 	fZStream.avail_in = amt;
-	int result = deflate (&fZStream, Z_NO_FLUSH);
+	result = deflate (&fZStream, Z_NO_FLUSH);
 	if (result != Z_OK) throw result;
 	if (fZStream.avail_out == 0) {
 		fStream->WRITE_BYTES (fBuffer, sizeof (fBuffer));
@@ -146,24 +158,33 @@ ZStreamRep::WriteBytes(const void* inPtr, long amt)
 void
 ZStreamRep::ReadBytes(void* inPtr, long amt)
 {
-#ifdef __GNUC__
-#pragma unused (inPtr, amt)
-	return;
-#else
 	int result;
 	if (amt == 0) return;
+
+#ifdef __GNUC__
+	struct stat streamStat;
+#endif
+	
 	switch (fInitState) {
 		case kZStreamDeflateInit:
 			throw -1;
 			
 		case kZStreamNoInit:
+#ifdef __GNUC__
+			fstat (fStream->rdbuf()->fd(), &streamStat);
+			fBytesLeft = streamStat.st_size;
+#else
 			fBytesLeft = fStream->GetSize ();
+#endif
 			fillBuffer ();
 			result = inflateInit (&fZStream);
 			if (result != Z_OK) {
 				throw result;
 			}
 			fInitState = kZStreamInflateInit;
+			break;
+
+		default:
 			break;
 	}
 	
@@ -177,7 +198,6 @@ ZStreamRep::ReadBytes(void* inPtr, long amt)
 		fillBuffer ();
 		ReadBytes (fZStream.next_out, fZStream.avail_out);
 	}
-#endif
 }
 
 
