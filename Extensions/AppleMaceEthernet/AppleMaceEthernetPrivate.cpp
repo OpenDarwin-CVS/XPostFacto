@@ -57,24 +57,6 @@ _IOGetTimestamp(ns_time_t *nsp)
 	*nsp = ((ns_time_t)now.tv_sec * NSEC_PER_SEC) + now.tv_nsec;
 }
 
-/*
- * Find a physical address (if any) for the specified virtual address.
- *
- * Note: what about vm_offset_t kvtophys(vm_offset_t va) 
- */
-static IOReturn _IOPhysicalFromVirtual(
-	vm_address_t virtualAddress,
-	unsigned *physicalAddress)
-{
-	*physicalAddress = pmap_extract(kernel_pmap, virtualAddress);
-	if(*physicalAddress == 0) {
-		return kIOReturnBadArgument;
-	}
-	else {
-		return kIOReturnSuccess;
-	}
-}
-
 // From osfmk/ppc/pmap.h
 //
 extern "C" {
@@ -119,37 +101,10 @@ static u_int8_t reverseBitOrder(u_int8_t data )
 }      
 
 /*
- * Function: IOMallocPage
- *
- * Purpose:
- *   Returns a pointer to a page-aligned memory block of size >= PAGE_SIZE
- *
- * Return:
- *   Actual pointer and size of block returned in actual_ptr and actual_size.
- *   Use these as arguments to kfree: kfree(*actual_ptr, *actual_size);
- */
-static void *
-IOMallocPage(int request_size, void ** actual_ptr, u_int * actual_size)
-{
-    void * mem_ptr;
-    
-	*actual_size = round_page(request_size) + PAGE_SIZE;
-	mem_ptr = IOMalloc(*actual_size);
-	if (mem_ptr == NULL)
-		return NULL;
-	*actual_ptr = mem_ptr;
-	return ((void *)round_page(mem_ptr));
-}
-
-/*
  * Private functions
  */
 bool MaceEnet::_allocateMemory()
 {
-    u_int32_t			i, n;
-    unsigned char *		virtAddr;
-    u_int32_t			physBase;
-    u_int32_t	 		physAddr;
 	u_int32_t			dbdmaSize;
 
     /* 
@@ -164,11 +119,8 @@ bool MaceEnet::_allocateMemory()
      * Allocate required memory
      */
 	dmaMemory.size = dbdmaSize;
-	dmaMemory.ptr = (void *)IOMallocPage(
-                                dmaMemory.size,
-                                &dmaMemory.ptrReal,
-                                &dmaMemory.sizeReal
-                                );
+	dmaMemory.ptr = (void *) IOMallocContiguous (dmaMemory.size, page_size, &dmaMemory.ptrReal);
+	dmaMemory.sizeReal = dmaMemory.size;
 
 	dmaCommands = (unsigned char *) dmaMemory.ptr;
 	if (!dmaCommands) {
@@ -176,30 +128,12 @@ bool MaceEnet::_allocateMemory()
 		return false;
 	}
 
-    /*
-     * If we needed more than one page, then make sure we received
-	 * contiguous memory.
-     */
-    n = (dbdmaSize - PAGE_SIZE) / PAGE_SIZE;
-    _IOPhysicalFromVirtual((vm_address_t) dmaCommands, &physBase );
-
-    virtAddr = (unsigned char *) dmaCommands;
-    for( i=0; i < n; i++, virtAddr += PAGE_SIZE )
-    {
-		_IOPhysicalFromVirtual( (vm_address_t) virtAddr, &physAddr );
-		if (physAddr != (physBase + i * PAGE_SIZE) )
-		{
-			IOLog("Mace: Cannot allocate contiguous memory for DBDMA "
-				"commands\n");
-			return false;
-		}
-	}           
-
     /* 
      * Setup the receive ring pointers
      */
     rxDMACommands = (enet_dma_cmd_t *)dmaCommands;
     rxMaxCommand  = RX_RING_LENGTH;
+	rxDMACommandsPhys = dmaMemory.ptrReal;
 
     /*
      * Setup the transmit ring pointers
@@ -208,6 +142,8 @@ bool MaceEnet::_allocateMemory()
 		dmaCommands + 
 		RX_RING_LENGTH * sizeof(enet_dma_cmd_t) +
 		sizeof(IODBDMADescriptor));
+		
+	txDMACommandsPhys = dmaMemory.ptrReal + RX_RING_LENGTH * sizeof(enet_dma_cmd_t) + sizeof(IODBDMADescriptor);
 
     txMaxCommand  = TX_RING_LENGTH;
 
@@ -287,7 +223,6 @@ bool MaceEnet::_allocateMemory()
 
 bool MaceEnet::_initTxRing()
 {
-    bool			kr;
     u_int32_t		i;
 
     /*
@@ -314,13 +249,6 @@ bool MaceEnet::_initTxRing()
      */
     txDMACommands[txMaxCommand].desc_seg[0] = dbdmaCmd_Branch; 
 
-    kr = _IOPhysicalFromVirtual( (vm_address_t) txDMACommands,
-		(u_int32_t *)&txDMACommandsPhys );
-    if ( kr != kIOReturnSuccess )
-    {
-		IOLog("Mace: Bad Tx DBDMA command buf - %08x\n\r",
-			(u_int32_t)txDMACommands );
-    }
     IOSetCCCmdDep( &txDMACommands[txMaxCommand].desc_seg[0],
 		txDMACommandsPhys );
 
@@ -355,21 +283,11 @@ bool MaceEnet::_initRxRing()
 {
     u_int32_t	 		i;
     bool				status;
-    IOReturn    		kr;
 
     /*
      * Clear the receive DMA command memory
      */
     bzero( (void *)rxDMACommands, sizeof(enet_dma_cmd_t) * rxMaxCommand);
-
-    kr = _IOPhysicalFromVirtual( (vm_address_t) rxDMACommands,
-		(u_int32_t *)&rxDMACommandsPhys );
-    if ( kr != kIOReturnSuccess )
-    {
-		IOLog("Mace: Bad Rx DBDMA command buf - %08x\n\r",  
-			(u_int32_t)rxDMACommands );
-		return false;
-    }
 
     /*
      * Allocate a receive buffer for each entry in the Receive ring

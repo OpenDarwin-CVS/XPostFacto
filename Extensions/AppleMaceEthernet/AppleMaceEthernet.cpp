@@ -63,7 +63,7 @@ bool MaceEnet::init(OSDictionary * properties)
 	debugClient       = false;
 	debugTxPoll       = false;
 	netifClient       = false;
-
+	
 	return true;
 }
 
@@ -171,15 +171,15 @@ bool MaceEnet::start(IOService * provider)
 	// Manually create an IODeviceMemory for the ROM memory
 	// range.
 	//
-	IODeviceMemory * romMemory = IODeviceMemory::withRange(
+	fROMMemory = IODeviceMemory::withRange(
 					(UInt) ioBaseEnetROM, 0x1000);
-	if (!romMemory) {
+	if (!fROMMemory) {
 		IOLog("Mace: can't create ROM memory object\n");
 		return false;
 	}
+	fROMMemory->prepare ();
 	
-	romMap = romMemory->map();	
-	romMemory->release();
+	romMap = fROMMemory->map();	
 
 	if (!romMap)
 		return false;
@@ -334,13 +334,18 @@ void MaceEnet::free()
     	if (txMbuf[i]) freePacket(txMbuf[i]);
 
 	if (romMap) romMap->release();
+	
+	if (fROMMemory) {
+		fROMMemory->complete ();
+		fROMMemory->release ();
+	}
 
-	for (i = 0; i < MEMORY_MAP_COUNT; i++)
+	for (i = 0; i < MEMORY_MAP_COUNT; i++) 
 		if (maps[i]) maps[i]->release();
 
 	if (dmaMemory.ptr)
 	{
-		IOFree(dmaMemory.ptrReal, dmaMemory.sizeReal);
+		IOFreeContiguous (dmaMemory.ptr, dmaMemory.size);
 		dmaMemory.ptr = 0;
 	}
 

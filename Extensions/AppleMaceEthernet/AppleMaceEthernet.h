@@ -75,12 +75,14 @@ typedef struct enet_txdma_cmd_t
 class MaceEnet : public IOEthernetController
 {
 	OSDeclareDefaultStructors(MaceEnet)
-
+	
 private:
     volatile IOPPCAddress       ioBaseEnet;
     volatile IOPPCAddress		ioBaseEnetROM;
     volatile IODBDMAChannelRegisters 	*ioBaseEnetRxDMA;	
     volatile IODBDMAChannelRegisters 	*ioBaseEnetTxDMA;
+	
+	IODeviceMemory *fROMMemory;
 
     u_int16_t				chipId;	
 
@@ -119,7 +121,7 @@ private:
 	struct {
 		void	*ptr;
 		u_int	size;
-		void	*ptrReal;
+		IOPhysicalAddress	ptrReal;
 		u_int	sizeReal;
 	} dmaMemory;
 
