@@ -131,10 +131,13 @@ int
 getPaths (char *rootDevicePath, char *bootDevicePath)
 {
 	char bootDeviceOFPath[256], rootDeviceOFPath[256];
-	CFMutableDictionaryRef properties;
-	io_registry_entry_t options;
+	CFMutableDictionaryRef properties = NULL;
+	io_registry_entry_t options = NULL;
 	mach_port_t iokitPort;
 	int err;
+	
+	bootDeviceOFPath[0] = 0;
+	rootDeviceOFPath[0] = 0;
 	
 	// Get the boot-device and boot-args
 	
@@ -146,10 +149,10 @@ getPaths (char *rootDevicePath, char *bootDevicePath)
 	if (!properties) return 2;
 	
 	CFStringRef bootDevice = CFDictionaryGetValue (properties, CFSTR ("boot-device"));
-	CFStringRef bootArgs = CFDictionaryGetValue (properties, CFSTR ("boot-args"));
+	CFStringRef rootCommand = CFDictionaryGetValue (properties, CFSTR ("boot-command"));
 	
-	CFStringGetCString (bootDevice, bootDeviceOFPath, 255, CFStringGetSystemEncoding ());
-	CFStringGetCString (bootArgs, rootDeviceOFPath, 255, CFStringGetSystemEncoding ());
+	if (bootDevice) CFStringGetCString (bootDevice, bootDeviceOFPath, 255, CFStringGetSystemEncoding ());
+	if (rootCommand) CFStringGetCString (rootCommand, rootDeviceOFPath, 255, CFStringGetSystemEncoding ());
 	
 	// The root-device is either found in the rd=* argument, or is equal to the boot-device
 	
@@ -165,8 +168,9 @@ getPaths (char *rootDevicePath, char *bootDevicePath)
 	
 	// Get the mount point that corresponds to the root-device and boot-device
 	
-	err = getMountPointForOFPath (rootDevicePath, rootDeviceOFPath); if (err) return err;
-	err = getMountPointForOFPath (bootDevicePath, bootDeviceOFPath); if (err) return err;
+	err = getMountPointForOFPath (rootDevicePath, rootDeviceOFPath); 
+	if (err == noErr) err = getMountPointForOFPath (bootDevicePath, bootDeviceOFPath); 
+	if (err) return err;
 	
 	// See if any synchronization is required. If so, construct the path to the helper files
 	// on the boot device
@@ -181,8 +185,11 @@ getPaths (char *rootDevicePath, char *bootDevicePath)
 		strcat (bootDevicePath, rootDeviceOFPath);
 	}
 	
-	CFRelease (properties);
-	IOObjectRelease (options);
+	if (properties) CFRelease (properties);
+	if (rootCommand) CFRelease (rootCommand);
+	if (bootDevice) CFRelease (bootDevice);
+	
+	if (options) IOObjectRelease (options);
 	
 	return 0;
 }
