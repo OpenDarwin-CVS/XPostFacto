@@ -143,7 +143,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.OpenPMUPCCardEject;
-				MODULE_VERSION = 1.0.0d1;
+				MODULE_VERSION = 1.0.1;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -184,7 +184,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.0d1</string>
+	<string>1.0.1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>PC Card Eject - Lower Socket</key>
@@ -230,10 +230,10 @@
 		<string>1.1.2</string>
 		<key>com.apple.iokit.IOPCIFamily</key>
 		<string>1.0b1</string>
-		<key>com.apple.kpi.iokit</key>
-		<string>7.0</string>
-		<key>com.apple.kpi.libkern</key>
-		<string>7.0</string>
+		<key>com.apple.kernel.iokit</key>
+		<string>6.9</string>
+		<key>com.apple.kernel.libkern</key>
+		<string>6.9</string>
 	</dict>
 	<key>OWCInstallMinBuild</key>
 	<string>7</string>
@@ -302,6 +302,192 @@
 		94C18CC10509155800A80003 = {
 			isa = PBXTargetDependency;
 			target = 94CC89DB0508E1BC00A80003;
+		};
+		94C360450597CB4E00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		94C360460597CB4E00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+				94C360510597CD8900A80003,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94C360470597CB4E00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+				94C360500597CD8900A80003,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94C360480597CB4E00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94C360490597CB4E00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94C3604A0597CB4E00A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		94C3604B0597CB4E00A80003 = {
+			buildPhases = (
+				94C360450597CB4E00A80003,
+				94C360460597CB4E00A80003,
+				94C360470597CB4E00A80003,
+				94C360480597CB4E00A80003,
+				94C360490597CB4E00A80003,
+				94C3604A0597CB4E00A80003,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "";
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+				KERNEL_MODULE = YES;
+				LIBRARY_SEARCH_PATHS = "";
+				MODULE_IOKIT = YES;
+				MODULE_NAME = com.macsales.iokit.OpenControlFramebuffer;
+				MODULE_VERSION = 1.0.0d1;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = OpenControlFramebuffer;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = kext;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = OpenControlFramebuffer;
+			productInstallPath = "$(USER_LIBRARY_DIR)/Bundles";
+			productName = OpenControlFramebuffer;
+			productReference = 94C3604C0597CB4E00A80003;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>OpenControlFramebuffer</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.macsales.iokit.OpenControlFramebuffer</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.0d1</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>OpenControlFramebuffer</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.macsales.iokit.OpenControlFramebuffer</string>
+			<key>IOClass</key>
+			<string>OpenControlFramebuffer</string>
+			<key>IOMatchCategory</key>
+			<string>IOFramebuffer</string>
+			<key>IONameMatch</key>
+			<string>control</string>
+			<key>IOProbeScore</key>
+			<integer>20200</integer>
+			<key>IOProviderClass</key>
+			<string>IOPCIDevice</string>
+		</dict>
+	</dict>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.iokit.IOGraphicsFamily</key>
+		<string>1.2</string>
+		<key>com.apple.iokit.IOPCIFamily</key>
+		<string>1.1</string>
+	</dict>
+	<key>OSBundleRequired</key>
+	<string>Root</string>
+</dict>
+</plist>
+";
+		};
+		94C3604C0597CB4E00A80003 = {
+			isa = PBXBundleReference;
+			path = OpenControlFramebuffer.kext;
+			refType = 3;
+		};
+		94C3604D0597CD5C00A80003 = {
+			children = (
+				94C3604E0597CD8900A80003,
+				94C3604F0597CD8900A80003,
+			);
+			isa = PBXGroup;
+			name = OpenControlFramebuffer;
+			refType = 4;
+		};
+		94C3604E0597CD8900A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = OpenControlFramebuffer.cpp;
+			path = OpenControlFramebuffer/OpenControlFramebuffer.cpp;
+			refType = 4;
+		};
+		94C3604F0597CD8900A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = OpenControlFramebuffer.h;
+			path = OpenControlFramebuffer/OpenControlFramebuffer.h;
+			refType = 4;
+		};
+		94C360500597CD8900A80003 = {
+			fileRef = 94C3604E0597CD8900A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94C360510597CD8900A80003 = {
+			fileRef = 94C3604F0597CD8900A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		94C63B6D054EDDA500A80003 = {
 			isa = PBXTargetDependency;
@@ -1993,6 +2179,7 @@
 				94FC07D3056AE12D00A80003,
 				94C954A7057CFA4D00A80003,
 				94B3FB9B05866E9F00A80003,
+				94C3604B0597CB4E00A80003,
 			);
 		};
 		F53C691001B191BA01A80001 = {
@@ -2040,6 +2227,7 @@
 		};
 		F53C695501B1926201A80001 = {
 			children = (
+				94C3604D0597CD5C00A80003,
 				94CC8146054C189400A80003,
 				94CC89D20508E13B00A80003,
 				F5FB800D03C7A0DD01A80002,
@@ -2465,6 +2653,7 @@
 				94FC07D4056AE12D00A80003,
 				94C954A8057CFA4D00A80003,
 				94B3FB9C05866E9F00A80003,
+				94C3604C0597CB4E00A80003,
 			);
 			isa = PBXGroup;
 			name = Products;
