@@ -56,6 +56,8 @@ private:
   
 public:
   virtual bool start(IOService *provider);
+
+  virtual bool passiveMatch (OSDictionary * matching, bool changesOK = false);
 };
 
 
