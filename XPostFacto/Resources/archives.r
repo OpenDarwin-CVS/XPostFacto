@@ -117,6 +117,9 @@ Read 'plst' (151, "GossamerNDRVSupport") ":Derived:Extensions:plist:GossamerNDRV
 Read 'hfsA' (152, "OpenG3AIODisplay") ":Derived:Extensions:OpenG3AIODisplay.hfs";
 Read 'plst' (152, "OpenG3AIODisplay") ":Derived:Extensions:plist:OpenG3AIODisplay.plist";
 
+Read 'hfsA' (153, "OpenChips65550Framebuffer") ":Derived:Extensions:OpenChips65550Framebuffer.hfs";
+Read 'plst' (153, "OpenChips65550Framebuffer") ":Derived:Extensions:plist:OpenChips65550Framebuffer.plist";
+
 // Startup Item
 
 Read 'hfsS' (200, "XPFStartupItem") ":Derived:StartupItems:XPFStartupItem.hfs";
