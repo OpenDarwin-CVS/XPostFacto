@@ -1,8 +1,8 @@
-<body><h2>XPostFacto 2.2b7</h2>
+<body><h2>XPostFacto 2.2b9</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-May 24, 2002<p>
+June 16, 2002<p>
 
 XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. The only difference from a supported installation is 3 extra clicks of your mouse! When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.<p>
 
@@ -11,7 +11,20 @@ XPostFacto is a free, open-source application. However, I would encourage you to
 <h3>Download Links and Version History</h3>
 
 <dl>
-<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Download/XPostFacto.img.sit">2.2b7 (April 20, 2002)</a>
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Download/XPostFacto.img.sit">2.2b9 (June 16, 2002)</a>
+<dd>
+<ul>
+<li>Permits unsupported Powerbooks to use Mac OS X 10.1.1 and later. However, sleep now crashes the system (in previous versions, sleep did not work, but at least it failed gracefully). So you will need to avoid sleep for the time being.
+<li>May now work with the Beige G3. Ordinarily, Mac OS X should just work with the Beige G3, but there are some cases in which the Beige G3 has problems that XPostFacto may be able to help with. It is untested with Beige G3s at this time, though.
+<li>Has some limited support for the 6400 and 6500. My 6500 still has problems with the SCSI bus, so booting from a CD does not work. So the 6400 and 6500 support is mostly for people who want to work on the problems, rather than the ordinary user.
+<li>A great deal of restructuring in the source code of the XPostFacto application. Some things may have been broken in the process.
+<li>A "debug" menu, for accessing certain debugging features in the Mac OS X kernel. If you do not know what the options mean, just leave them unselected.
+<li>Better error messages if you launch XPostFacto in Mac OS X or in Mac OS 8.x.
+<li>The "prepare a custom CD" feature is gone for the moment. It did not work with recent versions of the install CD. I should be able to fix this, but have not gotten around to it yet.
+<li>Source code now in the cvs repository at <a href="http://www.opendarwin.org/cgi-bin/cvsweb.cgi/proj/">http://www.opendarwin.org/</a>
+</ul>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Download/XPostFacto2.2b7.img.sit">2.2b7 (April 20, 2002)</a>
 <dd>Restores the "throttle" menu, so that you can adjust the processor throttling. Really, truly avoids persistent processor throttling when rebooting in Mac OS 9. 
 Should add support for the later 8600 and 9600 models (i.e. the 8600/250, 8600/300, 9600/300, 9600/350), but is not well tested on those machines.
 
@@ -75,20 +88,21 @@ If you are upgrading from a previous version of XPostFacto, you need to make sur
 
 <h3>Supported Hardware and Software</h3>
 
-The unsupported hardware that can work with XPostFacto is the 7300, 7500, 7600, 8500, 8600, 9500 and 9600, as well the clones that were based on one of these systems (the Umax S900 and J700, and the Power Computing PowerWave and PowerTowerPro). I'm hoping to add support for other systems over time.<p>
+The unsupported hardware that can work with XPostFacto is the 7300, 7500, 7600, 8500, 8600, 9500 and 9600, as well the clones that were based on one of these systems (the Umax S900 and J700, and the Power Computing PowerWave and PowerTowerPro). I have also had reports that the PowerCenter Pro works with recent versions of XPostFacto. I am hoping to add support for other systems over time.<p>
 
 The original 604 processor in these systems will work with Mac OS X (the 7500 requires a processor upgrade). The 9500MP and 9600MP work, but only one processor is active at this time. G3 and G4 upgrade cards work, though you will need a utility to enable the L2 cache (you can use my <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=L2CacheConfig.html">L2CacheConfig</a> software, or the PowerLogix <a href="http://www.powerlogix.com/support/betasoftware2.html">cache control</a> software).<p>
 
 Version 2.2b1 of XPostFacto adds beta-level support for the original Powerbook G3, the 3400, and the 2400. There will be several limitations initially:<p>
 
 <ul>
-<li>Sleep is not supported. (I will work on this).
-<li>While Mac OS X 10.1 will work, later versions contain an incompatible ApplePMU.kext. So if you upgrade past 10.1, you will need to replace ApplePMU.kext with the version from the Mac OS X 10.1 Install CD. Otherwise, you will get a kernel panic on restart.
-<li>There are intermittent problems in the boot process, which can usually be fixed by holding down command-r at boot time and letting the machine reboot. Sometimes it is necessary to reboot into Mac OS 9 and then try again.
+<li>Sleep is not supported. I have been working on this, but without success so far. In fact, sleep now crashes the system, so you should make sure to set your preferences to never permit system sleep.
+<li>There are intermittent problems in the boot process. Sometimes it is necessary to reboot into Mac OS 9 and then try again.
 <li>It is sometimes necessary to hold down the option key to reboot into Mac OS 9, even when Mac OS 9 is the selected startup disk.
 <li>Sound volume is not changeable.
 <li>The ethernet-only powerbook connections do not work yet (the combo ethernet-modem connections do work, at least for ethernet).
 </ul>
+
+Version 2.2b9 of XPostFacto adds some limited support for the 6400 and 6500. There are still problems with the SCSI bus on the 6500, at least, so the 6400 / 6500 support is mostly for people who want to help figure out that problems than for the ordinary user.
 
 <p>XPF requires Mac OS 9 or later. It will install Mac OS X 10, Mac OS X Server 10, and Darwin 1.3. As of version 2.0, it also installs Mac OS 10.1 (see <a href="#tenpointone">notes below</a>). It also installs Darwin 1.4.1, as well as install Mac OS X Server 10.1.<p>
 
@@ -98,7 +112,7 @@ Installing Mac OS X on the 7300 - 9600 series seems to work pretty reliably on s
 
 <dl>
 <dt><p>Video Cards
-<dd>Systems with video cards often experience problems during the boot process. I have <a href="/OSXCenter/XPostFacto/framework.cfm?page=Video.html">another page</a> with more information about this issue.<p>
+<dd>It is sometimes necessary to remove video cards to boot successfully.<p>
 
 <dt><p>PCI SCSI or IDE cards
 <dd>Some SCSI and IDE cards work with Mac OS X and some do not. In some cases, a firmware update is required. Generally, RAID software does not work with Mac OS X yet.<p>
@@ -108,9 +122,11 @@ Installing Mac OS X on the 7300 - 9600 series seems to work pretty reliably on s
 
 <dt><p>Drive Formatting Software
 <dd>Some users have reported trouble booting from volumes formatted with FWB's Hard Disk ToolKit, as well as LaCie's SilverLining. However, volumes formatted with Intech's <a href="http://www.IntechUSA.com/">Hard Disk SpeedTools</a> appear to work well (as, of course, do volumes formatted with Apple's Drive Setup). If you are using Intech's Hard Disk SpeedTools, make sure to upgrade to the latest version to fix a problem with the Mac OS X 10.1 installer.<p>
-</dl>
 
-<p>On the original Powerbook G3 (with version 2.2b1 of XPostFacto), there are some intermittent problems in the early stages of the boot process. This can generally be fixed by holding down command-r at boot time. This signals the version of BootX that is installed by XPostFacto to perform a "reset-all" command, which seems to clear the error condition. The boot process will then start over (so let go of command-r once it has restarted again). In some cases, you will need to reboot into Mac OS 9 and try again.
+<dt><p>Sleep
+<dd>Sleep support is broken on the unsupported Powerbooks, and attempting to sleep will crash the system. This is something I am working on, but with no success so far.
+
+</dl>
 
 <h3>Should I install Mac OS X?</h3>
 
@@ -118,7 +134,7 @@ I suppose only you can answer that question. The most helpful observation I can 
 
 I am often asked to characterize the performance of OS X on older machines. If you have a G3 or G4 upgrade card, my impression is that the performance of OS X is somewhat slower than the performance you would expect from supported computers with a similar processor, but it is in the same ballpark. Mac OS X 10.1 actually feels fairly useable with a 200 MHz 604e. The amount of RAM also makes a large difference.<p>
 
-With version 2.2 of XPostFacto, performance is pretty decent on the original Powerbook G3, assuming that you have at least 128 MB of RAM installed. Performance on the 3400 is very slow, unfortunately.
+With version 2.2 of XPostFacto, performance is pretty decent on the original Powerbook G3, assuming that you have at least 128 MB of RAM installed. Performance on the 3400 is very slow, unfortunately.<p>
 
 <h3>Installing Mac OS X</h3>
 
@@ -139,7 +155,13 @@ To install Mac OS X, you will need a volume that is at least 1 GB in size, and i
 
 <p>Once you have finished installing Mac OS X, the installer will reboot your system. If you are installing Mac OS X 10.1 for the first time, you will get a kernel panic at this point, because the Mac OS X 10.1 installer moves the kernel extensions which XPostFacto pre-installs. See the section on <a href="#tenpointone">installing Mac OS X 10.1</a> to solve this problem.
 
-<p>Once you have successfully rebooted, make sure to go to the "Energy Savers" panel in "System Preferences" and set your computer and hard drive to <b>never</b> sleep. There are problems with sleep mode on unsupported systems (and some supported systems, for that matter) which can cause data corruption on hard drives.<p>
+<p>Once you have successfully rebooted, make sure to go to the "Energy Savers" panel in "System Preferences" and set your computer and hard drive to <b>never</b> sleep. There are problems with sleep mode on unsupported systems (and some supported systems, for that matter) which can cause data corruption on hard drives. Furthermore, sleep will currently crash the system on the unsupported Powerbooks.<p>
+
+<h3>The "Install" and "Restart" Buttons</h3>
+
+What is the difference between the "Install" and "Restart" buttons, you may ask? The "Restart" procedure only works to boot Mac OS X from volumes that have already been prepared to work correctly with your machine. So, for instance, it will not work using an ordinary Mac OS X Install CD on an unsupported system. The "Install" procedure adds some extra tricks to make that work. And, of course, the "Restart" procedure will work once you have used XPostFacto to install Mac OS X on your machine.<p>
+
+In previous versions, XPostFacto disabled the "Restart" button for the Mac OS X Install CD. However, now XPostFacto will work with the Beige G3s, and on those systems it is possible to "Restart" from unmodified Mac OS X Install CDs. So XPostFacto no longer disables the "Restart" button for the install CD. You will still need to use the "Install" procedure on other systems (and it will do no harm on the Beige G3s either).
 
 <h3><a name="tenpointone">Installing Mac OS X 10.1</a></h3>
 
@@ -147,7 +169,7 @@ Version 2.0 of XPostFacto will install Mac OS X 10.1. To do the install, you fol
 
 <p>When you do a clean install of Mac OS X 10.1, there is a problem you will have to work around. When the Installer finishes and reboots the computer, you will get a kernel panic. The reason is that the Installer has moved the kernel extensions which XPF pre-installed for older systems.  There doesn't appear to be any way to avoid this. To fix the problem, reboot with the option key down to return to Mac OS 9, and use XPF to select the target volume to boot from. XPF will see that the kernel extensions have been moved, and re-install them. 
 
-<p>In some cases, rebooting with the option-key down won't work, because the Mac OS X installation process "de-blesses" the Mac OS 9 System Folder. In those cases, you can reboot from the Mac OS 9 CD with the "c" key held down, and take steps to "re-bless" the Mac OS 9 System Folder. The simplest method is to drag the System or Finder file to the desktop and then back into the System Folder. If that doesn't work, try creating a new folder, and dragging the entire contents of the old System Folder to the new folder. If that doesn't work, one user suggests command-option-double-clicking on the Finder file (I have not tried that yet). If nothing works, I suppose that reinstalling Mac OS 9.1 ought to do it.
+<p>In some cases, rebooting with the option-key down won't work, because the Mac OS X installation process "de-blesses" the Mac OS 9 System Folder. In those cases, you can reboot from the Mac OS 9 CD with the "c" key held down, and take steps to "re-bless" the Mac OS 9 System Folder. The simplest method is to drag the System or Finder file to the desktop and then back into the System Folder. If that doesn't work, one user suggests command-option-double-clicking on the Finder file (I have not tried that yet). Also, you could check to see whether the /System/Library/CoreServices folder has been blessed by the Mac OS X Installer. In that case, you could de-bless that folder by dragging out the fake Finder file located there (the one without the .app extension.) You should then be able to re-bless your Mac OS 9 System Folder.
 
 <h3><a name="ninepointtwo">Installing Mac OS 9.2</a></h3>
 
@@ -163,19 +185,7 @@ XPF will only startup Mac OS X. To choose a different Mac OS 9 volume, use the S
 
 <h3>Creating a Custom Install CD</h3>
 
-Creating a custom version of the Mac OS X Install CD became a little trickier with Mac OS X 10.1, but XPF version 2.1 is now able to help with that. The procedure is as follows:<p>
-
-<ul>
-<li>Use Toast (or a similar product) to create a disc image of the Mac OS X Install CD. It is important to do this in 'Disc Copy' mode, rather than 'Mac Volume' mode. Using 'Mac Volume' mode will result in a CD that does not work properly in the end.
-<li>Use Toast to mount the disc image file as a volume.
-<li>Launch XPostFacto, and select the disc image volume as the volume to boot from. XPF should notice that it is a disc image, and the 'Restart' button should change to 'Prepare'. Click on the 'Prepare' button, and XPF will do several steps which are required to modify the image to boot on older systems.
-<li>At this point, you can make any other modifications to the image volume that you need. For instance, you may need to copy extra extensions, or updated ATI drivers, or the like.
-<li>Then unmount the image volume, and use Toast to burn the image file to a CD.
-</ul>
-
-<p>Once you have the modified CD, you still need to use XPF to boot from it, because your NVRAM needs to be set up in a particular way to boot Mac OS X. However, the procedure is slightly different. You still select the CD as the volume to start from. But you can click on 'Restart', rather than 'Install'. Because the CD has been prepared to boot on an older system, you don't need the special 'Install' procedure. You just need to restart from the CD. (You could also use Apple's 'System Disk' utility to select the CD as your startup disk. Do not use 'Startup Disk' for this purpose, as it does not work on older machines).
-
-<p>The structure of the Mac OS X 10.1.3 Install CD is a little different than the 10.1 CD, and XPostFacto is not yet able to help create a custom CD from the 10.1.3 CD.
+XPostFacto used to be able to help with the creation of custom install CDs. However, recent versions of the install CD have changed in ways that make this more difficult, and I have not yet caught up. Also, I want to create a better user interface for this feature. So for the moment the feature is gone, but I do expect it to return in future versions. 
 
 <h3>Advanced Options</h3>
 
@@ -255,6 +265,10 @@ The "throttle" menu allows you to adjust the speed of your G3 or G4 upgrade card
 
 The higher the throttle setting, the slower the processor is during the early boot process. Several users have reported that a setting of 4 or higher allows them to boot on certain problematic drives, while 3 or less fails. I have set the default to 8, but would be interested in any reports if you should experiment with this.
 
+<h3>The "Debug" Menu</h3>
+
+Version 2.2b9 of XPostFacto adds a "Debug" menu that allows you to take advantage of certain debugging features present in the Mac OS X kernel. This is only useful if you know what these options mean. So if you do not understand what they are, simply leave them unselected.
+
 <h3>Existing Installations</h3>
 
 XPF copies the kernel and kernel extensions from the Mac OS X Install CD to your target volume. It puts them in the /private/tmp directory, since they are only needed for installation. This means that XPF does not interfere with any current installation of Mac OS X in cases where you do not boot from the Install CD successfully. (Of course, you can run into problems in cases where the Mac OS X Installer fails part way through the install).<p>
@@ -274,22 +288,6 @@ So XPF uses a different approach. It copies BootX to the file "BootX.image" in t
 
 Another problem can arise if the "BootX.image" file changes its physical location on the disk itself (for instance, if it is moved by a disk optimization utility). This would also make Mac OS X unbootable, but XPF will notice this problem and fix it as well.<p>
 
-<h3>Known Bugs</h3>
-		
-There are several known bugs with respect to Mac OS X 10 on older machines.<p>
-
-<ol>
-<li>Power management is not fully supported. Monitors sleep works successfully. However, if you permit the computer to go to sleep, you may find that some data has been corrupted on your hard drives when you wake.<p>
-
-<li>There is a problem reading or writing NVRAM. XPostFacto installs a kernel extension which fixes this problem (PatchedAppleNVRAM.kext).<p>
-					
-<li>There is a problem accessing audio CD's on certain SCSI CD drives. XPF installs several extensions to fix this. Which extension loads depends on whether you are installing 10.0.x or 10.1.x, and exactly which CD-ROM device you have. There are some CD drives that continue to have problems even with the patch installed.<p>
-
-<li>Many PCI video cards will cause Mac OS X to crash on unsupported machines, even if they work on supported machines. I have a <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=Video.html">separate page which discusses this issue</a>.<p>
-</ol>
-
-Also, some bugs relating to the powerbooks are noted earlier.<p> 
-
 <h3>Credits</h3>
 
 Great credit is due to the Darwin project and all those involved in it. The code in the kernel extensions installed by XPostFacto is derived from Darwin, with a few bug fixes here and there. Josh de Cesare deserves particular credit for his work on platform support. Dan Markarian and Chris Sarcone helped with the CD audio problem. I would also like to thank Markus Hitter for debugging tips (and for being a good sounding board), as well as Marc St-Jean for help with testing, and general encouragement. Finally, I would like to thank Kyle Kost and Will Schoumaker for their work on clone support.<p>
@@ -301,6 +299,8 @@ XPF makes use of the zlib compression library, for which I wish to thank Jean-lo
 Joshua Thorpe suggested the new name.<p>
 
 Michel Lanners wrote the Forth code to permit processor throttling in Open Firmware, and Matt Schechtman passed it along to me.<p>
+
+Pierre d'Herbemont has done some terrific work on 6400 support.<p>
 
 I would also like to thank Other World Computing (Larry O'Connor in particular) for their generous support.
 
@@ -327,6 +327,9 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <h3>Revision History</h3>
 
 <dl>
+<dt>June 16, 2002
+<dd>Various changes for version 2.2b9.
+
 <dt>May 24, 2002
 <dd>Added paragraph describing the option to register for the tech support forum.
 
