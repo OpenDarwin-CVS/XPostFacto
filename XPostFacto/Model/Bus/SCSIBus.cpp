@@ -97,6 +97,21 @@ SCSIBus::Initialize ()
         iterOp = kRegIterContinue;
     }
     RegistryEntryIterateDispose (&cookie);
+    
+    // Now, we look to see whether there is an internal and external built-in bus.
+    // That is, whether bus number 0 and 1 have been assigned. If not, we adjust 
+    // the other bus numbers.
+        
+    int offset = 0;
+    for (int x = 0; true; x++) {
+    	SCSIBus *bus = BusWithNumber (x);
+    	if (bus) {
+    		bus->fBusNumber -= offset;
+    	} else {
+    		offset++;
+    		if (x > 1) break;
+    	}
+    }
 }
 
 SCSIBus* 
@@ -109,8 +124,7 @@ SCSIBus::BusWithNumber (int number)
 			break;
 		}
 	}
-	// this next is for cases where there is no internal SCSI bus
-	if ((retVal == NULL) && (number == 0)) return BusWithNumber (1);
+
 	return retVal;
 }
 
