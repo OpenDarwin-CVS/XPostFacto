@@ -36,19 +36,11 @@ extern "C" {
 #define mtspr(spr, val) __mtspr(spr, val)
 #define mfspr(reg, spr) __mfspr(reg, spr)
 
-#define L2EM		0x80000000
-#define L2IM		0x00200000
-#define L2RESVM		0x000000FE
-#define L2IPM		0x00000001
-#define L2SIZM		0x30000000		// size
-
 #define L2CR		1017
 
 #define PVR			287
 #define PVR750		0x00080000		// a G3 processor
 #define PVR7400		0x000C0000		// a G4 processor
-
-#include "PerProcInfo.h"
 
 #include "PowerSurgeCPU.h"
 #include <IOKit/IODeviceTreeSupport.h>
@@ -66,10 +58,15 @@ OSDefineMetaClassAndStructors(PowerSurgeCPU, IOCPU);
 // Static variable initialization
 
 IOCPUInterruptController* PowerSurgeCPU::gCPUIC = NULL;
+#if 0   // need to fix for Panther
 unsigned char* PowerSurgeCPU::hammerHeadBase = NULL;
+#endif
 UInt32 PowerSurgeCPU::actualCPUs = 0;
 UInt32 PowerSurgeCPU::wantedCPUs = 0;
 
+#if 0
+// This needs to be fixed for Panther. And it isn't really accomplishing anything
+// anyway, since MP support isn't working.
 unsigned char 
 PowerSurgeCPU::readHammerHeadReg (unsigned long offset)
 {
@@ -84,6 +81,7 @@ PowerSurgeCPU::writeHammerHeadReg (unsigned long offset, unsigned char data)
 	hammerHeadBase[offset] = data;
 	eieio();
 }
+#endif
 
 bool 
 PowerSurgeCPU::start(IOService *provider)
@@ -105,8 +103,12 @@ PowerSurgeCPU::start(IOService *provider)
 	bootCPU = (physCPU == 0);
 	
 	if (bootCPU) {
+#if 0   // This needs to be fixed for Panther
 		hammerHeadBase = (unsigned char *) ml_io_map (0xF8000000, 0x1000);
 		actualCPUs = (readHammerHeadReg (0x0090) & 0x02) ? 2 : 1;
+#else   
+		actualCPUs = 1;
+#endif
 
 		// Limit the number of CPUs by the cpu=# boot arg.
 		wantedCPUs = actualCPUs;
@@ -208,7 +210,7 @@ const OSSymbol*
 PowerSurgeCPU::getCPUName(void)
 {
 	char tmpStr[32];
-	sprintf(tmpStr, "Primary%d", getCPUNumber());
+	sprintf(tmpStr, "Primary%ld", getCPUNumber());
 	return OSSymbol::withCString(tmpStr);
 }
   
@@ -243,81 +245,5 @@ PowerSurgeCPU::setupL2Cache ()
 		
 	unsigned oldValue;
 	mfspr (oldValue, L2CR);
-	if (oldValue & L2EM) return oldValue; // already enabled
-
-	unsigned int newValue;
-	int foundArg;
-	foundArg = PE_parse_boot_arg ("L2CR", &newValue);
-	if (foundArg) {
-		if (!(newValue & L2EM)) return oldValue;
-		
-		newValue &= ~L2RESVM;
-		IOLog ("Setting L2CR to: 0x%X\n", newValue);
-						
-		unsigned temp = newValue & ~L2EM;
-		mtspr (L2CR, temp);
-		__asm__ ("sync");
-		
-		temp |= L2IM;	// we disable, and we invalidate
-		mtspr (L2CR, temp);
-		__asm__ ("sync");
-		
-		volatile unsigned checkL2CR;
-		unsigned x = 0;
-		do {		// we check to see when invalidation is finished
-			x++;
-			mfspr (checkL2CR, L2CR);
-			__asm__ ("sync");
-		} while (checkL2CR & L2IPM);
-		
-		__asm__ ("isync");
-		if (x == 1) {
-			IOLog ("Error setting L2CR: L2CR never invalidated\n");
-			setProperty ("Error", "L2CR invalidation error");
-			return 0;
-		}
-		
-		mtspr (L2CR, newValue); // now set the new value
-		__asm__ ("sync");
-		
-		setProperty ("L2CR", newValue, 32);
-		
-		// we tell per_proc_info that we have an L2 cache
-		per_proc_info[0].pf.Available |= pfL2;
-		
-		// We set the L2CR shadowed by per_proc_info
-		per_proc_info[0].pf.l2cr = newValue;
-		
-		// We need to tell per_proc_into how big the cache is, which we can figure
-		// out by looking at the L2CR. 					
-		// We mask out everything but the two bits we want, and
-		// then we shift everything 28 bits to the right
-		unsigned l2Size = (newValue & L2SIZM) >> 28;
-		
-		// 01 means 256K, 10 means 512K, 11 means 1024K, and 00 means 2048
-		// so we test for 3, and make it 4. Test for 0 and make it 8.
-		// Then we have straight multiplication
-		switch (l2Size) {
-			case 3:
-				l2Size = 4;
-				break;
-			case 0:
-				l2Size = 8;
-				break;
-		}
-		
-		per_proc_info[0].pf.l2Size = l2Size * 256 * 1024;
-		
-		// Now, check if we are a G4. If so, set the flush assist available, in
-		// case it helps.
-		if (pvr == PVR7400) per_proc_info[0].pf.Available |= (pfL1fa | pfL2fa);
-		
-		return newValue; 
-	} else { 
-	
-		// we didn't find one
-		return oldValue;
-	}
-	
-	return 0;
+	return oldValue; // already enabled
 }

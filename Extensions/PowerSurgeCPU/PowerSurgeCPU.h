@@ -34,12 +34,16 @@ private:
 
 	static UInt32 actualCPUs;
 	static UInt32 wantedCPUs;
+#if 0	// needs to be fixed for Panther
 	static unsigned char *hammerHeadBase;
+#endif
 	static IOCPUInterruptController *gCPUIC;
 	
+#if 0 // needs to be fixed for Panther
 	static unsigned char readHammerHeadReg (unsigned long offset);
 	static void writeHammerHeadReg (unsigned long offset, unsigned char data);
-	
+#endif
+
 	virtual void ipiHandler (void *refCon, void *nub, int source);
 
 	virtual unsigned setupL2Cache ();
