@@ -1,22 +1,33 @@
 /*
 
- Portions Copyright (c) 1999-2001 Apple Computer, Inc. All Rights Reserved.
+ Copyright (c) 2004
+ Other World Computing
+ All rights reserved.
 
- This file contains Original Code and/or Modifications of Original Code
- as defined in and that are subject to the Apple Public Source License
- Version 1.2 (the 'License'). You may not use this file except in compliance
- with the License. Please obtain a copy of the License at
- http://www.apple.com/publicsource and read it before using this file.
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
 
- The Original Code and all software distributed under the License are
- distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
- EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
- INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY, FITNESS
- FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT. Please see
- the License for the specific language governing rights and limitations
- under the License.
+ 1. Redistributions of source code must retain the above copyright
+ notice, this list of conditions and the following disclaimer as
+ the first lines of this file unmodified.
 
- */
+ 2. Redistributions in binary form must reproduce the above copyright
+ notice, this list of conditions and the following disclaimer in the
+ documentation and/or other materials provided with the distribution.
+
+ This software is provided by Other World Computing ``as is'' and any express or
+ implied warranties, including, but not limited to, the implied warranties
+ of merchantability and fitness for a particular purpose are disclaimed.
+ In no event shall Other World Computing or Ryan Rempel be liable for any direct, indirect,
+ incidental, special, exemplary, or consequential damages (including, but
+ not limited to, procurement of substitute goods or services; loss of use,
+ data, or profits; or business interruption) however caused and on any
+ theory of liability, whether in contract, strict liability, or tort
+ (including negligence or otherwise) arising in any way out of the use of
+ this software, even if advised of the possibility of such damage.
+ 
+*/
 
 #ifndef __OPENCONTROLFRAMEBUFFER_H__
 #define __OPENCONTROLFRAMEBUFFER_H__
@@ -24,47 +35,105 @@
 #include <IOKit/graphics/IOFramebuffer.h>
 #include <IOKit/IOPlatformExpert.h>
 
-class OpenControlFramebuffer : public IOFramebuffer
-{
+struct OCFRegister {
+	volatile UInt32 reg;
+	UInt32 padding[3];
+};
+
+struct OCFColorRegister {
+	volatile UInt8 reg;
+	UInt8 padding[15];
+};
+	
+class OpenControlFramebuffer : public IOFramebuffer {
 
 	OSDeclareDefaultStructors (OpenControlFramebuffer);
 
 public:
 
-    virtual IOService * probe(	IOService * 	provider,
-				SInt32 *	score );
+	virtual bool start (IOService *provider);
+	virtual void free ();
+    virtual IOReturn enableController (void);
 
-//    virtual bool start( IOService * provider );
+    virtual IOReturn setAttribute (IOSelect attribute, UInt32 value);
+    virtual IOReturn getAttribute (IOSelect attribute, UInt32 *value);
+    virtual IOReturn setAttributeForConnection (IOIndex connectIndex, IOSelect attribute, UInt32 value);
+    virtual IOReturn getAttributeForConnection (IOIndex connectIndex, IOSelect attribute, UInt32 *value);
 
-    virtual const char * getPixelFormats( void );
+    virtual const char* getPixelFormats (void);
 
-    virtual IOItemCount getDisplayModeCount( void );
+    virtual IOItemCount getDisplayModeCount (void);
 
-    virtual IOReturn getDisplayModes( IODisplayModeID * allDisplayModes );
+    virtual IOReturn getDisplayModes (IODisplayModeID *allDisplayModes);
 
-    virtual IOReturn getInformationForDisplayMode( IODisplayModeID displayMode,
-                    IODisplayModeInformation * info );
+    virtual IOReturn getInformationForDisplayMode (IODisplayModeID displayMode, IODisplayModeInformation *info);
 
-    virtual UInt64  getPixelFormatsForDisplayMode( IODisplayModeID displayMode,
-                    IOIndex depth );
+    virtual UInt64 getPixelFormatsForDisplayMode (IODisplayModeID displayMode, IOIndex depth);
 
-    virtual IOReturn getPixelInformation (
-	IODisplayModeID displayMode, IOIndex depth,
-	IOPixelAperture aperture, IOPixelInformation * pixelInfo );
+    virtual IOReturn getTimingInfoForDisplayMode(
+		IODisplayModeID displayMode, IOTimingInformation * info );
 
-    virtual IOReturn getCurrentDisplayMode( IODisplayModeID * displayMode,
-                            IOIndex * depth );
+    virtual IOReturn getPixelInformation (	
+		IODisplayModeID displayMode, 
+		IOIndex depth,
+		IOPixelAperture aperture, 
+		IOPixelInformation * pixelInfo);
+
+    virtual IOReturn getCurrentDisplayMode (IODisplayModeID *displayMode, IOIndex *depth);
 
     virtual IODeviceMemory * getApertureRange( IOPixelAperture aperture );
+    virtual IODeviceMemory * getVRAMRange( void );
 
-    virtual bool isConsoleDevice( void );
+    virtual bool isConsoleDevice (void);
 
-    virtual IOReturn setCLUTWithEntries( IOColorEntry * colors, UInt32 index,
-                UInt32 numEntries, IOOptionBits options );
+    virtual IOReturn setCLUTWithEntries (IOColorEntry *colors, UInt32 index, UInt32 numEntries, IOOptionBits options);
 
-    virtual IOReturn setGammaTable( UInt32 channelCount, UInt32 dataCount,
-                    UInt32 dataWidth, void * data );
+    virtual IOReturn setGammaTable (UInt32 channelCount, UInt32 dataCount,
+                    UInt32 dataWidth, void *data);
 	
+    virtual IOReturn setDisplayMode( IODisplayModeID displayMode,
+                            IOIndex depth );
+
+	virtual IOReturn getAppleSense (IOIndex connectIndex, UInt32 *senseType, UInt32 *primary, UInt32 *extended, UInt32 *displayType);
+				
+	virtual IOReturn connectFlags (IOIndex connectIndex, IODisplayModeID displayMode, IOOptionBits *flags);
+	
+	virtual bool hasDDCConnect (IOIndex connectIndex);
+	
+private:
+
+	void implementGammaAndCLUT ();
+
+	void interpretAppleSense (IODisplayModeID displayMode, IOOptionBits *flags, UInt32 *displayType);
+	void interpretAppleSensePrimary (IODisplayModeID displayMode, IOOptionBits *flags, UInt32 *displayType);
+	void interpretAppleSenseExtended (IODisplayModeID displayMode, IOOptionBits *flags, UInt32 *displayType);
+
+	UInt32 getApertureSize (IODisplayModeID displayMode, IOIndex depth);
+																	
+private:
+
+	IOMemoryMap *fRegisterMap;	
+	OCFRegister *fRegister;
+	
+	IODeviceMemory *fColorDeviceMemory;
+	IOMemoryMap *fColorMap;
+	OCFColorRegister *fColorRegister;
+	
+	IODisplayModeID fCurrentDisplayMode;
+	IOIndex fCurrentDepth;
+	
+	UInt8 fGammaTable [256][3];
+	UInt8 fCLUTEntries [256][3];
+	bool fGammaValid;
+	bool fCLUTValid;
+	
+	bool fVRAMBank1;
+	bool fVRAMBank2;
+	UInt32 fVRAMSize;
+	
+	UInt32 fAppleSensePrimary;
+	UInt32 fAppleSenseExtended;
+
 };
 
 #endif
