@@ -448,9 +448,11 @@ HFSPlusArchive::extractArchiveTo (const FSRef *ref, bool contiguousAlloc)
 	catch (int error) {
 		fErr = error;
 	}
+#ifdef qMacApp	
 	catch (CException_AC &ex) {
 		fErr = ex.GetError ();
 	}
+#endif
 	catch (...) {
 		fErr = -27;
 	}
