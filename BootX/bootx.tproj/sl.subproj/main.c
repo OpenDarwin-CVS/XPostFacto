@@ -696,7 +696,7 @@ static long GetBootPaths(void)
 		pos = strstr (ofBootArgs, "rd=*");
 		if (pos) {
 			pos += 4;
-			while (pos == '/') pos++;
+			while (*pos == '/') pos++;
 			end = pos;
 			while ((*end != 0) && (*end != ' ')) {
 				if (*end == '/') *end = '\\';
