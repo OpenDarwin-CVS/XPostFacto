@@ -93,6 +93,28 @@ void statBootFile (XPFBootFile *bootFile);
 void checkForChangesBetween (XPFBootFile *bf1, XPFBootFile *bf2);
 
 void exitWithError (OSStatus err, int code);
+void turnOffSleepIfUnsupported ();
+
+void
+turnOffSleepIfUnsupported ()
+{
+	mach_port_t iokitPort;
+	IOMasterPort (MACH_PORT_NULL, &iokitPort);
+	io_service_t platformDevice = IOServiceGetMatchingService (iokitPort, IOServiceMatching ("IOPlatformExpertDevice"));
+	if (platformDevice) {
+		io_iterator_t iterator;
+		IORegistryEntryGetChildIterator (platformDevice, kIOServicePlane, &iterator);
+		if (iterator) {
+			io_object_t child;
+			while ((child = IOIteratorNext (iterator))) {
+				if (IOObjectConformsTo (child, "ApplePowerSurgePE") || IOObjectConformsTo (child, "ApplePowerStarPE")) system ("/usr/bin/pmset sleep 0");
+				IOObjectRelease (child);
+			}
+			IOObjectRelease (iterator);
+		}
+		IOObjectRelease (platformDevice);
+	}
+}
 
 void 
 exitWithError (OSStatus err, int code)
@@ -260,6 +282,8 @@ pollForChanges ()
 int
 main (int argc, char **argv)
 {	
+	turnOffSleepIfUnsupported ();
+
 	daemon (0, 0);
 	writePID ();
 	atexit (deletePID);
