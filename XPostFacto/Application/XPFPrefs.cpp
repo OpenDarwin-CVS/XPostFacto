@@ -45,10 +45,14 @@ advised of the possibility of such damage.
 #include "XPFSynchronizeCommand.h"
 #include "XPFAuthorization.h"
 #include "XPFErrors.h"
+#include "HFSPlusArchive.h"
 
 #include <string.h>
 
-#ifndef __MACH__
+#ifdef __MACH__
+	#include <sys/types.h>
+	#include <sys/wait.h>
+#else
 	#include <PCI.h>
 #endif
 
@@ -133,8 +137,10 @@ XPFPrefs::Close ()
 		ErrorAlert (ex.GetError (), ex.GetExceptionMessage ());
 	}
 		
+#ifdef __MACH__
 	restartStartupItem ();
-	
+#endif
+
 	if (!gApplication->GetDone ()) gApplication->DoMenuCommand (cQuit);
 }
 
@@ -291,10 +297,43 @@ XPFPrefs::getPrefsFromNVRAM ()
 	setThrottle (throttleVal >> 1);  // accounts for the on/off bit at the end
 }
 
+void 
+XPFPrefs::installXPFPartitionInfo ()
+{
+#ifdef __MACH__
+	FSRef tmpDirectory;
+	OSErr err = FSFindFolder (kOnAppropriateDisk, kTemporaryFolderType, true, &tmpDirectory);
+	if (err == noErr) {
+		CResourceStream_AC stream ('hfsB', 300);
+		HFSPlusArchive archive (&stream, NULL, this);
+		XPFSetUID myUID (0);
+		ThrowIfOSErr_AC (archive.extractArchiveTo (&tmpDirectory));
+		
+		char path[256];
+		err = FSRefMakePath (&tmpDirectory, (UInt8 *) path, 256);
+		if (err == noErr) {
+			strcat (path, "/XPFPartitionInfo.kext");
+			pid_t pid = fork ();
+			if (pid) {
+				if (pid != -1) {
+					int status;
+					waitpid (pid, &status, 0);
+				}
+			} else {
+				execl ("/sbin/kextload", "kextload", path, NULL);
+				ThrowException_AC (kInternalError, 0);	// the execl shouldn't return
+			}
+		}
+	}
+#endif
+}
+
 void
 XPFPrefs::DoInitialState ()
 {
 	Inherited::DoInitialState ();
+	
+	installXPFPartitionInfo ();
 
 	MountedVolume::Initialize ();
 	
@@ -532,10 +571,7 @@ XPFPrefs::DoSetupMenus ()
 {
 	Inherited::DoSetupMenus ();
 	
-#ifndef __MACH__
-	// not working yet in Mac OS X
 	Enable (cInstallBootX, true);
-#endif
 	Enable (cInstallExtensions, true);
 	Enable (cInstallStartupItem, true);
 	Enable (cShowOptionsWindow, true);

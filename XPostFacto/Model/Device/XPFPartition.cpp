@@ -158,10 +158,48 @@ XPFPartition::writePartition ()
 	#endif
 	
 	#if __MACH__
-		ThrowException_AC (kWritePartitionOSX, 0);
-	#endif
+		bool success = false;
 		
-	ThrowIfOSErr_AC (fSCSIDevice->writeBlocks (fPartitionNumber, 1, (UInt8 *) &fPartition));
+		if (!fMountedVolume) return;
+
+		io_object_t partInfo = fMountedVolume->getPartitionInfo ();
+		if (partInfo) {		
+			CFTypeRef keys[6] = {
+				CFSTR ("Processor Type"), 
+				CFSTR ("Boot Block"), 
+				CFSTR ("Boot Bytes"), 
+				CFSTR ("Boot Address"), 
+				CFSTR ("Boot Entry"), 
+				CFSTR ("Boot Checksum")
+			};
+			
+			CFTypeRef values[6] = {
+				CFStringCreateWithCString (NULL, (char *) fPartition.pmProcessor, kCFStringEncodingASCII),
+				CFNumberCreate (NULL, kCFNumberLongType, &fPartition.pmLgBootStart),
+				CFNumberCreate (NULL, kCFNumberLongType, &fPartition.pmBootSize),
+				CFNumberCreate (NULL, kCFNumberLongType, &fPartition.pmBootAddr),
+				CFNumberCreate (NULL, kCFNumberLongType, &fPartition.pmBootEntry),
+				CFNumberCreate (NULL, kCFNumberLongType, &fPartition.pmBootCksum)
+			};
+ 						
+			CFDictionaryRef props = CFDictionaryCreate (NULL, keys, values, 6, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+			if (props) {
+				kern_return_t kr = IORegistryEntrySetCFProperties (partInfo, props);
+				if (kr == KERN_SUCCESS) success = true;
+				CFRelease (props);
+			}
+			
+			for (int x = 0; x < 6; x++) CFRelease (values[x]);
+			IOObjectRelease (partInfo); 
+		}
+		
+		if (!success) ThrowException_AC (kWritePartitionOSX, 0);
+		
+	#else		
+
+		ThrowIfOSErr_AC (fSCSIDevice->writeBlocks (fPartitionNumber, 1, (UInt8 *) &fPartition));
+
+	#endif
 }
 
 void

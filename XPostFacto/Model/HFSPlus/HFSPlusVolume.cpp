@@ -45,6 +45,11 @@ advised of the possibility of such damage.
 #include "XPFAuthorization.h"
 #include "XPFApplication.h"
 
+#ifdef __MACH__
+	#include <unistd.h>
+	#include <sys/attr.h> 
+#endif
+
 HFSPlusVolume::HFSPlusVolume (XPFPartition *thePartition, unsigned long offsetToData)
 {
 	fBootXInstallationComplete = false;
@@ -106,6 +111,38 @@ HFSPlusVolume::readAllocationBlocks (unsigned int start, unsigned int count, voi
 unsigned long 
 HFSPlusVolume::getBootXStartBlock ()
 {
+#ifdef __MACH__
+	struct {
+  	  	u_int32_t length;
+ 	   	HFSPlusExtentRecord extents;
+	} attrBuffer;
+	
+	attrlist params;
+	
+	char path[256];
+	MountedVolume *vol = getMountedVolume ();
+	if (!vol) return 0;
+	FSRefMakePath (vol->getRootDirectory (), (UInt8 *) path, 255);
+	if (path[strlen (path) - 1] != '/') strcat (path, "/");
+	strcat (path, "BootX.image");
+
+	params.bitmapcount = 5;
+    params.reserved = 0;
+    params.commonattr = 0;
+    params.volattr =  0;
+    params.dirattr = 0;
+    params.fileattr = ATTR_FILE_DATAEXTENTS;
+    params.forkattr = 0;
+    
+    XPFSetUID (0);
+    int err = getattrlist (path, &params, &attrBuffer, sizeof (attrBuffer), 1); 
+    if (err) return 0;
+	if (attrBuffer.extents[1].blockCount == 0) {
+		return fOffsetIntoPartition + attrBuffer.extents[0].startBlock * (fHeader->blockSize / 512);
+	} else {
+		return 0;
+	}
+#else
 	HFSPlusCatalog catalog (this);
 	HFSUniStr255 bootXName = {11, {'B', 'o', 'o', 't', 'X', '.', 'i', 'm', 'a', 'g', 'e'}};
 	HFSPlusCatalogFile file; 
@@ -129,13 +166,14 @@ HFSPlusVolume::getBootXStartBlock ()
 	} else {
 		return 0;
 	}
+#endif
 }
 
 void
 HFSPlusVolume::installBootX ()
 {
 	if (((XPFApplication *) gApplication)->getDebugOptions () & kDisableBootX) return;
-
+	
 	MountedVolume* volume = getMountedVolume ();
 	if (!volume) {
 		#if qLogging
@@ -143,12 +181,17 @@ HFSPlusVolume::installBootX ()
 		#endif
 		return;
 	}
-	
+		
 #ifdef __MACH__
-	// Not working in Mac OS X yet.
-	ThrowException_AC (kWritePartitionOSX, 0);
+	// Check to make sure we've got partition info to work with
+	io_object_t partInfo = volume->getPartitionInfo ();
+	if (partInfo) {
+		IOObjectRelease (partInfo);
+	} else {
+		ThrowException_AC (kWritePartitionOSX, 0);
+	}
 #endif
-	
+
 	XPFSetUID myUID (0);
 	
 	FSRef bootXRef;
@@ -203,6 +246,13 @@ HFSPlusVolume::installBootX ()
 		throw;
 	}
 	
+#ifdef __MACH__
+	sync ();
+	sync ();
+#else
+	ThrowIfOSErr_AC (FlushVol (NULL, volume->getIOVDrvInfo ()));
+#endif
+
 	ThrowIfOSErr_AC (FSGetCatalogInfo (&bootXRef, kFSCatInfoNone, NULL, NULL, &bootXSpec, NULL));
  	FSpSetIsInvisible (&bootXSpec);
 	
@@ -225,8 +275,6 @@ HFSPlusVolume::installBootX ()
 	CloseResFile (resourceFork);
 	ThrowIfResError_AC ();
  	
-	ThrowIfOSErr_AC (FlushVol (NULL, volume->getIOVDrvInfo ()));
-	
 	fPartition->setLgBootStart (getBootXStartBlock ());
 	if (fPartition->getLgBootStart () == 0) {
 		#if qLogging

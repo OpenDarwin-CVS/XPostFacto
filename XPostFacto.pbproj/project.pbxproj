@@ -487,6 +487,215 @@
 			name = "Shared Code";
 			refType = 4;
 		};
+		94F4275F0543145400A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		94F427600543145400A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+				94F4276C0543161A00A80003,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94F427610543145400A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+				94F4276B0543161A00A80003,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94F427620543145400A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+				94F4276F0543163F00A80003,
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94F427630543145400A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94F427640543145400A80003 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			generatedFileNames = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			neededFileNames = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		94F427650543145400A80003 = {
+			buildPhases = (
+				94F4275F0543145400A80003,
+				94F427600543145400A80003,
+				94F427610543145400A80003,
+				94F427620543145400A80003,
+				94F427630543145400A80003,
+				94F427640543145400A80003,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
+				HEADER_SEARCH_PATHS = CompatibleKernelHeaders;
+				INSTALL_PATH = "/Library/Application Support/XPostFacto";
+				KERNEL_MODULE = YES;
+				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				MODULE_IOKIT = YES;
+				MODULE_NAME = com.macsales.iokit.XPFPartitionInfo;
+				MODULE_VERSION = 1.0.0d1;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = XPFPartitionInfo;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = kext;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = XPFPartitionInfo;
+			productInstallPath = "/Library/Application Support/XPostFacto";
+			productName = XPFPartitionInfo;
+			productReference = 94F427660543145400A80003;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>XPFPartitionInfo</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.macsales.iokit.XPFPartitionInfo</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0d1</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.0d1</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>XPFPartitionInfo</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.macsales.iokit.XPFPartitionInfo</string>
+			<key>IOClass</key>
+			<string>XPFPartitionInfo</string>
+			<key>IOMatchCategory</key>
+			<string>XPFPartitionInfo</string>
+			<key>IOProviderClass</key>
+			<string>IOMedia</string>
+		</dict>
+	</dict>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.iokit.IOStorageFamily</key>
+		<string>1.0b1</string>
+		<key>com.apple.kernel.iokit</key>
+		<string>1.0b1</string>
+	</dict>
+</dict>
+</plist>
+";
+		};
+		94F427660543145400A80003 = {
+			isa = PBXBundleReference;
+			path = XPFPartitionInfo.kext;
+			refType = 3;
+		};
+		94F427670543146000A80003 = {
+			isa = PBXTargetDependency;
+			target = 94F427650543145400A80003;
+		};
+		94F42768054315D700A80003 = {
+			children = (
+				94F427690543161A00A80003,
+				94F4276A0543161A00A80003,
+				94F4276D0543163F00A80003,
+			);
+			isa = PBXGroup;
+			name = XPFPartitionInfo;
+			refType = 4;
+		};
+		94F427690543161A00A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = XPFPartitionInfo.cpp;
+			path = XPFPartitionInfo/XPFPartitionInfo.cpp;
+			refType = 4;
+		};
+		94F4276A0543161A00A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = XPFPartitionInfo.h;
+			path = XPFPartitionInfo/XPFPartitionInfo.h;
+			refType = 4;
+		};
+		94F4276B0543161A00A80003 = {
+			fileRef = 94F427690543161A00A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94F4276C0543161A00A80003 = {
+			fileRef = 94F4276A0543161A00A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94F4276D0543163F00A80003 = {
+			children = (
+				94F4276E0543163F00A80003,
+			);
+			isa = PBXVariantGroup;
+			name = InfoPlist.strings;
+			path = "";
+			refType = 4;
+		};
+		94F4276E0543163F00A80003 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = English;
+			path = XPFPartitionInfo/English.lproj/InfoPlist.strings;
+			refType = 4;
+		};
+		94F4276F0543163F00A80003 = {
+			fileRef = 94F4276D0543163F00A80003;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 //940
 //941
 //942
@@ -591,6 +800,7 @@
 				F5FB800A03C7A0AD01A80002,
 				F5BF317E03F01EA201A80002,
 				94CC89DB0508E1BC00A80003,
+				94F427650543145400A80003,
 			);
 		};
 		F53C691001B191BA01A80001 = {
@@ -656,6 +866,7 @@
 				F53C699601B1926201A80001,
 				F588751B030D66DB01A80001,
 				F548C0E002897DDC01A80001,
+				94F42768054315D700A80003,
 			);
 			isa = PBXGroup;
 			path = Extensions;
@@ -1052,6 +1263,7 @@
 				F5FB800B03C7A0AD01A80002,
 				F5BF317F03F01EA201A80002,
 				94CC89DC0508E1BC00A80003,
+				94F427660543145400A80003,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -5643,6 +5855,7 @@
 				F59D629401B1D12901A80001,
 				F59D629501B1D12901A80001,
 				94CB5C4404FBB49500A80003,
+				94F427670543146000A80003,
 				F564382A01C2B3E601A80001,
 			);
 			isa = PBXBundleTarget;
@@ -5696,7 +5909,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "chown root:admin \"${DSTROOT}\"\nchmod 0775 \"${DSTROOT}\"\nchmod a+t \"${DSTROOT}\"\nchown -R root:wheel \"${DSTROOT}/System/Library/Extensions\"\nchmod -R u+w \"${DSTROOT}/System/Library/Extensions\"\nchown -R root:wheel \"${DSTROOT}/Library/StartupItems\"\n\n# Now copy the extensions and startup items\n\nmkdir -p \"${SRCROOT}/XPostFacto/Derived/Extensions/plist\"\nmkdir -p \"${SRCROOT}/XPostFacto/Derived/StartupItems/plist\"\n\ncd \"${SRCROOT}\"\nfor FILE in XPostFacto/Derived/Extensions/*.hfs\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in XPostFacto/Derived/Extensions/plist/*.plist\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in XPostFacto/Derived/StartupItems/*.hfs\n{\n\trm \"${FILE}\"\n}\n\nfor FILE in XPostFacto/Derived/StartupItems/plist/*.plist\n{\n\trm \"${FILE}\"\n}\n\ncd \"${DSTROOT}\"/System/Library/Extensions\nfor FILE in *.kext\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n\tcp \"${FILE}/Contents/Info.plist\" \"${SRCROOT}/XPostFacto/Derived/Extensions/plist/${FILE%.kext}.plist\"\n}\n\ncd \"${DSTROOT}\"/Library/StartupItems\nfor FILE in XPF*\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/StartupItems\"\n\tcp \"${FILE}/version.plist\" \"${SRCROOT}/XPostFacto/Derived/StartupItems/plist/${FILE}.plist\"\n}\n\nif test ${SUDO_USER}; then\n\tchown -R ${SUDO_USER} \"${SYMROOT}\"\n\tchown -R ${SUDO_USER} \"${SRCROOT}/XPostFacto/Derived\"\nfi";
+			shellScript = "chown -R root:wheel \"${DSTROOT}\"\n\ncd \"${SRCROOT}\"\n\nmkdir -p XPostFacto/Derived/Extensions/plist\nmkdir -p XPostFacto/Derived/StartupItems/plist\nmkdir -p XPostFacto/Derived/ApplicationSupport/plist\n\nrm XPostFacto/Derived/Extensions/*.hfs\nrm XPostFacto/Derived/Extensions/plist/*.plist\nrm XPostFacto/Derived/StartupItems/*.hfs\nrm XPostFacto/Derived/StartupItems/plist/*.plist\nrm XPostFacto/Derived/ApplicationSupport/*.hfs\nrm XPostFacto/Derived/ApplicationSupport/plist/*.plist\n\ncd \"${DSTROOT}\"/System/Library/Extensions\n\nfor FILE in *.kext\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/Extensions\"\n\tcp \"${FILE}/Contents/Info.plist\" \"${SRCROOT}/XPostFacto/Derived/Extensions/plist/${FILE%.kext}.plist\"\n}\n\ncd \"${DSTROOT}\"/Library/\"Application Support\"/XPostFacto\nfor FILE in *.kext\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/ApplicationSupport\"\n\tcp \"${FILE}/Contents/Info.plist\" \"${SRCROOT}/XPostFacto/Derived/ApplicationSupport/plist/${FILE%.kext}.plist\"\n}\n\ncd \"${DSTROOT}\"/Library/StartupItems\nfor FILE in XPF*\n{\n\t\"${SYMROOT}/hfsplusarchive\" \"${FILE}\" \"${SRCROOT}/XPostFacto/Derived/StartupItems\"\n\tcp \"${FILE}/version.plist\" \"${SRCROOT}/XPostFacto/Derived/StartupItems/plist/${FILE}.plist\"\n}\n\nif test ${SUDO_USER}; then\n\tchown -R ${SUDO_USER} \"${SYMROOT}\"\n\tchown -R ${SUDO_USER} \"${SRCROOT}/XPostFacto/Derived\"\nfi";
 		};
 		F5B85D2103F5E91001A80002 = {
 			fileEncoding = 30;

@@ -127,6 +127,8 @@ class MountedVolume : public MDependable_AC
 
 #ifdef __MACH__
 		static MountedVolume* WithRegistryEntry (io_object_t entry);
+		io_object_t getRegEntry ();
+		io_object_t getPartitionInfo ();
 #endif
 
 		~MountedVolume ();
@@ -138,10 +140,6 @@ class MountedVolume : public MDependable_AC
 		void setHFSName (HFSUniStr255 *name);
 		void setVolumeName (HFSUniStr255 *name);
 		
-#ifdef __MACH__
-		io_object_t getRegEntry ();
-#endif
-
 		FSRef fRootDirectory;
 		CStr255_AC fVolumeName;
 		HFSUniStr255 fHFSName;

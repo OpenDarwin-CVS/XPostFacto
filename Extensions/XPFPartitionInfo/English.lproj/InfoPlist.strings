@@ -1,0 +1,6 @@
+/* Localized versions of Info.plist keys */
+
+CFBundleName = "XPFPartitionInfo";
+CFBundleShortVersionString = "1.0.0";
+CFBundleGetInfoString = "1.0.0d1, Copyright Other World Computing 2003";
+NSHumanReadableCopyright = "Copyright Other World Computing 2003";

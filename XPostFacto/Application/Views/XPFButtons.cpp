@@ -84,11 +84,6 @@ XPFInstallButton::DoEvent(EventNumber eventNumber,
 bool
 XPFInstallButton::determineActiveState ()
 {
-#ifdef __MACH__
-	// Not working yet in the Mac OS X version.
-	return false;
-#endif
-
 	XPFPrefs *prefs = (XPFPrefs *) GetDocument ();
 	if (prefs->getRebootInMacOS9 ()) return false;
 	MountedVolume *targetDisk = prefs->getTargetDisk ();

@@ -554,6 +554,30 @@ MountedVolume::getRegEntry () {
 	return IOServiceGetMatchingService (iokitPort, IOBSDNameMatching (iokitPort, NULL, shortBSDName));
 }
 
+io_object_t
+MountedVolume::getPartitionInfo () {
+	io_object_t retVal = NULL;
+	io_object_t regEntry = getRegEntry ();
+	if (regEntry) {
+		io_iterator_t iter = NULL;
+		IORegistryEntryCreateIterator (regEntry, kIOServicePlane, 0, &iter);
+		if (iter) {
+			io_object_t child;
+			while ((child = IOIteratorNext (iter)) != NULL) {
+				if (IOObjectConformsTo (child, "XPFPartitionInfo")) {
+					retVal = child;
+					break;
+				} else {
+					IOObjectRelease (child);
+				}
+			}
+			IOObjectRelease (iter);
+		}
+		IOObjectRelease (regEntry);
+	}
+	return retVal;
+}
+
 #endif
 
 MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *rootDirectory)

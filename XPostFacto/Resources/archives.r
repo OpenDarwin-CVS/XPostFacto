@@ -95,6 +95,11 @@ Read 'plst' (142, "PatchedNDRVSupport") ":Derived:Extensions:plist:PatchedNDRVSu
 Read 'hfsS' (200, "XPFStartupItem") ":Derived:StartupItems:XPFStartupItem.hfs";
 Read 'plst' (200, "XPFStartupItem") ":Derived:StartupItems:plist:XPFStartupItem.plist";
 
+// Application Support
+
+Read 'hfsB' (300, "XPFPartitionInfo") ":Derived:ApplicationSupport:XPFPartitionInfo.hfs";
+Read 'plst' (300, "XPFPartitionInfo") ":Derived:ApplicationSupport:XPFPartitionInfo.hfs";
+
 // Set up the BootX file for extraction
 
 Read 'BooX' (128, "bootX.xcoff") ":Derived:bootx.xcoff";

@@ -140,6 +140,8 @@ DECLARE_DEBUG_ACCESSORS (DebugPanicText)
 				
 		CStr255_AC getBootCommandBase ();
 		
+		void installXPFPartitionInfo ();
+		
 		// Variables
 
 		bool fUseShortStrings;
