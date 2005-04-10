@@ -221,7 +221,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.GossamerNDRVSupport;
-				MODULE_VERSION = 1.0.1;
+				MODULE_VERSION = 1.0.2;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -262,7 +262,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.1</string>
+	<string>1.0.2</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>GossamerNDRVSupport</key>
@@ -475,7 +475,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.OpenG3AIODisplay;
-				MODULE_VERSION = 1.0.1;
+				MODULE_VERSION = 1.0.2;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -516,7 +516,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.1</string>
+	<string>1.0.2</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>OpenG3AIODisplay</key>
@@ -1134,7 +1134,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.OpenChips65550Framebuffer;
-				MODULE_VERSION = 1.0.1;
+				MODULE_VERSION = 1.0.2;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -1175,7 +1175,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.1</string>
+	<string>1.0.2</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>OpenChips65550Framebuffer</key>
@@ -2513,7 +2513,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.OpenControlFramebuffer;
-				MODULE_VERSION = 1.0.1;
+				MODULE_VERSION = 1.0.2;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -2554,7 +2554,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.1</string>
+	<string>1.0.2</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>OpenControlFramebuffer</key>
@@ -4367,7 +4367,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.GossamerDeviceTreeUpdater;
-				MODULE_VERSION = 1.0.4;
+				MODULE_VERSION = 1.0.5;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -4408,7 +4408,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.4</string>
+	<string>1.0.5</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>GossamerDeviceTreeUpdater</key>
