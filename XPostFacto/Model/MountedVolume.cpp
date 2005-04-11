@@ -1155,8 +1155,10 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	fHasFinder = false;
 	fIsDarwin = false;
 	
-	fMachineHasSufficientRAM = ((XPFApplication *) gApplication)->getPhysicalRAMSize () >= kBootXRAMRequired;
-	
+	UInt32 physicalRAMSize;
+	Gestalt (gestaltPhysicalRAMSize, (SInt32 *) &physicalRAMSize);
+	fMachineHasSufficientRAM = physicalRAMSize >= kBootXRAMRequired;
+
 	// Wrap entire method in try block, to catch exceptions
 	// The idea is to show all devices, even if there is an error initializing them
 	try {
