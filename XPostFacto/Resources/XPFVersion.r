@@ -50,11 +50,11 @@ RESOURCE 'vers' (1,
 	purgeable) {
 	0x03,
 	0x10,
-	alpha,
-	0x4,
+	final,
+	0xFF,
 	verUs,
-	"3.1a4",
-	"3.1a4, © 2001 - 2005 Other World Computing"
+	"3.1",
+	"3.1, © 2001 - 2005 Other World Computing"
 };
 
 RESOURCE 'vers' (3,
