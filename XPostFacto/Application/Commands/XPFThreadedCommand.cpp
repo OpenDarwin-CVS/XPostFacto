@@ -159,46 +159,61 @@ void
 XPFThreadedCommand::updateExtensionsCacheForRootDirectory (FSRef *rootDirectory)
 {
 	OSErr err;
+	bool deleteExtensionsMKext = true;
 	
 	if (fDebugOptions & kDisableExtensionsCache) return;
-#ifdef __MACH__
-	fProgressWindow->setProgressMax (0);
-	fProgressWindow->setProgressMin (0);
-	fProgressWindow->setProgressValue (0, true);
-	setStatusMessage (CStr255_AC ((ResNumber) kXPFStringsResource, kUpdatingExtensionsCache), true);
 
+#ifdef __MACH__
+	// We only rebuild the extensions cache if it is on the root device. Looking at the code
+	// in kextcache, it appears that it may make the assumption that it is dealing with the root
+	// device (at least, I'm not confident it's not making that assumption, and at least one user
+	// has reported problems which can be traced to mismatches).
 	char rootPath [1024];
 	ThrowIfOSErr_AC (FSRefMakePath (rootDirectory, (UInt8 *) rootPath, 1023));
+
 	XPFSetUID myUID (0);
-	if (!chdir (rootPath)) {
-		pid_t pid = fork ();
-		if (pid) {
-			if (pid != -1) {
-				int status;
-				while (!wait4 (pid, &status, WNOHANG, 0)) {
-					usleep (1000000 / 60); // about 1 tick 
-					fProgressWindow->animate ();
+
+	if (!strcmp (rootPath, "/")) {
+		fProgressWindow->setProgressMax (0);
+		fProgressWindow->setProgressMin (0);
+		fProgressWindow->setProgressValue (0, true);
+		setStatusMessage (CStr255_AC ((ResNumber) kXPFStringsResource, kUpdatingExtensionsCache), true);
+
+		if (!chdir (rootPath)) {
+			pid_t pid = fork ();
+			if (pid) {
+				if (pid != -1) {
+					int status;
+					while (!wait4 (pid, &status, WNOHANG, 0)) {
+						usleep (1000000 / 60); // about 1 tick 
+						fProgressWindow->animate ();
+					}
 				}
+			} else {
+				execl ("/usr/sbin/kextcache", "kextcache", "-l", "-k", "-m", "System/Library/Extensions.mkext", "System/Library/Extensions", NULL);
+				ThrowException_AC (kInternalError, 0);	// the execl shouldn't return
 			}
-		} else {
-			execl ("/usr/sbin/kextcache", "kextcache", "-l", "-k", "-m", "System/Library/Extensions.mkext", "System/Library/Extensions", NULL);
-			ThrowException_AC (kInternalError, 0);	// the execl shouldn't return
+
+			// Make sure the permissions got set correctly
+			chown ("System/Library/Extensions.mkext", 0, 0);
+			chmod ("System/Library/Extensions.mkext", 0644);
 		}
+		
+		deleteExtensionsMKext = false;
 	}
-	// Make sure the permissions got set correctly
-	chown ("System/Library/Extensions.mkext", 0, 0);
-	chmod ("System/Library/Extensions.mkext", 0644);
-#else
-	FSRef extensionsCache;
-	err = XPFFSRef::getExtensionsCacheFSRef (rootDirectory, &extensionsCache, false);
-	if (err == noErr) FSDeleteObject (&extensionsCache);
-	err = XPFFSRef::getKextCacheFSRef (rootDirectory, &extensionsCache, false);
-	if (err == noErr) FSDeleteObject (&extensionsCache);
 #endif
 
-// In either case, we delete the kernelcaches if they exist
-// We could recreate them with the kextcache command, but that only works in 10.3, and
-// we would need to construct the correct filename
+	if (deleteExtensionsMKext) {
+		FSRef extensionsCache;
+		err = XPFFSRef::getExtensionsCacheFSRef (rootDirectory, &extensionsCache, false);
+		if (err == noErr) FSDeleteObject (&extensionsCache);
+		err = XPFFSRef::getKextCacheFSRef (rootDirectory, &extensionsCache, false);
+		if (err == noErr) FSDeleteObject (&extensionsCache);
+	}
+
+	// In either case, we delete the kernelcaches if they exist
+	// We could recreate them with the kextcache command, but that only works in 10.3, and
+	// we would need to construct the correct filename
 
 	FSRef kernelCacheDir;
 	err = XPFFSRef::getOrCreateKernelCacheDirectory (rootDirectory, &kernelCacheDir, false);
