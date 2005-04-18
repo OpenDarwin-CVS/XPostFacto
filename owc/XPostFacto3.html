@@ -1,24 +1,23 @@
-<body><h2>XPostFacto 3</h2>
+<body><h2>XPostFacto 3.1</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-April 1, 2005
+April 18, 2005
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
 You should also remember to check the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto3.html">online version</a> of this documentation from time to time, to see whether there have been any changes.
 
+<p>Mac OS X 10.4 (Tiger) will be out soon, and I will certainly be working to get XPostFacto updated for Tiger. XPostFacto relies on the source code for Mac OS X, which Apple won't release until Tiger is officially released. So I will know more then about how much work will be required. At this time, it looks as though some of the early iMacs and the Lombard Powerbooks may need help in order to work with Tiger (in additional to the models that XPostFacto currently deals with). I will have some expenses working with Tiger, so now would be a great time for you to support XPostFacto by <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">registering as an XPostFacto user</a>, or if you are already registered, by <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">making a contribution to</a> the continuing development of XPostFacto.
+
 <p>Here's a quick link to download the latest version. Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes.
 
 <blockquote>
-<dl>
-<dt><b>Stable:</b>
-<dd><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.sitx">Download XPostFacto 3.0 (.sitx)</a> 
-(or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.sit">older .sit format</a>)
-
-<p><dt><b>Testing:</b>
-<dd><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1a4.sitx">Download XPostFacto 3.1a4 (.sitx)</a> 
-(or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1a4.sit">older .sit format</a>)
+<dl><dt>
+<b>Download:</b>
+<dd>
+<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1.sitx">XPostFacto 3.1 (.sitx)</a> 
+(or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1.sit">older .sit format</a>)
 </dl>
 </blockquote>
 
@@ -26,9 +25,15 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 
 <h4>What's New</h4>
 
-<p>Version 3.1a4 fixes some errors I made when building the kernel extensions for version 3.1a3 (I had some mismatched version numbers).
+<p>Here are the differences between version 3.0 and 3.1:
 
-<p>Version 3.1a3 makes some changes to the settings which control the stage (in the boot process) at which certain kernel extensions are loaded. The required settings vary depending on whether it is a "normal" boot or an installation from CD. BootX will now notice this and make the necessary adjustments. This will avoid some error messages early in the boot process. I had thought those error messages were harmless, but it seems that it may be a contributing factor in the "black screen" problem on the Beige G3s (the actual mechanism is obscure, but it is possible that these changes may help, at least with some subset of the problem).
+<ul>
+<li>Audio recording on the 7300 - 9600 series is now working.
+<li>Sound volume adjustment now works on the 7300 - 9600.
+<li>The 603 and 604 CPUs will now function in Mac OS X 10.2 (a G3 or G4 CPU is still required for 10.3 at this time).
+<li>Some error messages have been eliminated in the boot process.
+<li>XPostFacto now checks to make sure it is working with the root device before updating the Extensions.mkext cache.
+</ul>
 
 <h4><a name="problems">Known Problems</a></h4>
 
@@ -41,17 +46,13 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 
 <li>Booting from a Firewire drive is sometimes problematic -- it seems to depend on <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=879">which PCI card</a> is used, or sometimes <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=880">which Firewire devices are attached.</a> One workaround for error messages which appear in verbose mode is to tap the keyboard -- it is not clear why that should help, but in some cases it does.
 
-<li>Sometimes files are copied from the CD to the target volume with <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1160">the wrong permissions</a>, which causes errors when booting. I am hoping that recent versions of XPF have mostly fixed the problem. I have also added the "Check Permissions" command (in the "Cache" menu) which can be used to fix the problem.
-
 <li>There are some problems with <a href="http://bugzilla.opendarwin.org/show_bug.cgi?id=1171">video in Panther on the Wallstreet Powerbooks</a>, at least in some configurations. One problem is a kernel panic (or perhaps a WindowServer failure) which seems to correspond with high levels of disk activity. Another problem is colour problems. Enabling the "Use PatchedRagePro" option in XPF can help. This enables the PatchedRagePro.kext, which does two things. For video with a device-id of 0x4C50, it activates the ATIRagePro.kext. This is the equivalent of the <a href ="http://www.xlr8yourmac.com/OSX/osx_ragepro_driver_tip.html">Info.plist modification described at XLR8YourMac</a>, except that it doesn't actually modify ATIRagePro.kext. For video with a device-id of 0x4C47, it disables the ATIRageProGA.plugin, which seems to solve a problem with using "thousands" of colours.
 
-<li>A similar problem sometimes occurs with <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1708">Beige G3 video in Panther</a> -- it is some kind of kernel panic or WindowServer failure. It is possible that version 3.1a3 will help with at least some cases of this problem.
+<li>A similar problem sometimes occurs with <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1708">Beige G3 video in Panther</a> -- it is some kind of kernel panic or WindowServer failure. It is possible that version 3.1 will help with at least some cases of this problem.
 
 <li>The <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1374">Panther video driver for Kanga</a> (Original Powerbook G3) only supports 256 colours for the moment.
 
 <li>The Wallstreet Powerbooks sometimes boot from the Install CD in a way that doesn't <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1389">pick up the special settings</a> needed to get the Panther installer to work.
-
-<li>There are a couple of audio-related problems on the 7300 - 9600 series. The <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1762">global sound volume preference</a> is not adjustable, and <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1256">audio in</a> is generally not working. Note that version 3.1a1 includes a new driver which partly fixes both these problems (there are still some issues with audio in).
 
 <li>The video in/out on the <a href="http://bugzilla.opendarwin.org/show_bug.cgi?id=1914">Beige G3 A/V personality cards</a> is not working.
 
@@ -61,21 +62,17 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 
 <li>System sleep is not working properly on the <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1915">7300 - 9600 series</a>, or on the <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1916">original Powerbook G3 (Kanga)</a>. However, it is working on the Beige G3s and Wallstreet Powerbooks.
 
-<li>In some configurations, <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1917">audio output stutters or fails</a> when an ATA/100 or ATA/133 card is in use. However, this does not affect everyone consistently. It is possible that the new audio driver in 3.1a1 will make a difference with this problem.
+<li>In some configurations, <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1917">audio output stutters or fails</a> when an ATA/100 or ATA/133 card is in use. However, this does not affect everyone consistently. It is possible that the new audio driver in version 3.1 will make a difference with this problem.
 
 <li>The <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1918">floppy drive</a> does not work.
 
 <li>The ethernet port on <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1596">ethernet-only Kangas</a> (original Powerbook G3) is not working. (However, the combo modem-ethernet port is working). 
 
-<li>Mac OS X 10.2 (and later) <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=854">require a G3 or G4 CPU upgrade</a> on models that did not originally come with a G3 or G4. Note that version 3.1a1 includes a modification to BootX which should permit 10.2 to work with the 603 and 604 CPUs (but not 10.3).
+<li>Mac OS X 10.3 (and later) <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=854">require a G3 or G4 CPU upgrade</a> on models that did not originally come with a G3 or G4.
 
 <li>Volumes <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1919">partitioned in Mac OS X</a> are not bootable on older machines -- the utilities that work are Apple's Drive Setup (in Mac OS 9.x) and Intech's Hard Disk SpeedTools.
 
 <li>Some PCI video cards which were working in Jaguar are <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=1938">no longer working in Panther</a>. In some cases, the "Use old NDRVs" option can help, but in other cases it does not. 
-
-<li>I have not <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=936">tested XPF with Darwin</a> lately, and problems have been reported with the installation. This is partially fixed in 3.0b2, but not fully.
-
-<li>XPostFacto gets confused by volumes with <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=899">identical creation dates and sizes</a>. This is partially fixed in version 3.0b2.
 
 <li>XPF tries to detect whether you formatted your disk with Apple's Drive Setup or Intech's Hard Disk SpeedTools, but sometimes will <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=2092">generate a spurious warning</a> (i.e. warning that you should use Hard Disk SpeedTools when you already have).
 
@@ -185,7 +182,7 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <p><li><b>Certain Other Powerbooks</b>
 <p>These are the original Powerbook G3, the 2400 and the 3400. However, there are significant limitations in the support for these machines. The most serious limitation is that sleep does not work. On some models, the built-in ethernet connection also does not work. There are additional details below.
 
-<p>I should warn potential users that Mac OS X is pretty slow on the 2400 and 3400. Also, the original 603e CPU is only supported in Mac OS X 10.0 and 10.1.  
+<p>I should warn potential users that Mac OS X is pretty slow on the 2400 and 3400. Also, the original 603e CPU does not work in Mac OS X 10.3.  
 
 <p>The original Powerbook G3 (Kanga) is working with Panther now -- the main limitation is that the video support is limited to 256-colour mode at the moment (I will be working on 16-bit support). Also, there may be a problem with PC Cards in Panther.
 </ul> 
@@ -273,7 +270,7 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <dt><p><b><a name="cpus">CPUs</a></b>
 <dd><p>Mac OS X does not work with a 601 CPU. Therefore, if you have a 7500 with the original 601 processor, you will need to install a CPU upgrade before installing Mac OS X. 
 
-<P>Mac OS X 10.2 (and later) does not work with a 603 or 604 CPU either. I have done some work to try to fix this, but it seems unlikely that this problem will be solved. The workaround is to install a G3 or G4 upgrade card.
+<P>Mac OS X 10.3 (and later) does not work with a 603 or 604 CPU. (However, Mac OS X 10.2 can work with the 603 or 604, as of XPF 3.1).
 
 <p>If you install a G3 or a G4 upgrade, you will need some software to enable the L2 cache in Mac OS X. The forum contains a <a href="http://forum.macsales.com/viewtopic.php?t=1766">HOWTO on L2 cache software</a>.
 
@@ -285,9 +282,7 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <dd><p>Mac OS X does not come with support for the floppy drive. Some work has been done (by others) on an open-source driver, but it hasn't been updated for a while and I'm told that it's not working well at this point. Your best bet if you really need a floppy drive is to look at a USB-based drive.
 
 <dt><p><b><a name="sound">Sound and Video</a></b>
-<dd><p>Sound out works. However, it is not possible to change the volume globally (you can change the volume in applications such as iTunes). There are some cases in which users report trouble with sound out after intensive disk access. The exact cause has been difficult to track down, but is probably related to the PCI bus in some way.
-
-<p>Sound in does not work yet (at least, for most people -- there are cases where it does).
+<dd><p>Sound out works. There are some cases in which users report trouble with sound out after intensive disk access. The exact cause has been difficult to track down, but is probably related to the PCI bus in some way.
 
 <p>Video in and out does not work yet (on those models that have it--the 7600 and 8600, I believe).
 
@@ -417,26 +412,26 @@ The "Options" button will bring up a dialog that allows you to select various ad
 
 If Mac OS X will not boot successfully, you are going to want to reboot into Mac OS 9. Here are some ways to do that. None of these will solve your primary problem (i.e. they won't make Mac OS X boot any more successfully), but at least they will get you back to Mac OS 9 again.
 
-<p><ul>
-<li>Reboot with the option-key down. This should return you to Mac OS 9. The timing of holding the option-key down is sometimes a little tricky -- you may need to experiment a little, or in some cases you may need to tap the option-key repeatedly to get the timing right (in other cases, you can just hold it down).<p>
+<ul>
+<p><li>Reboot with the option-key down. This should return you to Mac OS 9. The timing of holding the option-key down is sometimes a little tricky -- you may need to experiment a little, or in some cases you may need to tap the option-key repeatedly to get the timing right (in other cases, you can just hold it down).
 
-<li>If that does not work, reboot with command-option-shift-delete held down.<p>
+<p><li>If that does not work, reboot with command-option-shift-delete held down.
 
-<li>If that does not work, you can try inserting the Mac OS 9 CD and booting with the "c" key down.<p>
+<p><li>If that does not work, you can try inserting the Mac OS 9 CD and booting with the "c" key down.
 
-<li>If that does not work, and you are using a G4 upgrade card, you could try booting from the "emergency floppy" that most of the card manufacturers include with the card. (This will help if speculative processing is the issue). Alternatively, you can try reinstalling your original CPU card.<p>
+<p><li>If that does not work, and you are using a G4 upgrade card, you could try booting from the "emergency floppy" that most of the card manufacturers include with the card. (This will help if speculative processing is the issue). Alternatively, you can try reinstalling your original CPU card.
 
-<li>If that does not work, you may need to zap your parameter RAM. The simplest way of doing this is to hold down the command-option-p-r keys while rebooting. The computer will "chime" while it zaps parameter RAM. Allow it to chime several times, and then release the keys. Sometimes doing this from a "cold-start" (i.e. after power has been off) is more successful than a "warm-start" (i.e. by pressing command-control-powerkey to reboot). Also, the timing of pressing comand-option-p-r can sometimes make a difference -- sometimes you have to try a couple of times before you get the timing right.<p>
+<p><li>If that does not work, you may need to zap your parameter RAM. The simplest way of doing this is to hold down the command-option-p-r keys while rebooting. The computer will "chime" while it zaps parameter RAM. Allow it to chime several times, and then release the keys. Sometimes doing this from a "cold-start" (i.e. after power has been off) is more successful than a "warm-start" (i.e. by pressing command-control-powerkey to reboot). Also, the timing of pressing comand-option-p-r can sometimes make a difference -- sometimes you have to try a couple of times before you get the timing right.
 
-<li>If this does not work, then you may need to press the CUDA reset button on the motherboard for 30 seconds. The CUDA reset button is a small red button usually located near the processor card. <p>
+<p><li>If this does not work, then you may need to press the CUDA reset button on the motherboard for 30 seconds. The CUDA reset button is a small red button usually located near the processor card. 
 
-<li>If that does not work, you may need to unplug the computer, remove the motherboard battery, and leave it out for some time. Then reinstall the battery (and make sure to orient it correctly). The amount of time required varies--sometimes it can be as little as few hours, but in other cases you may need to leave it overnight.<p>
+<p><li>If that does not work, you may need to unplug the computer, remove the motherboard battery, and leave it out for some time. Then reinstall the battery (and make sure to orient it correctly). The amount of time required varies--sometimes it can be as little as few hours, but in other cases you may need to leave it overnight.
 
-<li>It that does not work, it sometimes helps to install a new battery, and try the "zapping parameter RAM" or "pressing CUDA reset button" steps again.
+<p><li>It that does not work, it sometimes helps to install a new battery, and try the "zapping parameter RAM" or "pressing CUDA reset button" steps again.
 
-<li>Sometimes it helps to temporarily replace the video card with an older video card (or simply remove it temporarily and use built-in video).
+<p><li>Sometimes it helps to temporarily replace the video card with an older video card (or simply remove it temporarily and use built-in video).
 
-<li>Sometimes it helps to rearrange PCI cards or memory chips.
+<p><li>Sometimes it helps to rearrange PCI cards or memory chips.
 </ul>
 
 <p>If you have installed Mac OS X on the same partition as Mac OS 9, rebooting with the option-key down may not work, because the Mac OS X installation process "de-blesses" the Mac OS 9 System Folder. In those cases, you can reboot from the Mac OS 9 CD with the "c" key held down, and take steps to "re-bless" the Mac OS 9 System Folder. The simplest method is to drag the System or Finder file to the desktop and then back into the System Folder. If that doesn't work, one user suggests command-option-double-clicking on the Finder file (I have not tried that yet). Also, you could check to see whether the /System/Library/CoreServices folder has been blessed by the Mac OS X Installer. In that case, you could de-bless that folder by dragging out the fake System file located there. You should then be able to re-bless your Mac OS 9 System Folder. Also, the XPostFacto application now has a menu command to rebless the Mac OS 9 System folder on a volume.
@@ -560,6 +555,10 @@ This software is provided by Other World Computing ``as is'' and any express or 
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1.sitx">3.1a4 (April 18, 2005)</a> (or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1.sit">older .sit format</a>)
+
+<dd><p>Version 3.1 checks to make sure that it is working with the root device before updating the Extensions.mkext cache.
 
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1a4.sitx">3.1a4 (April 1, 2005)</a> (or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1a4.sit">older .sit format</a>)
 

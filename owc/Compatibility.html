@@ -1,6 +1,6 @@
 <h3>XPostFacto Compatibility</h3>
 
-<p>January 20, 2005<br>
+<p>April 18, 2005<br>
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a>
 
@@ -43,7 +43,7 @@ Ryan Rempel<br>
 <td>CPU</td>
 <td><ul>
 <li>G3 and G4 upgrades work, but you will need software to enable the L2 and/or L3 cache. Note that Umax S900 users have been reporting difficulties with the Sonnet G4/700 and G4/800 CPU upgrades in 10.2 and later.
-<li>The 603 and 604 processors work with Mac OS X 10.0 through 10.1 (i.e. not 10.2 or later).
+<li>The 603 and 604 processors work with Mac OS X 10.0 through 10.2 (i.e. not 10.3 or later).
 <li>The 601 processor does not work with Mac OS X.
 </ul></td></tr>
 
@@ -77,14 +77,14 @@ Ryan Rempel<br>
 <td>Supported, but not for serial printers. It is possible that serial printer support could be added to the CUPS system.</td>
 </tr>
 
-<tr bgcolor="#FFCCCC">
+<tr bgcolor="#FFFFCC">
 <td>Sound-in</td>
-<td>Not supported. This probably could be fixed.</td>
+<td>Partly supported depending on model -- the mic input on the 7300 - 9600 is working now with version 3.1, but the RCA inputs on the 7600 etc. are not yet working.</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
 <td>Sound-out</td>
-<td>Supported, but volume adjustment is not working properly</td>
+<td>Supported. Volume adjustment is working as of version 3.1.</td>
 </tr>
 
 </table></td></tr>
@@ -120,7 +120,7 @@ Ryan Rempel<br>
 
 <tr bgcolor="#FFFFCC">
 <td>5400, 5500, 6300, 6360, 6400, 6500</td>
-<td>Unsupported, but in progress. The main problem is that SCSI and Ethernet are not working, which makes installation difficult. Also, will not work with Mac OS X 10.2 or later, because of 603 CPU.</td>
+<td>Unsupported, but in progress. The main problem is that SCSI and Ethernet are not working, which makes installation difficult. Also, will not work with Mac OS X 10.3 or later, because of 603 CPU.</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -158,6 +158,11 @@ Ryan Rempel<br>
 <td>Supported -- mainly for the sake of Panther (supported by Apple pre-Panther).</td>
 </tr>
 
+<tr bgcolor="#FFFFCC">
+<td>Early iMacs</td>
+<td>Unsupported (so far) -- but may need support for Tiger -- I will investigate.</td>
+</tr>
+
 </table></td></tr>
 </table>
 
@@ -176,7 +181,7 @@ Ryan Rempel<br>
 
 <tr bgcolor="#FFFFCC">
 <td>2400, 3400</td>
-<td>Semi-supported. Will not work with Mac OS X 10.2, because of 603 CPU. Sleep and battery-monitoring is not supported. PC Card support limited.</td>
+<td>Semi-supported. Will not work with Mac OS X 10.3, because of 603 CPU. Sleep and battery-monitoring is not supported. PC Card support limited.</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -187,6 +192,11 @@ Ryan Rempel<br>
 <tr bgcolor="#CCFFCC">
 <td>Wallstreet Powerbooks</td>
 <td>Supported -- mainly for the sake of Panther (supported by Apple pre-Panther).</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<td>Lombard Powerbooks</td>
+<td>Unsupported (so far) -- but may need some support for Tiger -- I will investigate.</td>
 </tr>
 
 </table></td></tr>
@@ -261,7 +271,7 @@ G4/800 CPU upgrades in Mac OS X 10.2 and later.</td>
 <tr bgcolor="#CCFFCC">
 <td>ATI Radeon 7000</td>
 <td>
-Basically the only new card currently sold. It works with Mac OS X 10.1.5 and later. For best results, select the card as the "output-device" in the "Open Firmware" menu of XPostFacto.
+It works with Mac OS X 10.1.5 and later. For best results, select the card as the "output-device" in the "Open Firmware" menu of XPostFacto.
 </td></tr>
 
 <tr bgcolor="#CCFFCC">
