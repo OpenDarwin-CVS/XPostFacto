@@ -168,6 +168,12 @@ bool ApplePowerStarPE::platformAdjustService(IOService *service)
         return true;
 	}
     
+	if (IODTMatchNubWithKeys (service, "cpu")) {
+		// Set up the matching for the PowerStarCPU class (so it doesn't have to match on all machines)
+		service->setProperty ("cpu-device-type", "PowerStarCPU");
+		return true;
+	}
+	
     return true;
 }
 

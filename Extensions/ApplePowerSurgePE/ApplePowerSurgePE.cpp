@@ -78,6 +78,12 @@ ApplePowerSurgePE::platformAdjustService (IOService *service)
 		return true;
 	}
 	
+	if (IODTMatchNubWithKeys (service, "cpu")) {
+		// Set up the matching for the PowerSurgeCPU class (so it doesn't have to match on all machines)
+		service->setProperty ("cpu-device-type", "PowerSurgeCPU");
+		return true;
+	}
+	
 	return super::platformAdjustService (service);
 }
 
