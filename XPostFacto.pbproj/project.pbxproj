@@ -67,9 +67,10 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
-			path = GetSymbolFromPEF.h;
-			refType = 4;
-			sourceTree = "<group>";
+			name = GetSymbolFromPEF.h;
+			path = BootX/bootx.tproj/sl.subproj/GetSymbolFromPEF.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		94606079057BA4A300FE8769 = {
 			fileEncoding = 30;
@@ -314,6 +315,7 @@
 			);
 			isa = PBXGroup;
 			name = GossamerNDRVSupport;
+			path = "";
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -381,6 +383,7 @@
 			);
 			isa = PBXGroup;
 			name = OpenG3AIODisplay;
+			path = "";
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -1225,6 +1228,7 @@
 			);
 			isa = PBXGroup;
 			name = OpenChips65550Framebuffer;
+			path = "";
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -1471,6 +1475,7 @@
 			);
 			isa = PBXGroup;
 			name = OpenPMUPCCardEject;
+			path = "";
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -1918,6 +1923,7 @@
 			);
 			isa = PBXGroup;
 			name = OpenLegacyAudio;
+			path = "";
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -2602,6 +2608,7 @@
 			);
 			isa = PBXGroup;
 			name = OpenControlFramebuffer;
+			path = "";
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -2648,6 +2655,7 @@
 			);
 			isa = PBXGroup;
 			name = PatchedBlockStorageDriver;
+			path = "";
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -3025,6 +3033,7 @@
 			);
 			isa = PBXGroup;
 			name = OpenOWScreamerAudio;
+			path = "";
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -3322,6 +3331,7 @@
 			);
 			isa = PBXGroup;
 			name = OWCDumpIORegistry;
+			path = "";
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -3508,6 +3518,74 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		94D019AC08249F1700DB1813 = {
+			children = (
+				94C7506105F8E8ED00A80003,
+				F53C698901B1926201A80001,
+				F53C699601B1926201A80001,
+				F588751B030D66DB01A80001,
+				94CC8146054C189400A80003,
+			);
+			isa = PBXGroup;
+			name = "Pre-Tiger";
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94D019B50824A1CA00DB1813 = {
+			children = (
+				F557F69E0226FF1001A80001,
+				F547F715028EFEEC01A80001,
+				F53C697401B1926201A80001,
+				F53C6AE501B1AC0501A80001,
+				F54E20730267327701A80001,
+				F5FB800D03C7A0DD01A80002,
+				94FC07CC056AE11100A80003,
+			);
+			isa = PBXGroup;
+			name = "Platform and CPU";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94D019B80824A20900DB1813 = {
+			children = (
+				9490D555061C8DDC00D8F22E,
+				94C3604D0597CD5C00A80003,
+				947DFF800617B4E90087D76A,
+				947DFC0E061764C20087D76A,
+			);
+			isa = PBXGroup;
+			name = Video;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94D019BB0824A23A00DB1813 = {
+			children = (
+				94C19B6707C139B7004B83EE,
+				F53C695E01B1926201A80001,
+				F548C0E002897DDC01A80001,
+				94B3FB9D05866EAA00A80003,
+				F557F67F0226FBCB01A80001,
+				F557F67E0226FBCB01A80001,
+				F53C695601B1926201A80001,
+				F53C696601B1926201A80001,
+				F53C698101B1926201A80001,
+			);
+			isa = PBXGroup;
+			name = "Other Devices";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94D019C00824A29300DB1813 = {
+			children = (
+				94F42768054315D700A80003,
+				94CC89D20508E13B00A80003,
+			);
+			isa = PBXGroup;
+			name = Utility;
+			refType = 4;
+			sourceTree = "<group>";
 		};
 		94D432A505583C1100A80003 = {
 			buildActionMask = 2147483647;
@@ -4259,6 +4337,7 @@
 			);
 			isa = PBXGroup;
 			name = XPFPartitionInfo;
+			path = "";
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -4292,6 +4371,155 @@
 			settings = {
 			};
 		};
+		94FA121A082409E900B86EC9 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = md5c.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94FA121B082409E900B86EC9 = {
+			fileRef = 94FA121A082409E900B86EC9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94FA122008240A1700B86EC9 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = aes.h;
+			path = BootX/bootx.tproj/sl.subproj/aes.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		94FA122108240A1700B86EC9 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = aescrypt.c;
+			path = BootX/bootx.tproj/sl.subproj/aescrypt.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		94FA122208240A1700B86EC9 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = aeskey.c;
+			path = BootX/bootx.tproj/sl.subproj/aeskey.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		94FA122308240A1700B86EC9 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = aesopt.h;
+			path = BootX/bootx.tproj/sl.subproj/aesopt.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		94FA122408240A1700B86EC9 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = aestab.c;
+			path = BootX/bootx.tproj/sl.subproj/aestab.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		94FA122508240A1700B86EC9 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = aestab.h;
+			path = BootX/bootx.tproj/sl.subproj/aestab.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		94FA122608240A1700B86EC9 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = bmdecompress.c;
+			path = BootX/bootx.tproj/sl.subproj/bmdecompress.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		94FA122708240A1700B86EC9 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = plist.c;
+			path = BootX/bootx.tproj/sl.subproj/plist.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		94FA122808240A1700B86EC9 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = raid.c;
+			path = BootX/bootx.tproj/sl.subproj/raid.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		94FA122908240A1700B86EC9 = {
+			fileRef = 94FA122008240A1700B86EC9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94FA122A08240A1700B86EC9 = {
+			fileRef = 94FA122108240A1700B86EC9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94FA122B08240A1700B86EC9 = {
+			fileRef = 94FA122208240A1700B86EC9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94FA122C08240A1700B86EC9 = {
+			fileRef = 94FA122308240A1700B86EC9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94FA122D08240A1700B86EC9 = {
+			fileRef = 94FA122408240A1700B86EC9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94FA122E08240A1700B86EC9 = {
+			fileRef = 94FA122508240A1700B86EC9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94FA122F08240A1700B86EC9 = {
+			fileRef = 94FA122608240A1700B86EC9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94FA123008240A1700B86EC9 = {
+			fileRef = 94FA122708240A1700B86EC9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94FA123108240A1700B86EC9 = {
+			fileRef = 94FA122808240A1700B86EC9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		94FC07CC056AE11100A80003 = {
 			children = (
 				94FC07D6056AE24D00A80003,
@@ -4299,6 +4527,7 @@
 			);
 			isa = PBXGroup;
 			name = GossamerDeviceTreeUpdater;
+			path = "";
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -4424,6 +4653,10 @@
 				<string>AAPL,Gossamer</string>
 				<string>AAPL,PowerMac G3</string>
 				<string>AAPL,PowerBook1998</string>
+				<string>AAPL,PowerBook1999</string>
+				<string>PowerBook1,1</string>
+				<string>PowerBook2,1</string>
+				<string>iMac</string>
 			</array>
 			<key>IOProviderClass</key>
 			<string>IOPlatformExpertDevice</string>
@@ -4507,25 +4740,28 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
-			path = appleboot.h;
-			refType = 4;
-			sourceTree = "<group>";
+			name = appleboot.h;
+			path = BootX/bootx.tproj/sl.subproj/appleboot.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F513163D0322F90801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
-			path = failedboot.h;
-			refType = 4;
-			sourceTree = "<group>";
+			name = failedboot.h;
+			path = BootX/bootx.tproj/sl.subproj/failedboot.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F513163E0322F90801A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
-			path = netboot.h;
-			refType = 4;
-			sourceTree = "<group>";
+			name = netboot.h;
+			path = BootX/bootx.tproj/sl.subproj/netboot.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F513163F0322F90801A80001 = {
 			fileRef = F513163C0322F90801A80001;
@@ -4668,33 +4904,11 @@
 		};
 		F53C695501B1926201A80001 = {
 			children = (
-				947DFF800617B4E90087D76A,
-				9490D555061C8DDC00D8F22E,
-				94C3604D0597CD5C00A80003,
-				94CC8146054C189400A80003,
-				94C19B6707C139B7004B83EE,
-				94CC89D20508E13B00A80003,
-				F5FB800D03C7A0DD01A80002,
-				F547F715028EFEEC01A80001,
-				F557F69E0226FF1001A80001,
-				F53C697401B1926201A80001,
-				94FC07CC056AE11100A80003,
-				F54E20730267327701A80001,
-				F53C6AE501B1AC0501A80001,
-				F557F67E0226FBCB01A80001,
-				F557F67F0226FBCB01A80001,
-				F53C695601B1926201A80001,
-				F53C695E01B1926201A80001,
-				F53C696601B1926201A80001,
-				F53C698101B1926201A80001,
-				F53C698901B1926201A80001,
-				F53C699601B1926201A80001,
-				94C7506105F8E8ED00A80003,
-				F588751B030D66DB01A80001,
-				947DFC0E061764C20087D76A,
-				F548C0E002897DDC01A80001,
-				94B3FB9D05866EAA00A80003,
-				94F42768054315D700A80003,
+				94D019B50824A1CA00DB1813,
+				94D019B80824A20900DB1813,
+				94D019BB0824A23A00DB1813,
+				94D019C00824A29300DB1813,
+				94D019AC08249F1700DB1813,
 			);
 			isa = PBXGroup;
 			path = Extensions;
@@ -5088,10 +5302,10 @@
 				F53C6AAA01B19CA601A80001,
 			);
 			buildSettings = {
-				GCC_VERSION = 2.x;
+				DEBUGGING_SYMBOLS = NO;
 				HEADER_SEARCH_PATHS = BootX/bootx.tproj/include.subproj;
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
-				OTHER_CFLAGS = "-static -D_ANSI_SOURCE";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "-static -msoft-float -mno-dynamic-no-pic";
 				OTHER_LDFLAGS = "-nostdlib -e _StartTVector -seg1addr 05600000";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
@@ -5132,6 +5346,9 @@
 				F51316400322F90801A80001,
 				F51316410322F90801A80001,
 				9460607A057BA4A300FE8769,
+				94FA122908240A1700B86EC9,
+				94FA122C08240A1700B86EC9,
+				94FA122E08240A1700B86EC9,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5173,6 +5390,13 @@
 				F5BFE4220304D49801A80001,
 				9460607B057BA4A300FE8769,
 				944AD929067424E500FC3507,
+				94FA121B082409E900B86EC9,
+				94FA122A08240A1700B86EC9,
+				94FA122B08240A1700B86EC9,
+				94FA122D08240A1700B86EC9,
+				94FA122F08240A1700B86EC9,
+				94FA123008240A1700B86EC9,
+				94FA123108240A1700B86EC9,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5379,7 +5603,7 @@
 			isa = PBXShellScriptBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "mkdir -p \"${SRCROOT}/XPostFacto/Derived\"\n\"${SYMROOT}/macho-to-xcoff\" \"${SYMROOT}/bootx\" \"${SRCROOT}/XPostFacto/Derived/bootx.xcoff\"";
+			shellScript = "mkdir -p \"${SRCROOT}/XPostFacto/Derived\"\n\"${SYMROOT}/macho-to-xcoff\" \"${SYMROOT}/bootx\" \"${SRCROOT}/XPostFacto/Derived/bootx.xcoff\"\ncp \"${SRCROOT}/BootX/bootx.tproj/bootinfo.hdr\" \"${SRCROOT}/XPostFacto/Derived/bootx.bootinfo\"\ncat \"${SRCROOT}/XPostFacto/Derived/bootx.xcoff\" >> \"${SRCROOT}/XPostFacto/Derived/bootx.bootinfo\"";
 		};
 		F53C6AB401B19FD401A80001 = {
 			explicitFileType = wrapper.cfbundle;
@@ -7089,6 +7313,7 @@
 			);
 			isa = PBXGroup;
 			name = PowerStarCPU;
+			path = "";
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -7880,6 +8105,7 @@
 			);
 			isa = PBXGroup;
 			name = OHareATA;
+			path = "";
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -7890,6 +8116,7 @@
 			);
 			isa = PBXGroup;
 			name = AppleOHare;
+			path = "";
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -8544,6 +8771,7 @@
 		};
 		F572EE850254E9E801A80001 = {
 			children = (
+				94FA121A082409E900B86EC9,
 				F572EE860254E9E801A80001,
 				F572EE870254E9E801A80001,
 				F572EE880254E9E801A80001,
@@ -8679,6 +8907,15 @@
 		};
 		F572EE940254E9E801A80001 = {
 			children = (
+				94FA122008240A1700B86EC9,
+				94FA122308240A1700B86EC9,
+				94FA122508240A1700B86EC9,
+				F572EEAF0254E9E801A80001,
+				F513163C0322F90801A80001,
+				F572EEAA0254E9E801A80001,
+				F513163D0322F90801A80001,
+				F513163E0322F90801A80001,
+				94606078057BA4A300FE8769,
 				F572EE950254E9E801A80001,
 				F572EE960254E9E801A80001,
 				F572EE970254E9E801A80001,
@@ -8850,20 +9087,20 @@
 		};
 		F572EEA70254E9E801A80001 = {
 			children = (
+				94FA122108240A1700B86EC9,
+				94FA122208240A1700B86EC9,
+				94FA122408240A1700B86EC9,
+				94FA122608240A1700B86EC9,
+				94FA122708240A1700B86EC9,
+				94FA122808240A1700B86EC9,
 				944AD928067424E500FC3507,
 				F572EEA90254E9E801A80001,
-				F572EEAA0254E9E801A80001,
 				F572EEAB0254E9E801A80001,
 				F572EEAC0254E9E801A80001,
 				F572EEAD0254E9E801A80001,
 				F572EEAE0254E9E801A80001,
-				F572EEAF0254E9E801A80001,
 				F572EEB40254E9E801A80001,
 				F572EEB50254E9E801A80001,
-				F513163C0322F90801A80001,
-				F513163D0322F90801A80001,
-				F513163E0322F90801A80001,
-				94606078057BA4A300FE8769,
 				94606079057BA4A300FE8769,
 			);
 			isa = PBXGroup;
@@ -8884,9 +9121,10 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
-			path = clut.h;
-			refType = 4;
-			sourceTree = "<group>";
+			name = clut.h;
+			path = BootX/bootx.tproj/sl.subproj/clut.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F572EEAB0254E9E801A80001 = {
 			fileEncoding = 30;
@@ -8924,9 +9162,10 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
-			path = elf.h;
-			refType = 4;
-			sourceTree = "<group>";
+			name = elf.h;
+			path = BootX/bootx.tproj/sl.subproj/elf.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F572EEB40254E9E801A80001 = {
 			fileEncoding = 30;
