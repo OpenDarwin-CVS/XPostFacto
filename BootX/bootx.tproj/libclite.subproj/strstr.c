@@ -79,3 +79,14 @@ strstr(register const char *s, const char *find)
 	}
 	return ((char *)s);
 }
+
+char *
+strchr (register const char *s, const int c)
+{
+	do {
+		if (*s == c) return (char *) s;
+	} while (*s++);
+	
+	return (NULL);
+}
+
