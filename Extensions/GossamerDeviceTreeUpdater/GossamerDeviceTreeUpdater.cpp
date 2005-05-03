@@ -1,6 +1,6 @@
 /*
 
- Copyright (c) 2003
+ Copyright (c) 2003, 2005
  Other World Computing
  All rights reserved.
 
@@ -33,6 +33,7 @@
 
 #include <IOKit/IOLib.h>
 #include <IOKit/IODeviceTreeSupport.h>
+#include <IOKit/system.h>
 
 #undef super
 #define super IOService
@@ -52,6 +53,9 @@ GossamerDeviceTreeUpdater::updateDeviceTree (void *argument)
 {
 	IOService *self = (IOService *) argument;
 	IOService *provider = self->getProvider ();
+	
+	// We wait until all the driver matching has finished. The reason is that some of the driver
+	// configuration relies on the original "compatible" value.
 	provider->waitQuiet ();
 	
 	IORegistryEntry *options = provider->childFromPath (("options"), gIODTPlane);
@@ -60,6 +64,8 @@ GossamerDeviceTreeUpdater::updateDeviceTree (void *argument)
 		return;
 	}
 	
+	// We only need to adjust things when installing, so we check for the boot-file
+	// setting which XPF uses to indicate an install.
 	bool update = false;
 	OSString *bootfile = OSDynamicCast (OSString, options->getProperty ("boot-file"));
 	if (bootfile) {
@@ -77,17 +83,11 @@ GossamerDeviceTreeUpdater::updateDeviceTree (void *argument)
 	}
 	
 	if (update) {
-		char buffer [36];
-		buffer[0] = 0;
-			
-		if (IODTMatchNubWithKeys (provider, "'AAPL,Gossamer'"))
-			strcpy (buffer, "OPEN,Gossamer");
-		else if (IODTMatchNubWithKeys (provider, "'AAPL,PowerMac G3'"))
-			strcpy (buffer, "OPEN,PowerMac G3");
-		else if (IODTMatchNubWithKeys (provider, "'AAPL,PowerBook1998'"))
-			strcpy (buffer, "OPEN,PowerBook1998");
-			
-		if (buffer[0]) {
+		// We add "XPF," to the front of whatever name we matched
+		char buffer [64];
+		OSString *nameMatched = OSDynamicCast (OSString, self->getProperty ("IONameMatched"));
+		if (nameMatched) {
+			sprintf (buffer, "XPF,%s", nameMatched->getCStringNoCopy ());
 			provider->setName (buffer);
 			strcpy (buffer + strlen (buffer) + 1, "MacRISC");
 			OSData *data = OSData::withBytes (buffer, strlen (buffer) + strlen ("MacRISC") + 2);
