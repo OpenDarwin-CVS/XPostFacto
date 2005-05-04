@@ -25,7 +25,7 @@
 
 <h2>XPostFacto Developer Notes</h2>
 
-March 10, 2005<br> 
+May 4, 2005<br> 
 Ryan Rempel<br> 
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a>
 
@@ -62,6 +62,8 @@ Ryan Rempel<br>
 <p>As of XPF 3, XPostFacto runs in both Mac OS 9 and Mac OS X. The Mac OS 9 version builds as a non-Carbon application (because that makes certain parts of the code easier--some things I need aren't in Carbon). The Mac OS X version builds as mach-o, for the same reason (I need to link to some frameworks that are mach-o frameworks). I'm using CodeWarrior 8.3.
 
 <p>The main dependency that is not included in the XPostFacto sources is MacApp. The XPostFacto application is based on MacApp. Previously, I had instructed you to download MacApp yourself and set it up somewhere. The difficulty is that I was actually using a patched version of MacApp (to permit building the OS X version of XPostFacto). What I've done know is include the patches in the CVS repository, and include a Makefile to set up the MacApp environment.
+
+<p>Also, if you are using CodeWarrior 8.3, you need to set your "Mac OS X Volume" source tree to point at the 10.2 SDK.
 
 <p>So, here is what you need to do to set up the CodeWarrior environment.
 
@@ -101,7 +103,7 @@ This will add the correct file types and creators to the files from the CVS repo
 
 <p><li>Open the XPostFacto.mcp CodeWarrior project, and make the "Application" target. This builds both the Mac OS 9 and Mac OS X versions. Or you can build individual targets if you like.
 
-<p>You can build individual kernel extensions within XCode for testing purposes. But once you want to incorporate them into XPostFacto, you will need to repeat the "sudo xcodebuild install" step (and then rebuild XPostFacto). (For BootX, you need not perform the "sudo xcodebuild install"--building it within XCode is sufficient).
+<p>You can build individual kernel extensions within XCode for testing purposes. But once you want to incorporate them into XPostFacto, you will need to repeat the "sudo xcodebuild install" step (and then rebuild XPostFacto). 
 </ol>
 
 <h4>Quirks</h4>
@@ -110,9 +112,7 @@ This will add the correct file types and creators to the files from the CVS repo
 
 <h4>Panther</h4>
 
-<p>I'm building in Mac OS X 10.3 with XCode now. To do this, you need to install the 10.1.5 SDK, along with the gcc 2.95. This is in order to build kernel extensions that will function back to 10.1 (and 10.0 in fact).
-
-<p>Also, if you are using CodeWarrior 8.3, you need to set your "Mac OS X Volume" source tree to point at the 10.2 SDK.
+<p>I'm working on Tiger support, but not building in Tiger yet.
 
 <h4>Mac OS X 10.0 and 10.1 Headers</h4>
 

@@ -5597,11 +5597,11 @@
 			targetProxy = 948CD0F105FBEECE003103DB;
 		};
 		F53C6AAA01B19CA601A80001 = {
-			buildActionMask = 12;
+			buildActionMask = 8;
 			files = (
 			);
 			isa = PBXShellScriptBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "mkdir -p \"${SRCROOT}/XPostFacto/Derived\"\n\"${SYMROOT}/macho-to-xcoff\" \"${SYMROOT}/bootx\" \"${SRCROOT}/XPostFacto/Derived/bootx.xcoff\"\ncp \"${SRCROOT}/BootX/bootx.tproj/bootinfo.hdr\" \"${SRCROOT}/XPostFacto/Derived/bootx.bootinfo\"\ncat \"${SRCROOT}/XPostFacto/Derived/bootx.xcoff\" >> \"${SRCROOT}/XPostFacto/Derived/bootx.bootinfo\"";
 		};
