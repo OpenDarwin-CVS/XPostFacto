@@ -907,6 +907,7 @@ static long TestForKey(long key)
     case kOptKey     : keyNum =  61; break;
     case kShiftKey   : keyNum =  63; break;
     case kControlKey : keyNum =  49; break;
+	// FIXME case kDeleteKey: keyNum = ????; break;
     default : keyNum = -1; break;
     }
   } else {
