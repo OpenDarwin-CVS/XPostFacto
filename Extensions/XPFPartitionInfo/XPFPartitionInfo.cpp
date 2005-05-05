@@ -1,6 +1,6 @@
 /*
 
- Copyright (c) 2003
+ Copyright (c) 2003, 2005
  Other World Computing
  All rights reserved.
 
@@ -112,6 +112,7 @@ XPFPartitionInfo::updatePropertyList ()
 	setProperty ("Boot Entry", (unsigned) fPartitionMapEntry.dpme_goto_addr, 32);
 	setProperty ("Boot Checksum", fPartitionMapEntry.dpme_checksum, 32);
 	setProperty ("Processor Type", (char *) fPartitionMapEntry.dpme_process_id);
+	setProperty ("Partition Status", fPartitionMapEntry.dpme_flags, 32);
 }
 
 IOReturn 
@@ -144,6 +145,9 @@ XPFPartitionInfo::setProperties (OSObject *properties)
 
  	num = OSDynamicCast (OSNumber, dict->getObject ("Boot Checksum"));
 	if (num) fPartitionMapEntry.dpme_checksum = num->unsigned32BitValue ();
+	
+ 	num = OSDynamicCast (OSNumber, dict->getObject ("Partition Status"));
+	if (num) fPartitionMapEntry.dpme_flags = num->unsigned32BitValue ();
 	
 	updatePropertyList ();
 	
