@@ -142,6 +142,7 @@ Read 'plst' (300, "XPFPartitionInfo") ":Derived:ApplicationSupport:plist:XPFPart
 // Set up the BootX file for extraction
 
 Read 'BooX' (128, "bootX.xcoff") ":Derived:bootx.xcoff";
+Read 'BooX' (129, "bootX.bootinfo") ":Derived:bootx.bootinfo";
 
 // Other shared stuff
 
