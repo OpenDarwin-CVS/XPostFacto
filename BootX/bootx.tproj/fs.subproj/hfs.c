@@ -318,7 +318,7 @@ static long GetCatalogEntryInfo(void *entry, long *flags, long *time)
     if (((HFSPlusCatalogFolder *)entry)->bsdInfo.ownerID != 0) {
       static int nwarnings = 0;
       if(nwarnings++ < 25)  // so we don't warn for all in an Extensions walk
-      printf("non-root file owner detected: %d\n",
+      printf("non-root folder owner detected: %d\n",
 	  ((HFSPlusCatalogFolder *)entry)->bsdInfo.ownerID);
       *flags |= kOwnerNotRoot;
     }
