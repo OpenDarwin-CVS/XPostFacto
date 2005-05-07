@@ -313,7 +313,9 @@ XPFFSRef::getOrCreateLibraryExtensionsDirectory (FSRef *rootDirectory, FSRef *re
 	OSErr err;
 	FSRef libraryRef;
 	
-	err = getOrCreateLibraryDirectory (rootDirectory, &libraryRef, create);
+	// We don't use the usual routine for creating the "real" Library directory, as we
+	// want different permissions here.
+	err = getOrCreateDirectory (rootDirectory, libraryName, 0755, &libraryRef, create);
 	if (err != noErr) return err;
 				
 	return getOrCreateDirectory (&libraryRef, extensionsName, 0755, result, create);
