@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2002
+Copyright (c) 2002, 2005
 Other World Computing
 All rights reserved
 
@@ -58,6 +58,13 @@ under the License.
 #include <ctype.h>
 #include <stdio.h>
 
+#ifdef __MACH__
+     #include <sys/types.h>
+     #include <sys/sysctl.h>
+#endif
+
+XPFPlatform* XPFPlatform::gPlatform = NULL;
+
 // Resource manager stuff
 
 struct OFtc {
@@ -65,17 +72,36 @@ struct OFtc {
 	short id;
 };
 
+XPFPlatform*
+XPFPlatform::GetPlatform ()
+{
+	if (!gPlatform) gPlatform = new XPFPlatform;
+	return gPlatform;
+}
+
 XPFPlatform::XPFPlatform ()
 {
 	// Figure out whether we know how to patch this machine.
 	fCompatible = NULL;
 	getCompatibleFromDeviceTree (&fCompatible);
-	#if qLogging
-		gLogFile << "Compatible: " << fCompatible << endl_AC;
-	#endif
+	gLogFile << "Compatible: " << fCompatible << endl_AC;
+
+#ifdef __MACH__	
+	fIsNewWorld = false;
+	UInt32 epoch;
+	size_t epochlen = sizeof (epoch);
+	int err = sysctlbyname ("hw.epoch", &epoch, &epochlen, NULL, NULL);
+	if (err == noErr) fIsNewWorld = (epoch != 0);
+#else
+	long machineType;
+	Gestalt (gestaltMachineType, &machineType);
+	fIsNewWorld = (machineType == gestaltPowerMacNewWorld);
+#endif
 	
 	fNVRAMPatch = NULL;
-	loadNVRAMPatch (fCompatible);
+	if (!fIsNewWorld) loadNVRAMPatch (fCompatible);
+
+	gPlatform = this;
 }
 
 XPFPlatform::~XPFPlatform ()
@@ -87,6 +113,8 @@ XPFPlatform::~XPFPlatform ()
 void
 XPFPlatform::patchNVRAM ()
 {
+	if (fIsNewWorld) return;
+
 	XPFNVRAMSettings *settings = XPFNVRAMSettings::GetSettings ();
 	
 	settings->setBooleanValue ("use-nvramrc?", true);
@@ -106,7 +134,8 @@ XPFPlatform::patchNVRAM ()
 void
 XPFPlatform::loadNVRAMPatch (char *compatible)
 {
-	if (!strcmp (compatible, "OPEN,PowerBook1998")) strcpy (compatible, "AAPL,PowerBook1998");
+	if (fIsNewWorld) return;
+	
 	if (!strcmp (compatible, "AAPL,PowerBook1998")) {
 		#ifdef __MACH__
 			// No way to distinguish, so we'll just leave the current patch as is
@@ -323,5 +352,11 @@ XPFPlatform::getCompatibleFromDeviceTree (char **compatible)
 	RegistryEntryIDDispose (&deviceTree);
 
 #endif
+
+	// Clean up the compatible entry in case we've altered it. I don't actually think this
+	// is necessary (since this would only happen during an install, and we're unlikely
+	// to be running then), but may as well take care of it anyway.
+	if (!strncmp (*compatible, "OPEN", 4)) memcpy (*compatible, "AAPL", 4);
+	if (!strncmp (*compatible, "XPF,", 4)) memmove (*compatible, *compatible + 4, strlen (*compatible + 4) + 1);
 }
 

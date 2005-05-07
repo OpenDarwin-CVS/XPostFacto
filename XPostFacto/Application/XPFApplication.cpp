@@ -182,7 +182,6 @@ XPFApplication::~XPFApplication()
 	gLogFile.setViewStream (NULL);
 	gLogFile << endl_AC << "Quitting" << endl_AC;
 
-	if (fPlatform) delete fPlatform;
 	if (fAboutBox) delete fAboutBox;
 	if (fLogWindow) delete fLogWindow;
 }
@@ -394,8 +393,6 @@ XPFApplication::DoInitialState ()
 	fReporter = new CLogReporter (*fViewStream);
 	gLogFile.setViewStream (fViewStream);
 
-	fPlatform = new XPFPlatform;
-
 #ifndef __MACH__	
 	fSystemShowHelpTags = HMGetBalloons ();
 #endif
@@ -538,11 +535,11 @@ XPFApplication::OpenNew (CommandNumber itsCommandNumber)
 		return NULL;	
 	}
 	
-
-	if (!fPlatform->getCanPatchNVRAM()) {
+	XPFPlatform *platform = XPFPlatform::GetPlatform ();
+	if (!platform->getCanPatchNVRAM() && !platform->getIsNewWorld()) {
 		if (fSplash) fSplash->Close ();
 		GetIndString (message, kXPFStringsResource, kNoNVRAMPatches);
-		message += fPlatform->getCompatible();
+		message += platform->getCompatible();
 		reportFatalError (message);
 		return NULL;
 	}

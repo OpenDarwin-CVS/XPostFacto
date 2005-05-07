@@ -42,9 +42,11 @@ class XPFPlatform {
 
 public:
 
-	XPFPlatform ();
 	~XPFPlatform ();
+	
+	static XPFPlatform* GetPlatform ();
 
+	bool getIsNewWorld () {return fIsNewWorld;}
 	char* getCompatible () {return fCompatible;}
 	bool getCanPatchNVRAM () {return fNVRAMPatch != NULL;}
 	void patchNVRAM ();
@@ -53,12 +55,18 @@ public:
 
 private:
 
+	static XPFPlatform *gPlatform;
+
+	XPFPlatform ();
+
 	char *fNVRAMPatch;
 	char *fCompatible;
+	bool fIsNewWorld;
 	
 	void loadNVRAMPatch (char *compatible);
 	void processOFVariable (char *name, char *value);
-	void parsePatchStream (CStream_AC *patches);	
+	void parsePatchStream (CStream_AC *patches);
+	
 };
 
 #endif

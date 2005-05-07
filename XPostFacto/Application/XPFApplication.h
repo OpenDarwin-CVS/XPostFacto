@@ -102,8 +102,6 @@ class XPFApplication : public TApplication {
 		virtual void RegainControl (bool checkClipboard);
 			
 		// Accessors
-		
-		XPFPlatform* getPlatform () {return fPlatform;}
 		UInt32 getDebugOptions () {return fDebugOptions;}
 		XPFPrefs *getPrefs () {return fPrefs;}
 		
@@ -138,7 +136,6 @@ class XPFApplication : public TApplication {
 		CAutoPtr_AC <CLogReporter> fReporter;
 			
 		XPFPrefs *fPrefs;
-		XPFPlatform *fPlatform;
 		
 		bool fShowDebugOptions;
 		UInt32 fDebugOptions;
