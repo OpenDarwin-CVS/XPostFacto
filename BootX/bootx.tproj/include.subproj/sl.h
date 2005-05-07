@@ -31,7 +31,7 @@
 #define _BOOTX_SL_H_
 
 #define kBootXVersion "74.1"
-#define kBootXVersionXPF "4.0a1"
+#define kBootXVersionXPF "4.0"
 
 // i.e. should we put up our failure screen; else back to OF
 #define kFailToBoot (1)

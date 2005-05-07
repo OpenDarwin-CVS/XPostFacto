@@ -795,7 +795,12 @@ static long CallKernel(void)
 
 static void FailToBoot (char *reason)
 {
+#if kFailToBoot
 	int verbose = TestForKey (kCommandKey) && (TestForKey ('s') || TestForKey ('v'));
+#else
+	int verbose = 1;
+#endif
+
 	if (!verbose) {
 		DrawFailedBootPicture ();
 		SetOutputLevel (kOutputLevelFull);
@@ -947,6 +952,7 @@ static long GetBootPaths(void)
   const char *priv = "\\private";
   const char *tmp = ",\\tmp\\";
   gApparentBootFile[0] = 0;
+  int useBootUUID = 1;
   
   if (gBootSourceNumber == -1) {
     // Get the boot device and derive its type
@@ -992,16 +998,25 @@ static long GetBootPaths(void)
 	// Added by ryan.rempel@utoronto.ca
 	// Look for the -h, to see if we're using a helper
 	if (strstr (gBootFile, "-h")) {
-		char ofBootArgs[128];
 		char *pos, *end;
 		
-		size = GetProp (gChosenPH, "machargs", ofBootArgs, 127);
-		if (size == -1) size = GetProp (gOptionsPH, "boot-command", ofBootArgs, 127);
-		if (size == -1) {
-			ofBootArgs[0] = '\0';
+		if (gOFVersion < kOFVersion3x) {
+			size = GetProp (gChosenPH, "machargs", ofBootArgs, sizeof (ofBootArgs) - 1);
+			if (size == -1) size = GetProp (gOptionsPH, "boot-command", ofBootArgs, sizeof (ofBootArgs) - 1);
+			if (size == -1) {
+				ofBootArgs[0] = '\0';
+			} else {
+				ofBootArgs[size] = '\0';
+			}
 		} else {
-			ofBootArgs[size] = '\0';
+			size = GetProp (gOptionsPH, "boot-args", ofBootArgs, sizeof (ofBootArgs) - 1);
+			if (size == -1) {
+				ofBootArgs[0] = '\0';
+			} else {
+				ofBootArgs[size] = '\0';
+			}
 		}
+		
 		pos = strstr (ofBootArgs, "rd=*");
 		if (pos) {
 			// isolate the rd variable
@@ -1021,10 +1036,12 @@ static long GetBootPaths(void)
 				end++;
 			}
 			sprintf (gBootFile, ",\\.XPostFacto\\%s\\mach_kernel", pos);
+			useBootUUID = 0;
 		}
 	} else {
 		// If not using a helper, then check for the old -i scheme
 		if (strstr (gBootFile, "-i")) strcpy (gBootFile, ",\\private\\tmp\\mach_kernel");
+		useBootUUID = 0;
 	}
 	
 	// If it starts with /tmp, then add /private
@@ -1035,8 +1052,16 @@ static long GetBootPaths(void)
 	}
 	
 	// If it starts with a comma, add the bootdevice
+	// But leave off anything in the boot-device after a ",\" (for New World machines)
 	if (gBootFile[0] == ',') {
-		int bootDeviceSize = strlen (gBootDevice);
+		int bootDeviceSize;
+		char *clip = strstr (gBootDevice, ",\\");
+		if (clip) {
+			bootDeviceSize = clip - gBootDevice;
+		} else {
+			bootDeviceSize = strlen (gBootDevice);
+		}
+		
 		memcpy (&gBootFile[bootDeviceSize], gBootFile, strlen (gBootFile) + 1);
 		memcpy (gBootFile, gBootDevice, bootDeviceSize);
 	}
@@ -1216,7 +1241,7 @@ static long GetBootPaths(void)
 	SetProp(gChosenPH, "rootpath", gBootFile, strlen(gBootFile) + 1);
   }
 
-  if (GetFSUUID(gBootFile, uuidStr) == 0) {
+  if (useBootUUID && GetFSUUID(gBootFile, uuidStr) == 0) {
     printf("setting boot-uuid to: %s\n", uuidStr);
     SetProp(gChosenPH, "boot-uuid", uuidStr, strlen(uuidStr) + 1);
   }
