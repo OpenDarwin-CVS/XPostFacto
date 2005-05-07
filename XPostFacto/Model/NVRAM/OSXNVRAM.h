@@ -41,8 +41,6 @@ class OSXNVRAM : public XPFNVRAMSettings {
 
 	public:
 	
-		OSXNVRAM ();
-	
 		virtual void readFromNVRAM ();
 		virtual int writeToNVRAM ();
 

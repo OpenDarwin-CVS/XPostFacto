@@ -70,7 +70,6 @@ class ToolboxNVRAM : public XPFNVRAMSettings {
 
 	public:
 	
-		ToolboxNVRAM ();
 		virtual void readFromNVRAM ();
 		virtual int writeToNVRAM ();
 		

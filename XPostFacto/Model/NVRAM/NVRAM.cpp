@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001, 2002
+Copyright (c) 2001, 2002, 2005
 Other World Computing
 All rights reserved
 
@@ -39,11 +39,14 @@ advised of the possibility of such damage.
 
 #include "XPFLog.h"
 #include "XPFErrors.h"
+#include "XPFApplication.h"
+#include "XPFPlatform.h"
 
 #if __MACH__
 	#include "OSXNVRAM.h"
 #else
 	#include "ToolboxNVRAM.h"
+	#include "NameRegistryNVRAM.h"
 #endif
 
 XPFNVRAMSettings *XPFNVRAMSettings::gSettings = NULL;
@@ -57,50 +60,61 @@ XPFNVRAMSettings::GetSettings ()
 		#ifdef __MACH__
 			gSettings = new OSXNVRAM;
 		#else
-			gSettings = new ToolboxNVRAM;
+			if (XPFPlatform::GetPlatform()->getIsNewWorld()) {
+				gSettings = new NameRegistryNVRAM;
+			} else {
+				gSettings = new ToolboxNVRAM;
+			}
 		#endif
+		gSettings->readFromNVRAM ();
 	}
 	return gSettings;
 }
 
 XPFNVRAMSettings::XPFNVRAMSettings ()
 {	
-	fNVRAMValues.InsertLast (new NVRAMBooleanValue ("little-endian?", 0));
-	fNVRAMValues.InsertLast (new NVRAMBooleanValue ("real-mode?", 1));
-	fNVRAMValues.InsertLast (new NVRAMBooleanValue ("auto-boot?", 2));
-	fNVRAMValues.InsertLast (new NVRAMBooleanValue ("diag-switch?", 3));
-	fNVRAMValues.InsertLast (new NVRAMBooleanValue ("fcode-debug?", 4));
-	fNVRAMValues.InsertLast (new NVRAMBooleanValue ("oem-banner?", 5));
-	fNVRAMValues.InsertLast (new NVRAMBooleanValue ("oem-logo?", 6));
-	fNVRAMValues.InsertLast (new NVRAMBooleanValue ("use-nvramrc?", 7));
+	XPFPlatform *platform = XPFPlatform::GetPlatform ();
+	
+	if (!platform->getIsNewWorld ()) {
+		// On New World machines, we leave all these alone		
+		fNVRAMValues.InsertLast (new NVRAMBooleanValue ("little-endian?", 0));
+		fNVRAMValues.InsertLast (new NVRAMBooleanValue ("real-mode?", 1));
+		fNVRAMValues.InsertLast (new NVRAMBooleanValue ("diag-switch?", 3));
+		fNVRAMValues.InsertLast (new NVRAMBooleanValue ("fcode-debug?", 4));
+		fNVRAMValues.InsertLast (new NVRAMBooleanValue ("oem-banner?", 5));
+		fNVRAMValues.InsertLast (new NVRAMBooleanValue ("oem-logo?", 6));
+		fNVRAMValues.InsertLast (new NVRAMBooleanValue ("use-nvramrc?", 7));
 
-	fNVRAMValues.InsertLast (new NVRAMNumericValue ("real-base", 0));
-	fNVRAMValues.InsertLast (new NVRAMNumericValue ("real-size", 1));
-	fNVRAMValues.InsertLast (new NVRAMNumericValue ("virt-base", 2));
-	fNVRAMValues.InsertLast (new NVRAMNumericValue ("virt-size", 3));
-	fNVRAMValues.InsertLast (new NVRAMNumericValue ("load-base", 4));
-	fNVRAMValues.InsertLast (new NVRAMNumericValue ("pci-probe-list", 5));
-	fNVRAMValues.InsertLast (new NVRAMNumericValue ("screen-#columns", 6));
-	fNVRAMValues.InsertLast (new NVRAMNumericValue ("screen-#rows", 7));
-	fNVRAMValues.InsertLast (new NVRAMNumericValue ("selftest-#megs", 8));
+		fNVRAMValues.InsertLast (new NVRAMNumericValue ("real-base", 0));
+		fNVRAMValues.InsertLast (new NVRAMNumericValue ("real-size", 1));
+		fNVRAMValues.InsertLast (new NVRAMNumericValue ("virt-base", 2));
+		fNVRAMValues.InsertLast (new NVRAMNumericValue ("virt-size", 3));
+		fNVRAMValues.InsertLast (new NVRAMNumericValue ("load-base", 4));
+		fNVRAMValues.InsertLast (new NVRAMNumericValue ("pci-probe-list", 5));
+		fNVRAMValues.InsertLast (new NVRAMNumericValue ("screen-#columns", 6));
+		fNVRAMValues.InsertLast (new NVRAMNumericValue ("screen-#rows", 7));
+		fNVRAMValues.InsertLast (new NVRAMNumericValue ("selftest-#megs", 8));
 
+		fNVRAMValues.InsertLast (new NVRAMStringValue ("diag-device", 2));
+		fNVRAMValues.InsertLast (new NVRAMStringValue ("diag-file", 3));
+		fNVRAMValues.InsertLast (new NVRAMStringValue ("oem-banner", 6));
+		fNVRAMValues.InsertLast (new NVRAMStringValue ("oem-logo", 7));
+		fNVRAMValues.InsertLast (new NVRAMStringValue ("nvramrc", 8));
+	}
+	
+	// These are used on both old and new world	
 	fNVRAMValues.InsertLast (new NVRAMStringValue ("boot-device", 0));
 	fNVRAMValues.InsertLast (new NVRAMStringValue ("boot-file", 1));
-	fNVRAMValues.InsertLast (new NVRAMStringValue ("diag-device", 2));
-	fNVRAMValues.InsertLast (new NVRAMStringValue ("diag-file", 3));
 	fNVRAMValues.InsertLast (new NVRAMStringValue ("input-device", 4));
 	fNVRAMValues.InsertLast (new NVRAMStringValue ("output-device", 5));
-	fNVRAMValues.InsertLast (new NVRAMStringValue ("oem-banner", 6));
-	fNVRAMValues.InsertLast (new NVRAMStringValue ("oem-logo", 7));
-	fNVRAMValues.InsertLast (new NVRAMStringValue ("nvramrc", 8));
 	fNVRAMValues.InsertLast (new NVRAMStringValue ("boot-command", 9));
-						
+	
+	fNVRAMValues.InsertLast (new NVRAMBooleanValue ("auto-boot?", 2));
+	
+	// This one is normal here, but special when reading/writing
+	fNVRAMValues.InsertLast (new NVRAMStringValue ("boot-args", 99));
+							
 	fHasChanged = false;
-}
-
-XPFNVRAMSettings::~XPFNVRAMSettings ()
-{
-
 }
 
 NVRAMValue*
@@ -112,56 +126,52 @@ XPFNVRAMSettings::getValue (const char *key)
 	}
 	return NULL;
 }
-
-NVRAMValue*
-XPFNVRAMSettings::getOrCreateValue (const char *key)
-{
-	NVRAMValue *value = getValue (key);
-	if (value == NULL) {
-		value = new NVRAMStringValue (key, 99);
-		fNVRAMValues.InsertLast (value);
-	}
-	return value;
-}
-		
+	
 NVRAMValueType 
 XPFNVRAMSettings::getValueType (const char *key)
 {
-	return getValue (key)->getValueType ();
+	NVRAMValue *nv = getValue (key);
+	if (!nv) ThrowException_AC (kNoSuchNVRAMKey, 0);
+	return nv->getValueType ();
 }
 
 unsigned
 XPFNVRAMSettings::getOffset (const char *key)
 {
-	return getValue (key)->getOffset ();
+	NVRAMValue *nv = getValue (key);
+	if (!nv) ThrowException_AC (kNoSuchNVRAMKey, 0);
+	return nv->getOffset ();
 }
 		
 char *
 XPFNVRAMSettings::getStringValue (const char *key)
 {
-	return getValue (key)->getStringValue ();
+	NVRAMValue *nv = getValue (key);
+	if (!nv) ThrowException_AC (kNoSuchNVRAMKey, 0);
+	return nv->getStringValue ();
 }
 
 bool 
 XPFNVRAMSettings::getBooleanValue (const char *key)
 {
-	return getValue (key)->getBooleanValue ();
+	NVRAMValue *nv = getValue (key);
+	if (!nv) ThrowException_AC (kNoSuchNVRAMKey, 0);
+	return nv->getBooleanValue ();
 }
 
 long 
 XPFNVRAMSettings::getNumericValue (const char *key)
 {
-	return getValue (key)->getNumericValue ();
+	NVRAMValue *nv = getValue (key);
+	if (!nv) ThrowException_AC (kNoSuchNVRAMKey, 0);
+	return nv->getNumericValue ();
 }
 		
 bool 
 XPFNVRAMSettings::setStringValue (const char *key, const char *value)
 {
 	NVRAMValue *nv = getValue (key);
-	if (nv == NULL) {
-		nv = new NVRAMStringValue (key, 99);
-		fNVRAMValues.InsertLast (nv);
-	}
+	if (!nv) ThrowException_AC (kNoSuchNVRAMKey, 0);
 	bool result = nv->setStringValue (value);
 	if (result) fHasChanged = true;
 	return result;
@@ -171,10 +181,7 @@ bool
 XPFNVRAMSettings::setBooleanValue (const char *key, const bool value)
 {
 	NVRAMValue *nv = getValue (key);
-	if (nv == NULL) {
-		nv = new NVRAMBooleanValue (key, 99);
-		fNVRAMValues.InsertLast (nv);
-	}
+	if (!nv) ThrowException_AC (kNoSuchNVRAMKey, 0);
 	bool result = nv->setBooleanValue (value);
 	if (result) fHasChanged = true;
 	return result;
@@ -184,10 +191,7 @@ bool
 XPFNVRAMSettings::setNumericValue (const char *key, const long value)
 {
 	NVRAMValue *nv = getValue (key);
-	if (nv == NULL) {
-		nv = new NVRAMNumericValue (key, 99);
-		fNVRAMValues.InsertLast (nv);
-	}
+	if (!nv) ThrowException_AC (kNoSuchNVRAMKey, 0);
 	bool result = nv->setNumericValue (value);
 	if (result) fHasChanged = true;
 	return result;

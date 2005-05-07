@@ -49,12 +49,11 @@ class XPFNVRAMSettings {
 
 		virtual void readFromNVRAM () = 0;
 		virtual int writeToNVRAM () = 0;
-						
+		
 		static XPFNVRAMSettings* GetSettings ();
 
 		NVRAMValue *getValue (const char *key);
-		NVRAMValue *getOrCreateValue (const char *key);
-		
+
 		NVRAMValueType getValueType (const char *key);
 		unsigned getOffset (const char *key);
 		
@@ -69,7 +68,6 @@ class XPFNVRAMSettings {
 	protected:
 	
 		XPFNVRAMSettings ();
-		virtual ~XPFNVRAMSettings ();	
 
 		static XPFNVRAMSettings *gSettings;			
 		

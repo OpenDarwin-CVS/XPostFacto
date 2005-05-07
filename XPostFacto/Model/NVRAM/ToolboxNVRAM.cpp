@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2002
+Copyright (c) 2002, 2005
 Other World Computing
 All rights reserved
 
@@ -44,11 +44,6 @@ advised of the possibility of such damage.
 #define kWriteNVRAMSelector		0x032F
 #define kMagicTrapNumber 		0x02F3
 
-ToolboxNVRAM::ToolboxNVRAM ()
-{
-	readFromNVRAM ();
-}  
-
 UInt8 
 ToolboxNVRAM::readByte (unsigned offset)
 {
@@ -76,6 +71,8 @@ ToolboxNVRAM::readFromNVRAM ()
 	
 	for (TemplateAutoList_AC <NVRAMValue>::Iterator iter (&fNVRAMValues); (current = iter.Current ()); iter.Next ()) {
 
+		if (current->getOffset () > 12) continue; // Not one we can read directly -- e.g. boot-args
+
 		switch (current->getValueType ()) { 
 
 			case kStringValue:
@@ -85,7 +82,18 @@ ToolboxNVRAM::readFromNVRAM ()
 					tempString = NewPtr (nvramString->length + 1);
 					memcpy (tempString, bufferPtr + nvramString->offset - kOFPartitionOffset, nvramString->length);
 					tempString[nvramString->length] = 0;
-					current->setStringValue (tempString);
+					// Special case for boot-command / boot-args
+					if (!strcmp (current->getName (), "boot-command")) {
+						if (!strncmp (tempString, "0 bootr", strlen ("0 bootr"))) {
+							current->setStringValue ("0 bootr");
+							setStringValue ("boot-args", tempString + strlen ("0 bootr"));
+						} else {
+							current->setStringValue (tempString);
+							setStringValue ("boot-args", "");
+						}
+					} else {
+						current->setStringValue (tempString);
+					}
 					DisposePtr (tempString);
 				} else {
 					current->setStringValue ("");
@@ -124,19 +132,25 @@ ToolboxNVRAM::writeToNVRAM ()
 	NVRAMValue *current;
 	NVRAMString *nvramString;
 	unsigned length;
+	char strVal [2048];
 	
 	for (TemplateAutoList_AC <NVRAMValue>::Iterator iter (&fNVRAMValues); (current = iter.Current ()); iter.Next ()) {
+
+		if (current->getOffset () > 12) continue; // not one we can write directly -- e.g. boot-args
 
 		switch (current->getValueType ()) { 
 
 			case kStringValue:
 				nvramString = &fBuffer.stringValues[current->getOffset()];
-				length = strlen (current->getStringValue ());
+				strcpy (strVal, current->getStringValue ());
+				// Pick up the boot-args if this is boot-command
+				if (!strcmp (current->getName(), "boot-command")) strcat (strVal, getStringValue ("boot-args"));
+				length = strlen (strVal);
 				fBuffer.top -= length;
 				if (fBuffer.top >= fBuffer.here) {
 					nvramString->offset = fBuffer.top;
 					nvramString->length = length;
-					if (length > 0) BlockMoveData (current->getStringValue (), bufferPtr - kOFPartitionOffset + fBuffer.top , length);
+					if (length > 0) BlockMoveData (strVal, bufferPtr - kOFPartitionOffset + fBuffer.top, length);
 				}
 				break;
 				

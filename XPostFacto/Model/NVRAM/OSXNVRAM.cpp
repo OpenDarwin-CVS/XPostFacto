@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2002
+Copyright (c) 2002, 2005
 Other World Computing
 All rights reserved
 
@@ -39,12 +39,8 @@ advised of the possibility of such damage.
 
 #include "XPFAuthorization.h"
 #include "XPFLog.h"
-    
-OSXNVRAM::OSXNVRAM ()
-{
-	readFromNVRAM ();
-}
-    
+#include "XPFPlatform.h"
+        
 void 
 OSXNVRAM::processDictionary (const void *key, const void *value, void *context)
 {
@@ -55,14 +51,33 @@ void
 OSXNVRAM::setKeyForValue (const void *key, const void *value)
 {
 	const char *name = CFStringGetCStringPtr ((CFStringRef) key, kCFStringEncodingMacRoman);
-	if (!strcmp (name, "boot-args")) return;
+	
+	// Only set ones that we care about
+	if (!getValue (name)) return;
 	
 	CFTypeID type = CFGetTypeID (value);
 		
 	if (type == CFBooleanGetTypeID ()) {
 		setBooleanValue (name, CFBooleanGetValue ((CFBooleanRef) value));
 	} else if (type == CFStringGetTypeID ()) {
-		setStringValue (name, CFStringGetCStringPtr ((CFStringRef) value, kCFStringEncodingMacRoman));
+		const char *strVal = CFStringGetCStringPtr ((CFStringRef) value, kCFStringEncodingMacRoman);
+		if (XPFPlatform::GetPlatform()->getIsNewWorld()) {
+			setStringValue (name, strVal);
+		} else {
+			// On Old World, we ignore the boot-args, and pick it up from the boot-command
+			if (!strcmp (name, "boot-args")) return;
+			if (!strcmp (name, "boot-command")) {
+				if (!strncmp (strVal, "0 bootr", strlen ("0 bootr"))) {
+					setStringValue ("boot-command", "0 bootr");
+					setStringValue ("boot-args", strVal + strlen ("0 bootr"));
+				} else {
+					setStringValue ("boot-command", strVal);
+					setStringValue ("boot-args", "");
+				}
+			} else {
+				setStringValue (name, strVal);
+			}
+		}
 	} else if (type == CFNumberGetTypeID ()) {
 		long number;
 		CFNumberGetValue ((CFNumberRef) value, kCFNumberSInt32Type, &number);
@@ -92,37 +107,44 @@ OSXNVRAM::readFromNVRAM ()
 int
 OSXNVRAM::writeToNVRAM ()
 {
+	NVRAMValue *current;
+	bool isOldWorld = !XPFPlatform::GetPlatform()->getIsNewWorld();
+
 	if (fHasChanged) {		
 		fHasChanged = false;
 		
-		// Check to see whether there is enough space
-		unsigned stringLength = 0;
-		
-		NVRAMValue *current;
-		for (TemplateAutoList_AC <NVRAMValue>::Iterator iter (&fNVRAMValues); (current = iter.Current ()); iter.Next ()) {
-			if (current->getValueType () == kStringValue) {
-				stringLength += strlen (current->getStringValue ());
+		// Check to see whether there is enough space (if "Old World")
+		if (isOldWorld) {
+			unsigned stringLength = 0;
+			
+			for (TemplateAutoList_AC <NVRAMValue>::Iterator iter (&fNVRAMValues); (current = iter.Current ()); iter.Next ()) {
+				if (current->getValueType () == kStringValue) {
+					stringLength += strlen (current->getStringValue ());
+				}
+			}
+			
+			if ((stringLength >= kOFStringCapacity)) {
+				gLogFile << "NVRAM size limits exceeded" << endl_AC;
+				return -1;
 			}
 		}
-		
-		if (stringLength >= kOFStringCapacity) {
-			#if qLogging
-				gLogFile << "NVRAM size limits exceeded" << endl_AC;
-			#endif
-			return -1;
-		}
-			
+				
 		XPFSetUID myUID (0);
 		
 		mach_port_t iokitPort;
 		kern_return_t status = IOMasterPort (MACH_PORT_NULL, &iokitPort);
 		io_registry_entry_t options = IORegistryEntryFromPath (iokitPort, "IODeviceTree:/options");
 		ThrowIfNULL_AC ((void *) options);
+		char strVal[2048];
 			
 		for (TemplateAutoList_AC <NVRAMValue>::Iterator iter (&fNVRAMValues); (current = iter.Current ()); iter.Next ()) {
+
+			// On Old World, we skip "boot-args" (we'll add it to boot-command)
+			if (isOldWorld && !strcmp (current->getName(), "boot-args")) continue;
+
 			CFStringRef nameRef = CFStringCreateWithCString (kCFAllocatorDefault, current->getName (), kCFStringEncodingMacRoman); 
 			CFTypeRef valueRef;
-
+			
 			switch (current->getValueType ()) {
 				case kBooleanValue:
 					valueRef = current->getBooleanValue () ? kCFBooleanTrue : kCFBooleanFalse;
@@ -134,7 +156,10 @@ OSXNVRAM::writeToNVRAM ()
 					break;
 					
 				case kStringValue:
-					valueRef = CFStringCreateWithCString (kCFAllocatorDefault, current->getStringValue (), kCFStringEncodingMacRoman); 
+					strcpy (strVal, current->getStringValue ());
+					// On Old World, we add boot-args to boot-command
+					if (isOldWorld && !strcmp (current->getName(), "boot-command")) strcat (strVal, getStringValue ("boot-args"));
+					valueRef = CFStringCreateWithCString (kCFAllocatorDefault, strVal, kCFStringEncodingMacRoman); 
 					break;
 			}
 			
@@ -146,6 +171,6 @@ OSXNVRAM::writeToNVRAM ()
 		
 		IOObjectRelease (options);
 	}
-	
+		
 	return 0;
 }
