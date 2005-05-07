@@ -5603,7 +5603,7 @@
 			isa = PBXShellScriptBuildPhase;
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "mkdir -p \"${SRCROOT}/XPostFacto/Derived\"\n\"${SYMROOT}/macho-to-xcoff\" \"${SYMROOT}/bootx\" \"${SRCROOT}/XPostFacto/Derived/bootx.xcoff\"\ncp \"${SRCROOT}/BootX/bootx.tproj/bootinfo.hdr\" \"${SRCROOT}/XPostFacto/Derived/bootx.bootinfo\"\ncat \"${SRCROOT}/XPostFacto/Derived/bootx.xcoff\" >> \"${SRCROOT}/XPostFacto/Derived/bootx.bootinfo\"";
+			shellScript = "mkdir -p \"${SRCROOT}/XPostFacto/Derived\"\n\"${SYMROOT}/macho-to-xcoff\" \"${SYMROOT}/bootx\" \"${SRCROOT}/XPostFacto/Derived/bootx.xcoff\"\ncp \"${SRCROOT}/BootX/bootx.tproj/bootinfo.hdr\" \"${SRCROOT}/XPostFacto/Derived/bootx.bootinfo\"\ncat \"${SRCROOT}/XPostFacto/Derived/bootx.xcoff\" >> \"${SRCROOT}/XPostFacto/Derived/bootx.bootinfo\"\n\nif test ${SUDO_USER}; then\n\tchown -R ${SUDO_USER} \"${SYMROOT}\"\n\tchown -R ${SUDO_USER} \"${SRCROOT}/XPostFacto/Derived\"\nfi";
 		};
 		F53C6AB401B19FD401A80001 = {
 			explicitFileType = wrapper.cfbundle;
