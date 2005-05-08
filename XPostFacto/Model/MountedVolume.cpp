@@ -843,6 +843,26 @@ MountedVolume::getPartitionInfo () {
 #endif
 
 OSErr
+MountedVolume::blessCoreServicesFolder ()
+{
+	if (!fCoreServicesFolderNodeID) return noErr;
+	if (fCoreServicesFolderNodeID == fBlessedFolderID) return noErr;
+	
+	FSVolumeInfo volInfo;
+	OSErr err = FSGetVolumeInfo (fInfo.driveNumber, 0, NULL, kFSVolInfoFinderInfo, &volInfo, NULL, NULL);
+	if (err == noErr) {
+		UInt32 *finderInfo = (UInt32 *) volInfo.finderInfo;
+		finderInfo[0] = fCoreServicesFolderNodeID;
+		finderInfo[5] = fCoreServicesFolderNodeID;
+		err = FSSetVolumeInfo (fInfo.driveNumber, kFSVolInfoFinderInfo, &volInfo);
+	}
+	
+	checkBlessedFolder ();
+	
+	return err;
+}
+
+OSErr
 MountedVolume::blessMacOS9SystemFolder ()
 {
 	if (!fMacOS9SystemFolderNodeID) return noErr;

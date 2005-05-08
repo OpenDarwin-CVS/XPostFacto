@@ -100,6 +100,7 @@ class MountedVolume : public MDependable_AC
 		UInt32 getMacOS9SystemFolderNodeID () {return fMacOS9SystemFolderNodeID;}
 		UInt32 getBlessedFolderID () {return fBlessedFolderID;}
 		OSErr blessMacOS9SystemFolder ();
+		OSErr blessCoreServicesFolder ();
 		void checkBlessedFolder ();
 				
 		void installBootX ();

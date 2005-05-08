@@ -102,7 +102,8 @@ class XPFPrefs : public TFileBasedDocument {
 
 		CStr255_AC getBootDevice (bool forInstall);
 		CStr255_AC getBootFile (bool forInstall);
-		CStr255_AC getBootCommand (bool forInstall);
+		CStr255_AC getBootCommand ();
+		CStr255_AC getBootArgs (bool forInstall);
 				
 		CStr255_AC getInputDevice (bool forInstall);
 		CStr255_AC getOutputDevice (bool forInstall);
@@ -133,6 +134,7 @@ class XPFPrefs : public TFileBasedDocument {
 	
 DECLARE_ACCESSORS (MountedVolume*, TargetDisk)
 DECLARE_ACCESSORS (MountedVolume*, InstallCD)
+DECLARE_ACCESSORS (MountedVolume*, MacOS9Disk)
 DECLARE_ACCESSORS (XPFIODevice*, InputDevice)
 DECLARE_ACCESSORS (XPFIODevice*, OutputDevice)
 DECLARE_ACCESSORS (bool, BootInVerboseMode)
@@ -182,6 +184,7 @@ DECLARE_DEBUG_ACCESSORS (DebugPanicText)
 				
 		MountedVolume *fTargetDisk;
 		MountedVolume *fInstallCD;
+		MountedVolume *fMacOS9Disk;
 				
 		XPFIODevice *fInputDevice;
 		XPFIODevice *fOutputDevice;
