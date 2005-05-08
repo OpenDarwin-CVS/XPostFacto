@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2003 - 2004
+Copyright (c) 2003 - 2005
 Other World Computing
 All rights reserved
 
@@ -143,20 +143,8 @@ XPFVolumeDisplay::setVolume (MountedVolume* newVolume)
 	
 	fIcon->SetIconSuite (iconSuite, true);
 	
-	CStr255_AC status;
-	unsigned statusCode = fVolume->getHasInstaller () ? fVolume->getInstallerStatus () : fVolume->getBootStatus ();
-	
-	if (statusCode == kStatusOK) {
-		if (fVolume->getHasMachKernel ()) {
-			status = fVolume->getIsDarwin () ? "Darwin " : "Mac OS X ";
-			status += fVolume->getMacOSXVersion ();
-			if (fVolume->getHasInstaller ()) status += " Install CD";
-		}
-	} else {
-		status.CopyFrom (kXPFStringsResource, statusCode, 255);
-	}
-	fStatus->SetText (status, true);
-	
+	DoUpdate (cSetRebootInMacOS9, fPrefs, NULL, NULL);
+	DoUpdate (cSetMacOS9Disk, fPrefs, fPrefs->getMacOS9Disk (), NULL);
 	DoUpdate (cSetTargetDisk, fPrefs, fPrefs->getTargetDisk (), NULL);
 	DoUpdate (cSetInstallCD, fPrefs, fPrefs->getInstallCD (), NULL);
 	DoUpdate (cSetSymlinkStatus, fVolume, fVolume, NULL);
@@ -171,9 +159,12 @@ XPFVolumeDisplay::DoUpdate	(ChangeID_AC theChange,
 {
 	MountedVolume *vol = (MountedVolume *) changeData;
 
-	if (fVolume == vol) fWarningIcon->Show (fVolume->getBootWarning (fPrefs->getInstallCD ()), true);
-
 	switch (theChange) {
+	
+		case cSetRebootInMacOS9:
+			updateStatusText ();
+			updateActiveState ();
+			break;
 				
 		case cSetVolumeName:
 			fVolumeName->SetText (fVolume->getVolumeName (), true);
@@ -203,19 +194,59 @@ XPFVolumeDisplay::DoUpdate	(ChangeID_AC theChange,
 			break;
 			
 		case cSetInstallCD:
-			unsigned bootStatus = fVolume->getBootStatus ();
-			unsigned targetStatus = fVolume->getInstallTargetStatus ();
-			unsigned installerStatus = fVolume->getInstallerStatus ();
-			if (vol) {
-				SetActiveState ((installerStatus == kStatusOK) || (bootStatus == kStatusOK) || (targetStatus == kStatusOK), false);
-			} else {
-				SetActiveState ((installerStatus == kStatusOK) || (bootStatus == kStatusOK), false);			
-			}
-			fWarningIcon->Show (fVolume->getBootWarning (vol), true);
+			updateActiveState ();
 			break;
 				
 		default:
+			if (fVolume == vol) updateActiveState ();
 			Inherited::DoUpdate (theChange, changedObject, changeData, dependencySpace);
 			break;
 	}
+}
+
+void
+XPFVolumeDisplay::updateActiveState ()
+{
+	unsigned bootStatus = fVolume->getBootStatus ();
+	unsigned targetStatus = fVolume->getInstallTargetStatus ();
+	unsigned installerStatus = fVolume->getInstallerStatus ();
+
+	if (fPrefs->getRebootInMacOS9 ()) {
+		SetActiveState (fVolume->getMacOS9BootStatus() == kStatusOK, false);
+		fWarningIcon->Show (false, true);
+	} else if (fPrefs->getInstallCD ()) {
+		SetActiveState ((installerStatus == kStatusOK) || (bootStatus == kStatusOK) || (targetStatus == kStatusOK), false);
+		fWarningIcon->Show (fVolume->getBootWarning (true), true);
+	} else {
+		SetActiveState ((installerStatus == kStatusOK) || (bootStatus == kStatusOK), false);			
+		fWarningIcon->Show (fVolume->getBootWarning (false), true);
+	}	
+}
+
+void
+XPFVolumeDisplay::updateStatusText ()
+{
+	unsigned statusCode;
+	if (fPrefs->getRebootInMacOS9 ()) {
+		statusCode = fVolume->getMacOS9BootStatus ();
+	} else if (fVolume->getHasInstaller ()) {
+		statusCode = fVolume->getInstallerStatus ();
+	} else {
+		statusCode = fVolume->getBootStatus ();	
+	}
+	
+	CStr255_AC status;
+	if (statusCode == kStatusOK) {
+		if (fPrefs->getRebootInMacOS9 ()) {
+			status = "Mac OS 9.x";	// FIXME -- it would be nice to get the actual version
+		} else if (fVolume->getHasMachKernel ()) {
+			status = fVolume->getIsDarwin () ? "Darwin " : "Mac OS X ";
+			status += fVolume->getMacOSXVersion ();
+			if (fVolume->getHasInstaller ()) status += " Install CD";
+		}
+	} else {
+		status.CopyFrom (kXPFStringsResource, statusCode, 255);
+	}
+	
+	fStatus->SetText (status, true);
 }

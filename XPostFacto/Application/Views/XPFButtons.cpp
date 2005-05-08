@@ -56,7 +56,6 @@ XPFInstallButton::DoPostCreate (TDocument* itsDocument)
 		
 	itsDocument->AddDependent (this);
 	
-	DoUpdate (cSetTargetDisk, itsDocument, ((XPFPrefs *) itsDocument)->getTargetDisk (), NULL);
 	DoUpdate (cSetRebootInMacOS9, itsDocument, NULL, NULL);
 }
 
@@ -120,7 +119,6 @@ XPFRestartButton::DoPostCreate (TDocument* itsDocument)
 		
 	itsDocument->AddDependent (this);
 	
-	DoUpdate (cSetTargetDisk, itsDocument, ((XPFPrefs *) itsDocument)->getTargetDisk (), NULL);
 	DoUpdate (cSetRebootInMacOS9, itsDocument, NULL, NULL);
 }
 
@@ -145,11 +143,17 @@ bool
 XPFRestartButton::determineActiveState ()
 {
 	XPFPrefs *prefs = (XPFPrefs *) GetDocument ();
-	if (prefs->getRebootInMacOS9 ()) return true;
-	MountedVolume *targetDisk = prefs->getTargetDisk ();
-	if (!targetDisk) return false;
-	if (targetDisk->getBootStatus () != kStatusOK) return false;
-	if (prefs->getTooBigForNVRAM (false)) return false;
+	MountedVolume *targetDisk;
+	if (prefs->getRebootInMacOS9 ()) {
+		targetDisk = prefs->getMacOS9Disk ();
+		if (!targetDisk) return false;
+		if (targetDisk->getMacOS9BootStatus () != kStatusOK) return false;
+	} else {
+		targetDisk = prefs->getTargetDisk ();
+		if (!targetDisk) return false;
+		if (targetDisk->getBootStatus () != kStatusOK) return false;
+		if (prefs->getTooBigForNVRAM (false)) return false;
+	}
 	return true;
 }
 

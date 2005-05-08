@@ -151,7 +151,7 @@ XPFVolumeInspectorWindow::updateFields ()
 	fBlessedFolderID->SetText (buffer, true);
 	
 	UInt32 warning = fVolume->getBootWarning (fPrefs->getInstallCD ());
-	if (warning) {
+	if (warning && !fPrefs->getRebootInMacOS9 ()) {
 		fWarningIcon->Show (true, true);
 		fWarningText->SetTextWithStrListID (kXPFStringsResource, warning, true);
 	} else {

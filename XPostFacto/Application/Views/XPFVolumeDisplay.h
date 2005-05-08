@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2003 - 2004
+Copyright (c) 2003 - 2005
 Other World Computing
 All rights reserved
 
@@ -61,6 +61,11 @@ public:
 	void DoHighlightSelection (HLState fromHL, HLState toHL);
 	virtual TDrawingEnvironment* DoMakeNewDrawingEnvironment ();
 	
+private:
+
+	void updateStatusText ();
+	void updateActiveState ();
+
 private:
 	
 	XPFApplication *fApp;

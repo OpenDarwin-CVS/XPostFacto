@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2003
+Copyright (c) 2003, 2005
 Other World Computing
 All rights reserved
 
@@ -74,6 +74,7 @@ XPFVolumeList::DoPostCreate(TDocument* itsDocument)
 		
 	DoUpdate (cSetTargetDisk, fPrefs, fPrefs->getTargetDisk (), NULL);
 	DoUpdate (cSetInstallCD, fPrefs, fPrefs->getInstallCD (), NULL);
+	DoUpdate (cSetMacOS9Disk, fPrefs, fPrefs->getMacOS9Disk (), NULL);
 	DoUpdate (cSetRebootInMacOS9, fPrefs, NULL, NULL);
 }
 
@@ -185,7 +186,7 @@ XPFVolumeList::DoUpdate (ChangeID_AC theChange,
 {
 	MountedVolume *volume = (MountedVolume *) changeData;
 	
-	if (theChange == getSetSelectionCommandNumber ()) {
+	if (isSetSelectionCommandNumber (theChange)) {
 		for (CSubViewIterator iter (this); iter; ++iter) {
 			iter->DoUpdate (cSetSelectedVolume, changedObject, changeData, dependencySpace);		
 		}
@@ -202,13 +203,18 @@ XPFVolumeList::DoUpdate (ChangeID_AC theChange,
 				display->ScrollSelectionIntoView (false);
 				// Make sure that we highlight the disk if it is the default
 				if (volume == fPrefs->getTargetDisk ()) DoUpdate (cSetTargetDisk, changedObject, changeData, dependencySpace);
+				if (volume == fPrefs->getMacOS9Disk ()) DoUpdate (cSetMacOS9Disk, changedObject, changeData, dependencySpace);
 				if (volume == fPrefs->getInstallCD ()) DoUpdate (cSetInstallCD, changedObject, changeData, dependencySpace);
 				this->ForceRedraw ();
 			}
 			break;
 			
 		case cSetRebootInMacOS9:
-			SetActiveState (!fPrefs->getRebootInMacOS9 (), false);
+			if (fPrefs->getRebootInMacOS9 ()) {
+				DoUpdate (cSetMacOS9Disk, fPrefs, fPrefs->getMacOS9Disk (), NULL);
+			} else {
+				DoUpdate (cSetTargetDisk, fPrefs, fPrefs->getTargetDisk (), NULL);		
+			}
 			break;
 		
 		default:
@@ -242,7 +248,17 @@ XPFTargetVolumeList::useVolumeInList (MountedVolume *volume)
 void 
 XPFTargetVolumeList::handleUserSelectedVolume (MountedVolume *vol)
 {
-	fPrefs->setTargetDisk (vol);
+	if (fPrefs->getRebootInMacOS9 ()) {
+		fPrefs->setMacOS9Disk (vol);
+	} else {
+		fPrefs->setTargetDisk (vol);
+	}
+}
+
+bool
+XPFTargetVolumeList::isSetSelectionCommandNumber (CommandNumber command)
+{
+	return command == fPrefs->getRebootInMacOS9 () ? cSetMacOS9Disk : cSetTargetDisk;
 }
 
 // -------------------
@@ -327,4 +343,18 @@ XPFInstallCDList::RemovedASubView (TView* theSubView)
 {
 	Inherited::RemovedASubView (theSubView);
 	if (!HasSubViews ()) hideMiddleView ();
+}
+
+void 
+XPFInstallCDList::DoUpdate (ChangeID_AC theChange, MDependable_AC* changedObject, void* changeData, CDependencySpace_AC* dependencySpace)
+{
+	if (theChange == cSetRebootInMacOS9) {
+		if (fPrefs->getRebootInMacOS9 ()) {
+			hideMiddleView ();
+		} else {
+			if (HasSubViews ()) showMiddleView ();
+		}	
+	}
+	
+	Inherited::DoUpdate (theChange, changedObject, changeData, dependencySpace);
 }

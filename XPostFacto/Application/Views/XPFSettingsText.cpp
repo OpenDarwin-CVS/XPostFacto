@@ -68,18 +68,23 @@ XPFSettingsText::DoUpdate (ChangeID_AC theChange,
 	CStr255_AC message;
 	XPFPrefs *prefs = (XPFPrefs *) GetDocument ();
 	
-	MountedVolume *target = prefs->getTargetDisk ();
+	MountedVolume *target = prefs->getRebootInMacOS9 () ? prefs->getMacOS9Disk () : prefs->getTargetDisk ();
 	MountedVolume *installCD = prefs->getInstallCD ();
 	
 	if (target) {
-		bool forInstall = (target->getInstallTargetStatus () == kStatusOK) && installCD;
+		bool forInstall = !prefs->getRebootInMacOS9 () && (target->getInstallTargetStatus () == kStatusOK) && installCD;
 
 		message += "boot-device: ";
 		message += prefs->getBootDevice (forInstall);
 		message += "\nboot-file: ";
 		message += prefs->getBootFile (forInstall);
-		message += "\nboot-command: ";
-		message += prefs->getBootCommand (forInstall);
+		if (prefs->getRebootInMacOS9 ()) {
+			message += "\nboot-command: ";
+			message += prefs->getBootCommand ();
+		} else {
+			message += "\nboot-args: ";
+			message += prefs->getBootArgs (forInstall);		
+		}
 		message += "\nauto-boot?: ";
 		message += prefs->getAutoBoot () ? "true" : "false";
 		message += "\ninput-device: ";

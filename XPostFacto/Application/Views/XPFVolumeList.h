@@ -79,7 +79,7 @@ protected:
 
 	virtual void handleUserSelectedVolume (MountedVolume *vol) = 0;
 	virtual bool useVolumeInList (MountedVolume *vol) = 0;
-	virtual CommandNumber getSetSelectionCommandNumber () = 0;
+	virtual bool isSetSelectionCommandNumber (CommandNumber command) = 0;
 	
 	XPFApplication *fApp;
 	XPFPrefs *fPrefs;
@@ -98,7 +98,7 @@ protected:
 
 	void handleUserSelectedVolume (MountedVolume *vol);
 	bool useVolumeInList (MountedVolume *vol);
-	CommandNumber getSetSelectionCommandNumber () {return cSetTargetDisk;}
+	bool isSetSelectionCommandNumber (CommandNumber command);
 
 };
 
@@ -113,11 +113,16 @@ public:
 	void AddedASubView (TView* theSubView);
 	void RemovedASubView (TView* theSubView);
 
+	void DoUpdate	(ChangeID_AC theChange, 
+					MDependable_AC* changedObject,
+					void* changeData,
+					CDependencySpace_AC* dependencySpace);
+					
 protected:
 
 	void handleUserSelectedVolume (MountedVolume *vol);
 	bool useVolumeInList (MountedVolume *vol);
-	CommandNumber getSetSelectionCommandNumber () {return cSetInstallCD;}
+	bool isSetSelectionCommandNumber (CommandNumber command) {return command == cSetInstallCD;}
 	
 private:
 
