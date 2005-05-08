@@ -250,7 +250,7 @@ XPFPartition::writePartition ()
 
 		io_object_t partInfo = fMountedVolume->getPartitionInfo ();
 		if (partInfo) {		
-			CFTypeRef keys[6] = {
+			CFTypeRef keys[7] = {
 				CFSTR ("Processor Type"), 
 				CFSTR ("Boot Block"), 
 				CFSTR ("Boot Bytes"), 
@@ -260,7 +260,7 @@ XPFPartition::writePartition ()
 				CFSTR ("Partition Status")
 			};
 						
-			CFTypeRef values[6] = {
+			CFTypeRef values[7] = {
 				CFStringCreateWithCString (NULL, (char *) fPartition.pmProcessor, kCFStringEncodingASCII),
 				CFNumberCreate (NULL, kCFNumberLongType, &fPartition.pmLgBootStart),
 				CFNumberCreate (NULL, kCFNumberLongType, &fPartition.pmBootSize),
@@ -269,15 +269,15 @@ XPFPartition::writePartition ()
 				CFNumberCreate (NULL, kCFNumberLongType, &fPartition.pmBootCksum),
 				CFNumberCreate (NULL, kCFNumberLongType, &fPartition.pmPartStatus)
 			};
- 						
-			CFDictionaryRef props = CFDictionaryCreate (NULL, keys, values, 6, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+			
+			CFDictionaryRef props = CFDictionaryCreate (NULL, keys, values, 7, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 			if (props) {
 				kern_return_t kr = IORegistryEntrySetCFProperties (partInfo, props);
 				if (kr == KERN_SUCCESS) success = true;
 				CFRelease (props);
 			}
 			
-			for (int x = 0; x < 6; x++) CFRelease (values[x]);
+			for (int x = 0; x < 7; x++) CFRelease (values[x]);
 			IOObjectRelease (partInfo); 
 		}
 		
