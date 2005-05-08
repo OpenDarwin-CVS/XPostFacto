@@ -47,6 +47,7 @@ advised of the possibility of such damage.
 #include "XPFBootableDevice.h"
 #include "XPFAuthorization.h"
 #include "XPostFacto.h"
+#include "XPFPlatform.h"
 
 union VolumeHeader {
 	HFSMasterDirectoryBlock hfs;
@@ -204,7 +205,12 @@ XPFPartition::matchInfoAndName (FSVolumeInfo *info, HFSUniStr255 *name)
 void
 XPFPartition::setBootXValues (unsigned loadAddress, unsigned entryPoint, unsigned size) 
 {
-	// The idea here is that we have done a fresh BootX installation.
+	// The idea here is that we have done a fresh BootX installation and need to set up
+	// the correct partition information for Old World systems. It probably wouldn't cause
+	// any problems on New World machines, but we'll leave it alone anyway out of an abundance
+	// of caution.
+	
+	if (XPFPlatform::GetPlatform()->getIsNewWorld ()) return;
 		
 	fPartition.pmPartStatus |=  kPartitionAUXIsValid |
 								kPartitionAUXIsAllocated |
@@ -228,9 +234,14 @@ XPFPartition::setBootXValues (unsigned loadAddress, unsigned entryPoint, unsigne
 void
 XPFPartition::writePartition ()
 {
-	#if qLogging
-		gLogFile << "Writing partition info ..." << endl_AC;
-	#endif
+	// The idea here is that we have done a fresh BootX installation and need to set up
+	// the correct partition information for Old World systems. It probably wouldn't cause
+	// any problems on New World machines, but we'll leave it alone anyway out of an abundance
+	// of caution.
+	
+	if (XPFPlatform::GetPlatform()->getIsNewWorld ()) return;
+
+	gLogFile << "Writing partition info ..." << endl_AC;
 	
 	#if __MACH__
 		bool success = false;
@@ -245,16 +256,18 @@ XPFPartition::writePartition ()
 				CFSTR ("Boot Bytes"), 
 				CFSTR ("Boot Address"), 
 				CFSTR ("Boot Entry"), 
-				CFSTR ("Boot Checksum")
+				CFSTR ("Boot Checksum"),
+				CFSTR ("Partition Status")
 			};
-			
+						
 			CFTypeRef values[6] = {
 				CFStringCreateWithCString (NULL, (char *) fPartition.pmProcessor, kCFStringEncodingASCII),
 				CFNumberCreate (NULL, kCFNumberLongType, &fPartition.pmLgBootStart),
 				CFNumberCreate (NULL, kCFNumberLongType, &fPartition.pmBootSize),
 				CFNumberCreate (NULL, kCFNumberLongType, &fPartition.pmBootAddr),
 				CFNumberCreate (NULL, kCFNumberLongType, &fPartition.pmBootEntry),
-				CFNumberCreate (NULL, kCFNumberLongType, &fPartition.pmBootCksum)
+				CFNumberCreate (NULL, kCFNumberLongType, &fPartition.pmBootCksum),
+				CFNumberCreate (NULL, kCFNumberLongType, &fPartition.pmPartStatus)
 			};
  						
 			CFDictionaryRef props = CFDictionaryCreate (NULL, keys, values, 6, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
@@ -316,17 +329,17 @@ XPFPartition::readBootBlocks (void **buffer)
 void
 XPFPartition::installBootX ()
 {
-	// If it is a mounted volume, we ask it to install. 
-	// Otherwise, we make sure the processor field isn't set to powerpc
 	if (fMountedVolume) {
-		fMountedVolume->installBootXImageFile ();
+		fMountedVolume->installBootXFile ();
 	} else {
-		if (!strcmp ((char *) fPartition.pmProcessor, "powerpc")) {
-			#if qLogging
+		if (!XPFPlatform::GetPlatform()->getIsNewWorld()) {
+			// If we're on Old World and there is no mounted volume corresponding
+			// to the partition, then we make sure the processor field isn't set to powerpc
+			if (!strcmp ((char *) fPartition.pmProcessor, "powerpc")) {
 				gLogFile << "Disabling boot partition from previous installation" << endl_AC;
-			#endif
-			strcpy ((char *) fPartition.pmProcessor, "");
-			this->writePartition ();
+				strcpy ((char *) fPartition.pmProcessor, "");
+				this->writePartition ();
+			}
 		}
 	}
 }

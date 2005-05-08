@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2000 - 2004
+Copyright (c) 2000 - 2005
 Other World Computing
 All rights reserved
 
@@ -251,6 +251,22 @@ MountedVolume::GetDefaultRootDisk ()
 	return retVal;	
 }
 
+MountedVolume *
+MountedVolume::GetDefaultMacOS9Disk ()
+{
+	MountedVolume *retVal = NULL;
+	for (MountedVolumeIterator iter (GetVolumeList ()); iter.Current(); iter.Next()) {
+		if (iter->getMacOS9BootStatus () == kStatusOK) {
+			if (retVal) {
+				if (iter->getFreeBytes () > retVal->getFreeBytes ()) retVal = iter.Current (); 
+			} else {
+				retVal = iter.Current ();
+			}
+		}
+	}
+	return retVal;
+}
+
 #ifdef __MACH__
 
 MountedVolume*
@@ -273,9 +289,17 @@ MountedVolume::WithRegistryEntry (io_object_t entry)
 #endif
 
 MountedVolume*
-MountedVolume::WithOpenFirmwarePath (char *path)
+MountedVolume::WithOpenFirmwarePath (char *pathArg)
 {
 	MountedVolume *retVal = NULL;
+	
+	// We break the path at a comma-backslash, in case there is a file specifier in the path
+	// This would be true on New World machines, which specify a path to BootX
+	char path[256];
+	strcpy (path, pathArg);
+	char *comma = strstr (path, ",\\");
+	if (comma) *comma = 0;
+
 #ifdef __MACH__
 	mach_port_t iokitPort;
 	IOMasterPort (MACH_PORT_NULL, &iokitPort);
@@ -298,6 +322,7 @@ MountedVolume::WithOpenFirmwarePath (char *path)
 		}
 	}	
 #endif
+
 	return retVal;
 }
 
@@ -310,7 +335,14 @@ MountedVolume::getExtendsPastEightGB ()
 UInt32
 MountedVolume::getActiveBootXVersion () 
 {
-	return fBootableDevice ? fBootableDevice->getActiveBootXVersion () : 0;
+	// On New World, we can just check for BootX on this volume.
+	// On Old World, we have to ask the device, because OF on Old World won't
+	// necessarily use our BootX if the device has others.
+	if (XPFPlatform::GetPlatform()->getIsNewWorld ()) {
+		return getBootXVersion ();
+	} else {
+		return fBootableDevice ? fBootableDevice->getActiveBootXVersion () : 0;
+	}
 }
 
 OSErr
@@ -383,6 +415,16 @@ MountedVolume::installBootX ()
 	if (!getIsWriteable ()) ThrowException_AC (kVolumeNotWriteable, 0);
 
 	if (fBootableDevice) fBootableDevice->installBootXToPartition (fPartition);
+}
+
+void
+MountedVolume::installBootXFile ()
+{
+	if (XPFPlatform::GetPlatform()->getIsNewWorld ()) {
+		installBootXBootInfoFile ();
+	} else {
+		installBootXImageFile ();
+	}
 }
 
 void
@@ -509,6 +551,80 @@ MountedVolume::installBootXImageFile ()
 }
 
 void
+MountedVolume::installBootXBootInfoFile ()
+{
+	XPFSetUID myUID (0);
+	
+	FSRef bootXRef;
+	FSSpec bootXSpec;
+	try {
+		UniChar bootXName[] = {'B', 'o', 'o', 't', 'X', '.', 'b', 'o', 'o', 't', 'i', 'n', 'f', 'o'};
+		OSErr err = FSCreateFileUnicode (getRootDirectory (), 
+				sizeof (bootXName) / sizeof (UniChar), bootXName, kFSCatInfoNone, NULL, &bootXRef, NULL);
+		if (err == dupFNErr) {
+			err = noErr;
+			ThrowIfOSErr_AC (FSMakeFSRefUnicode (getRootDirectory (), 
+					sizeof (bootXName) / sizeof (UniChar), bootXName, kTextEncodingUnknown, &bootXRef));
+			ThrowIfOSErr_AC (FSDeleteObject (&bootXRef));
+			ThrowIfOSErr_AC (FSCreateFileUnicode (getRootDirectory (), 
+				sizeof (bootXName) / sizeof (UniChar), bootXName, kFSCatInfoNone, NULL, &bootXRef, NULL));
+		} else {
+			ThrowIfOSErr_AC (err);
+		}
+	}
+	catch (...) {
+		gLogFile << "Error creating BootX.bootinfo file" << endl_AC;
+		ThrowException_AC (kErrorExtractingBootX, 0);
+	}
+	
+	CResourceStream_AC stream ('BooX', 129);
+	
+	SInt16 forkRefNum = 0;
+	try {
+		HFSUniStr255 dataForkName;
+		FSGetDataForkName (&dataForkName);
+		ThrowIfOSErr_AC (FSOpenFork (&bootXRef, dataForkName.length, dataForkName.unicode, fsRdWrPerm, &forkRefNum));
+		char buffer[4096];
+		for (SInt32 bytesLeft = stream.GetSize (); bytesLeft > 0; bytesLeft -= 4096) {
+			stream.ReadBytes (buffer, Min_AC (bytesLeft, 4096));
+			ThrowIfOSErr_AC (FSWriteFork (forkRefNum, fsAtMark, 0, Min_AC (bytesLeft, 4096), buffer, NULL));
+		}
+		FSCloseFork (forkRefNum);
+	}
+	catch (...) {
+		if (forkRefNum) FSCloseFork (forkRefNum);
+		gLogFile << "Error extracting BootX.bootinfo" << endl_AC;
+		throw;
+	}
+	
+	ThrowIfOSErr_AC (FSGetCatalogInfo (&bootXRef, kFSCatInfoNone, NULL, NULL, &bootXSpec, NULL));
+ 	FSpSetIsInvisible (&bootXSpec);
+	
+#ifdef BUILDING_XPF	
+	// Now I add versioning info to the resource fork.
+	Handle bootXVersion = GetResource ('vers', 3);
+	ThrowIfResError_AC ();
+	Handle xpfVersion = GetResource ('vers', 1);
+	ThrowIfResError_AC ();
+	DetachResource (bootXVersion);
+	DetachResource (xpfVersion);
+	ThrowIfResError_AC ();	
+	FSpCreateResFile (&bootXSpec, '    ', '    ', smRoman);
+	ThrowIfResError_AC ();
+	SInt16 resourceFork = FSpOpenResFile (&bootXSpec, fsRdWrPerm);
+	ThrowIfResError_AC ();
+ 	AddResource (bootXVersion, 'vers', 1, "\p");
+ 	ThrowIfResError_AC ();
+ 	AddResource (xpfVersion, 'vers', 2, "\p");
+ 	ThrowIfResError_AC ();
+	CloseResFile (resourceFork);
+	ThrowIfResError_AC ();
+#endif
+
+	checkBootXVersion ();
+}
+
+void
 MountedVolume::turnOffIgnorePermissions ()
 {
 #ifdef __MACH__
@@ -533,18 +649,51 @@ MountedVolume::turnOffIgnorePermissions ()
 #endif
 }
 
-void
-MountedVolume::checkBootXVersion ()
+UInt32
+MountedVolume::getBootXBootInfoVersion ()
 {
+	UInt32 retVal;
 	OSErr err;
 	VersRecHndl installedVersion = NULL;
 	SInt16 resourceFork = 0;
-	fBootXVersion = kBootXImproperlyInstalled;
+	retVal = kBootXNotInstalled;
+
+	FSSpec bootXBootInfoSpec;
+	err = FSMakeFSSpec (getIOVDrvInfo(), fsRtDirID, "\p:BootX.bootinfo", &bootXBootInfoSpec);
+	if (err != noErr) return retVal;
+
+	try {	
+		resourceFork = FSpOpenResFile (&bootXBootInfoSpec, fsRdPerm);
+		ThrowIfResError_AC ();
+		installedVersion = (VersRecHndl) Get1Resource ('vers', 1);
+		ThrowIfNULL_AC (installedVersion);
+		ThrowIfResError_AC ();
+		memcpy (&retVal, &(*installedVersion)->numericVersion, sizeof (retVal));
+	}
+	catch (...) {
+		// There was a problem accessing the version info. So we'll just return.
+		gLogFile << "Could not access BootX.bootinfo version info." << endl_AC;
+	}
+	
+	if (installedVersion) ReleaseResource ((Handle) installedVersion);
+	if (resourceFork > 0) CloseResFile (resourceFork);
+	
+	return retVal;
+}
+
+UInt32
+MountedVolume::getBootXImageVersion ()
+{
+	UInt32 retVal;
+	OSErr err;
+	VersRecHndl installedVersion = NULL;
+	SInt16 resourceFork = 0;
+	retVal = kBootXImproperlyInstalled;
 
 	do {
 		// If the partition info doesn't claim that it is installed, then it's not installed
 		if (!fPartition || !fPartition->getClaimsBootXInstalled ()) {
-			fBootXVersion = kBootXNotInstalled;
+			retVal = kBootXNotInstalled;
 			continue;
 		}
 
@@ -577,21 +726,31 @@ MountedVolume::checkBootXVersion ()
 			installedVersion = (VersRecHndl) Get1Resource ('vers', 1);
 			ThrowIfNULL_AC (installedVersion);
 			ThrowIfResError_AC ();
+			memcpy (&retVal, &(*installedVersion)->numericVersion, sizeof (retVal));
 		}
 		catch (...) {
 			// There was a problem accessing the version info. So we'll just return.
-			gLogFile << "Could not access BootX version info." << endl_AC;
+			gLogFile << "Could not access BootX.image version info." << endl_AC;
 			continue;		
 		}
 		
-		memcpy (&fBootXVersion, &(*installedVersion)->numericVersion, sizeof (fBootXVersion));
-
 	} while (false);
 
-	Changed (cSetBootXVersion, this);
-	
 	if (installedVersion) ReleaseResource ((Handle) installedVersion);
 	if (resourceFork > 0) CloseResFile (resourceFork);
+	
+	return retVal;
+}
+
+void
+MountedVolume::checkBootXVersion ()
+{
+	if (XPFPlatform::GetPlatform()->getIsNewWorld()) {
+		fBootXVersion = getBootXBootInfoVersion ();
+	} else {
+		fBootXVersion = getBootXImageVersion ();
+	}
+	Changed (cSetBootXVersion, this);
 }
 
 void
@@ -962,13 +1121,19 @@ void
 MountedVolume::checkBlessedFolder ()
 {
 	fMacOS9SystemFolderNodeID = 0;
+	fCoreServicesFolderNodeID = 0;
 	fBlessedFolderID = 0;
+	
+	UInt32 currentlyBlessedMacOS9FolderNodeID = 0;
+	UInt32 currentlyBlessedCoreServicesFolderNodeID = 0;
 	
 	FSVolumeInfo volInfo;
 	OSErr err = FSGetVolumeInfo (fInfo.driveNumber, 0, NULL, kFSVolInfoFinderInfo, &volInfo, NULL, NULL);
 	if (err == noErr) {
 		UInt32 *finderInfo = (UInt32 *) volInfo.finderInfo;
 		fBlessedFolderID = finderInfo[0];
+		currentlyBlessedMacOS9FolderNodeID = finderInfo[3];
+		currentlyBlessedCoreServicesFolderNodeID = finderInfo[5];
 	}
 	
 	FSIterator iterator = NULL;
@@ -981,12 +1146,31 @@ MountedVolume::checkBlessedFolder ()
 		err = FSGetCatalogInfoBulk (iterator, 1, &actualObjects, NULL, kFSCatInfoNodeFlags | kFSCatInfoNodeID, &catInfo, &item, NULL, NULL);
 		if ((err == noErr) && (actualObjects == 1)) {
 			if (catInfo.nodeFlags & kFSNodeIsDirectoryMask) {
-				if (IsMacOS9SystemFolder (&item)) fMacOS9SystemFolderNodeID = catInfo.nodeID;
+				if (IsMacOS9SystemFolder (&item)) {
+					fMacOS9SystemFolderNodeID = catInfo.nodeID;
+					// stop looking if we have found what is currently blessed
+					// otherwise, we keep going even though we've found one
+					if (currentlyBlessedMacOS9FolderNodeID == catInfo.nodeID) break;
+				}
 			}
 		}
 	}
 	
 	if (iterator) FSCloseIterator (iterator);
+	
+	FSRef coreServicesFolder;
+	err = XPFFSRef::getOrCreateCoreServicesDirectory (&fRootDirectory, &coreServicesFolder, false);
+	if (err == noErr) {
+		FSCatalogInfo catInfo;
+		err = FSGetCatalogInfo (&coreServicesFolder, kFSCatInfoNodeFlags | kFSCatInfoNodeID, &catInfo, NULL, NULL, NULL);
+		if ((err == noErr) && (catInfo.nodeFlags & kFSNodeIsDirectoryMask)) {
+			fCoreServicesFolderNodeID = catInfo.nodeID;
+		}
+	}
+
+	// If I couldn't find blessed folders, then may as well use what's currently there, just in case.
+	if (!fMacOS9SystemFolderNodeID) fMacOS9SystemFolderNodeID = currentlyBlessedMacOS9FolderNodeID;
+	if (!fCoreServicesFolderNodeID) fCoreServicesFolderNodeID = currentlyBlessedCoreServicesFolderNodeID;
 
 	Changed (cSetBlessedFolderID, this);
 	
@@ -1146,6 +1330,7 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	fFullyInitialized = false;
 	fExtensionCachesOK = true;
 	fMacOS9SystemFolderNodeID = 0;
+	fCoreServicesFolderNodeID = 0;
 	fBlessedFolderID = 0;
 	fAllocationBlockSize = 0;
 	fIsWriteable = true;
@@ -1324,11 +1509,23 @@ MountedVolume::getBootStatus ()
 }
 
 unsigned
+MountedVolume::getMacOS9BootStatus ()
+{
+	if (!fFullyInitialized) return kNotInitialized;
+	if (!getBootableDevice ()) return kNotBootable;
+	if (!strcmp (getOpenFirmwareName (false), "")) return kNotBootable;
+	if (!fPartitionNumber) return kNoPartitionNumber;
+	if (!fMacOS9SystemFolderNodeID) return kNoMacOS9SystemFolder;
+
+	return kStatusOK;
+}
+
+unsigned
 MountedVolume::getBootWarning (bool forInstall)
 {
 	// We only worry about warnings if there is no fatal problem
 	if (getInstallTargetStatus () && getInstallerStatus ()) return kStatusOK;
-	
+		
 	if (!fExtensionCachesOK) return kExtensionsCacheInvalid;
 
 	if (fSymlinkStatus == kSymlinkStatusCannotFix) return kInvalidSymlinksCannotFix;
@@ -1344,7 +1541,7 @@ MountedVolume::getBootWarning (bool forInstall)
 			if (fPartition && !fPartition->getHasHFSWrapper ()) return kNoHFSWrapper;
 		}
 
-		if (fBootableDevice->isReallyATADevice () && getExtendsPastEightGB ()) {
+		if (fBootableDevice->isReallyATADevice () && getExtendsPastEightGB () && !XPFPlatform::GetPlatform()->getIsNewWorld()) {
 			if (fIsAttachedToPCICard) {
 				if (forInstall) return kBogus8GBWarning; 
 			} else {

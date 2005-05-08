@@ -124,7 +124,7 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			
 			"Could not determine partition number";
 			
-			"You have specified a non-default bus for this volume. This is only necessary in cases where "
+/* 60 */	"You have specified a non-default bus for this volume. This is only necessary in cases where "
 			"XPostFacto would otherwise assign the volume to the wrong bus.";
 			
 			"XPostFacto";
@@ -133,9 +133,11 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			
 			"Check log for error";
 			
-			"One of the extension cache files appears to be invalid (see log for details). You may be "
+/* 65 */	"One of the extension cache files appears to be invalid (see log for details). You may be "
 			"able to fix this problem with the 'Install Extensions' command.";
 			
-			"Mac OS X requires 96 MB of RAM."
+			"Mac OS X requires 96 MB of RAM.";
+			
+			"No Mac OS 9 System Folder.";
 	}
 };

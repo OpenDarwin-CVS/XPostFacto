@@ -55,6 +55,7 @@ advised of the possibility of such damage.
 #include "XPFAuthorization.h"
 #include "vers_rsrc.h"
 #include "OFAliases.h"
+#include "XPFPlatform.h"
 
 TemplateAutoList_AC <XPFBootableDevice> XPFBootableDevice::gDeviceList;
 
@@ -305,9 +306,12 @@ union VolumeHeader {
 void 
 XPFBootableDevice::installBootXToPartition (XPFPartition *part)
 {
+	bool isOldWorld = !XPFPlatform::GetPlatform()->getIsNewWorld ();
 	for (PartitionIterator iter (fPartitionList); iter.Current (); iter.Next ()) {
-		// We install if the partition is the one specified, or if BootX is already installed
-		if (iter->getClaimsBootXInstalled () || (iter.Current () == part)) {
+		// We install if the partition is the one specified.
+		// Or, on Old World, if BootX is already installed (since the Old World
+		// Open Firmware will not necessarily use the partition we specify)
+		if ((iter.Current () == part) || (isOldWorld && iter->getClaimsBootXInstalled ())) {
 			iter->installBootX ();
 		}
 	}

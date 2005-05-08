@@ -128,6 +128,8 @@ advised of the possibility of such damage.
 
 #define cSetExtensionsCacheStatus		1471
 
+#define cSetMacOS9Disk					1472
+
 // Views and Windows
 // -----------------
 

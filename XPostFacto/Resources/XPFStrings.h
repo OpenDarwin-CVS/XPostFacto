@@ -98,12 +98,13 @@ enum {
 	kRequiresInstallation,
 	kNoPartitionNumber,
 	kUsingNonDefaultBus,
-	kXPostFactoName,
+	kXPostFactoName,			// 60
 	kSaveCurrentLog,
 	kXPostFactoLog,
 	kNotInitialized,
 	kExtensionsCacheInvalid,
-	kNotSufficientRAM,
+	kNotSufficientRAM,			// 65
+	kNoMacOS9SystemFolder,
 };
 
 

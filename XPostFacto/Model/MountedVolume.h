@@ -103,14 +103,14 @@ class MountedVolume : public MDependable_AC
 		void checkBlessedFolder ();
 				
 		void installBootX ();
-		void installBootXImageFile ();
+		void installBootXFile ();
 		void checkBootXVersion ();
 		UInt32 getActiveBootXVersion ();
 		UInt32 getBootXVersion () {return fBootXVersion;}
 		
 		short getIOVDrvInfo () {return fInfo.driveNumber;}
 		short getIOVDRefNum () {return fInfo.driverRefNum;}
-		FSVolumeInfo getVolumeInfo () {return fInfo;}
+		FSVolumeInfo* getVolumeInfo () {return &fInfo;}
 		
 		unsigned getBootStatus ();
 		unsigned getInstallerStatus ();
@@ -118,6 +118,7 @@ class MountedVolume : public MDependable_AC
 		unsigned getHelperStatus ();
 		unsigned getBootWarning (bool forInstall = false);
 		unsigned getSymlinkStatus () {return fSymlinkStatus;}
+		unsigned getMacOS9BootStatus ();
 		
 		void fixSymlinkAtPath (char *path);
 		void checkSymlinks ();
@@ -142,6 +143,7 @@ class MountedVolume : public MDependable_AC
 		static MountedVolume* GetDefaultInstallerDisk ();
 		static MountedVolume* GetDefaultInstallTarget ();
 		static MountedVolume* GetDefaultRootDisk ();
+		static MountedVolume* GetDefaultMacOS9Disk ();
 		
 		static MountedVolume* WithOpenFirmwarePath (char *path);
 
@@ -169,6 +171,11 @@ class MountedVolume : public MDependable_AC
 
 		bool isCacheFileOK (FSRef *ref);
 		
+		void installBootXImageFile ();
+		void installBootXBootInfoFile ();
+		UInt32 getBootXImageVersion ();
+		UInt32 getBootXBootInfoVersion ();		
+		
 	private:	
 		
 		FSRef fRootDirectory;
@@ -182,6 +189,7 @@ class MountedVolume : public MDependable_AC
 		
 		UInt32 fBlessedFolderID;
 		UInt32 fMacOS9SystemFolderNodeID;
+		UInt32 fCoreServicesFolderNodeID;
 		UInt32 fBootXVersion;
 
 		UInt32 fAllocationBlockSize;
