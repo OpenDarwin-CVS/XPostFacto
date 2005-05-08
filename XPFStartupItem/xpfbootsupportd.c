@@ -1,6 +1,6 @@
 /*
 
-    Copyright (c) 2003
+    Copyright (c) 2003, 2005
     Other World Computing
     All rights reserved.
     
@@ -33,6 +33,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/sysctl.h>
 #include <sys/stat.h>
 #include <syslog.h>
 #include <stdarg.h>
@@ -93,6 +94,9 @@ void checkForChangesBetween (XPFBootFile *bf1, XPFBootFile *bf2);
 void exitWithError (OSStatus err, int code);
 void turnOffSleepIfUnsupported ();
 void setupRestartInMacOS9 ();
+int setupRestartInMacOS9OldWorld ();
+int setupRestartInMacOS9NewWorld ();
+
 void reblessMacOS9SystemFolder ();
 bool isOldWorld ();
 bool isMacOS9SystemFolder (char *path);
@@ -133,32 +137,12 @@ asprintfcompat (char **buffer, const char *format, char *string)
 bool
 isOldWorld ()
 {
-	bool retVal = false;
-	mach_port_t iokitPort;
-	IOMasterPort (MACH_PORT_NULL, &iokitPort);
-	io_service_t platformDevice = NULL; 
-	io_iterator_t iter = NULL;
-	
-	IOServiceGetMatchingServices (iokitPort, IOServiceMatching ("IOPlatformExpertDevice"), &iter);
-	if (iter) {
-		platformDevice = IOIteratorNext (iter);
-		IOObjectRelease (iter);
+	static UInt32 epoch = 256;
+	if (epoch == 256) {
+		size_t epochSize = sizeof (epoch);
+		sysctlbyname ("hw.epoch", &epoch, &epochSize, NULL, NULL);
 	}
-
-	if (platformDevice) {
-		io_iterator_t iterator;
-		IORegistryEntryGetChildIterator (platformDevice, kIOServicePlane, &iterator);
-		if (iterator) {
-			io_object_t child;
-			while ((child = IOIteratorNext (iterator)) && !retVal) {
-				if (IOObjectConformsTo (child, "ApplePowerSurgePE") || IOObjectConformsTo (child, "ApplePowerStarPE") || IOObjectConformsTo (child, "GossamerPE")) retVal = true;
-				IOObjectRelease (child);
-			}
-			IOObjectRelease (iterator);
-		}
-		IOObjectRelease (platformDevice);
-	}
-	return retVal;
+	return epoch == 0;
 }
 
 bool
@@ -196,7 +180,7 @@ isMacOS9SystemFolder (char *path)
 }
 
 unsigned
-getMacOS9SystemFolderNodeID ()
+getMacOS9SystemFolderNodeID (unsigned hint)
 {
 	unsigned retVal = 0;
 	struct dirent *entry;
@@ -220,6 +204,8 @@ getMacOS9SystemFolderNodeID ()
 
 			OSErr err = getattrlist (entry->d_name, &alist, &attrbuf, sizeof (attrbuf), 0);
 			if (err == noErr) retVal = attrbuf.dirid.fid_objno;
+			
+			if (hint && (hint == retVal)) break;
 		}
 	}
 
@@ -261,11 +247,9 @@ reblessMacOS9SystemFolder ()
 	// In those cases, Mac OS X sets finderinfo[5] equal to finderinfo[0]
 	if (vinfo.finderinfo[0] != vinfo.finderinfo[5]) return;
 	
-	// We look for a system folder. Theoretically, we could trust finderinfo[3], or at least
-	// use it if it seems to point to a real system folder. Could use searchfs to figure out
-	// what path finderinfo[3] is pointint to.
+	// We look for a system folder. We provide finderinfo[3] as a hint.
 	
-	UInt32 systemFolder = getMacOS9SystemFolderNodeID ();
+	UInt32 systemFolder = getMacOS9SystemFolderNodeID (vinfo.finderinfo[3]);
 	
 	// If we can't find a system folder, then we should set finderinfo[0] equal to
 	// finderinfo[3]. That way, we do no harm if our routine for detecting system folders
@@ -335,7 +319,7 @@ getPaths (char *rootDevicePath, char *bootDevicePath)
 	if (!properties) return 2;
 	
 	CFStringRef bootDevice = CFDictionaryGetValue (properties, CFSTR ("boot-device"));
-	CFStringRef rootCommand = CFDictionaryGetValue (properties, CFSTR ("boot-command"));
+	CFStringRef rootCommand = CFDictionaryGetValue (properties, CFSTR ("boot-args"));
 	
 	if (bootDevice) CFStringGetCString (bootDevice, bootDeviceOFPath, 255, CFStringGetSystemEncoding ());
 	if (rootCommand) CFStringGetCString (rootCommand, rootDeviceOFPath, 255, CFStringGetSystemEncoding ());
@@ -376,15 +360,23 @@ getPaths (char *rootDevicePath, char *bootDevicePath)
 	return err;
 }
 
-void
-setupRestartInMacOS9 ()
+int
+setupRestartInMacOS9OldWorld ()
 {
-	if (noSyncRequired) return;
-
+	// On Old World, we rewrite the NVRAM to boot in Mac OS 9. Unfortunately, we can't specify
+	// which Mac OS 9 disk to boot from. (The mechanism for doing so requires talking to the
+	// Mac OS 9 drivers, which of course we can't do.)
+	
+	// The alternative would be to find a different Mac OS X disk to boot from (presumably one
+	// that doesn't require a helper, or is sync'd up). But we can generally rely on there being
+	// a bootable Mac OS 9 volume around, whereas a second bootable Mac OS X volume is less likely.
+	// And the user interface works well in XPostFacto when we've switched to OS 9 (since it will
+	// automatically switch back to OS X).
+	
 	mach_port_t iokitPort;
 	IOMasterPort (MACH_PORT_NULL, &iokitPort);
 	io_registry_entry_t options = IORegistryEntryFromPath (iokitPort, "IODeviceTree:/options");
-
+	
 	if (options) {
 		CFTypeRef keys[3] = {
 			CFSTR ("boot-device"), 
@@ -401,15 +393,14 @@ setupRestartInMacOS9 ()
 				&kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 		if (dict) {
 			IORegistryEntrySetCFProperties (options, dict);
-			syslog (LOG_INFO, "Setting reboot to Mac OS 9 because synchronization required.");
 			CFRelease (dict);
-			noSyncRequired = true;
 		}
 		IOObjectRelease (options);
 	}
 	
+	syslog (LOG_INFO, "Setting reboot to Mac OS 9 because synchronization required.");	
+	
 	CFURLRef bundle = CFURLCreateWithFileSystemPath (kCFAllocatorDefault, CFSTR ("/Library/StartupItems/XPFStartupItem"), kCFURLPOSIXPathStyle, true);
-
 	CFURLRef icon = CFURLCreateWithFileSystemPath (kCFAllocatorDefault, CFSTR ("/Library/StartupItems/XPFStartupItem/Contents/Resources/XPFIcons.icns"), kCFURLPOSIXPathStyle, false);
 	
 	CFUserNotificationDisplayNotice (0, kCFUserNotificationCautionAlertLevel, 
@@ -420,6 +411,47 @@ setupRestartInMacOS9 ()
 		
 	if (bundle) CFRelease (bundle);
 	if (icon) CFRelease (icon);
+
+	return 0;
+}
+
+int
+setupRestartInMacOS9NewWorld ()
+{
+	// On New World machines, we need to find a volume that can boot Mac OS 9.
+	// Unlike on Old World, we need to specify a particular volume and bless the System Folder.
+	
+	// FIXME -- need to actually write this! For the moment, I'm simply warning the user and
+	// not actually changing anything.
+	
+	syslog (LOG_INFO, "XPostFacto synchronization required.");	
+	
+	CFURLRef bundle = CFURLCreateWithFileSystemPath (kCFAllocatorDefault, CFSTR ("/Library/StartupItems/XPFStartupItem"), kCFURLPOSIXPathStyle, true);
+	CFURLRef icon = CFURLCreateWithFileSystemPath (kCFAllocatorDefault, CFSTR ("/Library/StartupItems/XPFStartupItem/Contents/Resources/XPFIcons.icns"), kCFURLPOSIXPathStyle, false);
+	
+	CFUserNotificationDisplayNotice (0, kCFUserNotificationCautionAlertLevel, 
+			icon, NULL, bundle, 
+			CFSTR ("XPF Synchronization Required"),
+			CFSTR ("XPostFacto has noticed changes in progress to your system files. Once these changes have completed, you can launch XPostFacto synchronize the changes with your helper disk. If you cannot launch XPostFacto, then reboot from a different volume (or in Mac OS 9) and run XPostFacto from there."),
+			NULL);
+		
+	if (bundle) CFRelease (bundle);
+	if (icon) CFRelease (icon);
+
+	return -1;
+}
+
+void
+setupRestartInMacOS9 ()
+{
+	if (noSyncRequired) return;
+	noSyncRequired = true;
+	
+	if (isOldWorld ()) {
+		setupRestartInMacOS9OldWorld ();
+	} else {
+		setupRestartInMacOS9NewWorld ();
+	}
 }
 
 void
