@@ -12,10 +12,6 @@
 #include "AudioHardwareUtilities.h"
 #include "AppleiSubEngine.h"
 
-extern "C" {
-extern vm_offset_t phystokv(vm_offset_t pa);
-};
-
 extern float gOldSample;
 extern float gOldInputSample;
 
@@ -642,13 +638,27 @@ void OpenDBDMAAudioDMAEngine::interruptHandler(OSObject *owner, IOInterruptEvent
 
 UInt32 OpenDBDMAAudioDMAEngine::getCurrentSampleFrame()
 {
-   UInt32 currentBlock = 0;
+	UInt32 currentBlock = 0;
+	vm_offset_t currentDMACommand = (vm_offset_t) dmaCommandBufferOut;
+	IOByteCount bufferLength = dmaCommandBufferOutMemDescriptor->getLength ();
 
-    if (ioBaseDMAOutput) {
-        vm_offset_t currentDMACommandPhys, currentDMACommand;
+	if (ioBaseDMAOutput) {
+		IOPhysicalAddress currentDMACommandPhys = IOGetDBDMAChannelRegister (ioBaseDMAOutput, commandPtrLo);
 
-        currentDMACommandPhys = (vm_offset_t)IOGetDBDMAChannelRegister(ioBaseDMAOutput, commandPtrLo);
-        currentDMACommand = phystokv(currentDMACommandPhys);
+		IOByteCount offsetVirt = 0;
+		IOByteCount segmentLength = 0;
+
+		while (offsetVirt < bufferLength) {
+			IOPhysicalAddress segmentPhys = dmaCommandBufferOutMemDescriptor->getPhysicalSegment (offsetVirt, &segmentLength); 
+			if (currentDMACommandPhys >= segmentPhys) {
+				IOByteCount offsetPhys = currentDMACommandPhys - segmentPhys;
+				if (offsetPhys < segmentLength) {
+					currentDMACommand += offsetVirt + offsetPhys;
+					break;
+				}
+			}
+			offsetVirt += segmentLength;
+		}
 
         if ((UInt32)currentDMACommand > (UInt32)dmaCommandBufferOut) {
             currentBlock = ((UInt32)currentDMACommand - (UInt32)dmaCommandBufferOut) / sizeof(IODBDMADescriptor);

@@ -60,14 +60,17 @@ _IOGetTimestamp(ns_time_t *nsp)
 // From osfmk/ppc/pmap.h
 //
 extern "C" {
-extern void invalidate_dcache(vm_offset_t va, unsigned length, boolean_t phys);
 extern void flush_dcache(vm_offset_t va, unsigned length, boolean_t phys);
 }
 
-static inline void 
+static void 
 invalidate_cache_v(vm_offset_t va, unsigned length)
 {
-	invalidate_dcache(va, length, 0);
+	vm_offset_t last = va + length;
+	while (va < last) {
+		__asm__ volatile ("dcbi 0, %0" : : "r" (va));
+		va += 32;
+	}
 }
 
 static inline void

@@ -232,12 +232,13 @@ bool MaceEnet::start(IOService * provider)
 		return false;
 	}
 
-	MGETHDR(txDebuggerPkt, M_DONTWAIT, MT_DATA);
+	txDebuggerPkt = allocatePacket (NETWORK_BUFSIZE);
 	if (!txDebuggerPkt)
 	{
 		IOLog("Mace: Can't allocate KDB buffer\n");
 		return false;
 	}
+	txDebuggerPkt->m_next = 0;
 
 #if 0
 	// Do not enable interrupt sources until the hardware

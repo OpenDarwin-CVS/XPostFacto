@@ -20,6 +20,7 @@
 
 #include "GossamerNDRVSupport.h"
 #include <IOKit/IOLib.h>
+#include <IOKit/IOPlatformExpert.h>
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -34,9 +35,6 @@
 #define	defaultBrightness			144
 #define heathrowContrastControl		(0x33)
 #define	defaultContrast				183
-
-#define gossamerSystemReg1			(0xff000004)
-#define	gossamerAllInOne			(1 << 4)
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -133,7 +131,7 @@ Boolean
 GossamerNDRVSupport::ATIIsAllInOne (void)
 {
 	static bool	didBrightness = false;
-	static Boolean rtn = (0 == (ml_phys_read_half (gossamerSystemReg1) & gossamerAllInOne));
+	static Boolean rtn = (getPlatform()->getProperty ("AllInOne") != NULL);
 	if (rtn && !didBrightness) {
 		fHeathrow->callPlatformFunction (fHeathrowSafeWriteRegUInt8, false, (void *) heathrowBrightnessControl, 
 				(void *) 0xFF, (void *) defaultBrightness, (void *) 0);

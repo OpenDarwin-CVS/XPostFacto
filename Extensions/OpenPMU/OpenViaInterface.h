@@ -110,6 +110,10 @@ private: // private DATA
     // VIA functionality. The reason for having the lock provate it is described
     // below (in the lock methods comment).
     IOLock *mutex;
+	
+	// In Tiger, we can't link to disable_preemption and enable_preemption any more.
+	// But we can get a similar effect with a simple lock
+	IOSimpleLock *preemptionMutex;
 
     // This variable is set to remember if we can use kernel resources (as timers
     // and locks) or if we have to do without:

@@ -31,11 +31,6 @@
 // Uncomment the following define to trace the PMU/VIA code:
 // #define TRACE 1
 
-extern "C" {
-	void disable_preemption();
-	void enable_preemption();
-}
-
 // =====================================================================================
 // VIA Interfaces: Polled
 // =====================================================================================
@@ -67,6 +62,7 @@ OpenViaInterface::start(IOService *provider)
         // Sets all the pointers to NULL, since the real
         // resource allocation is in hwInit()
         mutex = NULL;
+		preemptionMutex = NULL;
 
         // Since we are in a kernel tread (the one that starts the
         // IOKit resources) we can say that from now on we can use
@@ -124,7 +120,9 @@ OpenViaInterface::free(void)
 bool
 OpenViaInterface::hwInit(UInt8 *baseAddress)
 {
-    if (baseAddress != NULL) {
+    if (baseAddress == NULL) return false;
+	
+	{
         VIA1_shift            = baseAddress + 0x1400;	// shift register address
         VIA1_auxillaryControl = baseAddress + 0x1600;   // mostly to define the direction of the data.
         VIA1_interruptFlag    = baseAddress + 0x1A00;   // interrupt status and acknowledgment
@@ -140,14 +138,15 @@ OpenViaInterface::hwInit(UInt8 *baseAddress)
         
         // Creates and initializes the lock:;
         mutex = IOLockAlloc();
-        if (mutex != NULL) {
-            IOLockInit( mutex );
-            return true;
-        }
+        if (mutex == NULL) return false;
+		IOLockInit( mutex );
+
+		preemptionMutex = IOSimpleLockAlloc ();
+		if (preemptionMutex == NULL) return false;
+		IOSimpleLockInit( preemptionMutex );
     }
 
-    // If we are here something went wrong:
-    return false;
+    return true;
 }
 
 // --------------------------------------------------------------------------
@@ -173,6 +172,11 @@ OpenViaInterface::hwRelease(void)
         IOLockFree(mutex);
         mutex = NULL;
     }
+	
+	if (preemptionMutex != NULL) {
+		IOSimpleLockFree(preemptionMutex);
+		preemptionMutex = NULL;
+	}
 
     return true;
 }
@@ -188,7 +192,7 @@ OpenViaInterface::hwIsReady(void)
 {
     // we check for one (any of them would be good) of the
     // register pointers to see if it is set properly:
-    return ((VIA1_shift != NULL) && (mutex != NULL));
+    return ((VIA1_shift != NULL) && (mutex != NULL) && (preemptionMutex != NULL));
 }
 
 // --------------------------------------------------------------------------
@@ -306,7 +310,7 @@ OpenViaInterface::downloadMicroCode(UInt8 *microCodeBlock, UInt32 length)
 
     // and makes clear that we do not want to be interrupted
     // (but let the primary interrupt handlers run):
-    disable_preemption();
+    if (preemptionMutex) IOSimpleLockLock (preemptionMutex);
 
     // Wait (up to 15 seconds) for the PMU to be ready to accept a command:
     if (waitForAck(true, 15000)) {
@@ -327,7 +331,7 @@ OpenViaInterface::downloadMicroCode(UInt8 *microCodeBlock, UInt32 length)
     }
 
     // however things went we can others taks be rescheduled:
-    enable_preemption();
+    if (preemptionMutex) IOSimpleLockUnlock (preemptionMutex);
 
     // End of the critical section area:
     releaseVIALock();
@@ -397,7 +401,7 @@ OpenViaInterface::processPMURequest(PMUrequestPtr plugInMessage)
     
     // and makes clear that we do not want to be interrupted
     // (but let the primary interrupt handlers run):
-    disable_preemption();
+    if (preemptionMutex) IOSimpleLockLock (preemptionMutex);
 
     // This is in case we jump at the end becuase of an error:
     plugInMessage->pmRLength = 0;
@@ -554,8 +558,8 @@ OpenViaInterface::processPMURequest(PMUrequestPtr plugInMessage)
 exitFromPolledTransmitter:
 
     // however things went we can others taks be rescheduled:
-    enable_preemption();
-
+    if (preemptionMutex) IOSimpleLockUnlock (preemptionMutex);
+	
     // End of the critical section area:
     releaseVIALock();
 
