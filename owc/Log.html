@@ -5,6 +5,28 @@ Ryan Rempel<br>
 
 <dl>
 
+<dt><p>May 10, 2005
+<dd>
+<p>I've been working away at Tiger compatibility since Apple released the source code (the same day Tiger shipped).
+
+<p>So far, I've been able to update all the kernel extensions installed by XPostFacto so that they will work with Tiger. I've also updated XPostFacto to work with "New World" machines, because Apple has dropped support for some New World machines in Tiger (the early iBooks, the early iMacs, and the Lombard Powerbook). This is also convenient for the Blue & White G3, because it permits Firewire booting (which normally isn't possible on that model).
+
+<p>I expect to get an initial version of XPF 4 out the door reasonably soon -- there are a few glitches I'd like to test a little first.
+
+<p>There are mainly two problems remaining:
+
+<ul>
+<p><li> The Mac OS X Installer has always enforced an 8 GB limit on "Old World" machines when installing onto an ATA drive. The Installer has always been a bit brain-dead about this -- the underlying problem only affects the built-in ATA hardware, but the Installer enforces the 8 GB limit on PCI cards as well. In Tiger, the Installer seems even more brain-dead -- it thinks all volumes are ATA volumes, and it thinks that they all go past 8 GB (even if they don't).
+
+<p>So, I'll have to figure out how to work around this. Of course, the Installer isn't open source, so it's not entirely straightforward. But it looks like the Installer distinguishes between "New World" and "Old World" by consulting the hw.epoch sysctl value. I can get sysctl to tell the Installer that it is running on New World easily enough -- that should theoretically solve the problem. The difficulty is that there will be a few side-effects -- the most significant of which is that the NVRAM writing routines will also think they are on New World, and this will make a hash of the NVRAM. The checksum won't computer properly, so you would go back to Mac OS 9 post-install.
+
+<p>I could work around this by modifiying the NVRAM writing routines as well. Either that, or perhaps there is another way to convince the Installer not to apply the 8 GB rule.
+
+<p><li>The other problem is that the XPostFacto application itself isn't working quite properly in Tiger -- it launches very, very slowly and it always thinks BootX hasn't been installed (and offers to install it again). I'll have to do some debugging to figure out what the issue is.
+</ul>
+
+So, I hope to have something for people to test within a couple of weeks.
+
 <dt><p>April 1, 2005
 <dd>
 <p>I suppose I should have come up with an April Fool's joke. <a href="http://slashdot.org/">Slashdot</a> is certainly entertaining today!
