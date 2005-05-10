@@ -4656,7 +4656,7 @@
 				<string>AAPL,PowerBook1999</string>
 				<string>PowerBook1,1</string>
 				<string>PowerBook2,1</string>
-				<string>iMac</string>
+				<string>iMac,1</string>
 			</array>
 			<key>IOProviderClass</key>
 			<string>IOPlatformExpertDevice</string>
