@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2002 - 2004
+Copyright (c) 2002 - 2005
 Other World Computing
 All rights reserved
 
@@ -64,11 +64,11 @@ RESOURCE 'vers' (3,
 	purgeable) {
 	0x04,
 	0x00,
-	alpha,
-	0x01,
+	final,
+	0xFF,
 	verUs,
-	"4.0a1",
-	"4.0a1, © 2001 - 2005 Other World Computing"
+	"4.0",
+	"4.0, © 2001 - 2005 Other World Computing"
 };
 
 RESOURCE 'vers' (4,
