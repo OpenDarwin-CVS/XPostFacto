@@ -129,6 +129,9 @@ Read 'plst' (155, "OpenScreamerAudio") ":Derived:Extensions:plist:OpenScreamerAu
 Read 'hfsA' (156, "OpenAudioDeviceTreeUpdater") ":Derived:Extensions:OpenAudioDeviceTreeUpdater.hfs";
 Read 'plst' (156, "OpenAudioDeviceTreeUpdater") ":Derived:Extensions:plist:OpenAudioDeviceTreeUpdater.plist";
 
+Read 'hfsA' (157, "OpenMesh") ":Derived:Extensions:OpenMesh.hfs";
+Read 'plst' (157, "OpenMesh") ":Derived:Extensions:plist:OpenMesh.plist";
+
 // Startup Item
 
 Read 'hfsS' (200, "XPFStartupItem") ":Derived:StartupItems:XPFStartupItem.hfs";

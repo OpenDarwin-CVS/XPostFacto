@@ -1063,6 +1063,217 @@
 			target = 948B2A8007A6F982007540CE;
 			targetProxy = 948D376207A6F07100F832E6;
 		};
+		948DEB360830FB2A001DF444 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		948DEB370830FB2A001DF444 = {
+			buildActionMask = 2147483647;
+			files = (
+				948DEB540830FCB5001DF444,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		948DEB380830FB2A001DF444 = {
+			buildActionMask = 2147483647;
+			files = (
+				948DEB530830FCB5001DF444,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		948DEB390830FB2A001DF444 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		948DEB3A0830FB2A001DF444 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		948DEB3B0830FB2A001DF444 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		948DEB3C0830FB2A001DF444 = {
+			buildPhases = (
+				948DEB360830FB2A001DF444,
+				948DEB370830FB2A001DF444,
+				948DEB380830FB2A001DF444,
+				948DEB390830FB2A001DF444,
+				948DEB3A0830FB2A001DF444,
+				948DEB3B0830FB2A001DF444,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\" \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+				KERNEL_MODULE = YES;
+				LIBRARY_SEARCH_PATHS = "";
+				MODULE_IOKIT = YES;
+				MODULE_NAME = com.macsales.iokit.OpenMesh;
+				MODULE_VERSION = 1.1.2;
+				OTHER_CFLAGS = "-fpermissive -D_BIG_ENDIAN -DmeshSCSIController=OpenMeshSCSIController";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = OpenMesh;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = kext;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = OpenMesh;
+			productInstallPath = "$(USER_LIBRARY_DIR)/Bundles";
+			productName = OpenMesh;
+			productReference = 948DEB3D0830FB2A001DF444;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>OpenMesh</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.macsales.iokit.OpenMesh</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.1.2</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>OpenMesh</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.macsales.iokit.OpenMesh</string>
+			<key>IOClass</key>
+			<string>OpenMeshSCSIController</string>
+			<key>IONameMatch</key>
+			<array>
+				<string>mesh</string>
+				<string>chrp,mesh0</string>
+			</array>
+			<key>IOProviderClass</key>
+			<string>AppleMacIODevice</string>
+		</dict>
+	</dict>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.iokit.IOSCSIFamily</key>
+		<string>1.0.3</string>
+		<key>com.apple.kernel.iokit</key>
+		<string>1.1.1</string>
+		<key>com.apple.kernel.libkern</key>
+		<string>1.1.1</string>
+		<key>com.apple.kernel.mach</key>
+		<string>1.1.1</string>
+	</dict>
+	<key>OSBundleRequired</key>
+	<string>Local-Root</string>
+	<key>OWCInstallMinBuild</key>
+	<string>8</string>
+</dict>
+</plist>
+";
+		};
+		948DEB3D0830FB2A001DF444 = {
+			explicitFileType = wrapper.cfbundle;
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = OpenMesh.kext;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		948DEB4E0830FC82001DF444 = {
+			children = (
+				948DEB510830FCB4001DF444,
+				948DEB520830FCB5001DF444,
+			);
+			isa = PBXGroup;
+			name = OpenMesh;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		948DEB510830FCB4001DF444 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = mesh.cpp;
+			path = OpenMesh/mesh.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		948DEB520830FCB5001DF444 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = mesh.h;
+			path = OpenMesh/mesh.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		948DEB530830FCB5001DF444 = {
+			fileRef = 948DEB510830FCB4001DF444;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		948DEB540830FCB5001DF444 = {
+			fileRef = 948DEB520830FCB5001DF444;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		948DEB6A0830FE7B001DF444 = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 948DEB3C0830FB2A001DF444;
+			remoteInfo = OpenMesh;
+		};
+		948DEB6B0830FE7B001DF444 = {
+			isa = PBXTargetDependency;
+			target = 948DEB3C0830FB2A001DF444;
+			targetProxy = 948DEB6A0830FE7B001DF444;
+		};
 		9490D526061C8AE700D8F22E = {
 			buildActionMask = 2147483647;
 			files = (
@@ -3569,6 +3780,7 @@
 				F557F67F0226FBCB01A80001,
 				F557F67E0226FBCB01A80001,
 				F53C695601B1926201A80001,
+				948DEB4E0830FC82001DF444,
 				F53C696601B1926201A80001,
 				F53C698101B1926201A80001,
 			);
@@ -4852,6 +5064,7 @@
 				9490D52C061C8AE700D8F22E,
 				947DFF930617B5230087D76A,
 				94B4B912066C02DD00C3EE18,
+				948DEB3C0830FB2A001DF444,
 			);
 		};
 		F53C691001B191BA01A80001 = {
@@ -5266,6 +5479,7 @@
 				948B2A8107A6F982007540CE,
 				94B59CA807B970C6005060B1,
 				94C19C2107C13BFB004B83EE,
+				948DEB3D0830FB2A001DF444,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -9775,6 +9989,7 @@
 				94B4B944066C0A3900C3EE18,
 				948D376307A6F07100F832E6,
 				9468B46607AC1B6F00D39D7B,
+				948DEB6B0830FE7B001DF444,
 			);
 			isa = PBXBundleTarget;
 			name = Package;
