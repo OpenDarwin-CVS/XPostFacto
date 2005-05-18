@@ -61,7 +61,7 @@ OSXNVRAM::setKeyForValue (const void *key, const void *value)
 		setBooleanValue (name, CFBooleanGetValue ((CFBooleanRef) value));
 	} else if (type == CFStringGetTypeID ()) {
 		const char *strVal = CFStringGetCStringPtr ((CFStringRef) value, kCFStringEncodingMacRoman);
-		if (XPFPlatform::GetPlatform()->getIsNewWorld()) {
+		if (XPFPlatform::GetPlatform()->getIsNewWorld() || XPFPlatform::GetPlatform()->getEmulatingNewWorld()) {
 			setStringValue (name, strVal);
 		} else {
 			// On Old World, we ignore the boot-args, and pick it up from the boot-command
@@ -108,7 +108,7 @@ int
 OSXNVRAM::writeToNVRAM ()
 {
 	NVRAMValue *current;
-	bool isOldWorld = !XPFPlatform::GetPlatform()->getIsNewWorld();
+	bool isOldWorld = !XPFPlatform::GetPlatform()->getIsNewWorld() && !XPFPlatform::GetPlatform()->getEmulatingNewWorld();
 
 	if (fHasChanged) {		
 		fHasChanged = false;

@@ -86,12 +86,37 @@ XPFPlatform::XPFPlatform ()
 	getCompatibleFromDeviceTree (&fCompatible);
 	gLogFile << "Compatible: " << fCompatible << endl_AC;
 
-#ifdef __MACH__	
 	fIsNewWorld = false;
-	UInt32 epoch;
-	size_t epochlen = sizeof (epoch);
-	int err = sysctlbyname ("hw.epoch", &epoch, &epochlen, NULL, NULL);
-	if (err == noErr) fIsNewWorld = (epoch != 0);
+	fEmulatingNewWorld = false;
+
+#ifdef __MACH__	
+	mach_port_t iokitPort;
+	IOMasterPort (MACH_PORT_NULL, &iokitPort);
+	io_service_t patchedAppleNVRAM = NULL; 
+	io_iterator_t iter = NULL;
+	
+	IOServiceGetMatchingServices (iokitPort, IOServiceMatching ("PatchedAppleNVRAM"), &iter);
+	if (iter) {
+		patchedAppleNVRAM = IOIteratorNext (iter);
+		IOObjectRelease (iter);
+	}
+	
+	if (patchedAppleNVRAM) {
+		CFTypeRef emulatingNewWorld = IORegistryEntryCreateCFProperty (patchedAppleNVRAM, CFSTR("EmulatingNewWorld"), NULL, 0);
+		if (emulatingNewWorld) {
+			fIsNewWorld = false;
+			fEmulatingNewWorld = true;
+			CFRelease (emulatingNewWorld);
+		}
+		IOObjectRelease (patchedAppleNVRAM);
+	}
+
+	if (!fEmulatingNewWorld) {
+		UInt32 epoch;
+		size_t epochlen = sizeof (epoch);
+		int err = sysctlbyname ("hw.epoch", &epoch, &epochlen, NULL, NULL);
+		if (err == noErr) fIsNewWorld = (epoch != 0);
+	}
 #else
 	long machineType;
 	Gestalt (gestaltMachineType, &machineType);

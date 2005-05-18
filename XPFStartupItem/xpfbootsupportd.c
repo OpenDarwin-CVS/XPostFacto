@@ -137,12 +137,43 @@ asprintfcompat (char **buffer, const char *format, char *string)
 bool
 isOldWorld ()
 {
-	static UInt32 epoch = 256;
-	if (epoch == 256) {
-		size_t epochSize = sizeof (epoch);
-		sysctlbyname ("hw.epoch", &epoch, &epochSize, NULL, NULL);
+	static bool retVal = true;
+	static bool cached = false;
+	
+	if (cached) return retVal;
+	
+	cached = true;
+	bool isEmulatingNewWorld = false;
+
+	mach_port_t iokitPort;
+	IOMasterPort (MACH_PORT_NULL, &iokitPort);
+	io_service_t patchedAppleNVRAM = NULL; 
+	io_iterator_t iter = NULL;
+	
+	IOServiceGetMatchingServices (iokitPort, IOServiceMatching ("PatchedAppleNVRAM"), &iter);
+	if (iter) {
+		patchedAppleNVRAM = IOIteratorNext (iter);
+		IOObjectRelease (iter);
 	}
-	return epoch == 0;
+	
+	if (patchedAppleNVRAM) {
+		CFTypeRef emulatingNewWorld = IORegistryEntryCreateCFProperty (patchedAppleNVRAM, CFSTR("EmulatingNewWorld"), NULL, 0);
+		if (emulatingNewWorld) {
+			isEmulatingNewWorld = true;
+			retVal = true;
+			CFRelease (emulatingNewWorld);
+		}
+		IOObjectRelease (patchedAppleNVRAM);
+	}
+
+	if (!isEmulatingNewWorld) {
+		UInt32 epoch;
+		size_t epochlen = sizeof (epoch);
+		int err = sysctlbyname ("hw.epoch", &epoch, &epochlen, NULL, NULL);
+		if (err == noErr) retVal = (epoch == 0);
+	}
+	
+	return retVal;
 }
 
 bool

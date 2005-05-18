@@ -65,6 +65,8 @@ class IOPMrootDomain;
 class IOPlatformExpert : public IOService
 {
     OSDeclareDefaultStructors(IOPlatformExpert);
+	
+	friend class PatchedAppleNVRAM;
 
 private:
     long _peBootROMType;

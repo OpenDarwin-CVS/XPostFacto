@@ -2102,6 +2102,199 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		94BC2BEB08341D6F00AD9A80 = {
+			children = (
+				94BC2BFC08341E1B00AD9A80,
+				94BC2BFD08341E1B00AD9A80,
+			);
+			isa = PBXGroup;
+			name = OWCDumpNVRAM;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94BC2BF208341DF800AD9A80 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		94BC2BF308341DF800AD9A80 = {
+			buildActionMask = 2147483647;
+			files = (
+				94BC2BFF08341E1B00AD9A80,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94BC2BF408341DF800AD9A80 = {
+			buildActionMask = 2147483647;
+			files = (
+				94BC2BFE08341E1B00AD9A80,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94BC2BF508341DF800AD9A80 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94BC2BF608341DF800AD9A80 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94BC2BF708341DF800AD9A80 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		94BC2BF808341DF800AD9A80 = {
+			buildPhases = (
+				94BC2BF208341DF800AD9A80,
+				94BC2BF308341DF800AD9A80,
+				94BC2BF408341DF800AD9A80,
+				94BC2BF508341DF800AD9A80,
+				94BC2BF608341DF800AD9A80,
+				94BC2BF708341DF800AD9A80,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "";
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+				KERNEL_MODULE = YES;
+				LIBRARY_SEARCH_PATHS = "";
+				MODULE_IOKIT = YES;
+				MODULE_NAME = com.macsales.iokit.OWCDumpNVRAM;
+				MODULE_VERSION = 1.0;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = OWCDumpNVRAM;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = kext;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = OWCDumpNVRAM;
+			productInstallPath = "$(USER_LIBRARY_DIR)/Bundles";
+			productName = OWCDumpNVRAM;
+			productReference = 94BC2BF908341DF800AD9A80;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>OWCDumpNVRAM</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.macsales.iokit.OWCDumpNVRAM</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>OWCDumpNVRAM</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.macsales.iokit.OWCDumpNVRAM</string>
+			<key>IOClass</key>
+			<string>OWCDumpNVRAM</string>
+			<key>IOMatchCategory</key>
+			<string>OWCDumpNVRAM</string>
+			<key>IONameMatch</key>
+			<array>
+				<string>nvram</string>
+			</array>
+			<key>IOProviderClass</key>
+			<string>AppleMacIODevice</string>
+		</dict>
+	</dict>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.kernel.iokit</key>
+		<string>1.0b1</string>
+		<key>com.apple.kernel.libkern</key>
+		<string>1.0b1</string>
+	</dict>
+</dict>
+</plist>
+";
+		};
+		94BC2BF908341DF800AD9A80 = {
+			explicitFileType = wrapper.cfbundle;
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = OWCDumpNVRAM.kext;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		94BC2BFC08341E1B00AD9A80 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = OWCDumpNVRAM.cpp;
+			path = OWCDumpNVRAM/OWCDumpNVRAM.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94BC2BFD08341E1B00AD9A80 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = OWCDumpNVRAM.h;
+			path = OWCDumpNVRAM/OWCDumpNVRAM.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		94BC2BFE08341E1B00AD9A80 = {
+			fileRef = 94BC2BFC08341E1B00AD9A80;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		94BC2BFF08341E1B00AD9A80 = {
+			fileRef = 94BC2BFD08341E1B00AD9A80;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		94C18CC10509155800A80003 = {
 			isa = PBXTargetDependency;
 			target = 94CC89DB0508E1BC00A80003;
@@ -3793,6 +3986,7 @@
 			children = (
 				94F42768054315D700A80003,
 				94CC89D20508E13B00A80003,
+				94BC2BEB08341D6F00AD9A80,
 			);
 			isa = PBXGroup;
 			name = Utility;
@@ -5065,6 +5259,7 @@
 				947DFF930617B5230087D76A,
 				94B4B912066C02DD00C3EE18,
 				948DEB3C0830FB2A001DF444,
+				94BC2BF808341DF800AD9A80,
 			);
 		};
 		F53C691001B191BA01A80001 = {
@@ -5480,6 +5675,7 @@
 				94B59CA807B970C6005060B1,
 				94C19C2107C13BFB004B83EE,
 				948DEB3D0830FB2A001DF444,
+				94BC2BF908341DF800AD9A80,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -6700,7 +6896,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = oldworld.support.PatchedAppleNVRAM;
-				MODULE_VERSION = 1.0;
+				MODULE_VERSION = 2.0;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -6741,7 +6937,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>2.0</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>PatchedAppleNVRAM</key>

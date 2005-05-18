@@ -47,6 +47,7 @@ public:
 	static XPFPlatform* GetPlatform ();
 
 	bool getIsNewWorld () {return fIsNewWorld;}
+	bool getEmulatingNewWorld () {return fEmulatingNewWorld;}
 	char* getCompatible () {return fCompatible;}
 	bool getCanPatchNVRAM () {return fNVRAMPatch != NULL;}
 	void patchNVRAM ();
@@ -62,6 +63,7 @@ private:
 	char *fNVRAMPatch;
 	char *fCompatible;
 	bool fIsNewWorld;
+	bool fEmulatingNewWorld;
 	
 	void loadNVRAMPatch (char *compatible);
 	void processOFVariable (char *name, char *value);
