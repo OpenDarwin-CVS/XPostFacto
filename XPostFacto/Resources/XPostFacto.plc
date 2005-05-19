@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2003
+Copyright (c) 2003, 2005
 Other World Computing
 All rights reserved
 
@@ -36,7 +36,7 @@ advised of the possibility of such damage.
 #define kBundleIdentifier "com.macsales.app.XPostFacto"
 #define kBundleShortVersion kXPFVersion
 
-#define kBundleGetInfo kBundleShortVersion ", Copyright © 2001 - 2004 by Other World Computing.  All rights reserved."
+#define kBundleGetInfo kBundleShortVersion ", Copyright © 2001 - 2005 by Other World Computing."
 
 plist
 {
