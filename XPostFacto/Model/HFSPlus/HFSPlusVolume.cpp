@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001, 2002
+Copyright (c) 2001, 2002, 2005
 Other World Computing
 All rights reserved
 
@@ -119,38 +119,8 @@ HFSPlusVolume::readAllocationBlocks (UInt32 start, UInt32 count, void **buffer)
 unsigned long 
 HFSPlusVolume::getBootXStartBlock ()
 {
-#ifdef __MACH__
-	struct {
-  	  	u_int32_t length;
- 	   	HFSPlusExtentRecord extents;
-	} attrBuffer;
-	
-	attrlist params;
-	
-	char path[1024];
-	MountedVolume *vol = getMountedVolume ();
-	if (!vol) return 0;
-	FSRefMakePath (vol->getRootDirectory (), (UInt8 *) path, 1023);
-	if (path[strlen (path) - 1] != '/') strcat (path, "/");
-	strcat (path, "BootX.image");
+	XPFSetUID myUID (0);
 
-	params.bitmapcount = 5;
-    params.reserved = 0;
-    params.commonattr = 0;
-    params.volattr =  0;
-    params.dirattr = 0;
-    params.fileattr = ATTR_FILE_DATAEXTENTS;
-    params.forkattr = 0;
-    
-    XPFSetUID myUID (0);
-    int err = getattrlist (path, &params, &attrBuffer, sizeof (attrBuffer), 1); 
-    if (err) return 0;
-	if (attrBuffer.extents[1].blockCount == 0) {
-		return fOffsetIntoPartition + attrBuffer.extents[0].startBlock * (fHeader->blockSize / 512);
-	} else {
-		return 0;
-	}
-#else
 	HFSPlusCatalog catalog (this);
 	HFSUniStr255 bootXName = {11, {'B', 'o', 'o', 't', 'X', '.', 'i', 'm', 'a', 'g', 'e'}};
 	HFSPlusCatalogFile file; 
@@ -178,5 +148,4 @@ HFSPlusVolume::getBootXStartBlock ()
 	} else {
 		return 0;
 	}
-#endif
 }

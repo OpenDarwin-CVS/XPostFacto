@@ -499,9 +499,9 @@ MountedVolume::installBootXImageFile ()
 #ifdef __MACH__
 	sync ();
 	sync ();
-#else
-	ThrowIfOSErr_AC (FlushVol (NULL, getIOVDrvInfo ()));
 #endif
+
+	ThrowIfOSErr_AC (FlushVol (NULL, getIOVDrvInfo ()));
 
 	ThrowIfOSErr_AC (FSGetCatalogInfo (&bootXRef, kFSCatInfoNone, NULL, NULL, &bootXSpec, NULL));
  	FSpSetIsInvisible (&bootXSpec);
