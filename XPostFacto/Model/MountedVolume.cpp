@@ -1057,13 +1057,21 @@ MountedVolume::isCacheFileOK (FSRef *ref)
 			return false;
 		}
 		
-		if (catInfo.permissions[0] || catInfo.permissions[1]) {
+#ifdef __MACH__
+		if (!fTurnedOffIgnorePermissions && (catInfo.permissions[0] == geteuid ()) && (catInfo.permissions[1] == 99)) {
+			catInfo.permissions[0] = 0;
+			catInfo.permissions[1] = 0;		
+		}
+#endif
+
+		if (catInfo.permissions[0] != 0) {
+			// It appears that BootX only checks the owner, not the group
 			gLogFile << "Cache file owner or group is incorrect" << endl_AC;
 			return false;
 		}
 		
-		if (catInfo.permissions[2] & ~S_IFMT != 0755) {
-			gLogFile << "Cache file permissions are not 0755" << endl_AC;
+		if ((catInfo.permissions[2] & S_IWGRP) || (catInfo.permissions[2] & S_IWOTH)) {
+			gLogFile << "Cache file is writeable by group or world" << endl_AC;
 			return false;
 		}
 	}
@@ -1339,7 +1347,11 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 	fCreationDate = 0;
 	fMacOSXVersion = "";
 	fMacOSXMajorVersion = 0;
+#ifdef __MACH__
 	fTurnedOffIgnorePermissions = false;
+#else
+	fTurnedOffIgnorePermissions = true;
+#endif
 	fSymlinkStatus = kSymlinkStatusOK;
 	fIsAttachedToPCICard = false;
 	fBootXVersion = 0;
@@ -1554,6 +1566,10 @@ MountedVolume::getBootWarning (bool forInstall)
 	if (!getWillRunOnCurrentCPU ()) return kCPUNotSupported;
 
 	if (fBootableDevice) {
+		// FIXME -- I suppose that I should really check the *helper* disk for things that
+		// need to be warned about if we're using a helper (e.g. 8 GB limit etc.). But that
+		// would require some UI changes as well.
+	
 		if (!getHelperDisk ()) {
 			XPFPartition* firstPart = fBootableDevice->getFirstHFSPartition ();
 			if (firstPart && firstPart->getPartitionNumber () < kExpectedFirstHFSPartition) return kFewerPartitionsThanExpected;
@@ -1561,14 +1577,12 @@ MountedVolume::getBootWarning (bool forInstall)
 			if (fPartition && !fPartition->getHasHFSWrapper ()) return kNoHFSWrapper;
 		}
 
-		if (fBootableDevice->isReallyATADevice () && getExtendsPastEightGB () && !XPFPlatform::GetPlatform()->getIsNewWorld()) {
-			if (fIsAttachedToPCICard) {
-				if (forInstall) return kBogus8GBWarning; 
-			} else {
-				if (forInstall && getHelperDisk ()) return kBogus8GBWarning;
-				if (!getHelperDisk ()) return k8GBWarning;
-			}
-		}
+		if (fBootableDevice->isReallyATADevice () && 
+			getExtendsPastEightGB () && 
+			!XPFPlatform::GetPlatform()->getIsNewWorld() &&
+			!fIsAttachedToPCICard && 
+			!getHelperDisk ()
+		) return k8GBWarning;
 	}
 	
 	if (getBus () != getDefaultBus ()) return kUsingNonDefaultBus;
