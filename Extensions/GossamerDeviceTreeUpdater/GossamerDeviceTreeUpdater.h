@@ -42,7 +42,11 @@ class GossamerDeviceTreeUpdater : public IOService
 		
 		virtual bool start (IOService *provider);
 			
-		static void updateDeviceTree (void *argument);
+		static void updateDeviceTree (void *self);
+		
+	private:
+	
+		void adjustProperty (char *key);
 				
 };
 

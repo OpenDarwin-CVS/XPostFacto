@@ -51,7 +51,7 @@ GossamerDeviceTreeUpdater::start (IOService *provider)
 void
 GossamerDeviceTreeUpdater::updateDeviceTree (void *argument)
 {
-	IOService *self = (IOService *) argument;
+	GossamerDeviceTreeUpdater *self = (GossamerDeviceTreeUpdater *) argument;
 	IOService *provider = self->getProvider ();
 	
 	// We wait until all the driver matching has finished. The reason is that some of the driver
@@ -84,15 +84,31 @@ GossamerDeviceTreeUpdater::updateDeviceTree (void *argument)
 	
 	if (update) {
 		// We add "XPF," to the front of whatever name we matched
-		char buffer [64];
 		OSString *nameMatched = OSDynamicCast (OSString, self->getProperty ("IONameMatched"));
 		if (nameMatched) {
+			char buffer [64];
 			sprintf (buffer, "XPF,%s", nameMatched->getCStringNoCopy ());
 			provider->setName (buffer);
-			strcpy (buffer + strlen (buffer) + 1, "MacRISC");
-			OSData *data = OSData::withBytes (buffer, strlen (buffer) + strlen ("MacRISC") + 2);
-			provider->setProperty ("compatible", data);
-			data->release ();
+
+			self->adjustProperty ("model");
+			self->adjustProperty ("compatible");
+		}
+	}
+}
+
+#define kPrefix		"XPF,"
+
+void
+GossamerDeviceTreeUpdater::adjustProperty (char *key)
+{
+	OSData *data = OSDynamicCast (OSData, getProperty (key));
+	if (data) {
+		OSData *newData = OSData::withCapacity (data->getLength () + strlen (kPrefix));
+		if (newData) {
+			newData->appendBytes (kPrefix, strlen (kPrefix));
+			newData->appendBytes (data);
+			setProperty (key, newData);
+			newData->release ();
 		}
 	}
 }
