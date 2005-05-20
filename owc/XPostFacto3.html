@@ -1,23 +1,29 @@
-<body><h2>XPostFacto 3.1</h2>
+<body><h2>XPostFacto 4</h2>
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-April 18, 2005
+May 19, 2005
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
 You should also remember to check the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/framework.cfm?page=XPostFacto3.html">online version</a> of this documentation from time to time, to see whether there have been any changes.
 
-<p>Mac OS X 10.4 (Tiger) will be out soon, and I will certainly be working to get XPostFacto updated for Tiger. XPostFacto relies on the source code for Mac OS X, which Apple won't release until Tiger is officially released. So I will know more then about how much work will be required. At this time, it looks as though some of the early iMacs and the Lombard Powerbooks may need help in order to work with Tiger (in additional to the models that XPostFacto currently deals with). I will have some expenses working with Tiger, so now would be a great time for you to support XPostFacto by <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">registering as an XPostFacto user</a>, or if you are already registered, by <a href="https://eshop.macsales.com/OSXCenter/XPostFacto/Billing_Form.cfm">making a contribution to</a> the continuing development of XPostFacto.
+<p>Version 4 of XPostFacto has support for Mac OS X 10.4 (Tiger), but it needs some testing. You should be cautious in installing Mac OS X 10.4, as there may be issues with a new version that are not immediately apparent. It would be prudent to have a good backup in place before attempting to install Tiger.
 
 <p>Here's a quick link to download the latest version. Previous versions are also available in the <a href="#links">version history</a> below, along with a list of changes.
 
 <blockquote>
-<dl><dt>
-<b>Download:</b>
+<dl>
+<dt><b>Stable:</b>
 <dd>
-<a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1.sitx">XPostFacto 3.1 (.sitx)</a> 
+<p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1.sitx">XPostFacto 3.1 (.sitx)</a> 
 (or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1.sit">older .sit format</a>)
+
+<p><dt><b>Testing:</b>
+<dd>
+<p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto4.0b1.sitx">XPostFacto 4.0b1 (.sitx)</a> 
+(or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto4.0b1.sit">older .sit format</a>)
+
 </dl>
 </blockquote>
 
@@ -25,14 +31,19 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 
 <h4>What's New</h4>
 
-<p>Here are the differences between version 3.0 and 3.1:
+<p>Here's what is new in version 4.0b1:
 
 <ul>
-<li>Audio recording on the 7300 - 9600 series is now working.
-<li>Sound volume adjustment now works on the 7300 - 9600.
-<li>The 603 and 604 CPUs will now function in Mac OS X 10.2 (a G3 or G4 CPU is still required for 10.3 at this time).
-<li>Some error messages have been eliminated in the boot process.
-<li>XPostFacto now checks to make sure it is working with the root device before updating the Extensions.mkext cache.
+<p><li><b>Tiger support!</b>
+
+<p><li>XPostFacto now works with "New World" machines as well as "Old World" machines. This is particularly useful for use with the original iBooks, the original iMacs, and the Lombard Powerbooks, because Apple has dropped support for those models in Mac OS X 10.4. It is also useful with the Blue & White G3's, as it enables Firewire booting on that model (with the use of a "helper" drive).
+
+<p><li>The Mac OS X Installer will no longer complain about the 8 GB limit. (It used to complain about the 8 GB limit even in cases in which it wasn't really a problem). The downside is that there are some cases where the 8 GB limit really is a problem -- XPostFacto will attempt to warn you of those cases, but it may not catch all of them.
+
+<p><li>XPostFacto avoids the Installer's overzealous application of the 8 GB limit by pretending to be a "New World" machine. This has a side-effect on the way in which Mac OS X reads and writes NVRAM, but XPostFacto installs a kernel extension which translates between "Old World" and "New World" NVRAM structures. There may be other side-effects that I'm not aware of.
+
+<p><li>The XPostFacto user interface will now allow you to select a specific Mac OS 9.x volume to boot from. On "New World" machines, this actually works -- on "Old World" machines you will boot from one of the Mac OS 9.x volumes, but not necessarily the one you select.
+
 </ul>
 
 <h4><a name="problems">Known Problems</a></h4>
@@ -41,8 +52,6 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 
 <ul>
 <li>OWCCacheConfig is often <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=855">causing problems</a>, especially with Panther. The workaround for the moment is to de-select the "Enable L2/L3 Cache" option in XPostFacto (I have made this the default setting for now). There are several other options for enabling the L2/L3 cache -- the forum contains a <a href="http://forum.macsales.com/viewtopic.php?t=1766">HOWTO on this topic</a>.
-
-<li>There is an <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=868">8 GB limit</a> that applies when installing Mac OS X on an ATA drive on an "Old World" machine. The issue is that the firmware drivers for the built-in ATA bus on Old World machines will not access past the 8 GB mark. This means that Mac OS X must be installed on the first partition, and that partition must be less than 8 GB in size. The Mac OS X Installer knows about this, and will refuse to install if it detects the problem. Unfortunately, the Mac OS X Installer also refuses to install on ATA drives connected to PCI cards on Old World machines, even though that would actually work. Complicating this further is that some ATA cards "pretend" to be SCSI cards in Mac OS X, while others do not. I have a few ideas about how to <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=872">work around</a> some of these issues, but have not implemented that yet.
 
 <li>Booting from a Firewire drive is sometimes problematic -- it seems to depend on <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=879">which PCI card</a> is used, or sometimes <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=880">which Firewire devices are attached.</a> One workaround for error messages which appear in verbose mode is to tap the keyboard -- it is not clear why that should help, but in some cases it does.
 
@@ -609,6 +618,22 @@ and/or fitness for purpose.
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto4.0b1.sitx">4.0b1 (May 19, 2005)</a> (or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto4.0b1.sit">older .sit format</a>)
+
+<dd><p>Here's what is new in version 4.0b1:
+
+<ul>
+<p><li><b>Tiger support!</b>
+
+<p><li>XPostFacto now works with "New World" machines as well as "Old World" machines. This is particularly useful for use with the original iBooks, the original iMacs, and the Lombard Powerbooks, because Apple has dropped support for those models in Mac OS X 10.4. It is also useful with the Blue & White G3's, as it enables Firewire booting on that model (with the use of a "helper" drive).
+
+<p><li>The Mac OS X Installer will no longer complain about the 8 GB limit. (It used to complain about the 8 GB limit even in cases in which it wasn't really a problem). The downside is that there are some cases where the 8 GB limit really is a problem -- XPostFacto will attempt to warn you of those cases, but it may not catch all of them.
+
+<p><li>XPostFacto avoids the Installer's overzealous application of the 8 GB limit by pretending to be a "New World" machine. This has a side-effect on the way in which Mac OS X reads and writes NVRAM, but XPostFacto installs a kernel extension which translates between "Old World" and "New World" NVRAM structures. There may be other side-effects that I'm not aware of.
+
+<p><li>The XPostFacto user interface will now allow you to select a specific Mac OS 9.x volume to boot from. On "New World" machines, this actually works -- on "Old World" machines you will boot from one of the Mac OS 9.x volumes, but not necessarily the one you select.
+</ul>
 
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1.sitx">3.1 (April 18, 2005)</a> (or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto3.1.sit">older .sit format</a>)
 
