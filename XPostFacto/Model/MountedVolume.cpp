@@ -1034,6 +1034,13 @@ MountedVolume::getSymlinkStatusForPath (char *path)
 
 const UInt64 kMaxCacheFileSize = 16 * 1024 * 1024;
 
+#ifndef __MACH__
+	#undef S_IWGRP
+	#undef S_IWOTH
+	#define	S_IWGRP	0000020			/* W for group */
+	#define	S_IWOTH	0000002			/* W for other */
+#endif		
+		
 bool
 MountedVolume::isCacheFileOK (FSRef *ref)
 {
