@@ -5,6 +5,14 @@ Ryan Rempel<br>
 
 <dl>
 
+<dt><p>May 20, 2005
+<dd>
+<p>I've posted the first beta version of XPostFacto, with Tiger support. It needs some testing, so be careful with it -- it would be prudent to have a backup, and to have the time to deal with any problems that might arise. (This is a good idea for any Tiger install, but even more so for an unsupported install).
+
+<p>To get around the Installer's overzealous 8 GB limit, I'm now pretending to be a "New World" machine, and I've rewritten the NVRAM kernel extension to emulate New World NVRAM structures on Old World machines. As far as I know, there aren't other side effects to worry about, but we'll see -- that's one of the things that needs testing.
+
+<p>I managed to figure out what was making the XPF application so slow to launch  in Tiger -- I used Apple's "Sampler" application to see which functions were taking the most time. It turned out to be the logging functions, of all things -- I sure wouldn't have guessed that! I was flushing the log too often -- it hadn't slowed things down so much in Panther, but it was very noticeable in Tiger. But easy to fix, once I knew what it was.
+
 <dt><p>May 10, 2005
 <dd>
 <p>I've been working away at Tiger compatibility since Apple released the source code (the same day Tiger shipped).
