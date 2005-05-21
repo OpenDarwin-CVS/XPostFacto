@@ -71,6 +71,7 @@ char gUseXPFInstallRequired = 0;
 char gBootDevice[256] = {0};
 char gBootFile[256] = {0};
 char gApparentBootFile[256] = {0};
+char gUUIDStr[64];
 TagPtr gBootDict = NULL;
 static char gBootKernelCacheFile[512];
 static char gExtensionsSpec[4096];
@@ -948,10 +949,11 @@ static long GetBootPaths(void)
 {
   long ret, cnt, cnt2, cnt3, cnt4, size, partNum, bootplen, bsdplen;
   unsigned long adler32;
-  char *filePath, *buffer, uuidStr[64];
+  char *filePath, *buffer;
   const char *priv = "\\private";
   const char *tmp = ",\\tmp\\";
   gApparentBootFile[0] = 0;
+  
   int useBootUUID = 1;
   
   if (gBootSourceNumber == -1) {
@@ -1241,9 +1243,9 @@ static long GetBootPaths(void)
 	SetProp(gChosenPH, "rootpath", gBootFile, strlen(gBootFile) + 1);
   }
 
-  if (useBootUUID && GetFSUUID(gBootFile, uuidStr) == 0) {
-    printf("setting boot-uuid to: %s\n", uuidStr);
-    SetProp(gChosenPH, "boot-uuid", uuidStr, strlen(uuidStr) + 1);
+  if (useBootUUID && GetFSUUID(gBootFile, gUUIDStr) == 0) {
+    printf("setting boot-uuid to: %s\n", gUUIDStr);
+    SetProp(gChosenPH, "boot-uuid", gUUIDStr, strlen(gUUIDStr) + 1);
   }
   
   gBootSourceNumber++;
