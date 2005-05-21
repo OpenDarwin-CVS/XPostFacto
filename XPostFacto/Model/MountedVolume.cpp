@@ -60,6 +60,7 @@ advised of the possibility of such damage.
 #include "XPFPartition.h"
 #include "XPFAuthorization.h"
 #include "XCOFFDecoder.h"
+#include "XPFPlatform.h"
 #include "FastUnicodeCompare.h"
 
 #include <iostream.h>

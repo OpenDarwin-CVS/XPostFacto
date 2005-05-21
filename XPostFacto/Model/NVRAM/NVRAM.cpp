@@ -39,7 +39,6 @@ advised of the possibility of such damage.
 
 #include "XPFLog.h"
 #include "XPFErrors.h"
-#include "XPFApplication.h"
 #include "XPFPlatform.h"
 
 #if __MACH__
