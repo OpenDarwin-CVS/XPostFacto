@@ -46,7 +46,7 @@ class GossamerDeviceTreeUpdater : public IOService
 		
 	private:
 	
-		void adjustProperty (char *key);
+		void adjustProperty (const char *key, const char *nameMatched);
 				
 };
 

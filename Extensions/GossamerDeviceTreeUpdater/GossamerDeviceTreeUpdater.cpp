@@ -90,8 +90,8 @@ GossamerDeviceTreeUpdater::updateDeviceTree (void *argument)
 			sprintf (buffer, "XPF,%s", nameMatched->getCStringNoCopy ());
 			provider->setName (buffer);
 
-			self->adjustProperty ("model");
-			self->adjustProperty ("compatible");
+			self->adjustProperty ("model", nameMatched->getCStringNoCopy ());
+			self->adjustProperty ("compatible", nameMatched->getCStringNoCopy ());
 		}
 	}
 }
@@ -99,16 +99,26 @@ GossamerDeviceTreeUpdater::updateDeviceTree (void *argument)
 #define kPrefix		"XPF,"
 
 void
-GossamerDeviceTreeUpdater::adjustProperty (char *key)
+GossamerDeviceTreeUpdater::adjustProperty (const char *key, const char *nameMatched)
 {
-	OSData *data = OSDynamicCast (OSData, getProperty (key));
-	if (data) {
+	IOService *provider = getProvider ();
+	if (!provider) return;
+	
+	OSData *data = OSDynamicCast (OSData, provider->getProperty (key));
+	if (!data) {
+		IOLog ("GossamerDeviceTreeUpdater: No Property %s\n", key);
+		return;
+	}
+	
+	if (!strcmp (nameMatched, (const char *) data->getBytesNoCopy ())) {
 		OSData *newData = OSData::withCapacity (data->getLength () + strlen (kPrefix));
 		if (newData) {
 			newData->appendBytes (kPrefix, strlen (kPrefix));
 			newData->appendBytes (data);
-			setProperty (key, newData);
+			provider->setProperty (key, newData);
 			newData->release ();
 		}
+	} else {
+		IOLog ("GossamerDeviceTreeUpdater: Property %s did not start with %s\n", key, nameMatched);
 	}
 }
