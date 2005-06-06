@@ -995,7 +995,11 @@ static long GetBootPaths(void)
 
     // Get the boot file (e.g. mach_kernel)
     size = GetProp(gChosenPH, "bootargs", gBootFile, 256);
-    gBootFile[size] = '\0';
+	if (size == -1) {
+		gBootFile[0] = '\0';
+	} else {
+		gBootFile[size] = '\0';
+	}
 
 	// Added by ryan.rempel@utoronto.ca
 	// Look for the -h, to see if we're using a helper
@@ -1287,6 +1291,9 @@ static long ReadBootPlist(char *devSpec)
 
 long GetDeviceType(char *devSpec)
 {
+// FIXME -- It looks like this is getting called with devSpec = 0x2000 at some point, which just isn't right
+// Try adding some diagnostics somewhere. See http://forum.macsales.com/viewtopic.php?t=2344
+
   CICell ph;
   long   size;
   char   deviceType[32];

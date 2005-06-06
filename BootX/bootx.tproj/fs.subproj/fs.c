@@ -95,7 +95,7 @@ long LoadFile(char *fileSpec)
 
 long LoadThinFatFile(char *fileSpec, void **binary)
 {
-  char       devSpec[256];
+  char       devSpec[256] = {0};
   char       *filePath;
   FSLoadFile loadFile;
   FSReadFile readFile;
@@ -143,7 +143,7 @@ long GetFSUUID(char *spec, char *uuidStr)
 {
   long       rval = -1, partIndex;
   FSGetUUID  getUUID;
-  char       devSpec[256];
+  char       devSpec[256] = {0};
   
   do {
     if(ConvertFileSpec(spec, devSpec, NULL))  break;
@@ -245,7 +245,7 @@ long GetFileInfo(char *dirSpec, char *name, long *flags, long *time)
 long GetDirEntry(char *dirSpec, long *dirIndex, char **name,
 		 long *flags, long *time)
 {
-  char          devSpec[256];
+  char          devSpec[256] = {0};
   char          *dirPath;
   FSGetDirEntry getDirEntry;
   long          ret, partIndex;
@@ -289,6 +289,8 @@ long LookupPartition(char *devSpec)
   CICell partIH;
   long   partIndex, partType;
   long   deviceType;
+  
+  // FIXME -- add some more error-checking here, for http://forum.macsales.com/viewtopic.php?p=14331
   
   // See if the devSpec has already been opened.
   for (partIndex = 0; partIndex < kNumPartInfos; partIndex++) {
