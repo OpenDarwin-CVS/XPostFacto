@@ -954,7 +954,7 @@ static long GetBootPaths(void)
   const char *tmp = ",\\tmp\\";
   gApparentBootFile[0] = 0;
   
-  int useBootUUID = 1;
+  int useBootUUID = 0; // disabling for the moment -- might be causing problems and not sure what benefits
   
   if (gBootSourceNumber == -1) {
     // Get the boot device and derive its type
