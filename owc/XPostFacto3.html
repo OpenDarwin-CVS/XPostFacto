@@ -2,7 +2,7 @@
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-May 21, 2005
+June 6, 2005
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -21,8 +21,8 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 
 <p><dt><b>Testing:</b>
 <dd>
-<p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto4.0b2.sitx">XPostFacto 4.0b2 (.sitx)</a> 
-(or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto4.0b2.sit">older .sit format</a>)
+<p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto4.0b3.sitx">XPostFacto 4.0b3 (.sitx)</a> 
+(or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto4.0b3.sit">older .sit format</a>)
 
 </dl>
 </blockquote>
@@ -31,20 +31,20 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 
 <h4>What's New</h4>
 
-<p>Version <b>4.0b2</b> fixes a problem with BootX that led to "Waiting for root device ..." messages after a successful Tiger install.
-
-<p>Here's what is new in version <b>4.0b1</b>:
+<p>Here's what is new in version 4.0b3:
 
 <ul>
-<p><li>Tiger support!
+<p><li>Disabled the new "boot-uuid" code in BootX, as it appears to have been causing problems in some configurations.
 
-<p><li>XPostFacto now works with "New World" machines as well as "Old World" machines. This is particularly useful for use with the original iBooks, the original iMacs, and the Lombard Powerbooks, because Apple has dropped support for those models in Mac OS X 10.4. It is also useful with the Blue & White G3's, as it enables Firewire booting on that model (with the use of a "helper" drive).
+<p><li>Wallstreet Powerbooks should now successfully pretend to be "New World" machines (for the purpose of avoiding the overzealous application of the 8 GB limit). Remember that the 8 GB limit is real for the IDE bus on the Wallstreet Powerbooks, so you should heed XPostFacto's warning about that if you see it.
 
-<p><li>The Mac OS X Installer will no longer complain about the 8 GB limit. (It used to complain about the 8 GB limit even in cases in which it wasn't really a problem). The downside is that there are some cases where the 8 GB limit really is a problem -- XPostFacto will attempt to warn you of those cases, but it may not catch all of them.
+<p><li>Fixed the problem launching XPF 4 under Mac OS X on the Wallstreet Powerbook.
 
-<p><li>XPostFacto avoids the Installer's overzealous application of the 8 GB limit by pretending to be a "New World" machine. This has a side-effect on the way in which Mac OS X reads and writes NVRAM, but XPostFacto installs a kernel extension which translates between "Old World" and "New World" NVRAM structures. There may be other side-effects that I'm not aware of.
+<p><li>Hopefully fixed a problem when installing from an Install CD that has been copied to a partition on your hard drive. To test this, you would need to copy the CD again before trying the install.
 
-<p><li>The XPostFacto user interface will now allow you to select a specific Mac OS 9.x volume to boot from. On "New World" machines, this actually works -- on "Old World" machines you will boot from one of the Mac OS 9.x volumes, but not necessarily the one you select.
+<p><li>Ensure that the GossamerNDRVSupport extension loads during "Safe Boot", to avoid a kernel panic.
+
+<p><li>Hopefully fixed the iMac support, so that the Tiger installer will be successfully tricked into performing the install.
 
 </ul>
 
@@ -620,6 +620,26 @@ and/or fitness for purpose.
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto4.0b3.sitx">4.0b3 (June 6, 2005)</a> (or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto4.0b3.sit">older .sit format</a>)
+
+<dd><p>Here's what is new in version 4.0b3:
+
+<ul>
+<p><li>Disabled the new "boot-uuid" code in BootX, as it appears to have been causing problems in some configurations.
+
+<p><li>Wallstreet Powerbooks should now successfully pretend to be "New World" machines (for the purpose of avoiding the overzealous application of the 8 GB limit). Remember that the 8 GB limit is real for the IDE bus on the Wallstreet Powerbooks, so you should heed XPostFacto's warning about that if you see it.
+
+<p><li>Fixed the problem launching XPF 4 under Mac OS X on the Wallstreet Powerbook.
+
+<p><li>Hopefully fixed a problem when installing from an Install CD that has been copied to a partition on your hard drive. To test this, you would need to copy the CD again before trying the install.
+
+<p><li>Ensure that the GossamerNDRVSupport extension loads during "Safe Boot", to avoid a kernel panic.
+
+<p><li>Hopefully fixed the iMac support, so that the Tiger installer will be successfully tricked into performing the install.
+
+</ul>
+
 
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto4.0b2.sitx">4.0b2 (May 21, 2005)</a> (or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto4.0b2.sit">older .sit format</a>)
 
