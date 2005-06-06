@@ -150,7 +150,7 @@ isOldWorld ()
 	io_service_t patchedAppleNVRAM = NULL; 
 	io_iterator_t iter = NULL;
 	
-	IOServiceGetMatchingServices (iokitPort, IOServiceMatching ("PatchedAppleNVRAM"), &iter);
+	IOServiceGetMatchingServices (iokitPort, IOServiceMatching ("IONVRAMController"), &iter);
 	if (iter) {
 		patchedAppleNVRAM = IOIteratorNext (iter);
 		IOObjectRelease (iter);
