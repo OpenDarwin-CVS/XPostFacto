@@ -45,39 +45,42 @@ for the specific language governing rights and limitations under the License.
 
 */
 
-#ifndef __PATCHEDAPPLENVRAM_H__
-#define __PATCHEDAPPLENVRAM_H__
-
-#include <IOKit/IONVRAM.h>
+#ifndef __OPENOLDWORLDNVRAM_H__
+#define __OPENOLDWORLDNVRAM_H__
 
 enum {
-	kNVRAMTypeNone = 0,
-	kNVRAMTypeIOMem,
-	kNVRAMTypePort,
+	kNVRAMImageSize = 0x2000
 };
 
 struct OWVariablesHeader;
 
-class PatchedAppleNVRAM : public IONVRAMController
-{
-	OSDeclareDefaultStructors(PatchedAppleNVRAM);
+#include <libkern/c++/OSObject.h>
+#include <libkern/OSTypes.h>
+
+class OpenOldWorldNVRAM : public OSObject {
+
+	OSDeclareDefaultStructors (OpenOldWorldNVRAM);
   
 private:
-
-	UInt32			fNVRAMType;
-	volatile UInt8	*fNVRAMData;
-	volatile UInt8	*fNVRAMPort;
+	
+	OWVariablesHeader *fOWHeader;
+	char *fOSPartitionTop;
+	char *fOSPartitionHere;
+	char *fOldWorldBuffer;
+	char *fNewWorldBuffer;
   
-	UInt8			*fOldWorldBuffer;
-	UInt8			*fNewWorldBuffer;
-	  
 public:
-
-	virtual bool start (IOService *provider);
-	virtual	void free ();
   
-	virtual IOReturn read (IOByteCount offset, UInt8 *buffer, IOByteCount length);
-	virtual IOReturn write (IOByteCount offset, UInt8 *buffer, IOByteCount length);
+	static OpenOldWorldNVRAM* withBuffers (char *oldWorldBuffer, char *newWorldBuffer);
+  
+	void copyOldWorldToNewWorld ();
+	void copyNewWorldToOldWorld ();
+	
+	UInt8 calculatePartitionChecksum (UInt8 *partitionHeader);
+	UInt16 generateOWChecksum (UInt8 *buffer);
+	bool validateOWChecksum (UInt8 *buffer);
+	bool getOWVariableInfo (UInt32 variableNumber, char **propName, UInt32 *propType, UInt32 *propOffset);
+	void storeOWString (char *propName, char *propData, UInt32 propOffset);
 
 };
 

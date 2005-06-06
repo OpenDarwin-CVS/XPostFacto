@@ -136,6 +136,357 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		947BEB910853A470002B8CC0 = {
+			children = (
+				947BEB920853A470002B8CC0,
+				947BEB930853A470002B8CC0,
+			);
+			isa = PBXGroup;
+			path = OpenOldWorldNVRAM;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		947BEB920853A470002B8CC0 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			path = OpenOldWorldNVRAM.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		947BEB930853A470002B8CC0 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = OpenOldWorldNVRAM.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		947BEB960853A497002B8CC0 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		947BEB970853A497002B8CC0 = {
+			buildActionMask = 2147483647;
+			files = (
+				947BEB9E0853A5F3002B8CC0,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		947BEB980853A497002B8CC0 = {
+			buildActionMask = 2147483647;
+			files = (
+				947BEB9F0853A5F7002B8CC0,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		947BEB990853A497002B8CC0 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		947BEB9A0853A497002B8CC0 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		947BEB9B0853A497002B8CC0 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		947BEB9C0853A497002B8CC0 = {
+			buildPhases = (
+				947BEB960853A497002B8CC0,
+				947BEB970853A497002B8CC0,
+				947BEB980853A497002B8CC0,
+				947BEB990853A497002B8CC0,
+				947BEB9A0853A497002B8CC0,
+				947BEB9B0853A497002B8CC0,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+				KERNEL_MODULE = YES;
+				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				MODULE_IOKIT = YES;
+				MODULE_NAME = com.macsales.iokit.OpenOldWorldNVRAM;
+				MODULE_VERSION = 1.0;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = OpenOldWorldNVRAM;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = kext;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = OpenOldWorldNVRAM;
+			productInstallPath = "$(USER_LIBRARY_DIR)/Bundles";
+			productName = OpenOldWorldNVRAM;
+			productReference = 947BEB9D0853A497002B8CC0;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>OpenOldWorldNVRAM</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.macsales.iokit.OpenOldWorldNVRAM</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	<key>OSBundleCompatibleVersion</key>
+	<string>1.0</string>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.kernel.iokit</key>
+		<string>1.0b1</string>
+		<key>com.apple.kernel.libkern</key>
+		<string>1.0b1</string>
+	</dict>
+	<key>OSBundleRequired</key>
+	<string>Root</string>
+</dict>
+</plist>
+";
+		};
+		947BEB9D0853A497002B8CC0 = {
+			explicitFileType = wrapper.cfbundle;
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = OpenOldWorldNVRAM.kext;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		947BEB9E0853A5F3002B8CC0 = {
+			fileRef = 947BEB930853A470002B8CC0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		947BEB9F0853A5F7002B8CC0 = {
+			fileRef = 947BEB920853A470002B8CC0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		947BED140853DB76002B8CC0 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		947BED150853DB76002B8CC0 = {
+			buildActionMask = 2147483647;
+			files = (
+				947BED1E0853DC48002B8CC0,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		947BED160853DB76002B8CC0 = {
+			buildActionMask = 2147483647;
+			files = (
+				947BED1C0853DC35002B8CC0,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		947BED170853DB76002B8CC0 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		947BED180853DB76002B8CC0 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		947BED190853DB76002B8CC0 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		947BED1A0853DB76002B8CC0 = {
+			buildPhases = (
+				947BED140853DB76002B8CC0,
+				947BED150853DB76002B8CC0,
+				947BED160853DB76002B8CC0,
+				947BED170853DB76002B8CC0,
+				947BED180853DB76002B8CC0,
+				947BED190853DB76002B8CC0,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+				KERNEL_MODULE = YES;
+				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				MODULE_IOKIT = YES;
+				MODULE_NAME = com.macsales.iokit.OpenPMUNVRAMController;
+				MODULE_VERSION = 1.0;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = OpenPMUNVRAMController;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = kext;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = OpenPMUNVRAMController;
+			productInstallPath = "$(USER_LIBRARY_DIR)/Bundles";
+			productName = OpenPMUNVRAMController;
+			productReference = 947BED1B0853DB76002B8CC0;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>OpenPMUNVRAMController</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.macsales.iokit.OpenPMUNVRAMController</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	<key>OSBundleCompatibleVersion</key>
+	<string>1.0</string>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.kernel.iokit</key>
+		<string>1.0b1</string>
+		<key>com.apple.kernel.libkern</key>
+		<string>1.0b1</string>
+		<key>com.macsales.iokit.OpenOldWorldNVRAM</key>
+		<string>1.0</string>
+	</dict>
+	<key>OSBundleRequired</key>
+	<string>Root</string>
+</dict>
+</plist>
+";
+		};
+		947BED1B0853DB76002B8CC0 = {
+			explicitFileType = wrapper.cfbundle;
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = OpenPMUNVRAMController.kext;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		947BED1C0853DC35002B8CC0 = {
+			fileRef = F548C0E702897DDC01A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		947BED1E0853DC48002B8CC0 = {
+			fileRef = F548C0E802897DDC01A80001;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		947BED210853DC62002B8CC0 = {
+			children = (
+				947BEB910853A470002B8CC0,
+				947BED240853DC76002B8CC0,
+				F53C698101B1926201A80001,
+			);
+			isa = PBXGroup;
+			name = NVRAM;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		947BED240853DC76002B8CC0 = {
+			children = (
+				F548C0E702897DDC01A80001,
+				F548C0E802897DDC01A80001,
+			);
+			isa = PBXGroup;
+			name = OpenPMUNVRAMController;
+			refType = 4;
+			sourceTree = "<group>";
+		};
 		947D00320617C03B0087D76A = {
 			containerPortal = F53C690F01B191BA01A80001;
 			isa = PBXContainerItemProxy;
@@ -3977,7 +4328,6 @@
 				F53C695601B1926201A80001,
 				948DEB4E0830FC82001DF444,
 				F53C696601B1926201A80001,
-				F53C698101B1926201A80001,
 			);
 			isa = PBXGroup;
 			name = "Other Devices";
@@ -4290,6 +4640,30 @@
 			name = "Shared Code";
 			refType = 4;
 			sourceTree = "<group>";
+		};
+		94D7DF1C0853DF50003858B6 = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 947BEB9C0853A497002B8CC0;
+			remoteInfo = OpenOldWorldNVRAM;
+		};
+		94D7DF1D0853DF50003858B6 = {
+			isa = PBXTargetDependency;
+			target = 947BEB9C0853A497002B8CC0;
+			targetProxy = 94D7DF1C0853DF50003858B6;
+		};
+		94D7DF1E0853DF50003858B6 = {
+			containerPortal = F53C690F01B191BA01A80001;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 947BED1A0853DB76002B8CC0;
+			remoteInfo = OpenPMUNVRAMController;
+		};
+		94D7DF1F0853DF50003858B6 = {
+			isa = PBXTargetDependency;
+			target = 947BED1A0853DB76002B8CC0;
+			targetProxy = 94D7DF1E0853DF50003858B6;
 		};
 		94E25C67054DF40600A80003 = {
 			fileEncoding = 30;
@@ -4998,13 +5372,14 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "";
+				GCC_VERSION = 2.x;
+				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.GossamerDeviceTreeUpdater;
-				MODULE_VERSION = 2.0;
+				MODULE_VERSION = 2.1;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -5045,7 +5420,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2.0</string>
+	<string>2.1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>GossamerDeviceTreeUpdater</key>
@@ -5064,7 +5439,7 @@
 				<string>AAPL,PowerBook1999</string>
 				<string>PowerBook1,1</string>
 				<string>PowerBook2,1</string>
-				<string>iMac,1</string>
+				<string>iMac</string>
 			</array>
 			<key>IOProviderClass</key>
 			<string>IOPlatformExpertDevice</string>
@@ -5074,11 +5449,13 @@
 	<dict>
 		<key>com.apple.kernel.iokit</key>
 		<string>6.9</string>
+		<key>com.macsales.iokit.OpenPMUNVRAMController</key>
+		<string>1.0</string>
 	</dict>
+	<key>OSBundleRequired</key>
+	<string>Root</string>
 	<key>OWCInstallMinBuild</key>
 	<string>7</string>
-	<key>XPFInstallRequired</key>
-	<string>Root</string>
 </dict>
 </plist>
 ";
@@ -5262,6 +5639,8 @@
 				94B4B912066C02DD00C3EE18,
 				948DEB3C0830FB2A001DF444,
 				94BC2BF808341DF800AD9A80,
+				947BEB9C0853A497002B8CC0,
+				947BED1A0853DB76002B8CC0,
 			);
 		};
 		F53C691001B191BA01A80001 = {
@@ -5316,6 +5695,7 @@
 			children = (
 				94D019B50824A1CA00DB1813,
 				94D019B80824A20900DB1813,
+				947BED210853DC62002B8CC0,
 				94D019BB0824A23A00DB1813,
 				94D019C00824A29300DB1813,
 				94D019AC08249F1700DB1813,
@@ -5678,6 +6058,8 @@
 				94C19C2107C13BFB004B83EE,
 				948DEB3D0830FB2A001DF444,
 				94BC2BF908341DF800AD9A80,
+				947BEB9D0853A497002B8CC0,
+				947BED1B0853DB76002B8CC0,
 			);
 			isa = PBXGroup;
 			name = Products;
@@ -6898,7 +7280,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = oldworld.support.PatchedAppleNVRAM;
-				MODULE_VERSION = 2.0;
+				MODULE_VERSION = 2.1;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -6939,7 +7321,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2.0</string>
+	<string>2.1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>PatchedAppleNVRAM</key>
@@ -6964,6 +7346,8 @@
 		<string>1.0b1</string>
 		<key>com.apple.kernel.libkern</key>
 		<string>1.0b1</string>
+		<key>com.macsales.iokit.OpenOldWorldNVRAM</key>
+		<string>1.0</string>
 	</dict>
 	<key>OSBundleRequired</key>
 	<string>Root</string>
@@ -7940,7 +8324,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.OpenPMU;
-				MODULE_VERSION = 1.0.2;
+				MODULE_VERSION = 1.1;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -7981,7 +8365,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.2</string>
+	<string>1.1</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>OpenPMU</key>
@@ -8006,6 +8390,8 @@
 		<string>1.0.0b1</string>
 		<key>com.apple.kernel.mach</key>
 		<string>1.0.0b1</string>
+		<key>com.macsales.iokit.OpenPMUNVRAMController</key>
+		<string>1.0</string>
 	</dict>
 	<key>OSBundleRequired</key>
 	<string>Root</string>
@@ -8042,7 +8428,6 @@
 			files = (
 				F548C0FC02897DDC01A80001,
 				F548C0FD02897DDC01A80001,
-				F548C0FF02897DDC01A80001,
 				F548C10002897DDC01A80001,
 				F548C10102897DDC01A80001,
 				F548C10202897DDC01A80001,
@@ -8080,8 +8465,6 @@
 				F548C0E202897DDC01A80001,
 				F548C0E302897DDC01A80001,
 				F548C0E402897DDC01A80001,
-				F548C0E702897DDC01A80001,
-				F548C0E802897DDC01A80001,
 				F548C0E902897DDC01A80001,
 				F548C0EA02897DDC01A80001,
 				F548C0EB02897DDC01A80001,
@@ -8133,17 +8516,19 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.cpp.cpp;
-			path = OpenPMUNVRAMController.cpp;
-			refType = 4;
-			sourceTree = "<group>";
+			name = OpenPMUNVRAMController.cpp;
+			path = Extensions/OpenPMUNVRAMController/OpenPMUNVRAMController.cpp;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F548C0E802897DDC01A80001 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
-			path = OpenPMUNVRAMController.h;
-			refType = 4;
-			sourceTree = "<group>";
+			name = OpenPMUNVRAMController.h;
+			path = Extensions/OpenPMUNVRAMController/OpenPMUNVRAMController.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		F548C0E902897DDC01A80001 = {
 			fileEncoding = 30;
@@ -8273,12 +8658,6 @@
 		};
 		F548C0FD02897DDC01A80001 = {
 			fileRef = F548C0E302897DDC01A80001;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		F548C0FF02897DDC01A80001 = {
-			fileRef = F548C0E702897DDC01A80001;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -10188,6 +10567,8 @@
 				948D376307A6F07100F832E6,
 				9468B46607AC1B6F00D39D7B,
 				948DEB6B0830FE7B001DF444,
+				94D7DF1D0853DF50003858B6,
+				94D7DF1F0853DF50003858B6,
 			);
 			isa = PBXBundleTarget;
 			name = Package;

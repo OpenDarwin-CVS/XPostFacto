@@ -30,10 +30,12 @@
 */
 
 #include "GossamerDeviceTreeUpdater.h"
+#include "../OpenPMUNVRAMController/OpenPMUNVRAMController.h"
 
 #include <IOKit/IOLib.h>
 #include <IOKit/IODeviceTreeSupport.h>
 #include <IOKit/system.h>
+#include <IOKit/platform/ApplePlatformExpert.h>
 
 #undef super
 #define super IOService
@@ -44,7 +46,45 @@ bool
 GossamerDeviceTreeUpdater::start (IOService *provider)
 {
 	if (!super::start (provider)) return false;
+	
 	IOCreateThread (&updateDeviceTree, this);
+	
+    fNotifier = addNotification (gIOPublishNotification, serviceMatching ("ApplePMU"), &updateApplePMU, this);
+
+	return true;
+}
+
+void
+GossamerDeviceTreeUpdater::free ()
+{
+	if (fNotifier) {
+		fNotifier->remove ();
+		fNotifier = NULL;
+	}
+	
+	if (fOpenPMUNVRAMController) {
+		fOpenPMUNVRAMController->release ();
+		fOpenPMUNVRAMController = NULL;
+	}
+}
+
+bool
+GossamerDeviceTreeUpdater::updateApplePMU (void *target, void *refCon, IOService *applePMU)
+{
+	GossamerDeviceTreeUpdater *self = (GossamerDeviceTreeUpdater*) target;
+
+	if (self->getPlatform()->getBootROMType() == kBootROMTypeOldWorld) {
+		applePMU->getProvider()->setProperty ("no-nvram", true);
+		
+		OpenPMUNVRAMController *controller = new OpenPMUNVRAMController;
+		self->fOpenPMUNVRAMController = controller;
+
+		controller && controller->init (0, applePMU) && controller->attach (applePMU) && controller->start (applePMU);
+	}
+		
+	self->fNotifier->remove ();
+	self->fNotifier = NULL;
+	
 	return true;
 }
 

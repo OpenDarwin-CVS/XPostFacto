@@ -67,6 +67,7 @@ class IOPlatformExpert : public IOService
     OSDeclareDefaultStructors(IOPlatformExpert);
 	
 	friend class PatchedAppleNVRAM;
+	friend class OpenPMUNVRAMController;
 
 private:
     long _peBootROMType;

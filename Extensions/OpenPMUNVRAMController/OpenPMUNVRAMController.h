@@ -45,40 +45,35 @@ for the specific language governing rights and limitations under the License.
 
 */
 
-#ifndef __PATCHEDAPPLENVRAM_H__
-#define __PATCHEDAPPLENVRAM_H__
+#ifndef __OPENPMUNVRAMCONTROLLER_H__
+#define __OPENPMUNVRAMCONTROLLER_H__
 
-#include <IOKit/IONVRAM.h>
+#include <IOKit/nvram/IONVRAMController.h>
 
-enum {
-	kNVRAMTypeNone = 0,
-	kNVRAMTypeIOMem,
-	kNVRAMTypePort,
-};
-
-struct OWVariablesHeader;
-
-class PatchedAppleNVRAM : public IONVRAMController
+class OpenPMUNVRAMController : public IONVRAMController
 {
-	OSDeclareDefaultStructors(PatchedAppleNVRAM);
-  
+
+    OSDeclareDefaultStructors(OpenPMUNVRAMController)
+
 private:
 
-	UInt32			fNVRAMType;
-	volatile UInt8	*fNVRAMData;
-	volatile UInt8	*fNVRAMPort;
-  
-	UInt8			*fOldWorldBuffer;
-	UInt8			*fNewWorldBuffer;
-	  
+	void sendPMUCommand (UInt32 command, IOByteCount sendLength, UInt8 *sendBuffer, IOByteCount *readLength, UInt8 *readBuffer);
+
+	// The PMUDdriver could be either ApplePMU or OpenPMU
+    IOService	*fPMUdriver;
+
+	UInt8		*fOldWorldBuffer;
+	UInt8		*fNewWorldBuffer;
+
 public:
 
-	virtual bool start (IOService *provider);
+    bool init (OSDictionary *properties, IOService *driver);
+	bool start (IOService *provider);
 	virtual	void free ();
-  
-	virtual IOReturn read (IOByteCount offset, UInt8 *buffer, IOByteCount length);
-	virtual IOReturn write (IOByteCount offset, UInt8 *buffer, IOByteCount length);
-
+	
+    IOReturn read (IOByteCount offset, UInt8 *buffer, IOByteCount length);
+    IOReturn write (IOByteCount offset, UInt8 *buffer, IOByteCount length);
+	
 };
 
 #endif

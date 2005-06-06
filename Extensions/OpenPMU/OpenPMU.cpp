@@ -21,7 +21,7 @@
  */
 
 #include "OpenPMU.h"
-#include "OpenPMUNVRAMController.h"
+#include "../OpenPMUNVRAMController/OpenPMUNVRAMController.h"
 #include "OpenPMURTCController.h"
 #include "OpenPMUPwrController.h"
 #include <IOKit/pwr_mgt/RootDomain.h>

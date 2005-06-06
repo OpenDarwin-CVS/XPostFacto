@@ -34,6 +34,8 @@
 
 #include <IOKit/IOService.h>
 
+class OpenPMUNVRAMController;
+
 class GossamerDeviceTreeUpdater : public IOService
 {
 	OSDeclareDefaultStructors (GossamerDeviceTreeUpdater);
@@ -41,12 +43,19 @@ class GossamerDeviceTreeUpdater : public IOService
   	public:
 		
 		virtual bool start (IOService *provider);
+		virtual void free ();
 			
 		static void updateDeviceTree (void *self);
+		static bool updateApplePMU (void *self, void *refCon, IOService *applePMU);
 		
 	private:
 	
 		void adjustProperty (const char *key, const char *nameMatched);
+		
+	private:
+	
+		IONotifier *fNotifier;
+		OpenPMUNVRAMController *fOpenPMUNVRAMController;
 				
 };
 

@@ -132,6 +132,12 @@ Read 'plst' (156, "OpenAudioDeviceTreeUpdater") ":Derived:Extensions:plist:OpenA
 Read 'hfsA' (157, "OpenMesh") ":Derived:Extensions:OpenMesh.hfs";
 Read 'plst' (157, "OpenMesh") ":Derived:Extensions:plist:OpenMesh.plist";
 
+Read 'hfsA' (158, "OpenOldWorldNVRAM") ":Derived:Extensions:OpenOldWorldNVRAM.hfs";
+Read 'plst' (158, "OpenOldWorldNVRAM") ":Derived:Extensions:plist:OpenOldWorldNVRAM.plist";
+
+Read 'hfsA' (159, "OpenPMUNVRAMController") ":Derived:Extensions:OpenPMUNVRAMController.hfs";
+Read 'plst' (159, "OpenPMUNVRAMController") ":Derived:Extensions:plist:OpenPMUNVRAMController.plist";
+
 // Startup Item
 
 Read 'hfsS' (200, "XPFStartupItem") ":Derived:StartupItems:XPFStartupItem.hfs";
