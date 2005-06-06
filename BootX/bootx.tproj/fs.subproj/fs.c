@@ -289,9 +289,7 @@ long LookupPartition(char *devSpec)
   CICell partIH;
   long   partIndex, partType;
   long   deviceType;
-  
-  // FIXME -- add some more error-checking here, for http://forum.macsales.com/viewtopic.php?p=14331
-  
+    
   // See if the devSpec has already been opened.
   for (partIndex = 0; partIndex < kNumPartInfos; partIndex++) {
     if (!strcmp(gParts[partIndex].partName, devSpec)) break;
@@ -304,13 +302,19 @@ long LookupPartition(char *devSpec)
       if (gParts[partIndex].partIH == 0) break;
     }
     // No free slots, so return error.
-    if (partIndex == kNumPartInfos) return -1;
-    
+    if (partIndex == kNumPartInfos) {
+		printf ("Not enough slots for partition %s\n", devSpec);
+		return -1;
+    }
+	
     deviceType = GetDeviceType(devSpec);
     switch (deviceType) {
     case kNetworkDeviceType :
       partIH = NetInitPartition(devSpec);
-      if (partIH == 0) return -1;
+      if (partIH == 0) {
+        printf ("Could not NetInitPartition %s\n", devSpec);
+        return -1;
+      }
       partType = kPartNet;
       break;
       
@@ -326,10 +330,14 @@ long LookupPartition(char *devSpec)
       if      (HFSInitPartition(partIH)  != -1) partType = kPartHFS;
       else if (UFSInitPartition(partIH)  != -1) partType = kPartUFS;
       else if (Ext2InitPartition(partIH) != -1) partType = kPartExt2;
-      else return -1;
+      else {
+        printf ("Partition was neither HFS, UFS nor ext2: %s\n", devSpec);
+        return -1;
+      }
       break;
       
     default :
+      printf ("Partition was neither block device nor network device: %s\n", devSpec);
       return -1;
     }
     
