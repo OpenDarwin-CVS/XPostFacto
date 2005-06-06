@@ -1425,6 +1425,10 @@ MountedVolume::MountedVolume (FSVolumeInfo *info, HFSUniStr255 *name, FSRef *roo
 		// See if it's writeable
 		fIsWriteable = !(info->flags & (kFSVolFlagHardwareLockedMask | kFSVolFlagSoftwareLockedMask));
 		
+		// Pretend that all installers are not writeable
+		// Because they are constructed in a special way, and we shouldn't interfere with that
+		if (fHasInstaller) fIsWriteable = false;
+		
 		// See if it's HFS Plus
 		fIsHFSPlus = (info->signature == kHFSPlusSigWord);
 		

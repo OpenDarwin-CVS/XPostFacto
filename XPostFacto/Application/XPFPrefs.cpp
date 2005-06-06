@@ -227,8 +227,6 @@ XPFPrefs::checkForUpdates (bool forInstall)
 			dialog->Close ();
 			
 			if (result == 'upda') PerformCommand (TH_new XPFUpdateCommand (&update));
-		} else {
-			PerformCommand (TH_new XPFUpdateCommand (&update));
 		}	
 	}
 }

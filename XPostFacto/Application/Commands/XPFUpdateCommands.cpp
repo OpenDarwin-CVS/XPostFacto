@@ -61,7 +61,7 @@ XPFInstallExtensionsCommand::DoItInProgressWindow ()
 {
 	fProgressMax = 1000;
 	setDescription (CStr255_AC (kXPFStringsResource, kInstallingExtensions));
-	installExtensionsWithRootDirectory (fRootDisk->getRootDirectory (), !fUpdate->getInstallCD ());
+	if (!fRootDisk->getHasInstaller()) installExtensionsWithRootDirectory (fRootDisk->getRootDirectory (), !fUpdate->getInstallCD ());
 	fProgressWindow->setFinished ();
 }
 
@@ -70,7 +70,7 @@ XPFInstallStartupCommand::DoItInProgressWindow ()
 {
 	fProgressMax = 1000;
 	setDescription (CStr255_AC (kXPFStringsResource, kInstallingStartupItem));
-	installStartupItemWithRootDirectory (fRootDisk->getRootDirectory ());
+	if (!fRootDisk->getHasInstaller()) installStartupItemWithRootDirectory (fRootDisk->getRootDirectory ());
 	fProgressWindow->setFinished ();
 }
 
