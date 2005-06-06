@@ -81,6 +81,9 @@ XPFPlatform::GetPlatform ()
 
 XPFPlatform::XPFPlatform ()
 {
+	fNVRAMPatch = NULL;
+	fCanPatchNVRAM = false;
+
 	// Figure out whether we know how to patch this machine.
 	fCompatible = NULL;
 	getCompatibleFromDeviceTree (&fCompatible);
@@ -95,7 +98,7 @@ XPFPlatform::XPFPlatform ()
 	io_service_t patchedAppleNVRAM = NULL; 
 	io_iterator_t iter = NULL;
 	
-	IOServiceGetMatchingServices (iokitPort, IOServiceMatching ("PatchedAppleNVRAM"), &iter);
+	IOServiceGetMatchingServices (iokitPort, IOServiceMatching ("IONVRAMController"), &iter);
 	if (iter) {
 		patchedAppleNVRAM = IOIteratorNext (iter);
 		IOObjectRelease (iter);
@@ -123,7 +126,6 @@ XPFPlatform::XPFPlatform ()
 	fIsNewWorld = (machineType == gestaltPowerMacNewWorld);
 #endif
 	
-	fNVRAMPatch = NULL;
 	if (!fIsNewWorld) loadNVRAMPatch (fCompatible);
 
 	gPlatform = this;
@@ -153,7 +155,7 @@ XPFPlatform::patchNVRAM ()
 	settings->setNumericValue ("screen-#columns", 0x64);
 	settings->setNumericValue ("screen-#rows", 0x28);
 	
-	settings->setStringValue ("nvramrc", fNVRAMPatch);
+	if (fNVRAMPatch) settings->setStringValue ("nvramrc", fNVRAMPatch);
 }
 
 void
@@ -164,8 +166,8 @@ XPFPlatform::loadNVRAMPatch (char *compatible)
 	if (!strcmp (compatible, "AAPL,PowerBook1998")) {
 		#ifdef __MACH__
 			// No way to distinguish, so we'll just leave the current patch as is
-			XPFNVRAMSettings *settings = XPFNVRAMSettings::GetSettings ();
-			processOFVariable ("nvramrc", settings->getStringValue ("nvramrc"));
+			fNVRAMPatch = NULL;
+			fCanPatchNVRAM = true;
 			return;
 		#else
 			long machineType;
@@ -205,6 +207,7 @@ XPFPlatform::loadNVRAMPatch (char *compatible)
 void
 XPFPlatform::processOFVariable (char *name, char *value) {
 	if (!strcmp (name, "nvramrc")) {
+		fCanPatchNVRAM = true;
 		fNVRAMPatch = NewPtr (strlen (value) + 1);
 		strcpy (fNVRAMPatch, value);
 		char *c = fNVRAMPatch;

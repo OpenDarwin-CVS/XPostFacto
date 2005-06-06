@@ -49,7 +49,7 @@ public:
 	bool getIsNewWorld () {return fIsNewWorld;}
 	bool getEmulatingNewWorld () {return fEmulatingNewWorld;}
 	char* getCompatible () {return fCompatible;}
-	bool getCanPatchNVRAM () {return fNVRAMPatch != NULL;}
+	bool getCanPatchNVRAM () {return fCanPatchNVRAM;}
 	void patchNVRAM ();
 
 	static void getCompatibleFromDeviceTree (char **compatible);
@@ -64,7 +64,8 @@ private:
 	char *fCompatible;
 	bool fIsNewWorld;
 	bool fEmulatingNewWorld;
-	
+	bool fCanPatchNVRAM;
+		
 	void loadNVRAMPatch (char *compatible);
 	void processOFVariable (char *name, char *value);
 	void parsePatchStream (CStream_AC *patches);
