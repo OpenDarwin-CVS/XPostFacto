@@ -50,7 +50,8 @@ OSXNVRAM::processDictionary (const void *key, const void *value, void *context)
 void
 OSXNVRAM::setKeyForValue (const void *key, const void *value)
 {
-	const char *name = CFStringGetCStringPtr ((CFStringRef) key, kCFStringEncodingMacRoman);
+	char name[256];
+	if (!CFStringGetCString ((CFStringRef) key, name, 256, kCFStringEncodingASCII)) return;
 	
 	// Only set ones that we care about
 	if (!getValue (name)) return;
@@ -60,7 +61,8 @@ OSXNVRAM::setKeyForValue (const void *key, const void *value)
 	if (type == CFBooleanGetTypeID ()) {
 		setBooleanValue (name, CFBooleanGetValue ((CFBooleanRef) value));
 	} else if (type == CFStringGetTypeID ()) {
-		const char *strVal = CFStringGetCStringPtr ((CFStringRef) value, kCFStringEncodingMacRoman);
+		char strVal[4096];
+		if (CFStringGetCString ((CFStringRef) value, strVal, 4096, kCFStringEncodingASCII)) return;
 		if (XPFPlatform::GetPlatform()->getIsNewWorld() || XPFPlatform::GetPlatform()->getEmulatingNewWorld()) {
 			setStringValue (name, strVal);
 		} else {
@@ -142,7 +144,7 @@ OSXNVRAM::writeToNVRAM ()
 			// On Old World, we skip "boot-args" (we'll add it to boot-command)
 			if (isOldWorld && !strcmp (current->getName(), "boot-args")) continue;
 
-			CFStringRef nameRef = CFStringCreateWithCString (kCFAllocatorDefault, current->getName (), kCFStringEncodingMacRoman); 
+			CFStringRef nameRef = CFStringCreateWithCString (kCFAllocatorDefault, current->getName (), kCFStringEncodingASCII); 
 			CFTypeRef valueRef;
 			
 			switch (current->getValueType ()) {
@@ -159,7 +161,7 @@ OSXNVRAM::writeToNVRAM ()
 					strcpy (strVal, current->getStringValue ());
 					// On Old World, we add boot-args to boot-command
 					if (isOldWorld && !strcmp (current->getName(), "boot-command")) strcat (strVal, getStringValue ("boot-args"));
-					valueRef = CFStringCreateWithCString (kCFAllocatorDefault, strVal, kCFStringEncodingMacRoman); 
+					valueRef = CFStringCreateWithCString (kCFAllocatorDefault, strVal, kCFStringEncodingASCII); 
 					break;
 			}
 			

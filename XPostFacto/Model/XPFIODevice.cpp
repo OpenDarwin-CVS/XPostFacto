@@ -45,7 +45,7 @@ XPFIODevice::getRegistryProperty (REG_ENTRY_TYPE entry, char *key, char *value)
 
 #ifdef __MACH__
 
-	CFStringRef cfKey = CFStringCreateWithCString (NULL, key, kCFStringEncodingMacRoman);
+	CFStringRef cfKey = CFStringCreateWithCString (NULL, key, kCFStringEncodingASCII);
 	CFTypeRef cfValue = IORegistryEntryCreateCFProperty (entry, cfKey, NULL, 0);
  
 	if (!cfValue) return -1;

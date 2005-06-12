@@ -197,12 +197,13 @@ OFAliases::processDictionary (const void *key, const void *value, void *context)
 {
 	OFAliases *self = (OFAliases *) context;
 	
-	const char *name = CFStringGetCStringPtr ((CFStringRef) key, kCFStringEncodingMacRoman);
+	char name[256];
+	if (!CFStringGetCString ((CFStringRef) key, name, 256, kCFStringEncodingASCII)) return;
+
 	if (!strcmp (name, "AAPL,phandle")) return;
 	if (!strcmp (name, "name")) return;
 	
-	CFTypeID type = CFGetTypeID (value);
-		
+	CFTypeID type = CFGetTypeID (value);			
 	if (type == CFDataGetTypeID ()) {
 		char str[256];
 		strcpy (str, (char *) CFDataGetBytePtr ((CFDataRef) value));
