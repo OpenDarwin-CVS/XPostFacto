@@ -62,7 +62,7 @@ OSXNVRAM::setKeyForValue (const void *key, const void *value)
 		setBooleanValue (name, CFBooleanGetValue ((CFBooleanRef) value));
 	} else if (type == CFStringGetTypeID ()) {
 		char strVal[4096];
-		if (CFStringGetCString ((CFStringRef) value, strVal, 4096, kCFStringEncodingASCII)) return;
+		if (!CFStringGetCString ((CFStringRef) value, strVal, 4096, kCFStringEncodingASCII)) return;
 		if (XPFPlatform::GetPlatform()->getIsNewWorld() || XPFPlatform::GetPlatform()->getEmulatingNewWorld()) {
 			setStringValue (name, strVal);
 		} else {
