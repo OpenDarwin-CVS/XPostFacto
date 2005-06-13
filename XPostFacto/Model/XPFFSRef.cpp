@@ -85,7 +85,7 @@ XPFFSRef::getFSRef (FSRef *rootDirectory, char *path, FSRef *result)
 	TextToUnicodeInfo converter;	
 
 	ThrowIfOSErr_AC (CreateTextToUnicodeInfoByEncoding (
-		CreateTextEncoding (kTextEncodingMacRoman, kTextEncodingDefaultVariant, kUnicode16BitFormat),
+		CreateTextEncoding (kTextEncodingUS_ASCII, kTextEncodingDefaultVariant, kUnicode16BitFormat),
 		&converter));
 		
 	err = ConvertFromTextToUnicode (converter, strlen (path), path, 0, 0, NULL, 0, NULL, 
@@ -107,7 +107,7 @@ XPFFSRef::getOrCreateFile (FSRef *rootDirectory, char *path, UInt32 mode, FSRef 
 	TextToUnicodeInfo converter;
 
 	ThrowIfOSErr_AC (CreateTextToUnicodeInfoByEncoding (
-		CreateTextEncoding (kTextEncodingMacRoman, kTextEncodingDefaultVariant, kUnicode16BitFormat),
+		CreateTextEncoding (kTextEncodingUS_ASCII, kTextEncodingDefaultVariant, kUnicode16BitFormat),
 		&converter));
 		
 	err = ConvertFromTextToUnicode (converter, strlen (path), path, 0, 0, NULL, 0, NULL, 
@@ -133,7 +133,7 @@ XPFFSRef::getOrCreateDirectory (FSRef *rootDirectory, char *path, UInt32 mode, F
 	TextToUnicodeInfo converter;
 
 	ThrowIfOSErr_AC (CreateTextToUnicodeInfoByEncoding (
-		CreateTextEncoding (kTextEncodingMacRoman, kTextEncodingDefaultVariant, kUnicode16BitFormat),
+		CreateTextEncoding (kTextEncodingUS_ASCII, kTextEncodingDefaultVariant, kUnicode16BitFormat),
 		&converter));
 		
 	err = ConvertFromTextToUnicode (converter, strlen (path), path, 0, 0, NULL, 0, NULL, 
