@@ -67,16 +67,22 @@ XPFInstallCommand::DoIt ()
 	if (targetDisk->getHelperDisk ()) targetDisk->getHelperDisk()->turnOffIgnorePermissions ();
 						
 	if (!(((XPFApplication *) gApplication)->getDebugOptions () & kDisableCoreServices)) {
-		FSRef coreServicesFolder, cdBootX;
+		FSRef coreServicesFolder, cdBootX, targetBootX;
 			
-		ThrowIfOSErr_AC (XPFFSRef::getOrCreateCoreServicesDirectory (targetDisk->getRootDirectory (), &coreServicesFolder));
-			
-		OSErr err = XPFFSRef::getBootXFSRef (installCD->getRootDirectory (), &cdBootX);
-		if (err != fnfErr) {
+		OSErr err = XPFFSRef::getBootXFSRef (targetDisk->getRootDirectory (), &targetBootX, false);
+		if (err == fnfErr) {
+			ThrowIfOSErr_AC (XPFFSRef::getOrCreateCoreServicesDirectory (targetDisk->getRootDirectory (), &coreServicesFolder));
+			err = XPFFSRef::getBootXFSRef (installCD->getRootDirectory (), &cdBootX);
+			if (err != fnfErr) {
+				if (err) gLogFile << "Error finding BootX on the Install CD" << endl_AC;
+				ThrowIfOSErr_AC (err);
+				XPFSetUID myUID (0);
+				err = FSRefFileCopy (&cdBootX, &coreServicesFolder, NULL, NULL, 0, false);
+				if (err != dupFNErr) ThrowIfOSErr_AC (err);
+			}
+		} else {
+			if (err) gLogFile << "Error finding /System/Library/CoreServers/BootX on install target" << endl_AC;
 			ThrowIfOSErr_AC (err);
-			XPFSetUID myUID (0);
-			err = FSRefFileCopy (&cdBootX, &coreServicesFolder, NULL, NULL, 0, false);
-			if (err != dupFNErr) ThrowIfOSErr_AC (err);
 		}
 	}
 	
