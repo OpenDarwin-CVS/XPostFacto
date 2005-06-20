@@ -74,7 +74,7 @@ advised of the possibility of such damage.
 
 #include "MoreDisks.h"
 
-#define kExpectedFirstHFSPartition 6
+#define kExpectedFirstHFSPartition 3
 #define kBootXRAMRequired (96 * 1024 * 1024)
 
 MountedVolumeList MountedVolume::gVolumeList;
@@ -1546,7 +1546,6 @@ MountedVolume::getBootStatus ()
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
 	if (!getHasMachKernel ()) return kNoMachKernel;
 	if (!fPartitionNumber) return kNoPartitionNumber;
-//	if (!getWillRunOnCurrentCPU ()) return kCPUNotSupported;
 	if (!fMachineHasSufficientRAM) return kNotSufficientRAM;
 
 	return kStatusOK;
@@ -1567,37 +1566,32 @@ MountedVolume::getMacOS9BootStatus ()
 unsigned
 MountedVolume::getBootWarning (bool forInstall)
 {
-	// We only worry about warnings if there is no fatal problem
-	if (getInstallTargetStatus () && getInstallerStatus ()) return kStatusOK;
+	MountedVolume *bootDisk = getHelperDisk ();
+	if (!bootDisk) bootDisk = this;
+	MountedVolume *rootDisk = this;
 		
-	if (!fExtensionCachesOK) return kExtensionsCacheInvalid;
+	if (!rootDisk->fExtensionCachesOK) return kExtensionsCacheInvalid;
 
-	if (fSymlinkStatus == kSymlinkStatusCannotFix) return kInvalidSymlinksCannotFix;
-	if (fSymlinkStatus != kSymlinkStatusOK) return kInvalidSymlinks;
+	if (rootDisk->fSymlinkStatus == kSymlinkStatusCannotFix) return kInvalidSymlinksCannotFix;
+	if (rootDisk->fSymlinkStatus != kSymlinkStatusOK) return kInvalidSymlinks;
 
-	if (!getWillRunOnCurrentCPU ()) return kCPUNotSupported;
+	if (!rootDisk->getWillRunOnCurrentCPU ()) return kCPUNotSupported;
 
-	if (fBootableDevice) {
-		// FIXME -- I suppose that I should really check the *helper* disk for things that
-		// need to be warned about if we're using a helper (e.g. 8 GB limit etc.). But that
-		// would require some UI changes as well.
-	
-		if (!getHelperDisk ()) {
-			XPFPartition* firstPart = fBootableDevice->getFirstHFSPartition ();
-			if (firstPart && firstPart->getPartitionNumber () < kExpectedFirstHFSPartition) return kFewerPartitionsThanExpected;
+	XPFBootableDevice *bootDevice = bootDisk->getBootableDevice ();
+	if (!bootDevice) return kNotBootable;
 
-			if (fPartition && !fPartition->getHasHFSWrapper ()) return kNoHFSWrapper;
-		}
+	XPFPartition* firstPart = bootDevice->getFirstHFSPartition ();
+	if (firstPart && firstPart->getPartitionNumber () < kExpectedFirstHFSPartition) return kFewerPartitionsThanExpected;
+	if (bootDisk->fPartition && !bootDisk->fPartition->getHasHFSWrapper ()) return kNoHFSWrapper;
 
-		if (fBootableDevice->isReallyATADevice () && 
-			getExtendsPastEightGB () && 
-			!XPFPlatform::GetPlatform()->getIsNewWorld() &&
-			!fIsAttachedToPCICard && 
-			!getHelperDisk ()
-		) return k8GBWarning;
-	}
-	
-	if (getBus () != getDefaultBus ()) return kUsingNonDefaultBus;
+	if (bootDevice->isReallyATADevice () && 
+		bootDisk->getExtendsPastEightGB () && 
+		!XPFPlatform::GetPlatform()->getIsNewWorld() &&
+		!bootDisk->fIsAttachedToPCICard
+	) return k8GBWarning;
+		
+	if (bootDisk->getBus () != bootDisk->getDefaultBus ()) return kUsingNonDefaultBus;
+	if (rootDisk->getBus () != rootDisk->getDefaultBus ()) return kUsingNonDefaultBus;
 	
 	return kStatusOK;
 }
@@ -1627,7 +1621,6 @@ MountedVolume::getInstallerStatus ()
 	if (!getIsHFSPlus ()) return kNotHFSPlus;
 	if (!getHasMachKernel ()) return kNoMachKernel;
 	if (!fPartitionNumber) return kNoPartitionNumber;
-//	if (!getWillRunOnCurrentCPU ()) return kCPUNotSupported;
 	if (!fMachineHasSufficientRAM) return kNotSufficientRAM;
 	
 	return kStatusOK;
