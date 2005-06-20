@@ -115,8 +115,8 @@ OSXNVRAM::writeToNVRAM ()
 	if (fHasChanged) {		
 		fHasChanged = false;
 		
-		// Check to see whether there is enough space (if "Old World")
-		if (isOldWorld) {
+		// Check to see whether there is enough space (if "Old World" or emulating)
+		if (!XPFPlatform::GetPlatform()->getIsNewWorld()) {
 			unsigned stringLength = 0;
 			
 			for (TemplateAutoList_AC <NVRAMValue>::Iterator iter (&fNVRAMValues); (current = iter.Current ()); iter.Next ()) {
