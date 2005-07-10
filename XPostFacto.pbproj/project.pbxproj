@@ -29,16 +29,6 @@
 			settings = {
 			};
 		};
-		9406C1EA058E057B00A80003 = {
-			isa = PBXTargetDependency;
-			target = 94D432AB05583C1100A80003;
-			targetProxy = 948CD10605FBEECE003103DB;
-		};
-		9406C1EB058E059200A80003 = {
-			isa = PBXTargetDependency;
-			target = F5812B810315F14401A80001;
-			targetProxy = 948CD10705FBEECE003103DB;
-		};
 		9407316705312E5900A80003 = {
 			children = (
 				946A5D270525115000A80003,
@@ -229,14 +219,13 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.OpenOldWorldNVRAM;
-				MODULE_VERSION = 1.0;
+				MODULE_VERSION = 2.0;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -277,7 +266,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>2.0</string>
 	<key>OSBundleCompatibleVersion</key>
 	<string>1.0</string>
 	<key>OSBundleLibraries</key>
@@ -380,14 +369,13 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.OpenPMUNVRAMController;
-				MODULE_VERSION = 1.0;
+				MODULE_VERSION = 2.0;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -428,7 +416,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>2.0</string>
 	<key>OSBundleCompatibleVersion</key>
 	<string>1.0</string>
 	<key>OSBundleLibraries</key>
@@ -1049,13 +1037,13 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.OpenAudioDeviceTreeUpdater;
-				MODULE_VERSION = 1.0.0d1;
+				MODULE_VERSION = 2.0;
 				OTHER_CFLAGS = "-DAudioDeviceTreeUpdater=OpenAudioDeviceTreeUpdater";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -1096,7 +1084,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.0d1</string>
+	<string>2.0</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>PowerSurge</key>
@@ -1271,13 +1259,6 @@
 			remoteGlobalIDString = 94F427650543145400A80003;
 			remoteInfo = XPFPartitionInfo;
 		};
-		948CD0F505FBEECE003103DB = {
-			containerPortal = F53C690F01B191BA01A80001;
-			isa = PBXContainerItemProxy;
-			proxyType = 1;
-			remoteGlobalIDString = F53C6B2701B1B4A101A80001;
-			remoteInfo = PatchedSCSIDeviceType05;
-		};
 		948CD0F605FBEECE003103DB = {
 			containerPortal = F53C690F01B191BA01A80001;
 			isa = PBXContainerItemProxy;
@@ -1306,13 +1287,6 @@
 			remoteGlobalIDString = F53C6B0A01B1B30F01A80001;
 			remoteInfo = PatchedAppleNVRAM;
 		};
-		948CD0FA05FBEECE003103DB = {
-			containerPortal = F53C690F01B191BA01A80001;
-			isa = PBXContainerItemProxy;
-			proxyType = 1;
-			remoteGlobalIDString = F53C6B1901B1B4A101A80001;
-			remoteInfo = PatchedIOSCSICDDrive;
-		};
 		948CD0FB05FBEECE003103DB = {
 			containerPortal = F53C690F01B191BA01A80001;
 			isa = PBXContainerItemProxy;
@@ -1326,13 +1300,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = F5EC95B601B1F16601A80001;
 			remoteInfo = hfsplusarchive;
-		};
-		948CD0FD05FBEECE003103DB = {
-			containerPortal = F53C690F01B191BA01A80001;
-			isa = PBXContainerItemProxy;
-			proxyType = 1;
-			remoteGlobalIDString = 94CC89DB0508E1BC00A80003;
-			remoteInfo = OWCDumpIORegistry;
 		};
 		948CD0FE05FBEECE003103DB = {
 			containerPortal = F53C690F01B191BA01A80001;
@@ -1389,20 +1356,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = F53C6A1A01B194DC01A80001;
 			remoteInfo = BootX;
-		};
-		948CD10605FBEECE003103DB = {
-			containerPortal = F53C690F01B191BA01A80001;
-			isa = PBXContainerItemProxy;
-			proxyType = 1;
-			remoteGlobalIDString = 94D432AB05583C1100A80003;
-			remoteInfo = AppleMaceEthernetPreJag;
-		};
-		948CD10705FBEECE003103DB = {
-			containerPortal = F53C690F01B191BA01A80001;
-			isa = PBXContainerItemProxy;
-			proxyType = 1;
-			remoteGlobalIDString = F5812B810315F14401A80001;
-			remoteInfo = AppleCurio4K78;
 		};
 		948D376207A6F07100F832E6 = {
 			containerPortal = F53C690F01B191BA01A80001;
@@ -1695,7 +1648,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\" \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = "";
@@ -2648,11 +2601,6 @@
 			settings = {
 			};
 		};
-		94C18CC10509155800A80003 = {
-			isa = PBXTargetDependency;
-			target = 94CC89DB0508E1BC00A80003;
-			targetProxy = 948CD0FD05FBEECE003103DB;
-		};
 		94C19B6707C139B7004B83EE = {
 			children = (
 				94C19CBA07C14735004B83EE,
@@ -3494,7 +3442,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\" \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = "";
@@ -3592,6 +3540,8 @@
 	</dict>
 	<key>OSBundleRequired</key>
 	<string>Local-Root</string>
+	<key>OWCInstallMaxBuild</key>
+	<string>7</string>
 	<key>OWCInstallMinBuild</key>
 	<string>7</string>
 </dict>
@@ -3943,7 +3893,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\" \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = "";
@@ -4169,14 +4119,13 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = "";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.OWCDumpIORegistry;
-				MODULE_VERSION = 1.0.0d1;
+				MODULE_VERSION = 2.0;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -4217,7 +4166,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.0d1</string>
+	<string>2.0</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>OWCDumpIORegistry</key>
@@ -4737,7 +4686,7 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\" \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				LIBRARY_STYLE = STATIC;
 				OTHER_CFLAGS = "-nostdinc -finline -fno-keep-inline-functions -force_cpusubtype_ALL -mlong-branch -fno-exceptions -static -DKERNEL -DKERNEL_PRIVATE -DDRIVER_PRIVATE -DAPPLE -DNeXT";
 				OTHER_LDFLAGS = "-static";
@@ -5025,15 +4974,15 @@
 				94F427640543145400A80003,
 			);
 			buildSettings = {
+				BUILD_SETTING = "";
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "/Library/Application Support/XPostFacto";
 				KERNEL_MODULE = YES;
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.XPFPartitionInfo;
-				MODULE_VERSION = 1.0.1;
+				MODULE_VERSION = 2.0;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -5069,12 +5018,10 @@
 	<string></string>
 	<key>CFBundlePackageType</key>
 	<string>KEXT</string>
-	<key>CFBundleShortVersionString</key>
-	<string>1.0d1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.1</string>
+	<string>2.0</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>XPFPartitionInfo</key>
@@ -5372,14 +5319,13 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.GossamerDeviceTreeUpdater;
-				MODULE_VERSION = 2.1;
+				MODULE_VERSION = 3.0;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -5420,7 +5366,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2.1</string>
+	<string>3.0</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>GossamerDeviceTreeUpdater</key>
@@ -6418,14 +6364,13 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.AppleCurio;
-				MODULE_VERSION = 1.1.1;
+				MODULE_VERSION = 2.0;
 				OTHER_CFLAGS = "-fpermissive";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -6449,24 +6394,16 @@
 	<string>English</string>
 	<key>CFBundleExecutable</key>
 	<string>AppleCurio</string>
-	<key>CFBundleGetInfoString</key>
-	<string></string>
-	<key>CFBundleIconFile</key>
-	<string></string>
 	<key>CFBundleIdentifier</key>
 	<string>com.apple.driver.AppleCurio</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string></string>
 	<key>CFBundlePackageType</key>
 	<string>KEXT</string>
-	<key>CFBundleShortVersionString</key>
-	<string></string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.1.1</string>
+	<string>2.0</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>AppleCurio</key>
@@ -6496,8 +6433,6 @@
 	</dict>
 	<key>OSBundleRequired</key>
 	<string>Local-Root</string>
-	<key>OWCInstallMinBuild</key>
-	<string>5</string>
 </dict>
 </plist>
 ";
@@ -6580,14 +6515,13 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.AppleGrandCentral;
-				MODULE_VERSION = 1.2;
+				MODULE_VERSION = 2.0;
 				OTHER_CFLAGS = "-fpermissive -D_BIG_ENDIAN=__BIG_ENDIAN__";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -6611,24 +6545,16 @@
 	<string>English</string>
 	<key>CFBundleExecutable</key>
 	<string>AppleGrandCentral</string>
-	<key>CFBundleGetInfoString</key>
-	<string></string>
-	<key>CFBundleIconFile</key>
-	<string></string>
 	<key>CFBundleIdentifier</key>
 	<string>com.apple.driver.AppleGrandCentral</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string></string>
 	<key>CFBundlePackageType</key>
 	<string>KEXT</string>
-	<key>CFBundleShortVersionString</key>
-	<string></string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.2</string>
+	<string>2.0</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>AppleGrandCentral</key>
@@ -6739,7 +6665,7 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\" \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.7.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = "";
@@ -6956,14 +6882,13 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.ApplePowerSurgePE;
-				MODULE_VERSION = 1.3.3;
+				MODULE_VERSION = 2.0;
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = ApplePowerSurgePE;
@@ -7003,7 +6928,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.3.3</string>
+	<string>2.0</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>ApplePowerSurgePE</key>
@@ -7102,14 +7027,13 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = oldworld.support.PowerSurgeCPU;
-				MODULE_VERSION = 1.2.1;
+				MODULE_VERSION = 2.0;
 				OTHER_CFLAGS = "-fpermissive -D_BIG_ENDIAN=1";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -7150,7 +7074,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.2.1</string>
+	<string>2.0</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>PowerSurgeCPU</key>
@@ -7273,14 +7197,13 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = oldworld.support.PatchedAppleNVRAM;
-				MODULE_VERSION = 2.1;
+				MODULE_VERSION = 3.0;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -7321,7 +7244,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2.1</string>
+	<string>3.0</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>PatchedAppleNVRAM</key>
@@ -7848,7 +7771,7 @@
 			);
 			buildSettings = {
 				HEADER_SEARCH_PATHS = "/Developer/Headers/FlatCarbon XPostFacto/MoreFiles/CHeaders \"XPostFacto/Unsupported UtilityX/MoreFiles/Sources\"";
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "-DwantDebugging=0 -DqCarbon=1 -DqPowerPC=1";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -8150,14 +8073,13 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.PowerStarCPU;
-				MODULE_VERSION = 1.0.1;
+				MODULE_VERSION = 2.0;
 				OTHER_CFLAGS = "-fpermissive -D_BIG_ENDIAN=1";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -8198,7 +8120,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.1</string>
+	<string>2.0</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>PowerStarCPU</key>
@@ -8317,14 +8239,13 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.OpenPMU;
-				MODULE_VERSION = 1.1;
+				MODULE_VERSION = 2.0;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -8348,24 +8269,16 @@
 	<string>English</string>
 	<key>CFBundleExecutable</key>
 	<string>OpenPMU</string>
-	<key>CFBundleGetInfoString</key>
-	<string></string>
-	<key>CFBundleIconFile</key>
-	<string></string>
 	<key>CFBundleIdentifier</key>
 	<string>com.macsales.iokit.OpenPMU</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string></string>
 	<key>CFBundlePackageType</key>
 	<string>KEXT</string>
-	<key>CFBundleShortVersionString</key>
-	<string></string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.1</string>
+	<string>2.0</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>OpenPMU</key>
@@ -8740,14 +8653,13 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.ApplePowerExpressPE;
-				MODULE_VERSION = 1.3.1;
+				MODULE_VERSION = 2.0;
 				OTHER_CFLAGS = "-fpermissive";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -8788,7 +8700,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.3.1</string>
+	<string>2.0</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>ApplePowerExpressPE</key>
@@ -8931,14 +8843,13 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.OHareATA;
-				MODULE_VERSION = 1.1.0f1;
+				MODULE_VERSION = 2.0;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -8964,8 +8875,6 @@
 	<string>OHareATA</string>
 	<key>CFBundleGetInfoString</key>
 	<string>OHare ATA Driver</string>
-	<key>CFBundleIconFile</key>
-	<string></string>
 	<key>CFBundleIdentifier</key>
 	<string>com.apple.driver.OHareATA</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -8974,12 +8883,10 @@
 	<string>OHareATA</string>
 	<key>CFBundlePackageType</key>
 	<string>KEXT</string>
-	<key>CFBundleShortVersionString</key>
-	<string>1.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.1.0f1</string>
+	<string>2.0</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>OHareATA</key>
@@ -9089,14 +8996,13 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.AppleOHare;
-				MODULE_VERSION = 1.1.2;
+				MODULE_VERSION = 2.0;
 				OTHER_CFLAGS = "-fpermissive -D_BIG_ENDIAN=__BIG_ENDIAN__";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -9120,24 +9026,16 @@
 	<string>English</string>
 	<key>CFBundleExecutable</key>
 	<string>AppleOHare</string>
-	<key>CFBundleGetInfoString</key>
-	<string></string>
-	<key>CFBundleIconFile</key>
-	<string></string>
 	<key>CFBundleIdentifier</key>
 	<string>com.apple.driver.AppleOHare</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string></string>
 	<key>CFBundlePackageType</key>
 	<string>KEXT</string>
-	<key>CFBundleShortVersionString</key>
-	<string></string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.1.2</string>
+	<string>2.0</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>AppleOHare</key>
@@ -9357,14 +9255,13 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.apple.driver.ApplePowerStarPE;
-				MODULE_VERSION = 1.2.2;
+				MODULE_VERSION = 2.0;
 				OTHER_CFLAGS = "-fpermissive";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -9405,7 +9302,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.2.2</string>
+	<string>2.0</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>ApplePowerStarPE</key>
@@ -10391,14 +10288,13 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.PatchedNDRVSupport;
-				MODULE_VERSION = 1.0.1;
+				MODULE_VERSION = 2.0;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -10439,7 +10335,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.1</string>
+	<string>2.0</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>1</key>
@@ -10532,8 +10428,6 @@
 				WRAPPER_EXTENSION = pkg;
 			};
 			dependencies = (
-				9406C1EB058E059200A80003,
-				9406C1EA058E057B00A80003,
 				94B3FBA205867A1C00A80003,
 				94FC07D5056AE14200A80003,
 				F54DBA8602B139A701A80001,
@@ -10545,10 +10439,7 @@
 				F54E20790267327701A80001,
 				F58C73360238599301A80001,
 				F557F6A40226FF1001A80001,
-				94C18CC10509155800A80003,
 				F557F6A60226FF1001A80001,
-				F59D628E01B1D12901A80001,
-				F59D628F01B1D12901A80001,
 				F59D629101B1D12901A80001,
 				F588752E030D69F001A80001,
 				F59D629301B1D12901A80001,
@@ -10581,16 +10472,6 @@
 <dict/>
 </plist>
 ";
-		};
-		F59D628E01B1D12901A80001 = {
-			isa = PBXTargetDependency;
-			target = F53C6B2701B1B4A101A80001;
-			targetProxy = 948CD0F505FBEECE003103DB;
-		};
-		F59D628F01B1D12901A80001 = {
-			isa = PBXTargetDependency;
-			target = F53C6B1901B1B4A101A80001;
-			targetProxy = 948CD0FA05FBEECE003103DB;
 		};
 		F59D629101B1D12901A80001 = {
 			isa = PBXTargetDependency;
@@ -11008,9 +10889,8 @@
 				F5EC95BA01B1F16601A80001,
 			);
 			buildSettings = {
-				GCC_VERSION = 2.x;
 				HEADER_SEARCH_PATHS = "/Developer/Headers/FlatCarbon XPostFacto/MoreFiles/CHeaders XPostFacto/MoreFiles/Sources";
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "-DwantDebugging=0 -DqCarbon=1 -DqPowerPC=1";
 				OTHER_REZFLAGS = "";
@@ -11458,14 +11338,13 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_VERSION = 2.x;
-				HEADER_SEARCH_PATHS = "CompatibleKernelHeaders \"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.1.5.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
+				HEADER_SEARCH_PATHS = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.2.8.sdk/System/Library/Frameworks/Kernel.framework/Headers\"";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
 				KERNEL_MODULE = YES;
-				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/2.95.2;
+				LIBRARY_SEARCH_PATHS = "";
 				MODULE_IOKIT = YES;
 				MODULE_NAME = com.macsales.iokit.OWCCacheConfig;
-				MODULE_VERSION = 1.0.2;
+				MODULE_VERSION = 2.0;
 				OTHER_CFLAGS = "-D_BIG_ENDIAN=1";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -11506,7 +11385,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.2</string>
+	<string>2.0</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>OWCCacheConfig</key>

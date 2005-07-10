@@ -25,9 +25,9 @@
 
 #include "OpenPMUNVRAMController.h"
 #include "../OpenOldWorldNVRAM/OpenOldWorldNVRAM.h"
+#include <../Headers/IOPlatformExpert.h>
 
 #include <IOKit/IOLib.h>
-#include <IOKit/IOPlatformExpert.h>
 #include <IOKit/IODeviceTreeSupport.h>
 #include <IOKit/platform/ApplePlatformExpert.h>
 #include <IOKit/IOSyncer.h>

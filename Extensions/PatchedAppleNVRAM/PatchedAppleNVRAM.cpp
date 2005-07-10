@@ -75,9 +75,9 @@ for the specific language governing rights and limitations under the License.
 
 #include "PatchedAppleNVRAM.h"
 #include "../OpenOldWorldNVRAM/OpenOldWorldNVRAM.h"
+#include <../Headers/IOPlatformExpert.h>
 
 #include <IOKit/IOLib.h>
-#include <IOKit/IOPlatformExpert.h>
 #include <IOKit/IODeviceTreeSupport.h>
 #include <IOKit/platform/ApplePlatformExpert.h>
 
