@@ -62,6 +62,8 @@ OpenPMUNVRAMController::start (IOService *provider)
 {
 	// If we're "Old World", then pretend we're "New World"
 	if (getPlatform()->getBootROMType() == kBootROMTypeOldWorld) {
+		IOLog ("OpenPMUNVRAMController::start emulating New World\n");
+		
 		getPlatform()->setBootROMType (kBootROMTypeNewWorld);
 		setProperty ("EmulatingNewWorld", true);
 	

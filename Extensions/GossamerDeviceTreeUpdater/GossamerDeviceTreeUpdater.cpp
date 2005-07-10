@@ -72,6 +72,8 @@ bool
 GossamerDeviceTreeUpdater::updateApplePMU (void *target, void *refCon, IOService *applePMU)
 {
 	GossamerDeviceTreeUpdater *self = (GossamerDeviceTreeUpdater*) target;
+	
+	IOLog ("GossamerDeviceTreeUpdater::updateApplePMU entered\n");
 
 	if (self->getPlatform()->getBootROMType() == kBootROMTypeOldWorld) {
 		applePMU->getProvider()->setProperty ("no-nvram", true);
