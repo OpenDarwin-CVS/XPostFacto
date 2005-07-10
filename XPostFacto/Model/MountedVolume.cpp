@@ -1547,6 +1547,7 @@ MountedVolume::getBootStatus ()
 	if (!getHasMachKernel ()) return kNoMachKernel;
 	if (!fPartitionNumber) return kNoPartitionNumber;
 	if (!fMachineHasSufficientRAM) return kNotSufficientRAM;
+	if (fMacOSXMajorVersion && fMacOSXMajorVersion <= 5) return kRequiresTenPointTwo;
 
 	return kStatusOK;
 }
@@ -1606,6 +1607,7 @@ MountedVolume::getInstallTargetStatus ()
 	if (!getIsWriteable ()) return kNotWriteable;
 	if (!fPartitionNumber) return kNoPartitionNumber;
 	if (!fMachineHasSufficientRAM) return kNotSufficientRAM;
+	if (fMacOSXMajorVersion && fMacOSXMajorVersion <= 5) return kRequiresTenPointTwo;
 
 	return kStatusOK;
 }
@@ -1622,6 +1624,7 @@ MountedVolume::getInstallerStatus ()
 	if (!getHasMachKernel ()) return kNoMachKernel;
 	if (!fPartitionNumber) return kNoPartitionNumber;
 	if (!fMachineHasSufficientRAM) return kNotSufficientRAM;
+	if (fMacOSXMajorVersion && fMacOSXMajorVersion <= 5) return kRequiresTenPointTwo;
 	
 	return kStatusOK;
 }

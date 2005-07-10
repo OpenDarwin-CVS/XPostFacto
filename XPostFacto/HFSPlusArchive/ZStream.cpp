@@ -171,8 +171,9 @@ ZStreamRep::ReadBytes(void* inPtr, long amt)
 			
 		case kZStreamNoInit:
 #ifdef __GNUC__
-			fstat (fStream->rdbuf()->fd(), &streamStat);
-			fBytesLeft = streamStat.st_size;
+// FIXME: the -fd() part isn't working in gcc 3.3
+//			fstat (fStream->rdbuf()->fd(), &streamStat);
+			fBytesLeft = /* streamStat.st_size */ -1;
 #else
 			fBytesLeft = fStream->GetSize ();
 #endif

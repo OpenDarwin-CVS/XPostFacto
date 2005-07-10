@@ -105,6 +105,7 @@ enum {
 	kExtensionsCacheInvalid,
 	kNotSufficientRAM,			// 65
 	kNoMacOS9SystemFolder,
+	kRequiresTenPointTwo,
 };
 
 

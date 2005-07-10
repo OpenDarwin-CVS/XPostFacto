@@ -139,5 +139,7 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			"Mac OS X requires 96 MB of RAM.";
 			
 			"No Mac OS 9 System Folder.";
+			
+			"XPostFacto 4 requires Mac OS X 10.2 or later.";
 	}
 };

@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2001 - 2003
+Copyright (c) 2001 - 2005
 Other World Computing
 All rights reserved
 
@@ -60,14 +60,8 @@ Read 'plst' (129, "ApplePowerSurgePE") ":Derived:Extensions:plist:ApplePowerSurg
 Read 'hfsA' (131, "AppleCurio") ":Derived:Extensions:AppleCurio.hfs";
 Read 'plst' (131, "AppleCurio") ":Derived:Extensions:plist:AppleCurio.plist";
 
-Read 'hfsA' (132, "PatchedIOSCSICDDrive") ":Derived:Extensions:PatchedIOSCSICDDrive.hfs";
-Read 'plst' (132, "PatchedIOSCSICDDrive") ":Derived:Extensions:plist:PatchedIOSCSICDDrive.plist";
-
 Read 'hfsA' (133, "PatchedAppleNVRAM") ":Derived:Extensions:PatchedAppleNVRAM.hfs";
 Read 'plst' (133, "PatchedAppleNVRAM") ":Derived:Extensions:plist:PatchedAppleNVRAM.plist";
-
-Read 'hfsA' (134, "PatchedSCSIDeviceType05") ":Derived:Extensions:PatchedSCSIDeviceType05.hfs";
-Read 'plst' (134, "PatchedSCSIDeviceType05") ":Derived:Extensions:plist:PatchedSCSIDeviceType05.plist";
 
 Read 'hfsA' (135, "PowerSurgeCPU") ":Derived:Extensions:PowerSurgeCPU.hfs";
 Read 'plst' (135, "PowerSurgeCPU") ":Derived:Extensions:plist:PowerSurgeCPU.plist";
@@ -98,12 +92,6 @@ Read 'plst' (145, "GossamerDeviceTreeUpdater") ":Derived:Extensions:plist:Gossam
 
 Read 'hfsA' (146, "OpenPMUPCCardEject") ":Derived:Extensions:OpenPMUPCCardEject.hfs";
 Read 'plst' (146, "OpenPMUPCCardEject") ":Derived:Extensions:plist:OpenPMUPCCardEject.plist";
-
-Read 'hfsA' (147, "AppleMaceEthernetPreJag") ":Derived:Extensions:AppleMaceEthernetPreJag.hfs";
-Read 'plst' (147, "AppleMaceEthernetPreJag") ":Derived:Extensions:plist:AppleMaceEthernetPreJag.plist";
-
-Read 'hfsA' (148, "AppleCurio4K78") ":Derived:Extensions:AppleCurio4K78.hfs";
-Read 'plst' (148, "AppleCurio4K78") ":Derived:Extensions:plist:AppleCurio4K78.plist";
 
 Read 'hfsA' (149, "OpenControlFramebuffer") ":Derived:Extensions:OpenControlFramebuffer.hfs";
 Read 'plst' (149, "OpenControlFramebuffer") ":Derived:Extensions:plist:OpenControlFramebuffer.plist";
