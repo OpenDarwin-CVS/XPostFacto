@@ -171,6 +171,13 @@ XPFPrefs::Close ()
 				if (update.getRequiresSynchronization ()) {
 					PerformCommand (TH_new XPFSynchronizeCommand (&update));
 				}
+				
+				// If the root disk was not writeable, then force an update if necessary
+				// The XPFUpdate class checks and updates /Library/Extensions in the helper
+				// directory in this case.
+				if (!rootDisk->getIsWriteable () && update.getRequiresAction ()) {
+					PerformCommand (TH_new XPFUpdateCommand (&update));
+				}
 			}
 		}
 	}

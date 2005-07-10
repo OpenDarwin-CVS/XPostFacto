@@ -392,15 +392,5 @@ XPFThreadedCommand::synchronizeWithHelper (bool deleteFirst)
 		fProgressMin = fProgressMax;
 		fProgressMax = progbase + scale * 950;
 		
-		// If the root disk was not writeable, then we need to install the extensions in the secondary location
-		// on the helper, so that BootX will pick them up
-		if (!fRootDisk->getIsWriteable ()) {
-			try {
-				installSecondaryExtensionsWithRootDirectory (&helperDir);
-			}
-			catch (...) {
-				ThrowException_AC (kProblemInstallingExtensions, 0);
-			}
-		}
 	}		
 }
