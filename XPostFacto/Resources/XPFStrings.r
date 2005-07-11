@@ -140,6 +140,6 @@ resource 'STR#' (kXPFStringsResource, purgeable) {
 			
 			"No Mac OS 9 System Folder.";
 			
-			"XPostFacto 4 requires Mac OS X 10.2 or later.";
+			"XPF 4 requires 10.2 or later.";
 	}
 };
