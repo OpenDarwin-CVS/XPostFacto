@@ -2,7 +2,7 @@
 
 Ryan Rempel<br>
 <a href="mailto:osxguru@macsales.com">osxguru@macsales.com</a><br>
-June 20, 2005
+July 10, 2005
 
 <p>XPostFacto is a utility which helps to install and boot Mac OS X, Mac OS X Server, and Darwin on certain unsupported systems. When Mac OS X installs successfully, its stability on unsupported systems appears to be excellent. However, there are cases in which Mac OS X is difficult to install, and there are a variety of problems you can run into. So read carefully.
 
@@ -21,8 +21,8 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 
 <p><dt><b>Testing:</b>
 <dd>
-<p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto4.0b4.sitx">XPostFacto 4.0b4 (.sitx)</a> 
-(or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto4.0b4.sit">older .sit format</a>)
+<p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto4.0b5.sitx">XPostFacto 4.0b5 (.sitx)</a> 
+(or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto4.0b5.sit">older .sit format</a>)
 
 </dl>
 </blockquote>
@@ -31,14 +31,12 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 
 <h4>What's New</h4>
 
-<p>Here's what is new in version 4.0b4:
+<p>Here's what is new in version 4.0b5:
 
 <ul>
-<p><li>Fixed the "file is locked" problem when doing a reinstall of Tiger.
+<p><li>Fixed a bug which sometimes failed to update the XPostFacto kernel extensions when booting from a CD or DVD.
 
-<p><li>Fixed warning messages to take the helper disk into account as well as the target disk.
-
-<p><li>Fixed several bugs related to text encodings -- should avoid some errors on non-English systems.
+<p><li>Switched to using the 10.2 headers and GCC 3.3 to compile the kernel extensions. This means that XPostFacto 4 now requires Mac OS X 10.2 or later. This appears to fix a problem loading certain kernel extensions at boot time on the Wallstreet Powerbooks.
 </ul>
 
 <h4><a name="problems">Known Problems</a></h4>
@@ -46,6 +44,10 @@ You should also remember to check the <a href="http://eshop.macsales.com/OSXCent
 <p>Here is a partial list of known problems with the current version of XPostFacto. You can also consult the <a href="http://www.opendarwin.org/bugzilla/buglist.cgi?product=XPostFacto&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&bug_status=RESOLVED&cmdtype=doit">bug list</a> directly.
 
 <ul>
+<li>In some cases, people have found it necessary to remove a Firewire card when installing Mac OS X 10.4 (Tiger). It is sometimes possible to reinsert the Firewire card after installation is complete.
+
+<li>It appears that the original iMac with certain CPU upgrades has a problem with the Firewire driver in Mac OS X 10.4. Removing the Firewire driver is a workaround in that case (at the expense of the loss of Firewire functionality).
+
 <li>OWCCacheConfig is often <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=855">causing problems</a>, especially with Panther. The workaround for the moment is to de-select the "Enable L2/L3 Cache" option in XPostFacto (I have made this the default setting for now). There are several other options for enabling the L2/L3 cache -- the forum contains a <a href="http://forum.macsales.com/viewtopic.php?t=1766">HOWTO on this topic</a>.
 
 <li>Booting from a Firewire drive is sometimes problematic -- it seems to depend on <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=879">which PCI card</a> is used, or sometimes <a href="http://www.opendarwin.org/bugzilla/show_bug.cgi?id=880">which Firewire devices are attached.</a> One workaround for error messages which appear in verbose mode is to tap the keyboard -- it is not clear why that should help, but in some cases it does.
@@ -613,6 +615,17 @@ and/or fitness for purpose.
 <h2><a name="links">Download Links and Version History</a></h2>
 
 <dl>
+
+<dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto4.0b5.sitx">4.0b5 (July 10, 2005)</a> (or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto4.0b5.sit">older .sit format</a>)
+
+<dd>
+<p>Here's what is new in version 4.0b5:
+
+<ul>
+<p><li>Fixed a bug which sometimes failed to update the XPostFacto kernel extensions when booting from a CD or DVD.
+
+<p><li>Switched to using the 10.2 headers and GCC 3.3 to compile the kernel extensions. This means that XPostFacto 4 now requires Mac OS X 10.2 or later. This appears to fix a problem loading certain kernel extensions at boot time on the Wallstreet Powerbooks.
+</ul>
 
 <dt><p><a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto4.0b4.sitx">4.0b4 (June 20, 2005)</a> (or in the <a href="http://eshop.macsales.com/OSXCenter/XPostFacto/Archive/XPostFacto4.0b4.sit">older .sit format</a>)
 
