@@ -355,6 +355,12 @@ getPaths (char *rootDevicePath, char *bootDevicePath)
 	if (bootDevice) CFStringGetCString (bootDevice, bootDeviceOFPath, 255, CFStringGetSystemEncoding ());
 	if (rootCommand) CFStringGetCString (rootCommand, rootDeviceOFPath, 255, CFStringGetSystemEncoding ());
 	
+	// We break the boot-device path at a comma-backslash, in case there is a file specifier in the path
+	// This would be true on New World machines, which specify a path to BootX
+	
+	char *comma = strstr (bootDeviceOFPath, ",\\");
+	if (comma) *comma = 0;
+	
 	// The root-device is either found in the rd=* argument, or is equal to the boot-device
 	
 	char *pos = strstr (rootDeviceOFPath, "rd=*");
