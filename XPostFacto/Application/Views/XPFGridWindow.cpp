@@ -57,7 +57,7 @@ XPFGridWindow::DoPostCreate(TDocument* itsDocument)
 {
 	TWindow::DoPostCreate (itsDocument);
 	
-	CStr255_AC title ("XPostFacto ");
+	CStr255_AC title ("Other World Computing's XPostFacto ");
 	title += kXPFVersion;
 	this->SetTitle (title);
 }
