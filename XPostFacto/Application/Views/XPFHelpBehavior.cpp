@@ -15,8 +15,11 @@ are permitted provided that the following conditions are met:
    this list of conditions and the following disclaimer in the documentation and/or
    other materials provided with the distribution.
 
-3. Redistributions in binary form must retain the link to Other World
-   Computing's web site in the application's "About Box."
+3. Redistributions in binary form must retain unchanged the elements of the application 
+   which credit Other World Computing (such as the splash screen and the "about box").
+
+4. Redistributions in binary form must not require payment (or be bundled with items 
+   requiring payment).
 
 This software is provided by Other World Computing ``as is'' and any express or implied
 warranties, including, but not limited to, the implied warranties of
