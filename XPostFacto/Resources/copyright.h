@@ -1,10 +1,10 @@
 XPostFacto is a partially open-source application provided by Other World Computing. There are some restrictions on the changes which you can make to it, and some conditions to be met if you want to redistribute it. In particular, you cannot remove the credits to Other World Computing. You also cannot charge for redistributing XPostFacto (or bundle XPostFacto with something that you charge for) without permission.
 
-Parts of the source code for XPostFacto are subject to a less restrictive license. If you wish to reuse code from XPostFacto in another application, consult the specific files involved for licensing provisions. (Generally speaking, the user interface code is subject to a more restrictive license, whereas the code relating to the underlying functionality is less restricted).<p>
+Parts of the source code for XPostFacto are subject to a less restrictive license. If you wish to reuse code from XPostFacto in another application, consult the specific files involved for licensing provisions. (Generally speaking, the user interface code is subject to a more restrictive license, whereas the code relating to the underlying functionality is less restricted).
 
 --
 
-BootX and most of the kernel extensions which are installed by XPostFacto are subject to the <a href="http://www.opensource.apple.com/apsl/">Apple Public Source License</a>. Again, consult the specific files involved for licensing provisions.<p>
+BootX and most of the kernel extensions which are installed by XPostFacto are subject to the Apple Public Source License. Again, consult the specific files involved for licensing provisions.
 
 --
 
