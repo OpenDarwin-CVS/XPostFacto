@@ -163,6 +163,9 @@ XPFThreadedCommand::updateExtensionsCacheForRootDirectory (FSRef *rootDirectory)
 	
 	if (fDebugOptions & kDisableExtensionsCache) return;
 
+	MountedVolume *volume = MountedVolume::WithRootDirectory (rootDirectory);
+	if (!volume || !volume->getIsWriteable ()) return;
+
 #ifdef __MACH__
 	// We only rebuild the extensions cache if it is on the root device. Looking at the code
 	// in kextcache, it appears that it may make the assumption that it is dealing with the root
@@ -219,7 +222,6 @@ XPFThreadedCommand::updateExtensionsCacheForRootDirectory (FSRef *rootDirectory)
 	err = XPFFSRef::getOrCreateKernelCacheDirectory (rootDirectory, &kernelCacheDir, false);
 	if (err == noErr) FSRefDeleteDirectoryContents (&kernelCacheDir);
 	
-	MountedVolume *volume = MountedVolume::WithRootDirectory (rootDirectory);
 	if (volume) volume->checkExtensionsCaches ();
 }
 
