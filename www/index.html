@@ -25,7 +25,7 @@
 
 <h2>XPostFacto</h2>
 
-<p>January 18, 2005
+<p>August 9, 2005
 <br>Ryan Rempel
 <br><a href="ryan@opendarwin.org">ryan@opendarwin.org</a>
 
@@ -37,31 +37,23 @@
 
 You can also <a href="http://www.opendarwin.org/mailman/listinfo/cvs-xpostfacto-all">sign up to receive e-mail</a> when XPF source is checked into the CVS repository.
 
-<p>You can report bugs in XPostFacto using the <a href="http://www.opendarwin.org/bugzilla/index.php">OpenDarwin Bugzilla</a> (look first to see whether there is already a bug open for your problem). Scroll down in the product list until you hit "XPostFacto." 
+<p>You can report bugs in XPostFacto using the <a href="http://www.opendarwin.org/bugzilla/index.php">OpenDarwin Bugzilla</a> (look first to see whether there is already a bug open for your problem). Scroll down in the product list until you hit "XPostFacto." You can also sign up to receive e-mail from the Bugzilla about individual bugs, or when new bugs are created etc.
 
-Here are some notes on a typical bug lifecycle:
+<h4>License</h4>
 
-<p><ul>
-<li>Newly reported bugs start out with a <b>New</b> status.
-<li>The status changes to <b>Assigned</b> when I determine that it really is a bug that should get fixed.
-<li>Once I fix the bug, I change the status to <b>Resolved</b>.
-<li>Once I release an interim release (i.e. alpha or beta) which includes the bug fix, the status gets changed to <b>Verified</b> (assuming that the person reporting the bug can verify that it is fixed).
-<li>Once an "official" release includes the bug fix, the bug is <b>Closed</b>.
-</ul>
+<p>XPostFacto is a partially open-source application provided by <a href="http://eshop.macsales.com">Other World Computing</a>. There are some restrictions on the changes which you can make to it, and some conditions to be met if you want to redistribute it. In particular, you cannot remove the credits to Other World Computing. You also cannot charge for redistributing XPostFacto (or bundle XPostFacto with something that you charge for) without permission.<p>
 
-<p>You can also sign up to receive e-mail from the Bugzilla about individual bugs, or when new bugs are created etc.
+Parts of the source code for XPostFacto are subject to a less restrictive license. If you wish to reuse code from XPostFacto in another application, consult the specific files involved for licensing provisions. (Generally speaking, the user interface code is subject to a more restrictive license, whereas the code relating to the underlying functionality is less restricted).<p>
 
-<p>Here is the licensing information for XPostFacto. I'll put it in small print :-)
+BootX and most of the kernel extensions which are installed by XPostFacto are subject to the <a href="http://www.opensource.apple.com/apsl/">Apple Public Source License</a>. Again, consult the specific files involved for licensing provisions.<p>
 
-<blockquote>
-<font size="-1">
-BootX and the kernel extensions which are installed by XPostFacto are subject to the <a href="http://www.opensource.apple.com/apsl/">Apple Public Source License</a>.<p>
-
-XPostFacto itself is subject to the following license:
+XPostFacto as a whole is subject to the following license:
 
 <blockquote>
 
-Copyright (c) 2001, 2002, Other World Computing. All rights reserved.<p>
+Copyright (c) 2001 - 2005<br>
+Other World Computing<br>
+All rights reserved.<p>
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
@@ -70,7 +62,9 @@ Redistribution and use in source and binary forms, with or without modification,
 
 <li>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.<p>
 
-<li>Redistributions in binary form must retain the link to Other World Computing's web site in the application's "About Box."
+<li>Redistributions in binary form must retain unchanged the elements of the application which credit Other World Computing (such as the splash screen and the "about box").<p>
+
+<li>Redistributions in binary form must not require payment (or be bundled with items requiring payment). 
 </ol><p>
 
 This software is provided by Other World Computing ``as is'' and any express or implied warranties, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose are disclaimed. In no event shall Ryan Rempel or Other World Computing be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, procurement of substitute goods or services; loss of use, data, or profits; or business interruption) however caused and on any theory of liability, whether in contract, strict liability, or tort (including negligence or otherwise) arising in any way out of the use of this software, even if advised of the possibility of such damage.
@@ -79,7 +73,58 @@ This software is provided by Other World Computing ``as is'' and any express or 
 
 <p>XPostFacto was written with the MacApp Application Framework. (c) 1983-2001 Apple Computer,  Inc. MacApp is a trademark of Apple Computer, Inc., registered in the United States and certain other countries.
 
-</font>
+<p>BootX includes the "RSA Data Security, Inc., MD5 message-digest algorithm", which is subject to the following copyright:
+
+<blockquote>
+Copyright (C) 1991-2, RSA Data Security, Inc. Created 1991. All
+rights reserved.
+
+<p>License to copy and use this software is granted provided that it
+is identified as the "RSA Data Security, Inc. MD5 Message-Digest
+Algorithm" in all material mentioning or referencing this software
+or this function.
+
+<p>License is also granted to make and use derivative works provided
+that such works are identified as "derived from the RSA Data
+Security, Inc. MD5 Message-Digest Algorithm" in all material
+mentioning or referencing the derived work.
+
+<p>RSA Data Security, Inc. makes no representations concerning either
+the merchantability of this software or the suitability of this
+software for any particular purpose. It is provided "as is"
+without express or implied warranty of any kind.
+
+<p>These notices must be retained in any copies of any part of this
+documentation and/or software.
+</blockquote>
+
+<p>BootX also includes code relating to AES encryption which is subject to the following copyright:
+
+<blockquote>
+Copyright (c) 2003, Dr Brian Gladman, Worcester, UK.   All rights reserved.
+
+<p>LICENSE TERMS
+
+<p>The free distribution and use of this software in both source and binary
+form is allowed (with or without changes) provided that:
+
+<ol>
+<p><li>distributions of this source code include the above copyright
+notice, this list of conditions and the following disclaimer;
+
+<p><li>distributions in binary form include the above copyright
+notice, this list of conditions and the following disclaimer
+in the documentation and/or other associated materials;
+
+<p><li>the copyright holder's name is not used to endorse products
+built using this software without specific written permission.
+</ol>
+
+<p>DISCLAIMER
+
+<p>This software is provided 'as is' with no explicit or implied warranties
+in respect of its properties, including, but not limited to, correctness
+and/or fitness for purpose.
 </blockquote>
 <p>
 
